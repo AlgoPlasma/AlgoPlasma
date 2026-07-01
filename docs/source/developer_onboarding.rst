@@ -38,7 +38,7 @@ AlgoPlasma Quick Start
 
          .. rubric:: 路线一：只想调用 AlgoPlasma
 
-         目标是把库用起来。重点是怎么拿到源码、怎么跑一个已有测试、怎么在自己的 Fortran 程序里调用子程序。
+         目标是把库用起来。重点是怎么拿到源码、怎么跑一个已有测试、怎么在自己的程序里调用算法模块或子程序。
 
          :doc:`进入使用者快速入门 <user_quick_start>`
 
@@ -81,8 +81,8 @@ AlgoPlasma Quick Start
          .. rubric:: Route 1: Call AlgoPlasma Routines
 
          The goal is to use the library. Focus on getting the source tree,
-         running one existing test, and calling one public subroutine from your
-         own Fortran program.
+         running one existing test, and calling one algorithm module or public
+         routine from your own code.
 
          :doc:`Open User Quick Start <user_quick_start>`
 

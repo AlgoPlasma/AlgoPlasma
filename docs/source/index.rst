@@ -43,18 +43,18 @@ AlgoPlasma
          <p class="ap-home-eyebrow">Open Algorithms for Plasma Modeling</p>
          <h1>AlgoPlasma</h1>
          <p class="ap-home-lead">
-          AlgoPlasma（曾用名 PMSL）致力于把等离子体建模中分散、重复实现的核心算法，
+          AlgoPlasma 致力于把等离子体建模中分散、重复实现的核心算法，
           沉淀为开放、可复用、可测试、可解释的算法库。
          </p>
          <div class="ap-home-actions">
            <a class="ap-home-action ap-home-action-primary" href="developer_onboarding.html">快速入门</a>
            <a class="ap-home-action" href="tests/index.html">查看测试</a>
            <a class="ap-home-action" href="glossary.html">术语表</a>
-           <a class="ap-home-action" href="https://edu.gitee.com/Yin-YinjianZhao-HIT/repos/Yin-YinjianZhao-HIT/algoplasma/sources">Gitee 源码</a>
+          <a class="ap-home-action" href="https://e.gitee.com/algoplasma/repos/algoplasma/algoplasma/sources" target="_blank" rel="noopener noreferrer">Gitee 源码</a>
          </div>
        </div>
        <p class="ap-home-caption">
-        配图来自基于 AlgoPlasma 搭建的 AlgoPlasma-PIC-HET-3D 程序；所引预印本中曾以 PMSL-PIC-HET-3D 命名。<br>
+        配图来自基于 AlgoPlasma 搭建的 AP-PIC-HET-3D 程序。<br>
          <a href="https://arxiv.org/abs/2603.14849v1" target="_blank" rel="noopener noreferrer">arXiv: 2603.14849v1</a>, 16 Mar 2026.
        </p>
      </section>
@@ -101,8 +101,8 @@ AlgoPlasma
      </section>
 
      <section class="ap-home-footer-band">
-       <p>欢迎贡献服务于等离子体科学的算法实现、测试案例、文档说明和验证结果。</p>
-       <p class="ap-home-contact">发起人：Yinjian Zhao · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian">Homepage</a></p>
+      <p>欢迎贡献服务于等离子体科学的算法实现、案例测试、文档说明和结果验证。</p>
+      <p class="ap-home-contact">发起人：赵隐剑 · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
    </div>
 
@@ -113,18 +113,18 @@ AlgoPlasma
          <p class="ap-home-eyebrow">Open Algorithms for Plasma Modeling</p>
          <h1>AlgoPlasma</h1>
          <p class="ap-home-lead">
-          AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma
-          modeling into an open, reusable, tested, and explainable algorithm library.
+          AlgoPlasma turns scattered and repeatedly reimplemented core algorithms for plasma modeling into
+          an open, reusable, tested, and explainable algorithm library.
          </p>
          <div class="ap-home-actions">
            <a class="ap-home-action ap-home-action-primary" href="developer_onboarding.html">Quick Start</a>
            <a class="ap-home-action" href="tests/index.html">View Tests</a>
            <a class="ap-home-action" href="glossary.html">Glossary</a>
-           <a class="ap-home-action" href="https://edu.gitee.com/Yin-YinjianZhao-HIT/repos/Yin-YinjianZhao-HIT/algoplasma/sources">Gitee Source</a>
+          <a class="ap-home-action" href="https://e.gitee.com/algoplasma/repos/algoplasma/algoplasma/sources" target="_blank" rel="noopener noreferrer">Gitee Source</a>
          </div>
        </div>
        <p class="ap-home-caption">
-        Image rendered from an AlgoPlasma-PIC-HET-3D program built on AlgoPlasma; the linked preprint used its former PMSL-PIC-HET-3D name.<br>
+        Image rendered from an AP-PIC-HET-3D program built on AlgoPlasma.<br>
          <a href="https://arxiv.org/abs/2603.14849v1" target="_blank" rel="noopener noreferrer">arXiv: 2603.14849v1</a>, 16 Mar 2026.
        </p>
      </section>
@@ -171,7 +171,7 @@ AlgoPlasma
      </section>
 
      <section class="ap-home-footer-band">
-       <p>Contributions are welcome for algorithm implementations, test cases, documentation, and validation results that serve plasma science.</p>
-       <p class="ap-home-contact">Initiator: Yinjian Zhao · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian">Homepage</a></p>
+      <p>Contributions are welcome for algorithm implementations, test cases, documentation, and result validation that serve plasma science.</p>
+      <p class="ap-home-contact">Initiator: Yinjian Zhao · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
    </div>
