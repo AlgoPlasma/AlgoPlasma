@@ -3,12 +3,12 @@ sub_H03_mpi_exchange_den.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 直接用途
 
@@ -77,7 +77,7 @@ sub_H03_mpi_exchange_den.f90
    - 先完成本地粒子沉积，再调用本例程；例程返回后 ``den`` 才包含全部 rank 的贡献。
    - 缓冲区只覆盖内部面 ``il:iu``，不含 ghost 层（与 H01 不同）。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Direct Purpose
 

@@ -9,16 +9,16 @@ I_Initializer
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
-   ``I_Initializer`` 放置 PMSL 的粒子初始化工具。当前分成两类入口：一类在 Fortran
+   ``I_Initializer`` 放置 AlgoPlasma 的粒子初始化工具。当前分成两类入口：一类在 Fortran
    内部直接生成规则粒子分布，另一类由 Python 离线生成全局二进制粒子文件，再由 MPI
    程序按本地子域筛选载入。
 
@@ -47,11 +47,11 @@ I_Initializer
 
    当前仓库中未发现覆盖 ``I_Initializer`` 的独立顶层 ``tests/`` 回归目录。I02 更接近离线数据生成和载入流程；若后续压缩成轻量初始化测试，应同步在 :doc:`测试总览 </tests/index>` 和本页补充链接。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
-   ``I_Initializer`` contains PMSL particle-initialization utilities. The current
+   ``I_Initializer`` contains AlgoPlasma particle-initialization utilities. The current
    module family has two entry styles: Fortran-side procedural initialization for
    regular particle distributions, and an offline Python binary generator followed
    by an MPI-aware Fortran loader.

@@ -1,7 +1,7 @@
 # 003_F_IO — F_IO I/O Regression Test (MPI + HDF5)
 
 This directory provides a small but comprehensive regression test for the `F_IO`
-I/O routines in PMSL. It validates:
+I/O routines in AlgoPlasma. It validates:
 
 - **Particle I/O**: `F02` (output) + `F01` (load)
 - **Field I/O**: `F04` (output) + `F03` (load)

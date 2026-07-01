@@ -3,12 +3,12 @@ D02_hypre_3Dxyz_bc Tests
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本页对应 ``tests/001_poisson/test01`` 和 ``test02``。两者共同描述 D02 在 Cartesian
    ``(x,y,z)`` 网格上的当前测试边界：``test01`` 偏重多 rank 代码路径，``test02`` 偏重解析边界回归。
@@ -121,17 +121,17 @@ D02_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test01/phi_zx.png
       :align: center
-      :figclass: pmsl-figure-equal-height
+      :figclass: ap-figure-equal-height
 
       ``test01`` 的 ``x-z`` 截面势函数，显示多 rank smoke test 输出稳定。
 
    .. figure:: ../../images/tests/001_poisson/test02/case1_linear_x_compare_limited_colorbar.png
       :align: center
-      :figclass: pmsl-figure-equal-height
+      :figclass: ap-figure-equal-height
 
       ``test02`` 的 ``case1`` 三联图。数值解与解析解在 ``1e-7`` 量级内重合，误差图接近零。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This page corresponds to ``tests/001_poisson/test01`` and ``test02``.
    Together they define the current D02 Cartesian test boundary: ``test01`` is
@@ -251,13 +251,13 @@ D02_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test01/phi_zx.png
       :align: center
-      :figclass: pmsl-figure-equal-height
+      :figclass: ap-figure-equal-height
 
       ``test01`` ``x-z`` potential slice from the multi-rank smoke test.
 
    .. figure:: ../../images/tests/001_poisson/test02/case1_linear_x_compare_limited_colorbar.png
       :align: center
-      :figclass: pmsl-figure-equal-height
+      :figclass: ap-figure-equal-height
 
       ``test02`` ``case1`` three-panel comparison. The numerical and exact
       fields agree at about the ``1e-7`` level and the error map stays near zero.

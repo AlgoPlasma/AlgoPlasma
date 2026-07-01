@@ -12,12 +12,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本节整理 ``tests/001_poisson`` 下的 Poisson 回归测试。页面目标不是重复算法/API 文档，而是回答三件事：
 
@@ -63,7 +63,7 @@
    所有测试在编译前都应先检查脚本中的 ``HYPRE_INC`` 与 ``HYPRE_LIB``。如果本机 HYPRE 安装路径不同，必须先修改这些变量，再执行 ``make.sh``、``run.sh`` 或其他编译/运行脚本。
 
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This section documents the Poisson regression tests under
    ``tests/001_poisson``. These pages do not repeat the algorithm/API notes.

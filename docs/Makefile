@@ -17,6 +17,7 @@ help:
 
 clean:
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@find . -type d -name __pycache__ -prune -exec rm -rf {} +
 	@rm -rf $(DOXYGENDIR)
 	@rm -rf $(BUILDDIR)
 

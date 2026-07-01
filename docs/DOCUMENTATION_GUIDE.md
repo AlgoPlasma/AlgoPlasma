@@ -1,6 +1,6 @@
 # Documentation Guide
 
-This guide defines how PMSL documentation should be split between README files,
+This guide defines how AlgoPlasma documentation should be split between README files,
 Sphinx pages, and Fortran Doxygen comments. The current `A_Pusher`
 documentation is the reference implementation for structure, bilingual
 switching, and build verification.
@@ -11,7 +11,7 @@ wrong language view.
 
 ## Current Documentation Philosophy
 
-PMSL documentation is module-first. Each subroutine group should remain useful
+AlgoPlasma documentation is module-first. Each subroutine group should remain useful
 as an independent algorithm component rather than assuming one fixed PIC driver
 or one global application workflow.
 
@@ -33,7 +33,7 @@ physical coupling between all modules should not be treated as required context
 for understanding a single subroutine.
 
 Numerical assumptions should be stated where they apply, not only in a global
-conventions page. PMSL modules may be reused in different programs with
+conventions page. AlgoPlasma modules may be reused in different programs with
 different normalizations, grid locations, precision choices, MPI layouts, and
 external dependencies. Repeating local assumptions in each relevant routine page
 is preferred over making the reader infer them from another module.
@@ -105,7 +105,7 @@ pass/fail criterion and should avoid unnecessary large images or long-running
 demonstrations unless the test is explicitly marked as heavyweight.
 
 Examples are user-facing usage demonstrations. They should show how a researcher
-or student calls PMSL routines in a small but readable program. An example may
+or student calls AlgoPlasma routines in a small but readable program. An example may
 reuse a test-sized problem, but its explanation should prioritize the calling
 sequence, required compile options, data preparation, output interpretation, and
 common modifications. Examples can include plots or saved outputs when those
@@ -137,18 +137,18 @@ section outside the intended language scope.
 ```rst
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
    中文内容。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
@@ -167,18 +167,18 @@ language scope.
 ```rst
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 模块说明
 
    中文内容。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Module Description
 
@@ -190,7 +190,7 @@ language scope.
 ```
 
 If a page has a language switch, every visible content block after the switch
-must be inside either `pmsl-lang-zh` or `pmsl-lang-en`.
+must be inside either `ap-lang-zh` or `ap-lang-en`.
 
 ## Generated API Sections
 
@@ -297,11 +297,11 @@ source. At minimum, check that:
 - `Generated API` sections are inside the intended language container.
 
 When updating a whole module group, scan all generated HTML pages in that group
-for visible text outside `pmsl-lang-zh` or `pmsl-lang-en` after the language
+for visible text outside `ap-lang-zh` or `ap-lang-en` after the language
 switch.
 
 For the practical maintenance checklist and command ideas, see
 `docs/source/maintenance_checklist.rst`.
 
 For the Codex-oriented development workflow used when students or maintainers
-extend PMSL with AI assistance, see `docs/CODEX_DEVELOPMENT_GUIDE.md`.
+extend AlgoPlasma with AI assistance, see `docs/CODEX_DEVELOPMENT_GUIDE.md`.

@@ -3,18 +3,18 @@ Documentation Checklist
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 轻量检查清单
 
    这页给文档维护时使用，不替代完整 review。新增或重写一个模块后，至少检查以下几项：
 
-   - 模块入口页、子模块概览页和 routine/API 页都包含 ``pmsl-language-switch``。
+   - 模块入口页、子模块概览页和 routine/API 页都包含 ``ap-language-switch``。
    - routine/API 页的 ``.. doxygenfile::`` 保持在英文语言块里，中文侧只写简短用途、接口和注意事项。
    - 需要双语 README 的模块目录不再残留旧的单文件 ``README.md``。
    - 模块页指向相关测试页，测试页反向指向算法/API 页；无独立测试时要明确说明状态。
@@ -28,8 +28,8 @@ Documentation Checklist
 
       cd docs
       source ~/.venv/bin/activate
-      sphinx-build -b html source build/html -j 1 2>&1 | tee /tmp/pmsl-sphinx.log
-      rg "WARNING|ERROR" /tmp/pmsl-sphinx.log
+      sphinx-build -b html source build/html -j 1 2>&1 | tee /tmp/ap-sphinx.log
+      rg "WARNING|ERROR" /tmp/ap-sphinx.log
 
    查找没有语言切换的 RST 页面：
 
@@ -37,7 +37,7 @@ Documentation Checklist
 
       cd docs/..
       while IFS= read -r f; do
-        rg -q "pmsl-language-switch" "$f" || echo "$f"
+        rg -q "ap-language-switch" "$f" || echo "$f"
       done < <(rg --files docs/source -g "*.rst")
 
    查找 ``.. doxygenfile::`` 页面，并人工确认它位于英文语言块内：
@@ -58,14 +58,14 @@ Documentation Checklist
    后续可以把这些检查收敛成一个只读脚本，例如 ``tools/check_docs_layout.py``。脚本只报告问题，不自动改文件；
    输出项建议包括缺失语言切换、Doxygen 指令位置、旧 README、孤立 tests 页面和 Sphinx warning 摘要。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Lightweight Checklist
 
    This page is for documentation maintenance and does not replace a full
    review. After adding or rewriting a module, check at least the following:
 
-   - Module entry pages, submodule overview pages, and routine/API pages contain ``pmsl-language-switch``.
+   - Module entry pages, submodule overview pages, and routine/API pages contain ``ap-language-switch``.
    - On routine/API pages, ``.. doxygenfile::`` stays inside the English language block; the Chinese side keeps only short purpose, interface, and notes.
    - Module directories that use bilingual READMEs no longer keep an old single-file ``README.md``.
    - Module pages link to related test pages, and test pages link back to algorithm/API pages; modules without standalone tests state that status explicitly.
@@ -80,8 +80,8 @@ Documentation Checklist
 
       cd docs
       source ~/.venv/bin/activate
-      sphinx-build -b html source build/html -j 1 2>&1 | tee /tmp/pmsl-sphinx.log
-      rg "WARNING|ERROR" /tmp/pmsl-sphinx.log
+      sphinx-build -b html source build/html -j 1 2>&1 | tee /tmp/ap-sphinx.log
+      rg "WARNING|ERROR" /tmp/ap-sphinx.log
 
    Find RST pages without a language switch:
 
@@ -89,7 +89,7 @@ Documentation Checklist
 
       cd docs/..
       while IFS= read -r f; do
-        rg -q "pmsl-language-switch" "$f" || echo "$f"
+        rg -q "ap-language-switch" "$f" || echo "$f"
       done < <(rg --files docs/source -g "*.rst")
 
    Find ``.. doxygenfile::`` pages, then manually confirm the directive is inside

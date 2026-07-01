@@ -65,7 +65,7 @@ program e03_fdtd_3d_cartesian_benchmark
     write(*,'(A,I0,A,I0,A,I0)') "grid=", nx, " x ", ny, " x ", nz
     write(*,'(A,I0,A,I0,A,I0)') "nsteps=", nsteps, ", repeats=", repeats, ", omp_max_threads=", threads
     write(*,'(A,ES14.6,A,ES14.6,A,ES14.6,A,ES14.6)') "dx=", dx, ", dy=", dy, ", dz=", dz, ", dt=", dt
-#ifdef PMSL_E03_USE_OMPDO
+#ifdef ALGOPLASMA_E03_USE_OMPDO
     write(*,'(A)') "kernel_mode=ompdo_outer_parallel"
 #else
     write(*,'(A)') "kernel_mode=parallel_do"
@@ -82,7 +82,7 @@ program e03_fdtd_3d_cartesian_benchmark
         call initialize_fields(nx, ny, nz, Ex, Ey, Ez, Hx, Hy, Hz)
 
         t0 = omp_get_wtime()
-#ifdef PMSL_E03_USE_OMPDO
+#ifdef ALGOPLASMA_E03_USE_OMPDO
         !$omp parallel default(shared) private(n)
         do n = 1, nsteps
             call sub_E03_fdtd_3d_cartesian_H_ompdo(ilo,ihi,jlo,jhi,klo,khi, &

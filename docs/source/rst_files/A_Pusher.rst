@@ -13,12 +13,12 @@ A_Pusher
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
@@ -74,7 +74,7 @@ A_Pusher
    更新粒子位置，将粒子电荷/电流 scatter 回网格，最后推进场。pusher、gather、scatter 和
    field solver 的坐标、权重和边界约定必须保持一致。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 

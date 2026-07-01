@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`G_collision` contains collision models used by PMSL. The current implementation
+`G_collision` contains collision models used by AlgoPlasma. The current implementation
 is `G01_MCC`, a tabulated-cross-section Monte Carlo Collision (MCC) module.
 
 ## Subdirectories

@@ -4,17 +4,17 @@ Pusher Learning Path
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 这页解决什么问题
 
    本页面向第一次接触 ``A_Pusher`` 的读者。它不是粒子动力学教材，而是帮你把
-   非相对论 Boris、柱坐标 Boris、相对论 Higuera-Cary 这三套推进器跟 PMSL
+   非相对论 Boris、柱坐标 Boris、相对论 Higuera-Cary 这三套推进器跟 AlgoPlasma
    里的 Fortran routine 对上号。读完后，应该知道该先看哪一页、哪些公式对应哪些代码、
    以及测试为什么能说明实现是可信的。
 
@@ -102,14 +102,14 @@ Pusher Learning Path
       非相对论 Boris 在这种工况下会有几千的偏差，HC 给出 ``x \approx 0``——
       理解何时必须切换到相对论 pusher。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: What This Page Is For
 
    This page is aimed at readers new to ``A_Pusher``. It is not a textbook on
    particle dynamics; it helps you connect the non-relativistic Boris,
    cylindrical Boris, and relativistic Higuera-Cary schemes to the Fortran
-   routines in PMSL. After reading it, you should know which page to read
+   routines in AlgoPlasma. After reading it, you should know which page to read
    first, which formula maps to which code, and why the tests give you
    confidence in the implementation.
 

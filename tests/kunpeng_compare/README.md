@@ -1,6 +1,6 @@
 # Kunpeng Comparison Tests
 
-This directory stores platform comparison cases for PMSL kernels. Each case
+This directory stores platform comparison cases for AlgoPlasma kernels. Each case
 keeps the original benchmark program, raw logs from the compared machines, and
 Python post-processing scripts.
 

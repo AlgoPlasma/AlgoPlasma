@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`F_IO` 是 PMSL 的 MPI per-rank 数据输入输出层，覆盖粒子相空间数组和局部场数组。
+`F_IO` 是 AlgoPlasma 的 MPI per-rank 数据输入输出层，覆盖粒子相空间数组和局部场数组。
 
 ## 子目录
 

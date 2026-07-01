@@ -32,8 +32,8 @@ select_bisheng_fc
 KUNPENG_MCPU="${KUNPENG_MCPU:-native}"
 FCFLAGS="${FCFLAGS:--cpp -O3 -fdefault-real-8 -fopenmp -ffree-line-length-none -mcpu=${KUNPENG_MCPU}}"
 case " ${FCFLAGS} " in
-  *" -DPMSL_E03_USE_OMPDO "*) ;;
-  *) FCFLAGS="${FCFLAGS} -DPMSL_E03_USE_OMPDO" ;;
+  *" -DALGOPLASMA_E03_USE_OMPDO "*) ;;
+  *) FCFLAGS="${FCFLAGS} -DALGOPLASMA_E03_USE_OMPDO" ;;
 esac
 export FC FCFLAGS
 

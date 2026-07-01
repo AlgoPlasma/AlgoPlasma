@@ -4,12 +4,12 @@ Scatter Usage Cookbook
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 这页解决什么问题
 
@@ -181,7 +181,7 @@ Scatter Usage Cookbook
    - **温度沉积期望 CIC 守恒**。``sub_..._T`` 是最近格子法，不能套
      ``sum(den_T) = sum(w*v^2)``。它给出节点级方差，不是"二阶矩"。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: What This Page Is For
 

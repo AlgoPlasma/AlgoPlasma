@@ -4,12 +4,12 @@ sub_B02_average_axis_jz_3d_cyl.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 直接用途
 
@@ -73,7 +73,7 @@ sub_B02_average_axis_jz_3d_cyl.f90
    ``Jz`` 做方位向平均。它应在所有粒子的电流沉积完成后调用，使
    ``jz(0,j,k)`` 的所有 ``j`` 使用同一个物理轴线值。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Direct Purpose
 

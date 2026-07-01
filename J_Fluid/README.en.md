@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`J_Fluid` contains PMSL fluid-equation update routines.
+`J_Fluid` contains AlgoPlasma fluid-equation update routines.
 
 ## Subdirectories
 

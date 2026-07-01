@@ -3,12 +3,12 @@ init_particles_bin.py
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 用途
 
@@ -116,7 +116,7 @@ init_particles_bin.py
    每个粒子记录为 6 个 ``float64`` 值：``x,y,z,vx,vy,vz``。脚本还会输出初始密度组图和离子轴向漂移速度剖面图。
    由于默认粒子数很大，运行前应确认内存、磁盘空间和 NumPy/SciPy/Matplotlib 环境。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Purpose
 

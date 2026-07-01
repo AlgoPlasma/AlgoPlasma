@@ -3,12 +3,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 3D Cylindrical (rtz) FDTD
 
@@ -361,7 +361,7 @@
 
    因为柱坐标 curl 含有 :math:`1/r` 和
    :math:`(1/r)\partial_r(r\cdot)`，CPML 只替换对应坐标方向上的差分算子。
-   对径向守恒型项，PMSL 按
+   对径向守恒型项，AlgoPlasma 按
    :math:`(1/r)\partial_r(rq)=\partial_r q+q/r` 拆分：memory 变量只作用于
    :math:`\partial_r q`，而 :math:`q/r` 作为柱坐标 metric 项在当前 Yee 位置的半径上单独加回。
    例如 :math:`E_r` 和 :math:`E_z` 的 CPML 形式可写为
@@ -391,7 +391,7 @@
    :math:`D_rE_\phi/\kappa_r+\psi_{H_z,r}+M_r(E_\phi)`，memory 不作用于
    :math:`q/r` metric 项。:math:`E_\phi`、:math:`H_r`、:math:`H_\phi` 和
    :math:`H_z` 按同样方式对
-   各自 curl 中的两个横向差分引入 memory 项。PMSL 的
+   各自 curl 中的两个横向差分引入 memory 项。AlgoPlasma 的
    ``sub_E02_cpml_3d_cylindrical_E`` 与 ``sub_E02_cpml_3d_cylindrical_H`` 对六个场
    分量共保存十二个 ``psi_*`` 数组，例如 ``psi_E_r_phi``、
    ``psi_E_r_z``、``psi_E_phi_z``、``psi_E_phi_r``、``psi_E_z_r``、
@@ -415,7 +415,7 @@
      *Microwave and Optical Technology Letters*, 27(5): 334-339, 2000.
      DOI: `10.1002/1098-2760(20001205)27:5\<334::AID-MOP14\>3.0.CO;2-A <https://doi.org/10.1002/1098-2760(20001205)27:5%3C334::AID-MOP14%3E3.0.CO;2-A>`_.
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: 3D Cylindrical (rtz) FDTD
 
@@ -791,7 +791,7 @@
 
    Cylindrical curls include :math:`1/r` factors and
    :math:`(1/r)\partial_r(r\cdot)` terms. CPML replaces the coordinate finite
-   difference. For conservative radial terms, PMSL uses
+   difference. For conservative radial terms, AlgoPlasma uses
    :math:`(1/r)\partial_r(rq)=\partial_r q+q/r`: the memory variable is applied
    only to :math:`\partial_r q`, while the :math:`q/r` cylindrical metric term is
    added separately at the current Yee radius. For example, the :math:`E_r` and
@@ -823,7 +823,7 @@
    :math:`D_rE_\phi/\kappa_r+\psi_{H_z,r}+M_r(E_\phi)`, so the memory variable
    does not act on the :math:`q/r` metric term. :math:`E_\phi`, :math:`H_r`,
    :math:`H_\phi`, and :math:`H_z` follow the
-   same rule: each transverse curl difference gets its own memory term. PMSL
+   same rule: each transverse curl difference gets its own memory term. AlgoPlasma
    stores twelve memory arrays across ``sub_E02_cpml_3d_cylindrical_E`` and
    ``sub_E02_cpml_3d_cylindrical_H``, such as ``psi_E_r_phi``, ``psi_E_r_z``,
    ``psi_E_phi_z``, ``psi_E_phi_r``, ``psi_E_z_r``, ``psi_E_z_phi``, and the

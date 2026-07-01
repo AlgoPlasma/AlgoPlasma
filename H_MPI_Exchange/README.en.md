@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`H_MPI_Exchange` provides data-exchange routines used by PMSL in MPI domain
+`H_MPI_Exchange` provides data-exchange routines used by AlgoPlasma in MPI domain
 decomposition.
 
 ## Subdirectories

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Put this file in:
-# ../pmsl-new/tests/004_scatter/B02_deposit_3d_cyl/test1/
+# ../algoplasma/tests/004_scatter/B02_deposit_3d_cyl/test1/
 #
 # Usage:
 #   ./make.sh

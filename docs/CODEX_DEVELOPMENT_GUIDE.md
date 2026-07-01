@@ -1,6 +1,6 @@
 # Codex Development Guide
 
-This guide is for students and maintainers who use Codex while developing PMSL.
+This guide is for students and maintainers who use Codex while developing AlgoPlasma.
 It complements `docs/DOCUMENTATION_GUIDE.md`, which defines the documentation
 style.
 

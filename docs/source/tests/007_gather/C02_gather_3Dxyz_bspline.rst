@@ -3,12 +3,12 @@ C02_gather_3Dxyz_bspline Test
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 测试目标
 
@@ -153,7 +153,7 @@ C02_gather_3Dxyz_bspline Test
    - ``constant`` 和 ``linear`` 是形函数一致性测试，不代表高阶非线性场的收敛阶测试。
    - 本测试假定粒子位置和模板位于可访问数组范围内；它不测试 guard-cell 通信。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Test Goal
 

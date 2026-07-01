@@ -11,16 +11,16 @@ H_MPI_Exchange
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
-   ``H_MPI_Exchange`` 记录 PMSL 在 3D 区域分解并行中使用的低层 MPI 数据交换例程。
+   ``H_MPI_Exchange`` 记录 AlgoPlasma 在 3D 区域分解并行中使用的低层 MPI 数据交换例程。
    它不是通用 MPI 通信工具箱，而是围绕 PIC/FDTD 主循环里的三类数据语义拆成三组接口：
 
    - H01：把邻居 rank 的有效内部场值复制到本 rank 的 ghost 层。
@@ -124,12 +124,12 @@ H_MPI_Exchange
    算例构造和期望值见
    :doc:`MPI Exchange Testing Guide <H_MPI_Exchange/mpi_exchange_testing_guide>`。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
    ``H_MPI_Exchange`` documents the low-level MPI data-motion routines used by
-   PMSL in 3D domain-decomposed runs. It is not a general MPI utility layer.
+   AlgoPlasma in 3D domain-decomposed runs. It is not a general MPI utility layer.
    Instead, it splits the PIC/FDTD loop into three different data semantics:
 
    - H01 copies neighboring field values into local ghost layers.

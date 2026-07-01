@@ -3,12 +3,12 @@ D01_hypre_3Dxyz_bc Tests
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本页对应 ``tests/001_poisson/test00``。它不是解析精度回归，而是 D01 旧版
    Fortran-C-HYPRE 路径的保留性 smoke test，用来确认最早一套 Cartesian 接口仍能完整跑通。
@@ -84,11 +84,11 @@ D01_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test00/phi_zx.png
       :align: center
-      :figclass: pmsl-figure-equal-height
+      :figclass: ap-figure-equal-height
 
       ``test00`` 的 ``x-z`` 截面势函数。场分布连续、无明显 rank 接缝，是 D01 旧接口仍可工作的直接证据。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This page corresponds to ``tests/001_poisson/test00``. It is not an
    analytic-accuracy regression. Instead, it is a preservation smoke test for
@@ -169,7 +169,7 @@ D01_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test00/phi_zx.png
       :align: center
-      :figclass: pmsl-figure-equal-height
+      :figclass: ap-figure-equal-height
 
       ``test00`` ``x-z`` potential slice. The continuous field without visible
       rank seams is the intended regression signal for the legacy D01 path.

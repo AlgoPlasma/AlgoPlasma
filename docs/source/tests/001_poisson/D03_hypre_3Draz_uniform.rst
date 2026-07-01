@@ -3,12 +3,12 @@ D03_hypre_3Draz_uniform Tests
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本页对应 ``tests/001_poisson/test03`` 和 ``test04``。两者共同构成 D03 均匀柱坐标求解器的边界条件回归：
    ``test03`` 是单 rank 基线，``test04`` 是 MPI 对照。
@@ -93,7 +93,7 @@ D03_hypre_3Draz_uniform Tests
    ``test03`` case 1 三联图：
 
    .. list-table::
-      :class: pmsl-triptych
+      :class: ap-triptych
       :widths: 34 33 33
 
       * - .. image:: ../../images/tests/001_poisson/test03/fig_case1/grid_phi_exact_j1.png
@@ -111,7 +111,7 @@ D03_hypre_3Draz_uniform Tests
    ``test04`` case 1 三联图：
 
    .. list-table::
-      :class: pmsl-triptych
+      :class: ap-triptych
       :widths: 34 33 33
 
       * - .. image:: ../../images/tests/001_poisson/test04/fig_case1/grid_phi_exact_j1.png
@@ -126,7 +126,7 @@ D03_hypre_3Draz_uniform Tests
 
    ``test04`` case 1 三联图，从左到右分别为解析解、数值解和误差图。MPI 版本仍使用同一解析参考场，数值场结构应与 ``test03`` case 1 保持一致，误差量级也应与单 rank 基线对齐。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This page corresponds to ``tests/001_poisson/test03`` and ``test04``.
    Together they define the D03 uniform cylindrical boundary-condition
@@ -218,7 +218,7 @@ D03_hypre_3Draz_uniform Tests
    ``test03`` case-1 three-panel view:
 
    .. list-table::
-      :class: pmsl-triptych
+      :class: ap-triptych
       :widths: 34 33 33
 
       * - .. image:: ../../images/tests/001_poisson/test03/fig_case1/grid_phi_exact_j1.png
@@ -236,7 +236,7 @@ D03_hypre_3Draz_uniform Tests
    ``test04`` case-1 three-panel view:
 
    .. list-table::
-      :class: pmsl-triptych
+      :class: ap-triptych
       :widths: 34 33 33
 
       * - .. image:: ../../images/tests/001_poisson/test04/fig_case1/grid_phi_exact_j1.png

@@ -4,12 +4,12 @@ sub_B02_deposit_charge_3d_cyl.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 直接用途
 
@@ -123,7 +123,7 @@ sub_B02_deposit_charge_3d_cyl.f90
    ``phi`` 方向周期处理；粒子循环结束后，轴线上的 ``rho(0,:,k)`` 应由
    ``sub_B02_average_axis_charge_3d_cyl`` 平均。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Direct Purpose
 

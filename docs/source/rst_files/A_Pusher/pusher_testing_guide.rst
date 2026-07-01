@@ -4,16 +4,16 @@ Pusher Testing Guide
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 1. 范围
 
-   本指南概述 PMSL 中 ``A_Pusher`` 模块的验证方式、测试算例位置、推荐运行顺序
+   本指南概述 AlgoPlasma 中 ``A_Pusher`` 模块的验证方式、测试算例位置、推荐运行顺序
    和结果解读。如果只想看目录式测试入口，可先看
    :doc:`/tests/002_pusher/index`。
 
@@ -122,11 +122,11 @@ Pusher Testing Guide
      需要在 :doc:`002_pusher tests </tests/002_pusher/index>` 之外
      单独建测试套件——当前还没有。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: 1. Scope
 
-   This guide summarises how ``A_Pusher`` modules are validated in PMSL,
+   This guide summarises how ``A_Pusher`` modules are validated in AlgoPlasma,
    where the test cases live, the recommended run order, and how to read
    the results. For the directory-oriented entry point, see
    :doc:`/tests/002_pusher/index`.

@@ -4,12 +4,12 @@ sub_A03_Higuera_Cary_relativistic_3Dxyz_push_v.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 直接用途
 
@@ -189,7 +189,7 @@ sub_A03_Higuera_Cary_relativistic_3Dxyz_push_v.f90
    integrators, Astrophys. J. Suppl. Ser. 235 (2018) 21.
    DOI: `10.3847/1538-4365/aab114 <https://doi.org/10.3847/1538-4365/aab114>`_.
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Direct Purpose
 

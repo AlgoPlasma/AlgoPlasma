@@ -4,12 +4,12 @@ sub_B02_average_axis_charge_3d_cyl.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 直接用途
 
@@ -71,7 +71,7 @@ sub_B02_average_axis_charge_3d_cyl.f90
 
    ``sub_B02_average_axis_charge_3d_cyl`` 对柱坐标轴线 ``r=0`` 上的电荷密度做方位向平均。由于 ``rho(0,j,k)`` 的所有 ``j`` 都表示同一个物理点，粒子循环结束后应把它们替换为同一平均值。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Direct Purpose
 

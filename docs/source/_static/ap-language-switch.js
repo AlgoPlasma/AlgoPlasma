@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var storageKey = "pmsl-doc-language";
+  var storageKey = "ap-doc-language";
 
   function readStoredLanguage() {
     try {
@@ -47,9 +47,9 @@
         return;
       }
 
-      var languageSection = target.classList.contains("pmsl-lang")
+      var languageSection = target.classList.contains("ap-lang")
         ? target
-        : target.closest(".pmsl-lang");
+        : target.closest(".ap-lang");
       if (!languageSection) {
         return;
       }
@@ -59,23 +59,23 @@
         return;
       }
 
-      item.hidden = !languageSection.classList.contains("pmsl-lang-" + language);
+      item.hidden = !languageSection.classList.contains("ap-lang-" + language);
     });
   }
 
   function setButtonState(language) {
-    var buttons = document.querySelectorAll("[data-pmsl-set-lang]");
+    var buttons = document.querySelectorAll("[data-ap-set-lang]");
     Array.prototype.forEach.call(buttons, function (button) {
-      var isActive = button.getAttribute("data-pmsl-set-lang") === language;
+      var isActive = button.getAttribute("data-ap-set-lang") === language;
       button.classList.toggle("is-active", isActive);
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
   }
 
   function setBlockVisibility(language) {
-    var blocks = document.querySelectorAll(".pmsl-lang");
+    var blocks = document.querySelectorAll(".ap-lang");
     Array.prototype.forEach.call(blocks, function (block) {
-      var isActive = block.classList.contains("pmsl-lang-" + language);
+      var isActive = block.classList.contains("ap-lang-" + language);
       block.hidden = !isActive;
       block.style.setProperty("display", isActive ? "block" : "none", "important");
     });
@@ -86,7 +86,7 @@
       language = "zh";
     }
 
-    document.documentElement.setAttribute("data-pmsl-lang", language);
+    document.documentElement.setAttribute("data-ap-lang", language);
     document.documentElement.setAttribute("lang", language === "zh" ? "zh-CN" : "en");
     setBlockVisibility(language);
     setButtonState(language);
@@ -95,7 +95,7 @@
   }
 
   function keepSwitcherInView(button) {
-    var switcher = button.closest(".pmsl-language-switch");
+    var switcher = button.closest(".ap-language-switch");
     if (!switcher) {
       return;
     }
@@ -104,8 +104,8 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    var hasLanguageBlocks = document.querySelector(".pmsl-lang");
-    var buttons = document.querySelectorAll("[data-pmsl-set-lang]");
+    var hasLanguageBlocks = document.querySelector(".ap-lang");
+    var buttons = document.querySelectorAll("[data-ap-set-lang]");
     if (!hasLanguageBlocks && buttons.length === 0) {
       return;
     }
@@ -115,7 +115,7 @@
 
     Array.prototype.forEach.call(buttons, function (button) {
       button.addEventListener("click", function () {
-        setLanguage(button.getAttribute("data-pmsl-set-lang"));
+        setLanguage(button.getAttribute("data-ap-set-lang"));
         keepSwitcherInView(button);
       });
     });

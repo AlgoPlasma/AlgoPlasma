@@ -3,12 +3,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 2D 轴对称柱坐标 (rz) FDTD
 
@@ -42,7 +42,7 @@
    - **TMz 模式** （:math:`H_z=0`）：非零分量为
      :math:`E_r,\ H_\phi,\ E_z`。
 
-   PMSL 源文件名、module 名和 routine 名使用 ``tez`` 与 ``tmz`` 后缀，分别对应上述 TEz 与 TMz 分量组。
+   AlgoPlasma 源文件名、module 名和 routine 名使用 ``tez`` 与 ``tmz`` 后缀，分别对应上述 TEz 与 TMz 分量组。
 
    .. rubric:: 3. 连续方程
 
@@ -321,7 +321,7 @@
 
    :math:`H_z` 的径向项来自 :math:`(1/r)\partial_r(rE_\phi)`；实现时要把
    Yee 差分中的径向导数和圆柱坐标 metric 一起放在正确的交错位置上。
-   当前 PMSL 的 ``sub_E01_cpml_2d_rz_tez_H`` 对径向差分使用
+   当前 AlgoPlasma 的 ``sub_E01_cpml_2d_rz_tez_H`` 对径向差分使用
    :math:`D_rE_\phi/\kappa_r+\psi_{H_z,r}`，并把 :math:`E_\phi/r`
    类型的 metric 项保留在 memory 变量之外。
 
@@ -344,7 +344,7 @@
       \right].
 
    :math:`E_z` 在 :math:`i=0` 使用第 6 节的轴线闭合；CPML 更新范围应避开
-   物理轴线，或在轴线上退回专门闭合公式。PMSL 的
+   物理轴线，或在轴线上退回专门闭合公式。AlgoPlasma 的
    ``sub_E01_cpml_2d_rz_tmz_E``、``sub_E01_cpml_2d_rz_tmz_H``、
    ``sub_E01_cpml_2d_rz_tez_E`` 和 ``sub_E01_cpml_2d_rz_tez_H`` 分别保存
    ``psi_ez_r``、``psi_er_z``、``psi_ha_r``、``psi_ha_z``、
@@ -358,7 +358,7 @@
      *Microwave and Optical Technology Letters*, 27(5): 334-339, 2000.
      DOI: `10.1002/1098-2760(20001205)27:5\<334::AID-MOP14\>3.0.CO;2-A <https://doi.org/10.1002/1098-2760(20001205)27:5%3C334::AID-MOP14%3E3.0.CO;2-A>`_.
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: 2D Cylindrical (rz) FDTD
 
@@ -390,7 +390,7 @@
      :math:`E_r,\ H_\phi,\ E_z`.
 
    In this axisymmetric reduction, TEz and TMz are two decoupled subsystems of
-   the full cylindrical Maxwell equations. PMSL source filenames, module names,
+   the full cylindrical Maxwell equations. AlgoPlasma source filenames, module names,
    and routine names use ``tez`` and ``tmz`` suffixes to match these axial mode names.
 
    .. rubric:: 3. Continuous Equations
@@ -684,7 +684,7 @@
 
    The :math:`H_z` radial term comes from
    :math:`(1/r)\partial_r(rE_\phi)`. Its Yee derivative and cylindrical metric
-   must be evaluated at the correct staggered radius. The current PMSL
+   must be evaluated at the correct staggered radius. The current AlgoPlasma
    ``sub_E01_cpml_2d_rz_tez_H`` applies CPML to the radial difference
    :math:`D_rE_\phi/\kappa_r+\psi_{H_z,r}` and keeps the
    :math:`E_\phi/r`-type metric contribution outside the memory variable.
@@ -709,7 +709,7 @@
 
    :math:`E_z` at :math:`i=0` must use the axis closure from section 6.
    Therefore the CPML update range should avoid the physical axis, or the
-   caller should fall back to the dedicated axis formula there. PMSL stores the
+   caller should fall back to the dedicated axis formula there. AlgoPlasma stores the
    memory variables in ``sub_E01_cpml_2d_rz_tmz_E``,
    ``sub_E01_cpml_2d_rz_tmz_H``, ``sub_E01_cpml_2d_rz_tez_E``, and
    ``sub_E01_cpml_2d_rz_tez_H`` as ``psi_ez_r``, ``psi_er_z``,

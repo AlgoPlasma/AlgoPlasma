@@ -11,9 +11,9 @@ import re
 import subprocess
 from pathlib import Path
 
-project = 'PMSL'
-copyright = '2025-2026, PMSL'
-author = 'PMSL'
+project = 'AlgoPlasma'
+copyright = '2025-2026, AlgoPlasma'
+author = 'AlgoPlasma'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -21,8 +21,8 @@ author = 'PMSL'
 HERE = os.path.dirname(__file__)
 subprocess.run(["doxygen", "Doxyfile"], cwd=HERE, check=True)
 
-breathe_projects = {"PMSL": os.path.join("_doxygen", "xml")}
-breathe_default_project = "PMSL"
+breathe_projects = {"AlgoPlasma": os.path.join("_doxygen", "xml")}
+breathe_default_project = "AlgoPlasma"
 
 extensions = [
     "sphinx_rtd_theme",
@@ -127,6 +127,6 @@ def mark_reference_links_in_html(app, exception):
 
 def setup(app):
     app.add_css_file("custom.css")  # Sphinx >= 1.8
-    app.add_css_file("pmsl-home-hero.css")
-    app.add_js_file("pmsl-language-switch.js")
+    app.add_css_file("ap-home-hero.css")
+    app.add_js_file("ap-language-switch.js")
     app.connect("build-finished", mark_reference_links_in_html)

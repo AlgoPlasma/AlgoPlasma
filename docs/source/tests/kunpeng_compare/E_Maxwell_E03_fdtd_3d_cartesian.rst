@@ -3,12 +3,12 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh pmsl-e03
+.. container:: ap-lang ap-lang-zh ap-e03
 
    .. note::
 
@@ -58,10 +58,10 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       :widths: 22 40 38
 
       "AMD 原版", "``gfortran -O3 -fopenmp``，H/E kernel 内部各自 ``parallel do collapse(3)``", "作为 AMD 基线"
-      "AMD ompdo", "增加 ``-DPMSL_E03_USE_OMPDO``，改成外层 ``parallel`` + H/E 内部 ``omp do``", "减少反复进入 OpenMP parallel region 的开销"
+      "AMD ompdo", "增加 ``-DALGOPLASMA_E03_USE_OMPDO``，改成外层 ``parallel`` + H/E 内部 ``omp do``", "减少反复进入 OpenMP parallel region 的开销"
       "Kunpeng gcc/mpifort", "鲲鹏环境下使用 GNU Fortran wrapper，并加 ``-mcpu=native`` 和 ``OMP_PROC_BIND=spread``", "作为鲲鹏 GNU 工具链基线"
       "Kunpeng BiSheng", "换成 BiSheng ``flang``，保留 ``-mcpu=native`` 和 ``OMP_PROC_BIND=spread``", "看鲲鹏专用编译器对同一 kernel 的收益"
-      "Kunpeng BiSheng ompdo", "BiSheng ``flang`` + ``-DPMSL_E03_USE_OMPDO``", "同时测试编译器优化和 OpenMP 并行区域优化"
+      "Kunpeng BiSheng ompdo", "BiSheng ``flang`` + ``-DALGOPLASMA_E03_USE_OMPDO``", "同时测试编译器优化和 OpenMP 并行区域优化"
 
    这里容易混的一点是：``-mcpu`` 属于编译选项，``OMP_PROC_BIND``、
    ``OMP_PLACES`` 和 ``OMP_DYNAMIC`` 属于 OpenMP 运行时环境变量。它们不是
@@ -72,7 +72,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       :widths: 24 48 28
 
       "``-mcpu=native``", "让编译器按当前鲲鹏 CPU 生成和调度代码；脚本里可用 ``KUNPENG_MCPU`` 改成具体 CPU 名称", "不是。本页 GNU 和 BiSheng 脚本都用了它；换到 x86 等架构时可能要改用 ``-march``/``-mtune``"
-      "``-cpp`` / ``-DPMSL_E03_USE_OMPDO``", "开启预处理，并用宏切换到 ompdo 版本", "不是。gfortran 和这套 BiSheng ``flang`` 都接受这类 GNU 风格选项"
+      "``-cpp`` / ``-DALGOPLASMA_E03_USE_OMPDO``", "开启预处理，并用宏切换到 ompdo 版本", "不是。gfortran 和这套 BiSheng ``flang`` 都接受这类 GNU 风格选项"
       "``-O3`` / ``-fopenmp``", "打开优化和 OpenMP 编译支持", "不是。两边都有对应支持；性能差异主要来自编译器后端和 OpenMP runtime 实现"
       "``-fdefault-real-8`` / ``-ffree-line-length-none``", "保持默认 ``real`` 为 8 字节，并放宽 Fortran 自由格式行长", "不是。这里使用的是两边都接受的 GNU 风格选项"
       "``OMP_NUM_THREADS``", "由 ``THREAD_LIST`` 扫描得到，控制每次运行使用的 OpenMP 线程数", "不是编译选项，而是 OpenMP 运行时变量"
@@ -226,7 +226,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       外层 ``parallel`` + H/E ``omp do`` 不是 Kunpeng 专属优化，平台公平比较时
       两边都应该保留对应数据。
 
-.. container:: pmsl-lang pmsl-lang-en pmsl-e03
+.. container:: ap-lang ap-lang-en ap-e03
 
    .. note::
 
@@ -271,10 +271,10 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       :widths: 22 40 38
 
       "AMD original", "``gfortran -O3 -fopenmp`` with H/E kernels using their own ``parallel do collapse(3)``", "AMD baseline"
-      "AMD ompdo", "Adds ``-DPMSL_E03_USE_OMPDO`` and uses one outer ``parallel`` region plus H/E ``omp do`` loops", "Reduce repeated OpenMP parallel-region entry cost"
+      "AMD ompdo", "Adds ``-DALGOPLASMA_E03_USE_OMPDO`` and uses one outer ``parallel`` region plus H/E ``omp do`` loops", "Reduce repeated OpenMP parallel-region entry cost"
       "Kunpeng GCC/mpifort", "GNU Fortran wrapper on Kunpeng with ``-mcpu=native`` and ``OMP_PROC_BIND=spread``", "Kunpeng GNU-toolchain baseline"
       "Kunpeng BiSheng", "Uses BiSheng ``flang`` with ``-mcpu=native`` and ``OMP_PROC_BIND=spread``", "Measure the compiler/toolchain effect on Kunpeng"
-      "Kunpeng BiSheng ompdo", "BiSheng ``flang`` plus ``-DPMSL_E03_USE_OMPDO``", "Combine the compiler change with the OpenMP-region change"
+      "Kunpeng BiSheng ompdo", "BiSheng ``flang`` plus ``-DALGOPLASMA_E03_USE_OMPDO``", "Combine the compiler change with the OpenMP-region change"
 
    One detail is easy to mix up: ``-mcpu`` is a compiler option, while
    ``OMP_PROC_BIND``, ``OMP_PLACES``, and ``OMP_DYNAMIC`` are OpenMP runtime
@@ -285,7 +285,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       :widths: 24 48 28
 
       "``-mcpu=native``", "Generate and tune code for the local Kunpeng CPU; ``KUNPENG_MCPU`` can override the CPU value", "No. This page uses it in both GNU and BiSheng scripts; on other architectures the spelling may become ``-march``/``-mtune``"
-      "``-cpp`` / ``-DPMSL_E03_USE_OMPDO``", "Enable preprocessing and switch to the ompdo kernel variant with a macro", "No. gfortran and this BiSheng ``flang`` accept these GNU-style options"
+      "``-cpp`` / ``-DALGOPLASMA_E03_USE_OMPDO``", "Enable preprocessing and switch to the ompdo kernel variant with a macro", "No. gfortran and this BiSheng ``flang`` accept these GNU-style options"
       "``-O3`` / ``-fopenmp``", "Enable optimization and OpenMP compilation", "No. Both sides support corresponding options; performance differences mainly come from the compiler backend and OpenMP runtime"
       "``-fdefault-real-8`` / ``-ffree-line-length-none``", "Use 8-byte default ``real`` and relax free-form source line length", "No. These are GNU-style options accepted by both toolchains used here"
       "``OMP_NUM_THREADS``", "Set from ``THREAD_LIST`` for each sweep point", "No. It is an OpenMP runtime variable, not a compiler option"

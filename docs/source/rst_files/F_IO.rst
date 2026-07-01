@@ -11,16 +11,16 @@ F_IO
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
-   ``F_IO`` 提供 PMSL 中按 MPI rank 组织的数据输入输出例程。它不负责全局重排或可视化，
+   ``F_IO`` 提供 AlgoPlasma 中按 MPI rank 组织的数据输入输出例程。它不负责全局重排或可视化，
    而是把本 rank 的粒子相空间数组、局部场数组或由网格节点平均得到的 cell-centered 场写入约定文件名，并在读回时恢复同一 rank 的本地数据。
 
    .. list-table:: 模块关系
@@ -75,11 +75,11 @@ F_IO
    ``dat/bin/h5`` round-trip、dispatcher fallback、场 ``1d/3d/grid`` round-trip，
    并用逐元素比较触发 ``MPI_ABORT`` 来保证失败可见。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
-   ``F_IO`` provides MPI-rank-local input and output routines for PMSL. It does not
+   ``F_IO`` provides MPI-rank-local input and output routines for AlgoPlasma. It does not
    perform global reassembly or visualization. Instead, each routine writes or
    loads the current rank's particle phase-space array, local field array, or
    cell-centered values reconstructed from a grid-defined field using a shared

@@ -3,12 +3,12 @@ sub_E02_cpml_3d_cylindrical_E.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 直接用途
 
@@ -131,7 +131,7 @@ sub_E02_cpml_3d_cylindrical_E.f90
    - 若更新范围包含 ``i=0``，``Ez`` 轴线闭合会对 ``jl:ju`` 范围内的 ``Hphi`` 求平均；调用端需要确认该范围代表预期的角向集合。
    - 若只在 CPML 区域调用本例程，内部普通区域可继续使用 ``sub_E02_fdtd_3d_cylindrical_E``。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Direct Purpose
 

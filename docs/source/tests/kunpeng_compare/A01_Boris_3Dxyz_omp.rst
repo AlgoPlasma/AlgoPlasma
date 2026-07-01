@@ -3,12 +3,12 @@ A01_Boris_3Dxyz_omp Comparison
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 测试目标
 
@@ -92,7 +92,7 @@ A01_Boris_3Dxyz_omp Comparison
    当前日志中，鲲鹏服务器在 8、16、64、128、512 线程下更快；AMD 服务器在 32、256
    线程下更快。该现象应结合机器硬件配置、线程绑定、NUMA 策略和运行时环境进一步解释。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Test Goal
 

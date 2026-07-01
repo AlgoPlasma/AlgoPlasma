@@ -8,16 +8,16 @@ J_Fluid
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
-   ``J_Fluid`` 放置 PMSL 的流体方程更新例程。当前只有一个子模块，负责在三维直角网格上推进自由流连续性方程。
+   ``J_Fluid`` 放置 AlgoPlasma 的流体方程更新例程。当前只有一个子模块，负责在三维直角网格上推进自由流连续性方程。
 
    .. math::
 
@@ -52,11 +52,11 @@ J_Fluid
 
    当前仓库中未发现覆盖 ``J_Fluid`` 的独立顶层 ``tests/`` 回归目录。若后续添加连续性方程或有限体积通量测试，应同步在 :doc:`测试总览 </tests/index>` 和本页补充链接。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
-   ``J_Fluid`` contains fluid-equation update routines for PMSL. The current
+   ``J_Fluid`` contains fluid-equation update routines for AlgoPlasma. The current
    module advances the free-flow continuity equation on a three-dimensional
    Cartesian mesh:
 

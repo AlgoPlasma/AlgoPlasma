@@ -10,12 +10,12 @@ mod_E02_cpml_3d_cylindrical.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 模块职责
 
@@ -60,7 +60,7 @@ mod_E02_cpml_3d_cylindrical.f90
    - 编译时需要启用预处理，并让编译器能找到被 ``#include`` 的两个子例程源文件。
    - 若只在吸收层调用 CPML 子例程，内部普通区域可继续使用 ``mod_E02_fdtd_3d_cylindrical`` 中的非 CPML 更新。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Module Role
 

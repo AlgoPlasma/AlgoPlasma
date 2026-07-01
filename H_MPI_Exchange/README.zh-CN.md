@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`H_MPI_Exchange` 提供 PMSL 在 MPI 区域分解中使用的数据交换例程。
+`H_MPI_Exchange` 提供 AlgoPlasma 在 MPI 区域分解中使用的数据交换例程。
 
 ## 子目录
 

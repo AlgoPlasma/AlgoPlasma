@@ -9,8 +9,8 @@ AMD_MARCH="${AMD_MARCH:-native}"
 AMD_MTUNE="${AMD_MTUNE:-native}"
 FCFLAGS="${FCFLAGS:--cpp -O3 -fdefault-real-8 -fopenmp -ffree-line-length-none -march=${AMD_MARCH} -mtune=${AMD_MTUNE}}"
 case " ${FCFLAGS} " in
-  *" -DPMSL_E03_USE_OMPDO "*) ;;
-  *) FCFLAGS="${FCFLAGS} -DPMSL_E03_USE_OMPDO" ;;
+  *" -DALGOPLASMA_E03_USE_OMPDO "*) ;;
+  *) FCFLAGS="${FCFLAGS} -DALGOPLASMA_E03_USE_OMPDO" ;;
 esac
 OMP_PROC_BIND="${OMP_PROC_BIND:-spread}"
 OMP_PLACES="${OMP_PLACES:-cores}"

@@ -11,12 +11,12 @@ I02_par_init_and_load
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 模块职责
 
@@ -45,12 +45,12 @@ I02_par_init_and_load
 
    .. raw:: html
 
-      <div class="pmsl-home-footer-band">
+      <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="pmsl-home-contact">Zhongping ZHAO (2026/4/22) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">Zhongping ZHAO (2026/4/22) · 哈尔滨工业大学</p>
       </div>
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Module Role
 
@@ -82,7 +82,7 @@ I02_par_init_and_load
 
    .. raw:: html
 
-      <div class="pmsl-home-footer-band">
+      <div class="ap-home-footer-band">
         <p><strong>Contributors</strong></p>
-        <p class="pmsl-home-contact">Zhongping ZHAO (2026/4/22) · Harbin Institute of Technology</p>
+        <p class="ap-home-contact">Zhongping ZHAO (2026/4/22) · Harbin Institute of Technology</p>
       </div>

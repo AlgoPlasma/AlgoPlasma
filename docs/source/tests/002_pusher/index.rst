@@ -11,12 +11,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本节整理 ``tests/002_pusher`` 下与 A_Pusher 相关的验证程序。这里的页面不替代
    A01/A02/A03 的算法说明，而是说明如何运行已有测试、如何读输出数据，以及静态参考图对应的物理图像。
@@ -41,7 +41,7 @@
    静态图片来自一次参考运行，并保存到 ``docs/source/images/tests/002_pusher``。
    如果修改了测试程序、pusher 算法或绘图脚本，应重新运行测试并更新这些图片。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This section documents the A_Pusher validation programs under
    ``tests/002_pusher``. These pages do not replace the algorithm notes for

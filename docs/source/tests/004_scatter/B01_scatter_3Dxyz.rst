@@ -3,12 +3,12 @@ B01_scatter_3Dxyz Test
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 测试目标
 
@@ -123,7 +123,7 @@ B01_scatter_3Dxyz Test
       ``case04`` 粒子布局与沉积密度切片。左上为 3D 粒子位置；右上为 ``k=5`` 的
       ``x-y`` 切片；左下为 ``j=5`` 的 ``x-z`` 切片；右下为 ``i=5`` 的 ``y-z`` 切片。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Test Goal
 

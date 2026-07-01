@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`F_IO` is PMSL's MPI per-rank data input/output layer for particle phase-space
+`F_IO` is AlgoPlasma's MPI per-rank data input/output layer for particle phase-space
 arrays and local field arrays.
 
 ## Subdirectories

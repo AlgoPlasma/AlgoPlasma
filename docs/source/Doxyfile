@@ -1,5 +1,5 @@
 # 基本
-PROJECT_NAME           = "PMSL"
+PROJECT_NAME           = "AlgoPlasma"
 OUTPUT_DIRECTORY       = _doxygen
 GENERATE_HTML          = NO
 GENERATE_LATEX         = NO

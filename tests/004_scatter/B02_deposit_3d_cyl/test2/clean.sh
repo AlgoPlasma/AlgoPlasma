@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # This script should be placed in:
-# pmsl-new/tests/004_scatter/B02_deposit_3d_cyl/test2/
+# algoplasma/tests/004_scatter/B02_deposit_3d_cyl/test2/
 
 CASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

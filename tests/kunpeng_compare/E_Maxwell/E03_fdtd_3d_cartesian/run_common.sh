@@ -9,7 +9,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "${SCRIPT_DIR}"
 
-PMSL_PLATFORM="$1"
+ALGOPLASMA_PLATFORM="$1"
 shift
 
 NX="${1:-${NX:-96}}"
@@ -18,7 +18,7 @@ NZ="${3:-${NZ:-96}}"
 NSTEPS="${4:-${NSTEPS:-40}}"
 REPEATS="${5:-${REPEATS:-3}}"
 THREAD_LIST="${THREAD_LIST:-1 2 4 8 16 32 64}"
-SAFE_PLATFORM="$(printf '%s' "${PMSL_PLATFORM}" | tr -c 'A-Za-z0-9_.-' '_')"
+SAFE_PLATFORM="$(printf '%s' "${ALGOPLASMA_PLATFORM}" | tr -c 'A-Za-z0-9_.-' '_')"
 
 FC="${FC:-gfortran}"
 FCFLAGS="${FCFLAGS:--cpp -O3 -fdefault-real-8 -fopenmp -ffree-line-length-none}"
@@ -57,7 +57,7 @@ echo "platform,hostname,cpu_model,compiler,fc,fcflags,omp_proc_bind,omp_places,n
 echo "platform,threads,repeat,elapsed_s,component_updates_per_s,checksum_e,checksum_h,total_energy" > "${repeat_csv}"
 
 echo "Running E03 FDTD Cartesian thread sweep..."
-echo "platform=${PMSL_PLATFORM}, nx=${NX}, ny=${NY}, nz=${NZ}, nsteps=${NSTEPS}, repeats=${REPEATS}"
+echo "platform=${ALGOPLASMA_PLATFORM}, nx=${NX}, ny=${NY}, nz=${NZ}, nsteps=${NSTEPS}, repeats=${REPEATS}"
 echo "THREAD_LIST=${THREAD_LIST}"
 echo "OMP_PROC_BIND=${OMP_PROC_BIND}, OMP_PLACES=${OMP_PLACES}"
 
@@ -79,7 +79,7 @@ for nthread in ${THREAD_LIST}; do
   summary_payload="${summary_line#SUMMARY_CSV,}"
   {
     printf '%s,%s,%s,%s,%s,%s,%s,%s,%s\n' \
-      "$(csv_escape "${PMSL_PLATFORM}")" \
+      "$(csv_escape "${ALGOPLASMA_PLATFORM}")" \
       "$(csv_escape "${hostname_value}")" \
       "$(csv_escape "${cpu_model}")" \
       "$(csv_escape "${compiler}")" \
@@ -90,7 +90,7 @@ for nthread in ${THREAD_LIST}; do
       "${summary_payload}"
   } >> "${raw_csv}"
 
-  awk -F, -v platform="${PMSL_PLATFORM}" -v threads="${nthread}" 'NR > 1 {
+  awk -F, -v platform="${ALGOPLASMA_PLATFORM}" -v threads="${nthread}" 'NR > 1 {
     print platform "," threads "," $0
   }' output/timings.csv >> "${repeat_csv}"
 done

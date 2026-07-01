@@ -3,12 +3,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 3D Cartesian (xyz) FDTD
 
@@ -230,7 +230,7 @@
    例如 :math:`\epsilon_x` 对应 :math:`E_x` 节点。若介质为空间变化但各向同性，
    一般应把标量材料参数采样到相应的交错分量位置。
 
-   PMSL 当前的 ``sub_E03_fdtd_3d_cartesian_E`` 和 ``sub_E03_fdtd_3d_cartesian_H`` 例程使用
+   AlgoPlasma 当前的 ``sub_E03_fdtd_3d_cartesian_E`` 和 ``sub_E03_fdtd_3d_cartesian_H`` 例程使用
    标量参数 ``ep`` 和 ``mu``，即一次调用中所有更新点共享同一个介电常数或磁导率。
    若后续需要非均匀介质，需要把材料参数扩展为与分量位置匹配的数组或外层分块调用。
 
@@ -323,7 +323,7 @@
 
    :math:`H_x`、:math:`E_y`、:math:`H_y`、:math:`E_z` 和 :math:`H_z`
    的处理完全类似，只需把对应 curl 中的每个差分
-   :math:`D_u q` 替换为 :math:`D_u q/\kappa_u+\psi`。PMSL 中
+   :math:`D_u q` 替换为 :math:`D_u q/\kappa_u+\psi`。AlgoPlasma 中
    ``sub_E03_cpml_3d_cartesian_E`` 和 ``sub_E03_cpml_3d_cartesian_H`` 正是按这个规则
    使用 ``aex/bex/kex``、``aey/bey/key``、``aez/bez/kez`` 以及对应的
    ``psi_*`` 数组。
@@ -335,7 +335,7 @@
      *Microwave and Optical Technology Letters*, 27(5): 334-339, 2000.
      DOI: `10.1002/1098-2760(20001205)27:5\<334::AID-MOP14\>3.0.CO;2-A <https://doi.org/10.1002/1098-2760(20001205)27:5%3C334::AID-MOP14%3E3.0.CO;2-A>`_.
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: 3D Cartesian (xyz) FDTD
 
@@ -576,7 +576,7 @@
    but remain isotropic, use position-dependent scalar values sampled on the same
    staggered locations as each component.
 
-   The current PMSL ``sub_E03_fdtd_3d_cartesian_E`` and
+   The current AlgoPlasma ``sub_E03_fdtd_3d_cartesian_E`` and
    ``sub_E03_fdtd_3d_cartesian_H`` kernels take scalar ``ep`` and ``mu`` arguments,
    so one call uses one permittivity or permeability value for all updated
    cells. Spatially varying media require either component-aligned material
@@ -681,7 +681,7 @@
 
    :math:`H_x`, :math:`E_y`, :math:`H_y`, :math:`E_z`, and :math:`H_z`
    follow the same replacement rule for every curl derivative
-   :math:`D_u q`. In PMSL this is implemented by
+   :math:`D_u q`. In AlgoPlasma this is implemented by
    ``sub_E03_cpml_3d_cartesian_E`` and ``sub_E03_cpml_3d_cartesian_H`` with the
    ``aex/bex/kex``, ``aey/bey/key``, ``aez/bez/kez``, and corresponding
    ``psi_*`` arrays.

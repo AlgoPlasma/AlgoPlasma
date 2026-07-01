@@ -8,16 +8,16 @@ G_collision
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
-   ``G_collision`` 收集 PMSL 中的碰撞模型。当前实现的子模块是
+   ``G_collision`` 收集 AlgoPlasma 中的碰撞模型。当前实现的子模块是
    :doc:`G01_MCC <G_collision/G01_MCC>`，用于基于截面表的 Monte Carlo
    Collision (MCC) 采样，包括电子-中性粒子、离子-中性粒子以及电离产生的二次粒子处理。
 
@@ -45,11 +45,11 @@ G_collision
    :doc:`G01_MCC <G_collision/G01_MCC>`。各 Fortran 文件页面保留简短中文说明，完整
    Doxygen API 位于英文视图。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
-   ``G_collision`` contains collision models used by PMSL. The current module is
+   ``G_collision`` contains collision models used by AlgoPlasma. The current module is
    :doc:`G01_MCC <G_collision/G01_MCC>`, a tabulated-cross-section Monte Carlo
    Collision (MCC) layer for electron-neutral collisions, ion-neutral collisions,
    and secondary particles produced by ionization.

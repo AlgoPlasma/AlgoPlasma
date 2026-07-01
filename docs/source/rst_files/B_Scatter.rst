@@ -13,12 +13,12 @@ B_Scatter
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
@@ -61,7 +61,7 @@ B_Scatter
    源码使用默认 ``real`` 精度；需要双精度默认实数时，应在主程序、模块和测试中使用一致的编译选项，
    例如 ``-fdefault-real-8`` 或 ``-real-size 64``。包含 ``#include`` 的模块入口和 MPI 交换例程通常还需要启用预处理，例如 ``-cpp`` 或 ``-fpp``。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 

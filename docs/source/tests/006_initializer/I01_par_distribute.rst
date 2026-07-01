@@ -3,12 +3,12 @@ I01_par_distribute Test
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 测试目标
 
@@ -80,7 +80,7 @@ I01_par_distribute Test
       Case 04 速度分布直方图（N=125000）。三个分量分别以对应的高斯曲线
       :math:`\mathcal{N}(v_d, v_t^2)` 叠加验证 Box-Muller 采样的正确性。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Test Goal
 

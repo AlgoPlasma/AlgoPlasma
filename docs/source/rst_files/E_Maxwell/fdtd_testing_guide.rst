@@ -4,16 +4,16 @@ FDTD Testing Guide
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 1. 范围
 
-   本指南概述 PMSL 中 FDTD 内核的验证方式、测试算例所在位置，以及如何快速运行和检查结果。
+   本指南概述 AlgoPlasma 中 FDTD 内核的验证方式、测试算例所在位置，以及如何快速运行和检查结果。
    如果只需要按目录查看测试入口、运行顺序和反向链接，可先看 :doc:`/tests/005_maxwell/index`。
 
    当前重点覆盖以下 Maxwell 更新内核：
@@ -139,11 +139,11 @@ FDTD Testing Guide
      - ``E_Maxwell/E02_Maxwell_3Drtz/fdtd_3d_cylindrical_notes``
      - ``E_Maxwell/E03_Maxwell_3Dxyz/fdtd_3d_cartesian_notes``
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: 1. Scope
 
-   This guide summarizes how FDTD kernels in PMSL are validated, where the test
+   This guide summarizes how FDTD kernels in AlgoPlasma are validated, where the test
    cases live, and how to run and check results quickly.
    For the directory-oriented entry point, run order, and reverse links, start
    from :doc:`/tests/005_maxwell/index`.

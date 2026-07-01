@@ -3,16 +3,16 @@ MPI Exchange Testing Guide
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
 .. raw:: html
 
-   <div class="pmsl-mpi-guide">
+   <div class="ap-mpi-guide">
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 1. 范围
 
@@ -47,13 +47,13 @@ MPI Exchange Testing Guide
 
    .. raw:: html
 
-      <div class="pmsl-home-panel pmsl-topology-panel">
-        <div class="pmsl-topology-label">拓扑 / 逻辑坐标</div>
-        <div class="pmsl-topology-grid">
-          <span class="pmsl-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
+      <div class="ap-home-panel ap-topology-panel">
+        <div class="ap-topology-label">拓扑 / 逻辑坐标</div>
+        <div class="ap-topology-grid">
+          <span class="ap-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
         </div>
       </div>
 
@@ -215,7 +215,7 @@ MPI Exchange Testing Guide
    最后核对迁移后的最终 ID 分布，这样更容易把“为什么会迁移到这个 rank”直接追溯回初值构造。
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 10 18 30
 
@@ -308,7 +308,7 @@ MPI Exchange Testing Guide
    而 ``1900`` / ``1903`` 则应该完全从全局结果里消失。
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 36 64
 
@@ -330,7 +330,7 @@ MPI Exchange Testing Guide
    方便在断言失败时快速判断问题更像是 halo 覆盖错误、边界累加错误，还是粒子归属错误。
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 34 24 42
 
@@ -352,7 +352,7 @@ MPI Exchange Testing Guide
    一个实用的排查顺序是：先看断言失败落在 H01/H02/H03 的哪一段，再去对照对应 ``.dat`` 和图，
    这样能更快缩小到“发送层不对”“累加语义不对”或“粒子删除/迁移不对”这类具体错误。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: 1. Scope
 
@@ -388,13 +388,13 @@ MPI Exchange Testing Guide
 
    .. raw:: html
 
-      <div class="pmsl-home-panel pmsl-topology-panel">
-        <div class="pmsl-topology-label">Topology / Logical Coordinates</div>
-        <div class="pmsl-topology-grid">
-          <span class="pmsl-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
+      <div class="ap-home-panel ap-topology-panel">
+        <div class="ap-topology-label">Topology / Logical Coordinates</div>
+        <div class="ap-topology-grid">
+          <span class="ap-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
         </div>
       </div>
 
@@ -562,7 +562,7 @@ MPI Exchange Testing Guide
    directly back to how the test data was seeded.
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 10 18 30
 
@@ -659,7 +659,7 @@ MPI Exchange Testing Guide
    and ``1900`` / ``1903`` should disappear from the global result entirely.
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 36 64
 
@@ -684,7 +684,7 @@ MPI Exchange Testing Guide
    overwrite issue, an accumulation issue, or an ownership issue.
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 34 24 42
 

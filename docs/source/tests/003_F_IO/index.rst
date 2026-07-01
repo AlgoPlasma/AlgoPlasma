@@ -3,12 +3,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本节整理 ``tests/003_F_IO`` 中的 F_IO 回归测试。这个测试不生成图片，而是用
    “写入 -> MPI 同步 -> 读取 -> 逐元素比较”的方式验证粒子数据和场数据的 I/O
@@ -132,7 +132,7 @@
    这是测试故意触发的 fallback 路径；只要后面出现 ``PASS: par unknown-tag fallback``，
    就表示该路径按预期工作。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This section documents the F_IO regression test under ``tests/003_F_IO``.
    The test does not generate figures. Instead, it uses a

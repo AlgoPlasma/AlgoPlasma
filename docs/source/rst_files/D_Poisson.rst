@@ -13,16 +13,16 @@ D_Poisson
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
-   ``D_Poisson`` 提供 PMSL 中的静电 Poisson 求解器文档入口。当前实现围绕
+   ``D_Poisson`` 提供 AlgoPlasma 中的静电 Poisson 求解器文档入口。当前实现围绕
    HYPRE Struct 接口组织，覆盖 Cartesian ``(x,y,z)`` 网格、
    柱坐标均匀 ``(r,alpha,z)`` 网格，以及柱坐标非均匀 ``(r,alpha,z)`` 网格。
    这些求解器面向 PIC 中的电势 :math:`\phi` 求解，输入通常是已经沉积到网格上的电荷密度
@@ -106,12 +106,12 @@ D_Poisson
    ``test07`` 的运行环境、误差表和参考图片。本节只描述 D_Poisson API 与算法结构，
    不重复保存测试结果；修改求解器或绘图脚本后，应重新运行测试页中对应用例并刷新图片。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
    ``D_Poisson`` is the documentation entry point for the electrostatic Poisson
-   solvers in PMSL. The current implementation is organized around the HYPRE
+   solvers in AlgoPlasma. The current implementation is organized around the HYPRE
    Struct interface. It covers Cartesian ``(x,y,z)`` grids,
    uniform cylindrical ``(r,alpha,z)`` grids, and nonuniform cylindrical
    ``(r,alpha,z)`` grids. In PIC workflows these solvers take charge density and

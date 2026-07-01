@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`A_Pusher` collects particle-pushing algorithms in PMSL. These routines update particle velocity or phase-space state under prescribed electric and magnetic fields, particle charge-to-mass ratio, and time step. The current directory contains three pushers for Cartesian coordinates, cylindrical coordinates, and relativistic velocity updates.
+`A_Pusher` collects particle-pushing algorithms in AlgoPlasma. These routines update particle velocity or phase-space state under prescribed electric and magnetic fields, particle charge-to-mass ratio, and time step. The current directory contains three pushers for Cartesian coordinates, cylindrical coordinates, and relativistic velocity updates.
 
 ## Current Algorithms
 

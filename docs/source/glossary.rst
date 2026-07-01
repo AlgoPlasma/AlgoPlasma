@@ -3,16 +3,16 @@ Glossary
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 常用术语
 
-   本页统一 PMSL 文档中反复出现的网格、粒子和并行术语。模块页和测试页优先使用这里的写法。
+   本页统一 AlgoPlasma 文档中反复出现的网格、粒子和并行术语。模块页和测试页优先使用这里的写法。
 
    .. list-table:: 术语表
       :header-rows: 1
@@ -53,12 +53,12 @@ Glossary
       * - MMS
         - Method of Manufactured Solutions，用人为构造的精确解和源项检查离散格式收敛阶。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Common Terms
 
    This page standardizes grid, particle, and parallel terms used throughout the
-   PMSL documentation. Module and test pages should prefer these spellings and
+   AlgoPlasma documentation. Module and test pages should prefer these spellings and
    meanings.
 
    .. list-table:: Glossary

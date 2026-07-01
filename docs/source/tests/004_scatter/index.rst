@@ -10,12 +10,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本节整理 ``tests/004_scatter`` 中的 B_Scatter 测试，当前包含三组内容：
    ``B01_scatter_3Dxyz`` 下的 Cartesian scatter 综合测试、
@@ -82,7 +82,7 @@
 
    ``run.sh`` 的参数是粒子数；README 中的默认粒子数很大，做快速 smoke test 时建议显式给一个较小数值。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This section documents the B_Scatter tests under ``tests/004_scatter``.
 <<<<<<< HEAD

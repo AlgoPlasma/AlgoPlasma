@@ -14,16 +14,16 @@ E_Maxwell
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 概览
 
-   ``E_Maxwell`` 记录 PMSL 中用于数值求解 Maxwell 方程组的场推进子程序和边界处理扩展。
+   ``E_Maxwell`` 记录 AlgoPlasma 中用于数值求解 Maxwell 方程组的场推进子程序和边界处理扩展。
    当前主要实现基于有限差分时域法（Finite-Difference Time-Domain, FDTD）：电场
    :math:`\mathbf{E}` 和磁场 :math:`\mathbf{H}` 在空间上交错，在时间上采用 leapfrog
    半步交错。模块还提供卷积完美匹配层（Convolutional Perfectly Matched Layer, CPML）
@@ -88,11 +88,11 @@ E_Maxwell
    覆盖内容对应 ``tests/005_maxwell`` 下的 single-step、m=0 equivalence、MMS、稳定性、
    长时间传播、CPML wave-packet reference 和可视化案例。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
-   ``E_Maxwell`` documents PMSL field-advance subroutines and boundary
+   ``E_Maxwell`` documents AlgoPlasma field-advance subroutines and boundary
    extensions for numerically solving Maxwell's equations. The current main
    implementation uses the finite-difference time-domain method (FDTD):
    electric and magnetic fields are staggered in space and advanced with

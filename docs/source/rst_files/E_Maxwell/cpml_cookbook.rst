@@ -3,12 +3,12 @@ CPML Cookbook
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: CPML 在 E_Maxwell 里的角色
 
@@ -16,7 +16,7 @@ CPML Cookbook
    内核负责内部区域的 Maxwell curl 更新；CPML 内核在吸收层中用带有 ``kappa`` 缩放和
    ``psi`` memory 的差分项替代普通差分项，从而降低出射波在边界处的反射。
 
-   本页关注“如何安全使用 PMSL 的 CPML routine”，不重新推导完整 PML 理论。公式细节见三篇
+   本页关注“如何安全使用 AlgoPlasma 的 CPML routine”，不重新推导完整 PML 理论。公式细节见三篇
    FDTD notes，反射效果验证见 :doc:`CPML wave-packet tests </tests/005_maxwell/cpml_wavepacket>`。
 
    .. rubric:: 使用规则
@@ -103,7 +103,7 @@ CPML Cookbook
      *Microwave and Optical Technology Letters*, 27(5): 334-339, 2000.
      DOI: `10.1002/1098-2760(20001205)27:5\<334::AID-MOP14\>3.0.CO;2-A <https://doi.org/10.1002/1098-2760(20001205)27:5%3C334::AID-MOP14%3E3.0.CO;2-A>`_.
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Role of CPML in E_Maxwell
 
@@ -113,7 +113,7 @@ CPML Cookbook
    absorbing layers with ``kappa``-scaled derivatives plus ``psi`` memory terms,
    reducing outgoing-wave reflection at domain edges.
 
-   This page focuses on safe use of PMSL CPML routines. It does not rederive
+   This page focuses on safe use of AlgoPlasma CPML routines. It does not rederive
    the full PML theory. Formula details live in the three FDTD notes, and
    reflection behavior is validated by
    :doc:`CPML wave-packet tests </tests/005_maxwell/cpml_wavepacket>`.

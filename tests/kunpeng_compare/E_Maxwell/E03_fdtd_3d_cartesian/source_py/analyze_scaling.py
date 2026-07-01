@@ -96,7 +96,7 @@ def main() -> int:
             speedup_text = ""
             efficiency_text = ""
 
-        if "PMSL_E03_USE_OMPDO" in row.get("fcflags", ""):
+        if "ALGOPLASMA_E03_USE_OMPDO" in row.get("fcflags", ""):
             parallel_note = "E03 FDTD benchmark uses one outer OpenMP parallel region with H/E ompdo kernels."
         else:
             parallel_note = "E03 FDTD H/E update kernels use OpenMP parallel do collapse(3) over the Cartesian grid."

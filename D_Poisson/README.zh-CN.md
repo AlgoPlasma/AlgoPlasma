@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`D_Poisson` 包含 PMSL 的静电 Poisson 求解器及相关后处理工具，主要通过 HYPRE Struct/PFMG 求解 cell-centered 结构网格上的电势方程。后处理例程负责展开求解器输出并计算电场等派生量。
+`D_Poisson` 包含 AlgoPlasma 的静电 Poisson 求解器及相关后处理工具，主要通过 HYPRE Struct/PFMG 求解 cell-centered 结构网格上的电势方程。后处理例程负责展开求解器输出并计算电场等派生量。
 
 ## 子目录
 

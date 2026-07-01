@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`I_Initializer` contains PMSL particle-initialization utilities.
+`I_Initializer` contains AlgoPlasma particle-initialization utilities.
 
 ## Subdirectories
 

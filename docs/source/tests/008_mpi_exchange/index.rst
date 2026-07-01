@@ -3,16 +3,16 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
 .. raw:: html
 
-   <div class="pmsl-mpi-guide">
+   <div class="ap-mpi-guide">
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 速览
 
@@ -22,7 +22,7 @@
    它偏向“先跑一遍确认没回归”，不是完整正确性证明，也不是 MPI 压力测试。
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 18 26 56
 
@@ -50,7 +50,7 @@
    .. rubric:: 覆盖与边界
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 20 30 26 24
 
@@ -92,7 +92,7 @@
    .. rubric:: 输出与判读
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 34 32 34
 
@@ -124,18 +124,18 @@
 
    .. raw:: html
 
-      <div class="pmsl-home-panel pmsl-topology-panel">
-        <div class="pmsl-topology-label">拓扑 / 逻辑坐标</div>
-        <div class="pmsl-topology-grid">
-          <span class="pmsl-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
+      <div class="ap-home-panel ap-topology-panel">
+        <div class="ap-topology-label">拓扑 / 逻辑坐标</div>
+        <div class="ap-topology-grid">
+          <span class="ap-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
         </div>
       </div>
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :widths: 14 86
 
       * - **H01**
@@ -157,7 +157,7 @@
 
           边界累加与 z 周期折叠后的代表样本状态。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
 
@@ -169,7 +169,7 @@
    break?" rather than provide a full correctness proof or an MPI stress test.
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 18 26 56
 
@@ -202,7 +202,7 @@
    .. rubric:: Coverage And Limits
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 20 30 26 24
 
@@ -251,7 +251,7 @@
    .. rubric:: Outputs And Reading Them
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :header-rows: 1
       :widths: 34 32 34
 
@@ -290,18 +290,18 @@
 
    .. raw:: html
 
-      <div class="pmsl-home-panel pmsl-topology-panel">
-        <div class="pmsl-topology-label">Topology / Logical Coordinates</div>
-        <div class="pmsl-topology-grid">
-          <span class="pmsl-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
-          <span class="pmsl-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
+      <div class="ap-home-panel ap-topology-panel">
+        <div class="ap-topology-label">Topology / Logical Coordinates</div>
+        <div class="ap-topology-grid">
+          <span class="ap-topology-node"><strong>rank 2</strong><code>(1,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 3</strong><code>(2,2,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 0</strong><code>(1,1,1)</code></span>
+          <span class="ap-topology-node"><strong>rank 1</strong><code>(2,1,1)</code></span>
         </div>
       </div>
 
    .. list-table::
-      :class: pmsl-table-compact
+      :class: ap-table-compact
       :widths: 14 86
 
       * - **H01**

@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`B_Scatter` 收纳 PMSL 中从粒子到网格的沉积算子。
+`B_Scatter` 收纳 AlgoPlasma 中从粒子到网格的沉积算子。
 
 ## 子目录
 

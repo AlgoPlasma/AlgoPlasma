@@ -9,12 +9,12 @@
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    本节整理 ``tests/006_initializer`` 中的 I_Initializer 测试，当前包含两组内容：
    ``I01_par_distribute`` 的纯 Fortran 单元测试，以及
@@ -57,7 +57,7 @@
       cd tests/006_initializer/I02_par_init_and_load
       python3 source_py/test_filter.py
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    This section documents the I_Initializer tests under
    ``tests/006_initializer``. It contains a pure-Fortran unit test suite for

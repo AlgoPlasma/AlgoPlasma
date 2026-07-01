@@ -3,12 +3,12 @@ mod_B02_average_axis_3d_cyl.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 模块职责
 
@@ -51,7 +51,7 @@ mod_B02_average_axis_3d_cyl.f90
    ``mod_B02_average_axis_3d_cyl`` 收纳 B02 的轴线平均工具例程。它导出电荷密度
    ``rho`` 和轴向电流 ``jz`` 的 ``r=0`` 方位向平均后处理，供粒子循环结束后统一调用。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Module Role
 

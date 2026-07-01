@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`J_Fluid` 放置 PMSL 的流体方程更新例程。
+`J_Fluid` 放置 AlgoPlasma 的流体方程更新例程。
 
 ## 子目录
 

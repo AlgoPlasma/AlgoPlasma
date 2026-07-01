@@ -1,13 +1,13 @@
-# PMSL: Plasma Modeling Subroutine Library
+# AlgoPlasma: Open Algorithms for Plasma Modeling
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-PMSL 致力于把等离子体模拟领域中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的子程序库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。PMSL 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
+AlgoPlasma 曾用名为 PMSL，致力于把等离子体建模中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的算法库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。AlgoPlasma 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
 
 ## 仓库结构
 
 ```text
-PMSL
+AlgoPlasma
 ├── A_Pusher          # 粒子推进
 ├── B_Scatter         # 粒子到网格沉积
 ├── C_Gather          # 网格到粒子插值
@@ -32,11 +32,11 @@ PMSL
 
 ## 实现语言
 
-PMSL 不限定实现语言。当前仓库以 Fortran 实现为主，同时包含少量 C 辅助代码和 Python 测试、初始化、绘图脚本。未来欢迎 C、C++、Python、CUDA、Julia 或其他适合特定算法的实现。
+AlgoPlasma 不限定实现语言。当前仓库以 Fortran 实现为主，同时包含少量 C 辅助代码和 Python 测试、初始化、绘图脚本。未来欢迎 C、C++、Python、CUDA、Julia 或其他适合特定算法的实现。
 
 ## 快速使用
 
-PMSL 当前主要以源码级算法库形式组织。Fortran 模块通常通过 `mod_*.f90` 入口文件集成，该入口文件会使用 C 预处理 `#include` 纳入具体子程序。
+AlgoPlasma 当前主要以源码级算法库形式组织。Fortran 模块通常通过 `mod_*.f90` 入口文件集成，该入口文件会使用 C 预处理 `#include` 纳入具体子程序。
 
 示例：调用 3D Boris 粒子推进器。
 

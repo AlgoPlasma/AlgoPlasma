@@ -3,12 +3,12 @@ D01_hypre_3Dxyz_omp Comparison
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 测试目标
 
@@ -159,7 +159,7 @@ D01_hypre_3Dxyz_omp Comparison
       在 AMD 上约为 ``9.6e-03 s``，在鲲鹏 BiSheng 上约为 ``1.03e-02 s``。
       因此当前端到端差异主要来自求解后的 gather/write 等阶段，而不是 HYPRE solve 核心。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Test Goal
 

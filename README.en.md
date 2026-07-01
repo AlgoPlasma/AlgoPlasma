@@ -1,13 +1,13 @@
-# PMSL: Plasma Modeling Subroutine Library
+# AlgoPlasma: Open Algorithms for Plasma Modeling
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-PMSL is dedicated to turning the scattered and repeatedly implemented core algorithms of plasma simulation into an open, reusable, tested, and explainable subroutine library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, PMSL aims to build a shared algorithmic foundation, so that others can build upon it and reach higher, rather than forcing everyone to start from scratch.
+AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma modeling into an open, reusable, tested, and explainable algorithm library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, AlgoPlasma aims to build a shared algorithmic foundation so that others can build upon it instead of starting from scratch.
 
 ## Repository Layout
 
 ```text
-PMSL
+AlgoPlasma
 ├── A_Pusher          # Particle pushers
 ├── B_Scatter         # Particle-to-grid deposition
 ├── C_Gather          # Grid-to-particle interpolation
@@ -32,11 +32,11 @@ An algorithm unit usually contains:
 
 ## Implementation Languages
 
-PMSL does not restrict implementation languages. The current repository is mostly Fortran, with some C helper code and Python scripts for testing, initialization, and plotting. Future contributions in C, C++, Python, CUDA, Julia, or other suitable languages are welcome.
+AlgoPlasma does not restrict implementation languages. The current repository is mostly Fortran, with some C helper code and Python scripts for testing, initialization, and plotting. Future contributions in C, C++, Python, CUDA, Julia, or other suitable languages are welcome.
 
 ## Quick Start
 
-PMSL is currently organized mainly as a source-level algorithm library. Fortran modules are typically integrated through `mod_*.f90` entry files, which use C preprocessor `#include` directives to include the actual subroutines.
+AlgoPlasma is currently organized mainly as a source-level algorithm library. Fortran modules are typically integrated through `mod_*.f90` entry files, which use C preprocessor `#include` directives to include the actual subroutines.
 
 Example: call the 3D Boris particle pusher.
 

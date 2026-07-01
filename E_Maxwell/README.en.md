@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`E_Maxwell` contains PMSL subroutines for advancing Maxwell fields, finite-difference time-domain (FDTD) implementations, and convolutional perfectly matched layer (CPML) boundary extensions.
+`E_Maxwell` contains AlgoPlasma subroutines for advancing Maxwell fields, finite-difference time-domain (FDTD) implementations, and convolutional perfectly matched layer (CPML) boundary extensions.
 
 ## Subdirectories
 

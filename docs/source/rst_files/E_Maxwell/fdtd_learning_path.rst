@@ -3,17 +3,17 @@ FDTD Learning Path
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 这页解决什么问题
 
    本页面向第一次接触 ``E_Maxwell`` 的读者。它不是完整电磁场教材，而是帮助你把
-   Maxwell 旋度方程、Yee 网格、leapfrog 时间推进、柱坐标轴线处理、CPML 边界和 PMSL
+   Maxwell 旋度方程、Yee 网格、leapfrog 时间推进、柱坐标轴线处理、CPML 边界和 AlgoPlasma
    的 Fortran routine 对上号。读完后，应该能知道该先看哪一页、哪些公式对应哪些代码、
    以及测试为什么能说明实现是可信的。
 
@@ -61,7 +61,7 @@ FDTD Learning Path
    - **边界不在普通 stencil 里。** 更新式会访问相邻点；调用前必须准备好周期 wrap、
      物理边界值或 MPI ghost cell。
    - **稳定性不由 routine 检查。** ``dt`` 必须由调用方按 CFL 条件和介质波速选择。
-     PMSL routine 使用传入的 ``dt``，不会自动判断是否稳定。
+     AlgoPlasma routine 使用传入的 ``dt``，不会自动判断是否稳定。
    - **材料参数是调用方约定。** 当前核心 routine 多使用标量 ``ep`` 和 ``mu``；
      若要非均匀介质，需要在外层分块调用，或扩展为按 Yee 位置采样的材料数组。
 
@@ -85,13 +85,13 @@ FDTD Learning Path
    4. 再看 E01 的 :math:`r=0` 轴线公式，理解为什么不能直接把内部点公式套在轴线上。
    5. 最后运行一个 visualization case，把公式更新和波传播图像连起来。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: What This Page Is For
 
    This page is for readers approaching ``E_Maxwell`` for the first time. It is
    not a full electromagnetics textbook; it is a bridge from Maxwell curl
-   equations to PMSL's Yee-grid, leapfrog, cylindrical-axis, CPML, and Fortran
+   equations to AlgoPlasma's Yee-grid, leapfrog, cylindrical-axis, CPML, and Fortran
    routine documentation. After reading it, you should know what to read first,
    which formulas correspond to which code paths, and why the tests support the
    implementation.
@@ -145,7 +145,7 @@ FDTD Learning Path
      cells; periodic wrapping, physical boundary values, or MPI ghost cells must
      be prepared before the call.
    - **Stability is not checked by the routine.** The caller must choose ``dt``
-     from the CFL condition and wave speed. PMSL routines simply use the input
+     from the CFL condition and wave speed. AlgoPlasma routines simply use the input
      ``dt``.
    - **Material parameters are caller conventions.** Current core routines
      mostly use scalar ``ep`` and ``mu``. Spatially varying media require outer

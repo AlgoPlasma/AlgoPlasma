@@ -4,12 +4,12 @@ mod_A01_Boris_3Dxyz.f90
 
 .. raw:: html
 
-   <div class="pmsl-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="zh">中文</button>
-     <button type="button" class="pmsl-lang-button" data-pmsl-set-lang="en">English</button>
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: pmsl-lang pmsl-lang-zh
+.. container:: ap-lang ap-lang-zh
 
    .. rubric:: 模块职责
 
@@ -93,7 +93,7 @@ mod_A01_Boris_3Dxyz.f90
 
    如果不启用这类默认实数精度选项，则 ``real`` 使用编译器默认精度。实际项目中应保证主程序、module 和所有相关子程序采用一致的默认 ``real`` 精度。
 
-.. container:: pmsl-lang pmsl-lang-en
+.. container:: ap-lang ap-lang-en
 
    .. rubric:: Module Role
 

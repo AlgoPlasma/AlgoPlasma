@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`B_Scatter` contains PMSL particle-to-grid deposition operators.
+`B_Scatter` contains AlgoPlasma particle-to-grid deposition operators.
 
 ## Subdirectories
 

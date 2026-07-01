@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`I_Initializer` 放置 PMSL 的粒子初始化工具。
+`I_Initializer` 放置 AlgoPlasma 的粒子初始化工具。
 
 ## 子目录
 
