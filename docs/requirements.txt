@@ -3,3 +3,4 @@ breathe
 myst-parser
 sphinxcontrib.katex
 sphinx-copybutton
+matplotlib

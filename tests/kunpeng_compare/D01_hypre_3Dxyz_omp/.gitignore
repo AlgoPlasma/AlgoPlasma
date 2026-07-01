@@ -1,9 +1,0 @@
-*.o
-*.mod
-*.out
-phi.dat
-run_gcc_np*_omp*_*.log
-run_bisheng_np*_omp*_*.log
-run_AMD_np*_omp*_*.log
-time_3compares_np*.png
-time_compare_gcc_bisheng_np*.png
