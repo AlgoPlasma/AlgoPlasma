@@ -95,6 +95,8 @@ User Quick Start
 
          gfortran -cpp -O2 -fdefault-real-8 demo_a01.f90
 
+      注意：当前不少 Fortran 程序直接使用默认 ``real``。如果希望按双精度运行，需要在编译命令中加入对应选项，例如 ``gfortran -fdefault-real-8``；使用 Intel Fortran 时可用类似 ``ifx -real-size 64`` 的选项。测试目录里的 ``make.sh`` 若已经包含该选项，直接按脚本运行即可。
+
    .. container:: ap-onboarding-step ap-onboarding-user
 
       .. rubric:: 4. PIC 流程里该用哪些模块
@@ -254,6 +256,12 @@ User Quick Start
       .. code-block:: bash
 
          gfortran -cpp -O2 -fdefault-real-8 demo_a01.f90
+
+      Note: many Fortran programs currently use default ``real``. If double
+      precision is required, add the corresponding compiler option, such as
+      ``gfortran -fdefault-real-8``. With Intel Fortran, use an option such as
+      ``ifx -real-size 64``. If a test directory's ``make.sh`` already contains
+      that option, run the script as written.
 
    .. container:: ap-onboarding-step ap-onboarding-user
 

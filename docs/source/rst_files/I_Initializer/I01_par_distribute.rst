@@ -43,7 +43,7 @@ I01_par_distribute
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Yinjian Zhao (2025/11/03) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">赵隐剑 (2025/11/03) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en
@@ -76,5 +76,5 @@ I01_par_distribute
 
       <div class="ap-home-footer-band">
         <p><strong>Contributors</strong></p>
-        <p class="ap-home-contact">Yinjian Zhao (2025/11/03) · Harbin Institute of Technology</p>
+        <p class="ap-home-contact">Yinjian ZHAO (2025/11/03) · Harbin Institute of Technology</p>
       </div>

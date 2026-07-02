@@ -51,7 +51,7 @@ F03_field_load
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
         <p class="ap-home-contact">刘哲 (2025/12/29; 2026/01/10) · 哈尔滨工业大学</p>
-        <p class="ap-home-contact">Yinjian ZHAO (2026/02/27) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">赵隐剑 (2026/02/27) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

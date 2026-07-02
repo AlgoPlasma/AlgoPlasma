@@ -14,7 +14,7 @@ Developer Quick Start
 
       .. rubric:: 开发者快速入门
 
-      这条路线面向要参与 AlgoPlasma 维护和开发的新同学。目标是先安全地改一个小地方，而不是一上来理解完整 PIC 程序。
+      这条路线面向要参与 AlgoPlasma 维护和开发的新人。目标是先安全地改一个小地方，而不是一上来理解完整程序体系。
 
       .. raw:: html
 
@@ -125,6 +125,7 @@ Developer Quick Start
              <li><code>doxygen</code>：从 Fortran 源码注释生成 API XML。</li>
              <li><code>graphviz</code>：让 Sphinx 里的流程图、结构图能正常生成。</li>
            </ul>
+           <p>注意：当前不少 Fortran 程序直接使用默认 <code>real</code>。如果需要按双精度编译，通常要在编译命令里加对应选项，例如 <code>gfortran -fdefault-real-8</code> 或 <code>ifx -real-size 64</code>；测试目录里的 <code>make.sh</code> 若已经写入该选项，直接按脚本运行即可。</p>
            <p>先用这些命令确认环境是否已经可用：</p>
            <pre><code>git --version
          make --version
@@ -144,6 +145,10 @@ Developer Quick Start
            <pre><code>python3 -m venv .venv
          source .venv/bin/activate
          pip install -r docs/requirements.txt</code></pre>
+           <p>之后如果需要重新激活这个虚拟环境，在仓库根目录运行：</p>
+           <pre><code>source .venv/bin/activate</code></pre>
+           <p>退出虚拟环境时运行：</p>
+           <pre><code>deactivate</code></pre>
            <p>如果只跑 A01 的 Fortran 测试，不需要先激活虚拟环境；如果构建 Sphinx 文档，就建议先激活它。</p>
          </details>
 
@@ -196,9 +201,10 @@ Developer Quick Start
            <pre><code>git branch -vv
          git remote -v
          git status</code></pre>
-           <p>最推荐的新手开发流程是：从最新的 <code>master</code> 拉一个自己的小分支，然后只在这个分支上改。</p>
+           <p>最推荐的新手开发流程是：从最新的 <code>master/develop</code> 拉一个自己的小分支，然后只在这个分支上改。</p>
            <pre><code>git switch master
          git pull --ff-only origin master
+         # 如果仓库使用 develop 作为主线，把 master 换成 develop。
          git switch -c docs/onboarding-notes</code></pre>
            <p>改完文件后，按这个顺序检查并提交：</p>
            <pre><code>git status
@@ -402,6 +408,7 @@ Developer Quick Start
              <li><code>doxygen</code>: generate API XML from Fortran source comments.</li>
              <li><code>graphviz</code>: render diagrams used by Sphinx pages.</li>
            </ul>
+           <p>Note: many Fortran programs currently use default <code>real</code>. If double precision is required, add the corresponding compiler option, such as <code>gfortran -fdefault-real-8</code> or <code>ifx -real-size 64</code>. If a test directory's <code>make.sh</code> already contains that option, run the script as written.</p>
            <p>Check the environment first:</p>
            <pre><code>git --version
          make --version
@@ -421,6 +428,10 @@ Developer Quick Start
            <pre><code>python3 -m venv .venv
          source .venv/bin/activate
          pip install -r docs/requirements.txt</code></pre>
+           <p>Later, activate this virtual environment from the repository root with:</p>
+           <pre><code>source .venv/bin/activate</code></pre>
+           <p>To leave the virtual environment, run:</p>
+           <pre><code>deactivate</code></pre>
            <p>You do not need the virtual environment to run the A01 Fortran test. Use it when building the Sphinx documentation.</p>
          </details>
 
@@ -473,9 +484,10 @@ Developer Quick Start
            <pre><code>git branch -vv
          git remote -v
          git status</code></pre>
-           <p>The safest beginner workflow is to start from the latest <code>master</code>, create a small personal branch, and edit only on that branch.</p>
+           <p>The safest beginner workflow is to start from the latest <code>master/develop</code>, create a small personal branch, and edit only on that branch.</p>
            <pre><code>git switch master
          git pull --ff-only origin master
+         # If the repository uses develop as the main branch, replace master with develop.
          git switch -c docs/onboarding-notes</code></pre>
            <p>After editing files, check and commit in this order:</p>
            <pre><code>git status

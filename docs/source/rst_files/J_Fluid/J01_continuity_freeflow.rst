@@ -68,11 +68,28 @@ J01_continuity_freeflow
    调用前需要设置 guard cells 和边界条件。Lax-Friedrichs 格式是一阶格式，数值扩散与局部最大速度有关；
    在当前归一化步长下，通常需要满足有效 CFL 条件 ``max(|ux|,|uy|,|uz|) <= 1``。
 
+   .. rubric:: 应用文献
+
+   该自由流连续性方程更新用于 Hall 推力器三维 PIC 模拟中的中性气体密度演化。
+   在早期工作中，它与 MCC 电离模型耦合，作为自洽中性气体密度流体求解器的一部分；
+   后续工作则将相同的 Lax-Friedrichs 有限体积思想用于由预处理速度场驱动的连续介质中性气体模型。
+   相关论文包括：
+
+   .. raw:: html
+
+      <ul>
+        <li>K. Zhong, D. Zeng, Y. Zhao, and D. Yu, <em>Effects of RZ magnetic field components on electron drift instability in hall thrusters via 3D PIC simulations</em>, <em>Physics Letters A</em> 590 (2026) 131809. DOI: <a href="https://doi.org/10.1016/j.physleta.2026.131809" target="_blank" rel="noopener noreferrer">10.1016/j.physleta.2026.131809</a>.</li>
+        <li>Y. Zhao and K. Zhong, <em>Effect of Magnetic Field Configuration on Hall Thruster Azimuthal Instability in 3D PIC simulations</em>, IEPC-2025-063, 39th International Electric Propulsion Conference, London, United Kingdom, 14-19 September 2025.</li>
+        <li>Y. Zhao and K. Zhong, <em>3D PIC Simulations on Hall Thruster Electron Drift Instability: Influence of Magnetic Field on Electron Transport</em>, arXiv:2512.06222 [physics.plasm-ph] (2025). DOI: <a href="https://doi.org/10.48550/arXiv.2512.06222" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2512.06222</a>.</li>
+        <li>K. Zhong, D. Zeng, Y. Zhao, and D. Yu, <em>3D PIC Study of Magnetic Field Effects on Hall Thruster Electron Drift Instability</em>, arXiv:2504.14144 [physics.plasm-ph] (2025). DOI: <a href="https://doi.org/10.48550/arXiv.2504.14144" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2504.14144</a>.</li>
+        <li>Z. Liu, Z. Zhao, and Y. Zhao, <em>Near-Wall Pathways of Anomalous Electron Transport in Hall Thrusters Revealed by 3D PIC Simulations</em>, arXiv:2603.14849 [physics.plasm-ph] (2026). DOI: <a href="https://doi.org/10.48550/arXiv.2603.14849" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2603.14849</a>.</li>
+      </ul>
+
    .. raw:: html
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Yinjian ZHAO (2025/12/02) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">赵隐剑 (2025/12/02) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en
@@ -129,6 +146,24 @@ J01_continuity_freeflow
    The Lax-Friedrichs scheme is first order and introduces numerical diffusion
    proportional to the maximum local velocity. Under the normalized step sizes,
    the effective CFL condition is typically ``max(|ux|,|uy|,|uz|) <= 1``.
+
+   .. rubric:: Applications and References
+
+   This free-flow continuity update is used for neutral-gas-density evolution in
+   Hall-thruster 3D PIC simulations. In earlier studies, it is coupled with MCC
+   ionization as part of a self-consistent fluid solver for neutral gas density;
+   later work uses the same Lax-Friedrichs finite-volume idea in a continuum
+   neutral model driven by preprocessed velocity fields. Related papers include:
+
+   .. raw:: html
+
+      <ul>
+        <li>K. Zhong, D. Zeng, Y. Zhao, and D. Yu, <em>Effects of RZ magnetic field components on electron drift instability in hall thrusters via 3D PIC simulations</em>, <em>Physics Letters A</em> 590 (2026) 131809. DOI: <a href="https://doi.org/10.1016/j.physleta.2026.131809" target="_blank" rel="noopener noreferrer">10.1016/j.physleta.2026.131809</a>.</li>
+        <li>Y. Zhao and K. Zhong, <em>Effect of Magnetic Field Configuration on Hall Thruster Azimuthal Instability in 3D PIC simulations</em>, IEPC-2025-063, 39th International Electric Propulsion Conference, London, United Kingdom, 14-19 September 2025.</li>
+        <li>Y. Zhao and K. Zhong, <em>3D PIC Simulations on Hall Thruster Electron Drift Instability: Influence of Magnetic Field on Electron Transport</em>, arXiv:2512.06222 [physics.plasm-ph] (2025). DOI: <a href="https://doi.org/10.48550/arXiv.2512.06222" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2512.06222</a>.</li>
+        <li>K. Zhong, D. Zeng, Y. Zhao, and D. Yu, <em>3D PIC Study of Magnetic Field Effects on Hall Thruster Electron Drift Instability</em>, arXiv:2504.14144 [physics.plasm-ph] (2025). DOI: <a href="https://doi.org/10.48550/arXiv.2504.14144" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2504.14144</a>.</li>
+        <li>Z. Liu, Z. Zhao, and Y. Zhao, <em>Near-Wall Pathways of Anomalous Electron Transport in Hall Thrusters Revealed by 3D PIC Simulations</em>, arXiv:2603.14849 [physics.plasm-ph] (2026). DOI: <a href="https://doi.org/10.48550/arXiv.2603.14849" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2603.14849</a>.</li>
+      </ul>
 
    .. rubric:: Indexing Convention
 

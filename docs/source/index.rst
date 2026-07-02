@@ -29,6 +29,10 @@ AlgoPlasma
     ./glossary
     ./maintenance_checklist
 
+.. image:: images/algoplasma-logo-transparent.png
+   :class: ap-home-preload
+   :alt: AlgoPlasma logo
+
 .. raw:: html
 
    <div class="ap-language-switch ap-home-switch" role="group" aria-label="Language switch">
@@ -39,6 +43,7 @@ AlgoPlasma
    <div class="ap-home ap-lang ap-lang-zh">
      <section class="ap-home-hero">
        <div class="ap-home-hero-image" aria-hidden="true"></div>
+       <img class="ap-home-logo" src="_images/algoplasma-logo-transparent.png" alt="AlgoPlasma logo" width="1286" height="946">
        <div class="ap-home-hero-content">
          <p class="ap-home-eyebrow">Open Algorithms for Plasma Modeling</p>
          <h1>AlgoPlasma</h1>
@@ -109,6 +114,7 @@ AlgoPlasma
    <div class="ap-home ap-lang ap-lang-en">
      <section class="ap-home-hero">
        <div class="ap-home-hero-image" aria-hidden="true"></div>
+       <img class="ap-home-logo" src="_images/algoplasma-logo-transparent.png" alt="AlgoPlasma logo" width="1286" height="946">
        <div class="ap-home-hero-content">
          <p class="ap-home-eyebrow">Open Algorithms for Plasma Modeling</p>
          <h1>AlgoPlasma</h1>

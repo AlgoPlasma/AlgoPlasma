@@ -54,7 +54,7 @@ F01_par_load
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Yinjian ZHAO (2025/04/16; 2025/12/02; 2026/02/28; 2026/03/03) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">赵隐剑 (2025/04/16; 2025/12/02; 2026/02/28; 2026/03/03) · 哈尔滨工业大学</p>
         <p class="ap-home-contact">刘哲 (2025/11/04; 2025/12/02; 2025/12/03) · 哈尔滨工业大学</p>
       </div>
 

@@ -126,6 +126,24 @@ html[data-ap-lang="en"] .ap-lang-en {
     line-height: 1.05;
 }
 
+.ap-home-logo {
+    display: block;
+    position: absolute;
+    top: 1.4rem;
+    right: 1.4rem;
+    z-index: 1;
+    width: min(27%, 280px);
+    max-width: 280px;
+    height: auto;
+    margin: 0;
+    padding: 0.75rem;
+    border: 1px solid rgba(220, 226, 232, 0.24);
+    border-radius: 8px;
+    background: rgba(235, 238, 242, 0.8);
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.22));
+    backdrop-filter: blur(2px);
+}
+
 .ap-home-lead {
     max-width: 680px;
     margin: 0;
@@ -693,6 +711,16 @@ html[data-ap-lang="en"] .ap-lang-en {
 
     .ap-home-hero h1 {
         font-size: 2.2rem;
+    }
+
+    .ap-home-logo {
+        position: relative;
+        top: auto;
+        right: auto;
+        z-index: 1;
+        width: min(220px, 100%);
+        margin: 0 0 1rem;
+        padding: 0.55rem;
     }
 
     .ap-home-lead {
