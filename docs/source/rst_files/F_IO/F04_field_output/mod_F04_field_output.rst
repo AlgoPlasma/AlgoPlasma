@@ -12,35 +12,39 @@ mod_F04_field_output.f90
 
    .. rubric:: 直接用途
 
-   ``mod_F04_field_output`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_F04_field_output`` 汇总场数据输出入口，把 cell-centered 场或由
+   grid-defined 场平均得到的 cell-centered 值写到 per-rank 文件。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_F04_field_output`` 的 ``contains`` 作用域内 include。调用方应
+   ``use mod_F04_field_output`` 后调用具体例程；不要把这些 include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_F04_field_output_1d_dat.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 以 ASCII ``.dat`` 写出 1D 场向量和 index header。
+        - 场数据已由调用方打包为线性数组，且希望文本可读。
       * - ``sub_F04_field_output_1d_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 以 raw stream ``.bin`` 写出 1D 场向量和 index header。
+        - 场数据已线性打包，且希望输出紧凑二进制文件。
       * - ``sub_F04_field_output_3d_dat.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 以 ASCII ``.dat`` 写出 3D cell-centered 场数组。
+        - 需要直接输出 ``F(il:iu,...)`` 形式的文本场数据。
       * - ``sub_F04_field_output_3d_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 以 raw stream ``.bin`` 写出 3D cell-centered 场数组。
+        - 需要直接输出 3D 场数组，并由匹配 reader 读取。
       * - ``sub_F04_field_output_3d_grid_dat.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 将 grid-defined 3D 场在八个相邻节点上平均后，以 ASCII 写出 cell-centered 值。
+        - 需要把节点/网格量转换成便于查看的 cell-centered 文本结果。
       * - ``sub_F04_field_output_3d_grid_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 将 grid-defined 3D 场平均为 cell-centered 值后，以 raw stream ``.bin`` 写出。
+        - 需要保存由网格量重构的紧凑二进制 cell-centered 结果。
 
    .. rubric:: 局部假设
 
@@ -58,41 +62,41 @@ mod_F04_field_output.f90
 
    .. rubric:: Direct Purpose
 
-   ``mod_F04_field_output`` module wrapper for F04 field output subroutines. Included files: - ``sub_F04_field_output_1d_dat.f90`` - ``sub_F04_field_output_1d_bin.f90`` - ``sub_F04_field_output_3d_dat.f90`` - ``sub_F04_field_output_3d_bin.f90`` - ``sub_F04_field_output_3d_grid_dat.f90`` - ``sub_F04_field_output_3d_grid_bin.f90``
+   ``mod_F04_field_output`` groups field-output entry points for cell-centered
+   fields and for cell-centered values reconstructed from grid-defined fields.
 
    .. rubric:: Public Entries And Includes
 
+   The following files are included inside the ``contains`` scope of
+   ``mod_F04_field_output``. Callers should ``use mod_F04_field_output`` and call
+   the concrete routines through the module; do not compile these include files
+   separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_F04_field_output_1d_dat.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Writes a 1D field vector and index header to ASCII ``.dat`` files.
+        - Output readable text data after the caller has packed the field linearly.
       * - ``sub_F04_field_output_1d_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Writes a 1D field vector and index header to raw stream ``.bin`` files.
+        - Output compact binary data from a caller-defined linear layout.
       * - ``sub_F04_field_output_3d_dat.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Writes a 3D cell-centered field array to ASCII ``.dat`` files.
+        - Output readable text data directly from ``F(il:iu,...)``.
       * - ``sub_F04_field_output_3d_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Writes a 3D cell-centered field array to raw stream ``.bin`` files.
+        - Output compact 3D field data for a matching reader.
       * - ``sub_F04_field_output_3d_grid_dat.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Averages a grid-defined 3D field to cell centers and writes ASCII ``.dat`` files.
+        - Inspect grid-defined quantities as cell-centered text output.
       * - ``sub_F04_field_output_3d_grid_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Averages a grid-defined 3D field to cell centers and writes raw stream ``.bin`` files.
+        - Store reconstructed cell-centered values in compact binary form.
 
    .. rubric:: Local Assumptions
 

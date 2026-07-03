@@ -112,7 +112,7 @@ H03_mpi_exchange_den
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">ZiLong Peng (2026/04/24) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">彭子龙 (2026/04/24) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en
@@ -224,5 +224,5 @@ H03_mpi_exchange_den
 
       <div class="ap-home-footer-band">
         <p><strong>Contributors</strong></p>
-        <p class="ap-home-contact">ZiLong Peng (2026/04/24) · Harbin Institute of Technology</p>
+        <p class="ap-home-contact">Zilong PENG (2026/04/24) · Harbin Institute of Technology</p>
       </div>

@@ -3,7 +3,7 @@
 !> @details The implementation follows the 3D cylindrical paper for
 !>          uniform cells. The phi direction is periodic. The caller may
 !>          average axis values after the particle loop.
-!> @author Zhou Zhijun (2026/04/13)
+!> @author Zhijun ZHOU (2026/04/13)
 !
 !> @param[in] rp: real, particle radius.
 !> @param[in] phip: real, particle azimuth.

@@ -3,7 +3,7 @@
 !> @details This module provides two post-processing routines for values
 !>          located on the cylindrical axis: one for node charge density
 !>          and one for axial current density.
-!> @author Zhou Zhijun (2026/04/23)
+!> @author Zhijun ZHOU (2026/04/23)
 module mod_B02_average_axis_3d_cyl
     implicit none
 

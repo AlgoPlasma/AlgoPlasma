@@ -17,16 +17,20 @@ mod_D05_phi1d_to_phi3d.f90
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_D05_phi1d_to_phi3d`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_D05_phi1d_to_phi3d`` 后调用公开入口；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_D05_phi1d_to_phi3d.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通过本模块 ``use`` 后访问；不要把 include 文件当作独立 translation unit 编译。
+        - 将 HYPRE 返回的 1D ``phi1d`` 解向量展开到 3D ``phi3d``，并填充周期或 MPI ghost cell。
+        - Poisson 求解后需要把线性解向量恢复成带一层 ghost 的 3D 势场。
 
    .. rubric:: include 结构说明
 
@@ -64,17 +68,21 @@ mod_D05_phi1d_to_phi3d.f90
 
    .. rubric:: Public Entries and Includes
 
+   The following file is included inside the ``contains`` scope of
+   ``mod_D05_phi1d_to_phi3d``. Callers should
+   ``use mod_D05_phi1d_to_phi3d`` and call the public entry through the module;
+   do not compile the include file separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_D05_phi1d_to_phi3d.f90``
-        - included public source entry
-        - Call through this module after ``use``; include files are not
-          standalone translation units.
+        - Unpacks the HYPRE 1D ``phi1d`` vector into 3D ``phi3d`` and fills periodic or MPI ghost cells.
+        - Restore a Poisson solution into a 3D potential array with one ghost layer.
 
    .. rubric:: Include Structure
 

@@ -12,20 +12,25 @@ mod_D01_hypre_3Dxyz_bc.f90
 
    .. rubric:: 直接用途
 
-   ``mod_D01_hypre_3Dxyz_bc`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_D01_hypre_3Dxyz_bc`` 汇总 Cartesian HYPRE Poisson 的 Fortran-C
+   接口入口，用于把 Fortran 侧数组传给底层 HYPRE 调用。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_D01_hypre_3Dxyz_bc`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_D01_hypre_3Dxyz_bc`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_D01_hypre_3Dxyz_interface.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 在 Fortran 与 C/HYPRE 包装层之间传递网格、矩阵、RHS 和解向量。
+        - 需要从 Fortran 侧调用 Cartesian 3D HYPRE Poisson 求解流程。
 
    .. rubric:: 局部假设
 
@@ -47,17 +52,21 @@ mod_D01_hypre_3Dxyz_bc.f90
 
    .. rubric:: Public Entries And Includes
 
+   The following file is included inside the ``contains`` scope of
+   ``mod_D01_hypre_3Dxyz_bc``. Callers should ``use mod_D01_hypre_3Dxyz_bc`` and
+   call the concrete routine through the module; do not compile the include file
+   separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_D01_hypre_3Dxyz_interface.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Transfers grid, matrix, RHS, and solution arrays between Fortran and the C/HYPRE wrapper.
+        - Call a Cartesian 3D HYPRE Poisson solve from Fortran-side code.
 
    .. rubric:: Local Assumptions
 

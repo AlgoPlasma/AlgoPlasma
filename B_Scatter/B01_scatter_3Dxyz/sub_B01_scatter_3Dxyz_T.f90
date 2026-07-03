@@ -1,5 +1,5 @@
 !> @file sub_B01_scatter_3Dxyz_T.f90
-!> @author ZiLong Peng (2026/04/16)
+!> @author Zilong PENG (2026/04/16)
 !> @brief Compute the variance of a particle quantity component
 !>        onto a 3D grid (cell-averaged temperature-like field).
 !>

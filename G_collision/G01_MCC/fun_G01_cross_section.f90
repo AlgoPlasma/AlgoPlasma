@@ -6,7 +6,7 @@
 !> uniformly spaced energy grid. Energies outside the table are clamped to the
 !> nearest boundary value.
 !>
-!> @author Xie Lihuan (2025/12/18)
+!> @author Lihuan XIE (2025/12/18)
 !>
 !> @param[in] energy Particle energy at which the cross section is evaluated.
 !> @param[in] Nmax Number of tabulated energy points.

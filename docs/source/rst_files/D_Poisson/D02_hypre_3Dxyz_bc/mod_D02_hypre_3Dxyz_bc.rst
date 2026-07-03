@@ -12,32 +12,37 @@ mod_D02_hypre_3Dxyz_bc.f90
 
    .. rubric:: 直接用途
 
-   ``mod_D02_hypre_3Dxyz_bc`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_D02_hypre_3Dxyz_bc`` 汇总 Cartesian 3D HYPRE Poisson 求解、矩阵装配
+   和边界修正入口。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_D02_hypre_3Dxyz_bc`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_D02_hypre_3Dxyz_bc`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_D02_hypre_3Dxyz_bc.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 调用 C/HYPRE 包装器完成 3D Cartesian 结构网格 Poisson 求解。
+        - 已有 ``A_values`` 和 ``rho1d``，需要把求解交给 C/HYPRE 层。
       * - ``sub_D02_hypre_3Dxyz_bc_A.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 装配 Cartesian cell-centered 7 点 stencil 的矩阵系数和 RHS。
+        - 求解前根据 charge density 和基础边界条件生成 ``A_values``/``rho1d``。
       * - ``sub_D02_hypre_3Dxyz_bc_A_dielectric.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 对已装配矩阵和 RHS 施加 dielectric/surface-charge 边界修正。
+        - 边界面存在介质表面电荷贡献，需要修改相邻 stencil 和 RHS。
       * - ``sub_D02_hypre_3Dxyz_bc_A_outflow.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 对已装配矩阵和 RHS 施加 outflow 型边界修正。
+        - 远场势 ``phi_infty`` 和参考点 ``r0`` 已知，需要处理开边界。
       * - ``sub_D02_hypre_3Dxyz_bc_fortran.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 使用 HYPRE Fortran 接口创建、更新、求解和释放 Struct PFMG 对象。
+        - 希望全程使用 Fortran HYPRE 接口并复用持久 HYPRE 句柄。
 
    .. rubric:: 局部假设
 
@@ -55,37 +60,38 @@ mod_D02_hypre_3Dxyz_bc.f90
 
    .. rubric:: Direct Purpose
 
-   ``mod_D02_hypre_3Dxyz_bc`` module wrapper for the D02 Cartesian HYPRE Poisson routines.
+   ``mod_D02_hypre_3Dxyz_bc`` groups Cartesian 3D HYPRE Poisson solve, matrix
+   assembly, and boundary-correction routines.
 
    .. rubric:: Public Entries And Includes
 
+   The following files are included inside the ``contains`` scope of
+   ``mod_D02_hypre_3Dxyz_bc``. Callers should ``use mod_D02_hypre_3Dxyz_bc`` and
+   call concrete routines through the module; do not compile these include files
+   separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_D02_hypre_3Dxyz_bc.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Calls the C/HYPRE wrapper to solve the Cartesian 3D structured Poisson system.
+        - Solve after ``A_values`` and ``rho1d`` have been assembled.
       * - ``sub_D02_hypre_3Dxyz_bc_A.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Assembles Cartesian cell-centered 7-point matrix coefficients and RHS values.
+        - Build ``A_values``/``rho1d`` from charge density and base boundary conditions.
       * - ``sub_D02_hypre_3Dxyz_bc_A_dielectric.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Applies dielectric/surface-charge corrections to an assembled matrix and RHS.
+        - Modify boundary-face stencil entries and RHS surface-charge terms.
       * - ``sub_D02_hypre_3Dxyz_bc_A_outflow.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Applies outflow-type boundary corrections to an assembled matrix and RHS.
+        - Handle open boundaries using ``phi_infty`` and the reference point ``r0``.
       * - ``sub_D02_hypre_3Dxyz_bc_fortran.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Uses the HYPRE Fortran interface to create, update, solve, and finalize Struct PFMG objects.
+        - Keep the HYPRE object lifecycle on the Fortran side with persistent handles.
 
    .. rubric:: Local Assumptions
 

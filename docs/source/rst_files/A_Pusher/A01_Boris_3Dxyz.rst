@@ -35,7 +35,7 @@ A01_Boris_3Dxyz
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
         <p class="ap-home-contact">赵隐剑 (2025/11/04) · 哈尔滨工业大学</p>
-        <p class="ap-home-contact">Zhongping ZHAO (2025/11/04) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">赵中平 (2025/11/04) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

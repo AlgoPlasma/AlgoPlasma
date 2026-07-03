@@ -6,7 +6,7 @@
 !>          all ``jz(0,j,k)`` by their azimuthal average for each axial
 !>          index ``k``. This treatment follows the axis handling used
 !>          in the paper for full PIC tests.
-!> @author Zhou Zhijun (2026/04/23)
+!> @author Zhijun ZHOU (2026/04/23)
 !
 !> @param[in] nr: integer, number of radial cells.
 !> @param[in] nphi: integer, maximum phi node index.

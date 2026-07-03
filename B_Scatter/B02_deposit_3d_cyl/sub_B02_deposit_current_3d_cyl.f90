@@ -4,7 +4,7 @@
 !>          azimuthal, or axial cell boundary. The single-cell formulas
 !>          follow the 3D cylindrical paper. The denominator of ``Jr``
 !>          uses ``dr`` rather than ``dr^2``.
-!> @author Zhou Zhijun (2026/04/13)
+!> @author Zhijun ZHOU (2026/04/13)
 !
 !> @param[in] r0: real, starting radius.
 !> @param[in] phi0: real, starting azimuth.

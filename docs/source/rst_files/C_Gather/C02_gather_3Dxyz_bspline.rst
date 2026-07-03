@@ -345,8 +345,8 @@ C02_gather_3Dxyz_bspline
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Xin LUO (2025/12/23) · 哈尔滨工业大学</p>
-        <p class="ap-home-contact">Zhongping ZHAO (2026/05/30) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">罗鑫 (2025/12/23) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">赵中平 (2026/05/30) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

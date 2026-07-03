@@ -12,20 +12,24 @@ mod_H01_mpi_exchange_field.f90
 
    .. rubric:: 直接用途
 
-   ``mod_H01_mpi_exchange_field`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_H01_mpi_exchange_field`` 汇总标量场 MPI halo/ghost-cell 交换入口。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_H01_mpi_exchange_field`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_H01_mpi_exchange_field`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_H01_mpi_exchange_field.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 在 3D Cartesian 区域分解中交换标量场的一层 ghost-cell 值。
+        - 电势、电场或其它 cell-centered 标量场需要同步邻居边界。
 
    .. rubric:: 局部假设
 
@@ -47,17 +51,21 @@ mod_H01_mpi_exchange_field.f90
 
    .. rubric:: Public Entries And Includes
 
+   The following file is included inside the ``contains`` scope of
+   ``mod_H01_mpi_exchange_field``. Callers should
+   ``use mod_H01_mpi_exchange_field`` and call the concrete routine through the
+   module; do not compile the include file separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_H01_mpi_exchange_field.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Exchanges one layer of scalar-field ghost cells in a 3D Cartesian domain decomposition.
+        - Synchronize potential, electric field, or other cell-centered scalar boundaries.
 
    .. rubric:: Local Assumptions
 

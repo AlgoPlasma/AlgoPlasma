@@ -129,7 +129,7 @@ B02_deposit_3d_cyl
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Zhou Zhijun (2026/04/13; 2026/04/23) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">周志君 (2026/04/13; 2026/04/23) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en
@@ -274,7 +274,7 @@ B02_deposit_3d_cyl
 
       <div class="ap-home-footer-band">
         <p><strong>Contributors</strong></p>
-        <p class="ap-home-contact">Zhou Zhijun (2026/04/13; 2026/04/23) · Harbin Institute of Technology</p>
+        <p class="ap-home-contact">Zhijun ZHOU (2026/04/13; 2026/04/23) · Harbin Institute of Technology</p>
       </div>
 
 .. toctree::

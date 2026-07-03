@@ -16,28 +16,32 @@ mod_G01_collision.f90
 
    .. rubric:: 公开入口与 include 关系
 
+   下列源码文件由 ``mod_G01_collision`` 在 ``contains`` 中 include；调用方通常
+   ``use mod_G01_collision`` 后调用具体例程，不应把这些 include 文件当作独立
+   translation unit 编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 32 36 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 何时使用
       * - ``sub_G01_load_cross_section.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 读取两列能量-截面表，补齐到 ``Nmax``，并保持最后一个截面值。
+        - 初始化碰撞截面数据时调用。
       * - ``sub_G01_collision1.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 执行电子-中性粒子 MCC，覆盖弹性散射、激发和电离，并在电离时生成新电子/离子和源项。
+        - 推进电子碰撞过程时调用。
       * - ``sub_G01_collision2.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 执行离子-中性粒子 MCC，覆盖电荷交换和离子-中性粒子弹性散射。
+        - 推进离子碰撞过程时调用。
       * - ``sub_G01_electron.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 根据已选电子碰撞类型更新碰后速度，并在电离事件中抽样二次电子和离子。
+        - 由电子碰撞例程内部调用，通常不是外层主循环的直接入口。
       * - ``fun_G01_cross_section.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 对均匀能量网格上的截面表做线性插值，超出表范围时钳制到边界值。
+        - 碰撞频率评估需要查询指定能量截面时调用。
 
    .. rubric:: 局部假设
 
@@ -59,33 +63,32 @@ mod_G01_collision.f90
 
    .. rubric:: Public Entries And Includes
 
+   The following source files are included inside ``mod_G01_collision`` under
+   ``contains``. Callers normally ``use mod_G01_collision`` and call the
+   concrete routines; the include files are not standalone translation units.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 32 36 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_G01_load_cross_section.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads a two-column energy/cross-section table, pads it to ``Nmax``, and holds the last cross-section value.
+        - During collision table initialization.
       * - ``sub_G01_collision1.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Runs electron-neutral MCC for elastic scattering, excitation, and ionization, including secondary particles and source deposition.
+        - During electron collision advancement.
       * - ``sub_G01_collision2.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Runs ion-neutral MCC for charge exchange and ion-neutral elastic scattering.
+        - During ion collision advancement.
       * - ``sub_G01_electron.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Updates the post-collision electron velocity and samples secondary electron/ion particles for ionization events.
+        - Called internally by the electron collision routine; normally not the outer loop entry.
       * - ``fun_G01_cross_section.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Linearly interpolates a uniformly spaced cross-section table and clamps out-of-range energies to boundary values.
+        - When evaluating collision frequencies at a given particle energy.
 
    .. rubric:: Local Assumptions
 

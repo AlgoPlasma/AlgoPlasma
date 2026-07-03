@@ -12,29 +12,34 @@ mod_F02_par_output.f90
 
    .. rubric:: 直接用途
 
-   ``mod_F02_par_output`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_F02_par_output`` 汇总粒子输出入口，并按格式标签把本地粒子数组写到
+   对应的 per-rank 文件中。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_F02_par_output`` 的 ``contains`` 作用域内 include。调用方应
+   ``use mod_F02_par_output`` 后调用具体例程；不要把这些 include 文件单独编译。
+   HDF5 入口只在启用 ``USE_HDF5`` 时参与构建。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_F02_par_output.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 根据 ``tag`` 分派到 ``dat``、``bin`` 或 ``h5/hdf5`` 输出例程。
+        - 调用方希望用统一入口选择粒子输出格式。
       * - ``sub_F02_par_output_dat.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 逐粒子写出 ASCII ``.dat`` 文件，每个 MPI rank 一个文件。
+        - 需要可读文本结果，便于调试或小规模后处理。
       * - ``sub_F02_par_output_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 写出 raw stream ``.bin`` 文件，只保存 ``par(:,1:np)`` 数据块。
+        - 需要紧凑二进制输出，且读写双方已约定实数精度和数组 shape。
       * - ``sub_F02_par_output_h5.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 写出 HDF5 ``.h5`` 文件，在 ``par`` 数据集上附带 ``it`` 和 ``rank`` 属性。
+        - 需要带元数据的并行粒子输出，并且构建环境启用了 HDF5。
 
    .. rubric:: 局部假设
 
@@ -52,33 +57,35 @@ mod_F02_par_output.f90
 
    .. rubric:: Direct Purpose
 
-   ``mod_F02_par_output`` module wrapper for F02 particle output routines. Included files: - ``sub_F02_par_output.f90`` - ``sub_F02_par_output_dat.f90`` - ``sub_F02_par_output_bin.f90`` - ``sub_F02_par_output_h5.f90``
+   ``mod_F02_par_output`` groups particle-output entry points and writes local
+   particle arrays to per-rank files selected by a format tag.
 
    .. rubric:: Public Entries And Includes
 
+   The following files are included inside the ``contains`` scope of
+   ``mod_F02_par_output``. Callers should ``use mod_F02_par_output`` and call
+   the concrete routines through the module; do not compile these include files
+   separately. The HDF5 entry is available only when ``USE_HDF5`` is enabled.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_F02_par_output.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Dispatches by ``tag`` to the ``dat``, ``bin``, or ``h5/hdf5`` writer.
+        - Use a single format-neutral particle-output entry point.
       * - ``sub_F02_par_output_dat.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Writes ASCII ``.dat`` files, one particle record per line and one file per MPI rank.
+        - Prefer readable text output for debugging or small post-processing jobs.
       * - ``sub_F02_par_output_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Writes raw stream ``.bin`` files containing only ``par(:,1:np)``.
+        - Prefer compact binary output when real kind and array shape are already agreed on.
       * - ``sub_F02_par_output_h5.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Writes HDF5 ``.h5`` files with a ``par`` dataset and ``it``/``rank`` attributes.
+        - Use metadata-carrying particle output when HDF5 is enabled.
 
    .. rubric:: Local Assumptions
 

@@ -55,7 +55,7 @@ D03_hypre_3Draz_uniform
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Baisheng WANG (2026/04/27) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">王佰胜 (2026/04/27) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

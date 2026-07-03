@@ -1,5 +1,5 @@
 !> @file sub_H03_mpi_exchange_den.f90
-!> @author ZiLong Peng (2026/04/24)
+!> @author Zilong PENG (2026/04/24)
 !> @brief Exchange ghost-cell density data between MPI ranks and
 !>        apply periodic boundary conditions where needed.
 !>

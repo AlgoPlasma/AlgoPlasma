@@ -7,7 +7,7 @@
 !> It handles charge-exchange and ion-neutral collisions using
 !> energy-dependent cross sections and spatially varying neutral density.
 
-!> @author Lihuan Xie (2025/12/18)
+!> @author Lihuan XIE (2025/12/18)
 
 !> @param[in,out] np: integer, number of ions.
 !> @param[in] npmax: integer, maximum number of ions.

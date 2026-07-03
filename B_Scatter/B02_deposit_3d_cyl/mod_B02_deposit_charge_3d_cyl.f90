@@ -3,7 +3,7 @@
 !> @details This module keeps only one public deposition subroutine.
 !>          Radial and axial dual-volume corrections are written
 !>          directly in the routine to avoid unnecessary helpers.
-!> @author Zhou Zhijun (2026/04/13)
+!> @author Zhijun ZHOU (2026/04/13)
 module mod_B02_deposit_charge_3d_cyl
     implicit none
 

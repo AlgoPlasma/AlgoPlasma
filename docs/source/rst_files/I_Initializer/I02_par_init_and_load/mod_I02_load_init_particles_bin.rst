@@ -12,20 +12,24 @@ mod_I02_load_init_particles_bin.f90
 
    .. rubric:: 直接用途
 
-   ``mod_I02_load_init_particles_bin`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_I02_load_init_particles_bin`` 汇总离线生成粒子 binary 文件的载入入口。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_I02_load_init_particles_bin`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_I02_load_init_particles_bin`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_I02_load_init_particles_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 读取 ``par_ele_init.bin`` 和 ``par_ion_init.bin``，按本地 ``il``/``iu`` 子域筛选粒子并分配数组。
+        - 需要把离线初始化数据载入并分发到 MPI 子域。
 
    .. rubric:: 局部假设
 
@@ -47,17 +51,21 @@ mod_I02_load_init_particles_bin.f90
 
    .. rubric:: Public Entries And Includes
 
+   The following file is included inside the ``contains`` scope of
+   ``mod_I02_load_init_particles_bin``. Callers should
+   ``use mod_I02_load_init_particles_bin`` and call the concrete routine through
+   the module; do not compile the include file separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_I02_load_init_particles_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads ``par_ele_init.bin`` and ``par_ion_init.bin``, filters particles by local ``il``/``iu`` bounds, and allocates local arrays.
+        - Load offline initialization data and distribute particles to MPI subdomains.
 
    .. rubric:: Local Assumptions
 

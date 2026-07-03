@@ -6,7 +6,7 @@
 !>          particles are deposited, axis values are averaged over ``phi`` and
 !>          the output map is written on the signed-``r``/``z`` plane using
 !>          ``phi = 0`` and ``phi = pi``.
-!> @author Zhou Zhijun (2026/04/13)
+!> @author Zhijun ZHOU (2026/04/13)
 program test_charge_like_test2
 
     use mod_B02_deposit_charge_3d_cyl

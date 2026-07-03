@@ -48,6 +48,9 @@ G01_MCC
 
    .. rubric:: Null-Collision 流程
 
+   当前 ``G01_MCC`` 的 null-collision 选择流程、电子散射角抽样和散射角几何示意遵循
+   Vahedi 和 Surendra 的 MCC 算法文献。
+
    为避免每个时间步对所有粒子逐个计算碰撞概率，MCC 先构造一个覆盖所有能量和位置的最大频率
    ``nu_prime``：
 
@@ -111,7 +114,15 @@ G01_MCC
       :width: 50%
       :name: G01_MCC_scatterangle
 
-      电子碰撞散射角几何关系。
+      电子碰撞散射角几何关系；图示来自 Vahedi 和 Surendra (1995)。
+
+   .. rubric:: 参考文献
+
+   .. raw:: html
+
+      <ul>
+        <li>V. Vahedi and M. Surendra, <em>A Monte Carlo collision model for the particle-in-cell method: applications to argon and oxygen discharges</em>, <em>Computer Physics Communications</em> 87 (1995) 179-198. DOI: <a href="https://doi.org/10.1016/0010-4655(94)00171-W" target="_blank" rel="noopener noreferrer">10.1016/0010-4655(94)00171-W</a>.</li>
+      </ul>
 
    .. rubric:: 调用注意
 
@@ -125,8 +136,7 @@ G01_MCC
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Xie Lihuan (2025/12/18) · 哈尔滨工业大学</p>
-        <p class="ap-home-contact">Lihuan Xie (2025/12/18) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">谢礼桓 (2025/12/18) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en
@@ -159,6 +169,10 @@ G01_MCC
         - Sample electron scattering angles, energy loss, and secondary-particle velocities.
 
    .. rubric:: Null-Collision Workflow
+
+   The current ``G01_MCC`` null-collision selection workflow, electron
+   scattering-angle sampling, and scattering-angle geometry follow the MCC
+   algorithm paper by Vahedi and Surendra.
 
    To avoid testing every particle against every physical reaction in every time
    step, MCC first constructs a maximum frequency ``nu_prime`` that bounds all
@@ -233,7 +247,15 @@ G01_MCC
       :width: 50%
       :name: G01_MCC_scatterangle_en
 
-      Electron collision scattering-angle geometry.
+      Electron collision scattering-angle geometry; figure from Vahedi and Surendra (1995).
+
+   .. rubric:: Reference
+
+   .. raw:: html
+
+      <ul>
+        <li>V. Vahedi and M. Surendra, <em>A Monte Carlo collision model for the particle-in-cell method: applications to argon and oxygen discharges</em>, <em>Computer Physics Communications</em> 87 (1995) 179-198. DOI: <a href="https://doi.org/10.1016/0010-4655(94)00171-W" target="_blank" rel="noopener noreferrer">10.1016/0010-4655(94)00171-W</a>.</li>
+      </ul>
 
    .. rubric:: Calling Notes
 
@@ -247,6 +269,5 @@ G01_MCC
 
       <div class="ap-home-footer-band">
         <p><strong>Contributors</strong></p>
-        <p class="ap-home-contact">Xie Lihuan (2025/12/18) · Harbin Institute of Technology</p>
-        <p class="ap-home-contact">Lihuan Xie (2025/12/18) · Harbin Institute of Technology</p>
+        <p class="ap-home-contact">Lihuan XIE (2025/12/18) · Harbin Institute of Technology</p>
       </div>

@@ -11,7 +11,7 @@
 !> and ionization events generate new electron and ion particles while
 !> accumulating the ionization source term ``S`` on the grid.
 
-!> @author Xie Lihuan (2025/12/18)
+!> @author Lihuan XIE (2025/12/18)
 
 !> @param[in,out] np1: integer, number of electron particles.
 !> @param[in,out] np2: integer, number of ion particles.

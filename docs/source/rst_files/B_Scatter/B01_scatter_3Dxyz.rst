@@ -118,7 +118,7 @@ B01_scatter_3Dxyz
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">ZiLong Peng (2026/04/06; 2026/04/16) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">彭子龙 (2026/04/06; 2026/04/16) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en
@@ -243,7 +243,7 @@ B01_scatter_3Dxyz
 
       <div class="ap-home-footer-band">
         <p><strong>Contributors</strong></p>
-        <p class="ap-home-contact">ZiLong Peng (2026/04/06; 2026/04/16) · Harbin Institute of Technology</p>
+        <p class="ap-home-contact">Zilong PENG (2026/04/06; 2026/04/16) · Harbin Institute of Technology</p>
       </div>
 
 .. toctree::

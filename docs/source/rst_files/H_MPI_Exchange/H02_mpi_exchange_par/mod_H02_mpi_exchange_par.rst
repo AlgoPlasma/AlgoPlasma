@@ -12,26 +12,31 @@ mod_H02_mpi_exchange_par.f90
 
    .. rubric:: 直接用途
 
-   ``mod_H02_mpi_exchange_par`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_H02_mpi_exchange_par`` 汇总粒子跨 MPI 子域交换入口，并维护邻居、
+   tag 和缓冲区缓存。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列源码在 ``mod_H02_mpi_exchange_par`` 的 ``contains`` 作用域内 include 或定义。
+   调用方应 ``use mod_H02_mpi_exchange_par`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
       * - 文件/符号
-        - 角色
-        - 调用约定
+        - 功能
+        - 适用场景
       * - ``sub_H02_mpi_exchange_par_init.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 初始化邻居列表、方向映射、MPI tags 和固定大小收发缓冲区。
+        - 粒子交换前调用一次；当 ``npm`` 或分解信息变化时重新初始化。
       * - ``sub_H02_mpi_exchange_par.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 打包离开本地子域的粒子，先交换计数再交换 payload，并追加接收粒子。
+        - 每个时间步或粒子推进后执行跨子域迁移。
       * - ``DIR_ID``
         - 模块内部 helper
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 将 ``(-1:1,-1:1,-1:1)`` 方向三元组映射为稳定整数编号，用于 tag 生成。
 
    .. rubric:: 局部假设
 
@@ -53,25 +58,27 @@ mod_H02_mpi_exchange_par.f90
 
    .. rubric:: Public Entries And Includes
 
+   The following sources are included or defined inside the ``contains`` scope
+   of ``mod_H02_mpi_exchange_par``. Callers should
+   ``use mod_H02_mpi_exchange_par`` and call concrete routines through the
+   module; do not compile the include files separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
       * - File/symbol
-        - Role
-        - Calling convention
+        - Function
+        - Typical use
       * - ``sub_H02_mpi_exchange_par_init.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Initializes neighbor lists, direction maps, MPI tags, and fixed send/receive buffers.
+        - Call once before particle exchange, or again when ``npm`` or decomposition metadata changes.
       * - ``sub_H02_mpi_exchange_par.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Packs particles leaving the local subdomain, exchanges counts then payloads, and appends received particles.
+        - Run after pushing particles whenever particles may cross MPI subdomain boundaries.
       * - ``DIR_ID``
         - module-local helper
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Maps ``(-1:1,-1:1,-1:1)`` direction triplets to stable integer ids for tag generation.
 
    .. rubric:: Local Assumptions
 

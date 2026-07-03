@@ -12,20 +12,24 @@ mod_I01_par_distribute.f90
 
    .. rubric:: 直接用途
 
-   ``mod_I01_par_distribute`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_I01_par_distribute`` 汇总规则粒子分布初始化入口。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_I01_par_distribute`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_I01_par_distribute`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_I01_par_distribute_equilibrium.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 在每个 cell 内生成规则空间位置，并用 Box-Muller 采样 Maxwellian 速度。
+        - 构造均匀初始粒子分布，带热速度和漂移速度。
 
    .. rubric:: 局部假设
 
@@ -47,17 +51,21 @@ mod_I01_par_distribute.f90
 
    .. rubric:: Public Entries And Includes
 
+   The following file is included inside the ``contains`` scope of
+   ``mod_I01_par_distribute``. Callers should ``use mod_I01_par_distribute`` and
+   call the concrete routine through the module; do not compile the include file
+   separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_I01_par_distribute_equilibrium.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Generates regular in-cell positions and Maxwellian velocities using Box-Muller sampling.
+        - Build a uniform initial particle distribution with thermal and drift velocities.
 
    .. rubric:: Local Assumptions
 

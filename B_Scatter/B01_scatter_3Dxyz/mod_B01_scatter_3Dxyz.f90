@@ -2,7 +2,7 @@
 !> @brief Module containing ``sub_B01_scatter_3Dxyz``.
 !> @details This module provides the scatter subroutine implementation
 !> for 3D Cartesian coordinates through file inclusion.
-!> @author ZiLong Peng (2026/04/06)
+!> @author Zilong PENG (2026/04/06)
 
 
 

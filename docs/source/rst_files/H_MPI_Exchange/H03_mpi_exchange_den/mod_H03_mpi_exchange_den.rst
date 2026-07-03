@@ -17,17 +17,20 @@ mod_H03_mpi_exchange_den.f90
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_H03_mpi_exchange_den`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_H03_mpi_exchange_den`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_H03_mpi_exchange_den.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通过 ``use mod_H03_mpi_exchange_den`` 后调用；
-          不要把 include 文件当作独立 translation unit 编译。
+        - 交换 density 边界面数据，并把收到的邻居贡献累加回本地密度边界。
+        - 粒子沉积后需要合并跨 MPI 子域边界的 charge/current density 贡献。
 
    .. rubric:: 局部假设
 
@@ -49,17 +52,21 @@ mod_H03_mpi_exchange_den.f90
 
    .. rubric:: Public Entries And Includes
 
+   The following file is included inside the ``contains`` scope of
+   ``mod_H03_mpi_exchange_den``. Callers should ``use mod_H03_mpi_exchange_den``
+   and call the concrete routine through the module; do not compile the include
+   file separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_H03_mpi_exchange_den.f90``
-        - Included public source entry
-        - Call after ``use mod_H03_mpi_exchange_den``; include files are not
-          standalone translation units.
+        - Exchanges density boundary-plane data and accumulates received neighbor contributions back into local density boundaries.
+        - Merge charge/current density contributions after particle deposition across MPI subdomain boundaries.
 
    .. rubric:: Local Assumptions
 

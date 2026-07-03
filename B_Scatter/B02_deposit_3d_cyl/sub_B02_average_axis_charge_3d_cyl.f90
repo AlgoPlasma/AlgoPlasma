@@ -5,7 +5,7 @@
 !>          routine should be called after the particle loop to replace
 !>          all ``rho(0,j,k)`` by their azimuthal average for each axial
 !>          index ``k``.
-!> @author Zhou Zhijun (2026/04/23)
+!> @author Zhijun ZHOU (2026/04/23)
 !
 !> @param[in] nr: integer, number of radial cells.
 !> @param[in] nphi: integer, maximum phi node index.

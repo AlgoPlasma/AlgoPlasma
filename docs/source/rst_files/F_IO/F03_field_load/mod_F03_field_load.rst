@@ -12,29 +12,35 @@ mod_F03_field_load.f90
 
    .. rubric:: 直接用途
 
-   ``mod_F03_field_load`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_F03_field_load`` 汇总场数据载入入口，从 per-rank ``.dat`` 或 ``.bin``
+   文件恢复 cell-centered 场数组。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_F03_field_load`` 的 ``contains`` 作用域内 include。调用方应
+   ``use mod_F03_field_load`` 后调用具体例程；不要把这些 include 文件单独编译。
+   本模块没有 ``3d_grid`` 对称载入入口，因为对应输出已经把 grid-defined 数据平均为
+   cell-centered 值，不能恢复原始网格量。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_F03_field_load_1d_dat.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 从 ASCII ``.dat`` 文件读取 header 和 1D 场向量。
+        - 输入数据以线性数组保存，且需要文本格式便于检查。
       * - ``sub_F03_field_load_1d_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 从 raw stream ``.bin`` 文件读取 header 和 1D 场向量。
+        - 输入数据以线性数组保存，且希望使用紧凑二进制格式。
       * - ``sub_F03_field_load_3d_dat.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 从 ASCII ``.dat`` 文件读取 3D cell-centered 场数组。
+        - 需要直接恢复 ``F(il:iu,...)`` 形式的文本场数据。
       * - ``sub_F03_field_load_3d_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 从 raw stream ``.bin`` 文件读取 3D cell-centered 场数组，并校验 index header。
+        - 需要直接恢复 3D 场数组，且读写双方约定实数精度和端序。
 
    .. rubric:: 局部假设
 
@@ -52,33 +58,37 @@ mod_F03_field_load.f90
 
    .. rubric:: Direct Purpose
 
-   ``mod_F03_field_load`` module wrapper for F03 field load routines. Included files: - ``sub_F03_field_load_1d_dat.f90`` - ``sub_F03_field_load_1d_bin.f90`` - ``sub_F03_field_load_3d_dat.f90`` - ``sub_F03_field_load_3d_bin.f90`` The ``3d_grid`` load wrappers are intentionally not included, because the corresponding ``sub_F04_field_output_3d_grid_*`` routines write reconstructed cell-centered values only and do not preserve the original grid-defined field. Therefore, a symmetric load routine that recovers the original grid-defined array is not provided.
+   ``mod_F03_field_load`` groups field-loading entry points that restore
+   cell-centered fields from per-rank ``.dat`` or ``.bin`` files.
 
    .. rubric:: Public Entries And Includes
 
+   The following files are included inside the ``contains`` scope of
+   ``mod_F03_field_load``. Callers should ``use mod_F03_field_load`` and call
+   the concrete routines through the module; do not compile these include files
+   separately. No symmetric ``3d_grid`` loader is provided because the matching
+   output routines write reconstructed cell-centered values, not the original
+   grid-defined field.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_F03_field_load_1d_dat.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads an ASCII ``.dat`` header and a 1D field vector.
+        - Restore text field data stored in a caller-defined linear layout.
       * - ``sub_F03_field_load_1d_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads a raw stream ``.bin`` header and a 1D field vector.
+        - Restore compact binary field data stored in a linear layout.
       * - ``sub_F03_field_load_3d_dat.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads an ASCII ``.dat`` file into a 3D cell-centered field array.
+        - Restore readable text data directly into ``F(il:iu,...)``.
       * - ``sub_F03_field_load_3d_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads a raw stream ``.bin`` file into a 3D field array and checks index headers.
+        - Restore compact binary 3D data when real kind and endianness match.
 
    .. rubric:: Local Assumptions
 

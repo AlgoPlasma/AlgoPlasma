@@ -20,7 +20,7 @@ H_MPI_Exchange
 
    .. rubric:: 概览
 
-   ``H_MPI_Exchange`` 记录 AlgoPlasma 在 3D 区域分解并行中使用的低层 MPI 数据交换例程。
+   ``H_MPI_Exchange`` 记录 AlgoPlasma 在 3D 区域分解并行中使用的底层 MPI 数据交换例程。
    它不是通用 MPI 通信工具箱，而是围绕 PIC/FDTD 主循环里的三类数据语义拆成三组接口：
 
    - H01：把邻居 rank 的有效内部场值复制到本 rank 的 ghost 层。

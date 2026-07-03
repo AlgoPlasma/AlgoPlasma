@@ -22,9 +22,9 @@ F02_par_output
 
    .. rubric:: 模块定位
 
-``F02_par_output`` 是粒子输出层。它将本 rank 的 ``par(:,1:np)`` 写入独立文件，
-统一入口 ``sub_F02_par_output`` 根据 ``tag`` 选择 ASCII、binary 或 HDF5 writer。
-未知 tag 会提示并回退到 ``dat``。
+   ``F02_par_output`` 是粒子输出层。它将本 rank 的 ``par(:,1:np)`` 写入独立文件，
+   统一入口 ``sub_F02_par_output`` 根据 ``tag`` 选择 ASCII、binary 或 HDF5 writer。
+   未知 tag 会提示并回退到 ``dat``。
 
    .. list-table:: 文件角色
       :header-rows: 1
@@ -60,10 +60,10 @@ F02_par_output
 
    .. rubric:: Module Role
 
-``F02_par_output`` is the particle output layer. It writes the current rank's
-``par(:,1:np)`` to a separate file. The common entry ``sub_F02_par_output``
-selects the ASCII, binary, or HDF5 writer by ``tag``. Unknown tags warn and
-fall back to ``dat``.
+   ``F02_par_output`` is the particle output layer. It writes the current rank's
+   ``par(:,1:np)`` to a separate file. The common entry ``sub_F02_par_output``
+   selects the ASCII, binary, or HDF5 writer by ``tag``. Unknown tags warn and
+   fall back to ``dat``.
 
    .. list-table:: File Roles
       :header-rows: 1

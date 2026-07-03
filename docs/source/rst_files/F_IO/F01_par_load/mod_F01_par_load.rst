@@ -16,28 +16,33 @@ mod_F01_par_load.f90
 
    .. rubric:: 公开入口与 include 关系
 
+   下列源码文件由 ``mod_F01_par_load`` 在 ``contains`` 中 include；调用方通常
+   ``use mod_F01_par_load`` 后调用具体例程，不应把这些 include 文件当作独立
+   translation unit 编译。``sub_F01_par_load_h5.f90`` 只在启用 ``USE_HDF5``
+   时参与编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 32 38 30
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_F01_par_load.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 按 ``tag`` 分发到 ``dat``、``bin`` 或 ``h5/hdf5`` 具体读取例程。
+        - 调用方希望用一个统一入口根据格式读取粒子数据。
       * - ``sub_F01_par_load_dat.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 从每个 MPI rank 对应的 ASCII ``.dat`` 文件逐行读取 ``par(:,p)``。
+        - 调试、人工检查或与 ``sub_F02_par_output_dat`` 配套读取文本粒子文件。
       * - ``sub_F01_par_load_bin.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 从 raw stream ``.bin`` 文件读取 ``par(:,1:np)``，不读取额外头信息。
+        - 读取与 ``sub_F02_par_output_bin`` 配套的轻量二进制粒子文件。
       * - ``sub_F01_par_load_count.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 根据格式推断本 rank 粒子数：``dat`` 数行、``bin`` 查文件大小、``h5`` 查 ``par`` 数据集维度。
+        - 在分配 ``par`` 或调用读取例程前先确定 ``np``。
       * - ``sub_F01_par_load_h5.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 从每个 MPI rank 对应的 HDF5 ``.h5`` 文件中读取二维数据集 ``par`` 的前 ``np`` 列。
+        - 启用 HDF5 构建后读取与 ``sub_F02_par_output_h5`` 配套的粒子文件。
 
    .. rubric:: 局部假设
 
@@ -55,37 +60,39 @@ mod_F01_par_load.f90
 
    .. rubric:: Direct Purpose
 
-   ``mod_F01_par_load`` module wrapper for F01 particle load routines. Included files: - ``sub_F01_par_load.f90`` - ``sub_F01_par_load_dat.f90`` - ``sub_F01_par_load_bin.f90`` - ``sub_F01_par_load_count.f90`` - ``sub_F01_par_load_h5.f90``
+   ``mod_F01_par_load`` is the module wrapper for F01 particle-loading
+   routines. It exposes the format dispatcher, format-specific readers, and the
+   particle-count helper through one module.
 
    .. rubric:: Public Entries And Includes
 
+   The following source files are included inside ``mod_F01_par_load`` under
+   ``contains``. Callers normally ``use mod_F01_par_load`` and call the
+   concrete routines; the include files are not standalone translation units.
+   ``sub_F01_par_load_h5.f90`` is compiled only when ``USE_HDF5`` is enabled.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 32 38 30
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_F01_par_load.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Dispatches to the concrete ``dat``, ``bin``, or ``h5/hdf5`` reader according to ``tag``.
+        - Use one format-neutral entry point to load particle data.
       * - ``sub_F01_par_load_dat.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads ``par(:,p)`` line by line from the per-rank ASCII ``.dat`` file.
+        - Debuggable text input paired with ``sub_F02_par_output_dat``.
       * - ``sub_F01_par_load_bin.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads ``par(:,1:np)`` from a raw stream ``.bin`` file with no extra header.
+        - Lightweight binary input paired with ``sub_F02_par_output_bin``.
       * - ``sub_F01_par_load_count.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Infers the local particle count: line count for ``dat``, file size for ``bin``, or ``par`` dataset shape for ``h5``.
+        - Determine ``np`` before allocating ``par`` or calling a reader.
       * - ``sub_F01_par_load_h5.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Reads the first ``np`` columns from the HDF5 dataset ``par`` in the per-rank ``.h5`` file.
+        - HDF5 particle input paired with ``sub_F02_par_output_h5``.
 
    .. rubric:: Local Assumptions
 

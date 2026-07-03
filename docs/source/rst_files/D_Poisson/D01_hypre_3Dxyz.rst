@@ -46,7 +46,7 @@ D01_hypre_3Dxyz_bc
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
         <p class="ap-home-contact">赵隐剑 (2025/11/09; 2025/12/15) · 哈尔滨工业大学</p>
-        <p class="ap-home-contact">Baisheng WANG (2025/11/09; 2025/12/15) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">王佰胜 (2025/11/09; 2025/12/15) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

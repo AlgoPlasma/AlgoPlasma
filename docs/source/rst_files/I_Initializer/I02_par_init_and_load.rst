@@ -43,11 +43,21 @@ I02_par_init_and_load
    3. 载入例程只保留满足 ``il(d)-1 <= r(d) < iu(d)`` 的粒子。
    4. 所有 rank 用 ``MPI_Allreduce`` 得到跨物种的本地最大粒子数，并按 ``f_npmax`` 扩展分配 ``par``。
 
+   .. rubric:: 应用文献
+
+   该离线初始粒子生成和载入流程用于 Hall 推力器三维 PIC 模拟中的近壁输运研究。相关论文包括：
+
+   .. raw:: html
+
+      <ul>
+        <li>Z. Liu, Z. Zhao, and Y. Zhao, <em>Near-Wall Pathways of Anomalous Electron Transport in Hall Thrusters Revealed by 3D PIC Simulations</em>, arXiv:2603.14849 [physics.plasm-ph] (2026). DOI: <a href="https://doi.org/10.48550/arXiv.2603.14849" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2603.14849</a>.</li>
+      </ul>
+
    .. raw:: html
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Zhongping ZHAO (2026/4/22) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">赵中平 (2026/4/22) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en
@@ -79,6 +89,18 @@ I02_par_init_and_load
    2. During MPI startup, each rank calls the loader and scans the global files.
    3. The loader keeps only particles satisfying ``il(d)-1 <= r(d) < iu(d)``.
    4. The ranks use ``MPI_Allreduce`` to find the local maximum particle count and allocate ``par`` with the ``f_npmax`` expansion factor.
+
+   .. rubric:: Applications and References
+
+   This offline initial-particle generation and loading workflow is used in a
+   near-wall transport study for Hall-thruster 3D PIC simulations. Related
+   papers include:
+
+   .. raw:: html
+
+      <ul>
+        <li>Z. Liu, Z. Zhao, and Y. Zhao, <em>Near-Wall Pathways of Anomalous Electron Transport in Hall Thrusters Revealed by 3D PIC Simulations</em>, arXiv:2603.14849 [physics.plasm-ph] (2026). DOI: <a href="https://doi.org/10.48550/arXiv.2603.14849" target="_blank" rel="noopener noreferrer">10.48550/arXiv.2603.14849</a>.</li>
+      </ul>
 
    .. raw:: html
 

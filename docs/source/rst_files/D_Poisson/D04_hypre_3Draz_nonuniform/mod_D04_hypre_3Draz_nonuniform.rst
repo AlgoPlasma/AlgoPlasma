@@ -12,32 +12,37 @@ mod_D04_hypre_3Draz_nonuniform.f90
 
    .. rubric:: 直接用途
 
-   ``mod_D04_hypre_3Draz_nonuniform`` 是该目录的模块包装器，集中 include 或暴露本组公开入口。
+   ``mod_D04_hypre_3Draz_nonuniform`` 汇总非均匀 ``(r,alpha,z)`` 柱坐标 3D
+   HYPRE Poisson 求解、矩阵装配和边界修正入口。
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_D04_hypre_3Draz_nonuniform`` 的 ``contains`` 作用域内 include。
+   调用方应 ``use mod_D04_hypre_3Draz_nonuniform`` 后调用具体例程；不要把这些
+   include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_D04_hypre_3Draz_nonuniform.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 用 HYPRE Struct PFMG 求解已装配的非均匀柱坐标 Poisson 系统。
+        - ``A_values`` 和 RHS 已准备好，需要执行求解阶段。
       * - ``sub_D04_hypre_3Draz_nonuniform_A.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 装配单域非均匀柱坐标 cell-centered 7 点矩阵和 RHS。
+        - 非 MPI 或整体域装配场景，网格间距由方向数组给出。
       * - ``sub_D04_hypre_3Draz_nonuniform_A_mpi.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 装配 MPI-local 非均匀柱坐标矩阵和 RHS，并使用 halo/邻接间距信息。
+        - 区域分解后每个 rank 只装配本地 owned cells。
       * - ``sub_D04_hypre_3Draz_nonuniform_bc_A_dielectric.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 对单域非均匀柱坐标矩阵/RHS 施加 dielectric/surface-charge 修正。
+        - 边界类型需要介质表面电荷贡献。
       * - ``sub_D04_hypre_3Draz_nonuniform_bc_A_outflow.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通常通过本模块 ``use`` 后访问具体例程；不要把 include 文件当作独立 translation unit 编译。
+        - 对单域非均匀柱坐标矩阵/RHS 施加 outflow/Robin 型修正。
+        - 需要在非均匀网格上处理开放边界或远场近似。
 
    .. rubric:: 局部假设
 
@@ -55,37 +60,39 @@ mod_D04_hypre_3Draz_nonuniform.f90
 
    .. rubric:: Direct Purpose
 
-   ``mod_D04_hypre_3Draz_nonuniform`` group the cylindrical 3D nonuniform HYPRE Poisson routines.
+   ``mod_D04_hypre_3Draz_nonuniform`` groups nonuniform cylindrical
+   ``(r,alpha,z)`` 3D HYPRE Poisson solve, matrix-assembly, and
+   boundary-correction routines.
 
    .. rubric:: Public Entries And Includes
 
+   The following files are included inside the ``contains`` scope of
+   ``mod_D04_hypre_3Draz_nonuniform``. Callers should
+   ``use mod_D04_hypre_3Draz_nonuniform`` and call concrete routines through the
+   module; do not compile these include files separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_D04_hypre_3Draz_nonuniform.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Solves the assembled nonuniform cylindrical Poisson system with HYPRE Struct PFMG.
+        - Run the solve stage after ``A_values`` and RHS are ready.
       * - ``sub_D04_hypre_3Draz_nonuniform_A.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Assembles the single-domain nonuniform cylindrical 7-point matrix and RHS.
+        - Use for whole-domain assembly with directional spacing arrays.
       * - ``sub_D04_hypre_3Draz_nonuniform_A_mpi.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Assembles MPI-local nonuniform cylindrical matrix/RHS using halo spacing data.
+        - Use after domain decomposition when each rank owns only local cells.
       * - ``sub_D04_hypre_3Draz_nonuniform_bc_A_dielectric.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Applies dielectric/surface-charge corrections to the single-domain matrix/RHS.
+        - Add surface-charge boundary contributions on a nonuniform grid.
       * - ``sub_D04_hypre_3Draz_nonuniform_bc_A_outflow.f90``
-        - included public source entry
-        - Call concrete routines through this module after ``use``; include files are not
-          standalone translation units.
+        - Applies outflow/Robin-type corrections to the single-domain matrix/RHS.
+        - Represent open boundaries or far-field behavior on a nonuniform grid.
 
    .. rubric:: Local Assumptions
 

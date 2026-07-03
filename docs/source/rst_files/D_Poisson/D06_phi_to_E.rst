@@ -55,7 +55,7 @@ D06_phi_to_E
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Zilong PENG (2026/06/05) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">彭子龙 (2026/06/05) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

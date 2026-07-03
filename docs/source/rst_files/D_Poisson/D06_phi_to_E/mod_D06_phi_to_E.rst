@@ -17,16 +17,19 @@ mod_D06_phi_to_E.f90
 
    .. rubric:: 公开入口与 include 关系
 
+   下列文件在 ``mod_D06_phi_to_E`` 的 ``contains`` 作用域内 include。调用方应
+   ``use mod_D06_phi_to_E`` 后调用公开入口；不要把这些 include 文件单独编译。
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - 文件/符号
-        - 角色
-        - 调用约定
+      * - 文件
+        - 功能
+        - 适用场景
       * - ``sub_D06_phi_to_E.f90``
-        - 被模块 include 的公开源码入口
-        - 调用方通过本模块 ``use`` 后访问；不要把 include 文件当作独立 translation unit 编译。
+        - 用二阶中心差分从 ``phi`` 计算 ``Ex``、``Ey``、``Ez``，实现 ``E=-grad(phi)``。
+        - Poisson 求解并完成 ghost/boundary 处理后，需要得到电场分量。
 
    .. rubric:: 局部假设
 
@@ -53,17 +56,20 @@ mod_D06_phi_to_E.f90
 
    .. rubric:: Public Entries and Includes
 
+   The following file is included inside the ``contains`` scope of
+   ``mod_D06_phi_to_E``. Callers should ``use mod_D06_phi_to_E`` and call the
+   public entry through the module; do not compile the include file separately.
+
    .. list-table::
       :header-rows: 1
-      :widths: 34 24 42
+      :widths: 34 34 32
 
-      * - File/symbol
-        - Role
-        - Calling convention
+      * - File
+        - Function
+        - Typical use
       * - ``sub_D06_phi_to_E.f90``
-        - included public source entry
-        - Call through this module after ``use``; include files are not
-          standalone translation units.
+        - Computes ``Ex``, ``Ey``, and ``Ez`` from ``phi`` using second-order central differences.
+        - Obtain electric-field components after Poisson solve and ghost/boundary preparation.
 
    .. rubric:: Local Assumptions
 

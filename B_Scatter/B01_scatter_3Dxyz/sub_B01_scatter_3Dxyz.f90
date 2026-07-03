@@ -1,5 +1,5 @@
 !> @file sub_B01_scatter_3Dxyz.f90
-!> @author ZiLong Peng (2026/04/06)
+!> @author Zilong PENG (2026/04/06)
 !> @brief Scatter particle weights to the 3D density field.
 !> @details This subroutine deposits particle contributions from
 !> ``par`` onto the nodal density array ``den`` using trilinear

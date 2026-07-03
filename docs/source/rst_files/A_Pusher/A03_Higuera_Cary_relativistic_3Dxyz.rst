@@ -38,7 +38,7 @@ A03_Higuera_Cary_relativistic_3Dxyz
 
       <div class="ap-home-footer-band">
         <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">Zilong PENG (2025/11/19; 2025/12/03) · 哈尔滨工业大学</p>
+        <p class="ap-home-contact">彭子龙 (2025/11/19; 2025/12/03) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

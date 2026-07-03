@@ -1,5 +1,5 @@
 !> @file   mod_I01_par_distribute.f90
-!> @author Yinjian Zhao (2025/11/03)
+!> @author Yinjian ZHAO (2025/11/03)
 !> @brief  Module wrapper for particle distribution initialization.
 !>
 !> @details

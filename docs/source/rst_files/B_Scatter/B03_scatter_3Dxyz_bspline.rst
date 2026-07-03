@@ -181,7 +181,7 @@ B03_scatter_3Dxyz_bspline
 
       <div class="ap-home-footer-band">
         <p><strong>作者</strong></p>
-        <p class="ap-home-contact">Zhongping ZHAO (2026/06/06) · Harbin Institute of Technology</p>
+        <p class="ap-home-contact">赵中平 (2026/06/06) · 哈尔滨工业大学</p>
       </div>
 
 .. container:: ap-lang ap-lang-en

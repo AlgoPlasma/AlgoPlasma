@@ -8,7 +8,7 @@
 !> spacing. If fewer than ``Nmax`` lines are present, the remaining energy
 !> entries are extrapolated and the last cross-section value is held constant.
 !>
-!> @author Xie Lihuan (2025/12/18)
+!> @author Lihuan XIE (2025/12/18)
 !>
 !> @param[in] Nmax Maximum number of table rows to load.
 !> @param[out] cross_section Table ``(1:2,1:Nmax)``. Row 1 stores energies and

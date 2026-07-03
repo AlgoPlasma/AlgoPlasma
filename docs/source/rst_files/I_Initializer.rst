@@ -45,7 +45,10 @@ I_Initializer
 
    .. rubric:: 测试状态
 
-   当前仓库中未发现覆盖 ``I_Initializer`` 的独立顶层 ``tests/`` 回归目录。I02 更接近离线数据生成和载入流程；若后续压缩成轻量初始化测试，应同步在 :doc:`测试总览 </tests/index>` 和本页补充链接。
+   当前 ``tests/006_initializer`` 已包含 :doc:`I01_par_distribute 测试 </tests/006_initializer/I01_par_distribute>`，
+   用于验证规则粒子分布初始化。I02 更接近离线初始化数据生成和载入流程，
+   :doc:`init_particles_bin.py <I_Initializer/I02_par_init_and_load/init_particles_bin>` 页面已给出参考输出图，
+   因此当前不单独作为轻量回归测试项。
 
 .. container:: ap-lang ap-lang-en
 
@@ -79,8 +82,10 @@ I_Initializer
 
    .. rubric:: Test Status
 
-   The current repository does not contain a standalone top-level ``tests/``
-   regression directory for ``I_Initializer``. I02 is closer to an offline data
-   generation and loading workflow; if it is later compressed into a lightweight
-   initializer test, link it from both the :doc:`test overview </tests/index>`
-   and this page.
+   ``tests/006_initializer`` currently includes the
+   :doc:`I01_par_distribute test </tests/006_initializer/I01_par_distribute>`
+   for regular particle-distribution initialization. I02 is closer to an offline
+   initialization-data generation and loading workflow. The
+   :doc:`init_particles_bin.py <I_Initializer/I02_par_init_and_load/init_particles_bin>`
+   page already includes reference output figures, so it is not listed as a
+   separate lightweight regression test item for now.

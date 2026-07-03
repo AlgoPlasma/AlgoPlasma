@@ -178,6 +178,6 @@ AlgoPlasma
 
      <section class="ap-home-footer-band">
       <p>Contributions are welcome for algorithm implementations, test cases, documentation, and result validation that serve plasma science.</p>
-      <p class="ap-home-contact">Initiator: Yinjian Zhao · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
+      <p class="ap-home-contact">Initiator: Yinjian ZHAO · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
    </div>

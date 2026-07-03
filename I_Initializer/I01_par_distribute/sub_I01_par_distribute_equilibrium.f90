@@ -1,5 +1,5 @@
 !> @file   sub_I01_par_distribute_equilibrium.f90
-!> @author Yinjian Zhao (2025/11/03)
+!> @author Yinjian ZHAO (2025/11/03)
 !> @brief  Particle initialization utilities.
 !>         Exactly uniform in space and Maxwellian velocity (dx=dy=dz=1).
 !> @details

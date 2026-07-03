@@ -8,7 +8,7 @@
 !> For ionization events, a secondary electron and an ion are generated,
 !> with their velocities sampled from the corresponding distributions.
 
-!> @author Xie Lihuan (2025/12/18)
+!> @author Lihuan XIE (2025/12/18)
 
 !> @param[in,out] v: real (1:3), electron velocity.
 !> @param[in] me: real, electron mass.
