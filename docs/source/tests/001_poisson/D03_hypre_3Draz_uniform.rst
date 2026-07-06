@@ -20,6 +20,44 @@ D03_hypre_3Draz_uniform Tests
    - ``test03``: 单 rank 边界条件回归。
    - ``test04``: 在 MPI 分块下重复同类测试，检查结果是否与单 rank 一致。
 
+   .. rubric:: 这个测试在做什么
+
+   D03 求解的是均匀柱坐标 ``(r, alpha, z)`` 网格上的 Poisson 方程。本页测试采用
+   quasi-2D ``r-z`` 设置：``alpha`` 方向保留 8 个周期网格点，用来确认周期方向和
+   3D 数据布局仍然走通；待验证的物理变化主要放在 ``r`` 和 ``z`` 方向。
+
+   ``test03`` 是单 rank 基线。它先用有解析解的线性势
+   :math:`\phi(z)=20z/L_z` 检查 axis、Neumann 和 Dirichlet 边界，再用两个
+   smoke case 分别走 dielectric 和 outflow 修正路径。``test04`` 使用同一组物理算例，
+   但把全局网格分给多个 MPI rank，重点检查局部矩阵组装、内部 MPI 面、物理外边界和
+   结果汇总是否与单 rank 保持一致。
+
+   .. rubric:: 参数设置
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 28 52
+
+      * - 算例
+        - 网格与运行方式
+        - 主要设置
+      * - ``test03`` case 1
+        - 单 rank，``nr=320``、``na=8``、``nz=320``。
+        - ``rmin=0``、``rmax=2``、``Lz=1``、``eps0=1``、``tolerance=1e-10``。``r_lo`` 为 axis，``r_hi`` 为 zero-Neumann，``z_lo=0 V``，``z_hi=20 V``，解析解为 ``phi(z)=20*z/Lz``。
+      * - ``test03`` case 2
+        - 单 rank，``nr=240``、``na=8``、``nz=240``。
+        - 保持 ``z_lo=0 V``、``z_hi=20 V`` 和 ``alpha`` 周期；``r_hi`` 改为 dielectric，表面修正 ``sr_hi=1e-3``。该算例用于覆盖 dielectric 路径，不做解析误差判据。
+      * - ``test03`` case 3
+        - 单 rank，``nr=240``、``na=8``、``nz=240``。
+        - ``r_hi`` 改为 outflow，``phi_infty=20``，``r0_cyl=(0,0,-10)``。该算例用于覆盖 outflow 路径，不做解析误差判据。
+      * - ``test04`` 三个 case
+        - 默认 ``mpirun -n 8``；``MPI_Dims_create`` 自动给出 ``(r,alpha,z)`` 三维分块。
+        - 使用与 ``test03`` 相同的全局网格、边界和物理参数；内部 MPI 面由 neighbor 标记处理，只有全局外边界使用 axis、Neumann、Dirichlet、dielectric 或 outflow。
+
+   边界数组顺序为 ``r_lo, r_hi, alpha_lo, alpha_hi, z_lo, z_hi``。
+   ``alpha`` 方向通过 ``period=(0,na,0)`` 保持周期，因此本组图主要展示固定
+   ``alpha`` 截面上的 ``r-z`` 结果。
+
    .. rubric:: 运行方式
 
    运行前建议确认：
@@ -88,6 +126,16 @@ D03_hypre_3Draz_uniform Tests
 
    两者在误差量级上几乎一致，说明 MPI 分块没有引入明显额外误差。case 2 与 case 3 主要用于覆盖 dielectric/outflow 代码路径。
 
+   .. rubric:: 图片如何阅读
+
+   case 1 的三联图从左到右分别是解析解、数值解和绝对误差。横轴为 ``z`` 索引，
+   纵轴为 ``r`` 索引，画的是固定 ``alpha`` 截面。由于解析解只依赖 ``z``，
+   左图和中图应呈现沿 ``z`` 单调变化、沿 ``r`` 基本不变的条带结构；右图应整体接近零。
+   ``test04`` 的三联图应与 ``test03`` 保持同样的结构和误差量级，这说明 MPI 局部组装没有破坏解。
+
+   case 2 和 case 3 输出的是 smoke 图，主要用于人工检查 dielectric/outflow 路径是否跑通、
+   结果是否有限平滑；它们不是解析误差图。
+
    .. rubric:: 代表图
 
    ``test03`` case 1 三联图：
@@ -139,6 +187,48 @@ D03_hypre_3Draz_uniform Tests
 
    - ``test03``: single-rank boundary-condition regression.
    - ``test04``: the same boundary suite under MPI decomposition.
+
+   .. rubric:: What This Test Is Doing
+
+   D03 solves the Poisson equation on a uniform cylindrical ``(r, alpha, z)``
+   grid. These tests use a quasi-2D ``r-z`` setup: the ``alpha`` direction
+   still contains 8 periodic cells, so the periodic direction and 3D layout
+   remain active, while the meaningful field variation is placed in ``r`` and
+   ``z``.
+
+   ``test03`` is the single-rank baseline. It first uses the exact linear
+   potential :math:`\phi(z)=20z/L_z` to verify axis, Neumann, and Dirichlet
+   boundaries, then runs two smoke cases that exercise the dielectric and
+   outflow edit paths. ``test04`` repeats the same physical cases under MPI
+   decomposition. Its focus is local matrix assembly, internal MPI faces,
+   physical outer boundaries, and gathered output consistency with the
+   single-rank baseline.
+
+   .. rubric:: Parameters
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 28 52
+
+      * - Case
+        - Grid and run mode
+        - Main settings
+      * - ``test03`` case 1
+        - Single rank, ``nr=320``, ``na=8``, ``nz=320``.
+        - ``rmin=0``, ``rmax=2``, ``Lz=1``, ``eps0=1``, ``tolerance=1e-10``. ``r_lo`` is axis, ``r_hi`` is zero-Neumann, ``z_lo=0 V``, ``z_hi=20 V``, with exact solution ``phi(z)=20*z/Lz``.
+      * - ``test03`` case 2
+        - Single rank, ``nr=240``, ``na=8``, ``nz=240``.
+        - Keeps ``z_lo=0 V``, ``z_hi=20 V``, and periodic ``alpha``; changes ``r_hi`` to dielectric with ``sr_hi=1e-3``. This is a dielectric-path smoke case, not an analytic-error check.
+      * - ``test03`` case 3
+        - Single rank, ``nr=240``, ``na=8``, ``nz=240``.
+        - Changes ``r_hi`` to outflow with ``phi_infty=20`` and ``r0_cyl=(0,0,-10)``. This is an outflow-path smoke case, not an analytic-error check.
+      * - ``test04`` three cases
+        - Default ``mpirun -n 8``; ``MPI_Dims_create`` chooses the 3D ``(r,alpha,z)`` decomposition.
+        - Uses the same global grids, boundaries, and physical parameters as ``test03``. Internal MPI faces are handled through neighbor flags; only global outer faces receive axis, Neumann, Dirichlet, dielectric, or outflow boundary codes.
+
+   The boundary array order is ``r_lo, r_hi, alpha_lo, alpha_hi, z_lo, z_hi``.
+   ``alpha`` is periodic through ``period=(0,na,0)``, so the figures mainly
+   show ``r-z`` slices at a fixed ``alpha`` index.
 
    .. rubric:: How To Run
 
@@ -212,6 +302,20 @@ D03_hypre_3Draz_uniform Tests
    The two runs match closely in error scale, which shows that the MPI
    decomposition does not introduce a meaningful additional accuracy loss.
    Case 2 and case 3 mainly serve to cover the dielectric/outflow code paths.
+
+   .. rubric:: How To Read The Figures
+
+   The case-1 triptychs show exact field, numerical field, and absolute error
+   from left to right. The horizontal axis is ``z`` index and the vertical axis
+   is ``r`` index at one fixed ``alpha`` slice. Because the exact solution only
+   depends on ``z``, the first two panels should show a monotone ``z`` pattern
+   with little ``r`` variation, and the error panel should remain near zero.
+   The ``test04`` triptych should match the ``test03`` structure and error
+   scale, showing that MPI-local assembly does not disturb the solution.
+
+   Case 2 and case 3 figures are smoke outputs for the dielectric and outflow
+   paths. They should be finite and smooth, but they are not analytic-error
+   plots.
 
    .. rubric:: Representative Figures
 

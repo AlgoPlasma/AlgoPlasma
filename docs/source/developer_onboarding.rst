@@ -1,5 +1,5 @@
 AlgoPlasma Quick Start
-================
+======================
 
 .. toctree::
    :maxdepth: 1

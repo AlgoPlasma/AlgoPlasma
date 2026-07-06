@@ -105,7 +105,7 @@ C01_gather_3Dxyz Test
 
    .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_ref_vs_num.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``exact`` case 的场值对比。横轴为粒子位置处的解析场分量值，纵轴为
       C01 gather 得到的同一分量值。每个点代表一个粒子的一个
@@ -113,7 +113,7 @@ C01_gather_3Dxyz Test
 
    .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_convergence.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``convergence`` case 的误差随网格间距变化。横轴为 ``h=1/N``，纵轴为
       gather 场分量相对解析值的误差。``L2`` 汇总所有粒子和六个场分量，
@@ -121,7 +121,7 @@ C01_gather_3Dxyz Test
 
    .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_push_displacement.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``push`` case 的粒子单步位移。每条线段从推进前 ``(x0,y0)`` 指向推进后
       ``(x1,y1)``，用于观察 fused gather-push 的位移方向和量级。
@@ -234,7 +234,7 @@ C01_gather_3Dxyz Test
 
    .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_ref_vs_num.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``exact`` field comparison. x-axis: analytic field component at the
       particle. y-axis: the same component gathered by C01. Each point is one
@@ -242,7 +242,7 @@ C01_gather_3Dxyz Test
 
    .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_convergence.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``convergence`` error versus grid spacing. x-axis: ``h=1/N``. y-axis:
       error of gathered field components against the analytic field. ``L2``
@@ -250,7 +250,7 @@ C01_gather_3Dxyz Test
 
    .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_push_displacement.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``push`` one-step displacement. Each segment goes from ``(x0,y0)``
       before the step to ``(x1,y1)`` after the step.

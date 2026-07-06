@@ -121,13 +121,13 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       平均单步耗时。纵轴越低越快，横轴为 OpenMP 线程数。
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_selected_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       只保留 ``1, 2, 4, 8, 16, 32, 64, 128, 256`` 线程档位的平均单步耗时，
       便于观察常用 2 倍线程扩展路径。图里的同色虚线是该配置自己的
@@ -135,7 +135,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/relative_time_vs_amd.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       同线程下相对 AMD 原版的耗时百分比。``100%`` 是 AMD 原版；低于
       ``100%`` 表示比 AMD 原版快，高于 ``100%`` 表示更慢。
@@ -335,13 +335,13 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       Average single-step time. Lower is better.
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_selected_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       Average single-step time for the selected power-of-two-style thread
       counts: ``1, 2, 4, 8, 16, 32, 64, 128, 256``. The dashed same-color
@@ -349,7 +349,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/relative_time_vs_amd.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       Time relative to AMD original at the same thread count.
 

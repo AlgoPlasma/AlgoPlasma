@@ -43,7 +43,7 @@ Pusher Testing Guide
 
    - ``tests/002_pusher/A02_Boris_3Drtz``
      A02 的四个算例，与 A01 在物理参数上对齐，
-     **每步把 Cartesian 场分量按 ``\theta`` 转成柱坐标分量**再传给推进器，
+     每步把 Cartesian 场分量按 ``\theta`` 转成柱坐标分量后再传给推进器，
      输出模拟的柱坐标状态转回 Cartesian 后跟 A01 同款解析解逐分量比较。
      详见 :doc:`A02 测试 </tests/002_pusher/A02_Boris_3Drtz>`。
 
@@ -81,12 +81,12 @@ Pusher Testing Guide
    3. **A01 case 03/04 (ExB)**：摆线轨迹和纯 drift，确认 Boris 在
       正交 E、B 下的物理图像。case 04 的 ``max|r|`` 应到 ~1e-6
       （E + v×B 严格抵消时的舍入级别）。
-   4. **A02 case 01-04**：和 A01 同款物理参数。跑完后**逐 case 对比
-      ``max|r - r_ana|``**，应与 A01 完全一致——这是柱坐标 Boris 物理等价的最强信号。
-   5. **A03 case 01 (相对论 gyro)**：``\gamma \approx 2.3``，
-      验证 HC 在相对论圆周运动下保持 ``|u|`` 守恒。
-   6. **A03 case 02 (高 ``\gamma`` ExB drift)**：``\gamma = 20``，``E + v×B = 0``。
-      HC 给出 ``x \approx 0``（漂移为零）；同工况下 Boris 会偏出 ~2321。
+   4. **A02 case 01-04**：和 A01 同款物理参数。跑完后逐 case 对比
+      ``max|r - r_ana|``，应与 A01 完全一致——这是柱坐标 Boris 物理等价的最强信号。
+   5. **A03 case 01 (相对论 gyro)**：gamma 约为 2.3，
+      验证 HC 在相对论圆周运动下保持 u 的模长守恒。
+   6. A03 case 02（高 gamma ExB drift）：gamma = 20，E + v×B = 0。
+      HC 给出 x 约为 0（漂移为零）；同工况下 Boris 会偏出 ~2321。
       这是判断"必须切到 HC"的关键算例。
    7. **A03 case 03 (WarpX 对照)**：与 WarpX 内置 HC 单元测试对齐的工况，
       用于跨实现回归。
@@ -103,19 +103,23 @@ Pusher Testing Guide
      先怀疑场分量没正确从 Cartesian 转成 cylindrical。
    - **case 1 速度误差差异（A02 略大于 A01）是正常的**。柱坐标 Boris 多了
      ``cos / sin / sqrt / atan2``，引入额外舍入。差异在 ~10 倍以内属正常。
-   - **A03 case 02 是"判别相对论必要性"的金标准**。如果你的代码在
+   - A03 case 02 是"判别相对论必要性"的金标准。如果你的代码在
      ``\gamma = 20`` 的 ExB 工况下用 Boris 给出 ``x \sim 2000``，
-     不是 bug 是物理上不对，**必须**切到 A03。
-   - **``v^2`` / ``|u|^2`` 守恒**。Boris 在纯 ``B`` 场下应严格守恒 ``v^2``；
+     不是 bug 是物理上不对，必须切到 A03。
+   - ``v^2`` / ``|u|^2`` 守恒：Boris 在纯 ``B`` 场下应严格守恒 ``v^2``；
      HC 在纯 ``B`` 场下应守恒 ``|u|^2 = (\gamma v)^2``。如果在你的代码里
      看到漂移，先看 E 场是不是真的为零。
 
    .. rubric:: 6. 说明
 
-   - 三个测试目录的输出格式都一致：``step, t, x, y, z, vx, vy, vz, v2,
-     x_ana, y_ana, z_ana, vx_ana, vy_ana, vz_ana, err_v, err_r``。
+   - 三个测试目录的输出格式都一致：
+
+     .. code-block:: text
+
+        step, t, x, y, z, vx, vy, vz, v2, x_ana, y_ana, z_ana, vx_ana, vy_ana, vz_ana, err_v, err_r
+
      所以 A02 和 A01 共用同一份 ``plot_savefig.py``。A03 在 ``v2`` 列填
-     ``\gamma`` 或 ``|u|^2``（按 case 不同），其它列含义保持一致。
+     ``\gamma`` 或 ``|u|^2`` （按 case 不同），其它列含义保持一致。
    - 静态参考图已经放在 ``docs/source/images/tests/002_pusher/``，
      在不重跑测试时也能看见。改完测试程序或 pusher 算法后记得重画并同步。
    - 这套测试**只验证单粒子**。把多粒子、自洽场和长时间数值稳定性纳入回归，

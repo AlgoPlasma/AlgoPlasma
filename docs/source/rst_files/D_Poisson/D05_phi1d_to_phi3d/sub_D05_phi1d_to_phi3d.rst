@@ -153,7 +153,7 @@ sub_D05_phi1d_to_phi3d.f90
    k-j-i loop from ``phi1d``. It then applies periodic ghost fill for directions
    where ``domain_split(d)==1`` and ``l(d)>tiny``. Finally, for each direction
    with ``domain_split(d)>1``, the corresponding ``inc_exchange_in_x/y/z.f90``
-   fragment is ``#include``d to perform MPI communication.
+   fragment is included with ``#include`` to perform MPI communication.
 
    .. rubric:: Generated API
 

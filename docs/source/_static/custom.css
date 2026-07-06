@@ -265,6 +265,50 @@ html[data-ap-lang="en"] .ap-lang-en {
     color: #4f5f6f;
 }
 
+.ap-figure-equal-height {
+    margin: 1rem auto 1.6rem;
+    text-align: center;
+}
+
+.ap-figure-medium {
+    max-width: 760px;
+}
+
+.ap-figure-wide {
+    max-width: 1080px;
+}
+
+.ap-figure-equal-height img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.ap-figure-equal-height figcaption,
+.ap-figure-equal-height .caption {
+    max-width: inherit;
+    margin: 0.55rem auto 0;
+    color: #425466;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    text-align: left;
+}
+
+.ap-triptych {
+    margin: 1rem 0 1.35rem;
+}
+
+.ap-triptych td {
+    text-align: center;
+    vertical-align: top;
+}
+
+.ap-triptych img {
+    max-width: 100%;
+    height: auto;
+}
+
 .ap-module-card {
     display: flex;
     flex-direction: column;

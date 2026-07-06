@@ -108,7 +108,7 @@ B01_scatter_3Dxyz
 
    沉积完成后的 MPI 边界同步由 :doc:`H03_mpi_exchange_den </rst_files/H_MPI_Exchange/H03_mpi_exchange_den>`
    负责。H03 先在未进行 MPI 切分且周期的方向做本地折叠，再把相邻 rank 的边界节点贡献
-   **累加**到本地密度数组（与场量交换 H01 的覆盖语义不同）。
+   累加到本地密度数组（与场量交换 H01 的覆盖语义不同）。
 
    .. rubric:: 测试
 

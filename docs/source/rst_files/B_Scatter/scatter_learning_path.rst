@@ -34,7 +34,7 @@ Scatter Learning Path
         - 一次完整的 3D Cartesian 密度沉积（``sub_B01_scatter_3Dxyz``）。
         - :doc:`B01_scatter_3Dxyz <B01_scatter_3Dxyz>` 和 ``sub_B01_scatter_3Dxyz`` 的 API 页。
       * - 3
-        - ``_v``（速度矩）和 ``_T``（温度/方差）变体与基础密度沉积的差别。
+        - ``_v`` （速度矩）和 ``_T`` （温度/方差）变体与基础密度沉积的差别。
         - :doc:`B01_scatter_3Dxyz <B01_scatter_3Dxyz>` 中三个子程序的 API 页。
       * - 4
         - 怎么调和怎么集成到 PIC 循环里。

@@ -146,7 +146,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_shape_curves.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_shape_curves.png``：不同 ``order`` 的中心化
       B-spline 形函数曲线。横轴为粒子到网格点的距离 :math:`r`，纵轴为权重
@@ -154,7 +154,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_single_particle_footprint.png
       :align: center
-      :width: 44%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_single_particle_footprint.png``：单个粒子的 xy
       沉积 footprint，图中已经对 z 方向权重求和。它展示了随着 ``order`` 增加，
@@ -162,7 +162,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_ref_vs_value.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_ref_vs_value.png``：横轴为理论参考不变量，纵轴为
       从 ``den`` 计算得到的不变量。虚线为 ``value=reference``。总量守恒和一阶矩子测试
@@ -170,7 +170,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_errors.png
       :align: center
-      :width: 44%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_errors.png``：按子测试和阶数统计最大绝对误差。横轴为对数坐标。
       高阶误差略大来自递归求值、模板点增加和三维乘加次数增加后的双精度舍入累积；图中误差仍远低于阈值，
@@ -328,7 +328,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_shape_curves.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_shape_curves.png``: centered B-spline shape
       functions for different ``order`` values. The x-axis is the
@@ -338,7 +338,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_single_particle_footprint.png
       :align: center
-      :width: 44%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_single_particle_footprint.png``: xy deposition
       footprint of one particle after summing the z weights. It shows that a
@@ -346,7 +346,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_ref_vs_value.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_ref_vs_value.png``: theoretical invariant on the
       x-axis and the invariant computed from ``den`` on the y-axis. The dashed
@@ -356,7 +356,7 @@ B03_scatter_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_errors.png
       :align: center
-      :width: 44%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``b03_bspline_scatter_errors.png``: maximum absolute error grouped by
       subtest and order. The x-axis is logarithmic. Slightly larger

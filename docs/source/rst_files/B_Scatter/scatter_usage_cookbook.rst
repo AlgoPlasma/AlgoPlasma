@@ -86,7 +86,7 @@ Scatter Usage Cookbook
 
         gfortran -cpp -O3 -fdefault-real-8 -fopenmp main.f90
 
-   - ``-fdefault-real-8`` 把所有 ``real`` 提升到 8 字节。**强烈建议**在生产代码里
+   - ``-fdefault-real-8`` 把所有 ``real`` 提升到 8 字节。强烈建议在生产代码里
      开这个：CIC 权重的累加在 ``np`` 大时会受单精度误差影响，
      ``sum(den) = sum(w_p)`` 守恒可能就保不住。
    - ``-fopenmp`` 是必须的：上游 ``!$omp parallel`` 没有 fallback；
@@ -153,12 +153,12 @@ Scatter Usage Cookbook
 
    实测数据（见 :doc:`B01 鲲鹏对比 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`）：
 
-   - **小 ``np`` (1e4)**：OMP 开销主导，2-4 线程是最优档位，再加线程负扩展。
-   - **大 ``np`` (1e7)**：``firstprivate`` 拷贝主导，**64 线程比 1 线程慢
-     37 倍**（在 514 平台），鲲鹏好一些但也只能做到 2.6 倍慢。
-   - **任何 ``np``**：实测加速比不会超过 ~3×，远低于线性。
+   - 小 ``np`` (1e4)：OMP 开销主导，2-4 线程是最优档位，再加线程负扩展。
+   - 大 ``np`` (1e7)：``firstprivate`` 拷贝主导，64 线程比 1 线程慢
+     37 倍（在 514 平台），鲲鹏好一些但也只能做到 2.6 倍慢。
+   - 任何 ``np``：实测加速比不会超过 ~3×，远低于线性。
 
-   换句话说，**当前 kernel 不适合高 OMP 并行**。
+   换句话说，当前 kernel 不适合高 OMP 并行。
    生产代码里集成时的可行折中：
 
    - 把线程数控制在 4-8 档位附近。

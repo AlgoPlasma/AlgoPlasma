@@ -90,7 +90,7 @@ Pusher Learning Path
 
    .. rubric:: 建议练习
 
-   1. 在草稿纸上把 Boris 旋转的三步推一遍，确认每步只用上一步的输出，**不**用回旋频率
+   1. 在草稿纸上把 Boris 旋转的三步推一遍，确认每步只用上一步的输出，不使用回旋频率
       或 ``\sin\omega\Delta t`` 的解析展开。
    2. 跑 :doc:`A01 测试 </tests/002_pusher/A01_Boris_3Dxyz>` 的 case 1，
       画出 ``x-y`` 轨迹和 ``v^2(t)``，确认 ``v^2`` 守恒。

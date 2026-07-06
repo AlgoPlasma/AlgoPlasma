@@ -65,7 +65,7 @@ Pusher Usage Cookbook
    4. **位置更新归属**。
 
       - A01 / A03：调用方在 routine 后写 ``r = r + v*dt``。
-      - A02：routine 内部已完成，**不要**再加一次。
+      - A02：routine 内部已完成，不要再加一次。
    5. **边界处理**。出界粒子的反射、周期 wrap、吸收等都不在推进器里。
    6. **诊断和守恒检查**。``v^2`` 守恒（Boris）或 ``\gamma`` 守恒
       （HC 在纯磁场下）由调用方测试；推进器不自检。
@@ -78,7 +78,7 @@ Pusher Usage Cookbook
 
         gfortran -cpp -O3 -fdefault-real-8 main.f90
 
-   - ``-fdefault-real-8`` 把所有 ``real`` 提升到 8 字节。**强烈建议**在 PIC
+   - ``-fdefault-real-8`` 把所有 ``real`` 提升到 8 字节。强烈建议在 PIC
      生产代码里也开这个，否则 case 04 这种"刚好抵消"的算例会被舍入误差吃掉。
    - 推进器源码使用 Fortran 默认 ``real``，跨编译器没有显式 KIND 假设；
      用 Intel ifort、NVIDIA nvfortran 都能直接编。
@@ -112,13 +112,13 @@ Pusher Usage Cookbook
 
    - 真实代码会按 ``np`` 数组遍历（不是按粒子写循环），并把 ``k`` 提到外层算一次。
    - ``compute_field_at_particle`` 通常是 ``C_Gather`` 模块；本页不展开。
-   - ``deposit_current`` 是 ``B_Scatter``（参考
-     :doc:`/rst_files/B_Scatter/scatter_testing_guide`）；当前 A01-A03 都假设
+   - ``deposit_current`` 是 ``B_Scatter`` （参考
+     :doc:`/rst_files/B_Scatter/scatter_testing_guide` ）；当前 A01-A03 都假设
      场为外部输入、不与粒子自洽，所以仅做单粒子测试时可省略。
 
    .. rubric:: 相对论场景的额外考虑
 
-   非相对论 Boris (A01/A02) 在 ``\gamma`` 显著大于 1 时**不**正确——
+   非相对论 Boris (A01/A02) 在 ``\gamma`` 显著大于 1 时不正确——
    不是数值精度问题，而是物理上不对：磁场旋转角度直接用 ``q\Delta t / m`` 计算，
    没有 ``1/\gamma`` 因子。常见症状：
 
@@ -132,7 +132,7 @@ Pusher Usage Cookbook
      :math:`\mathbf{v} \to \mathbf{u} = \gamma\mathbf{v}` 的转换，调用方无需处理。
    - 位置更新与 A01 相同：``r = r + v*dt``，``v`` 即 A03 返回的 lab velocity，
      无需额外换算。
-   - 守恒判据从 ``v^2`` 改为 ``|u|^2``（在纯 B 场下）。
+   - 守恒判据从 ``v^2`` 改为 ``|u|^2`` （在纯 B 场下）。
    - HC 比 Boris 多出 ``\gamma`` 求平方根步，但跟磁场旋转运算相比开销可忽略。
 
    切回 A01 的代价：HC 在低 ``\gamma`` 退化为 Boris，结果几乎相同。

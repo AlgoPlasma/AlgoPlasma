@@ -1,8 +1,8 @@
 .. rst-class:: ap-home-document-title
 
-====
+==========
 AlgoPlasma
-====
+==========
 
 .. toctree::
     :caption: Subroutines (by ID)

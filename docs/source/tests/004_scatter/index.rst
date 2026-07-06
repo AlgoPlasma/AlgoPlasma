@@ -31,7 +31,7 @@
         - 说明
       * - B01
         - :doc:`B01_scatter_3Dxyz 测试 <B01_scatter_3Dxyz>`
-        - 覆盖 ``sub_B01_scatter_3Dxyz``（密度）、``_v``（速度矩）、``_T``（温度/方差）
+        - 覆盖 ``sub_B01_scatter_3Dxyz`` （密度）、``_v`` （速度矩）、``_T`` （温度/方差）
           三个子程序，共 11 个算例，含 OMP 并行正确性与性能基准。
       * - B02
         - 暂无独立页面
@@ -85,15 +85,10 @@
 .. container:: ap-lang ap-lang-en
 
    This section documents the B_Scatter tests under ``tests/004_scatter``.
-<<<<<<< HEAD
-   It contains the ``B01_scatter_3Dxyz`` Cartesian scatter test suite and
-   the ``B02_deposit_3d_cyl`` cylindrical charge/current deposition tests.
-=======
    It contains three groups: the ``B01_scatter_3Dxyz`` Cartesian scatter test
    suite, the ``B02_deposit_3d_cyl`` cylindrical charge/current deposition
    tests, and the ``B03_scatter_3Dxyz_bspline`` arbitrary-order B-spline
    scatter tests.
->>>>>>> refs/remotes/origin/master
 
    .. list-table:: Available test pages
       :header-rows: 1

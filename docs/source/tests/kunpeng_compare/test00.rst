@@ -115,7 +115,7 @@ D01_hypre_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/test00/time_3compares_np4.png
       :align: center
-      :width: 62%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``np=4`` 时鲲鹏 GCC、鲲鹏 BiSheng 与 AMD 服务器的时间对比。
       虚线为 HYPRE solve 时间，实线为端到端总时间。
@@ -269,7 +269,7 @@ D01_hypre_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/test00/time_3compares_np4.png
       :align: center
-      :width: 62%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       Timing comparison for Kunpeng GCC, Kunpeng BiSheng, and AMD at ``np=4``.
       Dashed lines show HYPRE solve time; solid lines show end-to-end total time.

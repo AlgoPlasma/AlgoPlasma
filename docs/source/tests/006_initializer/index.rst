@@ -48,7 +48,7 @@
    - **二进制格式兼容性**：用 ``numpy.float64`` 按 Fortran 的 stream 格式写一个粒子文件
      （``access='stream'``，每粒子 6 个 float64：``x,y,z,vx,vy,vz``），
      再读回来比对，确认 Python 和 Fortran 读写同一套格式。
-   - **域过滤逻辑**：Fortran 的过滤条件是 ``il(d)-1 ≤ x(d) < iu(d)``（下界含、上界不含）。
+   - 域过滤逻辑：Fortran 的过滤条件是 ``il(d)-1 ≤ x(d) < iu(d)`` （下界含、上界不含）。
      Python 里重现这个条件，覆盖四种情况：全部在域内、全部在域外、一部分在域内、
      以及粒子恰好落在边界上。
 

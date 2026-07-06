@@ -54,9 +54,12 @@
    四个子页面统一采用同一结构：
 
    - `测试定位`：先说明测试的角色和目录边界。
+   - `这个测试在做什么`：用普通读者能跟上的语言解释测试问题和判据。
+   - `参数设置`：列出网格、MPI、边界、解析解、容差等关键参数。
    - `运行方式`：给出脚本入口和默认 MPI 配置。
    - `覆盖内容`：按测试目录解释覆盖到的接口和行为。
    - `输出文件`：说明判断结果要看哪些数据和图片。
+   - `图片如何阅读`：说明图中横纵轴、误差图含义，以及哪些现象代表测试异常。
    - `参考结果`：列出当前可对照的误差或输出范围。
    - `代表图`：保留一组风格一致的参考图，便于快速人工比对。
 
@@ -103,9 +106,12 @@
    All four subpages now follow the same structure:
 
    - `Test Role`: what this test is supposed to prove.
+   - `What This Test Is Doing`: a reader-facing explanation of the problem being tested and the acceptance signal.
+   - `Parameters`: key grid, MPI, boundary, exact-solution, and tolerance settings.
    - `How To Run`: entry script and default MPI layout.
    - `Coverage`: routines and behaviors exercised by the test.
    - `Outputs`: which data files and figures matter.
+   - `How To Read The Figures`: axis meanings, error-map interpretation, and common failure signs.
    - `Reference Result`: the current numeric baseline.
    - `Representative Figures`: a small, style-consistent figure set for manual comparison.
 

@@ -121,7 +121,7 @@ C02_gather_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_shape_curves.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``c02_bspline_gather_shape_curves.png``：不同 ``order`` 的中心化
       B-spline 形函数曲线。横轴为粒子到网格点的距离 :math:`r`，纵轴为权重
@@ -130,7 +130,7 @@ C02_gather_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_ref_vs_value.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``c02_bspline_gather_ref_vs_value.png``：横轴为参考值，纵轴为
       ``sub_C02_gather_3Dxyz_bspline`` 的 gather 输出。虚线为
@@ -139,7 +139,7 @@ C02_gather_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_errors.png
       :align: center
-      :width: 42%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``c02_bspline_gather_errors.png``：按子测试和 B-spline 阶数统计最大绝对误差。
       纵轴为对数坐标。``constant`` 覆盖 ``order=0..4``，``linear`` 覆盖
@@ -267,7 +267,7 @@ C02_gather_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_shape_curves.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``c02_bspline_gather_shape_curves.png``: centered B-spline shape
       functions for different ``order`` values. The x-axis is the
@@ -277,7 +277,7 @@ C02_gather_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_ref_vs_value.png
       :align: center
-      :width: 40%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``c02_bspline_gather_ref_vs_value.png``: reference values on the x-axis
       and gathered values from ``sub_C02_gather_3Dxyz_bspline`` on the y-axis.
@@ -287,7 +287,7 @@ C02_gather_3Dxyz_bspline Test
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_errors.png
       :align: center
-      :width: 42%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       ``c02_bspline_gather_errors.png``: maximum absolute error grouped by
       subtest and B-spline order. The y-axis is logarithmic. ``constant``

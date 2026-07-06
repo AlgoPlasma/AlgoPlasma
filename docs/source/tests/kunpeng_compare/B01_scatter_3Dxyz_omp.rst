@@ -49,7 +49,7 @@ B01_scatter_3Dxyz_omp Comparison
    - ``source_f90/main.f90``：外层 ``np`` 循环 × 内层 thread 循环，每点跑 ``nrepeat`` 次。
    - ``source_f90/make.sh`` / ``clean.sh``：编译 / 清理，被顶层 ``run_*.sh`` 内部调用。
    - ``run_514.sh``、``run_kunpeng.sh``：平台入口，自动 clean + make + run，日志直接落到对应 ``data_raw/from_*`` 子目录。
-   - ``source_py/analyze.py``：解析两份 log，写 ``summary.csv``；**仅当两个平台都有 log 时**才出图。
+   - ``source_py/analyze.py``：解析两份 log，写 ``summary.csv``；仅当两个平台都有 log 时才出图。
    - ``plot.sh``：顶层后处理入口，调 analyze.py。
 
    .. rubric:: 运行方式
@@ -107,7 +107,7 @@ B01_scatter_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/B01_scatter_3Dxyz_omp/time_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       平均单次 scatter 时间对比（log-log）。横轴为 OpenMP 线程数，
       纵轴为平均耗时；每个子图一个平台，每条曲线一个 ``np``。
@@ -116,7 +116,7 @@ B01_scatter_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/B01_scatter_3Dxyz_omp/speedup_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       加速比 ``t(1)/t(N)`` 对比（log-log）。虚线 ``ideal = N`` 代表
       **完美线性加速** ``N`` 个线程把时间砍成 ``1/N`` ，所以 64 线程理论加速 64×；
@@ -127,7 +127,7 @@ B01_scatter_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/B01_scatter_3Dxyz_omp/efficiency_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       并行效率 ``speedup / N``。虚线 ``ideal = 1`` 代表
       **完美并行效率**——每个线程都在做 100% 有用功；
@@ -176,7 +176,7 @@ B01_scatter_3Dxyz_omp Comparison
         - 0.179
         - 2.6× 慢
 
-   同档位下 Kunpeng 比 514 **快 23 倍**（``nt=64, np=1e7``），``nt=8`` 也快约 6 倍。
+   同档位下 Kunpeng 比 514 快 23 倍（``nt=64, np=1e7``），``nt=8`` 也快约 6 倍。
 
    要点总结：
 
@@ -292,7 +292,7 @@ B01_scatter_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/B01_scatter_3Dxyz_omp/time_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       Avg single-scatter time vs threads (log-log). One subplot per platform,
       one curve per ``np``. The classic U shape — minimum at a few threads,
@@ -301,7 +301,7 @@ B01_scatter_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/B01_scatter_3Dxyz_omp/speedup_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       Speedup ``t(1) / t(N)`` (log-log). The dashed ``ideal = N`` line is
       **perfect linear scaling** — ``N`` threads cut wall time to ``1/N``,
@@ -315,7 +315,7 @@ B01_scatter_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/B01_scatter_3Dxyz_omp/efficiency_vs_threads.png
       :align: center
-      :width: 92%
+      :figclass: ap-figure-equal-height ap-figure-wide
 
       Parallel efficiency ``speedup / N``. The dashed ``ideal = 1`` line is
       **perfect parallel efficiency** — every thread is doing 100% useful

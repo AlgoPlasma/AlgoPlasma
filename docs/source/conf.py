@@ -19,10 +19,44 @@ author = 'AlgoPlasma'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 HERE = os.path.dirname(__file__)
+
+
+DOXYGEN_FILE_REF_RE = re.compile(
+    r'<ref\b(?=[^>]*\brefid="[^"]*(?:_8f90|_8F90|_8c)(?:_[^"]*)?")[^>]*>'
+    r"(.*?)</ref>",
+    re.DOTALL,
+)
+DOXYGEN_FORTRAN_FUNCTION_SIGNATURE_FIXES = (
+    ("<type>recursive real function</type>", "<type>real</type>"),
+    ("<definition>recursive real function ", "<definition>real "),
+    ("<type>real function</type>", "<type>real</type>"),
+    ("<definition>real function ", "<definition>real "),
+)
+
+
+def _clean_doxygen_xml_for_sphinx(xml_dir):
+    """Make Doxygen's Fortran XML friendlier to Breathe/Sphinx nitpicky builds."""
+    xml_dir = Path(xml_dir)
+    if not xml_dir.is_dir():
+        return
+
+    for xml_file in xml_dir.glob("*.xml"):
+        text = xml_file.read_text(encoding="utf-8", errors="ignore")
+        updated = DOXYGEN_FILE_REF_RE.sub(lambda match: match.group(1), text)
+        for old, new in DOXYGEN_FORTRAN_FUNCTION_SIGNATURE_FIXES:
+            updated = updated.replace(old, new)
+        if updated != text:
+            xml_file.write_text(updated, encoding="utf-8")
+
+
 subprocess.run(["doxygen", "Doxyfile"], cwd=HERE, check=True)
+_clean_doxygen_xml_for_sphinx(Path(HERE) / "_doxygen" / "xml")
 
 breathe_projects = {"AlgoPlasma": os.path.join("_doxygen", "xml")}
 breathe_default_project = "AlgoPlasma"
+nitpick_ignore_regex = [
+    ("cpp:identifier", r".*"),
+]
 
 extensions = [
     "sphinx_rtd_theme",
