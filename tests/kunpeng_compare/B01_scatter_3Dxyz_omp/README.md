@@ -1,7 +1,7 @@
 # B01_scatter_3Dxyz_omp — Kunpeng comparison
 
 Cross-platform OpenMP comparison of the upstream `sub_B01_scatter_3Dxyz` kernel.
-The same benchmark runs on the lab `514` server and the Kunpeng server, and the
+The same benchmark runs on the AMD server and the Kunpeng server, and the
 analyzer overlays both platforms once their logs are present.
 
 The test is designed to expose how the kernel's
@@ -32,13 +32,13 @@ and worst single-call time. Per-platform derived columns:
 ## Layout
 
 ```
-run_514.sh                        # platform entry: builds, runs, writes data_raw/from_514/log.run
+run_AMD.sh                        # platform entry: builds, runs, writes data_raw/from_AMD/log.run
 run_kunpeng.sh                    # platform entry: builds, runs, writes data_raw/from_kunpeng/log.run
 plot.sh                           # post-process: invokes source_py/analyze.py
 source_f90/main.f90               # outer np-loop × inner thread-loop benchmark
          /make.sh clean.sh         # build helpers, invoked by the run_*.sh entries
 source_py/analyze.py               # parses logs, soft-fails on missing data
-data_raw/from_514/log.run          # produced by run_514.sh
+data_raw/from_AMD/log.run          # produced by run_AMD.sh
         /from_kunpeng/log.run      # produced by run_kunpeng.sh
 output/summary.csv                 # always written when at least one platform has data
        /figures/                   # only written when both platforms have data
@@ -52,11 +52,11 @@ each thread's stack; the default 8 MB OS stack overflows immediately at
 
 ## How to reproduce
 
-On the lab 514 server:
+On the AMD server:
 
 ```bash
 cd tests/kunpeng_compare/B01_scatter_3Dxyz_omp
-bash run_514.sh        # clean + build + run, writes data_raw/from_514/log.run
+bash run_AMD.sh        # clean + build + run, writes data_raw/from_AMD/log.run
 ```
 
 On the Kunpeng server (after copying or syncing this directory there):
@@ -82,7 +82,7 @@ cleanly.
 When both sides have data the analyzer emits:
 
 - `time_vs_threads.png` — avg compute time vs threads (log-log), two subplots
-  (514 / Kunpeng), one curve per `np`. The classic U shape — minimum at a few
+  (AMD server / Kunpeng), one curve per `np`. The classic U shape — minimum at a few
   threads, then rising — comes from the kernel's per-thread `par` copy.
 - `speedup_vs_threads.png` — `t(1)/t(N)` on log-log, with an `ideal = N`
   reference. Real curves stay well below the diagonal and bend back below 1 at

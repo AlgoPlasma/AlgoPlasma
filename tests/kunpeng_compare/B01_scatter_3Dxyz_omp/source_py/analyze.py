@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATASETS = {
-    "514": ROOT / "data_raw" / "from_514" / "log.run",
+    "AMD server": ROOT / "data_raw" / "from_AMD" / "log.run",
     "Kunpeng": ROOT / "data_raw" / "from_kunpeng" / "log.run",
 }
 OUT = ROOT / "output"

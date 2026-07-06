@@ -124,6 +124,17 @@ def maybe_make_figures(rows: list[dict[str, float | int | str]]) -> None:
         print(f"WARNING: matplotlib unavailable, skipping figures: {exc}")
         return
 
+    plt.rcParams.update(
+        {
+            "font.size": 11,
+            "axes.titlesize": 12,
+            "axes.labelsize": 11,
+            "xtick.labelsize": 10,
+            "ytick.labelsize": 10,
+            "legend.fontsize": 10,
+        }
+    )
+
     FIG.mkdir(parents=True, exist_ok=True)
     styles = {"AMD": "o-", "Kunpeng": "s-"}
 

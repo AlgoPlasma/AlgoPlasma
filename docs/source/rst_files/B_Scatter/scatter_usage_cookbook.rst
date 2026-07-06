@@ -155,7 +155,7 @@ Scatter Usage Cookbook
 
    - 小 ``np`` (1e4)：OMP 开销主导，2-4 线程是最优档位，再加线程负扩展。
    - 大 ``np`` (1e7)：``firstprivate`` 拷贝主导，64 线程比 1 线程慢
-     37 倍（在 514 平台），鲲鹏好一些但也只能做到 2.6 倍慢。
+     37 倍（在 AMD服务器上），鲲鹏好一些但也只能做到 2.6 倍慢。
    - 任何 ``np``：实测加速比不会超过 ~3×，远低于线性。
 
    换句话说，当前 kernel 不适合高 OMP 并行。
@@ -349,7 +349,7 @@ Scatter Usage Cookbook
    - **Small ``np`` (1e4)**: OMP overhead dominates; the sweet spot is
      2-4 threads, and adding more makes it slower.
    - **Large ``np`` (1e7)**: ``firstprivate`` copies dominate; 64 threads
-     are **37× slower than 1 thread** on the 514 server, and even on
+     are **37× slower than 1 thread** on the AMD server, and even on
      Kunpeng the kernel is only 2.6× slower at 64 threads.
    - **Across all ``np``**: measured speedup never reaches more than ~3×,
      well below linear.

@@ -14,7 +14,7 @@ B01_scatter_3Dxyz_omp Comparison
 
    本页说明 ``tests/kunpeng_compare/B01_scatter_3Dxyz_omp`` 中的性能对比测试。
    测试覆盖上游 :doc:`sub_B01_scatter_3Dxyz </rst_files/B_Scatter/B01_scatter_3Dxyz/sub_B01_scatter_3Dxyz>`
-   在实验室 514 服务器和鲲鹏服务器上的 OpenMP 扩展性，并对比两台机器在不同
+   在 AMD服务器和鲲鹏服务器上的 OpenMP 扩展性，并对比两台机器在不同
    ``np`` 和 ``nthread`` 组合下的单次 scatter 耗时、加速比和并行效率。
 
    这是平台性能对比，不是数值正确性回归测试。重点观察
@@ -48,18 +48,18 @@ B01_scatter_3Dxyz_omp Comparison
 
    - ``source_f90/main.f90``：外层 ``np`` 循环 × 内层 thread 循环，每点跑 ``nrepeat`` 次。
    - ``source_f90/make.sh`` / ``clean.sh``：编译 / 清理，被顶层 ``run_*.sh`` 内部调用。
-   - ``run_514.sh``、``run_kunpeng.sh``：平台入口，自动 clean + make + run，日志直接落到对应 ``data_raw/from_*`` 子目录。
+   - ``run_AMD.sh``、``run_kunpeng.sh``：平台入口，自动 clean + make + run，日志直接落到对应 ``data_raw/from_*`` 子目录。
    - ``source_py/analyze.py``：解析两份 log，写 ``summary.csv``；仅当两个平台都有 log 时才出图。
    - ``plot.sh``：顶层后处理入口，调 analyze.py。
 
    .. rubric:: 运行方式
 
-   在 514 上：
+   在 AMD服务器上：
 
    .. code-block:: bash
 
       cd tests/kunpeng_compare/B01_scatter_3Dxyz_omp
-      bash run_514.sh        # 写到 data_raw/from_514/log.run
+      bash run_AMD.sh        # 写到 data_raw/from_AMD/log.run
 
    在鲲鹏上（把这个目录同步过去后）：
 
@@ -89,7 +89,7 @@ B01_scatter_3Dxyz_omp Comparison
       * - 字段
         - 含义
       * - ``platform``
-        - ``514`` 或 ``Kunpeng``。
+        - ``AMD服务器`` 或 ``Kunpeng``。
       * - ``np``
         - 当前粒子数。
       * - ``threads``
@@ -122,7 +122,7 @@ B01_scatter_3Dxyz_omp Comparison
       **完美线性加速** ``N`` 个线程把时间砍成 ``1/N`` ，所以 64 线程理论加速 64×；
       在 log-log 下是 45° 直线。实测曲线和它之间的纵向距离 = OMP 额外开销的代价。
       实测曲线远低于 ideal 线，并在高线程档位**跌破 1**（即比串行还慢）。
-      514 上 ``np = 1e7`` 几乎从 ``nthread = 2`` 起就负扩展；鲲鹏在
+      AMD服务器上 ``np = 1e7`` 几乎从 ``nthread = 2`` 起就负扩展；鲲鹏在
       1-8 线程区间仍能拿到约 3× 的实际加速。
 
    .. figure:: ../../images/tests/kunpeng_compare/B01_scatter_3Dxyz_omp/efficiency_vs_threads.png
@@ -144,7 +144,7 @@ B01_scatter_3Dxyz_omp Comparison
       :widths: 14 28 28 30
 
       * - ``np``
-        - 514
+        - AMD服务器
         - Kunpeng
         - Kunpeng 优势
       * - ``1e7``
@@ -169,14 +169,14 @@ B01_scatter_3Dxyz_omp Comparison
       * - 平台
         - 时间 (s)
         - 相对自身串行
-      * - 514
+      * - AMD服务器
         - 4.10
         - **37× 慢**
       * - Kunpeng
         - 0.179
         - 2.6× 慢
 
-   同档位下 Kunpeng 比 514 快 23 倍（``nt=64, np=1e7``），``nt=8`` 也快约 6 倍。
+   同档位下 Kunpeng 比 AMD服务器快 23 倍（``nt=64, np=1e7``），``nt=8`` 也快约 6 倍。
 
    要点总结：
 
@@ -184,7 +184,7 @@ B01_scatter_3Dxyz_omp Comparison
       ``default(firstprivate) reduction(+:den)`` 复制 ``(3, np)`` 粒子数组到每个线程，
       reduction 还要合并每线程私有 ``den``，二者叠加把 OMP 收益吃光。
    2. Kunpeng 内存子系统对这种压力更耐受：``np = 1e7`` 时在 ``nthread = 8``
-      还能维持 ~0.4 的并行效率；514 同档位已掉到 <0.1。
+      还能维持 ~0.4 的并行效率；AMD服务器同档位已掉到 <0.1。
    3. 即使在 Kunpeng 的最佳档位，实测加速比也只有约 3×，距离 ideal=N
       仍有一个数量级——**说明问题主要在 ``sub_B01_scatter_3Dxyz``，不只在平台**，
       改写 ``sub_B01_scatter_3Dxyz``（去掉 ``default(firstprivate)``、
@@ -197,7 +197,7 @@ B01_scatter_3Dxyz_omp Comparison
    This page documents the platform comparison under
    ``tests/kunpeng_compare/B01_scatter_3Dxyz_omp``. The case probes how the
    upstream :doc:`sub_B01_scatter_3Dxyz </rst_files/B_Scatter/B01_scatter_3Dxyz/sub_B01_scatter_3Dxyz>`
-   subroutine scales on the lab 514 server and the Kunpeng server, sweeping
+   subroutine scales on the AMD server and the Kunpeng server, sweeping
    both particle count ``np`` and OpenMP thread count.
 
    This is a platform performance comparison, not a numerical regression test.
@@ -232,18 +232,18 @@ B01_scatter_3Dxyz_omp Comparison
 
    - ``source_f90/main.f90``: outer ``np`` loop × inner thread loop benchmark.
    - ``source_f90/make.sh``, ``clean.sh``: build/clean helpers invoked by ``run_*.sh``.
-   - ``run_514.sh``, ``run_kunpeng.sh``: per-platform entry points; clean + build + run, log goes straight into the matching ``data_raw/from_*`` directory.
+   - ``run_AMD.sh``, ``run_kunpeng.sh``: per-platform entry points; clean + build + run, log goes straight into the matching ``data_raw/from_*`` directory.
    - ``source_py/analyze.py``: parses both logs, writes ``summary.csv``; figures are written **only when both platforms have logs**.
    - ``plot.sh``: top-level post-processing entry point.
 
    .. rubric:: Run Command
 
-   On the 514 server:
+   On the AMD server:
 
    .. code-block:: bash
 
       cd tests/kunpeng_compare/B01_scatter_3Dxyz_omp
-      bash run_514.sh        # writes data_raw/from_514/log.run
+      bash run_AMD.sh        # writes data_raw/from_AMD/log.run
 
    On the Kunpeng server (after syncing the directory):
 
@@ -274,7 +274,7 @@ B01_scatter_3Dxyz_omp Comparison
       * - Field
         - Meaning
       * - ``platform``
-        - ``514`` or ``Kunpeng``.
+        - ``AMD server`` or ``Kunpeng``.
       * - ``np``
         - Particle count for this row.
       * - ``threads``
@@ -309,7 +309,7 @@ B01_scatter_3Dxyz_omp Comparison
       diagonal. The vertical gap between each curve and the diagonal is the
       cost of OMP overhead. Measured curves stay far below the diagonal
       and bend below 1 (slower than serial) at high thread counts.
-      On 514 with ``np = 1e7`` the scaling is negative from ``nthread = 2``
+      On the AMD server with ``np = 1e7`` the scaling is negative from ``nthread = 2``
       onward; on Kunpeng ``sub_B01_scatter_3Dxyz`` still picks up about 3×
       real speedup in the 1-8 thread range.
 
@@ -334,7 +334,7 @@ B01_scatter_3Dxyz_omp Comparison
       :widths: 14 28 28 30
 
       * - ``np``
-        - 514
+        - AMD server
         - Kunpeng
         - Kunpeng advantage
       * - ``1e7``
@@ -359,14 +359,14 @@ B01_scatter_3Dxyz_omp Comparison
       * - Platform
         - Time (s)
         - Relative to own serial
-      * - 514
+      * - AMD server
         - 4.10
         - **37× slower**
       * - Kunpeng
         - 0.179
         - 2.6× slower
 
-   At the same setting Kunpeng is **23× faster** than 514 (``nt=64, np=1e7``);
+   At the same setting Kunpeng is **23× faster** than the AMD server (``nt=64, np=1e7``);
    it is roughly 6× faster at ``nt=8``.
 
    Takeaways:
@@ -378,7 +378,7 @@ B01_scatter_3Dxyz_omp Comparison
       Together they eat OMP speedup.
    2. Kunpeng's memory subsystem is much more tolerant of this pressure:
       at ``np = 1e7, nthread = 8`` it still holds ~0.4 efficiency, while
-      the same point on 514 has already dropped below 0.1.
+      the same point on the AMD server has already dropped below 0.1.
    3. Even at Kunpeng's sweet spot, measured speedup peaks near 3× —
       an order of magnitude below the ``ideal = N`` line. **This means the
       bottleneck is ``sub_B01_scatter_3Dxyz``, not the platform**: a real

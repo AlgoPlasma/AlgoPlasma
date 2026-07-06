@@ -41,7 +41,7 @@ Scatter Testing Guide
      详见 :doc:`B01 综合测试 </tests/004_scatter/B01_scatter_3Dxyz>`。
 
    - ``tests/kunpeng_compare/B01_scatter_3Dxyz_omp``
-     B01 OMP 扩展性的跨平台对比测试。在 514 服务器和鲲鹏服务器上分别跑
+     B01 OMP 扩展性的跨平台对比测试。在 AMD服务器和鲲鹏服务器上分别跑
      ``np`` × ``nthread`` 二维扫描，比较 ``sub_B01_scatter_3Dxyz`` 的
      ``firstprivate`` + ``reduction`` 设计在两台机器上的开销差异。
      详见 :doc:`B01 鲲鹏对比 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`。
@@ -63,12 +63,12 @@ Scatter Testing Guide
       cd tests/004_scatter/B01_scatter_3Dxyz
       bash clean.sh && bash make.sh && bash run.sh && bash plot.sh
 
-   B01 鲲鹏对比（在 514 / Kunpeng 各跑一次）：
+   B01 鲲鹏对比（在 AMD服务器 / Kunpeng 各跑一次）：
 
    .. code-block:: bash
 
       cd tests/kunpeng_compare/B01_scatter_3Dxyz_omp
-      bash run_514.sh        # 在 514 上
+      bash run_AMD.sh        # 在 AMD服务器上
       bash run_kunpeng.sh    # 在鲲鹏上
       bash plot.sh           # 两边 log 都到位后
 
@@ -163,7 +163,7 @@ Scatter Testing Guide
 
    - ``tests/kunpeng_compare/B01_scatter_3Dxyz_omp``
      Cross-platform OMP scalability comparison for B01: a joint
-     ``np`` × ``nthread`` sweep run on both the 514 server and the Kunpeng
+     ``np`` × ``nthread`` sweep run on both the AMD server and the Kunpeng
      server, highlighting the cost of ``sub_B01_scatter_3Dxyz``'s
      ``firstprivate + reduction`` design on each machine. See
      :doc:`B01 Kunpeng comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`.
@@ -190,7 +190,7 @@ Scatter Testing Guide
    .. code-block:: bash
 
       cd tests/kunpeng_compare/B01_scatter_3Dxyz_omp
-      bash run_514.sh        # on the 514 server
+      bash run_AMD.sh        # on the AMD server
       bash run_kunpeng.sh    # on the Kunpeng server
       bash plot.sh           # after both logs are in place
 

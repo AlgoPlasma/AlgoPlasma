@@ -278,6 +278,10 @@ html[data-ap-lang="en"] .ap-lang-en {
     max-width: 1080px;
 }
 
+.ap-figure-readable {
+    max-width: 760px;
+}
+
 .ap-figure-equal-height img {
     display: block;
     width: 100%;

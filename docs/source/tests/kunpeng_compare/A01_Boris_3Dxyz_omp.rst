@@ -71,19 +71,19 @@ A01_Boris_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/wall_time_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-readable
 
       计算时间对比。横轴为 OpenMP 线程数，纵轴为 ``Compute wall time``，时间越短表示越快。
 
    .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/throughput_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-readable
 
       吞吐率对比。横轴为 OpenMP 线程数，纵轴为 G particle-pushes/s，数值越高表示单位时间完成的粒子推进越多。
 
    .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/speedup_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-readable
 
       并行扩展性对比。横轴为 OpenMP 线程数，纵轴为相对 8 线程的加速比。
 
@@ -157,21 +157,21 @@ A01_Boris_3Dxyz_omp Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/wall_time_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-readable
 
       Compute-time comparison. x-axis: OpenMP threads. y-axis: compute wall time
       in seconds. Lower is faster.
 
    .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/throughput_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-readable
 
       Throughput comparison. x-axis: OpenMP threads. y-axis:
       G particle-pushes/s. Higher is faster.
 
    .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/speedup_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-readable
 
       Scaling comparison. x-axis: OpenMP threads. y-axis: speedup relative to
       the same platform's 8-thread run.
