@@ -23,8 +23,8 @@ H03_mpi_exchange_den
    ``H03_mpi_exchange_den`` 用于粒子 scatter（沉积）之后的密度数组 MPI 边界交换。
    密度数组 ``den`` 含有一层 ghost cell，范围为 ``il(d)-1:iu(d)+1``。
 
-   与场量交换（H01）的关键区别在于：场量交换接收后**覆盖** ghost 层，
-   而密度交换接收后**累加**到边界节点——因为相邻 rank 的粒子也会沉积到本 rank
+   与场量交换（H01）的关键区别在于：场量交换接收后 **覆盖** ghost 层，
+   而密度交换接收后 **累加** 到边界节点——因为相邻 rank 的粒子也会沉积到本 rank
    边界节点，两侧的贡献必须相加才等于物理密度。
 
    .. rubric:: 初学者先抓住什么
@@ -51,7 +51,7 @@ H03_mpi_exchange_den
       * - :doc:`sub_H03_mpi_exchange_den.f90 <H03_mpi_exchange_den/sub_H03_mpi_exchange_den>`
         - 在未分裂方向做周期折叠，并依次执行 x/y/z 三方向的边界节点累加交换。
       * - ``inc_exchange_in_x/y/z.f90``
-        - 针对单个方向打包边界面、调用 send/recv include，并把接收值**累加**到本地边界节点。
+        - 针对单个方向打包边界面、调用 send/recv include，并把接收值 **累加** 到本地边界节点。
       * - ``inc_send_recv.f90`` / ``inc_recv_send.f90``
         - blocking ``MPI_Send`` / ``MPI_Recv`` 的两种调用顺序。
 

@@ -282,6 +282,78 @@ html[data-ap-lang="en"] .ap-lang-en {
     max-width: 760px;
 }
 
+/* Shared presentation for the four Kunpeng comparison reports. */
+.ap-kunpeng-compare {
+    max-width: 1240px;
+}
+
+.ap-kunpeng-compare .rubric {
+    margin: 1.65rem 0 0.75rem;
+    padding: 0 0 0.38rem;
+    border-bottom: 1px solid #d8e2ea;
+    color: #172b3a;
+    font-size: 1.24rem;
+    font-weight: 700;
+}
+
+.ap-kunpeng-compare .rubric::before {
+    content: "";
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    margin-right: 0.45rem;
+    border-radius: 2px;
+    background: #287c76;
+    vertical-align: 0.05rem;
+}
+
+.ap-kunpeng-compare .wy-table-responsive {
+    margin: 0.9rem 0 1.35rem;
+    border: 1px solid #d8e2ea;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(16, 34, 53, 0.04);
+}
+
+.ap-kunpeng-compare table.docutils {
+    width: 100%;
+    margin: 0;
+    border: 0;
+}
+
+.ap-kunpeng-compare table.docutils th {
+    border-color: #d8e2ea;
+    background: #eef4f7;
+    color: #172b3a;
+}
+
+.ap-kunpeng-compare table.docutils td {
+    border-color: #e2e9ef;
+    vertical-align: top;
+}
+
+.ap-kunpeng-compare figure,
+.ap-kunpeng-compare .figure {
+    padding: 0.8rem 0.8rem 0.65rem;
+    border: 1px solid #d8e2ea;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(16, 34, 53, 0.05);
+}
+
+.ap-figure-equal-height > a {
+    display: block;
+}
+
+/* The B01 two-panel plots need more room than ordinary single-panel figures. */
+.ap-figure-panorama {
+    position: relative;
+    left: 50%;
+    width: min(1450px, calc(100vw - 340px));
+    max-width: none;
+    transform: translateX(-50%);
+}
+
 .ap-figure-equal-height img {
     display: block;
     width: 100%;
@@ -297,6 +369,15 @@ html[data-ap-lang="en"] .ap-lang-en {
     font-size: 0.92rem;
     line-height: 1.55;
     text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+    .ap-figure-panorama {
+        left: auto;
+        width: 100%;
+        max-width: 100%;
+        transform: none;
+    }
 }
 
 .ap-triptych {

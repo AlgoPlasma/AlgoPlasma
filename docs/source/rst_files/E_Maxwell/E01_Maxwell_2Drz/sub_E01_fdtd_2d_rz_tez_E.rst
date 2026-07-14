@@ -195,7 +195,7 @@ sub_E01_fdtd_2d_rz_tez_E.f90
         - ``integer scalar``
         - declared lower ``r`` bound of the arrays
         - integer index
-        - Declares the first dimension of ``Ephi``, ``Hr``, and ``Hz``. Interior updates need ``Hz(i-1,k)`` readable; the ``i=0``TMz component group does not read ``i-1``.
+        - Declares the first dimension of ``Ephi``, ``Hr``, and ``Hz``. Interior updates need ``Hz(i-1,k)`` readable; the ``i=0`` axis branch does not read ``i-1``.
       * - ``ihi_f``
         - ``in``
         - ``integer scalar``

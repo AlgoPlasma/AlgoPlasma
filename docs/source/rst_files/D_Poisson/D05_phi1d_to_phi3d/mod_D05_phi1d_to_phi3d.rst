@@ -90,7 +90,7 @@ mod_D05_phi1d_to_phi3d.f90
    embedded via ``#include``:
 
    - ``inc_exchange_in_x/y/z.f90``: MPI ghost-exchange logic for each Cartesian
-     direction; each of these in turn ``#include``s ``inc_send_recv.f90`` or
+     direction; each of these in turn uses ``#include`` for ``inc_send_recv.f90`` or
      ``inc_recv_send.f90``.
    - ``inc_send_recv.f90``: ``mpi_send`` then ``mpi_recv`` sequence (odd-index ranks).
    - ``inc_recv_send.f90``: ``mpi_recv`` then ``mpi_send`` sequence (even-index ranks).

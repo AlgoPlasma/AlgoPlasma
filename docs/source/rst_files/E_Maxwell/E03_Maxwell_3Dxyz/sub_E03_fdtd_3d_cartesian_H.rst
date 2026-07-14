@@ -204,109 +204,109 @@ sub_E03_fdtd_3d_cartesian_H.f90
       * - ``ilo_f``
         - ``in``
         - ``integer scalar``
-        - lower ```x``` index bound of field arrays.
+        - lower ``x`` index bound of field arrays.
         - integer index
         - Defines valid bounds for field and CPML arrays.
       * - ``ihi_f``
         - ``in``
         - ``integer scalar``
-        - upper ```x``` index bound of field arrays.
+        - upper ``x`` index bound of field arrays.
         - integer index
         - Defines valid bounds for field and CPML arrays.
       * - ``jlo_f``
         - ``in``
         - ``integer scalar``
-        - lower ```y``` index bound of field arrays.
+        - lower ``y`` index bound of field arrays.
         - integer index
         - Defines valid bounds for field and CPML arrays.
       * - ``jhi_f``
         - ``in``
         - ``integer scalar``
-        - upper ```y``` index bound of field arrays.
+        - upper ``y`` index bound of field arrays.
         - integer index
         - Defines valid bounds for field and CPML arrays.
       * - ``klo_f``
         - ``in``
         - ``integer scalar``
-        - lower ```z``` index bound of field arrays.
+        - lower ``z`` index bound of field arrays.
         - integer index
         - Defines valid bounds for field and CPML arrays.
       * - ``khi_f``
         - ``in``
         - ``integer scalar``
-        - upper ```z``` index bound of field arrays.
+        - upper ``z`` index bound of field arrays.
         - integer index
         - Defines valid bounds for field and CPML arrays.
       * - ``il``
         - ``in``
         - ``integer scalar``
-        - lower update ```x``` index.
+        - lower update ``x`` index.
         - integer index
         - Update range must stay inside declared bounds and leave needed neighbor cells available.
       * - ``iu``
         - ``in``
         - ``integer scalar``
-        - upper update ```x``` index.
+        - upper update ``x`` index.
         - integer index
         - Update range must stay inside declared bounds and leave needed neighbor cells available.
       * - ``jl``
         - ``in``
         - ``integer scalar``
-        - lower update ```y``` index.
+        - lower update ``y`` index.
         - integer index
         - Update range must stay inside declared bounds and leave needed neighbor cells available.
       * - ``ju``
         - ``in``
         - ``integer scalar``
-        - upper update ```y``` index.
+        - upper update ``y`` index.
         - integer index
         - Update range must stay inside declared bounds and leave needed neighbor cells available.
       * - ``kl``
         - ``in``
         - ``integer scalar``
-        - lower update ```z``` index.
+        - lower update ``z`` index.
         - integer index
         - Update range must stay inside declared bounds and leave needed neighbor cells available.
       * - ``ku``
         - ``in``
         - ``integer scalar``
-        - upper update ```z``` index.
+        - upper update ``z`` index.
         - integer index
         - Update range must stay inside declared bounds and leave needed neighbor cells available.
       * - ``Ex``
         - ``in``
         - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
-        - ```x``` electric field component.
+        - ``x`` electric field component.
         - field value in caller normalization
         - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
       * - ``Ey``
         - ``in``
         - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
-        - ```y``` electric field component.
+        - ``y`` electric field component.
         - field value in caller normalization
         - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
       * - ``Ez``
         - ``in``
         - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
-        - ```z``` electric field component.
+        - ``z`` electric field component.
         - field value in caller normalization
         - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
       * - ``Hx``
         - ``in/out``
         - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
-        - ```x``` magnetic field component.
+        - ``x`` magnetic field component.
         - field value in caller normalization
         - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
       * - ``Hy``
         - ``in/out``
         - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
-        - ```y``` magnetic field component.
+        - ``y`` magnetic field component.
         - field value in caller normalization
         - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
       * - ``Hz``
         - ``in/out``
         - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
-        - ```z``` magnetic field component.
+        - ``z`` magnetic field component.
         - field value in caller normalization
         - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
       * - ``dt``
@@ -318,19 +318,19 @@ sub_E03_fdtd_3d_cartesian_H.f90
       * - ``dx``
         - ``in``
         - ``real scalar``
-        - grid spacing in ```x```.
+        - grid spacing in ``x``.
         - length in caller units
         - Used exactly as passed; no global spacing or material state is read.
       * - ``dy``
         - ``in``
         - ``real scalar``
-        - grid spacing in ```y```.
+        - grid spacing in ``y``.
         - length in caller units
         - Used exactly as passed; no global spacing or material state is read.
       * - ``dz``
         - ``in``
         - ``real scalar``
-        - grid spacing in ```z```.
+        - grid spacing in ``z``.
         - length in caller units
         - Used exactly as passed; no global spacing or material state is read.
       * - ``mu``

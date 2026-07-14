@@ -25,7 +25,7 @@ Pusher Testing Guide
    - **A03** ``sub_A03_Higuera_Cary_relativistic_3Dxyz``：相对论 Higuera-Cary
      Cartesian 速度推进。
 
-   除非各 case 的 README 明确说明，这些测试**不**覆盖：
+   除非各 case 的 README 明确说明，这些测试 **不** 覆盖：
 
    - 多粒子相互作用 / 自洽场
    - 边界条件、注入和吸收
@@ -98,7 +98,7 @@ Pusher Testing Guide
      位置误差量级 ≈ 相对位置误差 × 轨道半径；A01/A02 case 1 的
      ``r_L = v_0/\omega = 2 \times 10^7``，所以 0.5% 的相对位置误差
      就是 ~1e5 绝对值。
-   - **A02 跟 A01 应该完全一致**。位置误差**逐 case 相等**意味着柱坐标
+   - **A02 跟 A01 应该完全一致**。位置误差 **逐 case 相等** 意味着柱坐标
      Boris 没有引入额外物理偏差；如果某个 case 误差比 A01 大一个数量级，
      先怀疑场分量没正确从 Cartesian 转成 cylindrical。
    - **case 1 速度误差差异（A02 略大于 A01）是正常的**。柱坐标 Boris 多了
@@ -122,7 +122,7 @@ Pusher Testing Guide
      ``\gamma`` 或 ``|u|^2`` （按 case 不同），其它列含义保持一致。
    - 静态参考图已经放在 ``docs/source/images/tests/002_pusher/``，
      在不重跑测试时也能看见。改完测试程序或 pusher 算法后记得重画并同步。
-   - 这套测试**只验证单粒子**。把多粒子、自洽场和长时间数值稳定性纳入回归，
+   - 这套测试 **只验证单粒子**。把多粒子、自洽场和长时间数值稳定性纳入回归，
      需要在 :doc:`002_pusher tests </tests/002_pusher/index>` 之外
      单独建测试套件——当前还没有。
 
@@ -214,7 +214,7 @@ Pusher Testing Guide
       cylindrical Boris is physically equivalent to the Cartesian one.
    5. **A03 case 01 (relativistic gyro)**: ``\gamma \approx 2.3``, verifying
       that HC conserves ``|u|`` in relativistic circular motion.
-   6. **A03 case 02 (high-``\gamma`` ExB drift)**: ``\gamma = 20``, with
+   6. **A03 case 02 (high-γ ExB drift)**: ``\gamma = 20``, with
       ``E + v×B = 0``. HC gives ``x \approx 0`` (drift cancelled); Boris on
       the same setup drifts by ~2321. This is the key case for deciding
       "must switch to HC".
@@ -241,7 +241,7 @@ Pusher Testing Guide
      your code's Boris pusher drifts to ``x ~ 2000`` in the
      ``\gamma = 20`` ExB setup, that is not a bug — it is physically
      wrong, and you **must** switch to A03.
-   - **``v^2`` / ``|u|^2`` conservation.** Boris must conserve ``v^2``
+   - ``v^2`` / ``|u|^2`` **conservation.** Boris must conserve ``v^2``
      exactly in pure ``B``; HC must conserve ``|u|^2 = (\gamma v)^2`` in
      pure ``B``. If your code shows drift here, first check that the E
      field is really zero.

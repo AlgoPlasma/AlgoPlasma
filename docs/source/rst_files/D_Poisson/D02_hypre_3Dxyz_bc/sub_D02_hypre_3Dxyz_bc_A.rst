@@ -88,21 +88,21 @@ sub_D02_hypre_3Dxyz_bc_A.f90
       * - ``A_values``
         - out
         - ``(1:N)``
-        - real (1:N), 1D coefficient matrix A, ``N = 7 *
-          (iu(1)-il(1)+1)*(iu(2)-il(2)+1)*(iu(3)-il(3)+1)``. - The value/loop order follows:
-          ``` m = 1 do k = il(3),iu(3) do j = il(2),iu(2) do i = il(1),iu(1) do l = 0,6
-          A_values(m) m = m + 1 ...... ```
+        - real (1:N), 1D coefficient matrix A, where ``N = 7 *
+          (iu(1)-il(1)+1)*(iu(2)-il(2)+1)*(iu(3)-il(3)+1)``. The traversal
+          order is ``m = 1; do k = il(3),iu(3); do j = il(2),iu(2);
+          do i = il(1),iu(1); do l = 0,6; A_values(m); m = m + 1``.
       * - ``rho1d``
         - inout
         - ``(1:N)``
-        - real (1:N), 1D right-hand side (charge density) term array, ``N =
-          (iu(1)-il(1)+1)*(iu(2)-il(2)+1)*(iu(3)-il(3)+1)``. - rho1d should be assigned \f$
-          h^2 \rho / \varepsilon_0 :math:`before passing into this subroutine, such that it
-          can then be modified based on the boundary conditions with values ``phibc``,`h =
-          \Delta x = \Delta y = \Delta z:math:``is the cell size,``\rho:math:`is the
-          cell-centered charge density,`\varepsilon_0\f$ is the vacuum permittivity. - The
-          value/loop order follows: ``` m = 1 do k = il(3),iu(3) do j = il(2),iu(2) do i =
-          il(1),iu(1) rho1d(m) m = m + 1 ...... ```
+        - real (1:N), 1D right-hand side (charge density) term array, where
+          ``N = (iu(1)-il(1)+1)*(iu(2)-il(2)+1)*(iu(3)-il(3)+1)``. Before
+          calling this routine, assign :math:`\mathrm{rho1d}=h^2\rho/\varepsilon_0`;
+          boundary handling then modifies the array using ``phibc``. Here
+          :math:`h=\Delta x=\Delta y=\Delta z` is the cell size, :math:`\rho`
+          is the cell-centered charge density, and :math:`\varepsilon_0` is the
+          vacuum permittivity. The traversal order is ``m = 1; do k = il(3),iu(3);
+          do j = il(2),iu(2); do i = il(1),iu(1); rho1d(m); m = m + 1``.
       * - ``bc``
         - in
         - ``(1:6)``

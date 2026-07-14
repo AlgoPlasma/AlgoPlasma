@@ -14,7 +14,7 @@ sub_H03_mpi_exchange_den.f90
 
    ``sub_H03_mpi_exchange_den`` 在粒子沉积之后对密度数组进行 MPI 边界交换。
    对未进行 MPI 分裂且启用周期边界的方向先做本地折叠，
-   再通过 include 的方向性 exchange helper 把相邻 rank 的边界节点贡献**累加**到本地。
+   再通过 include 的方向性 exchange helper 把相邻 rank 的边界节点贡献 **累加** 到本地。
 
    .. rubric:: 参数表
 
@@ -62,7 +62,7 @@ sub_H03_mpi_exchange_den.f90
    .. rubric:: 局部假设
 
    - 调用前必须对 ``den`` 置零，以确保累加结果只反映当前时间步的贡献。
-   - 接收后**累加**（``den = den + buf_recv``），而非覆盖；与 H01 场交换的本质区别。
+   - **接收后采用累加方式**。计算为 ``den = den + buf_recv``，而非覆盖；这是与 H01 场交换的本质区别。
    - 内部使用 ``MPI_DOUBLE`` 通信，默认 ``real`` 应与之一致（构建时使用 ``-fdefault-real-8``）。
 
    .. rubric:: 实现逻辑

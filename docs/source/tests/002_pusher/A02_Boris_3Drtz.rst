@@ -24,7 +24,7 @@ A02_Boris_3Drtz Test
    - **坐标系**：位置 ``x = (r, \theta, z)``，速度 ``v = (v_r, v_\theta, v_z)``，
      电磁场 ``E``、``B`` 也按柱坐标分量传入。
    - **初值位移**：四个 case 都把粒子的初始 Cartesian 位置从原点平移到
-     ``(x_0, 0, 0)``（取 ``x_0 = 1.0``），避开 ``r = 0`` 奇点。
+     ``(x_0, 0, 0)``，其中 ``x_0 = 1.0``，以避开 ``r = 0`` 奇点。
    - **case 1 初始速度调整**：A02 case 1 用 ``v_init = (0, v_0, 0)`` Cartesian
      （A01 用 ``(v_0, 0, 0)``），让回旋圆心位于 +x 方向，整个轨道 ``r`` 始终大于 ``x_0``。
    - **每步重算 cylindrical 场**：均匀 Cartesian 场 ``E_x = E_0``
@@ -56,7 +56,7 @@ A02_Boris_3Drtz Test
    每个 ``.dat`` 文件的列与 A01 完全一致：
    ``step, t, x, y, z, vx, vy, vz, v2``，随后是解析位置和解析速度，
    最后两列为 ``err_v = |v - v_ana|`` 和 ``err_r = |r - r_ana|``。
-   注意这里的 ``(x, y, z, vx, vy, vz)`` 是**柱坐标模拟值转回 Cartesian** 后的结果，
+   注意这里的 ``(x, y, z, vx, vy, vz)`` 是 **柱坐标模拟值转回 Cartesian** 后的结果，
    方便直接跟 A01 的解析解逐分量比对。
 
    .. list-table:: 测试算例
@@ -113,7 +113,7 @@ A02_Boris_3Drtz Test
         - 1.25e-6
         - 1.25e-6
 
-   位置误差**逐 case 完全一致**，验证柱坐标 Boris 在物理上等价于 Cartesian Boris。
+   位置误差 **逐 case 完全一致**，验证柱坐标 Boris 在物理上等价于 Cartesian Boris。
    case 1 的速度误差略大（cos/sin/sqrt/atan2 引入的额外舍入），其余三个 case 完全相同。
 
    .. rubric:: 参考图

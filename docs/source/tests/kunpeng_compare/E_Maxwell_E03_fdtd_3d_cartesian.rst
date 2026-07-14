@@ -8,13 +8,15 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
      <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: ap-lang ap-lang-zh ap-e03
+.. container:: ap-lang ap-lang-zh ap-e03 ap-kunpeng-compare
 
-   .. note::
+   .. note:: 快速结论
 
       本页 workload 是 ``160^3`` 网格、每次 repeat 连续 100 步、共 5 次 repeat，
       线程扫描为 ``1-256``。当前这批数据里最快点是
-      ``Kunpeng BiSheng ompdo`` 的 224 线程，平均单步耗时 ``8.733e-04 s``。
+      ``Kunpeng BiSheng ompdo`` 的 224 线程，平均单步耗时 ``8.733e-04 s``；
+      但高线程重复波动较大，需要复跑确认。五条曲线同时改变了编译器、kernel 写法
+      和线程绑定，因此应把它们理解为“完整配置组合”，而不是单一 CPU 或编译器变量。
 
    .. rubric:: 测试目标
 
@@ -47,6 +49,12 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       "Kunpeng BiSheng ompdo", "``data_raw/kunpeng_ompdo``", "BiSheng ``flang 19.1.7``", "外层 ``parallel`` + H/E ``omp do``", "``close``"
 
    所有配置的 checksum 只存在浮点末位差异，说明各平台跑的是同一组计算。
+
+   .. important:: 比较口径
+
+      本页五种配置并非严格的单变量实验：例如 AMD 与鲲鹏的编译器、OpenMP runtime
+      和绑定策略不同，原版与 ompdo 又改变了并行区结构。因此图可以回答“哪套完整配置
+      在当前环境更快”，但不能单独证明某个 CPU、编译器或绑定策略贡献了全部差异。
 
    .. rubric:: 优化项和 ompdo 含义
 
@@ -90,28 +98,6 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
    仍然先更新，E 仍然后更新，中间默认有 OpenMP barrier，只是线程队伍不用在每个
    H/E kernel 里反复创建和销毁。
 
-   .. rubric:: 复现命令
-
-   从 ``tests/kunpeng_compare/E_Maxwell`` 目录运行。下面命令对应本文这批数据的
-   网格、步数、repeat 和线程列表：
-
-   .. code-block:: bash
-
-      cd tests/kunpeng_compare/E_Maxwell
-      export THREAD_LIST="1 2 4 8 12 16 24 32 40 48 56 64 80 96 112 128 160 192 224 256"
-
-      ./run_amd.sh 160 160 160 100 5
-      ./run_amd_ompdo.sh 160 160 160 100 5
-      ./run_kunpeng.sh 160 160 160 100 5
-      ./run_kunpeng_optimized.sh 160 160 160 100 5
-      ./run_kunpeng_ompdo.sh 160 160 160 100 5
-
-   结果会分别写到 ``E03_fdtd_3d_cartesian/data_raw/amd``、
-   ``amd_ompdo``、``kunpeng``、``kunpeng_optimized`` 和 ``kunpeng_ompdo``。
-   其中 ``run_kunpeng_optimized.sh`` 和 ``run_kunpeng_ompdo.sh`` 会优先加载
-   鲲鹏服务器上的 BiSheng 工具链配置；如果环境里已经设置了 ``FC``，则使用当前
-   ``FC``。
-
    .. rubric:: 参考图
 
    下面几张图画的是性能量，不是电磁场本身的物理量。``single_step_avg_s``
@@ -119,15 +105,21 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
    表示同线程数下 ``当前配置耗时 / AMD 原版耗时 * 100%``。selected threads
    图里的虚线是各配置自己的 ``1 线程耗时 / 线程数``，只用来表示理想时间缩放。
 
+   初学者可以按以下顺序阅读：先看全线程图找最低点和反弹区间，再看精选线程图比较
+   实线与理想虚线的距离，最后看相对 AMD 图判断同线程配置快慢。耗时越低越好；
+   相对耗时低于 ``100%`` 表示比 AMD 原版快。点击任意图片可查看原始尺寸。
+
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_threads.png
       :align: center
       :figclass: ap-figure-equal-height ap-figure-wide
+      :target: ../../_images/time_vs_threads1.png
 
-      平均单步耗时。纵轴越低越快，横轴为 OpenMP 线程数。
+      全部线程档位的平均单步耗时。纵轴越低越快；可用来找每条曲线的最低点和高线程回退。
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_selected_threads.png
       :align: center
       :figclass: ap-figure-equal-height ap-figure-wide
+      :target: ../../_images/time_vs_selected_threads.png
 
       只保留 ``1, 2, 4, 8, 16, 32, 64, 128, 256`` 线程档位的平均单步耗时，
       便于观察常用 2 倍线程扩展路径。图里的同色虚线是该配置自己的
@@ -136,9 +128,46 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/relative_time_vs_amd.png
       :align: center
       :figclass: ap-figure-equal-height ap-figure-wide
+      :target: ../../_images/relative_time_vs_amd.png
 
       同线程下相对 AMD 原版的耗时百分比。``100%`` 是 AMD 原版；低于
       ``100%`` 表示比 AMD 原版快，高于 ``100%`` 表示更慢。
+
+   .. rubric:: 先看三个代表线程点
+
+   .. csv-table:: single_step_avg_s（秒）
+      :header: "线程", "AMD 原版", "AMD ompdo", "鲲鹏 GCC", "鲲鹏 BiSheng", "鲲鹏 BiSheng ompdo"
+      :widths: 10 18 18 18 20 24
+
+      "32", "3.901e-03", "3.686e-03", "4.740e-03", "2.744e-03", "4.182e-03"
+      "64", "2.191e-03", "1.267e-03", "4.048e-03", "1.672e-03", "2.117e-03"
+      "224", "1.522e-03", "1.201e-03", "5.913e-03", "1.169e-03", "8.733e-04"
+
+   32 线程时，稳定的 BiSheng 原版最快；64 线程时 AMD ompdo 最快；224 线程时
+   鲲鹏 BiSheng ompdo 给出全表最低均值。单点冠军会随线程数改变，因此应该结合
+   整条曲线判断，而不是只比较一个线程档位。
+
+   .. rubric:: 再看整体并行效果
+
+   - **低线程 1–16：** 五种配置总体都随线程数增加而下降，说明场更新 kernel
+     有明确并行性。AMD ompdo 在 1–4 线程已经比 AMD 原版快约三倍，表明减少反复
+     进入 parallel region 对短时 kernel 尤其重要。
+   - **中线程 24–80：** AMD 原版、AMD ompdo 和鲲鹏 BiSheng 继续获得收益；
+     鲲鹏 GCC 在 48 线程附近触底，之后不再稳定下降。鲲鹏 BiSheng ompdo 在
+     80 线程出现明显低点，但相邻点波动较大。
+   - **高线程 96–256：** AMD 原版和鲲鹏 BiSheng 仍缓慢改善；鲲鹏 GCC 明显退化；
+     两条 ompdo 曲线保持较低耗时，但不再单调，说明并行区开销已不再是唯一瓶颈。
+   - 所有实线在高线程都逐渐偏离各自的理想虚线，表示并行效率随线程数增加而下降。
+
+   .. rubric:: 可能原因与结论边界
+
+   ``ompdo`` 能直接减少每个时间步反复创建/销毁 H、E 线程队伍的次数，这是源码可以
+   确认的机制；AMD 和鲲鹏都从中受益，所以它是 kernel 级优化，不是鲲鹏专属技巧。
+
+   鲲鹏 GCC 高线程退化、BiSheng 与 AMD 的差异还可能来自编译器代码生成、OpenMP
+   runtime、``spread``/``close`` 绑定、NUMA 距离和内存带宽。由于这些变量没有被逐项
+   控制，当前图不能确定其中哪一项占主导。224/256 线程的重复波动还说明最快点可能受
+   系统噪声影响；使用它作为最终性能结论前，应固定绑定并复跑，同时报告误差范围。
 
    .. rubric:: 最佳结果
 
@@ -155,6 +184,38 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
    这批数据里，平均最快的是 ``Kunpeng BiSheng ompdo`` 的 224 线程，
    单步耗时 ``8.733e-04 s``。不过它在 224/256 线程的 repeat 波动较大；
    作为结论使用前建议复跑确认。
+
+   .. rubric:: 综合结论
+
+   1. ``Kunpeng gcc/mpifort`` 在高线程下明显退化，不适合作为当前 E03
+      高线程性能主结果。
+   2. ``Kunpeng BiSheng`` 是更稳定的鲲鹏配置，在绝大多数线程档位低于 AMD 原版，
+      耗时通常约为 AMD 原版的 ``55%–78%``。
+   3. ``Kunpeng BiSheng ompdo`` 给出当前最高平均吞吐，但 224/256 线程重复波动较大，
+      应视为有潜力、仍需确认的调优方向。
+   4. ``AMD ompdo`` 同样非常有效，证明外层 ``parallel`` + H/E ``omp do`` 是
+      跨平台 kernel 优化。公平比较时应保留两边对应版本。
+
+   .. rubric:: 复现命令
+
+   从 ``tests/kunpeng_compare/E_Maxwell`` 目录运行。下面命令对应本文这批数据的
+   网格、步数、repeat 和线程列表：
+
+   .. code-block:: bash
+
+      cd tests/kunpeng_compare/E_Maxwell
+      export THREAD_LIST="1 2 4 8 12 16 24 32 40 48 56 64 80 96 112 128 160 192 224 256"
+
+      ./run_amd.sh 160 160 160 100 5
+      ./run_amd_ompdo.sh 160 160 160 100 5
+      ./run_kunpeng.sh 160 160 160 100 5
+      ./run_kunpeng_optimized.sh 160 160 160 100 5
+      ./run_kunpeng_ompdo.sh 160 160 160 100 5
+
+   结果分别写到 ``E03_fdtd_3d_cartesian/data_raw/amd``、``amd_ompdo``、
+   ``kunpeng``、``kunpeng_optimized`` 和 ``kunpeng_ompdo``。
+   ``run_kunpeng_optimized.sh`` 和 ``run_kunpeng_ompdo.sh`` 优先加载鲲鹏服务器的
+   BiSheng 工具链；若环境已经设置 ``FC``，则使用当前 ``FC``。
 
    .. rubric:: 原始单步耗时
 
@@ -214,25 +275,16 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       "224", "100.00%", "78.89%", "388.49%", "76.79%", "57.37%"
       "256", "100.00%", "76.31%", "353.19%", "75.16%", "67.45%"
 
-   .. rubric:: 结论
+.. container:: ap-lang ap-lang-en ap-e03 ap-kunpeng-compare
 
-   1. ``Kunpeng gcc/mpifort`` 在高线程下明显退化，说明这条 GNU/MPI wrapper
-      路线不适合作为当前 E03 高线程性能主结果。
-   2. ``Kunpeng BiSheng`` 稳定优于 AMD 原版，大多数线程档位耗时约为 AMD 原版的
-      ``55% - 78%``。
-   3. ``Kunpeng BiSheng ompdo`` 在高线程区间给出了当前最高平均吞吐，但 224/256
-      线程 repeat 波动较大，更适合作为“有潜力的调优方向”，需要复跑确认稳定性。
-   4. ``AMD ompdo`` 对 AMD 很有效，低线程和 48-128 线程区间表现很好；这说明
-      外层 ``parallel`` + H/E ``omp do`` 不是 Kunpeng 专属优化，平台公平比较时
-      两边都应该保留对应数据。
-
-.. container:: ap-lang ap-lang-en ap-e03
-
-   .. note::
+   .. note:: Quick take
 
       The workload is a ``160^3`` grid, 100 time steps per repeat, 5 repeats,
       and a ``1-256`` thread sweep. In this dataset, the fastest point is
-      ``Kunpeng BiSheng ompdo`` at 224 threads, with ``8.733e-04 s`` per step.
+      ``Kunpeng BiSheng ompdo`` at 224 threads, with ``8.733e-04 s`` per step,
+      but high-thread repeats are noisy and need confirmation. Compiler, kernel
+      form, and binding change together across the five curves, so they represent
+      complete configurations rather than one isolated CPU or compiler variable.
 
    .. rubric:: Test Goal
 
@@ -260,6 +312,14 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       "Kunpeng GCC/mpifort", "``data_raw/kunpeng``", "``/usr/bin/mpifort`` + GNU Fortran 10.3.1", "``parallel do collapse(3)``", "``spread``"
       "Kunpeng BiSheng", "``data_raw/kunpeng_optimized``", "BiSheng ``flang 19.1.7``", "``parallel do collapse(3)``", "``spread``"
       "Kunpeng BiSheng ompdo", "``data_raw/kunpeng_ompdo``", "BiSheng ``flang 19.1.7``", "outer ``parallel`` + H/E ``omp do``", "``close``"
+
+   .. important:: Comparison scope
+
+      The five configurations are not a strict one-variable experiment. AMD and
+      Kunpeng differ in compiler, OpenMP runtime, and binding; original and ompdo
+      also differ in parallel-region structure. The figures show which complete
+      configuration is faster here, but they cannot assign the full difference
+      to one CPU, compiler, or binding policy.
 
    .. rubric:: Optimizations and ompdo Meaning
 
@@ -305,9 +365,119 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
    main change is avoiding repeated thread-team creation around every H/E
    kernel call.
 
+   .. rubric:: Figures
+
+   These figures show performance quantities, not the E/H field values.
+   ``single_step_avg_s`` is the repeat wall time divided by ``NSTEPS``, in
+   seconds; relative time is ``current configuration time / AMD original time
+   at the same thread count * 100%``. In the selected-thread figure, the dashed
+   lines are each configuration's own ``T1 / threads`` ideal-time reference.
+
+   A beginner-friendly order is: use the full sweep to find minima and rebound,
+   compare solid curves with ideal dashed lines in the selected-thread view,
+   and then use the relative plot for equal-thread configuration comparisons.
+   Lower time is better; relative time below ``100%`` beats AMD original. Click
+   any figure to open it at original size.
+
+   .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_threads.png
+      :align: center
+      :figclass: ap-figure-equal-height ap-figure-wide
+      :target: ../../_images/time_vs_threads1.png
+
+      Average single-step time for all thread counts. Lower is better; use this
+      view to find minima and high-thread regression.
+
+   .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_selected_threads.png
+      :align: center
+      :figclass: ap-figure-equal-height ap-figure-wide
+      :target: ../../_images/time_vs_selected_threads.png
+
+      Average single-step time for the selected power-of-two-style thread
+      counts: ``1, 2, 4, 8, 16, 32, 64, 128, 256``. The dashed same-color
+      lines are each configuration's own ``T1 / threads`` ideal-time reference.
+
+   .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/relative_time_vs_amd.png
+      :align: center
+      :figclass: ap-figure-equal-height ap-figure-wide
+      :target: ../../_images/relative_time_vs_amd.png
+
+      Time relative to AMD original at the same thread count.
+
+   .. rubric:: Three Representative Thread Counts
+
+   .. csv-table:: ``single_step_avg_s`` (seconds)
+      :header: "Threads", "AMD original", "AMD ompdo", "Kunpeng GCC", "Kunpeng BiSheng", "Kunpeng BiSheng ompdo"
+      :widths: 10 18 18 18 20 24
+
+      "32", "3.901e-03", "3.686e-03", "4.740e-03", "2.744e-03", "4.182e-03"
+      "64", "2.191e-03", "1.267e-03", "4.048e-03", "1.672e-03", "2.117e-03"
+      "224", "1.522e-03", "1.201e-03", "5.913e-03", "1.169e-03", "8.733e-04"
+
+   Stable BiSheng is fastest at 32 threads, AMD ompdo at 64, and Kunpeng
+   BiSheng ompdo produces the lowest value in the entire table at 224. The
+   winner changes with thread count, so the full curves matter more than one point.
+
+   .. rubric:: Overall Parallel Behavior
+
+   - **Low threads, 1–16:** all five configurations generally improve, confirming
+     useful parallelism in the field-update kernel. AMD ompdo is already about
+     three times faster than AMD original at 1–4 threads, showing that repeated
+     parallel-region entry is important for short kernels.
+   - **Middle threads, 24–80:** AMD original, AMD ompdo, and Kunpeng BiSheng keep
+     improving. Kunpeng GCC bottoms near 48 threads and then stops decreasing
+     reliably. Kunpeng BiSheng ompdo has a sharp low point at 80, with noisy neighbors.
+   - **High threads, 96–256:** AMD original and Kunpeng BiSheng improve slowly;
+     Kunpeng GCC degrades. Both ompdo curves stay low but are no longer monotonic,
+     so parallel-region overhead is no longer the only bottleneck.
+   - All measured curves gradually separate from their own ideal dashed lines at
+     high thread counts, which means parallel efficiency is falling.
+
+   .. rubric:: Possible Causes and Limits
+
+   The source directly confirms that ompdo avoids repeatedly creating and
+   destroying H/E thread teams on every time step. Both AMD and Kunpeng benefit,
+   so this is a kernel-level optimization rather than a Kunpeng-only technique.
+
+   Kunpeng GCC's high-thread regression and the remaining platform differences
+   may involve compiler code generation, OpenMP runtime behavior, ``spread`` versus
+   ``close`` placement, NUMA distance, and memory bandwidth. These variables were
+   not isolated, so the figure cannot identify one dominant cause. Noisy 224/256
+   repeats also mean the fastest point may include system noise; final reporting
+   should use fixed placement, reruns, and an error range.
+
+   .. rubric:: Best Results
+
+   .. csv-table::
+      :header: "Configuration", "Best threads", "single_step_avg_s", "Throughput", "Speedup over own 1-thread result"
+      :widths: 24 14 20 20 22
+
+      "AMD original", "256", "1.411e-03", "1.677e+10", "77.06x"
+      "AMD ompdo", "128", "1.076e-03", "2.200e+10", "34.30x"
+      "Kunpeng GCC/mpifort", "48", "3.802e-03", "6.224e+09", "27.38x"
+      "Kunpeng BiSheng", "256", "1.060e-03", "2.232e+10", "74.09x"
+      "Kunpeng BiSheng ompdo", "224", "8.733e-04", "2.710e+10", "53.24x"
+
+   ``Kunpeng BiSheng ompdo`` reaches the best average in this dataset:
+   ``8.733e-04 s/step`` at 224 threads, or about ``2.71e10`` component updates/s.
+   Its 224/256-thread repeats are noisy, so rerun before using this as a final headline.
+
+   .. rubric:: Conclusions
+
+   1. ``Kunpeng GCC/mpifort`` degrades at high thread counts and is not the
+      preferred high-thread E03 configuration in the current dataset.
+   2. ``Kunpeng BiSheng`` is the more stable Kunpeng configuration and stays
+      below AMD original at almost all thread counts, usually at ``55%–78%``
+      of AMD original time.
+   3. ``Kunpeng BiSheng ompdo`` gives the highest current average throughput,
+      but noisy 224/256-thread repeats make it a promising result that still needs confirmation.
+   4. ``AMD ompdo`` is also highly effective, proving that outer ``parallel`` +
+      H/E ``omp do`` is a cross-platform kernel optimization. Fair comparisons
+      should retain corresponding variants on both platforms.
+
    .. rubric:: Reproduction Commands
 
-   Run these commands from ``tests/kunpeng_compare/E_Maxwell``:
+   Run from ``tests/kunpeng_compare/E_Maxwell`` using the workload and thread
+   list represented by this page:
 
    .. code-block:: bash
 
@@ -320,40 +490,12 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       ./run_kunpeng_optimized.sh 160 160 160 100 5
       ./run_kunpeng_ompdo.sh 160 160 160 100 5
 
-   The outputs are written under ``E03_fdtd_3d_cartesian/data_raw/amd``,
+   Outputs are written under ``E03_fdtd_3d_cartesian/data_raw/amd``,
    ``amd_ompdo``, ``kunpeng``, ``kunpeng_optimized``, and ``kunpeng_ompdo``.
-   The optimized Kunpeng scripts prefer the cluster BiSheng toolchain setup;
-   if ``FC`` is already set, they use that compiler.
+   The optimized Kunpeng scripts prefer the cluster BiSheng setup; if ``FC``
+   is already set, they use that compiler.
 
-   .. rubric:: Figures
-
-   These figures show performance quantities, not the E/H field values.
-   ``single_step_avg_s`` is the repeat wall time divided by ``NSTEPS``, in
-   seconds; relative time is ``current configuration time / AMD original time
-   at the same thread count * 100%``. In the selected-thread figure, the dashed
-   lines are each configuration's own ``T1 / threads`` ideal-time reference.
-
-   .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
-
-      Average single-step time. Lower is better.
-
-   .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_selected_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
-
-      Average single-step time for the selected power-of-two-style thread
-      counts: ``1, 2, 4, 8, 16, 32, 64, 128, 256``. The dashed same-color
-      lines are each configuration's own ``T1 / threads`` ideal-time reference.
-
-   .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/relative_time_vs_amd.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
-
-      Time relative to AMD original at the same thread count.
-
-   .. rubric:: Summary
+   .. rubric:: Raw Single-Step Times
 
    Raw ``single_step_avg_s`` values in seconds:
 
@@ -382,12 +524,31 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
       "224", "1.522e-03", "1.201e-03", "5.913e-03", "1.169e-03", "8.733e-04"
       "256", "1.411e-03", "1.077e-03", "4.983e-03", "1.060e-03", "9.516e-04"
 
-   ``Kunpeng BiSheng ompdo`` reaches the best average result in this dataset:
-   ``8.733e-04 s/step`` at 224 threads, or roughly ``2.71e10`` component
-   updates/s. The high-thread repeats are noisy, so this point should be
-   confirmed with another run before using it as the final headline number.
+   .. rubric:: Relative Time Versus AMD Original
 
-   ``Kunpeng BiSheng`` is the more stable Kunpeng configuration and stays below
-   the AMD original time across almost all thread counts. ``AMD ompdo`` is also
-   very effective, so the ompdo optimization should be treated as a kernel-level
-   improvement rather than a Kunpeng-only advantage.
+   The table sets AMD original at the same thread count to ``100%``:
+
+   .. csv-table::
+      :header: "Threads", "AMD original", "AMD ompdo", "Kunpeng GCC/mpifort", "Kunpeng BiSheng", "Kunpeng BiSheng ompdo"
+      :widths: 10 18 18 22 20 24
+
+      "1", "100.00%", "33.95%", "95.75%", "72.27%", "42.77%"
+      "2", "100.00%", "34.29%", "97.08%", "69.52%", "48.60%"
+      "4", "100.00%", "35.03%", "100.98%", "68.67%", "70.99%"
+      "8", "100.00%", "60.60%", "101.29%", "71.02%", "77.14%"
+      "12", "100.00%", "87.62%", "101.93%", "69.69%", "80.79%"
+      "16", "100.00%", "96.02%", "83.41%", "56.20%", "69.16%"
+      "24", "100.00%", "94.47%", "95.03%", "57.71%", "80.05%"
+      "32", "100.00%", "94.48%", "121.49%", "70.33%", "107.21%"
+      "40", "100.00%", "84.84%", "138.36%", "76.48%", "125.68%"
+      "48", "100.00%", "74.04%", "145.31%", "77.45%", "122.77%"
+      "56", "100.00%", "65.10%", "172.19%", "76.47%", "110.19%"
+      "64", "100.00%", "57.83%", "184.81%", "76.33%", "96.62%"
+      "80", "100.00%", "54.96%", "186.56%", "65.27%", "41.05%"
+      "96", "100.00%", "66.16%", "258.95%", "77.86%", "59.76%"
+      "112", "100.00%", "64.95%", "236.48%", "74.11%", "61.08%"
+      "128", "100.00%", "65.78%", "278.77%", "77.92%", "71.54%"
+      "160", "100.00%", "82.50%", "199.71%", "71.83%", "54.40%"
+      "192", "100.00%", "80.85%", "325.43%", "74.01%", "71.10%"
+      "224", "100.00%", "78.89%", "388.49%", "76.79%", "57.37%"
+      "256", "100.00%", "76.31%", "353.19%", "75.16%", "67.45%"

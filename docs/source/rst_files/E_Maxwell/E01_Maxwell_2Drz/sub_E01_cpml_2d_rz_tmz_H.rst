@@ -377,7 +377,7 @@ sub_E01_cpml_2d_rz_tmz_H.f90
 
    - If ``iu`` is a physical or local boundary, prepare ``Ez(iu+1,:)`` before the call or end the update range at a valid interior column.
    - If ``ku`` is a physical or local boundary, prepare ``Er(:,ku+1)`` before the call or end the update range at a valid interior row.
-   - This routine has no special ``i=0``TMz component group; callers that include axis-near cells must ensure ``Er/Ez`` follow the intended local discretization.
+   - This routine has no special ``i=0`` axis branch; callers that include axis-near cells must ensure ``Er/Ez`` follow the intended local discretization.
    - ``khr`` and ``khz`` must not contain zeros on the update range.
 
    .. rubric:: Generated API

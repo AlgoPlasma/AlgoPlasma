@@ -60,13 +60,13 @@ Pusher Learning Path
      传入推进器的 ``v`` 在物理上是 ``v^{n-1/2}``，返回的是 ``v^{n+1/2}``。
    - **Boris 旋转三步走**。在磁场不为零时：先做半步 ``E`` 加速（``v_neg``），
      再做 ``B`` 引起的旋转（``v_prime → v_pos``），最后再做半步 ``E`` 加速。
-     ``E`` 加速和 ``B`` 旋转是**算子分裂**，二阶精度。
+     ``E`` 加速和 ``B`` 旋转是 **算子分裂**，二阶精度。
    - **k 是 Boris 参数**。所有 A_Pusher 接口都需要 ``k = q\Delta t / (2m)`` 而不是
      原始 ``q/m`` 或 ``q\Delta t / m``——是把"半步加速"和"半角旋转"打包好的常数。
    - **位置更新归属不同**。A01/A03 只更新 ``v``，调用方写 ``r = r + v*dt``；
      A02 把位置更新放在 routine 内部，因为柱坐标位置更新涉及 ``\theta`` 旋转、
      不是简单加法。
-   - **场是在粒子位置取值**。推进器接收的 ``E``、``B`` 是**当前粒子位置**的取值，
+   - **场是在粒子位置取值**。推进器接收的 ``E``、``B`` 是 **当前粒子位置** 的取值，
      不是网格量。怎么从网格插值到粒子位置是 gather 算子（``C_Gather``）的事，
      不是推进器的事。
    - **数值稳定性由调用方负责**。``\omega_c \Delta t \ll 1`` 是 Boris 稳定且精确的条件
@@ -83,8 +83,9 @@ Pusher Learning Path
    - **柱坐标的场分量随 θ 变**。如果在物理上是均匀 Cartesian ``E_x``，
      在柱坐标里就是 ``E_r = E_x\cos\theta``、``E_\phi = -E_x\sin\theta``，**每步都要重算**。
      直接传 Cartesian 分量给 A02 会得到错误轨迹。
-   - **A03 内部把 ``v`` 转换为 proper velocity ``\gamma v`` 再做 HC 旋转，接口仍然
-     传入和返回 lab velocity ``v``**。初值约定与 Boris 相同，无需手动转换。
+   - **A03 内部转换 proper velocity，接口仍使用 lab velocity**。A03 内部把
+     ``v`` 转换为 proper velocity ``\gamma v`` 再做 HC 旋转，接口仍然传入和返回
+     lab velocity ``v``。初值约定与 Boris 相同，无需手动转换。
    - **r=0 在柱坐标里是奇点**。A02 的 routine 自己用 ``tiny(1.0_4)`` 检查并 fallback，
      但调用方应避免让粒子真正穿过 ``r=0`` 附近——θ 在该处不连续。
 
@@ -190,8 +191,9 @@ Pusher Learning Path
      ``E_x`` becomes ``E_r = E_x\cos\theta``, ``E_\phi = -E_x\sin\theta``
      in cylindrical components, **recomputed every step**. Passing Cartesian
      components to A02 will produce a wrong trajectory.
-   - **A03 converts ``v`` to proper velocity ``\gamma v`` internally; the
-     interface still accepts and returns lab velocity ``v``.**
+   - **A03 converts proper velocity internally while keeping a lab-velocity interface.**
+     It converts ``v`` to proper velocity ``\gamma v`` internally; the interface still
+     accepts and returns lab velocity ``v``.
      The initial-value convention is the same as Boris — no manual conversion
      is needed.
    - **r = 0 is a coordinate singularity.** A02's routine uses a

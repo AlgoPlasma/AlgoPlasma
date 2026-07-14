@@ -55,7 +55,7 @@ Scatter Learning Path
    累加。
 
    - **三线性（CIC）权重**。每个粒子落在网格的某个 cell 中，按粒子到 cell 八个
-     节点的"反向距离"分配权重，权重之和恒为 1。这保证了**逐粒子的局部守恒**：
+     节点的"反向距离"分配权重，权重之和恒为 1。这保证了 **逐粒子的局部守恒**：
      ``sum_{nodes} weight = 1``，因此 ``sum_{nodes} den = sum_p w_p``。
    - **节点定义在角上**。Cartesian 三线性把 ``den`` 放在整数索引节点
      ``(i,j,k)``；不像 staggered 网格那样区分边、面中心。``_v`` 也是节点量。
@@ -67,7 +67,7 @@ Scatter Learning Path
      ``!$omp parallel default(firstprivate) reduction(+:den)``——每个线程拿
      ``par`` 和 ``den`` 的本地副本，循环结束再做求和归约。在大 ``np``
      和高线程数下，``firstprivate(par)`` 的拷贝开销会主导。
-   - **柱坐标多了体积因子 ``r``**。在 ``(r,\phi,z)`` 网格里，cell 体积正比于
+   - **柱坐标多了体积因子** ``r``。在 ``(r,\phi,z)`` 网格里，cell 体积正比于
      ``r``，所以"均匀物理密度"和"均匀宏粒子密度"是两个不同的概念。
      ``B02`` 里有两组 test 分别覆盖这两种采样约定，确保实现一致。
    - **场不在 scatter 里**。scatter 输入是粒子位置 + 一个标量，输出是网格上
@@ -76,14 +76,14 @@ Scatter Learning Path
 
    .. rubric:: 初学者最容易混的点
 
-   - **``_v`` 不是另一种坐标**。``sub_B01_scatter_3Dxyz_v`` 的 ``_v`` 是
+   - ``_v`` **不是另一种坐标**。``sub_B01_scatter_3Dxyz_v`` 的 ``_v`` 是
      "velocity moment"，把 ``par(d,:) * w`` 按 CIC 权重沉积；
      ``d=4,5,6`` 分别对应 ``v_x, v_y, v_z``。和 Cartesian / cylindrical
-     的几何选择**无关**。
-   - **``_T`` 用最近格子法**。``sub_..._T`` 不是 CIC 也不是 ``_v`` 的二阶矩，
+     的几何选择 **无关**。
+   - ``_T`` **用最近格子法**。``sub_..._T`` 不是 CIC 也不是 ``_v`` 的二阶矩，
      而是基于最近格子的方差。混了这层会以为 ``_T`` 也守恒
      ``sum(den_T) = sum(w*v^2)``——并不。
-   - **``par`` 维度跟接口要严格匹配**。如果上游声明
+   - ``par`` **维度跟接口要严格匹配**。如果上游声明
      ``real, dimension(1:3, 1:np) :: par`` 而调用方传
      ``real(1:6, 1:np_max)`` 的整段，Fortran 会按 stride 3 而不是 stride 6
      重解释，每隔一列读到的是速度槽（全零），位置直接错位。这就是
@@ -92,7 +92,7 @@ Scatter Learning Path
    - **边界 / ghost cell 不在 scatter 里**。粒子落在 ``[il-1, iu+1]``
      范围外不会被处理；调用方要在 scatter 之前处理出界粒子，并预留
      guard cell 用于跨域累加。
-   - **柱坐标的"密度"要除以 ``r``**。``B02`` 沉积出来的 ``rho`` 是 charge per
+   - **柱坐标的“密度”要除以** ``r``。``B02`` 沉积出来的 ``rho`` 是 charge per
      grid cell，要得到物理上的电荷密度还需要除以 cell 体积 ``r \Delta r \Delta\phi \Delta z``。
 
    .. rubric:: 建议练习
@@ -173,7 +173,7 @@ Scatter Learning Path
      gets a private copy of both ``par`` and ``den`` and sums into the
      shared one. At large ``np`` and high thread counts the
      ``firstprivate(par)`` copy dominates the cost.
-   - **Cylindrical adds a volume factor ``r``.** In a ``(r,\phi,z)`` grid,
+   - **Cylindrical adds a volume factor** ``r``. In a ``(r,\phi,z)`` grid,
      cell volume scales with ``r``, so "uniform physical density" and
      "uniform macro-particle density" are different concepts. ``B02`` has
      two subtests covering both sampling conventions to confirm the
@@ -185,14 +185,14 @@ Scatter Learning Path
 
    .. rubric:: Common Beginner Traps
 
-   - **``_v`` is not a coordinate variant.** The ``_v`` suffix in
+   - ``_v`` **is not a coordinate variant.** The ``_v`` suffix in
      ``sub_B01_scatter_3Dxyz_v`` means "velocity moment": ``par(d,:) * w``
      is deposited with CIC weights, with ``d=4,5,6`` for ``v_x, v_y, v_z``.
      It has **nothing** to do with Cartesian vs cylindrical geometry.
-   - **``_T`` uses nearest-cell, not CIC.** ``sub_..._T`` is not the second
+   - ``_T`` **uses nearest-cell, not CIC.** ``sub_..._T`` is not the second
      moment of ``_v``; it's a nearest-cell variance. Conflating the two
      leads to wrongly expecting ``sum(den_T) = sum(w*v^2)``.
-   - **``par`` shape must match exactly.** If the upstream declares
+   - ``par`` **shape must match exactly.** If the upstream declares
      ``real, dimension(1:3, 1:np) :: par`` but the caller passes a
      ``real(1:6, 1:np_max)`` slab, Fortran reinterprets it with stride 3,
      reading every other column as garbage velocity slots. That's the
@@ -203,7 +203,7 @@ Scatter Learning Path
      ``[il-1, iu+1]`` are not handled; the caller must process
      out-of-domain particles before scatter and reserve guard cells for
      cross-domain accumulation.
-   - **Cylindrical "density" must be divided by ``r``.** The ``rho``
+   - **Cylindrical “density” must be divided by** ``r``. The ``rho``
      produced by ``B02`` is charge per grid cell; the physical charge
      density requires dividing by cell volume
      ``r \Delta r \Delta\phi \Delta z``.

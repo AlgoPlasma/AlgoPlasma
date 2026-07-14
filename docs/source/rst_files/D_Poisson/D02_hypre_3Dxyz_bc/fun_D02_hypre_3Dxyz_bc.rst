@@ -116,13 +116,13 @@ fun_D02_hypre_3Dxyz_bc.c
       * - ``phi1d``
         - in/out
         - ``(:)`` / flattened owned cells
-        - 1D array holding the potential :math:``\phi`` at cell centers on this MPI process. -
+        - 1D array holding the potential :math:`\phi` at cell centers on this MPI process. -
           On input: initial guess for the iterative solver (may be zero or a more informed
           guess). - On output: converged solution after applying PFMG.
       * - ``rho1d``
         - in
         - ``(:)`` / flattened owned cells
-        - 1D array holding the right-hand side :math:``h^2 \rho / \varepsilon_0`` for each local
+        - 1D array holding the right-hand side :math:`h^2 \rho / \varepsilon_0` for each local
           cell center, including contributions from Dirichlet and Neumann boundary conditions
           as assembled in
       * - ``tolerance``
@@ -135,9 +135,9 @@ fun_D02_hypre_3Dxyz_bc.c
         - ``(:)`` / 7 entries per cell
         - Flattened 1D array of matrix coefficients for the 7-point stencil at all local
           cells. Its layout must match the HYPRE stencil element order: - entry 0: center
-          :math:``(i,j,k)``, - entry 1: :math:``(i-1,j,k)`` (xmin), - entry 2: :math:``(i+1,j,k)``
-          (xmax), - entry 3: :math:``(i,j-1,k)`` (ymin), - entry 4: :math:``(i,j+1,k)`` (ymax), -
-          entry 5: :math:``(i,j,k-1)`` (zmin), - entry 6: :math:``(i,j,k+1)`` (zmax).
+          :math:`(i,j,k)`, - entry 1: :math:`(i-1,j,k)` (xmin), - entry 2: :math:`(i+1,j,k)`
+          (xmax), - entry 3: :math:`(i,j-1,k)` (ymin), - entry 4: :math:`(i,j+1,k)` (ymax), -
+          entry 5: :math:`(i,j,k-1)` (zmin), - entry 6: :math:`(i,j,k+1)` (zmax).
       * - ``period``
         - in
         - ``(1:3)``

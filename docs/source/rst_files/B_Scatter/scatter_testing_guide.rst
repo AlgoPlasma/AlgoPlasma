@@ -25,7 +25,7 @@ Scatter Testing Guide
      deposition，验证均匀物理密度场景下 ``rho``、``Jr``、``Jphi``、``Jz``
      与连续性方程的自洽性。
 
-   除非各 case 的 README 明确说明，这些测试**不**覆盖：
+   除非各 case 的 README 明确说明，这些测试 **不** 覆盖：
 
    - CPML / 吸收边界
    - 粒子推进、场求解和滤波
@@ -114,7 +114,7 @@ Scatter Testing Guide
      应小于 ``1e-10``。注意 ``reduction(+:)`` 的浮点求和顺序不固定，
      完全位级一致不保证；保留打印的 NOTE 状态用于人工判断。
    - **B01 鲲鹏对比** ：实测 speedup 距 ``ideal = N`` 的差距 = OMP 开销代价；
-     曲线**跌破 1** 即真负扩展。详细分析见
+     曲线 **跌破 1** 即真负扩展。详细分析见
      :doc:`B01_scatter_3Dxyz_omp 对比 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`。
    - **B02 连续性残差**：``∂ρ/∂t + ∇·J`` 在 macro-particle 步进后的离散值，
      用来判断电流沉积和电荷沉积是否互相自洽。
@@ -123,7 +123,7 @@ Scatter Testing Guide
 
    - B01 主 case（01-11）的输出对照 ``source_f90/sub_case*.f90`` 中的解析期望值，
      程序自身打印 ``PASS/FAIL``；外部脚本不会复算，把 stdout 留着就够了。
-   - B01 鲲鹏对比是**性能 benchmark**，不验证数值正确性。如果想同时跑数值校验，
+   - B01 鲲鹏对比是 **性能 benchmark**，不验证数值正确性。如果想同时跑数值校验，
      需要先确认 ``tests/004_scatter/B01_scatter_3Dxyz`` 主 case 全部通过。
    - 改 ``sub_B01_scatter_3Dxyz`` 的 OMP 设计（去掉 ``default(firstprivate)``、
      改用 shared par + 原子加 / 局部累加）之后，B01 鲲鹏对比的图会立刻反映
@@ -230,7 +230,7 @@ Scatter Testing Guide
    .. rubric:: 5. Result Interpretation
 
    - **Conservation** (B01 and B02): after one scatter step, ``sum(den)``
-     must equal ``sum(w_p)`` to within ~``1e-4``. **Failing this means
+     must equal ``sum(w_p)`` to within about ``1e-4``. **Failing this means
      scatter is fundamentally broken.**
    - **Node-weight accuracy** (B01 cases 01-04): single-particle weight at
      each of the 8 surrounding nodes must match the analytical trilinear

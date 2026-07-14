@@ -13,7 +13,7 @@ sub_E01_fdtd_2d_rz_tmz_H.f90
    .. rubric:: 直接用途
 
    在 E01 的 TMz 分量组中，用整数步径向电场 ``Er`` 和轴向电场 ``Ez`` 更新方位角磁场
-   ``Ha``（即 ``Hphi``）。该例程对应柱坐标中的
+   ``Ha``，即 ``Hphi``。该例程对应柱坐标中的
    :math:`\partial_r E_z-\partial_z E_r` curl 项。
 
    .. rubric:: 参数表

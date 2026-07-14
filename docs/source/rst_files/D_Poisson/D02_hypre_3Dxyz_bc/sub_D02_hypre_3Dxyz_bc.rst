@@ -85,7 +85,7 @@ sub_D02_hypre_3Dxyz_bc.f90
         - in
         - ``(1:3)``
         - (1:3), lower logical indices of the local cell-centered grid box on this MPI rank,
-          in HYPRE's index space :math:``(i_\text{L}, j_\text{L}, k_\text{L})``.
+          in HYPRE's index space :math:`(i_\text{L}, j_\text{L}, k_\text{L})`.
       * - ``iupper``
         - in
         - ``(1:3)``

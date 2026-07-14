@@ -13,7 +13,7 @@ Pusher Usage Cookbook
 
    .. rubric:: 这页解决什么问题
 
-   本页面向**已经把 A_Pusher 模块编译进自己代码**、要在 PIC 循环里调用推进器的开发者。
+   本页面面向 **已经把 A_Pusher 模块编译进自己代码**、要在 PIC 循环里调用推进器的开发者。
    它说明怎么选模块、调用方需要负责什么、最小时间步循环长什么样、相对论场景何时
    切换到 HC，以及常见集成错误。它不重复 :doc:`Learning Path <pusher_learning_path>`
    里的理论，也不替代每个 routine 自己的 API 页。
@@ -45,15 +45,15 @@ Pusher Usage Cookbook
 
    选型判据：
 
-   - 先按**几何**定 Cartesian 还是 cylindrical。
-   - 在 Cartesian 里再按**最大 γ** 决定 Boris (A01) 还是 HC (A03)：
+   - 先按 **几何** 确定 Cartesian 还是 cylindrical。
+   - 在 Cartesian 里再按 **最大 γ** 决定 Boris (A01) 还是 HC (A03)：
      若 ``\gamma_\text{max} - 1 > 0.01`` 就该认真考虑 A03。
    - 当前没有"相对论柱坐标 pusher"。需要时，请走 A02 做几何外推 + 在调用方
      侧自己做 ``\gamma`` 缩放，或上报需求。
 
    .. rubric:: 调用方必须负责的事情
 
-   推进器是无状态的；它**只**做一次状态更新。下面这些必须由调用方组织好：
+   推进器是无状态的；它 **只** 做一次状态更新。下面这些必须由调用方组织好：
 
    1. **初值时间约定**。把 ``v`` 时间约定调到 ``v^{n-1/2}`` 而不是 ``v^n``。
       初始化时常用半步回拉：用 ``E^0, B^0`` 反向做一次"半步推进"。
@@ -136,25 +136,25 @@ Pusher Usage Cookbook
    - HC 比 Boris 多出 ``\gamma`` 求平方根步，但跟磁场旋转运算相比开销可忽略。
 
    切回 A01 的代价：HC 在低 ``\gamma`` 退化为 Boris，结果几乎相同。
-   所以**统一用 A03 是安全的**，区别只是极低 ``\gamma`` 下的常数开销。
+   所以 **统一用 A03 是安全的**，区别只是极低 ``\gamma`` 下的常数开销。
 
    .. rubric:: 常见集成错误
 
-   - **``k`` 缓存了旧 dt**。把 ``k`` 当全局常数，``dt`` 在自适应步长里变了
+   - ``k`` **缓存了旧 dt**。把 ``k`` 当全局常数，``dt`` 在自适应步长里变了
      却没重算——推进结果会按 ``dt`` 比例失真。
-   - **A01 后忘了 ``r = r + v*dt``**。粒子位置永远停在初值，``v`` 在变。
+   - **A01 后忘了位置更新** ``r = r + v*dt``。粒子位置永远停在初值，``v`` 在变。
      现象：速度变化合理，但轨迹完全不动。
-   - **A02 后又做了一次 ``r = r + v*dt``**。位置被推进了两次，
+   - **A02 后又做了一次位置更新** ``r = r + v*dt``。位置被推进了两次，
      量值上看不出"两倍"，因为 A02 内部用的是柱坐标几何而不是简单加法，
      但轨迹会明显偏离解析解。
    - **A02 直接传 Cartesian 场分量**。粒子离 ``\theta = 0`` 越远，
      轨迹越离谱。改成每步重算
      ``E_r = E_x\cos\theta + E_y\sin\theta``、
      ``E_\phi = -E_x\sin\theta + E_y\cos\theta``。
-   - **A03 初始化时误传 proper velocity ``u = γv``**。high-``\gamma`` 工况下结果会偏
+   - **A03 初始化时误传 proper velocity** ``u = γv``。high-``\gamma`` 工况下结果会偏
      ``\gamma`` 倍。正确做法是传入 lab velocity ``v``；
      :math:`\gamma\mathbf{v}` 的转换由 routine 内部完成。
-   - **``-fdefault-real-8`` 没开**。case 04 那种"E + v×B 严格抵消"的算例
+   - ``-fdefault-real-8`` **没开**。case 04 那种"E + v×B 严格抵消"的算例
      会因为单精度舍入误差里出现寄生 drift。
 
 .. container:: ap-lang ap-lang-en
@@ -316,9 +316,9 @@ Pusher Usage Cookbook
    - **k cached with stale dt.** Treating ``k`` as a global constant while
      ``dt`` varies under an adaptive scheme — the push scales wrong by the
      ``dt`` ratio.
-   - **Forgot ``r = r + v*dt`` after A01.** Position never moves while
+   - **Forgot the position update after A01:** ``r = r + v*dt``. Position never moves while
      ``v`` evolves. Symptom: velocities look fine, trajectory frozen.
-   - **Added ``r = r + v*dt`` after A02.** Position is advanced twice.
+   - **Added another position update after A02:** ``r = r + v*dt``. Position is advanced twice.
      The factor isn't a clean 2× because A02's internal step uses
      cylindrical geometry, but the trajectory clearly diverges from the
      analytic answer.
@@ -326,10 +326,10 @@ Pusher Usage Cookbook
      ``\theta = 0``, the wronger the trajectory. Recompute
      ``E_r = E_x\cos\theta + E_y\sin\theta``,
      ``E_\phi = -E_x\sin\theta + E_y\cos\theta`` every step.
-   - **Passing proper velocity ``u = γv`` to A03.** At high ``\gamma`` the
+   - **Passing proper velocity to A03:** ``u = γv``. At high ``\gamma`` the
      result is off by a factor ``\gamma``. A03 accepts lab velocity ``v``
      and handles the conversion internally — initialise with ``v``, not
      ``u = γv``.
-   - **``-fdefault-real-8`` not enabled.** Single-precision rounding kills
+   - ``-fdefault-real-8`` **not enabled.** Single-precision rounding kills
      the cancellation in cases like case 04 (``E + v×B = 0``) and produces
      a spurious drift.

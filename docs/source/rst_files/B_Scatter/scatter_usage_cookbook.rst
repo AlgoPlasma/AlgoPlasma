@@ -13,7 +13,7 @@ Scatter Usage Cookbook
 
    .. rubric:: 这页解决什么问题
 
-   本页面向**已经把 B_Scatter 模块编译进自己代码**、要在 PIC 循环里调用沉积算子
+   本页面面向 **已经把 B_Scatter 模块编译进自己代码**、要在 PIC 循环里调用沉积算子
    的开发者。它说明怎么选模块、调用方需要负责什么、最小时间步循环长什么样、
    OMP / 并行场景的注意事项，以及常见集成错误。不重复
    :doc:`Learning Path <scatter_learning_path>` 里的理论，
@@ -40,7 +40,7 @@ Scatter Usage Cookbook
           流体诊断、Vlasov 矩闭合都走这条。
       * - ``sub_B01_scatter_3Dxyz_T``
         - Cartesian ``(x,y,z)``
-        - 温度（方差）``den_T``
+        - 温度（方差） ``den_T``
         - 需要节点上的方差/温度时调用；用最近格子法，不是 CIC。
       * - :doc:`B02 <B02_deposit_3d_cyl>`
         - 柱坐标 ``(r,\phi,z)``
@@ -50,24 +50,25 @@ Scatter Usage Cookbook
 
    选型判据：
 
-   - 先按**几何**定 Cartesian (B01) 还是 cylindrical (B02)。
-   - 在 Cartesian 内，按**需要的物理量**选 ``B01`` / ``_v`` / ``_T``。
+   - 先按 **几何** 确定 Cartesian (B01) 还是 cylindrical (B02)。
+   - 在 Cartesian 内，按 **需要的物理量** 选择 ``B01`` / ``_v`` / ``_T``。
      三个互不冲突，可以在同一时间步里依次调用。
    - 当前没有"相对论 scatter"——所有 routine 都假设宏粒子权重是经典质量/电荷。
      高 ``\gamma`` 工况下电流沉积要在调用方侧把 ``v`` 换成 ``\gamma v`` 后再传入。
 
    .. rubric:: 调用方必须负责的事情
 
-   scatter routine 是无状态的；它**只**做一次累加。下面这些都必须由调用方组织：
+   scatter routine 是无状态的；它 **只** 做一次累加。下面这些都必须由调用方组织：
 
    1. **粒子数组布局**。所有 B_Scatter routine 都要求
       ``par(1:3, 1:np)`` 是位置（``B01``）或
       ``par(1:6, 1:np)`` 包含位置+速度（``B01 _v / _T`` 需要 ``v`` 分量）。
       **传入维度必须严格匹配子程序声明**，否则会 stride 错位（见
       :doc:`Learning Path <scatter_learning_path>` 里的 "20 单位质量堆 (0,0,0)" 案例）。
-   2. **网格 ``den`` 初始化**。``den = 0`` 必须**显式**做。routine 是**累加**式，
+   2. **网格初始化**。目标数组为 ``den``；``den = 0`` 必须 **显式** 完成。routine 采用
+      **累加** 方式，
       不是覆盖式；第二次调用会叠加在第一次的结果上。
-   3. **粒子权重 ``w``**。多数 routine 把 ``w`` 当作整体缩放因子在循环结束后乘上；
+   3. **粒子权重** ``w``。多数 routine 把 ``w`` 当作整体缩放因子在循环结束后乘上；
       ``B02`` 里粒子权重直接进沉积公式。请按各 API 页的约定填。
    4. **Ghost cell / 边界**。``den`` 至少要分配 ``(il-1:iu+1, ...)`` 范围以容纳
       落在域边的粒子的 CIC 权重外溢；调用方在 routine 之后再处理 ghost cell
@@ -119,7 +120,7 @@ Scatter Usage Cookbook
 
    一些注释：
 
-   - 真实代码会按 ``np`` 数组**直接**传，不需要按粒子写循环；上游已经内部
+   - 真实代码会按 ``np`` 数组 **直接** 传入，不需要按粒子写循环；上游已经内部
      并行。
    - ``apply_boundary_or_inject`` 是用户代码，本页不展开。
    - ``exchange_ghost_cells`` 是 ``H_MPI_Exchange`` 模块；在单进程跑测试时
@@ -142,12 +143,13 @@ Scatter Usage Cookbook
 
    两个隐藏代价：
 
-   1. **``default(firstprivate)`` 把 ``par`` 拷到每个线程的栈**。``par`` 维度是
+   1. **OpenMP 的** ``default(firstprivate)`` **会把** ``par`` **拷到每个线程的栈**。
+      ``par`` 维度是
       ``3 × np``，``np = 1e7`` 时每线程占 ~240 MB。64 线程 = 15 GB 拷贝，
-      系统栈 8 MB 直接溢出。所以**测试目录的 run 脚本里设了
-      ``ulimit -s unlimited`` 和 ``OMP_STACKSIZE=1G``**。集成到生产代码时
+      系统栈 8 MB 直接溢出。因此 **测试目录的 run 脚本已设置所需栈参数**：
+      ``ulimit -s unlimited`` 和 ``OMP_STACKSIZE=1G``。集成到生产代码时
       要同样设置，否则 ``np`` 一上去就崩。
-   2. **``reduction(+:den)`` 在循环结束做归约**。每个线程私有的 ``den``
+   2. **OpenMP 的** ``reduction(+:den)`` **在循环结束时做归约**。每个线程私有的 ``den``
       在循环结束累加到主 ``den``。线程数高时归约开销不小，但相比 ``par``
       拷贝是次要的。
 
@@ -167,10 +169,10 @@ Scatter Usage Cookbook
 
    .. rubric:: 常见集成错误
 
-   - **``par`` 维度不匹配子程序声明**。调用方分配 ``par(1:6, 1:np_max)``，
+   - ``par`` **维度不匹配子程序声明**。调用方分配 ``par(1:6, 1:np_max)``，
      直接传给只接收 ``par(1:3, 1:np)`` 的 routine——Fortran 按 stride 3
      重解释，每隔一列读到的是速度槽（0），位置严重错位。**这是上线前必须查的 bug**。
-   - **``den`` 没清零**。多步 PIC 循环里前一步的 ``den`` 残留累加到这一步。
+   - ``den`` **没清零**。多步 PIC 循环里前一步的 ``den`` 残留累加到这一步。
    - **没分配 guard cell**。``den(il:iu, ...)`` 不留外延一圈，落在域边的粒子的
      CIC 权重写到边界外、触发段错误或 silent corruption。正确分配是
      ``den(il-1:iu+1, ...)``。
@@ -246,10 +248,10 @@ Scatter Usage Cookbook
       **must match the subroutine declaration exactly**, or Fortran
       reinterprets the memory by the wrong stride (see the "20 units of
       mass at ``(0,0,0)``" case in :doc:`Learning Path <scatter_learning_path>`).
-   2. **Initialising ``den``.** ``den = 0`` must be done **explicitly**.
+   2. **Initialising the grid array** ``den``. ``den = 0`` must be done **explicitly**.
       The routine accumulates, not overwrites; a second call adds on top
       of the first.
-   3. **Particle weight ``w``.** Most routines apply ``w`` as a global
+   3. **Particle weight** ``w``. Most routines apply ``w`` as a global
       scale after the loop; ``B02`` mixes ``w`` into the deposition
       formula directly. Follow each API page's convention.
    4. **Ghost cells / boundaries.** ``den`` should be allocated at least
@@ -331,14 +333,14 @@ Scatter Usage Cookbook
 
    Two hidden costs:
 
-   1. **``default(firstprivate)`` copies ``par`` to every thread stack.**
+   1. **OpenMP** ``default(firstprivate)`` **copies** ``par`` **to every thread stack.**
       ``par`` is ``3 × np`` reals; at ``np = 1e7`` each thread takes
       ~240 MB. 64 threads = 15 GB of copies, and the default 8 MB OS stack
       overflows immediately. The test directories' run scripts set
       ``ulimit -s unlimited`` and ``OMP_STACKSIZE=1G`` for exactly this
       reason — production code must do the same or it will crash as soon
       as ``np`` is non-trivial.
-   2. **``reduction(+:den)`` does a final merge.** Each thread's private
+   2. **OpenMP** ``reduction(+:den)`` **does a final merge.** Each thread's private
       ``den`` is summed into the shared one at loop exit. The merge cost
       is non-trivial at high thread counts but is secondary compared to
       the ``par`` copy.
@@ -346,12 +348,12 @@ Scatter Usage Cookbook
    Measured behaviour (see
    :doc:`B01 Kunpeng comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`):
 
-   - **Small ``np`` (1e4)**: OMP overhead dominates; the sweet spot is
+   - **Small problem** (``np = 1e4``): OMP overhead dominates; the sweet spot is
      2-4 threads, and adding more makes it slower.
-   - **Large ``np`` (1e7)**: ``firstprivate`` copies dominate; 64 threads
+   - **Large problem** (``np = 1e7``): ``firstprivate`` copies dominate; 64 threads
      are **37× slower than 1 thread** on the AMD server, and even on
      Kunpeng the kernel is only 2.6× slower at 64 threads.
-   - **Across all ``np``**: measured speedup never reaches more than ~3×,
+   - **Across all particle counts** (``np``): measured speedup never reaches more than ~3×,
      well below linear.
 
    In other words, **the current kernel does not scale well**. Practical
@@ -365,12 +367,12 @@ Scatter Usage Cookbook
 
    .. rubric:: Common Integration Mistakes
 
-   - **``par`` shape mismatch.** Caller allocates ``par(1:6, 1:np_max)``
+   - ``par`` **shape mismatch.** Caller allocates ``par(1:6, 1:np_max)``
      and passes the slab to a routine declared as ``par(1:3, 1:np)`` —
      Fortran reinterprets the memory with stride 3 and reads every other
      column as garbage velocity slots. **Always check this before going
      live.**
-   - **``den`` not zeroed.** Residue from the previous step accumulates
+   - ``den`` **not zeroed.** Residue from the previous step accumulates
      into the current one inside a multi-step PIC loop.
    - **No guard cell allocated.** ``den(il:iu, ...)`` with no overflow
      ring catches CIC weights from edge particles writing past the
@@ -383,6 +385,6 @@ Scatter Usage Cookbook
      ``OMP_STACKSIZE`` is around 4 MB; ``np = 1e7`` with
      ``firstprivate`` segfaults immediately. Fix per the OMP section
      above.
-   - **Expecting CIC conservation from ``_T``.** ``sub_..._T`` uses
+   - **Expecting CIC conservation from** ``_T``. ``sub_..._T`` uses
      nearest-cell, not CIC, so ``sum(den_T) = sum(w*v^2)`` does not hold.
      It provides per-node variance, not "the second moment".
