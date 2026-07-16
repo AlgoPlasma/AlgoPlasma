@@ -101,9 +101,12 @@ style_map = {
 
 # 按 MPI 进程数分组绘图
 np_list = sorted(set(r["np"] for r in rows))
+ylim = (0, 14)
+windows_out_dir = "/mnt/e/kunpeng"
 
 for np_val in np_list:
     plt.figure(figsize=(12, 6.5))
+    omp_ticks = sorted({item["omp"] for item in rows if item["np"] == np_val})
 
     # 遍历三类编译器
     for comp in ["gcc", "bisheng", "AMD"]:
@@ -131,15 +134,16 @@ for np_val in np_list:
     plt.ylabel("Execution Time [s]", fontsize=11)
     plt.title(
         f"Performance Comparison: KP-GCC / KP-BiSheng / AMD\n"
-        f"HYPRE Solver Time & Total Time | MPI Process = {np_val}",
+        f"HYPRE Solver Time & Total Time | MPI Process = {np_val} | Y-axis = {ylim[0]}-{ylim[1]} s",
         fontsize=12, pad=15
     )
+    plt.ylim(*ylim)
 
     # X轴刻度优化
-    if omp_list:
-        x_max = max(omp_list)
+    if omp_ticks:
+        x_max = max(omp_ticks)
         xticks = list(range(2, x_max + 1, 2))
-        if 1 in omp_list:
+        if 1 in omp_ticks:
             xticks.insert(0, 1)
         plt.xticks(xticks, rotation=45)
 
@@ -151,6 +155,10 @@ for np_val in np_list:
     out_img = f"time_3compares_np{np_val}.png"
     plt.savefig(out_img, dpi=300, bbox_inches="tight")
     print(f"✅ 图片已生成: {out_img}")
+    if os.path.isdir(windows_out_dir):
+        windows_out_img = os.path.join(windows_out_dir, f"time_kp_amd_np{np_val}_ylim0_14.png")
+        plt.savefig(windows_out_img, dpi=300, bbox_inches="tight")
+        print(f"✅ 图片已生成: {windows_out_img}")
 
 plt.close("all")
 print("\n🎉 全部绘图任务完成！")
