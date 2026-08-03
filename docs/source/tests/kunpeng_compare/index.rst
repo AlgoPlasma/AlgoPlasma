@@ -8,7 +8,7 @@ Kunpeng Comparison Tests
    A01_Boris_3Dxyz_omp
    B01_scatter_3Dxyz_omp
    E_Maxwell_E03_fdtd_3d_cartesian
-   test00
+   D01_hypre_3Dxyz_Comparison
 
 .. raw:: html
 
@@ -42,7 +42,7 @@ Kunpeng Comparison Tests
         - :doc:`E_Maxwell_E03_fdtd_3d_cartesian <E_Maxwell_E03_fdtd_3d_cartesian>`
       * - ``D01_hypre_3Dxyz``
         - D01 Poisson/HYPRE 的 OpenMP 线程扫描和 MPI rank 扫描：鲲鹏 GCC、鲲鹏 BiSheng 与 AMD 服务器。
-        - :doc:`D01_hypre_3Dxyz <test00>`
+        - :doc:`D01_hypre_3Dxyz Comparison <D01_hypre_3Dxyz_Comparison>`
 
 .. container:: ap-lang ap-lang-en
 
@@ -71,4 +71,4 @@ Kunpeng Comparison Tests
         - :doc:`E_Maxwell_E03_fdtd_3d_cartesian <E_Maxwell_E03_fdtd_3d_cartesian>`
       * - ``D01_hypre_3Dxyz``
         - OpenMP-thread and MPI-rank D01 Poisson/HYPRE comparison for Kunpeng GCC, Kunpeng BiSheng, and AMD.
-        - :doc:`D01_hypre_3Dxyz <test00>`
+        - :doc:`D01_hypre_3Dxyz Comparison <D01_hypre_3Dxyz_Comparison>`

@@ -21,7 +21,7 @@ D01_hypre_3Dxyz Comparison
 
    .. rubric:: 测试模型
 
-   本页对应 ``tests/kunpeng_compare/D01_hypre_3Dxyz``。它复用 D01
+   本页是 ``tests/kunpeng_compare/D01_hypre_3Dxyz`` 的对比说明页。它复用 D01
    ``hypre_3Dxyz_bc`` 基准，在固定 ``320 x 80 x 320`` 网格上比较鲲鹏 GCC、
    鲲鹏 BiSheng 和 AMD 的性能。目录下有两个子测试：``test_OMP`` 固定
    ``4`` 个 MPI rank，扫描 OpenMP 线程数；``test_MPI`` 固定 ``OMP=1``，
@@ -59,7 +59,7 @@ D01_hypre_3Dxyz Comparison
 
    .. rubric:: 测试结果
 
-   .. figure:: ../../images/tests/kunpeng_compare/test00/time_3compares_np4.png
+   .. figure:: ../../images/tests/kunpeng_compare/D01_hypre_3Dxyz_Comparison/time_3compares_np4.png
       :align: center
       :figclass: ap-figure-equal-height ap-figure-wide
       :target: ../../_images/time_3compares_np4.png
@@ -143,7 +143,7 @@ D01_hypre_3Dxyz Comparison
 
    .. rubric:: 测试结果
 
-   .. figure:: ../../images/tests/kunpeng_compare/test00/time_compare_gcc_bisheng_AMD_np_omp1.png
+   .. figure:: ../../images/tests/kunpeng_compare/D01_hypre_3Dxyz_Comparison/time_compare_gcc_bisheng_AMD_np_omp1.png
       :align: center
       :figclass: ap-figure-equal-height ap-figure-wide
       :target: ../../_images/time_compare_gcc_bisheng_AMD_np_omp1.png
@@ -210,8 +210,8 @@ D01_hypre_3Dxyz Comparison
 
    .. rubric:: Test Model
 
-   This page corresponds to ``tests/kunpeng_compare/D01_hypre_3Dxyz``. It
-   reuses the D01 ``hypre_3Dxyz_bc`` benchmark on a fixed ``320 x 80 x 320``
+   This page is the comparison guide for ``tests/kunpeng_compare/D01_hypre_3Dxyz``.
+   It reuses the D01 ``hypre_3Dxyz_bc`` benchmark on a fixed ``320 x 80 x 320``
    grid. The directory has two subtests: ``test_OMP`` fixes 4 MPI ranks and
    scans OpenMP threads; ``test_MPI`` fixes ``OMP=1`` and scans MPI process
    counts. The two sweeps should be read separately.
@@ -248,7 +248,7 @@ D01_hypre_3Dxyz Comparison
 
    .. rubric:: Test Results
 
-   .. figure:: ../../images/tests/kunpeng_compare/test00/time_3compares_np4.png
+   .. figure:: ../../images/tests/kunpeng_compare/D01_hypre_3Dxyz_Comparison/time_3compares_np4.png
       :align: center
       :figclass: ap-figure-equal-height ap-figure-wide
       :target: ../../_images/time_3compares_np4.png
@@ -339,7 +339,7 @@ D01_hypre_3Dxyz Comparison
 
    .. rubric:: Test Results
 
-   .. figure:: ../../images/tests/kunpeng_compare/test00/time_compare_gcc_bisheng_AMD_np_omp1.png
+   .. figure:: ../../images/tests/kunpeng_compare/D01_hypre_3Dxyz_Comparison/time_compare_gcc_bisheng_AMD_np_omp1.png
       :align: center
       :figclass: ap-figure-equal-height ap-figure-wide
       :target: ../../_images/time_compare_gcc_bisheng_AMD_np_omp1.png
