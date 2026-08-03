@@ -4,6 +4,10 @@ program main
     use mod_D01_hypre_3Dxyz_bc
     implicit none
 
+    integer, parameter :: nx = 320
+    integer, parameter :: ny = 80
+    integer, parameter :: nz = 320
+
     ! mpi_i: The ith MPI rank.
     ! mpi_n: The MPI size.
     integer :: ierr, mpi_i, mpi_n
@@ -24,8 +28,8 @@ program main
 
     integer :: n, n_global
     integer :: i, j, k, l
+    integer :: source_x0, source_x1
     real :: tolerance
-    real :: xc, zc, sigma
 
     ! Timing variables.
     real :: t_total0, t_total1
@@ -44,43 +48,49 @@ program main
     real :: phi_max_local, phi_max_global
 
     character(len=512) :: hypre_dir
+    character(len=32) :: write_phi_env
     integer :: env_len, env_status
+    integer :: write_phi_len, write_phi_status
+    logical :: write_phi
 
     call mpi_init(ierr)
     call mpi_comm_rank(mpi_comm_world, mpi_i, ierr)
     call mpi_comm_size(mpi_comm_world, mpi_n, ierr)
 
-    call mpi_barrier(mpi_comm_world, ierr)
-    t_total0 = mpi_wtime()
-
-    if (mpi_n /= 4) then
+    if (mpi_n > nx) then
         if (mpi_i == 0) then
-            write(*,*) 'ERROR: this test is intended for 4 MPI ranks only.'
+            write(*,*) 'ERROR: mpi_size must be <= nx for x-slab partitioning.'
         end if
         call mpi_finalize(ierr)
         stop
     end if
 
-    if (mpi_i == 0) then
-        il(1:3) = (/ 9, 1, 1/)
-        iu(1:3) = (/24, 8,16/)
-        bc(1:4) = (/2,2,1,0/)
-    else if (mpi_i == 1) then
-        il(1:3) = (/ 1, 1,17/)
-        iu(1:3) = (/ 8, 8,32/)
-        bc(1:4) = (/1,0,1,1/)
-    else if (mpi_i == 2) then
-        il(1:3) = (/ 9, 1,17/)
-        iu(1:3) = (/24, 8,32/)
-        bc(1:4) = (/0,0,0,1/)
-    else if (mpi_i == 3) then
-        il(1:3) = (/25, 1,17/)
-        iu(1:3) = (/32, 8,32/)
-        bc(1:4) = (/0,1,1,1/)
+    write_phi = .false.
+    call get_environment_variable('WRITE_PHI', write_phi_env, length=write_phi_len, status=write_phi_status)
+    if (write_phi_status == 0) then
+        select case (trim(write_phi_env(1:write_phi_len)))
+        case ('1', 'yes', 'YES', 'true', 'TRUE', 'on', 'ON')
+            write_phi = .true.
+        end select
     end if
 
-    il0(1:3) = (/ 1, 1, 1/)
-    iu0(1:3) = (/32, 8,32/)
+    call mpi_barrier(mpi_comm_world, ierr)
+    t_total0 = mpi_wtime()
+
+    il0(1:3) = (/1, 1, 1/)
+    iu0(1:3) = (/nx, ny, nz/)
+
+    call split_1d(nx, mpi_n, mpi_i, il(1), iu(1))
+    il(2) = 1
+    iu(2) = ny
+    il(3) = 1
+    iu(3) = nz
+
+    bc = 0
+    if (il(1) == il0(1)) bc(1) = 1
+    if (iu(1) == iu0(1)) bc(2) = 1
+    bc(3) = 1
+    bc(4) = 1
 
     n = (iu(1)-il(1)+1) * (iu(2)-il(2)+1) * (iu(3)-il(3)+1)
 
@@ -98,31 +108,18 @@ program main
     call mpi_barrier(mpi_comm_world, ierr)
     t0 = mpi_wtime()
 
-    if (mpi_i == 0) then
-        l = 1
-        do k = il(3), iu(3)
-        do j = il(2), iu(2)
-        do i = il(1), iu(1)
-            if (k == il(3)) rho1d(l) = 1.0
-            l = l + 1
-        end do
-        end do
-        end do
-    end if
+    source_x0 = nx / 4 + 1
+    source_x1 = 3 * nx / 4
 
-!    xc = 16.5
-!    zc = 16.5
-!    sigma = 4.0
-!
-!    l = 1
-!    do k = il(3), iu(3)
-!    do j = il(2), iu(2)
-!    do i = il(1), iu(1)
-!        rho1d(l) = exp(-((real(i)-xc)**2 + (real(k)-zc)**2)/(2.0*sigma**2))
-!        l = l + 1
-!    end do
-!    end do
-!    end do
+    l = 1
+    do k = il(3), iu(3)
+    do j = il(2), iu(2)
+    do i = il(1), iu(1)
+        if (k == il0(3) .and. i >= source_x0 .and. i <= source_x1) rho1d(l) = 1.0
+        l = l + 1
+    end do
+    end do
+    end do
 
     call mpi_barrier(mpi_comm_world, ierr)
     t1 = mpi_wtime()
@@ -178,51 +175,54 @@ program main
     end if
 
     ! ----------------------------
-    ! Gather phi and write phi.dat.
+    ! Optional gather phi and write phi.dat.
+    ! Keep disabled by default for MPI-rank scaling runs.
     ! ----------------------------
     call mpi_barrier(mpi_comm_world, ierr)
     t0 = mpi_wtime()
 
-    block
-        real, dimension(:,:,:), allocatable :: phi0, phi
-        integer :: ni, nj, nk
+    if (write_phi) then
+        block
+            real, dimension(:,:,:), allocatable :: phi0, phi
+            integer :: ni, nj, nk
 
-        allocate(phi (il0(1):iu0(1), il0(2):iu0(2), il0(3):iu0(3)))
-        allocate(phi0(il0(1):iu0(1), il0(2):iu0(2), il0(3):iu0(3)))
+            allocate(phi (il0(1):iu0(1), il0(2):iu0(2), il0(3):iu0(3)))
+            allocate(phi0(il0(1):iu0(1), il0(2):iu0(2), il0(3):iu0(3)))
 
-        phi  = 0.0
-        phi0 = 0.0
+            phi  = 0.0
+            phi0 = 0.0
 
-        l = 1
-        do k = il(3), iu(3)
-        do j = il(2), iu(2)
-        do i = il(1), iu(1)
-            phi(i,j,k) = phi1d(l)
-            l = l + 1
-        end do
-        end do
-        end do
-
-        ni = iu0(1) - il0(1) + 1
-        nj = iu0(2) - il0(2) + 1
-        nk = iu0(3) - il0(3) + 1
-
-        call mpi_allreduce(phi, phi0, ni*nj*nk, MPI_DOUBLE_PRECISION, MPI_SUM, mpi_comm_world, ierr)
-
-        if (mpi_i == 0) then
-            open(unit=1000, file='phi.dat', status='replace')
-            do k = il0(3), iu0(3)
-            do j = il0(2), iu0(2)
-            do i = il0(1), iu0(1)
-                write(1000,*) phi0(i,j,k)
+            l = 1
+            do k = il(3), iu(3)
+            do j = il(2), iu(2)
+            do i = il(1), iu(1)
+                phi(i,j,k) = phi1d(l)
+                l = l + 1
             end do
             end do
             end do
-            close(1000)
-        end if
 
-        deallocate(phi, phi0)
-    end block
+            ni = iu0(1) - il0(1) + 1
+            nj = iu0(2) - il0(2) + 1
+            nk = iu0(3) - il0(3) + 1
+
+            call mpi_allreduce(phi, phi0, ni*nj*nk, MPI_DOUBLE_PRECISION, MPI_SUM, mpi_comm_world, ierr)
+
+            if (mpi_i == 0) then
+                open(unit=1000, file='phi.dat', status='replace')
+                do k = il0(3), iu0(3)
+                do j = il0(2), iu0(2)
+                do i = il0(1), iu0(1)
+                    write(1000,*) phi0(i,j,k)
+                end do
+                end do
+                end do
+                close(1000)
+            end if
+
+            deallocate(phi, phi0)
+        end block
+    end if
 
     call mpi_barrier(mpi_comm_world, ierr)
     t1 = mpi_wtime()
@@ -244,11 +244,12 @@ program main
         end if
 
         write(*,*)
-        write(*,*) '================ Poisson HYPRE Benchmark ================'
+        write(*,*) '================ Poisson HYPRE MPI-rank Benchmark ================'
         write(*,'(A,I0)')       '[RESULT] mpi_size              = ', mpi_n
         write(*,'(A,I0)')       '[RESULT] n_global              = ', n_global
-        write(*,'(A,3(I0,1X))') '[RESULT] global_grid           = ', &
-                                 iu0(1)-il0(1)+1, iu0(2)-il0(2)+1, iu0(3)-il0(3)+1
+        write(*,'(A,3(I0,1X))') '[RESULT] global_grid           = ', nx, ny, nz
+        write(*,'(A,A)')        '[RESULT] partition             = x-slab'
+        write(*,'(A,I0)')       '[RESULT] write_phi             = ', merge(1, 0, write_phi)
         write(*,'(A,ES16.8)')   '[RESULT] tolerance             = ', tolerance
         write(*,'(A,A)')        '[RESULT] HYPRE_DIR             = ', trim(hypre_dir(1:env_len))
 
@@ -264,12 +265,33 @@ program main
         write(*,'(A,ES16.8)')   '[NORM] phi_absmax             = ', phi_absmax_global
         write(*,'(A,ES16.8)')   '[NORM] phi_min                = ', phi_min_global
         write(*,'(A,ES16.8)')   '[NORM] phi_max                = ', phi_max_global
-        write(*,*) '=========================================================='
+        write(*,*) '===================================================================='
         write(*,*)
     end if
 
     deallocate(phi1d, rho1d)
 
     call mpi_finalize(ierr)
+
+contains
+
+    subroutine split_1d(n_total, n_parts, part_id, lo, hi)
+        integer, intent(in) :: n_total, n_parts, part_id
+        integer, intent(out) :: lo, hi
+        integer :: base, rem, count
+
+        base = n_total / n_parts
+        rem = mod(n_total, n_parts)
+
+        if (part_id < rem) then
+            count = base + 1
+            lo = part_id * count + 1
+        else
+            count = base
+            lo = rem * (base + 1) + (part_id - rem) * base + 1
+        end if
+
+        hi = lo + count - 1
+    end subroutine split_1d
 
 end program main
