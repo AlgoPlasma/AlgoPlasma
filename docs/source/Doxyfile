@@ -1,0 +1,46 @@
+# 基本
+PROJECT_NAME           = "AlgoPlasma"
+OUTPUT_DIRECTORY       = _doxygen
+GENERATE_HTML          = NO
+GENERATE_LATEX         = NO
+GENERATE_XML           = YES
+XML_OUTPUT             = xml
+XML_PROGRAMLISTING     = NO
+RECURSIVE              = YES
+
+# 输入
+INPUT                  = ../../
+FILE_PATTERNS          = *.f90 *.F90 *.md *.c
+EXTENSION_MAPPING      = f90=Fortran
+OPTIMIZE_FOR_FORTRAN   = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+SOURCE_BROWSER         = NO
+INLINE_SOURCES         = NO
+
+# 注释样式与外观
+JAVADOC_AUTOBRIEF      = YES
+WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_DOC_ERROR      = YES
+GENERATE_TREEVIEW      = YES
+MARKDOWN_SUPPORT       = YES
+USE_MATHJAX            = YES
+HAVE_DOT	           = YES
+
+# 启用代码片段提取
+ENABLE_PREPROCESSING = YES
+MACRO_EXPANSION = YES
+EXPAND_ONLY_PREDEF = NO
+
+IMAGE_PATH = images/
+EXCLUDE_SYMBOLS += mpi omp_lib iso_c_binding
+EXCLUDE_PATTERNS += */H_MPI_Exchange/H01_mpi_exchange_field/inc_*.f90
+EXCLUDE_PATTERNS += */H_MPI_Exchange/H03_mpi_exchange_den/inc_*.f90
+EXCLUDE_PATTERNS += */D_Poisson/D05_phi1d_to_phi3d/inc_*.f90
+EXCLUDE_PATTERNS += */tests/*/REPORT.md
+INCLUDE_PATH += ../../D_Poisson/D01_hypre_3Dxyz
+
+# 标准输出进度信息
+QUIET = YES
+WARNINGS = NO

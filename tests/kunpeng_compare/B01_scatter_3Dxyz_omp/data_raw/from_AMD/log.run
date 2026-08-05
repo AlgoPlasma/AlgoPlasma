@@ -1,0 +1,68 @@
+====================================================
+B01 Scatter OMP sweep benchmark
+np_list     =      10000     100000    1000000   10000000
+thread_list =    1    2    4    6    7    8    9   10   12   14   16   32   64
+nrepeat     = 10
+grid_il     =    1   1   1
+grid_iu     =   12  12  12
+w           =    2.000
+OMP max     = 64
+====================================================
+--- np = 10000 ---
+nthread=   1  avg_s=  1.004926E-04  best_s=  9.066900E-05  worst_s=  1.789940E-04
+nthread=   2  avg_s=  7.281910E-05  best_s=  5.239801E-05  worst_s=  2.517210E-04
+nthread=   4  avg_s=  7.326690E-05  best_s=  4.181801E-05  worst_s=  3.494130E-04
+nthread=   6  avg_s=  9.142490E-05  best_s=  5.773798E-05  worst_s=  3.591810E-04
+nthread=   7  avg_s=  7.409340E-05  best_s=  5.526401E-05  worst_s=  2.245800E-04
+nthread=   8  avg_s=  7.297060E-05  best_s=  5.210799E-05  worst_s=  2.522610E-04
+nthread=   9  avg_s=  7.304150E-05  best_s=  5.232700E-05  worst_s=  2.550260E-04
+nthread=  10  avg_s=  7.472750E-05  best_s=  5.320899E-05  worst_s=  2.606070E-04
+nthread=  12  avg_s=  8.900620E-05  best_s=  5.477201E-05  worst_s=  3.824640E-04
+nthread=  14  avg_s=  1.067524E-04  best_s=  6.067401E-05  worst_s=  4.505420E-04
+nthread=  16  avg_s=  1.264161E-04  best_s=  6.662399E-05  worst_s=  6.404770E-04
+nthread=  32  avg_s=  3.212493E-04  best_s=  1.276290E-04  worst_s=  1.993004E-03
+nthread=  64  avg_s=  1.708781E-03  best_s=  2.110050E-04  worst_s=  1.504302E-02
+--- np = 100000 ---
+nthread=   1  avg_s=  1.354332E-03  best_s=  9.148090E-04  worst_s=  2.023372E-03
+nthread=   2  avg_s=  8.290517E-04  best_s=  5.023490E-04  worst_s=  3.312521E-03
+nthread=   4  avg_s=  4.608751E-04  best_s=  3.141270E-04  worst_s=  1.564243E-03
+nthread=   6  avg_s=  5.156827E-04  best_s=  4.082830E-04  worst_s=  1.341137E-03
+nthread=   7  avg_s=  5.408095E-04  best_s=  4.005080E-04  worst_s=  1.345895E-03
+nthread=   8  avg_s=  5.534782E-04  best_s=  4.468050E-04  worst_s=  1.394646E-03
+nthread=   9  avg_s=  6.191141E-04  best_s=  4.982710E-04  worst_s=  1.628253E-03
+nthread=  10  avg_s=  8.893942E-04  best_s=  7.270290E-04  worst_s=  2.068576E-03
+nthread=  12  avg_s=  1.090006E-03  best_s=  9.331640E-04  worst_s=  1.949954E-03
+nthread=  14  avg_s=  1.468886E-03  best_s=  1.316290E-03  worst_s=  2.124310E-03
+nthread=  16  avg_s=  1.614945E-03  best_s=  1.431566E-03  worst_s=  2.236229E-03
+nthread=  32  avg_s=  3.492636E-03  best_s=  3.015315E-03  worst_s=  6.083659E-03
+nthread=  64  avg_s=  9.022342E-03  best_s=  8.104836E-03  worst_s=  1.230248E-02
+--- np = 1000000 ---
+nthread=   1  avg_s=  1.280508E-02  best_s=  1.179203E-02  worst_s=  1.866932E-02
+nthread=   2  avg_s=  9.964861E-03  best_s=  8.927413E-03  worst_s=  1.786838E-02
+nthread=   4  avg_s=  1.086113E-02  best_s=  1.026895E-02  worst_s=  1.464767E-02
+nthread=   6  avg_s=  1.381263E-02  best_s=  1.290619E-02  worst_s=  1.960331E-02
+nthread=   7  avg_s=  1.452918E-02  best_s=  1.391704E-02  worst_s=  1.810424E-02
+nthread=   8  avg_s=  1.648522E-02  best_s=  1.572612E-02  worst_s=  2.160452E-02
+nthread=   9  avg_s=  2.082186E-02  best_s=  1.981400E-02  worst_s=  2.563514E-02
+nthread=  10  avg_s=  2.150184E-02  best_s=  2.099469E-02  worst_s=  2.443294E-02
+nthread=  12  avg_s=  2.453346E-02  best_s=  2.347431E-02  worst_s=  2.829887E-02
+nthread=  14  avg_s=  2.753670E-02  best_s=  2.619065E-02  worst_s=  3.559071E-02
+nthread=  16  avg_s=  2.925358E-02  best_s=  2.828903E-02  worst_s=  3.300142E-02
+nthread=  32  avg_s=  5.608438E-02  best_s=  5.326195E-02  worst_s=  6.714631E-02
+nthread=  64  avg_s=  1.700586E-01  best_s=  1.557425E-01  worst_s=  2.527882E-01
+--- np = 10000000 ---
+nthread=   1  avg_s=  1.122944E-01  best_s=  9.538524E-02  worst_s=  1.962245E-01
+nthread=   2  avg_s=  8.677591E-02  best_s=  7.517304E-02  worst_s=  1.859236E-01
+nthread=   4  avg_s=  1.010566E-01  best_s=  9.306760E-02  worst_s=  1.559840E-01
+nthread=   6  avg_s=  1.190053E-01  best_s=  1.095568E-01  worst_s=  1.779541E-01
+nthread=   7  avg_s=  1.439047E-01  best_s=  1.307920E-01  worst_s=  2.082077E-01
+nthread=   8  avg_s=  1.703629E-01  best_s=  1.417925E-01  worst_s=  2.420170E-01
+nthread=   9  avg_s=  1.956157E-01  best_s=  1.816163E-01  worst_s=  2.578227E-01
+nthread=  10  avg_s=  2.153085E-01  best_s=  2.003781E-01  worst_s=  2.710837E-01
+nthread=  12  avg_s=  2.610675E-01  best_s=  2.352035E-01  worst_s=  3.288267E-01
+nthread=  14  avg_s=  3.057969E-01  best_s=  2.912910E-01  worst_s=  3.659670E-01
+nthread=  16  avg_s=  3.510569E-01  best_s=  3.335775E-01  worst_s=  4.161691E-01
+nthread=  32  avg_s=  8.036364E-01  best_s=  7.385196E-01  worst_s=  1.282312E+00
+nthread=  64  avg_s=  3.506554E+00  best_s=  1.326434E+00  worst_s=  2.281976E+01
+====================================================
+Done.
