@@ -1,6 +1,6 @@
 # E01_Maxwell_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 2D 轴对称柱坐标 `(r,z)` Maxwell/FDTD 内核，包含两套解耦场分量更新和 2D RZ CPML。
 

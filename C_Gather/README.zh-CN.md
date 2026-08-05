@@ -1,6 +1,6 @@
 # C_Gather
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `C_Gather` 收集 PIC 粒子循环中常用的“网格到粒子”插值例程，用于把网格上的场量或形函数权重计算到粒子位置。
 

@@ -1,6 +1,6 @@
 # C01_gather_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `C01_gather_3Dxyz` 将三维直角坐标、cell-centered 网格上的电磁场插值到粒子位置。同时提供一个融合内核，在同一粒子循环中完成 gather、非相对论 Boris 速度更新和位置推进。
 

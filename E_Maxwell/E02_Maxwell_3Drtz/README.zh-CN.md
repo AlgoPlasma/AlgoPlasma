@@ -1,6 +1,6 @@
 # E02_Maxwell_3Drtz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 完整 3D 柱坐标 `(r,phi,z)` Maxwell/FDTD 内核，保留 `phi` 方向变化并更新全部六个场分量。
 

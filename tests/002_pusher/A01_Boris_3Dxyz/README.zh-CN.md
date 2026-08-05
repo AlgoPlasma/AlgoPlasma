@@ -1,6 +1,6 @@
 # A01_Boris_3Dxyz 测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 本目录提供 `A_Pusher/A01_Boris_3Dxyz` 的独立测试，用于验证三维直角坐标中的 Boris 粒子速度推进器。测试程序会编译一个小型 Fortran 驱动，运行多个单粒子解析算例，并把数值轨道、速度和解析解进行对比。
 

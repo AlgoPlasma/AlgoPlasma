@@ -1,6 +1,6 @@
 # E_Maxwell
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `E_Maxwell` 包含 AlgoPlasma 的 Maxwell 方程场推进子程序、有限差分时域法（Finite-Difference Time-Domain, FDTD）实现，以及卷积完美匹配层（Convolutional Perfectly Matched Layer, CPML）边界扩展。
 

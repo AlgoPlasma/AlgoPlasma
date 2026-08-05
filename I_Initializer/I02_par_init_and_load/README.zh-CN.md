@@ -1,6 +1,6 @@
 # I02_par_init_and_load
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `I02_par_init_and_load` 提供离线二进制粒子初值生成和 MPI 载入流程。
 

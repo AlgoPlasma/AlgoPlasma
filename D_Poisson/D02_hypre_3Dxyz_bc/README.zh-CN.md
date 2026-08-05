@@ -1,6 +1,6 @@
 # D02_hypre_3Dxyz_bc
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 Cartesian 3D Poisson 求解器，包含矩阵/RHS 组装、边界修正和 HYPRE Struct 求解接口。
 

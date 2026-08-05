@@ -1,6 +1,6 @@
 # I_Initializer
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `I_Initializer` 放置 AlgoPlasma 的粒子初始化工具。
 

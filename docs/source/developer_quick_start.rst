@@ -357,7 +357,7 @@ Developer Quick Start
 
       .. code-block:: text
 
-         A_Pusher/A01_Boris_3Dxyz/README.en.md
+         A_Pusher/A01_Boris_3Dxyz/README.md
          -> A_Pusher/A01_Boris_3Dxyz/mod_A01_Boris_3Dxyz.f90
          -> A_Pusher/A01_Boris_3Dxyz/sub_A01_Boris_3Dxyz.f90
          -> tests/002_pusher/A01_Boris_3Dxyz/source_f90/main.f90

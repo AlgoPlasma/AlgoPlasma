@@ -1,6 +1,6 @@
 # F02_par_output
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 将每个 MPI rank 的粒子数组 `par(:,1:np)` 写入独立文件。
 

@@ -1,6 +1,6 @@
 # A02_Boris_3Drtz 测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 本目录提供 `A_Pusher/A02_Boris_3Drtz` 的独立测试，用于验证三维柱坐标中的非相对论 Boris 粒子推进器。测试程序会编译一个小型 Fortran 驱动，运行多个单粒子解析算例，并把柱坐标推进得到的位置和速度转换回直角坐标后与解析解对比。
 

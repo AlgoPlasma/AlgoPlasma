@@ -1,6 +1,6 @@
 # D01_hypre_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 早期 Cartesian 3D Poisson/HYPRE 接口。Fortran 侧通过桥接子程序调用 C 侧 HYPRE Struct 求解器。
 

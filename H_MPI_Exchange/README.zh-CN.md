@@ -1,6 +1,6 @@
 # H_MPI_Exchange
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `H_MPI_Exchange` 提供 AlgoPlasma 在 MPI 区域分解中使用的数据交换例程。
 

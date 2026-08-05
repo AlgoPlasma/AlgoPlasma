@@ -1,6 +1,6 @@
 # H01_mpi_exchange_field
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `H01_mpi_exchange_field` 交换标量场的一层 ghost/halo cell。
 

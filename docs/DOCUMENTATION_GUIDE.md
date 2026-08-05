@@ -73,7 +73,7 @@ in Sphinx instead.
 Directory README pairs should use:
 
 - `README.zh-CN.md`
-- `README.en.md`
+- `README.md`
 
 ## Sphinx Pages
 

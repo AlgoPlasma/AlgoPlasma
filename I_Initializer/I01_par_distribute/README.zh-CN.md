@@ -1,6 +1,6 @@
 # I01_par_distribute
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `I01_par_distribute` 提供 Fortran 内部粒子分布初始化例程。
 

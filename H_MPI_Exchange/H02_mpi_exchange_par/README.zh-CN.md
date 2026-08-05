@@ -1,6 +1,6 @@
 # H02_mpi_exchange_par
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.md)
 
 `H02_mpi_exchange_par` 在 3D Cartesian MPI 区域分解中迁移多物种粒子。
 
