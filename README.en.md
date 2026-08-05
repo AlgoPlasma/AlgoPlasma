@@ -118,6 +118,10 @@ A new algorithm contribution should ideally include:
 
 Please keep algorithm units independent, interfaces clear, and dependencies explicit. For improvements to an existing algorithm, document whether the numerical behavior changes and update the corresponding tests when needed.
 
+## License
+
+AlgoPlasma is licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for copyright and attribution information.
+
 ## Initiator / Contact
 
 - Yinjian Zhao / 赵隐剑

@@ -118,6 +118,10 @@ make html
 
 贡献时请尽量保持算法单元独立、接口清晰、依赖明确。对于已有算法的改进，请同时说明数值行为是否改变，并补充或更新相应测试。
 
+## 许可证
+
+AlgoPlasma 采用 [Apache License 2.0](LICENSE) 开源许可证。版权和归属信息见 [NOTICE](NOTICE)。
+
 ## 发起人/联系人
 
 - 赵隐剑 / Yinjian Zhao

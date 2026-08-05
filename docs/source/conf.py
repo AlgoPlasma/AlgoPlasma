@@ -12,7 +12,7 @@ import subprocess
 from pathlib import Path
 
 project = 'AlgoPlasma'
-copyright = '2025-2026, AlgoPlasma'
+copyright = '2026, Harbin Institute of Technology and AlgoPlasma contributors'
 author = 'AlgoPlasma'
 
 # -- General configuration ---------------------------------------------------
@@ -77,6 +77,8 @@ exclude_patterns = ["sphinx_rtd_theme"]
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_extra_path = ['../../LICENSE', '../../NOTICE']
+html_show_copyright = False
 
 breathe_default_members = ()
 
