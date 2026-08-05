@@ -38,8 +38,12 @@
     color: #fff;
 }
 
-.ap-lang-en {
+.ap-lang-zh {
     display: none;
+}
+
+.ap-lang-en {
+    display: block;
 }
 
 html[data-ap-lang="zh"] .ap-lang-zh {

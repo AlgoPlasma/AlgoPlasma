@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var storageKey = "ap-doc-language";
+  var storageKey = "ap-doc-language-github";
 
   function readStoredLanguage() {
     try {
@@ -110,7 +110,7 @@
       return;
     }
 
-    var initialLanguage = readStoredLanguage() || "zh";
+    var initialLanguage = readStoredLanguage() || "en";
     setLanguage(initialLanguage);
 
     Array.prototype.forEach.call(buttons, function (button) {
