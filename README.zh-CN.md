@@ -125,5 +125,5 @@ AlgoPlasma 采用 [Apache License 2.0](LICENSE) 开源许可证。版权和归�
 ## 发起人/联系人
 
 - 赵隐剑 / Yinjian Zhao
-- Email: zhaoyinjian0903@foxmail.com
+- Email: contact@algoplasma.com
 - Homepage: <https://homepage.hit.edu.cn/zhaoyinjian>
