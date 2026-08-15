@@ -1,5 +1,7 @@
 import numpy as np
 import scipy.constants as sc
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import textwrap
 from pathlib import Path

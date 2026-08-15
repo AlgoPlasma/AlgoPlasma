@@ -5,6 +5,8 @@ import os
 import re
 import statistics
 
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 

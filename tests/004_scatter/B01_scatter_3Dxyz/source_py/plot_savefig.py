@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from pathlib import Path
@@ -148,5 +150,4 @@ fig.colorbar(im4, ax=ax4, fraction=0.046, pad=0.04)
 plt.tight_layout()
 plt.savefig("./build/result_many.png", dpi=200)
 #plt.show()
-
 
