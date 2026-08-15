@@ -116,7 +116,7 @@ AlgoPlasma
      <section class="ap-home-footer-band">
       <p>欢迎贡献服务于等离子体科学的算法实现、案例测试、文档说明和结果验证。</p>
       <p class="ap-home-license">本项目采用 <a href="LICENSE">Apache License 2.0</a> 开源许可证；版权和归属信息见 <a href="NOTICE">NOTICE</a>。</p>
-      <p class="ap-home-contact">发起人：赵隐剑 · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
+      <p class="ap-home-contact">发起人：赵隐剑 · contact@algoplasma.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
    </div>
 
@@ -189,6 +189,6 @@ AlgoPlasma
      <section class="ap-home-footer-band">
       <p>Contributions are welcome for algorithm implementations, test cases, documentation, and result validation that serve plasma science.</p>
       <p class="ap-home-license">AlgoPlasma is licensed under the <a href="LICENSE">Apache License 2.0</a>; copyright and attribution information is available in <a href="NOTICE">NOTICE</a>.</p>
-      <p class="ap-home-contact">Initiator: Yinjian ZHAO · zhaoyinjian0903@foxmail.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
+      <p class="ap-home-contact">Initiator: Yinjian ZHAO · contact@algoplasma.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
    </div>
