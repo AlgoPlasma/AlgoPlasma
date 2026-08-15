@@ -1,6 +1,6 @@
 # A_Pusher
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `A_Pusher` 收集 AlgoPlasma 中的粒子推进算法，用于在给定电场、磁场、粒子电荷质量比和时间步长的条件下更新粒子速度或粒子相空间状态。当前目录包含三个粒子推进器，覆盖直角坐标、柱坐标和相对论速度推进场景。
 

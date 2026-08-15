@@ -1,6 +1,6 @@
 # B01_scatter_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 直角坐标三维 PIC 粒子沉积工具。该目录提供 CIC 数密度/物理量沉积、NGP
 单元方差统计，以及沉积后的 MPI ghost-cell 交换。

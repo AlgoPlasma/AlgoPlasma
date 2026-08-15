@@ -4,6 +4,8 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
 
 DATASETS = [
     ("amd", "AMD original", "#1f77b4", "o"),
@@ -153,10 +155,6 @@ def plot_relative_time(data: dict[str, list[dict[str, float]]], out_dir: Path) -
 
 
 def main() -> int:
-    import matplotlib
-
-    matplotlib.use("Agg")
-
     case_dir = Path(__file__).resolve().parents[1]
     root = repo_root(case_dir)
     out_dir = root / "docs" / "source" / "images" / "tests" / "kunpeng_compare" / "E_Maxwell_E03_fdtd_3d_cartesian"

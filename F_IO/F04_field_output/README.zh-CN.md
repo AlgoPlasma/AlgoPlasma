@@ -1,6 +1,6 @@
 # F04_field_output
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 写出每个 MPI rank 的本地场文件，支持 1D、3D 和 grid-to-cell 平均输出。
 

@@ -1,6 +1,6 @@
 # A01_Boris_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `A01_Boris_3Dxyz` 提供三维直角坐标中的非相对论 Boris 速度推进器。它在给定电场和磁场后，对单个粒子的速度 `v = (v_x, v_y, v_z)` 做一次完整更新。
 

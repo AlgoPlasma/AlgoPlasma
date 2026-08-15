@@ -1,6 +1,6 @@
 # D06_phi_to_E
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 使用二阶中心差分格式由静电势计算三个电场分量（E = -∇φ，dx = dy = dz = 1）。
 

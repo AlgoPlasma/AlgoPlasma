@@ -1,6 +1,6 @@
 # A02_Boris_3Drtz
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `A02_Boris_3Drtz` 提供三维柱坐标中的非相对论 Boris 粒子推进器。它会同时更新单个粒子的位置 `x = (r, theta, z)` 和速度 `v = (v_r, v_theta, v_z)`。
 

@@ -1,6 +1,6 @@
 # J01_continuity_freeflow
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `J01_continuity_freeflow` 使用三维 Lax-Friedrichs 有限体积格式推进自由流连续性方程。
 

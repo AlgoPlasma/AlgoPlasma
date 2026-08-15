@@ -1,6 +1,6 @@
 # B03_scatter_3Dxyz_bspline
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `B03_scatter_3Dxyz_bspline` 在三维直角坐标网格上执行任意阶 centered
 B-spline 粒子沉积。它与 `C_Gather/C02_gather_3Dxyz_bspline` 使用同一类

@@ -22,7 +22,7 @@ style.
 
 For a module or submodule update, aim to provide:
 
-- `README.zh-CN.md` and `README.md` for short repository browsing.
+- `README.zh-CN.md` and `README.en.md` for short repository browsing.
 - A bilingual Sphinx group or submodule page with a language switch.
 - Routine/API pages with Chinese usage notes and generated Doxygen API in the
   English language block.

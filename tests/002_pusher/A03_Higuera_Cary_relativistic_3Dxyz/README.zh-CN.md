@@ -1,6 +1,6 @@
 # A03_Higuera_Cary_relativistic_3Dxyz 测试
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 本目录提供 `A_Pusher/A03_Higuera_Cary_relativistic_3Dxyz` 的独立测试，用于验证三维直角坐标中的相对论 Higuera-Cary 粒子速度推进器。测试程序会编译一个小型 Fortran 驱动，运行相对论回旋和高 Lorentz 因子 `E x B` 漂移算例，并与解析解或参考容差对比。
 

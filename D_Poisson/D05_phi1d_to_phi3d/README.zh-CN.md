@@ -1,6 +1,6 @@
 # D05_phi1d_to_phi3d
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 将 HYPRE Poisson 求解器输出的一维解向量展开为含幽灵格点的三维数组，并对 phi 场进行 MPI halo 交换。
 

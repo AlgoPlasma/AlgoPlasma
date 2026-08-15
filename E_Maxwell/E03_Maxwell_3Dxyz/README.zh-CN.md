@@ -1,6 +1,6 @@
 # E03_Maxwell_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 3D Cartesian `(x,y,z)` Maxwell/FDTD 内核，包含标准 Yee curl 更新和 3D CPML 扩展。
 

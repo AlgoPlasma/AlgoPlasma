@@ -1,6 +1,6 @@
 # D04_hypre_3Draz_nonuniform
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 非均匀柱坐标 `(r,alpha,z)` 3D Poisson 求解器。它与 D03 使用同类 HYPRE Struct/PFMG 求解流程，但矩阵系数来自局部非均匀网格尺度。
 

@@ -1,6 +1,6 @@
 # G_collision
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `G_collision` 收集 AlgoPlasma 中的碰撞模型。当前实现为 `G01_MCC`，用于基于截面表的 Monte Carlo Collision (MCC) 采样。
 

@@ -3,6 +3,8 @@ import re
 import glob
 import os
 import statistics
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # ===================== 正则规则（兼容三类日志）=====================

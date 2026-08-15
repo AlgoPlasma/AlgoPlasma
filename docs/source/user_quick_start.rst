@@ -323,7 +323,7 @@ User Quick Start
 
          .. rubric:: Calling Other Modules
 
-         - Start with the module directory's ``README.md``.
+         - Start with the module directory's ``README.en.md``.
          - Then read the related test page for run commands and output meaning.
          - More complex modules may require MPI, HYPRE, HDF5, or Python plotting packages; use the module notes as the source of truth.
 

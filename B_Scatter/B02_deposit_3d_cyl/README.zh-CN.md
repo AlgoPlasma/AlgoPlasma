@@ -1,6 +1,6 @@
 # B02_deposit_3d_cyl
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 三维柱坐标 `(r, phi, z)` PIC 电荷密度与电流密度沉积工具。实现包含柱坐标
 节点体积归一化、`phi` 周期处理、`r=0` 轴线平均，以及跨单元轨迹切分。

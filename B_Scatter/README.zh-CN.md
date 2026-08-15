@@ -1,6 +1,6 @@
 # B_Scatter
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `B_Scatter` 收纳 AlgoPlasma 中从粒子到网格的沉积算子。
 

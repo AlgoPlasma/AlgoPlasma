@@ -1,6 +1,6 @@
 # D03_hypre_3Draz_uniform
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 均匀柱坐标 `(r,alpha,z)` 3D Poisson 求解器。它使用 HYPRE Struct/PFMG 求解由 D03 组装例程生成的 7 点邻接系统。
 

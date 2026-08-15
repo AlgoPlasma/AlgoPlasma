@@ -1,6 +1,6 @@
 # F01_par_load
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 读取每个 MPI rank 的粒子文件到 `par(:,1:np)`。
 

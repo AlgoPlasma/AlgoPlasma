@@ -1,6 +1,6 @@
 # J_Fluid
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `J_Fluid` 放置 AlgoPlasma 的流体方程更新例程。
 

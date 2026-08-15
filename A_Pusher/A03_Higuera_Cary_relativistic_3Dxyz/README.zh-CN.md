@@ -1,6 +1,6 @@
 # A03_Higuera_Cary_relativistic_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 `A03_Higuera_Cary_relativistic_3Dxyz` 提供三维直角坐标中的相对论 Higuera-Cary 速度推进器。它在给定电场和磁场后推进粒子速度，并考虑相对论修正。
 
