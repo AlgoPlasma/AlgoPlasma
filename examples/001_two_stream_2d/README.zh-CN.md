@@ -22,9 +22,41 @@ AlgoPlasma 组件组装成面向具体应用的时间推进程序。算例使用
 ## 编译与运行
 
 算例依赖 GNU Fortran、CMake、MPI、HYPRE 3.1 或更高版本，以及
-NumPy、SciPy 和 Matplotlib。首次编译前，需要将 `CMakeLists.txt`
-开头附近的 `HYPRE_ROOT` 修改为本地 HYPRE 的安装路径。在 WSL 或
-Linux 中运行：
+NumPy、SciPy 和 Matplotlib。
+
+一种已经测试通过的 HYPRE 安装方式是从
+<https://github.com/hypre-space/hypre> 下载 HYPRE，并将 `hypre/`
+目录与 `algoplasma/` 目录平行放置：
+
+```text
+parent/
+├── algoplasma/
+└── hypre/
+```
+
+然后编译并安装 HYPRE：
+
+```bash
+cd hypre/src
+./configure
+make install -j 8
+```
+
+其中 `-j 8` 表示使用 8 个 CPU 核心并行编译。安装完成后，进入本算例目录运行：
+
+```bash
+cd ../../algoplasma/examples/001_two_stream_2d
+./run.sh
+```
+
+在上述平行目录结构下，`run.sh` 会自动使用 `hypre/src/hypre` 下的
+HYPRE 安装路径。如果 HYPRE 安装在其他位置，可显式指定安装前缀：
+
+```bash
+HYPRE_ROOT=/path/to/hypre/src/hypre ./run.sh
+```
+
+如果已经位于 AlgoPlasma 仓库根目录，则通常直接运行：
 
 ```bash
 cd examples/001_two_stream_2d
@@ -44,5 +76,5 @@ bash run.sh
 如需删除编译文件、模拟输出和生成的图片，使算例恢复到初始状态，可运行：
 
 ```bash
-bash clean.sh
+./clean.sh
 ```

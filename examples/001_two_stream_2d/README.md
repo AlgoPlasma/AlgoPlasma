@@ -24,9 +24,43 @@ perturbation of 0.5%.
 ## Build and run
 
 Requirements are GNU Fortran, CMake, MPI, HYPRE 3.1 or later, NumPy,
-SciPy, and Matplotlib. Before the first build, change `HYPRE_ROOT` near the
-top of `CMakeLists.txt` to the local HYPRE installation prefix. From WSL or
-Linux, run:
+SciPy, and Matplotlib.
+
+A tested HYPRE setup is to download HYPRE from
+<https://github.com/hypre-space/hypre> and place the `hypre/` directory next
+to the `algoplasma/` directory:
+
+```text
+parent/
+├── algoplasma/
+└── hypre/
+```
+
+Then build and install HYPRE with:
+
+```bash
+cd hypre/src
+./configure
+make install -j 8
+```
+
+Here `-j 8` uses 8 CPU cores for parallel compilation. After installation,
+enter this example and run:
+
+```bash
+cd ../../algoplasma/examples/001_two_stream_2d
+./run.sh
+```
+
+With the sibling-directory layout above, `run.sh` automatically uses the HYPRE
+installation under `hypre/src/hypre`. If HYPRE is installed elsewhere, pass the
+installation prefix explicitly:
+
+```bash
+HYPRE_ROOT=/path/to/hypre/src/hypre ./run.sh
+```
+
+If you are already inside the AlgoPlasma repository, the usual command is:
 
 ```bash
 cd examples/001_two_stream_2d
@@ -50,5 +84,5 @@ To remove the generated build, simulation output, and figure files and
 return the example to its initial state, run:
 
 ```bash
-bash clean.sh
+./clean.sh
 ```

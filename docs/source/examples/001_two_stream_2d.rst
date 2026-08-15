@@ -130,8 +130,39 @@
    .. rubric:: 编译、运行与输出
 
    本示例需要 GNU Fortran、CMake、MPI、HYPRE 3.1 或更高版本，以及 NumPy、
-   SciPy 和 Matplotlib。首次编译前，将 ``CMakeLists.txt`` 中的 ``HYPRE_ROOT``
-   设置为本地 HYPRE 安装前缀。随后在 Linux 或 WSL 中执行：
+   SciPy 和 Matplotlib。一种已经测试通过的 HYPRE 安装方式是从
+   `HYPRE GitHub 仓库 <https://github.com/hypre-space/hypre>`__ 下载源码，
+   并将 ``hypre/`` 目录与 ``algoplasma/`` 目录平行放置：
+
+   .. code-block:: text
+
+      parent/
+      ├── algoplasma/
+      └── hypre/
+
+   然后编译并安装 HYPRE：
+
+   .. code-block:: bash
+
+      cd hypre/src
+      ./configure
+      make install -j 8
+
+   其中 ``-j 8`` 表示使用 8 个 CPU 核心并行编译。安装完成后，进入本示例目录运行：
+
+   .. code-block:: bash
+
+      cd ../../algoplasma/examples/001_two_stream_2d
+      ./run.sh
+
+   在上述平行目录结构下，``run.sh`` 会自动使用 ``hypre/src/hypre`` 下的
+   HYPRE 安装路径。如果 HYPRE 安装在其他位置，可显式指定安装前缀：
+
+   .. code-block:: bash
+
+      HYPRE_ROOT=/path/to/hypre/src/hypre ./run.sh
+
+   如果已经位于 AlgoPlasma 仓库根目录，则通常直接执行：
 
    .. code-block:: bash
 
@@ -149,7 +180,7 @@
 
    .. code-block:: bash
 
-      bash clean.sh
+      ./clean.sh
 
    .. rubric:: 参考结果
 
@@ -352,9 +383,41 @@
    .. rubric:: Build, Run, and Outputs
 
    The example requires GNU Fortran, CMake, MPI, HYPRE 3.1 or later, NumPy,
-   SciPy, and Matplotlib. Before the first build, set ``HYPRE_ROOT`` in
-   ``CMakeLists.txt`` to the local HYPRE installation prefix. Then run from
-   Linux or WSL:
+   SciPy, and Matplotlib. One tested HYPRE setup is to download HYPRE from
+   the `HYPRE GitHub repository <https://github.com/hypre-space/hypre>`__ and
+   place the ``hypre/`` directory next to the ``algoplasma/`` directory:
+
+   .. code-block:: text
+
+      parent/
+      ├── algoplasma/
+      └── hypre/
+
+   Then build and install HYPRE with:
+
+   .. code-block:: bash
+
+      cd hypre/src
+      ./configure
+      make install -j 8
+
+   Here ``-j 8`` uses 8 CPU cores for parallel compilation. After installation,
+   enter this example and run:
+
+   .. code-block:: bash
+
+      cd ../../algoplasma/examples/001_two_stream_2d
+      ./run.sh
+
+   With the sibling-directory layout above, ``run.sh`` automatically uses the
+   HYPRE installation under ``hypre/src/hypre``. If HYPRE is installed
+   elsewhere, pass the installation prefix explicitly:
+
+   .. code-block:: bash
+
+      HYPRE_ROOT=/path/to/hypre/src/hypre ./run.sh
+
+   If you are already inside the AlgoPlasma repository, the usual command is:
 
    .. code-block:: bash
 
@@ -375,7 +438,7 @@
 
    .. code-block:: bash
 
-      bash clean.sh
+      ./clean.sh
 
    .. rubric:: Reference Results
 

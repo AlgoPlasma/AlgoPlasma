@@ -4,12 +4,25 @@ project(algoplasma_two_stream LANGUAGES C Fortran)
 find_package(MPI REQUIRED COMPONENTS Fortran)
 
 # User configuration: set this to the local HYPRE installation prefix.
-set(HYPRE_ROOT "/opt/hypre-3.1.0" CACHE PATH "HYPRE installation prefix")
-find_package(HYPRE 3.1 CONFIG REQUIRED
-    PATHS
-        "${HYPRE_ROOT}/lib/cmake/HYPRE"
-        "${HYPRE_ROOT}/lib64/cmake/HYPRE"
+set(HYPRE_ROOT "" CACHE PATH "HYPRE installation prefix")
+find_path(HYPRE_INCLUDE_DIR
+    NAMES HYPRE.h
+    PATHS "${HYPRE_ROOT}/include"
     NO_DEFAULT_PATH)
+
+find_library(HYPRE_LIBRARY
+    NAMES HYPRE
+    PATHS "${HYPRE_ROOT}/lib"
+    NO_DEFAULT_PATH)
+
+if(NOT HYPRE_INCLUDE_DIR OR NOT HYPRE_LIBRARY)
+    message(FATAL_ERROR "Could not find HYPRE under HYPRE_ROOT=${HYPRE_ROOT}")
+endif()
+
+add_library(HYPRE::HYPRE UNKNOWN IMPORTED)
+set_target_properties(HYPRE::HYPRE PROPERTIES
+    IMPORTED_LOCATION "${HYPRE_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${HYPRE_INCLUDE_DIR}")
 
 get_filename_component(DEFAULT_ALGOPLASMA_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
 set(ALGOPLASMA_ROOT "${DEFAULT_ALGOPLASMA_ROOT}" CACHE PATH "AlgoPlasma source root")
