@@ -1,0 +1,366 @@
+sub_E02_fdtd_3d_cylindrical_E.f90
+----------------------------------
+
+.. raw:: html
+
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
+   </div>
+
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 直接用途
+
+   在三维柱坐标 ``r-phi-z`` Yee 网格上，用 ``Hr/Hphi/Hz`` 更新 ``Er/Ephi/Ez``。
+
+   .. rubric:: 参数表
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 10 25 33 22 38
+
+      * - 参数
+        - 方向
+        - shape / 范围
+        - 含义
+        - 单位 / 归一化
+        - 索引 / ghost-cell 要求
+      * - ``ilo_f``
+        - ``in``
+        - ``integer scalar``
+        - 场数组第一维下界
+        - 整数下标
+        - 声明所有场数组和 CPML 数组的有效下标边界。
+      * - ``ihi_f``
+        - ``in``
+        - ``integer scalar``
+        - 场数组第一维上界
+        - 整数下标
+        - 声明所有场数组和 CPML 数组的有效下标边界。
+      * - ``jlo_f``
+        - ``in``
+        - ``integer scalar``
+        - 场数组第二维下界
+        - 整数下标
+        - 声明所有场数组和 CPML 数组的有效下标边界。
+      * - ``jhi_f``
+        - ``in``
+        - ``integer scalar``
+        - 场数组第二维上界
+        - 整数下标
+        - 声明所有场数组和 CPML 数组的有效下标边界。
+      * - ``klo_f``
+        - ``in``
+        - ``integer scalar``
+        - 场数组 z 方向下界
+        - 整数下标
+        - 声明所有场数组和 CPML 数组的有效下标边界。
+      * - ``khi_f``
+        - ``in``
+        - ``integer scalar``
+        - 场数组 z 方向上界
+        - 整数下标
+        - 声明所有场数组和 CPML 数组的有效下标边界。
+      * - ``il``
+        - ``in``
+        - ``integer scalar``
+        - 第一维更新下界
+        - 整数下标
+        - 更新区间必须落在声明边界内，并给差分访问留出相邻点。
+      * - ``iu``
+        - ``in``
+        - ``integer scalar``
+        - 第一维更新上界
+        - 整数下标
+        - 更新区间必须落在声明边界内，并给差分访问留出相邻点。
+      * - ``jl``
+        - ``in``
+        - ``integer scalar``
+        - 第二维更新下界
+        - 整数下标
+        - 更新区间必须落在声明边界内，并给差分访问留出相邻点。
+      * - ``ju``
+        - ``in``
+        - ``integer scalar``
+        - 第二维更新上界
+        - 整数下标
+        - 更新区间必须落在声明边界内，并给差分访问留出相邻点。
+      * - ``kl``
+        - ``in``
+        - ``integer scalar``
+        - z 方向更新下界
+        - 整数下标
+        - 更新区间必须落在声明边界内，并给差分访问留出相邻点。
+      * - ``ku``
+        - ``in``
+        - ``integer scalar``
+        - z 方向更新上界
+        - 整数下标
+        - 更新区间必须落在声明边界内，并给差分访问留出相邻点。
+      * - ``Er``
+        - ``in/out``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - 径向电场分量
+        - 调用者归一化下的场值
+        - 按 ``*_f`` 边界声明；调用者需提前填好差分会访问的相邻/ghost cell。
+      * - ``Ephi``
+        - ``in/out``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - 方位角电场分量
+        - 调用者归一化下的场值
+        - 按 ``*_f`` 边界声明；调用者需提前填好差分会访问的相邻/ghost cell。
+      * - ``Ez``
+        - ``in/out``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - z/轴向电场分量
+        - 调用者归一化下的场值
+        - 按 ``*_f`` 边界声明；调用者需提前填好差分会访问的相邻/ghost cell。
+      * - ``Hr``
+        - ``in``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - 径向磁场分量
+        - 调用者归一化下的场值
+        - 按 ``*_f`` 边界声明；调用者需提前填好差分会访问的相邻/ghost cell。
+      * - ``Hphi``
+        - ``in``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - 方位角磁场分量
+        - 调用者归一化下的场值
+        - 按 ``*_f`` 边界声明；调用者需提前填好差分会访问的相邻/ghost cell。
+      * - ``Hz``
+        - ``in``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - z/轴向磁场分量
+        - 调用者归一化下的场值
+        - 按 ``*_f`` 边界声明；调用者需提前填好差分会访问的相邻/ghost cell。
+      * - ``dt``
+        - ``in``
+        - ``real scalar``
+        - 时间步长
+        - 调用者单位的时间步长
+        - 本例程只使用传入标量，不读取全局设置。
+      * - ``dr``
+        - ``in``
+        - ``real scalar``
+        - 径向网格间距
+        - 调用者单位的长度
+        - 本例程只使用传入标量，不读取全局设置。
+      * - ``dphi``
+        - ``in``
+        - ``real scalar``
+        - 方位角网格间距
+        - 角度间距，按调用者约定
+        - 本例程只使用传入标量，不读取全局设置。
+      * - ``dz``
+        - ``in``
+        - ``real scalar``
+        - z 方向网格间距
+        - 调用者单位的长度
+        - 本例程只使用传入标量，不读取全局设置。
+      * - ``ep``
+        - ``in``
+        - ``real scalar``
+        - 介电常数
+        - 调用者归一化下的介电常数
+        - 本例程只使用传入标量，不读取全局设置。
+
+   .. rubric:: 局部假设 / 前置条件
+
+   - 网格是三维柱坐标 ``r-phi-z`` Yee staggered 布局；``dphi`` 按调用者的角度间距约定传入。
+   - 所有步长、介质参数和数组边界都由调用者传入；本例程不假设全局 ``dx=1``、``dt=1`` 或固定 real kind。
+   - 本例程只更新指定的局部范围；不做 MPI exchange、外边界条件、源项注入或粒子电流沉积。
+   - 若差分使用 ``j-1`` 或 ``j+1``，方位角/横向边界的 periodic 或 ghost cell 必须在调用前处理好。
+   - 径向轴线 ``i=0`` 有源码中明确的闭合分支；不要在上层再把它当作普通径向内点处理。
+
+   .. rubric:: 实现逻辑
+
+   - 若更新范围包含 ``i=0``，先沿 ``phi`` 平均 ``Hphi(0,j,k)`` 得到轴线闭合量。
+   - 随后分别更新 ``Er``、``Ephi``、``Ez``；``Ephi(0,j,k)`` 取 ``Er(0,j,k)``，``Ez`` 轴线使用平均后的 ``Hphi``。
+
+   .. rubric:: 调用注意
+
+   - 调用者负责维持 Yee leapfrog 时间层关系；本例程只完成一次局部场更新。
+   - 传入的更新范围要与场数组 stagger 位置一致，否则可能在边界处读到未定义相邻点。
+   - 包含 ``i=0`` 时要确认径向轴线确实在本地数组中；若本地 MPI 子域不含轴线，不应把局部下标 0 误当物理轴线。
+
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Direct Purpose
+
+   Updates ``Er/Ephi/Ez`` from ``Hr/Hphi/Hz`` on a 3D cylindrical ``r-phi-z`` Yee grid.
+
+   .. rubric:: Parameter Table
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 10 25 33 22 38
+
+      * - Parameter
+        - Direction
+        - Shape / Range
+        - Meaning
+        - Units / Normalization
+        - Index / ghost-cell requirement
+      * - ``ilo_f``
+        - ``in``
+        - ``integer scalar``
+        - lower ``r`` index bound of field arrays.
+        - integer index
+        - Defines valid bounds for field and CPML arrays.
+      * - ``ihi_f``
+        - ``in``
+        - ``integer scalar``
+        - upper ``r`` index bound of field arrays.
+        - integer index
+        - Defines valid bounds for field and CPML arrays.
+      * - ``jlo_f``
+        - ``in``
+        - ``integer scalar``
+        - lower ``phi`` index bound of field arrays.
+        - integer index
+        - Defines valid bounds for field and CPML arrays.
+      * - ``jhi_f``
+        - ``in``
+        - ``integer scalar``
+        - upper ``phi`` index bound of field arrays.
+        - integer index
+        - Defines valid bounds for field and CPML arrays.
+      * - ``klo_f``
+        - ``in``
+        - ``integer scalar``
+        - lower ``z`` index bound of field arrays.
+        - integer index
+        - Defines valid bounds for field and CPML arrays.
+      * - ``khi_f``
+        - ``in``
+        - ``integer scalar``
+        - upper ``z`` index bound of field arrays.
+        - integer index
+        - Defines valid bounds for field and CPML arrays.
+      * - ``il``
+        - ``in``
+        - ``integer scalar``
+        - lower update ``r`` index.
+        - integer index
+        - Update range must stay inside declared bounds and leave needed neighbor cells available.
+      * - ``iu``
+        - ``in``
+        - ``integer scalar``
+        - upper update ``r`` index.
+        - integer index
+        - Update range must stay inside declared bounds and leave needed neighbor cells available.
+      * - ``jl``
+        - ``in``
+        - ``integer scalar``
+        - lower update ``phi`` index.
+        - integer index
+        - Update range must stay inside declared bounds and leave needed neighbor cells available.
+      * - ``ju``
+        - ``in``
+        - ``integer scalar``
+        - upper update ``phi`` index.
+        - integer index
+        - Update range must stay inside declared bounds and leave needed neighbor cells available.
+      * - ``kl``
+        - ``in``
+        - ``integer scalar``
+        - lower update ``z`` index.
+        - integer index
+        - Update range must stay inside declared bounds and leave needed neighbor cells available.
+      * - ``ku``
+        - ``in``
+        - ``integer scalar``
+        - upper update ``z`` index.
+        - integer index
+        - Update range must stay inside declared bounds and leave needed neighbor cells available.
+      * - ``Er``
+        - ``in/out``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - radial electric field.
+        - field value in caller normalization
+        - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
+      * - ``Ephi``
+        - ``in/out``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - azimuthal electric field.
+        - field value in caller normalization
+        - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
+      * - ``Ez``
+        - ``in/out``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - axial electric field.
+        - field value in caller normalization
+        - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
+      * - ``Hr``
+        - ``in``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - radial magnetic field.
+        - field value in caller normalization
+        - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
+      * - ``Hphi``
+        - ``in``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - azimuthal magnetic field.
+        - field value in caller normalization
+        - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
+      * - ``Hz``
+        - ``in``
+        - ``real(ilo_f:ihi_f,jlo_f:jhi_f,klo_f:khi_f)``
+        - axial magnetic field.
+        - field value in caller normalization
+        - Array bounds follow ``*_f``; caller must provide neighboring or ghost cells touched by finite differences.
+      * - ``dt``
+        - ``in``
+        - ``real scalar``
+        - time step.
+        - time step in caller units
+        - Used exactly as passed; no global spacing or material state is read.
+      * - ``dr``
+        - ``in``
+        - ``real scalar``
+        - radial grid spacing.
+        - length in caller units
+        - Used exactly as passed; no global spacing or material state is read.
+      * - ``dphi``
+        - ``in``
+        - ``real scalar``
+        - azimuthal grid spacing.
+        - angular spacing in caller convention
+        - Used exactly as passed; no global spacing or material state is read.
+      * - ``dz``
+        - ``in``
+        - ``real scalar``
+        - axial grid spacing.
+        - length in caller units
+        - Used exactly as passed; no global spacing or material state is read.
+      * - ``ep``
+        - ``in``
+        - ``real scalar``
+        - permittivity.
+        - permittivity in caller normalization
+        - Used exactly as passed; no global spacing or material state is read.
+
+   .. rubric:: Local Assumptions / Preconditions
+
+   - The grid is a 3D cylindrical ``r-phi-z`` Yee-staggered layout; ``dphi`` is the caller-provided angular spacing.
+   - All spacings, material parameters, and bounds are passed explicitly; the routine assumes no global ``dx=1``, ``dt=1``, or fixed real kind.
+   - Only the requested local range is modified; MPI exchange, external boundary conditions, sources, and current deposition are outside this routine.
+   - Any periodic or ghost values used by ``j-1``/``j+1`` differences must be prepared by the caller.
+   - The radial axis ``i=0`` has explicit closure branches in the source and should not be treated as an ordinary interior radial point by the caller.
+
+   .. rubric:: Implementation Notes
+
+   - If the update range contains ``i=0``, averages ``Hphi(0,j,k)`` over ``phi`` for the axis closure.
+   - Then updates ``Er``, ``Ephi``, and ``Ez``; ``Ephi(0,j,k)`` is assigned from ``Er(0,j,k)`` and ``Ez`` uses the averaged axis term.
+
+   .. rubric:: Calling Notes
+
+   - The caller maintains the Yee leapfrog time staggering; this routine performs only one local field update.
+   - The update range must match the staggered locations of the fields so boundary neighbors are defined.
+   - When ``i=0`` is included, ensure it is the physical radial axis in the local array; an MPI-local index should not be mistaken for the axis.
+
+   .. rubric:: Generated API
+
+   .. doxygenfile:: sub_E02_fdtd_3d_cylindrical_E.f90

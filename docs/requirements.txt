@@ -1,0 +1,6 @@
+sphinx_rtd_theme
+breathe
+myst-parser
+sphinxcontrib.katex
+sphinx-copybutton
+matplotlib

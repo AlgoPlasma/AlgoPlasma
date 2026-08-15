@@ -1,0 +1,108 @@
+sub_F03_field_load_3d_bin.f90
+-----------------------------
+
+.. raw:: html
+
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
+   </div>
+
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 直接用途
+
+   ``sub_F03_field_load_3d_bin`` 从文件读取一维或三维场数组 ``F`` 到调用方给定的索引范围。
+
+   .. rubric:: 参数表
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 18 10 24 48
+
+      * - 参数
+        - 方向
+        - shape/范围
+        - 含义与局部约定
+      * - ``label``
+        - in
+        - scalar or caller-provided array
+        - 文件目录名和文件名前缀；通常是简单名字，不应包含路径分隔符。
+      * - ``it``
+        - in
+        - scalar or caller-provided array
+        - 时间步或迭代编号，会按固定宽度编码到文件名中。
+      * - ``il``
+        - in
+        - ``(1:3)``
+        - 本地 active cell 下界索引。
+      * - ``iu``
+        - in
+        - ``(1:3)``
+        - 本地 active cell 上界索引。
+      * - ``F``
+        - out
+        - field array on caller index range
+        - 场数组；读写或交换范围由 ``il``/``iu`` 和 ghost cell 约定决定。
+
+   .. rubric:: 局部假设
+
+   I/O 例程不改变数据物理含义，只按约定文件名和数组内存顺序读写。raw ``.bin`` 文件使用默认 Fortran ``real`` 的 stream 数据；读写双方必须使用一致的实数精度、端序和数组 shape。HDF5 入口依赖 ``USE_HDF5`` 构建宏和 HDF5 模块。
+
+   .. rubric:: 实现逻辑
+
+   实现使用 Fortran stream unformatted I/O，不写 record marker；文件 payload 直接对应数组切片的列优先内存顺序。
+
+   .. rubric:: 调用注意
+
+   本页只说明该例程本身的调用边界和实现事实；完整接口声明和源码级 API 仍以英文侧的 generated API 为准。
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Direct Purpose
+
+   ``sub_F03_field_load_3d_bin`` load a 3D cell-centered field from per-rank binary files.
+
+   .. rubric:: Parameter Table
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 18 10 24 48
+
+      * - Parameter
+        - Direction
+        - Shape/range
+        - Meaning and local convention
+      * - ``label``
+        - in
+        - scalar or caller-provided array
+        - character(*), input directory and file name prefix; should be a simple name and must
+          not contain ``/``.
+      * - ``it``
+        - in
+        - scalar or caller-provided array
+        - integer, time step index encoded in the file name.
+      * - ``il``
+        - in
+        - ``(1:3)``
+        - integer (1:3), cell-centered lower indices in x,y,z.
+      * - ``iu``
+        - in
+        - ``(1:3)``
+        - integer (1:3), cell-centered upper indices in x,y,z.
+      * - ``F``
+        - out
+        - field array on caller index range
+        - real (il(1):iu(1),il(2):iu(2),il(3):iu(3)), loaded field.
+
+   .. rubric:: Local Assumptions
+
+   I/O routines do not change the physical meaning of data; they only read or write arrays using the naming and memory-order conventions. Raw ``.bin`` files store default Fortran ``real`` stream data, so readers and writers must agree on real kind, endianness, and array shape. HDF5 entries depend on the ``USE_HDF5`` build macro and HDF5 module.
+
+   .. rubric:: Implementation Notes
+
+   The implementation uses Fortran stream unformatted I/O without record markers. The payload follows the column-major memory order of the array slice.
+
+   .. rubric:: Generated API
+
+   .. doxygenfile:: sub_F03_field_load_3d_bin.f90
