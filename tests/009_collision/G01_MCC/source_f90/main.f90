@@ -19,6 +19,6 @@ program test_cross_section_loader
 
 contains
 
-#include "G_collision/G01_MCC/sub_G01_load_cross_section.f90"
+#include "G_Collision/G01_MCC/sub_G01_load_cross_section.f90"
 
 end program test_cross_section_loader

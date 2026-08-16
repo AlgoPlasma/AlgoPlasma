@@ -40,7 +40,7 @@ subroutine sub_G01_load_cross_section(Nmax,cross_section,path)
         if (i > Nmax) then
             write(*,*) "ERROR: i > Nmax in sub_G01_load_cross_section."
             write(*,*) "- Use a larger Nmax."
-            stop
+            stop 1
         end if
 
         cross_section(1:2,i) = row

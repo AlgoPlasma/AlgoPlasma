@@ -50,7 +50,7 @@ Documentation Checklist
 
    .. code-block:: bash
 
-      find A_Pusher B_Scatter C_Gather D_Poisson E_Maxwell F_IO G_collision H_MPI_Exchange I_Initializer J_Fluid \
+      find A_Pusher B_Scatter C_Gather D_Poisson E_Maxwell F_IO G_Collision H_MPI_Exchange I_Initializer J_Fluid \
         -name README.md -print
 
    .. rubric:: 脚本化建议
@@ -103,7 +103,7 @@ Documentation Checklist
 
    .. code-block:: bash
 
-      find A_Pusher B_Scatter C_Gather D_Poisson E_Maxwell F_IO G_collision H_MPI_Exchange I_Initializer J_Fluid \
+      find A_Pusher B_Scatter C_Gather D_Poisson E_Maxwell F_IO G_Collision H_MPI_Exchange I_Initializer J_Fluid \
         -name README.md -print
 
    .. rubric:: Script Idea
