@@ -109,7 +109,7 @@ G01_MCC
 
    激发直接扣除激发阈值；电离把剩余能量在保留电子和新电子之间平均分配。
 
-   .. figure:: ../../images/G_collision/G01_MCC_scatterangle.png
+   .. figure:: ../../images/G_Collision/G01_MCC_scatterangle.png
       :align: center
       :width: 50%
       :name: G01_MCC_scatterangle
@@ -242,7 +242,7 @@ G01_MCC
    Excitation subtracts the excitation threshold directly. Ionization splits the
    remaining energy equally between the retained electron and the new electron.
 
-   .. figure:: ../../images/G_collision/G01_MCC_scatterangle.png
+   .. figure:: ../../images/G_Collision/G01_MCC_scatterangle.png
       :align: center
       :width: 50%
       :name: G01_MCC_scatterangle_en
