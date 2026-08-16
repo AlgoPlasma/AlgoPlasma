@@ -13,6 +13,7 @@ Tests
    006_initializer/index
    007_gather/index
    008_mpi_exchange/index
+   009_collision/index
    kunpeng_compare/index
 
 .. raw:: html
@@ -69,6 +70,10 @@ Tests
         - H_MPI_Exchange 的 4-rank 小算例 MPI 回归测试。
         - :doc:`H_MPI_Exchange </rst_files/H_MPI_Exchange>`
         - :doc:`008_mpi_exchange 测试总览 <008_mpi_exchange/index>`
+      * - ``009_collision``
+        - G_Collision 截面表加载器的数组边界回归测试。
+        - :doc:`G_Collision </rst_files/G_Collision>`
+        - :doc:`009_collision 测试总览 <009_collision/index>`
       * - ``kunpeng_compare``
         - 鲲鹏相关的平台/编译器性能对比测试。
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -76,7 +81,8 @@ Tests
 
    .. rubric:: 覆盖状态说明
 
-   当前仓库中，``G_collision`` 和 ``J_Fluid`` 没有独立的顶层 ``tests/`` 回归目录。
+   ``G_Collision`` 当前由 ``tests/009_collision`` 覆盖截面表加载器的数组边界行为，
+   尚不包含完整 MCC 物理验证。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；
    ``H_MPI_Exchange`` 已由 ``tests/008_mpi_exchange`` 覆盖。
 
 .. container:: ap-lang ap-lang-en
@@ -129,6 +135,10 @@ Tests
         - 4-rank small-case MPI regression tests for H_MPI_Exchange.
         - :doc:`H_MPI_Exchange </rst_files/H_MPI_Exchange>`
         - :doc:`008_mpi_exchange test overview <008_mpi_exchange/index>`
+      * - ``009_collision``
+        - Array-bound regression tests for the G_Collision cross-section loader.
+        - :doc:`G_Collision </rst_files/G_Collision>`
+        - :doc:`009_collision test overview <009_collision/index>`
       * - ``kunpeng_compare``
         - Kunpeng-related platform and compiler performance comparisons.
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -136,6 +146,7 @@ Tests
 
    .. rubric:: Coverage Notes
 
-   The current repository has no standalone top-level ``tests/`` regression
-   directory for ``G_collision`` or ``J_Fluid``.  ``H_MPI_Exchange`` is covered
-   by ``tests/008_mpi_exchange``.
+   ``G_Collision`` currently has array-bound coverage for its cross-section
+   loader under ``tests/009_collision``; this is not a complete MCC physics
+   validation. ``J_Fluid`` has no standalone top-level regression directory.
+   ``H_MPI_Exchange`` is covered by ``tests/008_mpi_exchange``.

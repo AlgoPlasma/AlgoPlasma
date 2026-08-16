@@ -85,7 +85,7 @@ AlgoPlasma
          <a class="ap-module-card" style="--accent:#d9822b" href="rst_files/D_Poisson.html"><strong>D_Poisson</strong><span>Poisson 求解</span></a>
          <a class="ap-module-card" style="--accent:#1f9bb4" href="rst_files/E_Maxwell.html"><strong>E_Maxwell</strong><span>Maxwell</span></a>
          <a class="ap-module-card" style="--accent:#5964d8" href="rst_files/F_IO.html"><strong>F_IO</strong><span>数据输入输出</span></a>
-         <a class="ap-module-card" style="--accent:#c94c4c" href="rst_files/G_collision.html"><strong>G_collision</strong><span>碰撞模型</span></a>
+         <a class="ap-module-card" style="--accent:#c94c4c" href="rst_files/G_Collision.html"><strong>G_Collision</strong><span>碰撞模型</span></a>
          <a class="ap-module-card" style="--accent:#178f66" href="rst_files/H_MPI_Exchange.html"><strong>H_MPI_Exchange</strong><span>MPI 数据交换</span></a>
          <a class="ap-module-card" style="--accent:#b7791f" href="rst_files/I_Initializer.html"><strong>I_Initializer</strong><span>初始化</span></a>
          <a class="ap-module-card" style="--accent:#4a78a6" href="rst_files/J_Fluid.html"><strong>J_Fluid</strong><span>流体算法</span></a>
@@ -159,7 +159,7 @@ AlgoPlasma
          <a class="ap-module-card" style="--accent:#d9822b" href="rst_files/D_Poisson.html"><strong>D_Poisson</strong><span>Poisson solvers</span></a>
          <a class="ap-module-card" style="--accent:#1f9bb4" href="rst_files/E_Maxwell.html"><strong>E_Maxwell</strong><span>Maxwell</span></a>
          <a class="ap-module-card" style="--accent:#5964d8" href="rst_files/F_IO.html"><strong>F_IO</strong><span>Data input and output</span></a>
-         <a class="ap-module-card" style="--accent:#c94c4c" href="rst_files/G_collision.html"><strong>G_collision</strong><span>Collision models</span></a>
+         <a class="ap-module-card" style="--accent:#c94c4c" href="rst_files/G_Collision.html"><strong>G_Collision</strong><span>Collision models</span></a>
          <a class="ap-module-card" style="--accent:#178f66" href="rst_files/H_MPI_Exchange.html"><strong>H_MPI_Exchange</strong><span>MPI data exchange</span></a>
          <a class="ap-module-card" style="--accent:#b7791f" href="rst_files/I_Initializer.html"><strong>I_Initializer</strong><span>Initialization</span></a>
          <a class="ap-module-card" style="--accent:#4a78a6" href="rst_files/J_Fluid.html"><strong>J_Fluid</strong><span>Fluid algorithms</span></a>

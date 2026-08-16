@@ -1,8 +1,8 @@
-# G_collision
+# G_Collision
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`G_collision` contains collision models used by AlgoPlasma. The current implementation
+`G_Collision` contains collision models used by AlgoPlasma. The current implementation
 is `G01_MCC`, a tabulated-cross-section Monte Carlo Collision (MCC) module.
 
 ## Subdirectories
@@ -17,5 +17,5 @@ is `G01_MCC`, a tabulated-cross-section Monte Carlo Collision (MCC) module.
 
 ## Documentation
 
-Full formulas, workflow notes, and API pages live in the Sphinx `G_collision` /
+Full formulas, workflow notes, and API pages live in the Sphinx `G_Collision` /
 `G01_MCC` documentation.
