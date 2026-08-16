@@ -128,7 +128,7 @@ User Quick Start
            - :doc:`A_Pusher <rst_files/A_Pusher>`
            - ``A01_Boris_3Dxyz``，``A02_Boris_3Drtz``，``A03_Higuera_Cary_relativistic_3Dxyz``
          * - 碰撞
-           - :doc:`G_collision <rst_files/G_collision>`
+           - :doc:`G_Collision <rst_files/G_Collision>`
            - ``G01_MCC``
          * - 粒子沉积到网格
            - :doc:`B_Scatter <rst_files/B_Scatter>`
@@ -296,7 +296,7 @@ User Quick Start
            - :doc:`A_Pusher <rst_files/A_Pusher>`
            - ``A01_Boris_3Dxyz``, ``A02_Boris_3Drtz``, ``A03_Higuera_Cary_relativistic_3Dxyz``
          * - Collisions
-           - :doc:`G_collision <rst_files/G_collision>`
+           - :doc:`G_Collision <rst_files/G_Collision>`
            - ``G01_MCC``
          * - Deposit particles to grid
            - :doc:`B_Scatter <rst_files/B_Scatter>`

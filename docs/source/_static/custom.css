@@ -38,6 +38,10 @@
     color: #fff;
 }
 
+.ap-lang-zh {
+    display: block;
+}
+
 .ap-lang-en {
     display: none;
 }

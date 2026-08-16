@@ -14,7 +14,7 @@ AlgoPlasma
 ├── D_Poisson         # Poisson solvers and electric field post-processing
 ├── E_Maxwell         # Maxwell / FDTD solvers
 ├── F_IO              # Data input and output
-├── G_collision       # Collision models
+├── G_Collision       # Collision models
 ├── H_MPI_Exchange    # MPI data exchange
 ├── I_Initializer     # Initialization
 ├── J_Fluid           # Fluid algorithms

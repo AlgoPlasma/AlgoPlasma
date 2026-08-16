@@ -14,7 +14,7 @@ AlgoPlasma
 ├── D_Poisson         # Poisson 求解及电场后处理
 ├── E_Maxwell         # Maxwell / FDTD
 ├── F_IO              # 数据输入输出
-├── G_collision       # 碰撞模型
+├── G_Collision       # 碰撞模型
 ├── H_MPI_Exchange    # MPI 数据交换
 ├── I_Initializer     # 初始化
 ├── J_Fluid           # 流体算法
