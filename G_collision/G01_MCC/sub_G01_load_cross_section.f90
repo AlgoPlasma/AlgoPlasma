@@ -24,7 +24,7 @@ subroutine sub_G01_load_cross_section(Nmax,cross_section,path)
     character(len=*) :: path
 
     integer :: stat,i,j
-    real :: de
+    real :: de,row(1:2)
 
     open(1000,file=path)
 
@@ -32,7 +32,7 @@ subroutine sub_G01_load_cross_section(Nmax,cross_section,path)
     i = 1
     do
 
-        read(1000,*,iostat=stat) cross_section(1:2,i)
+        read(1000,*,iostat=stat) row
 
         ! If end of file.
         if (stat < 0) exit
@@ -43,6 +43,7 @@ subroutine sub_G01_load_cross_section(Nmax,cross_section,path)
             stop
         end if
 
+        cross_section(1:2,i) = row
         i = i + 1
 
     end do
