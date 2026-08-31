@@ -3,8 +3,10 @@ set -euo pipefail
 
 case_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 default_hypre_root="$(cd "${case_dir}/../../../hypre/src/hypre" && pwd)"
-
 HYPRE_ROOT="${HYPRE_ROOT:-${default_hypre_root}}"
+export OMP_NUM_THREADS="${OMP_NUM_THREADS:-8}"
+export OMP_PROC_BIND="${OMP_PROC_BIND:-close}"
+export OMP_PLACES="${OMP_PLACES:-cores}"
 
 cmake -S "${case_dir}" -B "${case_dir}/build" \
   -DHYPRE_ROOT="${HYPRE_ROOT}"
