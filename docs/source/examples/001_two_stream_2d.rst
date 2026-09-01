@@ -200,7 +200,7 @@
 
    .. figure:: ../images/examples/001_two_stream_2d/fig1_phase_space_evolution.png
       :align: center
-      :width: 75%
+      :width: 60%
 
       :math:`\omega_{pe}t=0`、17.5 和 25 时沿波矢方向的电子相空间分布。
 
@@ -236,7 +236,7 @@
 
    .. figure:: ../images/examples/001_two_stream_2d/fig2_field_growth_energy.png
       :align: center
-      :width: 75%
+      :width: 65%
 
       双流不稳定性示例的电场结构、模态增长和能量平衡。(a) 在
       :math:`\omega_{pe}t=22.5` 时的平行电场；(b) :math:`(2,1)` 模态幅值及
@@ -463,7 +463,7 @@
 
    .. figure:: ../images/examples/001_two_stream_2d/fig1_phase_space_evolution.png
       :align: center
-      :width: 75%
+      :width: 60%
 
       Electron phase-space distributions in wave-aligned coordinates at
       :math:`\omega_{pe}t=0`, 17.5, and 25.
@@ -504,7 +504,7 @@
 
    .. figure:: ../images/examples/001_two_stream_2d/fig2_field_growth_energy.png
       :align: center
-      :width: 75%
+      :width: 65%
 
       Electric-field structure, mode growth, and energy balance in the
       two-stream example. (a) Parallel electric field at

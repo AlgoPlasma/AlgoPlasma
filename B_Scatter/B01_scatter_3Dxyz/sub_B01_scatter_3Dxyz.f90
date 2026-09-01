@@ -32,7 +32,8 @@ subroutine sub_B01_scatter_3Dxyz(il,iu,den,np,par,w)
     integer :: p,i,j,k
     real :: fi,fj,fk
 
-    !$omp parallel default(firstprivate) reduction(+:den)
+    !$omp parallel default(shared) &
+    !$omp private(p,i,j,k,fi,fj,fk) reduction(+:den)
     !$omp do
     do p = 1,np
         i = floor(par(1,p))
