@@ -14,6 +14,7 @@ Tests
    007_gather/index
    008_mpi_exchange/index
    009_collision/index
+   010_diagnostics/index
    kunpeng_compare/index
 
 .. raw:: html
@@ -74,6 +75,10 @@ Tests
         - G_Collision 截面表加载器的数组边界回归测试。
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision 测试总览 <009_collision/index>`
+      * - ``010_diagnostics``
+        - K_Diagnostics 三个单元的合成宽带链路测试，判据取自信号生成器。
+        - :doc:`K_Diagnostics </rst_files/K_Diagnostics>`
+        - :doc:`010_diagnostics 测试总览 <010_diagnostics/index>`
       * - ``kunpeng_compare``
         - 鲲鹏相关的平台/编译器性能对比测试。
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -82,7 +87,7 @@ Tests
    .. rubric:: 覆盖状态说明
 
    ``G_Collision`` 当前由 ``tests/009_collision`` 覆盖截面表加载器的数组边界行为，
-   尚不包含完整 MCC 物理验证。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；
+   尚不包含完整 MCC 物理验证。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；``K_Diagnostics`` 由 ``tests/010_diagnostics`` 覆盖；
    ``H_MPI_Exchange`` 已由 ``tests/008_mpi_exchange`` 覆盖。
 
 .. container:: ap-lang ap-lang-en
@@ -139,6 +144,10 @@ Tests
         - Array-bound regression tests for the G_Collision cross-section loader.
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision test overview <009_collision/index>`
+      * - ``010_diagnostics``
+        - Synthetic broadband chain test of the three K_Diagnostics units, with criteria taken from the signal generator.
+        - :doc:`K_Diagnostics </rst_files/K_Diagnostics>`
+        - :doc:`010_diagnostics test overview <010_diagnostics/index>`
       * - ``kunpeng_compare``
         - Kunpeng-related platform and compiler performance comparisons.
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -149,4 +158,5 @@ Tests
    ``G_Collision`` currently has array-bound coverage for its cross-section
    loader under ``tests/009_collision``; this is not a complete MCC physics
    validation. ``J_Fluid`` has no standalone top-level regression directory.
+   ``K_Diagnostics`` is covered by ``tests/010_diagnostics``.
    ``H_MPI_Exchange`` is covered by ``tests/008_mpi_exchange``.
