@@ -14,6 +14,7 @@ Tests
    007_gather/index
    008_mpi_exchange/index
    009_collision/index
+   011_fluid/index
    kunpeng_compare/index
 
 .. raw:: html
@@ -74,6 +75,10 @@ Tests
         - G_Collision 截面表加载器的数组边界回归测试。
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision 测试总览 <009_collision/index>`
+      * - ``011_fluid``
+        - J01 自由分子历史、J02 SN P1-DG 和 J03 面通量连续性方程测试。
+        - :doc:`J_Fluid </rst_files/J_Fluid>`
+        - :doc:`011_fluid 测试总览 <011_fluid/index>`
       * - ``kunpeng_compare``
         - 鲲鹏相关的平台/编译器性能对比测试。
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -82,7 +87,8 @@ Tests
    .. rubric:: 覆盖状态说明
 
    ``G_Collision`` 当前由 ``tests/009_collision`` 覆盖截面表加载器的数组边界行为，
-   尚不包含完整 MCC 物理验证。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；
+   尚不包含完整 MCC 物理验证。``tests/011_fluid`` 已覆盖 J01 单步/自由分子历史、
+   J02 求积、离散算子、反射边界和 J03 稳态连续性闭合。应用测试页展示 B0 的自由分子流与离散纵标前处理结果及各自的连续性方程解；ION 提供运行入口，尚未列出验证结果。
    ``H_MPI_Exchange`` 已由 ``tests/008_mpi_exchange`` 覆盖。
 
 .. container:: ap-lang ap-lang-en
@@ -139,6 +145,10 @@ Tests
         - Array-bound regression tests for the G_Collision cross-section loader.
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision test overview <009_collision/index>`
+      * - ``011_fluid``
+        - J01 free-molecular histories, J02 SN P1-DG, and J03 face-flux continuity tests.
+        - :doc:`J_Fluid </rst_files/J_Fluid>`
+        - :doc:`011_fluid test overview <011_fluid/index>`
       * - ``kunpeng_compare``
         - Kunpeng-related platform and compiler performance comparisons.
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -148,5 +158,9 @@ Tests
 
    ``G_Collision`` currently has array-bound coverage for its cross-section
    loader under ``tests/009_collision``; this is not a complete MCC physics
-   validation. ``J_Fluid`` has no standalone top-level regression directory.
-   ``H_MPI_Exchange`` is covered by ``tests/008_mpi_exchange``.
+   validation. ``tests/011_fluid`` covers the J01 legacy/FM paths, J02
+   quadrature/DG/reflection and the J03 steady closure. The application page
+   reports B0 runs for both preprocessing methods and their respective continuity
+   solutions; ION commands are provided without a validated result.
+   ``H_MPI_Exchange`` is covered by
+   ``tests/008_mpi_exchange``.

@@ -1,10 +1,13 @@
 J_Fluid
-=======
+=================================================================
 
 .. toctree::
-    :maxdepth: 1
+   :maxdepth: 1
+   :hidden:
 
-    J_Fluid/J01_continuity_freeflow
+   J_Fluid/J01_free_molecular
+   J_Fluid/J02_neutral_sn_transport_2Drz
+   J_Fluid/J03_neutral_continuity_faceflux_2Drz
 
 .. raw:: html
 
@@ -13,85 +16,55 @@ J_Fluid
      <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: ap-lang ap-lang-zh
+.. container:: ap-lang ap-lang-zh ap-fluid-doc
 
-   .. rubric:: 概览
+   .. rubric:: 模块职责
 
-   ``J_Fluid`` 放置 AlgoPlasma 的流体方程更新例程。当前只有一个子模块，负责在三维直角网格上推进自由流连续性方程。
+   J_Fluid 包含连续性方程更新和中性粒子输运前处理。三维接口和二维柱坐标接口采用不同的数据布局与源项约定。
 
-   .. math::
+   .. rubric:: 子模块
 
-      \frac{\partial n}{\partial t}
-      + \nabla \cdot (\mathbf{u} n)
-      = s.
-
-   其中 ``n`` 是按网格节点存储的数密度场；``u=(ux,uy,uz)`` 是给定速度场，
-   ``s`` 是源项。
-
-   .. list-table:: 子模块
+   .. list-table::
       :header-rows: 1
-      :widths: 28 32 40
 
       * - 模块
-        - 数值方法
-        - 主要职责
-      * - :doc:`J01_continuity_freeflow <J_Fluid/J01_continuity_freeflow>`
-        - 一阶 Lax-Friedrichs 有限体积通量
-        - 在 ``dx=dy=dz=dt=1`` 的约定下更新三维数密度场。
+        - 输入
+        - 输出与用途
+      * - :doc:`J01 <J_Fluid/J01_free_molecular>`
+        - 粒子方法输入网格、入口和壁面条件；连续性工具输入密度与给定速度
+        - 粒子方法输出参考密度与面通量；连续性工具输出通量或更新后的密度。
+      * - :doc:`J02 <J_Fluid/J02_neutral_sn_transport_2Drz>`
+        - 网格、速度求积、入口、反射条件、吸收系数
+        - 离散纵标分布、密度、速度及面通量。
+      * - :doc:`J03 <J_Fluid/J03_neutral_continuity_faceflux_2Drz>`
+        - 参考密度、面通量、几何、体源与损失频率
+        - 单步更新或稳态密度、残差与收敛信息。
 
-   .. rubric:: 共享约定
 
-   - 网格和时间步采用归一化约定 ``dx=dy=dz=dt=1``。
-   - 速度场 ``ux``、``uy``、``uz`` 与 ``n`` 使用相同的节点索引布局，并在一次更新中保持不变。
-   - 边界条件和 guard/ghost cells 需要在调用流体更新例程前由调用者设置。
-   - 由于 ``n`` 采用节点存储，按当前代码实现，密度最终更新区间是
-     ``i=il(1)-1:iu(1)``, ``j=il(2)-1:iu(2)``, ``k=il(3)-1:iu(3)``；
-     因而不能把 ``il``/``iu`` 直接理解成 cell-centered ``n(il:iu)`` 的下上界。
+   .. rubric:: 调用关系
 
-   .. rubric:: 测试状态
+   二维应用先调用 J01 自由分子例程或 J02 输运例程，再把参考密度、内部面通量和开放边界通量传入 J03。J03 固定由参考场构造的面速度，后续通量随当前迎风密度变化。改变输运边界或速度分布后，应重新评估该闭合是否仍适用。
 
-   当前仓库中未发现覆盖 ``J_Fluid`` 的独立顶层 ``tests/`` 回归目录。若后续添加连续性方程或有限体积通量测试，应同步在 :doc:`测试总览 </tests/index>` 和本页补充链接。
+   .. rubric:: 数据约定
 
-.. container:: ap-lang ap-lang-en
+   三维 J01 使用带保护层的节点数组，``dx=dy=dz=dt=1``；更新式减去 ``s``，正值表示密度扣减。二维接口采用单元中心密度和实际几何量，正体源 ``source_rate`` 增加密度，损失为 ``loss_frequency*density``。
+
+   面通量单位为粒子数每平方米每秒，符号相对于坐标正方向；计算净流出时，低端面取负号。四面顺序为径向低端、径向高端、轴向低端、轴向高端。
+
+   .. rubric:: 测试入口
+
+   :doc:`011_fluid </tests/011_fluid/index>` 列出各子测试的实现与通过条件。
+
+.. container:: ap-lang ap-lang-en ap-fluid-doc
 
    .. rubric:: Overview
 
-   ``J_Fluid`` contains fluid-equation update routines for AlgoPlasma. The current
-   module advances the free-flow continuity equation on a three-dimensional
-   Cartesian mesh:
+   J01_neutral_free_molecular_2Drz provides particle preprocessing. Legacy Cartesian updates and prescribed-velocity utilities remain in J01_continuity_freeflow. J02 provides discrete-ordinates transport. J03 imports reference densities and fluxes to advance continuity.
 
-   .. math::
+   .. rubric:: Conventions
 
-      \frac{\partial n}{\partial t}
-      + \nabla \cdot (\mathbf{u} n)
-      = s.
+   The 3D J01 interface uses nodal arrays with guards and unit spacings; positive ``s`` is subtracted. Cylindrical interfaces use cell-centred density, physical geometry, positive production and loss frequency. Flux signs follow coordinate directions; low faces enter divergence with a minus sign.
 
-   Here ``n`` is a node-stored number-density field. ``u=(ux,uy,uz)`` is a
-   prescribed velocity field, and ``s`` is a source term.
+   .. rubric:: Tests
 
-   .. list-table:: Submodules
-      :header-rows: 1
-      :widths: 28 32 40
-
-      * - Module
-        - Numerical method
-        - Main responsibility
-      * - :doc:`J01_continuity_freeflow <J_Fluid/J01_continuity_freeflow>`
-        - First-order Lax-Friedrichs finite-volume flux
-        - Update a three-dimensional density field under the ``dx=dy=dz=dt=1`` convention.
-
-   .. rubric:: Shared Conventions
-
-   - Grid spacing and time step use the normalized convention ``dx=dy=dz=dt=1``.
-   - ``ux``, ``uy``, and ``uz`` use the same nodal indexing layout as ``n`` and remain fixed during one update.
-   - Boundary conditions and guard/ghost cells must be set by the caller before invoking the fluid update.
-   - Because ``n`` is node-stored, the density update region in the current code is
-     ``i=il(1)-1:iu(1)``, ``j=il(2)-1:iu(2)``, ``k=il(3)-1:iu(3)``, so ``il``/``iu``
-     should not be read as cell-centered ``n(il:iu)`` bounds.
-
-   .. rubric:: Test Status
-
-   The current repository does not contain a standalone top-level ``tests/``
-   regression directory for ``J_Fluid``. If continuity-equation or finite-volume
-   flux tests are added later, link them from both the :doc:`test overview
-   </tests/index>` and this page.
+   :doc:`011_fluid </tests/011_fluid/index>` describes unit and application tests.

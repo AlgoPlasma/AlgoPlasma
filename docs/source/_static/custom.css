@@ -1,3 +1,19 @@
+/* Wrap long interface names without changing the shared documentation theme. */
+.ap-fluid-doc table.docutils {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.ap-fluid-doc table.docutils th,
+.ap-fluid-doc table.docutils td {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.ap-fluid-doc table.docutils code {
+    white-space: normal;
+}
+
 /* Keep RTD pages readable on wide monitors. */
 .wy-nav-content {
     max-width: 1200px;
