@@ -83,16 +83,26 @@ cd tests/010_diagnostics/case_broadband_dispersion && bash run.sh
 
 ## Provenance
 
-- K01 and K03 migrated from [`simulation/simulation_liu`](../../the-world-of-king-peng-zilong/simulation/simulation_liu/),
-  following the anti-aliasing wavevector method of Liu & Jorns (IEPC-2025-357).
-- K02 migrated from [`core/beall`](../../the-world-of-king-peng-zilong/core/beall/).
-- The synthetic signal used by the test is taken from
-  `simulation/simulation_beall/02宽频`, under `/mnt/d/波探针原始数据/simulation/`.
+- K01 implements the underlying segmented-FFT, cross-spectrum, power-spectrum,
+  coherence and circular-statistics operations.
+- K02 follows the fixed-probe-pair wavenumber–frequency spectrum method of Beall
+  et al.
+- K03 follows the multi-configuration Bayesian spatial anti-aliasing method of
+  Liu and Jorns.
+- The test signals are generated deterministically from repository parameters by
+  `tests/010_diagnostics/case_broadband_dispersion/source_py/generate.py`; no
+  external or private data files are required.
 
 ## References
 
-- Liu and Jorns, IEPC-2025-357 (2025).  Taken from source comments; the author
-  initials are not given there and should be completed before formal citation.
+- M. F. Liu and B. A. Jorns, "Anti-aliasing technique for inferring dispersion
+  of short-wavelength instabilities in electric propulsion devices," AIAA
+  SciTech Forum, Paper AIAA-2025-1293 (2025),
+  [doi:10.2514/6.2025-1293](https://doi.org/10.2514/6.2025-1293).
+- M. F. Liu and B. A. Jorns, "Experimental validation of a spatial
+  anti-aliasing plasma wave analysis technique on ion acoustic turbulence in a
+  hollow cathode plume," 39th International Electric Propulsion Conference,
+  Paper IEPC-2025-357 (2025).
 - J. M. Beall, Y. C. Kim, and E. J. Powers, "Estimation of wavenumber and
   frequency spectra using fixed probe pairs," J. Appl. Phys. **53**(6),
   3933–3940 (1982).

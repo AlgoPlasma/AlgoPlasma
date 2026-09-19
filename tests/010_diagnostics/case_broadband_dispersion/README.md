@@ -54,8 +54,8 @@ it needs far more segments than the mean phase the inversion needs.
 | K01 | The lower band edge is recovered | 104 kHz, matching to within one bin |
 | K01 | The spectrum meets the noise floor where the `1/f^2` law predicts | 816 kHz measured against 733 kHz predicted (11 %) |
 | K01 | Coherence is high where modes stand clear of the floor, and at the `1/n_seg` floor above the band | 0.932 and 0.038 against a floor of 0.0625 (checked numerically; not plotted) |
-| K02 | Every mode is assigned to the correct fold, its peak landing where K02's own closed form predicts | largest circular residual 34 rad/m, 11 % of one fold period; median 1.1 bins |
-| K02 | The branch is genuinely folded, many times over | all 238 modes aliased, 10 distinct fold orders |
+| K02 | For modes above ten times the noise floor, the measured folded-wavenumber peak lands within two grid bins of K02's closed-form prediction | 83 modes assessed; circular residual median 0.40 bins, p95 1.46 bins |
+| K02 | The generated branch is genuinely folded, many times over | all 238 modes aliased across 10 theoretical fold orders |
 | K03 | Fitting `f` against `\|k_hat\|` through the origin returns the ion sound speed | 3829.6 against 3824.6 m/s, relative error **1.3e-3** |
 | K03 | Per-mode accuracy | `\|k\|` error median 0.28 %, direction error median 0.26 deg |
 

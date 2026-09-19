@@ -72,8 +72,9 @@ case_broadband_dispersion Test
         - 生成频带以外的相干度应落在 ``1/n_segments`` 底线上
         - 带外 0.038、带内 0.932，底线 0.0625
       * - K02
-        - 每个模态是否被归到正确的折叠阶
-        - 238 个模态全部混叠，10 个折叠阶；最大圆周残差为折叠周期的 11%
+        - 高于 10 倍噪声底的模态，其折叠波数峰是否落在闭式预测的 2 个网格以内
+        - 评价 83 个模态；圆周残差中位数 0.40 格、p95 为 1.46 格；生成真值的 238 个模态
+          全部混叠并跨越 10 个理论折叠阶
       * - K03
         - 把 ``f`` 对 ``|k̂|`` 拟合成过原点的直线，斜率还原离子声速
         - 3829.6 对 3824.6 m/s，相对误差 1.3e-3
@@ -189,9 +190,10 @@ case_broadband_dispersion Test
         - Coherence outside the generated band must sit at the ``1/n_segments`` floor
         - 0.038 out of band against 0.932 in band, floor 0.0625
       * - K02
-        - Every mode is assigned to the correct aliasing fold
-        - All 238 modes aliased across 10 fold orders; largest circular residual 11 % of one
-          fold period
+        - Folded-wavenumber peaks above ten times the noise floor stay within two grid bins of
+          the closed-form prediction
+        - 83 modes assessed; circular-residual median 0.40 bins and p95 1.46 bins; all 238
+          generated modes aliased across 10 theoretical fold orders
       * - K03
         - Fitting ``f`` against ``|k_hat|`` through the origin returns the ion sound speed
         - 3829.6 against 3824.6 m/s, relative error 1.3e-3

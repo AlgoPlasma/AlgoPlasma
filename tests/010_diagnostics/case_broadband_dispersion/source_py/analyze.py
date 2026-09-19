@@ -23,8 +23,10 @@ K02 builds the Beall S(k, f) map of a single, deliberately coarse pair. The
 branch runs far past that pair's Nyquist wavenumber, so it must appear folded
 into a repeating sawtooth, and every mode's peak must land where K02's own
 closed form predicts. The residual is measured as a circular distance, because
-the wavenumber axis is periodic; passing means every mode is assigned to the
-correct fold, which a residual far below one fold period demonstrates.
+the wavenumber axis is periodic. Only modes whose power stands clearly above
+the noise floor are assessed, and their peak residual is measured in wavenumber
+bins. This checks the folded-wavenumber trend; a single pair cannot recover the
+lost fold order.
 
 K03 inverts the probe array jointly. Its wavenumbers span more than a decade,
 which one uniform grid cannot cover at useful resolution, so the search runs
@@ -38,7 +40,7 @@ returns the ion sound speed the generator used.
 @details Routines
 load                read the generated records and reduce each pair with K01
 check_k01           spectral exponent, band edge, noise crossover, coherence
-check_k02           fold assignment of every mode on the coarse pair
+check_k02           folded-wavenumber peaks on the coarse pair
 check_k03           joint inversion and the recovered sound speed
 _plot_waveform      noiseless against recorded, and the two noiseless probes
 _plot_spectrum      both power spectra against the f^-2 law and the noise floor
@@ -228,6 +230,17 @@ def check_k02(entries: list[dict]) -> dict:
 
     bin_width = float(result["k_centers"][1] - result["k_centers"][0])
     residual = fun_K02_wavenumber_residual(measured, predicted, chi)
+    psd = fun_K01_power_spectrum(
+        reference["ffts_1"][: config.segments_for(reference)],
+        config.SAMPLING_RATE_HZ,
+        config.NPERSEG,
+    )
+    out_of_band = np.ones(psd.size, dtype=bool)
+    out_of_band[bins] = False
+    out_of_band[0] = False
+    floor = float(np.median(psd[out_of_band]))
+    measurable = psd[bins] > 10.0 * floor
+    residual_in_bins = residual[measurable] / bin_width
     fold_period = 2.0 * result["k_nyquist"]
     aliased = int(np.sum(np.abs(projected) > result["k_nyquist"]))
 
@@ -244,18 +257,21 @@ def check_k02(entries: list[dict]) -> dict:
         "highest_fold_order": int(np.max(np.abs(orders))),
         "fold_period_rad_m": float(fold_period),
         "bin_width_rad_m": bin_width,
-        "max_circular_residual_rad_m": float(np.max(residual)),
-        "max_circular_residual_over_fold_period": float(np.max(residual) / fold_period),
-        "median_circular_residual_in_bins": float(np.median(residual) / bin_width),
+        "modes_above_floor": int(np.count_nonzero(measurable)),
+        "noise_floor_psd": floor,
+        "peak_residual_in_bins_median": float(np.median(residual_in_bins)),
+        "peak_residual_in_bins_p95": float(np.percentile(residual_in_bins, 95)),
+        "peak_residual_in_bins_max": float(np.max(residual_in_bins)),
         "note": (
             "the prediction is K02's own closed form applied to the true "
-            "wavevector and the measurement is the histogram peak; passing "
-            "means every mode is assigned to the correct fold, with the "
-            "residual far below one fold period"
+            "wavevector and the measurement is the histogram peak; modes "
+            "above ten times the noise floor verify the folded-wavenumber "
+            "trend within the histogram-grid resolution, not the lost fold order"
         ),
         "passed": bool(
             aliased > 0
-            and np.max(residual) < 0.25 * fold_period
+            and np.count_nonzero(measurable) > 0
+            and np.percentile(residual_in_bins, 95) < 2.0
             and np.all(np.abs(measured) <= result["k_nyquist"] + 1.0e-9)
         ),
     }
@@ -292,7 +308,7 @@ def check_k03(entries: list[dict]) -> dict:
     speed_error = abs(speed - config.SOUND_SPEED_M_S) / config.SOUND_SPEED_M_S
 
     relative = np.abs(magnitude - truth) / truth
-    angle_error = np.abs(angle - config.PHI_DEG)
+    angle_error = np.abs((angle - config.PHI_DEG + 180.0) % 360.0 - 180.0)
 
     _plot_dispersion(frequencies, magnitude, truth)
 
@@ -310,11 +326,14 @@ def check_k03(entries: list[dict]) -> dict:
         "angle_error_deg_median": float(np.median(angle_error)),
         "angle_error_deg_p95": float(np.percentile(angle_error, 95)),
         "note": (
-            "the slope of f against |k| is the ion sound speed; recovering it "
-            "is a physical criterion rather than a chosen tolerance"
+            "the slope of f against |k| is the ion sound speed; the magnitude "
+            "and circular direction errors jointly verify the recovered "
+            "two-dimensional wavevector"
         ),
         "passed": bool(
-            speed_error < 5.0e-3 and float(np.median(relative)) < 0.05
+            speed_error < 5.0e-3
+            and float(np.median(relative)) < 0.05
+            and float(np.percentile(angle_error, 95)) < 2.0
         ),
     }
 

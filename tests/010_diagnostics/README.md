@@ -16,6 +16,6 @@ compiling, and `run.sh` reduces them through the three units.  Nothing is stored
 in the repository: the records are rebuilt from the constants in
 `source_py/config.py` on every run and removed by `clean.sh`.
 
-The criteria are quantities the generator was built from — a spectral exponent,
-an aliasing fold order, an ion sound speed — recovered from the measurement and
-compared back, rather than tolerances chosen to make the tests pass.
+The criteria compare the measurement with quantities fixed by the generator: a
+spectral exponent, folded-wavenumber peaks and an ion sound speed.  The single-pair
+K02 check does not claim to recover the fold order that aliasing removes.

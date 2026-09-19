@@ -114,13 +114,15 @@ peaks = fun_K02_peak_wavenumber(result["spectrum"], result["k_centers"])
 
 `tests/010_diagnostics/case_broadband_dispersion`: a deliberately **coarse** pair is
 used, 20 mm at 30 deg, whose alias frequency is `c_s/2d = 96 kHz`.  All 238
-modes are aliased and ten distinct fold orders appear, so `S(k, f)` shows the
-repeating sawtooth that is the characteristic form of a Beall map.
+generated modes are aliased and span ten theoretical fold orders; the measured
+`S(k, f)` shows the repeating sawtooth characteristic of a Beall map.
 
-The criterion is that **every mode is assigned to the correct fold**: the
-largest circular residual is 34 rad/m, only 11 % of one fold period, where a
-misassigned order would be off by nearly a whole period.  The median residual is
-1.1 wavenumber bins.
+The criterion assesses the 83 modes whose power exceeds ten times the noise
+floor and checks whether their measured folded-wavenumber peaks land near the
+closed-form prediction.  The circular residual has a median of 0.40 bins and a
+95th percentile of 1.46 bins, below the two-bin threshold.  This verifies the
+folded-wavenumber trend; it does not claim that one pair recovers the lost fold
+order.
 
 The number of visible folds is `f_max / f_alias` with `f_alias = c_s / (2 d)`,
 so coarsening the separation and widening the band are equivalent ways to
@@ -129,9 +131,11 @@ cost of the inversion.
 
 ## Provenance
 
-Migrated from [`core/beall`](../../../the-world-of-king-peng-zilong/core/beall/),
-which builds the aliasing map from synthetic two-probe raw signals rather than
-by folding a theoretical dispersion curve directly.
+This implementation follows the fixed-probe-pair wavenumber–frequency spectrum
+method of Beall et al.  The test deterministically generates raw two-probe
+signals from repository parameters and constructs the aliasing map from the
+measured cross phase rather than by folding a theoretical dispersion curve
+directly.
 
 ## References
 

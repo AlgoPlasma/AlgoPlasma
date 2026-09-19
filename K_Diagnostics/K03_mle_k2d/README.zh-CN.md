@@ -48,7 +48,7 @@ ln L(K)   = Σ_j ln L_j(K)
 - **搜索范围**。估计值被限制在网格内，`k_range` 必须包含真实波矢；峰位贴在边界说明范围过窄。网格离散化给出半个网格步长的精度下限。
 - **方差是单样本方差**。`K01` 返回的 `σ²` 描述单个分段样本。各构型分段数相同时这只是似然的整体常数因子，不影响峰位；分段数不同时应自行按均值方差 `σ²/n` 加权。
 - **内存**。似然数组为 `n_grid²` 个 float64，401×401 约 1.3 MB，逐构型累加。
-- **宽频带要用两级搜索**。单一均匀网格既要够到最大波矢、又要分辨最小波矢；跨三个数量级需要每轴数千点。`search_wavevector` 先在全域粗搜、再在粗峰附近重建细网格。粗搜只需选对条纹而非条纹内的具体位置，所以粗步长应显著小于最短间距的条纹周期 `2π/|χ|`——结果若被锁到错误折叠阶，先查这一条。
+- **宽频带要用两级搜索**。单一均匀网格既要够到最大波矢、又要分辨最小波矢；跨三个数量级需要每轴数千点。`search_wavevector` 先在全域粗搜、再在粗峰附近重建细网格。粗搜只需选对条纹而非条纹内的具体位置。由于条纹周期 `2π/|χ|` 随间距增大而减小，最长间距产生最小周期并给出最严格的网格限制；粗步长应显著小于该周期。结果若被锁到错误折叠阶，先查这一条。
 
 ## 使用方式
 
@@ -81,4 +81,9 @@ result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, gri
 
 ## 方法来源
 
-迁移自 [`simulation/simulation_liu`](../../../the-world-of-king-peng-zilong/simulation/simulation_liu/)，遵循 Liu & Jorns (IEPC-2025-357) 的反混叠波矢方法。
+本实现遵循 Liu 和 Jorns 提出的多构型贝叶斯空间反混叠方法。
+
+## 参考文献
+
+- M. F. Liu and B. A. Jorns, "Anti-aliasing technique for inferring dispersion of short-wavelength instabilities in electric propulsion devices," AIAA SciTech Forum, Paper AIAA-2025-1293 (2025), [doi:10.2514/6.2025-1293](https://doi.org/10.2514/6.2025-1293)。
+- M. F. Liu and B. A. Jorns, "Experimental validation of a spatial anti-aliasing plasma wave analysis technique on ion acoustic turbulence in a hollow cathode plume," 39th International Electric Propulsion Conference, Paper IEPC-2025-357 (2025)。

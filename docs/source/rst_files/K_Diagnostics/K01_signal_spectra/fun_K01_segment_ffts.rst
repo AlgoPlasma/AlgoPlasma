@@ -77,7 +77,6 @@ fun_K01_segment_ffts.py
         <p class="ap-home-contact">彭子龙 (2026/09/02) · 哈尔滨工业大学</p>
       </div>
 
-
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Direct Purpose
@@ -145,4 +144,3 @@ fun_K01_segment_ffts.py
         <p><strong>Contributors</strong></p>
         <p class="ap-home-contact">Zilong PENG (2026/09/02) · Harbin Institute of Technology</p>
       </div>
-

@@ -61,7 +61,7 @@ fun_K02_wavenumber_residual.py
 
    .. rubric:: 调用注意
 
-   - 判断折叠阶是否归对时，应看残差相对**一个折叠周期**的比例：归错阶会差近整整一个周期。
+   - 圆周残差只比较折叠轴上的位置；相差整数个周期的波数具有相同残差，因此它不能判断已丢失的折叠阶。评价谱峰定位时，应把残差与波数网格宽度比较。
 
    .. rubric:: 算法说明
 
@@ -130,7 +130,7 @@ fun_K02_wavenumber_residual.py
 
    .. rubric:: Calling Notes
 
-   - To judge whether a fold order was assigned correctly, read the residual as a fraction of **one fold period**: a misassignment is off by nearly a whole period.
+   - Circular residual compares positions only on the folded axis. Wavenumbers separated by an integer number of periods have the same residual, so it cannot identify the lost fold order. Compare it with the wavenumber-grid spacing when assessing peak localization.
 
    .. rubric:: Algorithm Notes
 
@@ -145,4 +145,3 @@ fun_K02_wavenumber_residual.py
         <p><strong>Contributors</strong></p>
         <p class="ap-home-contact">Zilong PENG (2026/09/02) · Harbin Institute of Technology</p>
       </div>
-

@@ -78,8 +78,9 @@ Diagnostics Usage Cookbook
    - **分段数**。K03 只需给出稳定的均值相位，十几段通常够；K02 是直方图估计器，分段数应显著多于
      波数格数，否则谱峰只是最强的单个样本。
    - **波数格数**。Beall 的波数范围恒为 :math:`\pm\pi/|\boldsymbol{\chi}|`，不要设得更宽或更窄。
-   - **粗网格步长**。两级搜索的粗搜只需选对条纹，其步长必须显著小于最短间距的条纹周期
-     :math:`2\pi/|\boldsymbol{\chi}|`。
+   - **粗网格步长**。两级搜索的粗搜只需选对条纹。条纹周期
+     :math:`2\pi/|\boldsymbol{\chi}|` 随间距增大而减小，因此最长间距产生最小周期并给出
+     最严格的限制；粗网格步长必须显著小于该周期。
 
    .. rubric:: 常见集成错误
 
@@ -167,8 +168,9 @@ Diagnostics Usage Cookbook
    - **Wavenumber bins.** The Beall range is always :math:`\pm\pi/|\boldsymbol{\chi}|`;
      neither widen nor narrow it.
    - **Coarse grid step.** In the two-stage search the coarse stage only has to pick the right
-     fringe, so its step must stay well below the fringe period
-     :math:`2\pi/|\boldsymbol{\chi}|` of the shortest separation.
+     fringe. Since the fringe period :math:`2\pi/|\boldsymbol{\chi}|` decreases as the
+     separation grows, the longest separation sets the smallest period and the strictest
+     limit; keep the coarse-grid step well below that period.
 
    .. rubric:: Common Integration Mistakes
 

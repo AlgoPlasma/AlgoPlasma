@@ -71,9 +71,10 @@ likelihood and can be resolved by the other configurations.
   largest wavevector while still resolving the smallest, and three decades would
   need thousands of points per axis.  `search_wavevector` searches coarse, then
   rebuilds a fine grid around the coarse peak.  The coarse stage only has to
-  pick the right fringe, so its step must stay well below the fringe period
-  `2 pi/|chi|` of the shortest separation; check that first if a result looks
-  locked to the wrong fold.
+  pick the right fringe.  Since the fringe period `2 pi/|chi|` decreases as the
+  separation grows, the longest separation sets the smallest period and the
+  strictest grid-spacing requirement.  Keep the coarse step well below that
+  period; check this first if a result looks locked to the wrong fold.
 
 ## Usage
 
@@ -111,5 +112,16 @@ recovered here as a straight branch.
 
 ## Provenance
 
-Migrated from [`simulation/simulation_liu`](../../../the-world-of-king-peng-zilong/simulation/simulation_liu/),
-following the anti-aliasing wavevector method of Liu & Jorns (IEPC-2025-357).
+This implementation follows the multi-configuration Bayesian spatial
+anti-aliasing method of Liu and Jorns.
+
+## References
+
+- M. F. Liu and B. A. Jorns, "Anti-aliasing technique for inferring dispersion
+  of short-wavelength instabilities in electric propulsion devices," AIAA
+  SciTech Forum, Paper AIAA-2025-1293 (2025),
+  [doi:10.2514/6.2025-1293](https://doi.org/10.2514/6.2025-1293).
+- M. F. Liu and B. A. Jorns, "Experimental validation of a spatial
+  anti-aliasing plasma wave analysis technique on ion acoustic turbulence in a
+  hollow cathode plume," 39th International Electric Propulsion Conference,
+  Paper IEPC-2025-357 (2025).

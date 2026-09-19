@@ -37,11 +37,11 @@ Diagnostics Testing Guide
         - 相干度在高出噪声底的频点上接近 1，带外落到 :math:`1/n_{\rm seg}` 的底
         - 0.932 与 0.038，底为 0.0625
       * - K02
-        - 每个模态是否被归到正确的折叠阶
-        - 最大圆周残差为折叠周期的 11%
+        - 高于 10 倍噪声底的模态，其折叠波数峰是否落在闭式预测的 2 个网格以内
+        - 评价 83 个模态；圆周残差中位数 0.40 格，p95 为 1.46 格
       * - K02
-        - 色散支确实被多次折叠
-        - 238 个模态全部混叠，10 个折叠阶
+        - 生成的色散支确实被多次折叠
+        - 238 个模态全部混叠，跨越 10 个理论折叠阶
       * - K03
         - 把 :math:`f` 对 :math:`|\hat k|` 拟合成过原点的直线，斜率还原离子声速
         - 3829.6 对 3824.6 m/s，相对误差 1.3e-3
@@ -104,11 +104,12 @@ Diagnostics Testing Guide
           :math:`1/n_{\rm seg}` floor outside the band
         - 0.932 and 0.038, against a floor of 0.0625
       * - K02
-        - Every mode assigned to the correct aliasing fold
-        - Largest circular residual 11 % of one fold period
+        - Folded-wavenumber peaks above ten times the noise floor stay within two grid bins of
+          the closed-form prediction
+        - 83 modes assessed; circular-residual median 0.40 bins, p95 1.46 bins
       * - K02
-        - The branch is genuinely folded, many times over
-        - All 238 modes aliased across 10 fold orders
+        - The generated branch is genuinely folded, many times over
+        - All 238 modes aliased across 10 theoretical fold orders
       * - K03
         - Fitting :math:`f` against :math:`|\hat k|` through the origin returns the ion sound
           speed

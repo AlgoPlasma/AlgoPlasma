@@ -9,9 +9,10 @@ searches a coarse grid over the whole range, then rebuilds a fine grid in a
 small window around the coarse peak.
 
 The coarse stage only has to pick the right fringe, not the right point within
-it, so its step must stay well below the fringe period 2 pi/|chi| of the
-shortest separation. That is the condition to check first if a result looks
-locked to the wrong aliasing fold.
+it. Because the fringe period 2 pi/|chi| decreases as the separation grows,
+the longest separation sets the smallest period and therefore the strictest
+grid-spacing requirement. The coarse step must stay well below that period;
+check this condition first if a result looks locked to the wrong aliasing fold.
 
 @author Zilong PENG (2026/09/02)
 

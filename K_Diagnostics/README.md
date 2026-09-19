@@ -63,11 +63,14 @@ cd tests/010_diagnostics/case_broadband_dispersion && bash run.sh
 
 ## 方法来源
 
-- K01/K03 迁移自 [`simulation/simulation_liu`](../../the-world-of-king-peng-zilong/simulation/simulation_liu/)，遵循 Liu & Jorns (IEPC-2025-357) 的反混叠波矢方法
-- K02 迁移自 [`core/beall`](../../the-world-of-king-peng-zilong/core/beall/)
-- 测试所用的合成信号取自 `simulation/simulation_beall/02宽频`（在 `/mnt/d/波探针原始数据/simulation/` 下）
+- K01 实现分段 FFT、互谱、功率谱、相干度和圆统计等基础信号处理步骤。
+- K02 遵循 Beall 等人的固定探针对波数–频率谱方法。
+- K03 遵循 Liu 和 Jorns 提出的多构型贝叶斯空间反混叠方法。
+- 测试信号由 `tests/010_diagnostics/case_broadband_dispersion/source_py/generate.py`
+  根据仓库内参数确定性生成，不依赖外部或私有数据文件。
 
 ## 参考文献
 
-- Liu and Jorns, IEPC-2025-357 (2025)。引用信息取自源码注释，作者名首字母未给出，正式引用前应补全。
+- M. F. Liu and B. A. Jorns, "Anti-aliasing technique for inferring dispersion of short-wavelength instabilities in electric propulsion devices," AIAA SciTech Forum, Paper AIAA-2025-1293 (2025), [doi:10.2514/6.2025-1293](https://doi.org/10.2514/6.2025-1293)。
+- M. F. Liu and B. A. Jorns, "Experimental validation of a spatial anti-aliasing plasma wave analysis technique on ion acoustic turbulence in a hollow cathode plume," 39th International Electric Propulsion Conference, Paper IEPC-2025-357 (2025)。
 - J. M. Beall, Y. C. Kim, and E. J. Powers, "Estimation of wavenumber and frequency spectra using fixed probe pairs," J. Appl. Phys. **53**(6), 3933–3940 (1982).

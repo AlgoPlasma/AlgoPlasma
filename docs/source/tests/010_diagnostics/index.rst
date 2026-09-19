@@ -30,8 +30,8 @@
       * - K01–K03
         - :doc:`case_broadband_dispersion 测试 <case_broadband_dispersion>`
         - 用一份合成宽带信号把 K01、K02、K03 串成一条链驱动，并把每个单元的输出对回生成
-          该信号的参数。判据是谱指数、混叠折叠阶、离子声速这类生成器自带的量，而不是
-          为通过测试而选取的容差。
+          该信号的参数。判据比较谱指数、折叠波数峰和离子声速；单探针对的 K02 检查不声称
+          恢复混叠所丢失的折叠阶。
 
    静态图片来自一次参考运行，并保存到 ``docs/source/images/tests/010_diagnostics``。
    如果修改了测试程序或绘图脚本，应重新运行并更新这些图片。
@@ -55,8 +55,8 @@
         - :doc:`case_broadband_dispersion test <case_broadband_dispersion>`
         - Drives K01, K02 and K03 as one chain from a single synthetic broadband dataset and
           checks each unit's output against the parameters that produced it. The criteria are
-          quantities the generator was built from — a spectral exponent, an aliasing fold order,
-          an ion sound speed — rather than tolerances chosen to make the test pass.
+          generator-fixed quantities — a spectral exponent, folded-wavenumber peaks and an ion
+          sound speed. The single-pair K02 check does not claim to recover the lost fold order.
 
    The static figures come from one reference run and are stored under
    ``docs/source/images/tests/010_diagnostics``. Regenerate and update them if the test program

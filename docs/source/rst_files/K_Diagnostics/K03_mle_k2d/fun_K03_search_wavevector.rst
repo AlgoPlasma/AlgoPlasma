@@ -73,7 +73,7 @@ fun_K03_search_wavevector.py
 
    .. rubric:: 调用注意
 
-   - 粗搜阶段只需选对条纹、而非条纹内的具体位置，因此粗步长必须显著小于最短间距的条纹周期 :math:`2\pi/|\boldsymbol{\chi}|`。结果若像是被锁到错误的折叠阶，先查这一条。
+   - 粗搜阶段只需选对条纹、而非条纹内的具体位置。条纹周期 :math:`2\pi/|\boldsymbol{\chi}|` 随间距增大而减小，因此最长间距产生最小周期并给出最严格的限制；粗步长必须显著小于该周期。结果若像是被锁到错误的折叠阶，先查这一条。
 
    .. raw:: html
 
@@ -147,7 +147,7 @@ fun_K03_search_wavevector.py
 
    .. rubric:: Calling Notes
 
-   - The coarse stage only has to pick the right fringe, not the right point within it, so its step must stay well below the fringe period :math:`2\pi/|\boldsymbol{\chi}|` of the shortest separation. Check that first if a result looks locked to the wrong fold.
+   - The coarse stage only has to pick the right fringe, not the right point within it. Since the fringe period :math:`2\pi/|\boldsymbol{\chi}|` decreases as the separation grows, the longest separation sets the smallest period and the strictest limit; the coarse step must stay well below that period. Check this first if a result looks locked to the wrong fold.
 
    .. raw:: html
 
@@ -155,4 +155,3 @@ fun_K03_search_wavevector.py
         <p><strong>Contributors</strong></p>
         <p class="ap-home-contact">Zilong PENG (2026/09/02) · Harbin Institute of Technology</p>
       </div>
-
