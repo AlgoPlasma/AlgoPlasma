@@ -118,6 +118,92 @@ make html
 
 贡献时请尽量保持算法单元独立、接口清晰、依赖明确。对于已有算法的改进，请同时说明数值行为是否改变，并补充或更新相应测试。
 
+## Contributors / 贡献者
+
+本名单由 `contributors.yml` 生成，请勿手工修改本节内容；运行 `python3 tools/generate_contributors.py` 重新生成。
+
+<!-- CONTRIBUTORS:START -->
+<p align="center"><sub>感谢每一位为 AlgoPlasma 贡献代码、测试、性能基准、文档、示例与缺陷修复的成员。</sub></p>
+
+<p align="center"><sub>贡献类型：💻 Code · 🧪 Tests · 📊 Benchmark · 📖 Documentation · 🎓 Examples · 🐛 Bug Fixes</sub></p>
+
+<table>
+  <tr>
+    <td align="center" width="110" valign="top">
+      <a href="https://github.com/Yin-YinjianZhao"><img src="https://github.com/Yin-YinjianZhao.png" width="80" height="80" alt="Yinjian Zhao"></a><br>
+      <sub><b>Yinjian Zhao</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://github.com/GooseGH"><img src="https://github.com/GooseGH.png" width="80" height="80" alt="Zhongping Zhao"></a><br>
+      <sub><b>Zhongping Zhao</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="80" height="80" alt="Zhe Liu"></a><br>
+      <sub><b>Zhe Liu</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/baisheng-wang.svg" width="80" height="80" alt="Baisheng Wang"></a><br>
+      <sub><b>Baisheng Wang</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/zilong-peng.svg" width="80" height="80" alt="Zilong Peng"></a><br>
+      <sub><b>Zilong Peng</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="Xin Luo"></a><br>
+      <sub><b>Xin Luo</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="110" valign="top">
+      <a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="80" height="80" alt="Lihuan Xie"></a><br>
+      <sub><b>Lihuan Xie</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="Xi Chen"><br>
+      <sub><b>Xi Chen</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="Zhijun Zhou"></a><br>
+      <sub><b>Zhijun Zhou</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="Kunpeng Zhong"><br>
+      <sub><b>Kunpeng Zhong</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="80" height="80" alt="Yingjie Chen"></a><br>
+      <sub><b>Yingjie Chen</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <img src="docs/source/_static/contributors/changzheng-hu.svg" width="80" height="80" alt="Changzheng Hu"><br>
+      <sub><b>Changzheng Hu</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="110" valign="top">
+      <a href="https://github.com/bocong-zheng"><img src="https://github.com/bocong-zheng.png" width="80" height="80" alt="Bocong Zheng"></a><br>
+      <sub><b>Bocong Zheng</b></sub><br>
+      <sub><abbr title="Code">💻</abbr></sub>
+    </td>
+  </tr>
+</table>
+
+<p align="center"><sub>完整名单（含角色与链接）：<a href="https://algoplasma.readthedocs.io/en/latest/community/contributors.html">Read the Docs</a></sub></p>
+<!-- CONTRIBUTORS:END -->
+
 ## 许可证
 
 AlgoPlasma 采用 [Apache License 2.0](LICENSE) 开源许可证。版权和归属信息见 [NOTICE](NOTICE)。

@@ -1,0 +1,121 @@
+# AlgoPlasma contributors
+# ======================
+#
+# This file is the single source of truth for the contributor list.  The
+# README section and the Read the Docs page are both generated from it:
+#
+#     python3 tools/generate_contributors.py
+#
+# Fields
+# ------
+#   name           display name (required)
+#   role           lead | maintainer | contributor   (default: contributor)
+#   contributions  list of contribution types, or `all` for every type
+#   github         GitHub username (optional)
+#   gitee          Gitee username (optional)
+#   orcid          ORCID iD, e.g. 0000-0000-0000-0000 (optional)
+#   avatar         explicit avatar URL or repo-relative image path (optional)
+#
+# The avatar is taken from `avatar` when it is set, otherwise from
+# https://github.com/<github>.png.  Contributors without either field get a
+# generated initial-based avatar in docs/source/_static/contributors/.
+# For a Gitee-only contributor, set `avatar: https://gitee.com/<gitee>.png` --
+# that URL follows the Gitee avatar, so it stays in sync when it changes.
+#
+# Contribution types
+# ------------------
+#   code       💻 Code            docs       📖 Documentation
+#   tests      🧪 Tests           examples   🎓 Examples
+#   benchmark  📊 Benchmark       bug        🐛 Bug fixes
+#
+# Spelled-out aliases are accepted too (software, validation, performance,
+# writing, tutorial, fix, ...).  Unknown keys stop the generator with an error
+# so typos are caught early.
+#
+# The order of this list is preserved exactly as written; reorder it freely.
+# The README wall uses this order.  The Read the Docs page instead groups people
+# by role (Project Lead / Maintainers / Contributors), sorts each group
+# alphabetically by display name, and is written in English only.
+#
+# Adding a contributor
+# --------------------
+#   - name: Example User
+#     github: example
+#     role: contributor
+#     contributions:
+#       - code
+#       - bug
+
+contributors:
+  # --- project lead ---------------------------------------------------------
+  - name: Yinjian Zhao
+    github: Yin-YinjianZhao
+    gitee: Yin-YinjianZhao
+    role: lead
+    contributions: all
+
+  # --- maintainers ----------------------------------------------------------
+  - name: Zhongping Zhao
+    # 赵中平; contributes under the account name GooseGH.
+    github: GooseGH
+    gitee: GooseGH
+    role: maintainer
+    contributions: all
+
+  - name: Zhe Liu
+    gitee: lzhe898
+    # Gitee-only contributor: point `avatar` at the Gitee avatar so it stays in
+    # sync when the avatar changes.  Without it the generated initials avatar
+    # (docs/source/_static/contributors/) is used instead.
+    avatar: https://gitee.com/lzhe898.png
+    role: maintainer
+    contributions: all
+
+  - name: Baisheng Wang
+    gitee: HermiteCat
+    role: maintainer
+    contributions: all
+
+  - name: Zilong Peng
+    gitee: peng-zilong123
+    role: maintainer
+    contributions: all
+
+  - name: Xin Luo
+    gitee: Luo-Xin-410
+    role: maintainer
+    contributions: all
+
+  - name: Lihuan Xie
+    orcid: 0009-0009-6248-9781
+    role: maintainer
+    contributions: all
+
+  - name: Xi Chen
+    role: maintainer
+    contributions: all
+
+  - name: Zhijun Zhou
+    gitee: HIT-ZhouZhijun
+    role: maintainer
+    contributions: all
+
+  - name: Kunpeng Zhong
+    role: maintainer
+    contributions: all
+
+  - name: Yingjie Chen
+    gitee: jiaohuadetudouni
+    role: maintainer
+    contributions: all
+
+  - name: Changzheng Hu
+    role: maintainer
+    contributions: all
+
+  # --- contributor ----------------------------------------------------------
+  - name: Bocong Zheng
+    github: bocong-zheng
+    role: contributor
+    contributions:
+      - code

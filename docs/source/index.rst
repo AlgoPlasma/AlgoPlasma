@@ -36,6 +36,13 @@ AlgoPlasma
     ./glossary
     ./maintenance_checklist
 
+.. toctree::
+    :caption: Community
+    :maxdepth: 1
+    :hidden:
+
+    ./community/contributors
+
 .. image:: images/algoplasma-logo-transparent.png
    :class: ap-home-preload
    :alt: AlgoPlasma logo

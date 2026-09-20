@@ -164,5 +164,6 @@ def mark_reference_links_in_html(app, exception):
 def setup(app):
     app.add_css_file("custom.css")  # Sphinx >= 1.8
     app.add_css_file("ap-home-hero.css")
+    app.add_css_file("contributors.css")
     app.add_js_file("ap-language-switch.js")
     app.connect("build-finished", mark_reference_links_in_html)
