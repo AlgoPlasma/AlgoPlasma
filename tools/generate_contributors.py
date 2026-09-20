@@ -519,7 +519,7 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
     parts.append(f'<p align="center"><sub>{legend}</sub></p>')
     assigned = set()
     for title_en, title_zh, roles in README_SECTIONS:
-        group = [entry for entry in contributors if entry["role"] in roles]
+        group = _readme_group(contributors, roles)
         assigned.update(roles)
         if not group:
             continue
@@ -558,6 +558,17 @@ def _sorted_group(contributors, roles) -> list:
     """Contributors of the given roles, sorted by display name."""
     group = [entry for entry in contributors if entry["role"] in roles]
     return sorted(group, key=lambda entry: entry["name"].casefold())
+
+
+def _readme_group(contributors, roles) -> list:
+    """Group for the README: project lead first, the rest by display name."""
+    group = [entry for entry in contributors if entry["role"] in roles]
+    lead = [entry for entry in group if entry["role"] == "lead"]
+    rest = sorted(
+        (entry for entry in group if entry["role"] != "lead"),
+        key=lambda entry: entry["name"].casefold(),
+    )
+    return lead + rest
 
 
 def render_rtd_page(contributors, target_dir: str = RTD_TARGET_DIR) -> str:

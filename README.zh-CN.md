@@ -138,32 +138,20 @@ make html
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <a href="https://github.com/GooseGH"><img src="https://github.com/GooseGH.png" width="80" height="80" alt="Zhongping Zhao"></a><br>
-      <sub><b>Zhongping Zhao</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="80" height="80" alt="Zhe Liu"></a><br>
-      <sub><b>Zhe Liu</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
       <a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/baisheng-wang.svg" width="80" height="80" alt="Baisheng Wang"></a><br>
       <sub><b>Baisheng Wang</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/zilong-peng.svg" width="80" height="80" alt="Zilong Peng"></a><br>
-      <sub><b>Zilong Peng</b></sub><br>
+      <img src="docs/source/_static/contributors/changzheng-hu.svg" width="80" height="80" alt="Changzheng Hu"><br>
+      <sub><b>Changzheng Hu</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="Xin Luo"></a><br>
-      <sub><b>Xin Luo</b></sub><br>
+      <img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="Kunpeng Zhong"><br>
+      <sub><b>Kunpeng Zhong</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
-  </tr>
-  <tr>
     <td align="center" width="110" valign="top">
       <a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="80" height="80" alt="Lihuan Xie"></a><br>
       <sub><b>Lihuan Xie</b></sub><br>
@@ -174,14 +162,11 @@ make html
       <sub><b>Xi Chen</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
+  </tr>
+  <tr>
     <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="Zhijun Zhou"></a><br>
-      <sub><b>Zhijun Zhou</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="Kunpeng Zhong"><br>
-      <sub><b>Kunpeng Zhong</b></sub><br>
+      <a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="Xin Luo"></a><br>
+      <sub><b>Xin Luo</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
@@ -190,8 +175,23 @@ make html
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/changzheng-hu.svg" width="80" height="80" alt="Changzheng Hu"><br>
-      <sub><b>Changzheng Hu</b></sub><br>
+      <a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="80" height="80" alt="Zhe Liu"></a><br>
+      <sub><b>Zhe Liu</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="Zhijun Zhou"></a><br>
+      <sub><b>Zhijun Zhou</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://github.com/GooseGH"><img src="https://github.com/GooseGH.png" width="80" height="80" alt="Zhongping Zhao"></a><br>
+      <sub><b>Zhongping Zhao</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/zilong-peng.svg" width="80" height="80" alt="Zilong Peng"></a><br>
+      <sub><b>Zilong Peng</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
   </tr>
