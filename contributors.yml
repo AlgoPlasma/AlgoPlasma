@@ -115,6 +115,11 @@ contributors:
     role: maintainer
     contributions: all
 
+  - name: Wushun Zhang
+    # 张武顺
+    role: maintainer
+    contributions: all
+
   # --- contributor ----------------------------------------------------------
   - name: Bocong Zheng
     github: bocong-zheng

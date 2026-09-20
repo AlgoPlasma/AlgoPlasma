@@ -158,12 +158,17 @@ This list is generated from `contributors.yml`; do not edit this section by hand
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="Xi Chen"><br>
-      <sub><b>Xi Chen</b></sub><br>
+      <img src="docs/source/_static/contributors/wushun-zhang.svg" width="80" height="80" alt="Wushun Zhang"><br>
+      <sub><b>Wushun Zhang</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
   </tr>
   <tr>
+    <td align="center" width="110" valign="top">
+      <img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="Xi Chen"><br>
+      <sub><b>Xi Chen</b></sub><br>
+      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+    </td>
     <td align="center" width="110" valign="top">
       <a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="Xin Luo"></a><br>
       <sub><b>Xin Luo</b></sub><br>
@@ -189,6 +194,8 @@ This list is generated from `contributors.yml`; do not edit this section by hand
       <sub><b>Zhongping Zhao</b></sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
+  </tr>
+  <tr>
     <td align="center" width="110" valign="top">
       <a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/zilong-peng.svg" width="80" height="80" alt="Zilong Peng"></a><br>
       <sub><b>Zilong Peng</b></sub><br>

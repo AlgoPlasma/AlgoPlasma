@@ -51,6 +51,11 @@ AlgoPlasma is built by the people below. The Read the Docs page groups contribut
   </tr>
   <tr>
     <td align="center" width="200" valign="top">
+      <img src="../_static/contributors/wushun-zhang.svg" width="96" height="96" alt="Wushun Zhang"><br>
+      <strong>Wushun Zhang</strong><br>
+      <small><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></small>
+    </td>
+    <td align="center" width="200" valign="top">
       <img src="../_static/contributors/xi-chen.svg" width="96" height="96" alt="Xi Chen"><br>
       <strong>Xi Chen</strong><br>
       <small><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></small>
@@ -67,14 +72,14 @@ AlgoPlasma is built by the people below. The Read the Docs page groups contribut
       <small><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></small>
       <br><small><a href="https://gitee.com/jiaohuadetudouni">Gitee</a></small>
     </td>
+  </tr>
+  <tr>
     <td align="center" width="200" valign="top">
       <a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="96" height="96" alt="Zhe Liu"></a><br>
       <strong><a href="https://gitee.com/lzhe898">Zhe Liu</a></strong><br>
       <small><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></small>
       <br><small><a href="https://gitee.com/lzhe898">Gitee</a></small>
     </td>
-  </tr>
-  <tr>
     <td align="center" width="200" valign="top">
       <a href="https://gitee.com/HIT-ZhouZhijun"><img src="../_static/contributors/zhijun-zhou.svg" width="96" height="96" alt="Zhijun Zhou"></a><br>
       <strong><a href="https://gitee.com/HIT-ZhouZhijun">Zhijun Zhou</a></strong><br>
