@@ -127,11 +127,14 @@ make html
 
 <p align="center"><sub>贡献类型：💻 Code · 🧪 Tests · 📊 Benchmark · 📖 Documentation · 🎓 Examples · 🐛 Bug Fixes</sub></p>
 
+### Maintainers / 维护者
+
 <table>
   <tr>
     <td align="center" width="110" valign="top">
       <a href="https://github.com/Yin-YinjianZhao"><img src="https://github.com/Yin-YinjianZhao.png" width="80" height="80" alt="Yinjian Zhao"></a><br>
       <sub><b>Yinjian Zhao</b></sub><br>
+      <sub>Project Lead</sub><br>
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
@@ -192,6 +195,11 @@ make html
       <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
     </td>
   </tr>
+</table>
+
+### Contributors / 贡献者
+
+<table>
   <tr>
     <td align="center" width="110" valign="top">
       <a href="https://github.com/bocong-zheng"><img src="https://github.com/bocong-zheng.png" width="80" height="80" alt="Bocong Zheng"></a><br>

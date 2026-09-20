@@ -33,9 +33,11 @@
 # so typos are caught early.
 #
 # The order of this list is preserved exactly as written; reorder it freely.
-# The README wall uses this order.  The Read the Docs page instead groups people
-# by role (Project Lead / Maintainers / Contributors), sorts each group
-# alphabetically by display name, and is written in English only.
+# The README wall is grouped into Maintainers / Contributors and keeps this
+# order inside each group, so the README stays in paper-author order.  The Read
+# the Docs page instead groups people by role (Project Lead / Maintainers /
+# Contributors), sorts each group alphabetically by display name, and is written
+# in English only.
 #
 # Adding a contributor
 # --------------------

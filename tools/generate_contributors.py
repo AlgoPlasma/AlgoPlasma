@@ -135,6 +135,12 @@ RTD_SECTIONS = (
     ("Maintainers", ("maintainer",)),
     ("Contributors", ("contributor",)),
 )
+# README groups: (English title, Chinese title, roles).  Inside a group the order
+# of contributors.yml is kept, so the README stays in paper-author order.
+README_SECTIONS = (
+    ("Maintainers", "维护者", ("lead", "maintainer")),
+    ("Contributors", "贡献者", ("contributor",)),
+)
 
 # --- Short blurbs ------------------------------------------------------------
 README_INTRO = {
@@ -454,7 +460,7 @@ def _render_table(cells, columns: int, table_class: str = "") -> str:
     return "\n".join(lines)
 
 
-def _readme_cell(entry: dict, target_dir: str) -> list:
+def _readme_cell(entry: dict, target_dir: str, role_label: str = "") -> list:
     url, _ = _profile_url(entry)
     src = _avatar_url(entry, target_dir)
     image = f'<img src="{src}" width="{README_AVATAR_PX}" height="{README_AVATAR_PX}" alt="{entry["name"]}">'
@@ -465,6 +471,9 @@ def _readme_cell(entry: dict, target_dir: str) -> list:
         f"  {image}<br>",
         f'  <sub><b>{entry["name"]}</b></sub>',
     ]
+    if role_label:
+        cell[-1] += "<br>"
+        cell.append(f"  <sub>{role_label}</sub>")
     emoji = _emoji_title_html(entry)
     if emoji:
         cell[-1] += "<br>"
@@ -508,9 +517,38 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
     parts.append("")
     legend = f"{README_LEGEND_LABEL[lang]}{_legend_text(contributors)}"
     parts.append(f'<p align="center"><sub>{legend}</sub></p>')
-    parts.append("")
-    cells = [_readme_cell(entry, target_dir) for entry in contributors]
-    parts.append(_render_table(cells, README_COLUMNS))
+    assigned = set()
+    for title_en, title_zh, roles in README_SECTIONS:
+        group = [entry for entry in contributors if entry["role"] in roles]
+        assigned.update(roles)
+        if not group:
+            continue
+        title = title_en if lang == "en" else f"{title_en} / {title_zh}"
+        parts.append("")
+        parts.append(f"### {title}")
+        parts.append("")
+        cells = [
+            _readme_cell(
+                entry,
+                target_dir,
+                # the project lead keeps a label inside the maintainer group
+                ROLE_LABELS[entry["role"]] if entry["role"] == "lead" else "",
+            )
+            for entry in group
+        ]
+        parts.append(_render_table(cells, README_COLUMNS))
+    extra_roles = [
+        role
+        for role in ROLE_LABELS
+        if role not in assigned and any(e["role"] == role for e in contributors)
+    ]
+    for role in extra_roles:  # future roles fall back to their own group
+        group = [entry for entry in contributors if entry["role"] == role]
+        parts.append("")
+        parts.append(f"### {ROLE_LABELS[role]}")
+        parts.append("")
+        cells = [_readme_cell(entry, target_dir) for entry in group]
+        parts.append(_render_table(cells, README_COLUMNS))
     parts.append("")
     parts.append(f'<p align="center"><sub>{README_OUTRO[lang]}</sub></p>')
     return "\n".join(parts) + "\n"
