@@ -135,12 +135,12 @@ ROLE_LABELS_ZH = {
     "contributor": "贡献者",
 }
 DEFAULT_ROLE = "contributor"
-# Read the Docs sections: (title, roles in this section).  The role is shown by
-# the section heading, so it is not repeated on every card.
+# Read the Docs sections: (English title, Chinese title, roles in this section).
+# The role is shown by the section heading, so it is not repeated on every card.
 RTD_SECTIONS = (
-    ("Project Lead", ("lead",)),
-    ("Maintainers", ("maintainer",)),
-    ("Contributors", ("contributor",)),
+    ("Project Lead", "项目负责人", ("lead",)),
+    ("Maintainers", "维护者", ("maintainer",)),
+    ("Contributors", "贡献者", ("contributor",)),
 )
 # README groups: (English title, Chinese title, roles).  The project lead is
 # placed first in its group, the rest of the group is sorted by display name.
@@ -158,13 +158,16 @@ README_INTRO = {
     ),
 }
 README_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
-# The docs page is English-only; the Chinese introduction lives in the Chinese
-# README, so the two languages are not mixed on one page.
-RTD_INTRO = (
-    "AlgoPlasma is built by the people below. The Read the Docs page groups "
-    "contributors by role; the README list keeps the order given in "
-    "<code>contributors.yml</code>."
-)
+# The docs page is bilingual: each language lives in its own .ap-lang block, so
+# no page mixes the two languages.
+RTD_INTRO = {
+    "zh": "AlgoPlasma 由下列成员共同建设，按角色分组，组内按姓名拼音排序。",
+    "en": (
+        "AlgoPlasma is built by the people below, grouped by role. Names are "
+        "sorted alphabetically within each group."
+    ),
+}
+RTD_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
 # Plain HTML: Markdown is not parsed inside the generated HTML blocks.
 README_OUTRO = {
     "zh": (
@@ -504,19 +507,20 @@ def _readme_cell(
     return cell
 
 
-def _rtd_cell(entry: dict, target_dir: str) -> list:
+def _rtd_cell(entry: dict, target_dir: str, lang: str) -> list:
     url, _ = _profile_url(entry)
     src = _avatar_url(entry, target_dir)
-    image = f'<img src="{src}" width="{RTD_AVATAR_PX}" height="{RTD_AVATAR_PX}" alt="{entry["name"]}">'
+    name = display_name(entry, lang)
+    image = f'<img src="{src}" width="{RTD_AVATAR_PX}" height="{RTD_AVATAR_PX}" alt="{name}">'
     if url:
         image = f'<a href="{url}">{image}</a>'
-    name = f'<a href="{url}">{entry["name"]}</a>' if url else entry["name"]
+    name = f'<a href="{url}">{name}</a>' if url else name
     cell = [
         '<td align="center" width="200" valign="top">',
         f"  {image}<br>",
         f"  <strong>{name}</strong>",
     ]
-    emoji = _emoji_title_html(entry, "en")
+    emoji = _emoji_title_html(entry, lang)
     if emoji:
         cell[-1] += "<br>"
         cell.append(f"  <small>{emoji}</small>")
@@ -595,19 +599,25 @@ def _readme_group(contributors, roles) -> list:
     return lead + rest
 
 
-def render_rtd_page(contributors, target_dir: str = RTD_TARGET_DIR) -> str:
-    parts = [RTD_INTRO, "", f"<p>Contribution types: {_legend_text(contributors, 'en')}</p>", ""]
+def _rtd_block(contributors, lang: str, target_dir: str) -> str:
+    """One language block of the Read the Docs page.
+
+    Everything is emitted without blank lines inside the ``<div>`` so that the
+    whole block stays a single HTML block in Markdown.
+    """
+    parts = [f'<div class="ap-lang ap-lang-{lang}">']
+    parts.append(f"<p>{RTD_INTRO[lang]}</p>")
+    parts.append(f"<p>{RTD_LEGEND_LABEL[lang]}{_legend_text(contributors, lang)}</p>")
     assigned = set()
-    for title, roles in RTD_SECTIONS:
+    role_titles = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
+    for title_en, title_zh, roles in RTD_SECTIONS:
         group = _sorted_group(contributors, roles)
         assigned.update(roles)
         if not group:
             continue
-        parts.append(f"<h2>{title}</h2>")
-        parts.append("")
-        cells = [_rtd_cell(entry, target_dir) for entry in group]
+        parts.append(f"<h2>{title_en if lang == 'en' else title_zh}</h2>")
+        cells = [_rtd_cell(entry, target_dir, lang) for entry in group]
         parts.append(_render_table(cells, RTD_COLUMNS, RTD_TABLE_CLASS))
-        parts.append("")
     extra_roles = [
         role for role in ROLE_LABELS if role not in assigned and any(
             entry["role"] == role for entry in contributors
@@ -615,12 +625,18 @@ def render_rtd_page(contributors, target_dir: str = RTD_TARGET_DIR) -> str:
     ]
     for role in extra_roles:  # future roles fall back to their own section
         group = _sorted_group(contributors, (role,))
-        parts.append(f"<h2>{ROLE_LABELS[role]}</h2>")
-        parts.append("")
-        cells = [_rtd_cell(entry, target_dir) for entry in group]
+        parts.append(f"<h2>{role_titles[role]}</h2>")
+        cells = [_rtd_cell(entry, target_dir, lang) for entry in group]
         parts.append(_render_table(cells, RTD_COLUMNS, RTD_TABLE_CLASS))
-        parts.append("")
+    parts.append("</div>")
     return "\n".join(parts)
+
+
+def render_rtd_page(contributors, target_dir: str = RTD_TARGET_DIR) -> str:
+    # Chinese first: the docs site shows Chinese by default.
+    return "\n\n".join(
+        _rtd_block(contributors, lang, target_dir) for lang in ("zh", "en")
+    )
 
 
 # =============================================================================
