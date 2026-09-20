@@ -72,16 +72,18 @@ AVATAR_PALETTE = (
 )
 
 # --- Contribution types ------------------------------------------------------
-# canonical key -> (emoji, English label).  Keep this list short and tied to the
-# kinds of work that actually happen in this repository.
+# canonical key -> (emoji, English label, Chinese label).  Keep this list short
+# and tied to the kinds of work that actually happen in this repository.
 CONTRIBUTION_TYPES = {
-    "code": ("💻", "Code"),
-    "tests": ("🧪", "Tests"),
-    "benchmark": ("📊", "Benchmark"),
-    "docs": ("📖", "Documentation"),
-    "examples": ("🎓", "Examples"),
-    "bug": ("🐛", "Bug Fixes"),
+    "code": ("💻", "Code", "代码"),
+    "tests": ("🧪", "Tests", "测试"),
+    "benchmark": ("📊", "Benchmark", "性能基准"),
+    "docs": ("📖", "Documentation", "文档"),
+    "examples": ("🎓", "Examples", "示例"),
+    "bug": ("🐛", "Bug Fixes", "缺陷修复"),
 }
+# index of the label for each language in CONTRIBUTION_TYPES
+LABEL_INDEX = {"en": 1, "zh": 2}
 # accepted spellings -> canonical key
 CONTRIBUTION_ALIASES = {
     "code": "code",
@@ -127,6 +129,11 @@ ROLE_LABELS = {
     "maintainer": "Maintainer",
     "contributor": "Contributor",
 }
+ROLE_LABELS_ZH = {
+    "lead": "项目负责人",
+    "maintainer": "维护者",
+    "contributor": "贡献者",
+}
 DEFAULT_ROLE = "contributor"
 # Read the Docs sections: (title, roles in this section).  The role is shown by
 # the section heading, so it is not repeated on every card.
@@ -135,8 +142,8 @@ RTD_SECTIONS = (
     ("Maintainers", ("maintainer",)),
     ("Contributors", ("contributor",)),
 )
-# README groups: (English title, Chinese title, roles).  Inside a group the order
-# of contributors.yml is kept, so the README stays in paper-author order.
+# README groups: (English title, Chinese title, roles).  The project lead is
+# placed first in its group, the rest of the group is sorted by display name.
 README_SECTIONS = (
     ("Maintainers", "维护者", ("lead", "maintainer")),
     ("Contributors", "贡献者", ("contributor",)),
@@ -343,6 +350,7 @@ def _normalise(entry, index: int) -> dict:
     contributions.sort(key=list(CONTRIBUTION_TYPES).index)
     return {
         "name": name,
+        "name_zh": str(entry.get("name_zh") or "").strip(),
         "role": role,
         "contributions": contributions,
         "github": str(entry.get("github") or "").strip(),
@@ -350,6 +358,13 @@ def _normalise(entry, index: int) -> dict:
         "orcid": str(entry.get("orcid") or "").strip(),
         "avatar": str(entry.get("avatar") or "").strip(),
     }
+
+
+def display_name(entry: dict, lang: str) -> str:
+    """Name shown for ``lang``: the Chinese name when there is one."""
+    if lang == "zh" and entry.get("name_zh"):
+        return entry["name_zh"]
+    return entry["name"]
 
 
 # =============================================================================
@@ -422,11 +437,15 @@ def _profile_url(entry: dict):
 # =============================================================================
 # Rendering
 # =============================================================================
-def _emoji_title_html(entry: dict) -> str:
+def _label(key: str, lang: str) -> str:
+    return CONTRIBUTION_TYPES[key][LABEL_INDEX[lang]]
+
+
+def _emoji_title_html(entry: dict, lang: str) -> str:
     tokens = []
     for key in entry["contributions"]:
-        emoji, label = CONTRIBUTION_TYPES[key]
-        tokens.append(f'<abbr title="{label}">{emoji}</abbr>')
+        emoji = CONTRIBUTION_TYPES[key][0]
+        tokens.append(f'<abbr title="{_label(key, lang)}">{emoji}</abbr>')
     return " ".join(tokens)
 
 
@@ -436,10 +455,10 @@ def _used_contribution_keys(contributors) -> list:
     return [key for key in CONTRIBUTION_TYPES if key in used]
 
 
-def _legend_text(contributors) -> str:
+def _legend_text(contributors, lang: str) -> str:
     """One-line legend so the per-card emoji need no repeated labels."""
     return " · ".join(
-        f"{CONTRIBUTION_TYPES[key][0]} {CONTRIBUTION_TYPES[key][1]}"
+        f"{CONTRIBUTION_TYPES[key][0]} {_label(key, lang)}"
         for key in _used_contribution_keys(contributors)
     )
 
@@ -460,21 +479,24 @@ def _render_table(cells, columns: int, table_class: str = "") -> str:
     return "\n".join(lines)
 
 
-def _readme_cell(entry: dict, target_dir: str, role_label: str = "") -> list:
+def _readme_cell(
+    entry: dict, target_dir: str, lang: str, role_label: str = ""
+) -> list:
     url, _ = _profile_url(entry)
     src = _avatar_url(entry, target_dir)
-    image = f'<img src="{src}" width="{README_AVATAR_PX}" height="{README_AVATAR_PX}" alt="{entry["name"]}">'
+    name = display_name(entry, lang)
+    image = f'<img src="{src}" width="{README_AVATAR_PX}" height="{README_AVATAR_PX}" alt="{name}">'
     if url:
         image = f'<a href="{url}">{image}</a>'
     cell = [
         '<td align="center" width="110" valign="top">',
         f"  {image}<br>",
-        f'  <sub><b>{entry["name"]}</b></sub>',
+        f"  <sub><b>{name}</b></sub>",
     ]
     if role_label:
         cell[-1] += "<br>"
         cell.append(f"  <sub>{role_label}</sub>")
-    emoji = _emoji_title_html(entry)
+    emoji = _emoji_title_html(entry, lang)
     if emoji:
         cell[-1] += "<br>"
         cell.append(f"  <sub>{emoji}</sub>")
@@ -494,7 +516,7 @@ def _rtd_cell(entry: dict, target_dir: str) -> list:
         f"  {image}<br>",
         f"  <strong>{name}</strong>",
     ]
-    emoji = _emoji_title_html(entry)
+    emoji = _emoji_title_html(entry, "en")
     if emoji:
         cell[-1] += "<br>"
         cell.append(f"  <small>{emoji}</small>")
@@ -515,15 +537,16 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
     parts = []
     parts.append(f'<p align="center"><sub>{README_INTRO[lang]}</sub></p>')
     parts.append("")
-    legend = f"{README_LEGEND_LABEL[lang]}{_legend_text(contributors)}"
+    legend = f"{README_LEGEND_LABEL[lang]}{_legend_text(contributors, lang)}"
     parts.append(f'<p align="center"><sub>{legend}</sub></p>')
     assigned = set()
+    role_labels = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
     for title_en, title_zh, roles in README_SECTIONS:
         group = _readme_group(contributors, roles)
         assigned.update(roles)
         if not group:
             continue
-        title = title_en if lang == "en" else f"{title_en} / {title_zh}"
+        title = title_en if lang == "en" else title_zh
         parts.append("")
         parts.append(f"### {title}")
         parts.append("")
@@ -531,8 +554,9 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
             _readme_cell(
                 entry,
                 target_dir,
+                lang,
                 # the project lead keeps a label inside the maintainer group
-                ROLE_LABELS[entry["role"]] if entry["role"] == "lead" else "",
+                role_labels[entry["role"]] if entry["role"] == "lead" else "",
             )
             for entry in group
         ]
@@ -545,9 +569,9 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
     for role in extra_roles:  # future roles fall back to their own group
         group = [entry for entry in contributors if entry["role"] == role]
         parts.append("")
-        parts.append(f"### {ROLE_LABELS[role]}")
+        parts.append(f"### {role_labels[role]}")
         parts.append("")
-        cells = [_readme_cell(entry, target_dir) for entry in group]
+        cells = [_readme_cell(entry, target_dir, lang) for entry in group]
         parts.append(_render_table(cells, README_COLUMNS))
     parts.append("")
     parts.append(f'<p align="center"><sub>{README_OUTRO[lang]}</sub></p>')
@@ -572,7 +596,7 @@ def _readme_group(contributors, roles) -> list:
 
 
 def render_rtd_page(contributors, target_dir: str = RTD_TARGET_DIR) -> str:
-    parts = [RTD_INTRO, "", f"<p>Contribution types: {_legend_text(contributors)}</p>", ""]
+    parts = [RTD_INTRO, "", f"<p>Contribution types: {_legend_text(contributors, 'en')}</p>", ""]
     assigned = set()
     for title, roles in RTD_SECTIONS:
         group = _sorted_group(contributors, roles)

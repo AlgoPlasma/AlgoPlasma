@@ -8,7 +8,8 @@
 #
 # Fields
 # ------
-#   name           display name (required)
+#   name           display name, Latin/pinyin (required)
+#   name_zh        Chinese name, used on the Chinese README pages (optional)
 #   role           lead | maintainer | contributor   (default: contributor)
 #   contributions  list of contribution types, or `all` for every type
 #   github         GitHub username (optional)
@@ -51,6 +52,7 @@
 contributors:
   # --- project lead ---------------------------------------------------------
   - name: Yinjian Zhao
+    name_zh: 赵隐剑
     github: Yin-YinjianZhao
     gitee: Yin-YinjianZhao
     role: lead
@@ -58,13 +60,15 @@ contributors:
 
   # --- maintainers ----------------------------------------------------------
   - name: Zhongping Zhao
-    # 赵中平; contributes under the account name GooseGH.
+    name_zh: 赵中平
+    # contributes under the account name GooseGH
     github: GooseGH
     gitee: GooseGH
     role: maintainer
     contributions: all
 
   - name: Zhe Liu
+    name_zh: 刘哲
     gitee: lzhe898
     # Gitee-only contributor: point `avatar` at the Gitee avatar so it stays in
     # sync when the avatar changes.  Without it the generated initials avatar
@@ -74,49 +78,58 @@ contributors:
     contributions: all
 
   - name: Baisheng Wang
+    name_zh: 王佰胜
     gitee: HermiteCat
     role: maintainer
     contributions: all
 
   - name: Zilong Peng
+    name_zh: 彭子龙
     gitee: peng-zilong123
     role: maintainer
     contributions: all
 
   - name: Xin Luo
+    name_zh: 罗鑫
     gitee: Luo-Xin-410
     role: maintainer
     contributions: all
 
   - name: Lihuan Xie
+    name_zh: 谢礼桓
     orcid: 0009-0009-6248-9781
     role: maintainer
     contributions: all
 
   - name: Xi Chen
+    name_zh: 陈曦
     role: maintainer
     contributions: all
 
   - name: Zhijun Zhou
+    name_zh: 周志君
     gitee: HIT-ZhouZhijun
     role: maintainer
     contributions: all
 
   - name: Kunpeng Zhong
+    name_zh: 钟昆硼
     role: maintainer
     contributions: all
 
   - name: Yingjie Chen
+    name_zh: 陈英杰
     gitee: jiaohuadetudouni
     role: maintainer
     contributions: all
 
   - name: Changzheng Hu
+    name_zh: 胡长征
     role: maintainer
     contributions: all
 
   - name: Wushun Zhang
-    # 张武顺
+    name_zh: 张武顺
     role: maintainer
     contributions: all
 

@@ -125,93 +125,93 @@ make html
 <!-- CONTRIBUTORS:START -->
 <p align="center"><sub>感谢每一位为 AlgoPlasma 贡献代码、测试、性能基准、文档、示例与缺陷修复的成员。</sub></p>
 
-<p align="center"><sub>贡献类型：💻 Code · 🧪 Tests · 📊 Benchmark · 📖 Documentation · 🎓 Examples · 🐛 Bug Fixes</sub></p>
+<p align="center"><sub>贡献类型：💻 代码 · 🧪 测试 · 📊 性能基准 · 📖 文档 · 🎓 示例 · 🐛 缺陷修复</sub></p>
 
-### Maintainers / 维护者
+### 维护者
 
 <table>
   <tr>
     <td align="center" width="110" valign="top">
-      <a href="https://github.com/Yin-YinjianZhao"><img src="https://github.com/Yin-YinjianZhao.png" width="80" height="80" alt="Yinjian Zhao"></a><br>
-      <sub><b>Yinjian Zhao</b></sub><br>
-      <sub>Project Lead</sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+      <a href="https://github.com/Yin-YinjianZhao"><img src="https://github.com/Yin-YinjianZhao.png" width="80" height="80" alt="赵隐剑"></a><br>
+      <sub><b>赵隐剑</b></sub><br>
+      <sub>项目负责人</sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/baisheng-wang.svg" width="80" height="80" alt="Baisheng Wang"></a><br>
-      <sub><b>Baisheng Wang</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+      <a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/baisheng-wang.svg" width="80" height="80" alt="王佰胜"></a><br>
+      <sub><b>王佰胜</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/changzheng-hu.svg" width="80" height="80" alt="Changzheng Hu"><br>
-      <sub><b>Changzheng Hu</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+      <img src="docs/source/_static/contributors/changzheng-hu.svg" width="80" height="80" alt="胡长征"><br>
+      <sub><b>胡长征</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="Kunpeng Zhong"><br>
-      <sub><b>Kunpeng Zhong</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+      <img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="钟昆硼"><br>
+      <sub><b>钟昆硼</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="80" height="80" alt="Lihuan Xie"></a><br>
-      <sub><b>Lihuan Xie</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+      <a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="80" height="80" alt="谢礼桓"></a><br>
+      <sub><b>谢礼桓</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
     </td>
     <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/wushun-zhang.svg" width="80" height="80" alt="Wushun Zhang"><br>
-      <sub><b>Wushun Zhang</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="Xi Chen"><br>
-      <sub><b>Xi Chen</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="Xin Luo"></a><br>
-      <sub><b>Xin Luo</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="80" height="80" alt="Yingjie Chen"></a><br>
-      <sub><b>Yingjie Chen</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="80" height="80" alt="Zhe Liu"></a><br>
-      <sub><b>Zhe Liu</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="Zhijun Zhou"></a><br>
-      <sub><b>Zhijun Zhou</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://github.com/GooseGH"><img src="https://github.com/GooseGH.png" width="80" height="80" alt="Zhongping Zhao"></a><br>
-      <sub><b>Zhongping Zhao</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+      <img src="docs/source/_static/contributors/wushun-zhang.svg" width="80" height="80" alt="张武顺"><br>
+      <sub><b>张武顺</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/zilong-peng.svg" width="80" height="80" alt="Zilong Peng"></a><br>
-      <sub><b>Zilong Peng</b></sub><br>
-      <sub><abbr title="Code">💻</abbr> <abbr title="Tests">🧪</abbr> <abbr title="Benchmark">📊</abbr> <abbr title="Documentation">📖</abbr> <abbr title="Examples">🎓</abbr> <abbr title="Bug Fixes">🐛</abbr></sub>
+      <img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="陈曦"><br>
+      <sub><b>陈曦</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="罗鑫"></a><br>
+      <sub><b>罗鑫</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="80" height="80" alt="陈英杰"></a><br>
+      <sub><b>陈英杰</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="80" height="80" alt="刘哲"></a><br>
+      <sub><b>刘哲</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="周志君"></a><br>
+      <sub><b>周志君</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
+    </td>
+    <td align="center" width="110" valign="top">
+      <a href="https://github.com/GooseGH"><img src="https://github.com/GooseGH.png" width="80" height="80" alt="赵中平"></a><br>
+      <sub><b>赵中平</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="110" valign="top">
+      <a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/zilong-peng.svg" width="80" height="80" alt="彭子龙"></a><br>
+      <sub><b>彭子龙</b></sub><br>
+      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
     </td>
   </tr>
 </table>
 
-### Contributors / 贡献者
+### 贡献者
 
 <table>
   <tr>
     <td align="center" width="110" valign="top">
       <a href="https://github.com/bocong-zheng"><img src="https://github.com/bocong-zheng.png" width="80" height="80" alt="Bocong Zheng"></a><br>
       <sub><b>Bocong Zheng</b></sub><br>
-      <sub><abbr title="Code">💻</abbr></sub>
+      <sub><abbr title="代码">💻</abbr></sub>
     </td>
   </tr>
 </table>
