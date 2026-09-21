@@ -4,6 +4,7 @@ K_Diagnostics
 .. toctree::
     :maxdepth: 1
 
+    K_Diagnostics/diagnostics_foundations
     K_Diagnostics/diagnostics_learning_path
     K_Diagnostics/diagnostics_usage_cookbook
     K_Diagnostics/diagnostics_testing_guide

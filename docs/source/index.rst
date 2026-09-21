@@ -34,6 +34,7 @@ AlgoPlasma
 
     ./developer_onboarding
     ./glossary
+    ./knowledge/index
     ./maintenance_checklist
 
 .. image:: images/algoplasma-logo-transparent.png

@@ -11,6 +11,12 @@ Diagnostics Learning Path
 
 .. container:: ap-lang ap-lang-zh
 
+   .. note::
+
+      如果还不熟悉波数、FFT、互相位或最大似然，请先读
+      :doc:`探针诊断基础 <diagnostics_foundations>`。它从同一个双探针例子逐步引入这些概念，
+      并说明多构型反演的适用条件；读完后再用本页安排函数阅读顺序。
+
    .. rubric:: 这页解决什么问题
 
    本页面向第一次接触 ``K_Diagnostics`` 的读者。它不是谱分析教材，而是帮你把"两根探针能测到什么、
@@ -93,6 +99,13 @@ Diagnostics Learning Path
    - 逐个加入构型重画联合似然，观察候选集如何从一族条纹收缩到一个峰。
 
 .. container:: ap-lang ap-lang-en
+
+   .. note::
+
+      If wavenumber, FFTs, cross phase, or maximum likelihood are new to you, start with
+      :doc:`Probe Diagnostics Foundations <diagnostics_foundations>`. It develops these ideas
+      through one two-probe example and explains the conditions for multi-configuration
+      inversion. Then use this page to choose the routine reading order.
 
    .. rubric:: What This Page Is For
 
