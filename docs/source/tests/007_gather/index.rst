@@ -7,6 +7,7 @@
 
    C01_gather_3Dxyz
    C02_gather_3Dxyz_bspline
+   C03_gather_3Draz_nonuniform
 
 .. raw:: html
 
@@ -20,7 +21,7 @@
    .. rubric:: 范围
 
    ``tests/007_gather`` 覆盖 :doc:`C_Gather </rst_files/C_Gather>` 的 gather 例程。
-   测试程序由 Fortran 写出确定性 CSV 数据，Python 脚本负责基准对比、误差统计和图片输出。
+   测试程序由 Fortran 写出确定性 CSV 数据，Python 脚本负责基准对比和误差统计；C01/C02 另输出诊断图片，C03 另检查错误输入。
 
    .. list-table::
       :header-rows: 1
@@ -36,6 +37,10 @@
         - ``sub_C02_gather_3Dxyz_bspline``
         - ``order=1`` 对 C01、常数场保持、线性场精确性。
 
+      * - :doc:`C03_gather_3Draz_nonuniform <C03_gather_3Draz_nonuniform>`
+        - 两个 gather 接口和 ``sub_C03_check_grid``
+        - 非均匀交错场解析解、接口与周期路径、边界/ghost、收敛阶与错误诊断。
+
    .. rubric:: 运行方式
 
    .. code-block:: bash
@@ -46,6 +51,9 @@
       cd ../C02_gather_3Dxyz_bspline
       bash run.sh
 
+      cd ../C03_gather_3Draz_nonuniform
+      bash run.sh
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Scope
@@ -53,7 +61,7 @@
    ``tests/007_gather`` covers gather routines from
    :doc:`C_Gather </rst_files/C_Gather>`. The Fortran drivers write
    deterministic CSV data; Python scripts compare against references, compute
-   errors, and save diagnostic figures.
+   errors, and report PASS/FAIL. C01/C02 also save diagnostic figures; C03 also checks invalid inputs.
 
    .. list-table::
       :header-rows: 1
@@ -69,6 +77,10 @@
         - ``sub_C02_gather_3Dxyz_bspline``
         - ``order=1`` against C01, constant-field preservation, and linear-field exactness.
 
+      * - :doc:`C03_gather_3Draz_nonuniform <C03_gather_3Draz_nonuniform>`
+        - Both gather entries and ``sub_C03_check_grid``
+        - Staggered-field analytic values, interface/periodic paths, boundaries/ghosts, convergence, and invalid-input diagnostics.
+
    .. rubric:: Run Commands
 
    .. code-block:: bash
@@ -77,4 +89,7 @@
       bash run.sh
 
       cd ../C02_gather_3Dxyz_bspline
+      bash run.sh
+
+      cd ../C03_gather_3Draz_nonuniform
       bash run.sh
