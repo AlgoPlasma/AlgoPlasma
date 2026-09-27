@@ -23,7 +23,7 @@ K02_beall
 
    * :doc:`fun_K02_beall_spectrum.py <K02_beall/fun_K02_beall_spectrum>`:
 
-       ``fun_K02_beall_spectrum`` 累积 :math:`S(k,f)`：每个 (分段, 频点) 样本按互谱幅度加权投进一个波数格。这是**统计**估计器，不相干的分段散开、相干的堆叠，因此需要的分段数远多于求一个均值相位所需。
+       ``fun_K02_beall_spectrum`` 累积 :math:`S(k,f)`：每个 (分段, 频点) 样本按两路自功率平均加权投进一个波数格。这是**统计**估计器，不相干的分段散开、相干的堆叠，因此需要的分段数远多于求一个均值相位所需。
 
    * :doc:`fun_K02_wavenumber_residual.py <K02_beall/fun_K02_wavenumber_residual>`:
 
@@ -47,7 +47,7 @@ K02_beall
 
    * :doc:`fun_K02_fold_order.py <K02_beall/fun_K02_fold_order>`:
 
-       ``fun_K02_fold_order`` 给出折叠阶数 :math:`n`——单对探针无法提供、而多个不同间距长度联合起来才能在 K03 中恢复的那个整数。
+       ``fun_K02_fold_order`` 从已知投影波数计算折叠阶数 :math:`n`，用于比较理论波数与主值区间内的折叠波数。
 
    * :doc:`fun_K02_wavenumber_edges.py <K02_beall/fun_K02_wavenumber_edges>`:
 
@@ -87,7 +87,7 @@ K02_beall
 
    * :doc:`fun_K02_beall_spectrum.py <K02_beall/fun_K02_beall_spectrum>`:
 
-       ``fun_K02_beall_spectrum`` accumulates :math:`S(k,f)`: each (segment, frequency) sample is weighted by the cross-spectral magnitude and dropped into one wavenumber bin. It is a **statistical** estimator in which incoherent segments spread out and coherent ones pile up, so it needs many more segments than a mean phase does.
+       ``fun_K02_beall_spectrum`` accumulates :math:`S(k,f)`: each (segment, frequency) sample is weighted by the mean of the two auto-powers and dropped into one wavenumber bin. It is a **statistical** estimator in which incoherent segments spread out and coherent ones pile up, so it needs many more segments than a mean phase does.
 
    * :doc:`fun_K02_wavenumber_residual.py <K02_beall/fun_K02_wavenumber_residual>`:
 
@@ -111,7 +111,7 @@ K02_beall
 
    * :doc:`fun_K02_fold_order.py <K02_beall/fun_K02_fold_order>`:
 
-       ``fun_K02_fold_order`` returns the fold order :math:`n`, the integer a single pair cannot supply and that several separation lengths jointly restore in K03.
+       ``fun_K02_fold_order`` computes the fold order :math:`n` from a known projected wavenumber, for comparing theoretical wavenumbers with their values in the principal interval.
 
    * :doc:`fun_K02_wavenumber_edges.py <K02_beall/fun_K02_wavenumber_edges>`:
 

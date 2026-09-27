@@ -11,6 +11,8 @@ fun_K02_beall_spectrum.py
 
 .. container:: ap-lang ap-lang-zh
 
+   无效相位、非有限或非正权重不累积；仍除以输入总段数。不自动作 PSD 归一化。
+
    .. rubric:: 直接用途
 
    累积 Beall 统计色散谱 :math:`S(k,f)`。
@@ -36,7 +38,7 @@ fun_K02_beall_spectrum.py
       * - ``magnitude``
         - ``in``
         - ``(nseg, nfreq)``
-        - 互谱幅度，作为累积权重。
+        - 两路自功率平均 ``(|X1|²+|X2|²)/2``，用作累积权重，由 fun_K01_pair_power 计算。
         - 调用者归一化下的信号单位平方
         - 与 ``phase`` 逐元素对应。
       * - ``frequencies_hz``
@@ -75,7 +77,7 @@ fun_K02_beall_spectrum.py
 
    .. rubric:: 实现逻辑
 
-   - 每个 (分段, 频点) 样本按 :math:`|X_1X_2^{*}|` 加权投进 :math:`\mathrm{wrap}(\theta)/|\boldsymbol{\chi}|` 所在的唯一一个波数格，最后除以分段数。
+   - 每个 (分段, 频点) 样本按 :math:`(|X_1|^2+|X_2|^2)/2` 加权投进 :math:`\mathrm{wrap}(\theta)/|\boldsymbol{\chi}|` 所在的唯一一个波数格，最后除以分段数。
    - 不相干的分段沿波数轴散开，相干的堆叠——这就是该估计器"统计"二字的含义。
 
    .. rubric:: 调用注意
@@ -87,7 +89,7 @@ fun_K02_beall_spectrum.py
    .. math::
 
       S(k, f) = \frac{1}{N_{\rm seg}}\sum_{s}
-      \left|X_{1,s}X_{2,s}^{*}\right|\,
+      \frac{|X_{1,s}|^2+|X_{2,s}|^2}{2}\,
       \delta\!\left[k - \frac{\mathrm{wrap}(\theta_s)}{|\boldsymbol{\chi}|}\right]
 
    .. raw:: html
@@ -98,6 +100,8 @@ fun_K02_beall_spectrum.py
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   Invalid phases and nonfinite/nonpositive weights are omitted; division remains by total input segments, not valid count. No PSD normalization is applied.
 
    .. rubric:: Direct Purpose
 
@@ -124,7 +128,7 @@ fun_K02_beall_spectrum.py
       * - ``magnitude``
         - ``in``
         - ``(nseg, nfreq)``
-        - Cross-spectral magnitude, the accumulation weight.
+        - Mean pair auto-power ``(|X1|²+|X2|²)/2``, computed by fun_K01_pair_power and used as the accumulation weight.
         - Squared signal units under the caller's normalisation
         - Element-wise counterpart of ``phase``.
       * - ``frequencies_hz``
@@ -163,7 +167,7 @@ fun_K02_beall_spectrum.py
 
    .. rubric:: Implementation Notes
 
-   - Each (segment, frequency) sample contributes its :math:`|X_1X_2^{*}|` to the single wavenumber bin holding :math:`\mathrm{wrap}(\theta)/|\boldsymbol{\chi}|`, and the histogram is divided by the segment count.
+   - Each (segment, frequency) sample contributes :math:`(|X_1|^2+|X_2|^2)/2` to the single wavenumber bin holding :math:`\mathrm{wrap}(\theta)/|\boldsymbol{\chi}|`, and the histogram is divided by the segment count.
    - Incoherent segments spread their power along the wavenumber axis while coherent ones concentrate it, which is what makes the estimator statistical.
 
    .. rubric:: Calling Notes
@@ -175,7 +179,7 @@ fun_K02_beall_spectrum.py
    .. math::
 
       S(k, f) = \frac{1}{N_{\rm seg}}\sum_{s}
-      \left|X_{1,s}X_{2,s}^{*}\right|\,
+      \frac{|X_{1,s}|^2+|X_{2,s}|^2}{2}\,
       \delta\!\left[k - \frac{\mathrm{wrap}(\theta_s)}{|\boldsymbol{\chi}|}\right]
 
    .. raw:: html

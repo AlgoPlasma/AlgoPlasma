@@ -11,6 +11,8 @@ fun_K03_peak_wavevector.py
 
 .. container:: ap-lang ap-lang-zh
 
+   输入似然应有限且包含可定位的峰。非有限或完全平坦的数组抛 ValueError；相等最大值按数组顺序取第一个。
+
    .. rubric:: 直接用途
 
    定位对数似然网格的极大点。
@@ -52,7 +54,7 @@ fun_K03_peak_wavevector.py
 
    .. rubric:: 局部假设 / 前置条件
 
-   - 估计值被限制在网格上，精度有半个网格步长的下限。
+   - 估计值被限制在网格上，精度与网格分辨率及混叠分支选择有关。
 
    .. rubric:: 实现逻辑
 
@@ -60,7 +62,7 @@ fun_K03_peak_wavevector.py
 
    .. rubric:: 调用注意
 
-   - 峰位落在网格边界说明搜索范围过窄；``angle_deg`` 由 ``arctan2`` 给出，落在 :math:`(-180°, 180°]`。
+   - 峰位落在边界时，可扩大范围并比较结果；``angle_deg`` 由 ``arctan2`` 给出。
 
    .. raw:: html
 
@@ -70,6 +72,8 @@ fun_K03_peak_wavevector.py
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   The input likelihood must be finite and have a locatable peak. Nonfinite or flat arrays raise ValueError; exact ties select the first point in array order.
 
    .. rubric:: Direct Purpose
 
@@ -112,7 +116,7 @@ fun_K03_peak_wavevector.py
 
    .. rubric:: Local Assumptions and Preconditions
 
-   - The estimate is confined to the grid, so the accuracy has a floor of half a grid step.
+   - The estimate is confined to the grid, so the accuracy depends on grid resolution and alias selection.
 
    .. rubric:: Implementation Notes
 
@@ -120,7 +124,7 @@ fun_K03_peak_wavevector.py
 
    .. rubric:: Calling Notes
 
-   - A peak on the boundary means the search range was too narrow; ``angle_deg`` comes from ``arctan2`` and lies in :math:`(-180^\circ, 180^\circ]`.
+   - For a boundary peak, expand the range and compare the resulting estimates. ``angle_deg`` comes from ``arctan2``.
 
    .. raw:: html
 

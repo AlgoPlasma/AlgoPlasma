@@ -11,6 +11,8 @@ fun_K02_peak_wavenumber.py
 
 .. container:: ap-lang ap-lang-zh
 
+   只比较有限正功率；没有有效功率的频段返回 NaN。
+
    .. rubric:: 直接用途
 
    取每个频点上 Beall 谱的峰位波数。
@@ -64,6 +66,8 @@ fun_K02_peak_wavenumber.py
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   Only finite positive power is compared; empty/invalid rows return NaN.
 
    .. rubric:: Direct Purpose
 

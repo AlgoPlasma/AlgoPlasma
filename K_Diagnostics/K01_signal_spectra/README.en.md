@@ -7,6 +7,10 @@ probe records into the spectral quantities the later units need.  The
 segmentation scheme and the phase sign convention are defined here once and
 shared by K02 and K03.
 
+The Beall weight is provided separately by `fun_K01_pair_power(ffts_1, ffts_2)`.
+Zero/nonfinite cross spectra give NaN phase; fewer than two valid samples gives NaN statistics.
+The histogram mode estimates the mean directly (Liu 2025 II.E); ddof=1 is an implementation convention.
+
 ## Files
 
 One routine per file, as elsewhere in the repository; `mod_` only aggregates.
@@ -19,15 +23,15 @@ One routine per file, as elsewhere in the repository; `mod_` only aggregates.
 | `fun_K01_power_spectrum.py` | Segment-averaged one-sided power spectral density. |
 | `fun_K01_coherence.py` | Magnitude-squared coherence in `[0, 1]`. |
 | `fun_K01_cross_phase.py` | Per-segment cross phase and cross-spectral magnitude. |
-| `fun_K01_phase_mode_statistics.py` | Mode-referenced phase mean and variance (`ddof=1`). |
+| `fun_K01_phase_mode_statistics.py` | Histogram-mode phase mean and variance (`ddof=1`). |
 
 ## Interface
 
 | Function | Purpose |
 | --- | --- |
 | `fun_K01_wrap_to_pi(values)` | Wrap angles into `[-pi, pi]`. |
-| `fun_K01_segment_ffts(signal, nperseg, n_segments=None, detrend=True)` | Segment, detrend, rFFT. |
-| `fun_K01_power_spectrum(ffts, sampling_rate_hz, nperseg)` | One-sided power spectral density. |
+| `fun_K01_segment_ffts(signal, nperseg, n_segments=None, detrend=True, window='boxcar')` | Segment, detrend, rFFT. |
+| `fun_K01_power_spectrum(ffts, sampling_rate_hz, nperseg, window='boxcar')` | One-sided power spectral density. |
 | `fun_K01_coherence(ffts_1, ffts_2)` | Magnitude-squared coherence. |
 | `fun_K01_cross_phase(ffts_1, ffts_2)` | Cross phase and cross-spectral magnitude. |
 | `fun_K01_phase_mode_statistics(phase, nbins=60)` | Phase mean and variance. |
@@ -43,10 +47,10 @@ The separation is `chi = r_2 - r_1` and the cross spectrum is
 
 When the true phase approaches `+-pi` the segment phases fall on both sides of
 the branch cut and an arithmetic mean collapses towards zero.  This estimator
-locates the mode on a histogram and moves the cut opposite it before averaging:
+uses the histogram mode directly as the mean estimate and shifts samples to compute variance:
 
 ```
-theta_bar = theta_mode + <wrap(theta_i - theta_mode)>
+theta_bar = theta_mode
 sigma^2   = var(wrap(theta_i - theta_mode), ddof=1) + 1e-12
 ```
 
@@ -54,16 +58,12 @@ sigma^2   = var(wrap(theta_i - theta_mode), ddof=1) + 1e-12
 
 - **Segments do not overlap.**  Overlapping them correlates the phase samples,
   whereas K03's likelihood weights assume independence.
-- **No window is applied.**  A rectangular window is exact for content periodic
-  in the segment length; measured data that is not bin aligned needs a window
-  from the caller.  Being off-bin affects only the in-bin power, not the *cross*
-  phase: the leakage factor is identical for both probes and cancels in
-  `X_1 conj(X_2)`.
+- Use window='boxcar' for bin-aligned data or window='hann' to reduce sidelobes while broadening the main lobe. Off-bin truncation can affect cross-phase estimates; power_spectrum uses the matching FFT window for power normalization.
 - **The coherence floor is not zero.**  With `n` independent segments,
   uncorrelated signals average to `1/n`, not 0.  That is the reference for
   judging an empty band.
 - `phase_mode_statistics` returns the variance of an **individual** sample, not
-  of the mean, and `theta_bar` is not re-wrapped.
+  of the mean. The mode centre is within the principal range; ddof=1 is an implementation convention.
 - A trailing partial segment is discarded.
 
 ## Usage
@@ -91,11 +91,11 @@ mean_phase, variance = fun_K01_phase_mode_statistics(phase[:, mode_bins])
 the power spectrum falls as `1/f^2`.  Three quantities of the generator are
 recovered from the measurement:
 
-- fitted spectral exponent **-2.015** against -2;
+- fitted spectral exponent **-2.002** against -2;
 - lower band edge 104 kHz, matching the generated value to within one bin;
-- the frequency at which the spectrum meets the noise floor, 816 kHz measured
-  against the 733 kHz the `1/f^2` law predicts (11 %).  This last one tests the
+- the frequency at which the spectrum meets the noise floor, 752 kHz measured
+  against the 725 kHz the `1/f^2` law predicts (3.7 %).  This last one tests the
   spectrum across its whole dynamic range rather than only where it is strong.
 
-Coherence has median 0.932 over the bins that stand clear of the floor, and
-out-of-band bins sit at 0.038 against the `1/n_seg = 0.0625` floor.
+Coherence has median 0.933 over the bins that stand clear of the floor, and
+out-of-band bins sit at 0.00248 against the `1/n_seg = 0.003906` floor.

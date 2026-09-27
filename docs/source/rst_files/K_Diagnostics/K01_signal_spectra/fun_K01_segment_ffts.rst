@@ -11,6 +11,8 @@ fun_K01_segment_ffts.py
 
 .. container:: ap-lang ap-lang-zh
 
+   新增可选参数 window='boxcar'；hann 对应对称 numpy.hanning 窗，要求至少三个样本。
+
    .. rubric:: 直接用途
 
    把一路探针记录切成不重叠的分段，逐段去均值后做实数 FFT。
@@ -59,7 +61,7 @@ fun_K01_segment_ffts.py
    .. rubric:: 局部假设 / 前置条件
 
    - 分段不重叠。重叠会使相位样本相关，而 ``fun_K01_phase_mode_statistics`` 估计方差时假定样本独立，K03 的似然权重会因此偏大。
-   - 不加窗。内容在分段长度上周期时矩形窗即精确；非 bin 对齐的实测数据需由调用方自行加窗。
+   - window 可选 boxcar（默认）或 hann（numpy.hanning）；去均值后乘窗。Hann 窗降低频谱旁瓣，同时使主瓣变宽。
 
    .. rubric:: 实现逻辑
 
@@ -78,6 +80,8 @@ fun_K01_segment_ffts.py
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   Optional window='boxcar'; hann uses symmetric numpy.hanning and requires at least three samples.
 
    .. rubric:: Direct Purpose
 
@@ -127,7 +131,7 @@ fun_K01_segment_ffts.py
    .. rubric:: Local Assumptions and Preconditions
 
    - Segments do not overlap. Overlapping them correlates the phase samples that ``fun_K01_phase_mode_statistics`` treats as independent when estimating the variance, which would inflate the K03 likelihood weights.
-   - No window is applied. A rectangular window is exact for content periodic in the segment length; records that are not bin aligned need a window supplied by the caller.
+   - window accepts boxcar (default) or hann (numpy.hanning); detrending precedes windowing. Hann reduces spectral sidelobes and broadens the main lobe.
 
    .. rubric:: Implementation Notes
 

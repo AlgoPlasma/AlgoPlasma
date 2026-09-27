@@ -8,8 +8,7 @@
 A single pair can only report wavenumbers inside `+-pi/|chi|`; modes beyond that
 limit are folded back, so a straight dispersion branch appears broken into a
 sawtooth on the `S(k, f)` map.  `K03_mle_k2d` removes the ambiguity using
-separations of several lengths — the two units are the problem and the solution
-of the same measurement.
+complementary geometries when identifiability holds; multiple lengths alone do not guarantee it.
 
 ## Files
 
@@ -61,7 +60,7 @@ cannot supply.
 ## Method
 
 For each segment `s` and frequency `f`, the histogram bin holding
-`wrap(theta)/|chi|` receives the weight `|X_1 conj(X_2)|`; the result is divided
+`wrap(theta)/|chi|` receives the weight `(|X_1|**2 + |X_2|**2)/2`; the result is divided
 by the segment count.  Each `(segment, frequency)` sample lands in exactly one
 bin, which is what makes the estimator statistical: incoherent segments spread
 out, coherent ones pile up.
@@ -79,8 +78,8 @@ out, coherent ones pile up.
   a finite-sample mode.  When the segment count is far below the number of
   wavenumber bins the "peak" is really just the strongest single sample and
   scatters widely; a smooth `S(k, f)` needs substantially more segments.
-- **The effective separation is the projected length.**  Pass the projected
-  `chi` when the pair is at an angle to the direction of interest.
+- **Baseline and projection.** Use the actual probe-displacement vector for
+  `chi`; the reported Beall wavenumber is its component along that baseline, `K·chi_hat`.
 - Aliasing cannot be resolved within this unit; recovering the truth needs K03.
 
 ## Usage
@@ -91,7 +90,7 @@ sys.path.insert(0, "/path/to/AlgoPlasma")
 
 import numpy as np
 from K_Diagnostics.K01_signal_spectra.mod_K01_signal_spectra import (
-    fun_K01_cross_phase, fun_K01_segment_ffts,
+    fun_K01_cross_phase, fun_K01_pair_power, fun_K01_segment_ffts,
 )
 from K_Diagnostics.K02_beall.mod_K02_beall import (
     fun_K02_beall_spectrum, fun_K02_peak_wavenumber,
@@ -99,9 +98,10 @@ from K_Diagnostics.K02_beall.mod_K02_beall import (
 )
 
 chi = fun_K02_separation_vector(5.0e-3, np.deg2rad(30.0))
-phase, magnitude = fun_K01_cross_phase(
-    fun_K01_segment_ffts(probe_1, nperseg), fun_K01_segment_ffts(probe_2, nperseg)
-)
+ffts_1 = fun_K01_segment_ffts(probe_1, nperseg)
+ffts_2 = fun_K01_segment_ffts(probe_2, nperseg)
+phase, _ = fun_K01_cross_phase(ffts_1, ffts_2)
+magnitude = fun_K01_pair_power(ffts_1, ffts_2)
 frequencies = np.fft.rfftfreq(nperseg, d=1.0 / fs_hz)
 result = fun_K02_beall_spectrum(
     phase, magnitude, frequencies, chi,
@@ -117,10 +117,10 @@ used, 20 mm at 30 deg, whose alias frequency is `c_s/2d = 96 kHz`.  All 238
 generated modes are aliased and span ten theoretical fold orders; the measured
 `S(k, f)` shows the repeating sawtooth characteristic of a Beall map.
 
-The criterion assesses the 83 modes whose power exceeds ten times the noise
-floor and checks whether their measured folded-wavenumber peaks land near the
-closed-form prediction.  The circular residual has a median of 0.40 bins and a
-95th percentile of 1.46 bins, below the two-bin threshold.  This verifies the
+The criterion assesses the 84 modes whose power exceeds ten times the noise
+floor and checks whether the 95th percentile of their folded-wavenumber residual lies near the
+closed-form prediction.  The circular residual has a median of 0.443 bins and a
+95th percentile of 1.466 bins, below the two-bin threshold.  This verifies the
 folded-wavenumber trend; it does not claim that one pair recovers the lost fold
 order.
 

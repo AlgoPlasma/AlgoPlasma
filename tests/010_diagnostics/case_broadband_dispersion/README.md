@@ -35,7 +35,7 @@ them.
 ### Two probe sets
 
 The **inversion array** is 35 configurations, spacings 3.0–5.0 mm at
-orientations 0–90 deg, recorded for 16 segments each.
+orientations 0–90 deg, recorded for 256 segments each. The phase distribution is estimated from these repeated segments.
 
 The **Beall pair** is a single, deliberately coarse 20 mm pair recorded for 512
 segments.  Two reasons for treating it separately.  The number of aliasing folds
@@ -50,22 +50,21 @@ it needs far more segments than the mean phase the inversion needs.
 
 | Unit | Criterion | Measured |
 | --- | --- | --- |
-| K01 | The generator's spectral exponent is recovered from the measured spectrum | −2.015 against −2 |
+| K01 | The generator's spectral exponent is recovered from the measured spectrum | −2.002 against −2 |
 | K01 | The lower band edge is recovered | 104 kHz, matching to within one bin |
-| K01 | The spectrum meets the noise floor where the `1/f^2` law predicts | 816 kHz measured against 733 kHz predicted (11 %) |
-| K01 | Coherence is high where modes stand clear of the floor, and at the `1/n_seg` floor above the band | 0.932 and 0.038 against a floor of 0.0625 (checked numerically; not plotted) |
-| K02 | For modes above ten times the noise floor, the measured folded-wavenumber peak lands within two grid bins of K02's closed-form prediction | 83 modes assessed; circular residual median 0.40 bins, p95 1.46 bins |
+| K01 | The spectrum meets the noise floor where the `1/f^2` law predicts | 752 kHz measured against 725 kHz predicted (3.7 %) |
+| K01 | Coherence is high where modes stand clear of the floor, and at the `1/n_seg` floor above the band | 0.933 and 0.00248 against a floor of 0.003906 (checked numerically; not plotted) |
+| K02 | For modes above ten times the noise floor, the measured folded-wavenumber peak lands within two grid bins at the 95th percentile of K02's closed-form prediction | 84 modes assessed; circular residual median 0.443 bins, p95 1.466 bins |
 | K02 | The generated branch is genuinely folded, many times over | all 238 modes aliased across 10 theoretical fold orders |
-| K03 | Fitting `f` against `\|k_hat\|` through the origin returns the ion sound speed | 3829.6 against 3824.6 m/s, relative error **1.3e-3** |
-| K03 | Per-mode accuracy | `\|k\|` error median 0.28 %, direction error median 0.26 deg |
+| K03 | Fitting `f` against `\|k_hat\|` through the origin returns the ion sound speed | 3833.2 against 3824.6 m/s, relative error **2.27e-3** |
+| K03 | Per-mode accuracy | `\|k\|` error median 0.388 %, direction error median 0.304 deg |
 
 Every criterion has the same shape: a quantity the generator was built from is
 recovered from the measurement and compared with it.  None of them is a
 tolerance chosen to make the test go green.
 
-The wavenumbers span more than a decade, which one uniform search grid cannot
-cover at useful resolution, so K03 is driven through `search_wavevector`: a
-coarse grid over the whole range followed by a fine grid around the coarse peak.
+K03 is driven through `search_wavevector` on a
+complete uniform grid with bounded-memory row blocks; every grid point is evaluated.
 
 ## Running
 
@@ -76,8 +75,8 @@ bash run.sh
 `make.sh` generates the records into `build/`, and `source_py/analyze.py`
 reduces them through the three units, writing `output/summary.json` and four
 figures under `output/figures/`.  The exit code is 0 when all three checks
-pass.  A full run takes a few seconds and leaves about 11 MB in `build/`, which
-`clean.sh` deletes.
+pass.  The 256-segment run leaves about 95 MB in `build/`, removed by `clean.sh`.
+Runtime depends on available workers. `run.sh` first runs the deterministic counterexample tests.
 
 ## Figures
 

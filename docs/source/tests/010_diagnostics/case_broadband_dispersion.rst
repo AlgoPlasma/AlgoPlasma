@@ -50,8 +50,7 @@ case_broadband_dispersion Test
       bash clean.sh && bash make.sh && bash run.sh
 
    ``make.sh`` 把记录写进 ``build/``，``run.sh`` 把结果写进 ``output/summary.json`` 和
-   ``output/figures/`` 下的四张图。三项检验全部通过时退出码为 0。整次运行约数秒，
-   ``build/`` 约 11 MB，由 ``clean.sh`` 删除。
+   ``output/figures/`` 下的四张图。三项检验全部通过时退出码为 0。当前每个 MLE 构型使用 256 段、每轴 1501 点（完整遍历）；build 约 95 MB，运行耗时取决于并行资源，由 clean.sh 清理。
 
    .. rubric:: 判据
 
@@ -64,27 +63,30 @@ case_broadband_dispersion Test
         - 实测
       * - K01
         - 从测得的谱里拟合回生成器的谱指数
-        - −2.015 对 −2
+        - −2.002 对 −2
       * - K01
         - 下带边，以及谱与噪声底相交的频率是否符合 ``1/f²`` 律的预言
-        - 104 kHz 对 104 kHz；816 kHz 对预言的 733 kHz
+        - 104 kHz 对 104 kHz；752 kHz 对预言的 725 kHz
       * - K01
         - 生成频带以外的相干度应落在 ``1/n_segments`` 底线上
-        - 带外 0.038、带内 0.932，底线 0.0625
+        - 带外 0.00248、带内 0.933，底线 0.003906
       * - K02
-        - 高于 10 倍噪声底的模态，其折叠波数峰是否落在闭式预测的 2 个网格以内
-        - 评价 83 个模态；圆周残差中位数 0.40 格、p95 为 1.46 格；生成真值的 238 个模态
+        - 高于 10 倍噪声底的模态，其折叠波数峰残差的 95 分位是否小于 2 个网格
+        - 评价 84 个模态；圆周残差中位数 0.443 格、p95 为 1.466 格；生成真值的 238 个模态
           全部混叠并跨越 10 个理论折叠阶
       * - K03
         - 把 ``f`` 对 ``|k̂|`` 拟合成过原点的直线，斜率还原离子声速
-        - 3829.6 对 3824.6 m/s，相对误差 1.3e-3
+        - 3833.2 对 3824.6 m/s，相对误差 2.27e-3
       * - K03
         - 波数模长与方向的逐模态误差
-        - ``|k|`` 相对误差中位数 0.28%、p95 0.83%；方向误差中位数 0.26°、p95 0.62°
+        - ``|k|`` 相对误差中位数 0.388%、p95 1.267%；方向误差中位数 0.304°、p95 0.940°
 
-   每条判据形式相同：把生成信号时用到的某个量从测量里测回来再对比，而不是取一个能让测试通过的容差。
+   各项检验将计算结果与生成器给定的参考量比较，误差定义和验收阈值见上表。
 
-   .. rubric:: 参考图
+   .. rubric:: 参考运行图
+
+   下列图片来自先前的参考运行，图注列出该次运行的数值。
+   上表对应当前 256 段配置；运行后可在 output/summary.json 和 output/figures/ 中查看同次计算的结果。
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/raw_waveform.png
       :align: center
@@ -167,8 +169,8 @@ case_broadband_dispersion Test
 
    ``make.sh`` writes the records into ``build/`` and ``run.sh`` writes ``output/summary.json``
    together with four figures under ``output/figures/``. The exit code is 0 when all three
-   checks pass. A full run takes a few seconds and leaves about 11 MB in ``build/``, removed by
-   ``clean.sh``.
+   checks pass. The revised test uses 256 segments per MLE configuration and a complete 1501-by-1501 grid.
+   Build data occupy about 95 MB and are removed by clean.sh; runtime depends on parallel resources.
 
    .. rubric:: Criteria
 
@@ -181,31 +183,34 @@ case_broadband_dispersion Test
         - Measured
       * - K01
         - The generator's spectral exponent is fitted back out of the measured spectrum
-        - −2.015 against −2
+        - −2.002 against −2
       * - K01
         - The lower band edge, and the frequency at which the spectrum meets the noise floor as
           the ``1/f^2`` law predicts
-        - 104 kHz against 104 kHz; 816 kHz against 733 kHz predicted
+        - 104 kHz against 104 kHz; 752 kHz against 725 kHz predicted
       * - K01
         - Coherence outside the generated band must sit at the ``1/n_segments`` floor
-        - 0.038 out of band against 0.932 in band, floor 0.0625
+        - 0.00248 out of band against 0.933 in band, floor 0.003906
       * - K02
-        - Folded-wavenumber peaks above ten times the noise floor stay within two grid bins of
+        - Folded-wavenumber peaks above ten times the noise floor stay within two grid bins at the 95th percentile of
           the closed-form prediction
-        - 83 modes assessed; circular-residual median 0.40 bins and p95 1.46 bins; all 238
+        - 84 modes assessed; circular-residual median 0.443 bins and p95 1.466 bins; all 238
           generated modes aliased across 10 theoretical fold orders
       * - K03
         - Fitting ``f`` against ``|k_hat|`` through the origin returns the ion sound speed
-        - 3829.6 against 3824.6 m/s, relative error 1.3e-3
+        - 3833.2 against 3824.6 m/s, relative error 2.27e-3
       * - K03
         - Per-mode error in wavenumber magnitude and direction
-        - ``|k|`` relative error median 0.28 %, p95 0.83 %; angle error median 0.26 deg, p95
-          0.62 deg
+        - ``|k|`` relative error median 0.388 %, p95 1.267 %; angle error median 0.304 deg, p95
+          0.940 deg
 
    Every criterion has the same shape: a quantity the generator was built from is recovered from
    the measurement and compared back, rather than a tolerance chosen to make the test pass.
 
-   .. rubric:: Reference Figures
+   .. rubric:: Reference-run figures
+
+   These images come from an earlier reference run; their captions give that run's values.
+   The table above uses the current 256-segment configuration. Each run writes its matching results to output/summary.json and output/figures/.
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/raw_waveform.png
       :align: center

@@ -65,7 +65,7 @@ SOUND_SPEED_M_S = float(
 
 SAMPLING_RATE_HZ = 1.0e7
 NPERSEG = 1250
-N_SEGMENTS = 16
+N_SEGMENTS = 256  # histogram-mode estimation needs more samples than a mean
 BIN_WIDTH_HZ = SAMPLING_RATE_HZ / NPERSEG
 
 BAND_MIN_HZ = 1.0e5
@@ -83,9 +83,9 @@ BEALL_N_SEGMENTS = 512
 
 SNR = 10.0
 SEED = 20260902
-N_COARSE = 401           # first-stage grid, spanning the whole wavenumber range
-N_FINE = 201             # second-stage grid, around the coarse peak
-REFINE_SPAN = 2.0        # coarse steps kept on each side when refining
+N_GRID = 1501            # exhaustive uniform grid; no local refinement
+FFT_WINDOW = "boxcar"   # this generator uses exactly bin-aligned modes
+MLE_WORKERS = 48         # each worker uses bounded-memory row blocks
 MODE_STRIDE = 3          # inversion is run on every third mode
 BEALL_K_BINS = 80
 

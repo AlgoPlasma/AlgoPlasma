@@ -11,6 +11,8 @@ fun_K03_config_log_likelihood.py
 
 .. container:: ap-lang ap-lang-zh
 
+   参数必须有限，方差为正，chi 为非零二维向量；可选 prediction 必须匹配网格。
+
    .. rubric:: 直接用途
 
    给出单个探针构型在波数网格上的对数似然。
@@ -71,15 +73,15 @@ fun_K03_config_log_likelihood.py
    .. rubric:: 局部假设 / 前置条件
 
    - 把测得的均值相位建模为围绕平面波预测值的高斯分布。
-   - 方差为单样本方差；各构型分段数不同时应自行按 :math:`\sigma^2/n` 加权。
+   - 此方差描述分段相位的散布，用于设置似然中的残差尺度。众数的估计误差另受样本数、分箱和相位分布影响。
 
    .. rubric:: 实现逻辑
 
-   - 残差在平方前先折算。这一步不是数值便利：正是它使混叠构型贡献出周期性的一族脊而非单条脊，混叠信息因而保留在似然里、可以被其他构型解出。
+   - 将预测相位与测量相位之差折算到主值区间，再平方并按方差加权。相位的周期性在波数平面上形成条纹，可与其他构型的条纹联合分析。
 
    .. rubric:: 调用注意
 
-   - 传入 ``prediction`` 时不再校验其与 ``chi`` 是否匹配，调用方需自行保证一致。
+   - ``prediction`` 可用于复用相同基线和网格上的前向计算结果，应与本次 ``chi`` 和网格对应。
 
    .. rubric:: 算法说明
 
@@ -96,6 +98,8 @@ fun_K03_config_log_likelihood.py
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   Inputs must be finite, variance positive, chi a nonzero 2-vector; optional prediction must match the grid.
 
    .. rubric:: Direct Purpose
 
@@ -157,15 +161,15 @@ fun_K03_config_log_likelihood.py
    .. rubric:: Local Assumptions and Preconditions
 
    - Models the measured mean phase as Gaussian about the plane-wave prediction.
-   - The variance is a single-sample variance; unequal segment counts should be weighted by :math:`\sigma^2/n`.
+   - The variance describes segment-phase scatter and sets the residual scale. Mode-location uncertainty also depends on sample count, binning and the distribution.
 
    .. rubric:: Implementation Notes
 
-   - The residual is wrapped before squaring. That step is not a numerical convenience: it is what makes an aliased configuration contribute a periodic family of ridges rather than a single one, so the folded information stays in the likelihood and can be resolved by the other configurations.
+   - Wrap the predicted-minus-measured phase difference, square it and weight by the variance. Phase periodicity produces fringes in the wavenumber plane, which can be analyzed jointly with other configurations.
 
    .. rubric:: Calling Notes
 
-   - When ``prediction`` is supplied it is not re-checked against ``chi``; the caller must keep them consistent.
+   - Supply ``prediction`` to reuse a forward calculation for the same baseline and grid; it should correspond to this call's ``chi`` and grid.
 
    .. rubric:: Algorithm Notes
 

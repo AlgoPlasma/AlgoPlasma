@@ -28,10 +28,9 @@ the noise floor are assessed, and their peak residual is measured in wavenumber
 bins. This checks the folded-wavenumber trend; a single pair cannot recover the
 lost fold order.
 
-K03 inverts the probe array jointly. Its wavenumbers span more than a decade,
-which one uniform grid cannot cover at useful resolution, so the search runs
-coarse then fine through fun_K03_search_wavevector. Every configuration is given
-the same number of segments so that each carries the same statistical weight.
+K03 inverts the probe array jointly on a complete uniform grid. Resolution must
+be checked for alias selection as well as local error. Configurations have equal
+sample counts, but their likelihood weights still depend on phase variance.
 The pass criterion is that a line through the origin fitted to f against |k|
 returns the ion sound speed the generator used.
 
@@ -54,6 +53,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
 import matplotlib
 
@@ -71,6 +71,7 @@ import config  # noqa: E402
 from K_Diagnostics.K01_signal_spectra.mod_K01_signal_spectra import (  # noqa: E402
     fun_K01_coherence,
     fun_K01_cross_phase,
+    fun_K01_pair_power,
     fun_K01_phase_mode_statistics,
     fun_K01_power_spectrum,
     fun_K01_segment_ffts,
@@ -101,8 +102,8 @@ def load() -> list[dict]:
             / f"{config.config_name(entry['spacing_mm'], entry['angle_deg'])}.npz"
         )
         data = np.load(path)
-        ffts_1 = fun_K01_segment_ffts(data["probe_1"], config.NPERSEG)
-        ffts_2 = fun_K01_segment_ffts(data["probe_2"], config.NPERSEG)
+        ffts_1 = fun_K01_segment_ffts(data["probe_1"], config.NPERSEG, window=config.FFT_WINDOW)
+        ffts_2 = fun_K01_segment_ffts(data["probe_2"], config.NPERSEG, window=config.FFT_WINDOW)
         phase, magnitude = fun_K01_cross_phase(ffts_1, ffts_2)
         mean_phase, variance = fun_K01_phase_mode_statistics(phase[: config.N_SEGMENTS, bins])
         entries.append(
@@ -112,6 +113,7 @@ def load() -> list[dict]:
                 "ffts_2": ffts_2,
                 "phase": phase,
                 "magnitude": magnitude,
+                "pair_power": fun_K01_pair_power(ffts_1, ffts_2),
                 "mean_phase": mean_phase,
                 "variance": variance,
                 "probe_1": data["probe_1"],
@@ -127,8 +129,8 @@ def check_k01(entries: list[dict]) -> dict:
     reference = next(entry for entry in entries if not entry["is_beall_pair"])
     take = config.N_SEGMENTS
     frequencies = np.fft.rfftfreq(config.NPERSEG, d=1.0 / config.SAMPLING_RATE_HZ)
-    psd_1 = fun_K01_power_spectrum(reference["ffts_1"][:take], config.SAMPLING_RATE_HZ, config.NPERSEG)
-    psd_2 = fun_K01_power_spectrum(reference["ffts_2"][:take], config.SAMPLING_RATE_HZ, config.NPERSEG)
+    psd_1 = fun_K01_power_spectrum(reference["ffts_1"][:take], config.SAMPLING_RATE_HZ, config.NPERSEG, window=config.FFT_WINDOW)
+    psd_2 = fun_K01_power_spectrum(reference["ffts_2"][:take], config.SAMPLING_RATE_HZ, config.NPERSEG, window=config.FFT_WINDOW)
     gamma = fun_K01_coherence(reference["ffts_1"][:take], reference["ffts_2"][:take])
 
     bins = config.mode_bins()
@@ -213,7 +215,7 @@ def check_k02(entries: list[dict]) -> dict:
 
     result = fun_K02_beall_spectrum(
         reference["phase"][:, keep],
-        reference["magnitude"][:, keep],
+        reference["pair_power"][:, keep],
         frequencies[keep],
         chi,
         fun_K02_wavenumber_edges(chi, config.BEALL_K_BINS),
@@ -234,12 +236,13 @@ def check_k02(entries: list[dict]) -> dict:
         reference["ffts_1"][: config.segments_for(reference)],
         config.SAMPLING_RATE_HZ,
         config.NPERSEG,
+        window=config.FFT_WINDOW,
     )
     out_of_band = np.ones(psd.size, dtype=bool)
     out_of_band[bins] = False
     out_of_band[0] = False
     floor = float(np.median(psd[out_of_band]))
-    measurable = psd[bins] > 10.0 * floor
+    measurable = (psd[bins] > 10.0 * floor) & np.isfinite(residual)
     residual_in_bins = residual[measurable] / bin_width
     fold_period = 2.0 * result["k_nyquist"]
     aliased = int(np.sum(np.abs(projected) > result["k_nyquist"]))
@@ -259,9 +262,9 @@ def check_k02(entries: list[dict]) -> dict:
         "bin_width_rad_m": bin_width,
         "modes_above_floor": int(np.count_nonzero(measurable)),
         "noise_floor_psd": floor,
-        "peak_residual_in_bins_median": float(np.median(residual_in_bins)),
-        "peak_residual_in_bins_p95": float(np.percentile(residual_in_bins, 95)),
-        "peak_residual_in_bins_max": float(np.max(residual_in_bins)),
+        "peak_residual_in_bins_median": float(np.median(residual_in_bins)) if residual_in_bins.size else None,
+        "peak_residual_in_bins_p95": float(np.percentile(residual_in_bins, 95)) if residual_in_bins.size else None,
+        "peak_residual_in_bins_max": float(np.max(residual_in_bins)) if residual_in_bins.size else None,
         "note": (
             "the prediction is K02's own closed form applied to the true "
             "wavevector and the measurement is the histogram peak; modes "
@@ -284,19 +287,19 @@ def check_k03(entries: list[dict]) -> dict:
     selected = np.arange(0, frequencies.size, config.MODE_STRIDE)
 
     k_range = config.wavenumber_range()
-    recovered = np.empty((selected.size, 2))
-    for position, mode in enumerate(selected):
+    def recover(mode):
         peak = fun_K03_search_wavevector(
             (
                 (entry["chi"], float(entry["mean_phase"][mode]), float(entry["variance"][mode]))
                 for entry in array
             ),
             k_range,
-            n_coarse=config.N_COARSE,
-            n_fine=config.N_FINE,
-            refine_span=config.REFINE_SPAN,
+            n_grid=config.N_GRID,
         )
-        recovered[position] = (peak["kx"], peak["ky"])
+        return peak["kx"], peak["ky"]
+
+    with ThreadPoolExecutor(max_workers=min(config.MLE_WORKERS, selected.size)) as pool:
+        recovered = np.asarray(list(pool.map(recover, selected)))
 
     frequencies = frequencies[selected]
     truth = np.hypot(*wavevectors[selected].T)
@@ -315,8 +318,8 @@ def check_k03(entries: list[dict]) -> dict:
     return {
         "modes_inverted": int(selected.size),
         "configurations": len(array),
-        "coarse_grid": config.N_COARSE,
-        "fine_grid": config.N_FINE,
+        "grid_n": config.N_GRID,
+        "grid_step_rad_m": 2 * k_range / (config.N_GRID - 1),
         "wavenumber_range_rad_m": k_range,
         "sound_speed_true_m_s": config.SOUND_SPEED_M_S,
         "sound_speed_fitted_m_s": speed,

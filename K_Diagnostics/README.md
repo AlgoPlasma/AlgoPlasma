@@ -14,7 +14,7 @@
 
 ## 本模块解决的问题
 
-一对探针只能测到波矢在其间距方向上的投影，而且只能测到模 2π 的相位。因此当波长小于两倍间距时，单对探针报出的是**折叠后的假波数**：一条笔直的色散支在 `S(k, f)` 图上被打断成锯齿。K02 给出这一限制的闭式几何并让它显形，K03 用多个**不同长度**的间距联合反演把它解除。仅改变探针方向不够——不同长度给出不可通约的条纹周期，才能定出折叠阶数。
+每条基线通过相位差约束波矢沿该方向的投影。将多个构型的对数似然相加，可以在二维波数平面上寻找共同支持的波矢。基线的方向和长度共同决定相位条纹的交汇位置。
 
 ## 统一约定
 
@@ -55,7 +55,7 @@ result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, gri
 
 ## 测试
 
-[`tests/010_diagnostics/case_broadband_dispersion/`](../tests/010_diagnostics/case_broadband_dispersion/)：一份合成宽带信号同时驱动三个单元，出四张图。判据取自生成器本身，不是人为容差——核心的一条是**把恢复出的色散支拟合成过原点的直线，斜率必须还原生成信号时用的离子声速**，实测相对误差 1.3e-3。
+[`tests/010_diagnostics/case_broadband_dispersion/`](../tests/010_diagnostics/case_broadband_dispersion/)：一份合成宽带信号同时驱动三个单元，出四张图。参考值由生成器给出，验收比较计算值与参考值的误差。其中，将恢复的频率与波数模长拟合为过原点的直线，可由斜率估计离子声速；本例声速相对误差为 2.27e-3。
 
 ```bash
 cd tests/010_diagnostics/case_broadband_dispersion && bash run.sh

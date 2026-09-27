@@ -29,7 +29,7 @@ K_Diagnostics
 
    本模块以 Python 实现，是仓库中第一个非 Fortran 的算法模块。文件组织仍遵循一个 routine 一个
    文件、``mod_`` 只做汇总的约定：``mod_`` 用 ``from ... import`` 汇总，对应 Fortran 侧的
-   ``#include``。三个单元均不做任何文件读写，计算只发生在测试的主程序里。
+   ``#include``。三个单元均不做任何文件读写；由调用者（例如测试主程序）提供数据并调用计算函数。
 
    .. list-table:: 算法选择
       :header-rows: 1
@@ -45,8 +45,8 @@ K_Diagnostics
         - 分段谱、功率谱、相干度、互相位及其均值与方差
       * - K02
         - :doc:`混叠代数与 Beall 谱 <K_Diagnostics/K02_beall>`
-        - 单对探针的互相位
-        - 折叠阶数、折叠波数、``S(k, f)``
+        - 互相位、两路自功率平均、频率和间距；折叠阶计算另需已知投影波数
+        - 折叠波数、``S(k, f)``；仅对已知投影波数计算折叠阶，不从单对相位恢复它
       * - K03
         - :doc:`二维联合最大似然反演 <K_Diagnostics/K03_mle_k2d>`
         - 多构型的相位均值与方差
@@ -54,10 +54,15 @@ K_Diagnostics
 
    .. rubric:: 本模块解决的问题
 
-   一对探针只能测到波矢在其间距方向上的投影，而且只能测到模 :math:`2\pi` 的相位。因此当波长小于
-   两倍间距时，单对探针报出的是**折叠后的假波数**：一条笔直的色散支在 ``S(k, f)`` 图上被打断成
-   锯齿。K02 给出这一限制的闭式几何并让它显形，K03 用多个**不同长度**的间距联合反演把它解除。
-   仅改变探针方向不够——不同长度给出不可通约的条纹周期，才能定出折叠阶数。
+   一对探针只能测到波矢在其间距方向上的投影，而且只能测到模 :math:`2\pi` 的相位。当
+   :math:`|\mathbf{K}\cdot\boldsymbol{\chi}|>\pi` 时，真实投影波数超出单对探针的主值区间，
+   报出的是**折叠波数**：一条笔直的色散支在 ``S(k, f)`` 图上可呈锯齿。
+   K02 给出折叠波数与真实投影波数之间的关系，并用 Beall 谱展示频率与折叠波数的分布。
+   K03 将多个构型的相位测量组合起来：每条基线约束沿该方向的波矢投影，
+   多个方向共同提供二维信息。基线的长度和方向决定相位条纹的交汇方式。
+
+   K03 在二维波数范围内遍历均匀网格，以联合对数似然最大处的波矢作为估计结果。
+   :doc:`诊断基础 <K_Diagnostics/diagnostics_foundations>` 第 7 节介绍条纹交汇与几何条件。
 
    .. rubric:: 统一符号约定
 
@@ -76,7 +81,9 @@ K_Diagnostics
    .. rubric:: 相关测试
 
    :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`：一份合成宽带信号同时驱动三个单元，
-   判据取自生成器本身而非人为容差。
+   参考真值取自生成器，验收比较谱指数、折叠波数及恢复波矢的误差。
+   :doc:`基础与边界条件测试 </tests/010_diagnostics/case_basic_checks>` 则用小型已知输入
+   检查各计算环节，并展示数值结果与解释图。
 
 .. container:: ap-lang ap-lang-en
 
@@ -91,7 +98,7 @@ K_Diagnostics
    Its file organisation still follows the convention of one routine per file with a ``mod_``
    wrapper that only aggregates: here the wrapper re-exports through ``from ... import``, the
    counterpart of the Fortran ``#include``. None of the three units performs any file I/O;
-   computation happens only in the main program of the test.
+   callers, such as the test driver, supply data and invoke the numerical routines.
 
    .. list-table:: Algorithm Selection
       :header-rows: 1
@@ -107,8 +114,8 @@ K_Diagnostics
         - Segment spectra, power spectra, coherence, cross phase with its mean and variance
       * - K02
         - :doc:`Aliasing algebra and the Beall spectrum <K_Diagnostics/K02_beall>`
-        - Cross phase of one pair
-        - Fold order, folded wavenumber, ``S(k, f)``
+        - Cross phase, mean pair auto-power, frequency and separation; fold-order calculation additionally needs a known projected wavenumber
+        - Folded wavenumber and ``S(k, f)``; fold order only from a known projected wavenumber, not recovered from one pair's phase
       * - K03
         - :doc:`Joint 2-D maximum-likelihood inversion <K_Diagnostics/K03_mle_k2d>`
         - Phase means and variances of many configurations
@@ -117,12 +124,17 @@ K_Diagnostics
    .. rubric:: The Problem This Module Solves
 
    A single probe pair measures only the projection of the wavevector onto its separation, and
-   only modulo :math:`2\pi` of phase. Once the wavelength drops below twice the spacing, the
-   pair therefore reports a **folded, false wavenumber**: a straight dispersion branch appears
-   broken into a sawtooth on the ``S(k, f)`` map. K02 supplies the closed-form geometry of that
-   limit and makes it visible; K03 removes it by combining separations of several **lengths**.
-   Changing only the orientation is not enough, because different lengths are what give
-   incommensurate fringe periods and fix the fold order.
+   only modulo :math:`2\pi` of phase. When :math:`|\mathbf{K}\cdot\boldsymbol{\chi}|>\pi`,
+   the true projected wavenumber lies outside the pair's principal interval and the reported
+   value is a **folded wavenumber**: a straight dispersion branch can become a sawtooth on
+   the ``S(k, f)`` map. K02 describes this geometry; K03 combines configurations to recover
+   the wavevector using phase measurements from several configurations. Each baseline constrains
+   the wavevector projection along its direction; multiple directions provide two-dimensional
+   information. Baseline lengths and directions determine the phase-fringe intersections.
+
+   K03 evaluates a uniform two-dimensional wavenumber grid and reports its maximum joint
+   log-likelihood point. Section 7 of :doc:`the foundations <K_Diagnostics/diagnostics_foundations>`
+   introduces fringe intersections and geometry conditions.
 
    .. rubric:: Shared Sign Convention
 
@@ -143,5 +155,7 @@ K_Diagnostics
    .. rubric:: Related Tests
 
    :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`: one synthetic broadband dataset
-   drives all three units, with criteria taken from the generator rather than from chosen
-   tolerances.
+   drives all three units. Reference values come from the generator; acceptance uses explicit
+   numerical tolerances for spectral slope, folded wavenumbers and recovered wavevectors.
+   :doc:`Basic and boundary-condition checks </tests/010_diagnostics/case_basic_checks>` use
+   small known inputs to examine individual operations, with numerical results and explanatory figures.

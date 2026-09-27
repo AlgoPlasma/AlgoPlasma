@@ -1,6 +1,5 @@
---------------------------------
 fun_K01_phase_mode_statistics.py
---------------------------------
+==================================
 
 .. raw:: html
 
@@ -11,130 +10,76 @@ fun_K01_phase_mode_statistics.py
 
 .. container:: ap-lang ap-lang-zh
 
-   .. rubric:: 直接用途
+   .. rubric:: 相位分布的均值与方差
 
-   给出折叠相位样本的众数参考均值与方差。
+   多段互相位形成相位分布。依据 Liu and Jorns, AIAA-2025-1293, II.E，
+   函数以最高直方图格的中心估计相位均值。随后将各样本相对于该中心的偏差折算到主值区间，
+   计算分段相位的散布。这样可以把跨越 ±π 的同一相位簇放在一起处理。
 
-   .. rubric:: 参数表
+   .. code-block:: python
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 14 10 28 34 26 40
+      theta_bar = theta_mode
+      sigma2 = var(wrap(theta - theta_mode), ddof=1) + 1e-12
 
-      * - 参数
-        - 方向
-        - shape / 范围
-        - 含义
-        - 单位 / 归一化
-        - 索引 / 轴约定
-      * - ``phase``
-        - ``in``
-        - ``(nseg,)`` 或 ``(nseg, nfreq)``
-        - 来自 ``fun_K01_cross_phase`` 的折叠相位。
-        - 无量纲（弧度）
-        - 轴 0 必须是分段轴；轴 1 若存在则为频点。
-      * - ``nbins``
-        - ``in``
-        - ``scalar``，可选
-        - 定位众数用的直方图格数，默认 60。
-        - 格数，无量纲
-        - 直方图张在 :math:`(-\pi, \pi]` 上。
+   这里采用样本方差分母 M-1（ddof=1）；Liu 原文未指定分母。
+   小正数 1e-12 用于有效无噪声样本的数值正则化。
 
-   .. rubric:: 返回值
+   .. rubric:: 参数与返回值
 
-   两个 ``numpy.ndarray``：均值相位与方差。1-D 输入时为标量，2-D 输入时为 ``(nfreq,)``。
+   调用：``fun_K01_phase_mode_statistics(phase, nbins=60)``。
 
-   .. rubric:: 局部假设 / 前置条件
+   - phase 是 (nseg,) 或 (nseg, nfreq) 的弧度相位。
+   - nbins 为相位直方图格数，至少 2，默认 60。
+   - 返回均值估计和单样本方差；一维输入返回标量，二维输入返回 (nfreq,) 数组。
+   - 非有限样本按频点剔除；有效样本少于两个时返回 NaN。输入总段数少于 2 时抛 ValueError。
 
-   - 返回的是**单个样本**的方差而不是均值的方差。各构型分段数相同时这只是似然的整体常数因子，不影响峰位；分段数不同时调用方应自行按 :math:`\sigma^2/n` 加权。
-   - 均值不再折回 :math:`(-\pi, \pi]`，众数贴近切割线时可能超出该区间不超过一格宽。
-   - 至少需要两个分段才能给出方差。
+   互谱为零时相位无定义，由 cross_phase 用 NaN 标记，随后作为缺失样本处理。
+   直方图峰并列时选择第一个格。
 
-   .. rubric:: 实现逻辑
+   .. rubric:: 分箱与样本数
 
-   - 相位分布可能横跨 :math:`\pm\pi` 的分支切割线，此时算术平均会塌向零。
-   - 先在直方图上定位众数，把切割线移到众数对面再平均；方差取 ``ddof=1`` 并加 :math:`10^{-12}` 的下限以防除零。
+   格宽决定众数估计的角度分辨率，分段数影响各格的计数稳定性。
+   可比较不同分箱和分段数下的结果，观察峰的位置及相位分布形状。
+   返回方差描述各段相位的散布；众数位置的估计误差还取决于样本数与分布。
+   多峰分布适合结合直方图进一步分析各相位簇。
 
-   .. rubric:: 调用注意
-
-   - 直方图格宽给出一个量化下限；相位散布远小于一格时，均值的精度由格宽而非样本数决定。
-
-   .. rubric:: 算法说明
-
-   .. math::
-
-      \bar\theta = \theta_{\rm mode}
-      + \left\langle \mathrm{wrap}(\theta_i - \theta_{\rm mode}) \right\rangle,\qquad
-      \sigma^2 = \mathrm{var}\!\left[\mathrm{wrap}(\theta_i-\theta_{\rm mode})\right]_{\rm ddof=1}
-
-   .. raw:: html
-
-      <div class="ap-home-footer-band">
-        <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">彭子龙 (2026/09/02) · 哈尔滨工业大学</p>
-      </div>
+   贡献者：彭子龙 (2026/09/02) · Harbin Institute of Technology
 
 .. container:: ap-lang ap-lang-en
 
-   .. rubric:: Direct Purpose
+   .. rubric:: Mean and variance of a phase distribution
 
-   Return the mode-referenced mean and variance of wrapped phase samples.
+   Segment cross phases form a phase distribution. Following Liu and Jorns, AIAA-2025-1293,
+   II.E, the centre of its most populated histogram bin estimates the mean. Samples are
+   shifted relative to that centre and wrapped before their variance is calculated.
+   This groups a phase cluster spanning the ±pi cut into one neighborhood.
 
-   .. rubric:: Parameter Table
+   .. code-block:: python
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 14 10 28 34 26 40
+      theta_bar = theta_mode
+      sigma2 = var(wrap(theta - theta_mode), ddof=1) + 1e-12
 
-      * - Parameter
-        - Direction
-        - Shape / range
-        - Meaning
-        - Units / normalisation
-        - Indexing / axis convention
-      * - ``phase``
-        - ``in``
-        - ``(nseg,)`` or ``(nseg, nfreq)``
-        - Wrapped phases from ``fun_K01_cross_phase``.
-        - Dimensionless (radians)
-        - Axis 0 must be the segment axis; axis 1, if present, is the frequency bin.
-      * - ``nbins``
-        - ``in``
-        - ``scalar``, optional
-        - Histogram bins used to locate the mode. Default 60.
-        - Bin count, dimensionless
-        - The histogram spans :math:`(-\pi, \pi]`.
+   This implementation uses the sample-variance denominator M-1 (ddof=1); Liu does not specify
+   the denominator. The 1e-12 floor regularizes valid noiseless samples.
 
-   .. rubric:: Return Value
+   .. rubric:: Parameters and returns
 
-   Two ``numpy.ndarray``: the mean phase and the variance; scalar for 1-D input and ``(nfreq,)`` for 2-D input.
+   Call: ``fun_K01_phase_mode_statistics(phase, nbins=60)``.
 
-   .. rubric:: Local Assumptions and Preconditions
+   - phase has shape (nseg,) or (nseg, nfreq), in radians.
+   - nbins sets the phase histogram bin count: at least 2, default 60.
+   - Returns mean estimate and individual-sample variance: scalars for 1D input or (nfreq,) arrays.
+   - Nonfinite samples are omitted per frequency. Fewer than two valid samples returns NaN;
+     fewer than two input segments raises ValueError.
 
-   - The variance is that of an **individual** sample, not of the mean. With equal segment counts this is only an overall constant in the likelihood and does not move the peak; with unequal counts the caller should weight by :math:`\sigma^2/n`.
-   - The mean is not re-wrapped, so it may leave :math:`(-\pi, \pi]` by up to one histogram bin when the mode sits on the cut.
-   - At least two segments are needed for a variance.
+   A zero cross spectrum has undefined phase, marked NaN by cross_phase and treated as missing.
+   Exact histogram ties select the first bin.
 
-   .. rubric:: Implementation Notes
+   .. rubric:: Binning and sample count
 
-   - A distribution of wrapped phases can straddle the :math:`\pm\pi` branch cut, where an arithmetic mean collapses towards zero.
-   - The mode is located on a histogram, the cut is moved opposite it, and the average is taken there; the variance uses ``ddof=1`` plus a :math:`10^{-12}` floor against division by zero.
+   Bin width sets the angular resolution of the mode estimate; segment count affects histogram
+   stability. Compare binning and sample counts to inspect the peak location and distribution.
+   The returned variance describes segment-phase scatter. Uncertainty of the mode location also
+   depends on sample count and distribution. Inspect multiple phase clusters with the histogram.
 
-   .. rubric:: Calling Notes
-
-   - The histogram bin width sets a quantisation floor: when the phase scatter is far below one bin, the accuracy of the mean is set by the bin width rather than by the sample count.
-
-   .. rubric:: Algorithm Notes
-
-   .. math::
-
-      \bar\theta = \theta_{\rm mode}
-      + \left\langle \mathrm{wrap}(\theta_i - \theta_{\rm mode}) \right\rangle,\qquad
-      \sigma^2 = \mathrm{var}\!\left[\mathrm{wrap}(\theta_i-\theta_{\rm mode})\right]_{\rm ddof=1}
-
-   .. raw:: html
-
-      <div class="ap-home-footer-band">
-        <p><strong>Contributors</strong></p>
-        <p class="ap-home-contact">Zilong PENG (2026/09/02) · Harbin Institute of Technology</p>
-      </div>
+   Contributor: Zilong PENG (2026/09/02) · Harbin Institute of Technology

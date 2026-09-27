@@ -5,6 +5,7 @@
    :maxdepth: 1
    :hidden:
 
+   case_basic_checks
    case_broadband_dispersion
 
 .. raw:: html
@@ -28,13 +29,16 @@
         - 测试页面
         - 说明
       * - K01–K03
+        - :doc:`基础与边界条件测试 <case_basic_checks>`
+        - 12 项确定性检查：输入、实际值、参考值和判据逐项列出，并用 4 张图解释相位、权重、网格和泄漏。
+      * - K01–K03
         - :doc:`case_broadband_dispersion 测试 <case_broadband_dispersion>`
         - 用一份合成宽带信号把 K01、K02、K03 串成一条链驱动，并把每个单元的输出对回生成
           该信号的参数。判据比较谱指数、折叠波数峰和离子声速；单探针对的 K02 检查不声称
           恢复混叠所丢失的折叠阶。
 
-   静态图片来自一次参考运行，并保存到 ``docs/source/images/tests/010_diagnostics``。
-   如果修改了测试程序或绘图脚本，应重新运行并更新这些图片。
+   基础测试的数值与图件快照存放在本目录的 ``_generated/case_basic_checks``，由 run.sh --publish-docs 更新。
+   宽频页面保留一组参考运行图，存放在 ``docs/source/images/tests/010_diagnostics``，图注说明对应结果。
 
 .. container:: ap-lang ap-lang-en
 
@@ -52,12 +56,14 @@
         - Test page
         - Description
       * - K01–K03
+        - :doc:`Basic and boundary-condition checks <case_basic_checks>`
+        - Twelve deterministic cases with inputs, measurements, references and criteria, plus four figures for phases, weights, grids and leakage.
+      * - K01–K03
         - :doc:`case_broadband_dispersion test <case_broadband_dispersion>`
         - Drives K01, K02 and K03 as one chain from a single synthetic broadband dataset and
           checks each unit's output against the parameters that produced it. The criteria are
           generator-fixed quantities — a spectral exponent, folded-wavenumber peaks and an ion
           sound speed. The single-pair K02 check does not claim to recover the lost fold order.
 
-   The static figures come from one reference run and are stored under
-   ``docs/source/images/tests/010_diagnostics``. Regenerate and update them if the test program
-   or the plotting script changes.
+   The basic-check snapshot is stored under ``_generated/case_basic_checks`` and refreshed with run.sh --publish-docs.
+   Broadband reference-run figures are stored under ``docs/source/images/tests/010_diagnostics``; their captions identify the results.
