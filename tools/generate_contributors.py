@@ -7,10 +7,12 @@
 * the ``Contributors`` section between the markers in ``README.md``,
   ``README.zh-CN.md`` and ``README.en.md``;
 * the Sphinx / Read the Docs page ``docs/source/community/contributors.md``;
+* surname-first initial avatars for members using ``default_avatar: initials``.
 
-Lead and maintainer avatars use the shared local placeholder until an explicit
-``avatar`` is supplied. Ordinary contributors use their GitHub or Gitee avatar
-by default. An explicit ``avatar`` takes precedence for every role.
+Lead and maintainer avatars use surname and given-name initials until an
+explicit ``avatar`` is supplied. Ordinary contributors use their GitHub or
+Gitee avatar by default, or initials without an account. An explicit ``avatar``
+takes precedence for every role; ``default_avatar`` can also be a shared image.
 
 Usage::
 
@@ -29,6 +31,7 @@ the subset of YAML used by ``contributors.yml``.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import re
 import sys
@@ -71,7 +74,12 @@ RESEARCH_WORK_HEADERS = {
 }
 WORK_PENDING = {"zh": "待补充", "en": "To be added"}
 
-DEFAULT_AVATAR = "docs/source/_static/contributors/placeholder.png"
+DEFAULT_AVATAR = "initials"
+AVATAR_URL_BASE = "docs/source/_static/contributors"
+AVATAR_PALETTE = (
+    "#2c7be5", "#00a887", "#7b61ff", "#d9822b",
+    "#1f9bb4", "#5964d8", "#c94c4c", "#178f66",
+)
 
 # --- Contribution types ------------------------------------------------------
 # canonical key -> (emoji, English label, Chinese label).  Keep this list short
@@ -324,9 +332,9 @@ def load_contributors(path: Path = DATA_FILE):
     if not isinstance(entries, list) or not entries:
         sys.exit(f"error: 'contributors' in {path.name} must be a non-empty list")
     catalog = _normalise_work_catalog(data.get("work_catalog"))
-    default_avatar = _normalise_avatar(
-        data.get("default_avatar") or DEFAULT_AVATAR, "default_avatar"
-    )
+    default_avatar = data.get("default_avatar") or DEFAULT_AVATAR
+    if default_avatar != "initials":
+        default_avatar = _normalise_avatar(default_avatar, "default_avatar")
     return [
         _normalise(entry, index, catalog, default_avatar)
         for index, entry in enumerate(entries)
@@ -446,6 +454,11 @@ def _normalise(
             avatar = f"https://github.com/{github}.png"
         elif gitee:
             avatar = f"https://gitee.com/{gitee}.png"
+    generated_avatar = not avatar and default_avatar == "initials"
+    if generated_avatar:
+        avatar = f"{AVATAR_URL_BASE}/{_slug(name)}.svg"
+    else:
+        avatar = _normalise_avatar(avatar or default_avatar, name)
     return {
         "name": name,
         "name_zh": str(entry.get("name_zh") or "").strip(),
@@ -457,7 +470,8 @@ def _normalise(
         "github": github,
         "gitee": gitee,
         "orcid": str(entry.get("orcid") or "").strip(),
-        "avatar": _normalise_avatar(avatar or default_avatar, name),
+        "avatar": avatar,
+        "generated_avatar": generated_avatar,
     }
 
 
@@ -471,6 +485,37 @@ def display_name(entry: dict, lang: str) -> str:
 # =============================================================================
 # Avatar helpers
 # =============================================================================
+def _slug(name: str) -> str:
+    slug = re.sub(r"[^0-9A-Za-z]+", "-", name).strip("-").lower()
+    return slug or hashlib.md5(name.encode("utf-8")).hexdigest()[:8]
+
+
+def _initials(name: str) -> str:
+    """Names are given-name first; avatar initials put the surname first."""
+    parts = name.split()
+    if len(parts) >= 2:
+        return (parts[-1][0] + parts[0][0]).upper()
+    return parts[0][:2].upper() if parts else "?"
+
+
+def _avatar_svg(name: str) -> str:
+    digest = hashlib.md5(name.encode("utf-8")).hexdigest()
+    color = AVATAR_PALETTE[int(digest, 16) % len(AVATAR_PALETTE)]
+    initials = html_escape(_initials(name))
+    font_size = 66 if len(initials) == 1 else 58
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" '
+        'width="160" height="160" role="img" '
+        f'aria-label="{html_escape(name, quote=True)}">\n'
+        f'  <rect width="160" height="160" rx="80" fill="{color}"/>\n'
+        f'  <text x="80" y="80" fill="#ffffff" font-size="{font_size}" '
+        'font-weight="600" font-family="Helvetica, Arial, sans-serif" '
+        'text-anchor="middle" dominant-baseline="central">'
+        f'{initials}</text>\n'
+        '</svg>\n'
+    )
+
+
 def _normalise_avatar(value, owner: str) -> str:
     """Catch missing local photos before generating broken image links."""
     avatar = str(value).strip()
@@ -856,6 +901,14 @@ def desired_files(contributors) -> dict:
     return files
 
 
+def desired_avatars(contributors) -> dict:
+    return {
+        ROOT / entry["avatar"]: _avatar_svg(entry["name"])
+        for entry in contributors
+        if entry["generated_avatar"]
+    }
+
+
 # =============================================================================
 # Entry point
 # =============================================================================
@@ -870,10 +923,11 @@ def main(argv=None) -> int:
 
     contributors = load_contributors()
     files = desired_files(contributors)
+    files.update(desired_avatars(contributors))
 
     stale = []
     for path, content in files.items():
-        current = path.read_text(encoding="utf-8")
+        current = path.read_text(encoding="utf-8") if path.is_file() else None
         if current != content:
             stale.append(path)
     if args.check:

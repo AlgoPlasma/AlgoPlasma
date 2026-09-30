@@ -1,9 +1,15 @@
 """Checks for the generated contributor work lists."""
 
+import io
 import re
 import unittest
+from contextlib import redirect_stdout
 from html import escape as html_escape
 from html.parser import HTMLParser
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
+from xml.etree import ElementTree
 
 from tools import generate_contributors as contributors
 
@@ -133,6 +139,7 @@ class ContributorWorkListTests(unittest.TestCase):
             if name not in expected:
                 continue
             self.assertEqual(entry["avatar"], expected[name])
+            self.assertFalse(entry["generated_avatar"])
             for target_dir in (".", contributors.RTD_TARGET_DIR):
                 src = contributors._avatar_url(entry, target_dir)
                 table = contributors._work_table([entry], "zh", target_dir)
@@ -143,6 +150,114 @@ class ContributorWorkListTests(unittest.TestCase):
                     path = contributors.ROOT / target_dir / src
                     self.assertEqual(path.resolve(), contributors.ROOT / expected[name])
                     self.assertTrue(path.is_file())
+
+    def test_surname_first_initial_avatars(self):
+        expected = {
+            "陈曦": "CX", "陈英杰": "CY", "罗鑫": "LX", "谢礼桓": "XL",
+            "张武顺": "ZW", "赵中平": "ZZ", "钟昆硼": "ZK", "周志君": "ZZ",
+        }
+        generated = [entry for entry in self.entries if entry["generated_avatar"]]
+        self.assertEqual({entry["name_zh"] for entry in generated}, set(expected))
+        avatars = contributors.desired_avatars(self.entries)
+        self.assertEqual(len(avatars), len(expected))
+        namespace = {"svg": "http://www.w3.org/2000/svg"}
+        for entry in generated:
+            with self.subTest(name=entry["name_zh"]):
+                initials = expected[entry["name_zh"]]
+                self.assertEqual(contributors._initials(entry["name"]), initials)
+                path = contributors.ROOT / entry["avatar"]
+                svg = ElementTree.fromstring(avatars[path])
+                self.assertEqual(svg.find("svg:text", namespace).text, initials)
+                self.assertEqual(svg.get("aria-label"), entry["name"])
+                self.assertEqual(svg.get("viewBox"), "0 0 160 160")
+                for target_dir in (".", contributors.RTD_TARGET_DIR):
+                    src = contributors._avatar_url(entry, target_dir)
+                    self.assertEqual(
+                        (contributors.ROOT / target_dir / src).resolve(), path
+                    )
+                    self.assertIn(
+                        f'src="{src}"',
+                        contributors._work_table([entry], "zh", target_dir),
+                    )
+
+    def test_default_avatar_precedence(self):
+        for role in ("lead", "maintainer", "contributor"):
+            entry = {
+                "name": "Yingjie Chen", "role": role,
+                "github": "example-github", "gitee": "example-gitee",
+            }
+            normalised = contributors._normalise(entry, 0, {})
+            if role == "contributor":
+                self.assertEqual(
+                    normalised["avatar"], "https://github.com/example-github.png"
+                )
+                self.assertFalse(normalised["generated_avatar"])
+            else:
+                self.assertEqual(
+                    normalised["avatar"],
+                    "docs/source/_static/contributors/yingjie-chen.svg",
+                )
+                self.assertTrue(normalised["generated_avatar"])
+            explicit = contributors._normalise(
+                {**entry, "avatar": "https://example.com/portrait.png"}, 0, {}
+            )
+            self.assertEqual(explicit["avatar"], "https://example.com/portrait.png")
+            self.assertFalse(explicit["generated_avatar"])
+        gitee = contributors._normalise(
+            {"name": "Example User", "gitee": "example-gitee"}, 0, {}
+        )
+        self.assertEqual(gitee["avatar"], "https://gitee.com/example-gitee.png")
+        self.assertFalse(gitee["generated_avatar"])
+        no_account = contributors._normalise({"name": "Example User"}, 0, {})
+        self.assertTrue(no_account["generated_avatar"])
+        shared = contributors._normalise(
+            {"name": "Example User"}, 0, {},
+            default_avatar="docs/source/_static/contributors/placeholder.png",
+        )
+        self.assertEqual(
+            shared["avatar"], "docs/source/_static/contributors/placeholder.png"
+        )
+        self.assertFalse(shared["generated_avatar"])
+        with self.assertRaises(SystemExit):
+            contributors._normalise(
+                {"name": "Example User", "avatar": "missing-portrait.png"}, 0, {}
+            )
+
+    def test_initial_svg_is_deterministic_and_escaped(self):
+        name = 'Xi "A & B" Chen'
+        first = contributors._avatar_svg(name)
+        self.assertEqual(first, contributors._avatar_svg(name))
+        svg = ElementTree.fromstring(first)
+        self.assertEqual(svg.get("aria-label"), name)
+        self.assertEqual(
+            svg.find("{http://www.w3.org/2000/svg}text").text, "CX"
+        )
+        self.assertEqual(contributors._initials("  Yingjie   Chen  "), "CY")
+        self.assertEqual(contributors._initials("A"), "A")
+        self.assertEqual(contributors._initials(""), "?")
+
+    def test_generator_checks_and_creates_initial_avatars(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            avatar = root / "avatars" / "xi-chen.svg"
+            content = contributors._avatar_svg("Xi Chen")
+            with (
+                patch.object(contributors, "ROOT", root),
+                patch.object(contributors, "load_contributors", return_value=self.entries),
+                patch.object(contributors, "desired_files", return_value={}),
+                patch.object(contributors, "desired_avatars", return_value={avatar: content}),
+                redirect_stdout(io.StringIO()),
+            ):
+                self.assertEqual(contributors.main(["--check"]), 1)
+                self.assertFalse(avatar.exists())
+                self.assertEqual(contributors.main([]), 0)
+                self.assertEqual(avatar.read_text(encoding="utf-8"), content)
+                self.assertEqual(contributors.main(["--check"]), 0)
+                avatar.write_text("outdated\n", encoding="utf-8")
+                self.assertEqual(contributors.main(["--check"]), 1)
+                self.assertEqual(avatar.read_text(encoding="utf-8"), "outdated\n")
+                self.assertEqual(contributors.main([]), 0)
+                self.assertEqual(contributors.main(["--check"]), 0)
 
     def test_lead_biography_replaces_work_with_localized_header(self):
         lead = next(entry for entry in self.entries if entry["role"] == "lead")

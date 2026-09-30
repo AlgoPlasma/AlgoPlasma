@@ -120,8 +120,6 @@ Please keep algorithm units independent, interfaces clear, and dependencies expl
 
 ## Contributors
 
-This list is generated from `contributors.yml`; do not edit this section by hand. Run `python3 tools/generate_contributors.py` to regenerate it.
-
 <!-- CONTRIBUTORS:START -->
 <p align="center"><sub>Thanks to everyone contributing code, tests, benchmarks, documentation, examples, and bug fixes to the project.</sub></p>
 
@@ -199,7 +197,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Kunpeng Zhong"></span>
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="Kunpeng Zhong"></span>
           <div class="ap-member-identity">
             <strong>Kunpeng Zhong</strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -213,7 +211,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Lihuan Xie"></a></span>
+          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="80" height="80" alt="Lihuan Xie"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://orcid.org/0009-0009-6248-9781">Lihuan Xie</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -229,7 +227,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Wushun Zhang"></span>
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/wushun-zhang.svg" width="80" height="80" alt="Wushun Zhang"></span>
           <div class="ap-member-identity">
             <strong>Wushun Zhang</strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -243,7 +241,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Xi Chen"></span>
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="Xi Chen"></span>
           <div class="ap-member-identity">
             <strong>Xi Chen</strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -257,7 +255,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Xin Luo"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="Xin Luo"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/Luo-Xin-410">Xin Luo</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -273,7 +271,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Yingjie Chen"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="80" height="80" alt="Yingjie Chen"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/jiaohuadetudouni">Yingjie Chen</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -309,7 +307,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Zhijun Zhou"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="Zhijun Zhou"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/HIT-ZhouZhijun">Zhijun Zhou</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -325,7 +323,7 @@ This list is generated from `contributors.yml`; do not edit this section by hand
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="Zhongping Zhao"></a></span>
+          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="docs/source/_static/contributors/zhongping-zhao.svg" width="80" height="80" alt="Zhongping Zhao"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://github.com/GooseGH">Zhongping Zhao</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>

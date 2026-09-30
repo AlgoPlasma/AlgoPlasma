@@ -120,8 +120,6 @@ make html
 
 ## Contributors / 贡献者
 
-本名单由 `contributors.yml` 生成，请勿手工修改本节内容；运行 `python3 tools/generate_contributors.py` 重新生成。
-
 <!-- CONTRIBUTORS:START -->
 <p align="center"><sub>感谢每一位为 AlgoPlasma 贡献代码、测试、性能基准、文档、示例与缺陷修复的成员。</sub></p>
 
@@ -165,7 +163,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="陈曦"></span>
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="陈曦"></span>
           <div class="ap-member-identity">
             <strong>陈曦</strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -179,7 +177,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="陈英杰"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="80" height="80" alt="陈英杰"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/jiaohuadetudouni">陈英杰</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -229,7 +227,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="罗鑫"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="罗鑫"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/Luo-Xin-410">罗鑫</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -286,7 +284,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="谢礼桓"></a></span>
+          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="80" height="80" alt="谢礼桓"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://orcid.org/0009-0009-6248-9781">谢礼桓</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -302,7 +300,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="张武顺"></span>
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/wushun-zhang.svg" width="80" height="80" alt="张武顺"></span>
           <div class="ap-member-identity">
             <strong>张武顺</strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -316,7 +314,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="赵中平"></a></span>
+          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="docs/source/_static/contributors/zhongping-zhao.svg" width="80" height="80" alt="赵中平"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://github.com/GooseGH">赵中平</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -337,7 +335,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="钟昆硼"></span>
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="钟昆硼"></span>
           <div class="ap-member-identity">
             <strong>钟昆硼</strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -351,7 +349,7 @@ make html
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="周志君"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="周志君"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/HIT-ZhouZhijun">周志君</a></strong><br>
             <sub class="ap-member-role">维护者</sub>

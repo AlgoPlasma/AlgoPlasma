@@ -8,7 +8,7 @@
 #
 # Fields
 # ------
-#   name           display name, Latin/pinyin (required)
+#   name           Latin/pinyin display name, given name first (required)
 #   name_zh        Chinese name, used on the Chinese README pages (optional)
 #   role           lead | maintainer | contributor   (default: contributor)
 #   contributions  list of contribution types, or `all` for every type
@@ -21,6 +21,9 @@
 #   avatar         explicit avatar URL or repo-relative image path (optional)
 #
 # Leads and maintainers use `default_avatar` until their own photo is ready.
+# `initials` generates a colored avatar with the surname initial followed by
+# the given-name initial: Xi Chen -> CX, Yingjie Chen -> CY.
+# A shared image URL or repo-relative path is also accepted as `default_avatar`.
 # Ordinary contributors use their GitHub avatar, or Gitee avatar if GitHub is
 # absent; members without either account use `default_avatar`.
 # An explicit `avatar` overrides these defaults for any role.
@@ -54,7 +57,7 @@
 #       - code
 #       - bug
 
-default_avatar: docs/source/_static/contributors/placeholder.png
+default_avatar: initials
 
 work_catalog:
   A01:

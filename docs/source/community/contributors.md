@@ -50,7 +50,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="陈曦"></span>
+          <span class="ap-member-avatar"><img src="../_static/contributors/xi-chen.svg" width="80" height="80" alt="陈曦"></span>
           <div class="ap-member-identity">
             <strong>陈曦</strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -64,7 +64,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="陈英杰"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="../_static/contributors/yingjie-chen.svg" width="80" height="80" alt="陈英杰"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/jiaohuadetudouni">陈英杰</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -116,7 +116,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="罗鑫"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="../_static/contributors/xin-luo.svg" width="80" height="80" alt="罗鑫"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/Luo-Xin-410">罗鑫</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -176,7 +176,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="谢礼桓"></a></span>
+          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="../_static/contributors/lihuan-xie.svg" width="80" height="80" alt="谢礼桓"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://orcid.org/0009-0009-6248-9781">谢礼桓</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -193,7 +193,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="张武顺"></span>
+          <span class="ap-member-avatar"><img src="../_static/contributors/wushun-zhang.svg" width="80" height="80" alt="张武顺"></span>
           <div class="ap-member-identity">
             <strong>张武顺</strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -207,7 +207,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="赵中平"></a></span>
+          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/zhongping-zhao.svg" width="80" height="80" alt="赵中平"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://github.com/GooseGH">赵中平</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -229,7 +229,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="钟昆硼"></span>
+          <span class="ap-member-avatar"><img src="../_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="钟昆硼"></span>
           <div class="ap-member-identity">
             <strong>钟昆硼</strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -243,7 +243,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="周志君"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="../_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="周志君"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/HIT-ZhouZhijun">周志君</a></strong><br>
             <sub class="ap-member-role">维护者</sub>
@@ -348,7 +348,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Kunpeng Zhong"></span>
+          <span class="ap-member-avatar"><img src="../_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="Kunpeng Zhong"></span>
           <div class="ap-member-identity">
             <strong>Kunpeng Zhong</strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -362,7 +362,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Lihuan Xie"></a></span>
+          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="../_static/contributors/lihuan-xie.svg" width="80" height="80" alt="Lihuan Xie"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://orcid.org/0009-0009-6248-9781">Lihuan Xie</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -379,7 +379,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Wushun Zhang"></span>
+          <span class="ap-member-avatar"><img src="../_static/contributors/wushun-zhang.svg" width="80" height="80" alt="Wushun Zhang"></span>
           <div class="ap-member-identity">
             <strong>Wushun Zhang</strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -393,7 +393,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Xi Chen"></span>
+          <span class="ap-member-avatar"><img src="../_static/contributors/xi-chen.svg" width="80" height="80" alt="Xi Chen"></span>
           <div class="ap-member-identity">
             <strong>Xi Chen</strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -407,7 +407,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Xin Luo"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="../_static/contributors/xin-luo.svg" width="80" height="80" alt="Xin Luo"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/Luo-Xin-410">Xin Luo</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -424,7 +424,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Yingjie Chen"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="../_static/contributors/yingjie-chen.svg" width="80" height="80" alt="Yingjie Chen"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/jiaohuadetudouni">Yingjie Chen</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -462,7 +462,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Zhijun Zhou"></a></span>
+          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="../_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="Zhijun Zhou"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://gitee.com/HIT-ZhouZhijun">Zhijun Zhou</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
@@ -479,7 +479,7 @@
     <tr>
       <td class="ap-member" align="center" width="160" valign="top">
         <div class="ap-member-profile">
-          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/placeholder.png" width="80" height="80" alt="Zhongping Zhao"></a></span>
+          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/zhongping-zhao.svg" width="80" height="80" alt="Zhongping Zhao"></a></span>
           <div class="ap-member-identity">
             <strong><a href="https://github.com/GooseGH">Zhongping Zhao</a></strong><br>
             <sub class="ap-member-role">Maintainer</sub>
