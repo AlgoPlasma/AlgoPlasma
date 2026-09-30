@@ -125,87 +125,251 @@ make html
 <!-- CONTRIBUTORS:START -->
 <p align="center"><sub>感谢每一位为 AlgoPlasma 贡献代码、测试、性能基准、文档、示例与缺陷修复的成员。</sub></p>
 
-<p align="center"><sub>贡献类型：💻 代码 · 🧪 测试 · 📊 性能基准 · 📖 文档 · 🎓 示例 · 🐛 缺陷修复</sub></p>
+### 项目负责人
+
+<table class="ap-work-list ap-work-list--lead">
+  <thead>
+    <tr>
+      <th scope="col" align="left" width="160">成员</th>
+      <th scope="col" align="left">个人简介</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://github.com/Yin-YinjianZhao"><img src="docs/source/_static/contributors/zhaoyinjian.png" width="80" height="80" alt="赵隐剑"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://github.com/Yin-YinjianZhao">赵隐剑</a></strong><br>
+            <sub class="ap-member-role">项目负责人</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <p class="ap-member-biography">哈尔滨工业大学副教授、博士生导师，美国南加州大学航天工程博士，曾在美国劳伦斯伯克利国家实验室从事博士后研究，并参与美国能源部百亿亿次级计算项目WarpX开源程序的研发。长期从事等离子体物理与数值模拟研究，研究方向涵盖电推进、等离子体不稳定性、粒子模拟算法及高性能并行计算等。发表SCI论文40余篇，主持国家级青年人才、国家自然科学基金面上项目等多项科研项目。现任Plasma Science and Technology期刊青年编委，并担任Plasma Sources Science and Technology、Physics of Plasmas、Computer Physics Communications多本国内外等离子体物理与计算物理期刊审稿人。</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ### 维护者
 
-<table>
-  <tr>
-    <td align="center" width="110" valign="top">
-      <a href="https://github.com/Yin-YinjianZhao"><img src="https://github.com/Yin-YinjianZhao.png" width="80" height="80" alt="赵隐剑"></a><br>
-      <sub><b>赵隐剑</b></sub><br>
-      <sub>项目负责人</sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/baisheng-wang.svg" width="80" height="80" alt="王佰胜"></a><br>
-      <sub><b>王佰胜</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/changzheng-hu.svg" width="80" height="80" alt="胡长征"><br>
-      <sub><b>胡长征</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="80" height="80" alt="钟昆硼"><br>
-      <sub><b>钟昆硼</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="80" height="80" alt="谢礼桓"></a><br>
-      <sub><b>谢礼桓</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/wushun-zhang.svg" width="80" height="80" alt="张武顺"><br>
-      <sub><b>张武顺</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="110" valign="top">
-      <img src="docs/source/_static/contributors/xi-chen.svg" width="80" height="80" alt="陈曦"><br>
-      <sub><b>陈曦</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="80" height="80" alt="罗鑫"></a><br>
-      <sub><b>罗鑫</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="80" height="80" alt="陈英杰"></a><br>
-      <sub><b>陈英杰</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="80" height="80" alt="刘哲"></a><br>
-      <sub><b>刘哲</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="80" height="80" alt="周志君"></a><br>
-      <sub><b>周志君</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-    <td align="center" width="110" valign="top">
-      <a href="https://github.com/GooseGH"><img src="https://github.com/GooseGH.png" width="80" height="80" alt="赵中平"></a><br>
-      <sub><b>赵中平</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="110" valign="top">
-      <a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/zilong-peng.svg" width="80" height="80" alt="彭子龙"></a><br>
-      <sub><b>彭子龙</b></sub><br>
-      <sub><abbr title="代码">💻</abbr> <abbr title="测试">🧪</abbr> <abbr title="性能基准">📊</abbr> <abbr title="文档">📖</abbr> <abbr title="示例">🎓</abbr> <abbr title="缺陷修复">🐛</abbr></sub>
-    </td>
-  </tr>
+<table class="ap-work-list">
+  <thead>
+    <tr>
+      <th scope="col" align="left" width="160">成员</th>
+      <th scope="col" align="left">研究方向与参与工作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="陈曦"></span>
+          <div class="ap-member-identity">
+            <strong>陈曦</strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <span class="ap-work-pending">待补充</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="陈英杰"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://gitee.com/jiaohuadetudouni">陈英杰</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <span class="ap-work-pending">待补充</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/huchangzheng.jpg" width="80" height="80" alt="胡长征"></span>
+          <div class="ap-member-identity">
+            <strong>胡长征</strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <span class="ap-work-pending">待补充</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="80" height="80" alt="刘哲"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://gitee.com/lzhe898">刘哲</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <ul class="ap-work-items">
+          <li><a href="docs/source/rst_files/E_Maxwell/E01_Maxwell_2Drz.rst">轴对称二维柱坐标 Maxwell 方程的 FDTD 更新</a></li>
+          <li><a href="docs/source/rst_files/E_Maxwell/E02_Maxwell_3Drtz.rst">三维柱坐标 Maxwell 方程的 FDTD 更新</a></li>
+          <li><a href="docs/source/rst_files/E_Maxwell/E03_Maxwell_3Dxyz.rst">三维直角坐标 Maxwell 方程的 FDTD 更新</a></li>
+          <li><a href="docs/source/rst_files/F_IO/F01_par_load.rst">并行粒子数据读取</a></li>
+          <li><a href="docs/source/rst_files/F_IO/F02_par_output.rst">并行粒子数据输出</a></li>
+          <li><a href="docs/source/rst_files/F_IO/F03_field_load.rst">并行场数据读取</a></li>
+          <li><a href="docs/source/rst_files/F_IO/F04_field_output.rst">并行场数据输出</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="罗鑫"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://gitee.com/Luo-Xin-410">罗鑫</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <ul class="ap-work-items">
+          <li><a href="docs/source/rst_files/C_Gather/C02_gather_3Dxyz_bspline.rst">三维直角坐标网格的 B 样条场插值</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/pengzilong.jpg" width="80" height="80" alt="彭子龙"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://gitee.com/peng-zilong123">彭子龙</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <p class="ap-member-research"><strong>研究方向</strong><br>研究方向为电推进等离子体波动诊断与动力学机制，重点开展色散测量与高阶谱分析，后续拟结合实验与粒子模拟，探究多尺度波动耦合及其与电子输运的联系</p>
+        <ul class="ap-work-items">
+          <li><a href="docs/source/rst_files/A_Pusher/A03_Higuera_Cary_relativistic_3Dxyz.rst">三维直角坐标相对论 Higuera-Cary 粒子推进</a></li>
+          <li><a href="docs/source/rst_files/B_Scatter/B01_scatter_3Dxyz.rst">三维直角坐标网格的粒子量沉积</a></li>
+          <li><a href="docs/source/rst_files/D_Poisson/D05_phi1d_to_phi3d.rst">电势数组转三维网格与 MPI 边界交换</a></li>
+          <li><a href="docs/source/rst_files/D_Poisson/D06_phi_to_E.rst">由电势计算三维电场</a></li>
+          <li><a href="docs/source/rst_files/H_MPI_Exchange/H03_mpi_exchange_den.rst">粒子沉积后密度数组的 MPI 边界交换</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/wangbaisheng.jpg" width="80" height="80" alt="王佰胜"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://gitee.com/HermiteCat">王佰胜</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <p class="ap-member-research"><strong>研究方向</strong><br>空间电推进空心阴极数值模拟</p>
+        <ul class="ap-work-items">
+          <li><a href="docs/source/rst_files/D_Poisson/D01_hypre_3Dxyz.rst">三维直角坐标 Poisson 方程的 HYPRE 求解接口</a></li>
+          <li><a href="docs/source/rst_files/D_Poisson/D02_hypre_3Dxyz_bc.rst">含边界条件的三维直角坐标 Poisson 求解</a></li>
+          <li><a href="docs/source/rst_files/D_Poisson/D03_hypre_3Draz_uniform.rst">均匀柱坐标网格的三维 Poisson 求解</a></li>
+          <li><a href="docs/source/rst_files/D_Poisson/D04_hypre_3Draz_nonuniform.rst">非均匀柱坐标网格的三维 Poisson 求解</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="谢礼桓"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://orcid.org/0009-0009-6248-9781">谢礼桓</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <ul class="ap-work-items">
+          <li><a href="docs/source/rst_files/G_Collision/G01_MCC.rst">基于空碰撞法的蒙特卡洛碰撞处理</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="张武顺"></span>
+          <div class="ap-member-identity">
+            <strong>张武顺</strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <span class="ap-work-pending">待补充</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="赵中平"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://github.com/GooseGH">赵中平</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <ul class="ap-work-items">
+          <li><a href="docs/source/rst_files/A_Pusher/A01_Boris_3Dxyz.rst">三维直角坐标非相对论 Boris 粒子推进</a></li>
+          <li><a href="docs/source/rst_files/A_Pusher/A02_Boris_3Drtz.rst">三维柱坐标非相对论 Boris 粒子推进</a></li>
+          <li><a href="docs/source/rst_files/B_Scatter/B03_scatter_3Dxyz_bspline.rst">三维直角坐标网格的 B 样条粒子沉积</a></li>
+          <li><a href="docs/source/rst_files/C_Gather/C01_gather_3Dxyz.rst">三维直角坐标网格的三线性场插值</a></li>
+          <li><a href="docs/source/rst_files/C_Gather/C02_gather_3Dxyz_bspline.rst">三维直角坐标网格的 B 样条场插值</a></li>
+          <li><a href="docs/source/rst_files/I_Initializer/I02_par_init_and_load.rst">离线生成并行加载初始粒子</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="钟昆硼"></span>
+          <div class="ap-member-identity">
+            <strong>钟昆硼</strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <span class="ap-work-pending">待补充</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/placeholder.png" width="80" height="80" alt="周志君"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://gitee.com/HIT-ZhouZhijun">周志君</a></strong><br>
+            <sub class="ap-member-role">维护者</sub>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <ul class="ap-work-items">
+          <li><a href="docs/source/rst_files/B_Scatter/B02_deposit_3d_cyl.rst">三维柱坐标网格的电荷与电流密度沉积</a></li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
 </table>
 
 ### 贡献者
 
+<p align="center"><sub>贡献类型：💻 代码</sub></p>
 <table>
   <tr>
     <td align="center" width="110" valign="top">

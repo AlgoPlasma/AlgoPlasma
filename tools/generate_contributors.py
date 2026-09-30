@@ -7,8 +7,10 @@
 * the ``Contributors`` section between the markers in ``README.md``,
   ``README.zh-CN.md`` and ``README.en.md``;
 * the Sphinx / Read the Docs page ``docs/source/community/contributors.md``;
-* initial-based fallback avatars in ``docs/source/_static/contributors/``
-  for contributors that have neither a GitHub account nor an ``avatar``.
+
+Lead and maintainer avatars use the shared local placeholder until an explicit
+``avatar`` is supplied. Ordinary contributors use their GitHub or Gitee avatar
+by default. An explicit ``avatar`` takes precedence for every role.
 
 Usage::
 
@@ -20,20 +22,18 @@ Only the text between ``<!-- CONTRIBUTORS:START -->`` and
 content is preserved.  The output is deterministic: running the script twice
 produces no diff, and the order of ``contributors.yml`` is never changed.
 
-The script uses the standard library only.  PyYAML is used when it is
-installed; otherwise a small built-in parser for the subset of YAML used by
-``contributors.yml`` is used, so no dependency is required for a rebuild.
+The script uses the standard library only.  A small built-in parser handles
+the subset of YAML used by ``contributors.yml``.
 """
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import os
 import re
 import sys
+from html import escape as html_escape
 from pathlib import Path, PurePosixPath
-from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "contributors.yml"
@@ -56,20 +56,22 @@ RTD_COLUMNS = 4
 RTD_TABLE_CLASS = "ap-contributors"
 README_AVATAR_PX = 80
 RTD_AVATAR_PX = 96
+WORK_AVATAR_PX = 80
+MODULE_PAGE_RE = re.compile(r"^([A-J][0-9]{2})_.+\.rst$")
+WORK_TABLE_CLASS = "ap-work-list"
+WORK_HEADERS = {
+    "zh": ("成员", "参与过的具体工作"),
+    "en": ("Member", "Documented work"),
+}
+BIOGRAPHY_LABELS = {"zh": "个人简介", "en": "Biography"}
+RESEARCH_LABELS = {"zh": "研究方向", "en": "Research Interests"}
+RESEARCH_WORK_HEADERS = {
+    "zh": "研究方向与参与工作",
+    "en": "Research Interests and Documented Work",
+}
+WORK_PENDING = {"zh": "待补充", "en": "To be added"}
 
-AVATAR_DIR = ROOT / "docs/source/_static/contributors"
-AVATAR_URL_BASE = "docs/source/_static/contributors"
-# Accent colors shared with the home-page module cards.
-AVATAR_PALETTE = (
-    "#2c7be5",
-    "#00a887",
-    "#7b61ff",
-    "#d9822b",
-    "#1f9bb4",
-    "#5964d8",
-    "#c94c4c",
-    "#178f66",
-)
+DEFAULT_AVATAR = "docs/source/_static/contributors/placeholder.png"
 
 # --- Contribution types ------------------------------------------------------
 # canonical key -> (emoji, English label, Chinese label).  Keep this list short
@@ -136,16 +138,16 @@ ROLE_LABELS_ZH = {
 }
 DEFAULT_ROLE = "contributor"
 # Read the Docs sections: (English title, Chinese title, roles in this section).
-# The role is shown by the section heading, so it is not repeated on every card.
+# Detailed rows show roles; ordinary contributor cards use the section heading.
 RTD_SECTIONS = (
     ("Project Lead", "项目负责人", ("lead",)),
     ("Maintainers", "维护者", ("maintainer",)),
     ("Contributors", "贡献者", ("contributor",)),
 )
-# README groups: (English title, Chinese title, roles).  The project lead is
-# placed first in its group, the rest of the group is sorted by display name.
+# README groups: (English title, Chinese title, roles).
 README_SECTIONS = (
-    ("Maintainers", "维护者", ("lead", "maintainer")),
+    ("Project Lead", "项目负责人", ("lead",)),
+    ("Maintainers", "维护者", ("maintainer",)),
     ("Contributors", "贡献者", ("contributor",)),
 )
 
@@ -161,10 +163,10 @@ README_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
 # The docs page is bilingual: each language lives in its own .ap-lang block, so
 # no page mixes the two languages.
 RTD_INTRO = {
-    "zh": "AlgoPlasma 由下列成员共同建设，按角色分组，组内按姓名拼音排序。",
+    "zh": "AlgoPlasma 由下列成员共同建设。项目负责人置顶，维护者按姓氏拼音排序。",
     "en": (
-        "AlgoPlasma is built by the people below, grouped by role. Names are "
-        "sorted alphabetically within each group."
+        "AlgoPlasma is built by the people below. The project lead appears "
+        "first; maintainers are sorted by given name."
     ),
 }
 RTD_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
@@ -286,6 +288,8 @@ def _parse_mapping(tokens, position: int, indent: int):
         if not match:
             raise ValueError(f"expected 'key: value', got {content!r}")
         key = _unquote(match.group(1))
+        if key in mapping:
+            raise ValueError(f"duplicate YAML key {key!r}")
         rest = match.group(2).strip()
         position += 1
         if rest:
@@ -311,20 +315,85 @@ def load_contributors(path: Path = DATA_FILE):
         sys.exit(f"error: {_display(path)} not found")
     text = path.read_text(encoding="utf-8")
     try:
-        import yaml  # type: ignore
-    except ImportError:
         data = _mini_yaml_load(text)
-    else:
-        data = yaml.safe_load(text)
+    except ValueError as error:
+        sys.exit(f"error: {path.name}: {error}")
     if not isinstance(data, dict) or "contributors" not in data:
         sys.exit(f"error: {path.name} must contain a top-level 'contributors' list")
     entries = data["contributors"]
     if not isinstance(entries, list) or not entries:
         sys.exit(f"error: 'contributors' in {path.name} must be a non-empty list")
-    return [_normalise(entry, index) for index, entry in enumerate(entries)]
+    catalog = _normalise_work_catalog(data.get("work_catalog"))
+    default_avatar = _normalise_avatar(
+        data.get("default_avatar") or DEFAULT_AVATAR, "default_avatar"
+    )
+    return [
+        _normalise(entry, index, catalog, default_avatar)
+        for index, entry in enumerate(entries)
+    ]
 
 
-def _normalise(entry, index: int) -> dict:
+def _module_pages() -> dict:
+    """Index top-level module pages by their unique short ID."""
+    pages = {}
+    for path in sorted((ROOT / "docs/source/rst_files").glob("*/*.rst")):
+        match = MODULE_PAGE_RE.fullmatch(path.name)
+        if not match:
+            continue
+        module_id = match.group(1)
+        if module_id in pages:
+            sys.exit(f"error: duplicate module ID {module_id} in module pages")
+        pages[module_id] = path
+    return pages
+
+
+def _normalise_work_catalog(raw) -> dict:
+    if not isinstance(raw, dict) or not raw:
+        sys.exit("error: contributors.yml must contain a non-empty 'work_catalog'")
+    pages = _module_pages()
+    catalog = {}
+    for module_id, labels in raw.items():
+        if not isinstance(module_id, str) or not re.fullmatch(
+            r"[A-J][0-9]{2}", module_id
+        ):
+            sys.exit(f"error: invalid work module ID {module_id!r}")
+        if module_id not in pages:
+            sys.exit(f"error: {module_id}: matching module document not found")
+        if not isinstance(labels, dict):
+            sys.exit(f"error: {module_id}: work description must be a mapping")
+        descriptions = {}
+        for lang in ("zh", "en"):
+            value = labels.get(lang)
+            if not isinstance(value, str) or not value.strip():
+                sys.exit(f"error: {module_id}: missing {lang} work description")
+            if re.search(r"\b[A-J][0-9]{2}\b", value):
+                sys.exit(f"error: {module_id}: {lang} description contains a module ID")
+            descriptions[lang] = value.strip()
+        catalog[module_id] = {
+            **descriptions,
+            "path": pages[module_id],
+        }
+    return catalog
+
+
+def _normalise_profile_text(raw, field: str, name: str) -> dict:
+    """Keep optional profile prose complete in both language views."""
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        sys.exit(f"error: {name}: '{field}' must be a zh/en mapping")
+    text = {}
+    for lang in ("zh", "en"):
+        value = raw.get(lang)
+        if not isinstance(value, str) or not value.strip():
+            sys.exit(f"error: {name}: missing {lang} {field}")
+        text[lang] = value.strip()
+    return text
+
+
+def _normalise(
+    entry, index: int, catalog: dict, default_avatar: str = DEFAULT_AVATAR
+) -> dict:
     where = f"contributors.yml entry #{index + 1}"
     if not isinstance(entry, dict):
         sys.exit(f"error: {where} is not a mapping")
@@ -351,15 +420,44 @@ def _normalise(entry, index: int) -> dict:
         if key not in contributions:
             contributions.append(key)
     contributions.sort(key=list(CONTRIBUTION_TYPES).index)
+    raw_work = entry.get("work_modules") or []
+    if not isinstance(raw_work, list):
+        sys.exit(f"error: {name}: 'work_modules' must be a list")
+    work_modules = []
+    for module_id in raw_work:
+        if not isinstance(module_id, str) or module_id not in catalog:
+            sys.exit(f"error: {name}: unknown work module {module_id!r}")
+        if module_id in work_modules:
+            sys.exit(f"error: {name}: duplicate work module {module_id}")
+        work_modules.append(module_id)
+    if role == "contributor" and work_modules:
+        sys.exit(f"error: {name}: 'work_modules' is only displayed for lead/maintainer")
+    biography = _normalise_profile_text(entry.get("biography"), "biography", name)
+    research_interests = _normalise_profile_text(
+        entry.get("research_interests"), "research_interests", name
+    )
+    if role == "contributor" and (biography or research_interests):
+        sys.exit(f"error: {name}: profile text is only displayed for lead/maintainer")
+    github = str(entry.get("github") or "").strip()
+    gitee = str(entry.get("gitee") or "").strip()
+    avatar = str(entry.get("avatar") or "").strip()
+    if not avatar and role == "contributor":
+        if github:
+            avatar = f"https://github.com/{github}.png"
+        elif gitee:
+            avatar = f"https://gitee.com/{gitee}.png"
     return {
         "name": name,
         "name_zh": str(entry.get("name_zh") or "").strip(),
         "role": role,
         "contributions": contributions,
-        "github": str(entry.get("github") or "").strip(),
-        "gitee": str(entry.get("gitee") or "").strip(),
+        "work": [catalog[module_id] for module_id in work_modules],
+        "biography": biography,
+        "research_interests": research_interests,
+        "github": github,
+        "gitee": gitee,
         "orcid": str(entry.get("orcid") or "").strip(),
-        "avatar": str(entry.get("avatar") or "").strip(),
+        "avatar": _normalise_avatar(avatar or default_avatar, name),
     }
 
 
@@ -373,49 +471,18 @@ def display_name(entry: dict, lang: str) -> str:
 # =============================================================================
 # Avatar helpers
 # =============================================================================
-def _slug(name: str) -> str:
-    slug = re.sub(r"[^0-9A-Za-z]+", "-", name).strip("-").lower()
-    return slug or hashlib.md5(name.encode("utf-8")).hexdigest()[:8]
-
-
-def _initials(name: str) -> str:
-    parts = [part for part in re.split(r"\s+", name.strip()) if part]
-    if len(parts) >= 2:
-        return (parts[0][0] + parts[1][0]).upper()
-    word = parts[0] if parts else "?"
-    if word.isascii():
-        return word[:2].upper()
-    return word[0]
-
-
-def _avatar_svg(name: str) -> str:
-    digest = hashlib.md5(name.encode("utf-8")).hexdigest()
-    color = AVATAR_PALETTE[int(digest, 16) % len(AVATAR_PALETTE)]
-    initials = escape(_initials(name))
-    font_size = 66 if len(initials) == 1 else 58
-    return (
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" '
-        'width="160" height="160" role="img" '
-        f'aria-label="{escape(name)}">\n'
-        f'  <rect width="160" height="160" rx="80" fill="{color}"/>\n'
-        '  <text x="80" y="80" fill="#ffffff" font-size="{}" font-weight="600" '
-        'font-family="Helvetica, Arial, sans-serif" text-anchor="middle" '
-        f'dominant-baseline="central">{initials}</text>\n'
-        "</svg>\n"
-    ).format(font_size)
-
-
-def _uses_fallback_avatar(entry: dict) -> bool:
-    return not entry["avatar"] and not entry["github"]
+def _normalise_avatar(value, owner: str) -> str:
+    """Catch missing local photos before generating broken image links."""
+    avatar = str(value).strip()
+    if not avatar:
+        sys.exit(f"error: {owner}: avatar path is empty")
+    if not re.match(r"^https?://", avatar) and not (ROOT / avatar).is_file():
+        sys.exit(f"error: {owner}: avatar image not found: {avatar}")
+    return avatar
 
 
 def _avatar_url(entry: dict, target_dir: str) -> str:
-    url = entry["avatar"]
-    if not url and entry["github"]:
-        url = f"https://github.com/{entry['github']}.png"
-    if not url:
-        url = f"{AVATAR_URL_BASE}/{_slug(entry['name'])}.svg"
-    return _localise(url, target_dir)
+    return _localise(entry["avatar"], target_dir)
 
 
 def _localise(url: str, target_dir: str) -> str:
@@ -524,29 +591,124 @@ def _rtd_cell(entry: dict, target_dir: str, lang: str) -> list:
     if emoji:
         cell[-1] += "<br>"
         cell.append(f"  <small>{emoji}</small>")
-    links = []
-    if entry["github"]:
-        links.append(f'<a href="https://github.com/{entry["github"]}">GitHub</a>')
-    if entry["gitee"]:
-        links.append(f'<a href="https://gitee.com/{entry["gitee"]}">Gitee</a>')
-    if entry["orcid"]:
-        links.append(f'<a href="https://orcid.org/{entry["orcid"]}">ORCID</a>')
+    links = _profile_links(entry)
     if links:
-        cell.append("  <br><small>" + " | ".join(links) + "</small>")
+        cell.append("  <br><small>" + links + "</small>")
     cell.append("</td>")
     return cell
+
+
+def _profile_links(entry: dict, separator: str = " | ") -> str:
+    links = []
+    for field, base, label in (
+        ("github", "https://github.com/", "GitHub"),
+        ("gitee", "https://gitee.com/", "Gitee"),
+        ("orcid", "https://orcid.org/", "ORCID"),
+    ):
+        value = entry[field]
+        if value:
+            links.append(f'<a href="{base}{html_escape(value, quote=True)}">{label}</a>')
+    return separator.join(links)
+
+
+def _work_href(work: dict, target_dir: str) -> str:
+    """Link to the source RST from README, or built HTML from Read the Docs."""
+    path = work["path"]
+    if target_dir == RTD_TARGET_DIR:
+        path = path.with_suffix(".html")
+    return PurePosixPath(os.path.relpath(path, ROOT / target_dir)).as_posix()
+
+
+def _work_table(entries, lang: str, target_dir: str) -> str:
+    member_label, work_label = WORK_HEADERS[lang]
+    if all(entry.get("biography") for entry in entries):
+        work_label = BIOGRAPHY_LABELS[lang]
+    elif any(entry.get("research_interests") for entry in entries):
+        work_label = RESEARCH_WORK_HEADERS[lang]
+    role_labels = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
+    table_class = WORK_TABLE_CLASS
+    if all(entry["role"] == "lead" for entry in entries):
+        table_class += " ap-work-list--lead"
+    lines = [
+        f'<table class="{table_class}">',
+        "  <thead>",
+        "    <tr>",
+        f'      <th scope="col" align="left" width="160">{member_label}</th>',
+        f'      <th scope="col" align="left">{work_label}</th>',
+        "    </tr>",
+        "  </thead>",
+        "  <tbody>",
+    ]
+    for entry in entries:
+        name = html_escape(display_name(entry, lang))
+        src = html_escape(_avatar_url(entry, target_dir), quote=True)
+        url, _ = _profile_url(entry)
+        safe_url = html_escape(url, quote=True)
+        image = (
+            f'<img src="{src}" width="{WORK_AVATAR_PX}" height="{WORK_AVATAR_PX}" '
+            f'alt="{name}">'
+        )
+        if url:
+            image = f'<a href="{safe_url}">{image}</a>'
+        linked_name = f'<a href="{safe_url}">{name}</a>' if url else name
+        lines.extend(
+            [
+                "    <tr>",
+                '      <td class="ap-member" align="center" width="160" valign="top">',
+                '        <div class="ap-member-profile">',
+                f'          <span class="ap-member-avatar">{image}</span>',
+                '          <div class="ap-member-identity">',
+                f"            <strong>{linked_name}</strong><br>",
+                f'            <sub class="ap-member-role">{role_labels[entry["role"]]}</sub>',
+            ]
+        )
+        if target_dir == RTD_TARGET_DIR:
+            links = _profile_links(entry, separator=" ")
+            if links:
+                lines.append(f'            <br><small class="ap-member-links">{links}</small>')
+        lines.extend([
+            "          </div>",
+            "        </div>",
+            "      </td>",
+            '      <td class="ap-work-cell" valign="top">',
+        ])
+        biography = entry.get("biography", {}).get(lang, "")
+        research_interests = entry.get("research_interests", {}).get(lang, "")
+        if biography:
+            lines.append(
+                f'        <p class="ap-member-biography">{html_escape(biography, quote=False)}</p>'
+            )
+        if research_interests:
+            lines.append(
+                f'        <p class="ap-member-research"><strong>{RESEARCH_LABELS[lang]}</strong>'
+                f'<br>{html_escape(research_interests, quote=False)}</p>'
+            )
+        if entry["work"] and not biography:
+            list_class = "ap-work-items"
+            if len(entry["work"]) > 8:
+                list_class += " ap-work-items--long"
+            lines.append(f'        <ul class="{list_class}">')
+            for work in entry["work"]:
+                href = html_escape(_work_href(work, target_dir), quote=True)
+                description = html_escape(work[lang])
+                lines.append(f'          <li><a href="{href}">{description}</a></li>')
+            lines.append("        </ul>")
+        elif not biography and not research_interests:
+            lines.append(
+                f'        <span class="ap-work-pending">{WORK_PENDING[lang]}</span>'
+            )
+        lines.extend(["      </td>", "    </tr>"])
+    lines.extend(["  </tbody>", "</table>"])
+    return "\n".join(lines)
 
 
 def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str:
     parts = []
     parts.append(f'<p align="center"><sub>{README_INTRO[lang]}</sub></p>')
-    parts.append("")
-    legend = f"{README_LEGEND_LABEL[lang]}{_legend_text(contributors, lang)}"
-    parts.append(f'<p align="center"><sub>{legend}</sub></p>')
     assigned = set()
     role_labels = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
     for title_en, title_zh, roles in README_SECTIONS:
-        group = _readme_group(contributors, roles)
+        group = _readme_group(contributors, roles, lang)
         assigned.update(roles)
         if not group:
             continue
@@ -554,17 +716,16 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
         parts.append("")
         parts.append(f"### {title}")
         parts.append("")
-        cells = [
-            _readme_cell(
-                entry,
-                target_dir,
-                lang,
-                # the project lead keeps a label inside the maintainer group
-                role_labels[entry["role"]] if entry["role"] == "lead" else "",
-            )
-            for entry in group
-        ]
-        parts.append(_render_table(cells, README_COLUMNS))
+        if any(role in ("lead", "maintainer") for role in roles):
+            parts.append(_work_table(group, lang, target_dir))
+        else:
+            legend = _legend_text(group, lang)
+            if legend:
+                parts.append(
+                    f'<p align="center"><sub>{README_LEGEND_LABEL[lang]}{legend}</sub></p>'
+                )
+            cells = [_readme_cell(entry, target_dir, lang) for entry in group]
+            parts.append(_render_table(cells, README_COLUMNS))
     extra_roles = [
         role
         for role in ROLE_LABELS
@@ -582,19 +743,31 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
     return "\n".join(parts) + "\n"
 
 
-def _sorted_group(contributors, roles) -> list:
-    """Contributors of the given roles, sorted by display name."""
+def _name_sort_key(entry: dict, lang: str) -> tuple:
+    """Chinese: surname pinyin; English: first word of the English name."""
+    words = entry["name"].split()
+    if lang == "zh":
+        return (
+            words[-1].casefold(),
+            " ".join(words[:-1]).casefold(),
+            entry["name"].casefold(),
+        )
+    return (words[0].casefold(), entry["name"].casefold())
+
+
+def _sorted_group(contributors, roles, lang: str) -> list:
+    """Contributors of the given roles, sorted for the target language."""
     group = [entry for entry in contributors if entry["role"] in roles]
-    return sorted(group, key=lambda entry: entry["name"].casefold())
+    return sorted(group, key=lambda entry: _name_sort_key(entry, lang))
 
 
-def _readme_group(contributors, roles) -> list:
-    """Group for the README: project lead first, the rest by display name."""
+def _readme_group(contributors, roles, lang: str) -> list:
+    """Group for the README: project lead first, then language-specific order."""
     group = [entry for entry in contributors if entry["role"] in roles]
     lead = [entry for entry in group if entry["role"] == "lead"]
     rest = sorted(
         (entry for entry in group if entry["role"] != "lead"),
-        key=lambda entry: entry["name"].casefold(),
+        key=lambda entry: _name_sort_key(entry, lang),
     )
     return lead + rest
 
@@ -605,26 +778,31 @@ def _rtd_block(contributors, lang: str, target_dir: str) -> str:
     Everything is emitted without blank lines inside the ``<div>`` so that the
     whole block stays a single HTML block in Markdown.
     """
-    parts = [f'<div class="ap-lang ap-lang-{lang}">']
-    parts.append(f"<p>{RTD_INTRO[lang]}</p>")
-    parts.append(f"<p>{RTD_LEGEND_LABEL[lang]}{_legend_text(contributors, lang)}</p>")
+    parts = [f'<div class="ap-lang ap-lang-{lang} ap-contributor-page">']
+    parts.append(f'<p class="ap-contributor-intro">{RTD_INTRO[lang]}</p>')
     assigned = set()
     role_titles = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
     for title_en, title_zh, roles in RTD_SECTIONS:
-        group = _sorted_group(contributors, roles)
+        group = _sorted_group(contributors, roles, lang)
         assigned.update(roles)
         if not group:
             continue
-        parts.append(f"<h2>{title_en if lang == 'en' else title_zh}</h2>")
-        cells = [_rtd_cell(entry, target_dir, lang) for entry in group]
-        parts.append(_render_table(cells, RTD_COLUMNS, RTD_TABLE_CLASS))
+        parts.append(f'<h2 class="ap-contributor-heading">{title_en if lang == "en" else title_zh}</h2>')
+        if any(role in ("lead", "maintainer") for role in roles):
+            parts.append(_work_table(group, lang, target_dir))
+        else:
+            legend = _legend_text(group, lang)
+            if legend:
+                parts.append(f"<p>{RTD_LEGEND_LABEL[lang]}{legend}</p>")
+            cells = [_rtd_cell(entry, target_dir, lang) for entry in group]
+            parts.append(_render_table(cells, RTD_COLUMNS, RTD_TABLE_CLASS))
     extra_roles = [
         role for role in ROLE_LABELS if role not in assigned and any(
             entry["role"] == role for entry in contributors
         )
     ]
     for role in extra_roles:  # future roles fall back to their own section
-        group = _sorted_group(contributors, (role,))
+        group = _sorted_group(contributors, (role,), lang)
         parts.append(f"<h2>{role_titles[role]}</h2>")
         cells = [_rtd_cell(entry, target_dir, lang) for entry in group]
         parts.append(_render_table(cells, RTD_COLUMNS, RTD_TABLE_CLASS))
@@ -678,14 +856,6 @@ def desired_files(contributors) -> dict:
     return files
 
 
-def desired_avatars(contributors) -> dict:
-    return {
-        AVATAR_DIR / f"{_slug(entry['name'])}.svg": _avatar_svg(entry["name"])
-        for entry in contributors
-        if _uses_fallback_avatar(entry)
-    }
-
-
 # =============================================================================
 # Entry point
 # =============================================================================
@@ -700,52 +870,29 @@ def main(argv=None) -> int:
 
     contributors = load_contributors()
     files = desired_files(contributors)
-    avatars = desired_avatars(contributors)
 
     stale = []
     for path, content in files.items():
         current = path.read_text(encoding="utf-8")
         if current != content:
             stale.append(path)
-    for path, content in avatars.items():
-        if not path.is_file() or path.read_text(encoding="utf-8") != content:
-            stale.append(path)
-    obsolete = [
-        path
-        for path in sorted(AVATAR_DIR.glob("*.svg"))
-        if path not in avatars
-    ]
-
     if args.check:
         for path in stale:
             print(f"out of date: {path.relative_to(ROOT)}")
-        for path in obsolete:
-            print(f"unexpected:  {path.relative_to(ROOT)}")
-        if stale or obsolete:
+        if stale:
             print("run: python3 tools/generate_contributors.py")
             return 1
         print(f"up to date: {len(contributors)} contributors")
         return 0
 
-    AVATAR_DIR.mkdir(parents=True, exist_ok=True)
-    for path, content in {**files, **avatars}.items():
+    for path, content in files.items():
         if path.is_file() and path.read_text(encoding="utf-8") == content:
             continue
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)}")
-    for path in obsolete:
-        path.unlink()
-        print(f"removed {path.relative_to(ROOT)}")
-
-    fallback = [entry["name"] for entry in contributors if _uses_fallback_avatar(entry)]
     print(f"{len(contributors)} contributors")
-    if fallback:
-        print(
-            "initial-based fallback avatars (add 'github' or 'avatar' to use a "
-            "photo): " + ", ".join(fallback)
-        )
-    if not stale and not obsolete:
+    if not stale:
         print("no changes")
     return 0
 

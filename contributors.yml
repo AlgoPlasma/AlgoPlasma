@@ -12,16 +12,23 @@
 #   name_zh        Chinese name, used on the Chinese README pages (optional)
 #   role           lead | maintainer | contributor   (default: contributor)
 #   contributions  list of contribution types, or `all` for every type
+#   work_modules   module IDs for documented work (lead/maintainer only)
+#   biography      zh/en personal introduction, shown instead of documented work
+#   research_interests  zh/en research interests, shown above documented work
 #   github         GitHub username (optional)
 #   gitee          Gitee username (optional)
 #   orcid          ORCID iD, e.g. 0000-0000-0000-0000 (optional)
 #   avatar         explicit avatar URL or repo-relative image path (optional)
 #
-# The avatar is taken from `avatar` when it is set, otherwise from
-# https://github.com/<github>.png.  Contributors without either field get a
-# generated initial-based avatar in docs/source/_static/contributors/.
-# For a Gitee-only contributor, set `avatar: https://gitee.com/<gitee>.png` --
-# that URL follows the Gitee avatar, so it stays in sync when it changes.
+# Leads and maintainers use `default_avatar` until their own photo is ready.
+# Ordinary contributors use their GitHub avatar, or Gitee avatar if GitHub is
+# absent; members without either account use `default_avatar`.
+# An explicit `avatar` overrides these defaults for any role.
+# To replace one person's image, put a square photo in
+# docs/source/_static/contributors/ and add an `avatar` field to that member:
+#     avatar: docs/source/_static/contributors/example-user.jpg
+# Then rerun the generator. Paths are relative to the repository root.
+# 中文：把个人方形照片放到上述目录，在对应成员下添加 avatar 路径，再运行生成器。
 #
 # Contribution types
 # ------------------
@@ -33,12 +40,10 @@
 # writing, tutorial, fix, ...).  Unknown keys stop the generator with an error
 # so typos are caught early.
 #
-# The order of this list is preserved exactly as written; reorder it freely.
-# The README wall is grouped into Maintainers / Contributors: the project lead
-# comes first in its group, everyone else is sorted alphabetically by display
-# name.  The Read the Docs page instead groups people by role (Project Lead /
-# Maintainers / Contributors), sorts each group alphabetically by display name,
-# and is written in English only.
+# `work_catalog` supplies the public descriptions for `work_modules`.  Module
+# IDs are internal references: generated pages show the descriptions, not IDs.
+# Chinese pages sort maintainers by surname pinyin, English pages by given name;
+# the project lead always comes first.
 #
 # Adding a contributor
 # --------------------
@@ -49,6 +54,94 @@
 #       - code
 #       - bug
 
+default_avatar: docs/source/_static/contributors/placeholder.png
+
+work_catalog:
+  A01:
+    zh: 三维直角坐标非相对论 Boris 粒子推进
+    en: Nonrelativistic Boris particle pushing in 3D Cartesian coordinates
+  A02:
+    zh: 三维柱坐标非相对论 Boris 粒子推进
+    en: Nonrelativistic Boris particle pushing in 3D cylindrical coordinates
+  A03:
+    zh: 三维直角坐标相对论 Higuera-Cary 粒子推进
+    en: Relativistic Higuera-Cary particle pushing in 3D Cartesian coordinates
+  B01:
+    zh: 三维直角坐标网格的粒子量沉积
+    en: Particle deposition on a 3D Cartesian grid
+  B02:
+    zh: 三维柱坐标网格的电荷与电流密度沉积
+    en: Charge and current deposition on a 3D cylindrical grid
+  B03:
+    zh: 三维直角坐标网格的 B 样条粒子沉积
+    en: B-spline particle deposition on a 3D Cartesian grid
+  C01:
+    zh: 三维直角坐标网格的三线性场插值
+    en: Trilinear field gathering on a 3D Cartesian grid
+  C02:
+    zh: 三维直角坐标网格的 B 样条场插值
+    en: B-spline field gathering on a 3D Cartesian grid
+  D01:
+    zh: 三维直角坐标 Poisson 方程的 HYPRE 求解接口
+    en: HYPRE interface for the 3D Cartesian Poisson equation
+  D02:
+    zh: 含边界条件的三维直角坐标 Poisson 求解
+    en: 3D Cartesian Poisson solving with boundary conditions
+  D03:
+    zh: 均匀柱坐标网格的三维 Poisson 求解
+    en: 3D Poisson solving on a uniform cylindrical grid
+  D04:
+    zh: 非均匀柱坐标网格的三维 Poisson 求解
+    en: 3D Poisson solving on a nonuniform cylindrical grid
+  D05:
+    zh: 电势数组转三维网格与 MPI 边界交换
+    en: Potential mapping to a 3D grid with MPI boundary exchange
+  D06:
+    zh: 由电势计算三维电场
+    en: Computing 3D electric fields from electrostatic potential
+  E01:
+    zh: 轴对称二维柱坐标 Maxwell 方程的 FDTD 更新
+    en: FDTD updates for axisymmetric 2D cylindrical Maxwell equations
+  E02:
+    zh: 三维柱坐标 Maxwell 方程的 FDTD 更新
+    en: FDTD updates for 3D cylindrical Maxwell equations
+  E03:
+    zh: 三维直角坐标 Maxwell 方程的 FDTD 更新
+    en: FDTD updates for 3D Cartesian Maxwell equations
+  F01:
+    zh: 并行粒子数据读取
+    en: Parallel particle data loading
+  F02:
+    zh: 并行粒子数据输出
+    en: Parallel particle data output
+  F03:
+    zh: 并行场数据读取
+    en: Parallel field data loading
+  F04:
+    zh: 并行场数据输出
+    en: Parallel field data output
+  G01:
+    zh: 基于空碰撞法的蒙特卡洛碰撞处理
+    en: Null-collision Monte Carlo collision handling
+  H01:
+    zh: 标量场的 MPI 幽灵层交换
+    en: MPI ghost-cell exchange for scalar fields
+  H02:
+    zh: 多物种粒子的 MPI 跨域交换
+    en: MPI exchange of multispecies particles across subdomains
+  H03:
+    zh: 粒子沉积后密度数组的 MPI 边界交换
+    en: MPI boundary exchange of density arrays after particle deposition
+  I01:
+    zh: 内存中均匀生成粒子初始分布
+    en: In-memory generation of uniformly distributed initial particles
+  I02:
+    zh: 离线生成并行加载初始粒子
+    en: Offline particle initialization and parallel loading
+  J01:
+    zh: 三维自由流连续性方程的有限体积更新
+    en: Finite-volume updates for the 3D free-flow continuity equation
+
 contributors:
   # --- project lead ---------------------------------------------------------
   - name: Yinjian Zhao
@@ -56,7 +149,11 @@ contributors:
     github: Yin-YinjianZhao
     gitee: Yin-YinjianZhao
     role: lead
-    contributions: all
+    avatar: docs/source/_static/contributors/zhaoyinjian.png
+    biography:
+      zh: 哈尔滨工业大学副教授、博士生导师，美国南加州大学航天工程博士，曾在美国劳伦斯伯克利国家实验室从事博士后研究，并参与美国能源部百亿亿次级计算项目WarpX开源程序的研发。长期从事等离子体物理与数值模拟研究，研究方向涵盖电推进、等离子体不稳定性、粒子模拟算法及高性能并行计算等。发表SCI论文40余篇，主持国家级青年人才、国家自然科学基金面上项目等多项科研项目。现任Plasma Science and Technology期刊青年编委，并担任Plasma Sources Science and Technology、Physics of Plasmas、Computer Physics Communications多本国内外等离子体物理与计算物理期刊审稿人。
+      en: Associate Professor and PhD Supervisor at Harbin Institute of Technology. He received his PhD in Astronautical Engineering from the University of Southern California, USA, and conducted postdoctoral research at Lawrence Berkeley National Laboratory, USA. He contributed to the development of the open-source WarpX code under the U.S. Department of Energy's Exascale Computing Project. His research focuses on plasma physics and numerical simulation, including electric propulsion, plasma instabilities, particle simulation algorithms, and high-performance parallel computing. He has published more than 40 SCI-indexed papers and led several research projects, including a national young talent program and General Program projects funded by the National Natural Science Foundation of China. He serves on the Young Editorial Board of Plasma Science and Technology and reviews for Chinese and international journals in plasma physics and computational physics, including Plasma Sources Science and Technology, Physics of Plasmas, and Computer Physics Communications.
+    work_modules: [A01, C01, D01, D02, D04, E01, E02, E03, F01, F02, F03, F04, H01, H02, I01, J01]
 
   # --- maintainers ----------------------------------------------------------
   - name: Zhongping Zhao
@@ -65,73 +162,74 @@ contributors:
     github: GooseGH
     gitee: GooseGH
     role: maintainer
-    contributions: all
+    work_modules: [A01, A02, B03, C01, C02, I02]
 
   - name: Zhe Liu
     name_zh: 刘哲
     gitee: lzhe898
-    # Gitee-only contributor: point `avatar` at the Gitee avatar so it stays in
-    # sync when the avatar changes.  Without it the generated initials avatar
-    # (docs/source/_static/contributors/) is used instead.
-    avatar: https://gitee.com/lzhe898.png
     role: maintainer
-    contributions: all
+    avatar: https://gitee.com/lzhe898.png
+    work_modules: [E01, E02, E03, F01, F02, F03, F04]
 
   - name: Baisheng Wang
     name_zh: 王佰胜
     gitee: HermiteCat
     role: maintainer
-    contributions: all
+    avatar: docs/source/_static/contributors/wangbaisheng.jpg
+    research_interests:
+      zh: 空间电推进空心阴极数值模拟
+      en: Numerical simulation of hollow cathodes for space electric propulsion
+    work_modules: [D01, D02, D03, D04]
 
   - name: Zilong Peng
     name_zh: 彭子龙
     gitee: peng-zilong123
     role: maintainer
-    contributions: all
+    avatar: docs/source/_static/contributors/pengzilong.jpg
+    research_interests:
+      zh: 研究方向为电推进等离子体波动诊断与动力学机制，重点开展色散测量与高阶谱分析，后续拟结合实验与粒子模拟，探究多尺度波动耦合及其与电子输运的联系
+      en: Research focuses on plasma fluctuation diagnostics and dynamical mechanisms in electric propulsion, with an emphasis on dispersion measurements and higher-order spectral analysis. Future work will combine experiments and particle simulations to investigate multiscale fluctuation coupling and its relationship with electron transport.
+    work_modules: [A03, B01, D05, D06, H03]
 
   - name: Xin Luo
     name_zh: 罗鑫
     gitee: Luo-Xin-410
     role: maintainer
-    contributions: all
+    work_modules: [C02]
 
   - name: Lihuan Xie
     name_zh: 谢礼桓
     orcid: 0009-0009-6248-9781
     role: maintainer
-    contributions: all
+    work_modules: [G01]
 
   - name: Xi Chen
     name_zh: 陈曦
     role: maintainer
-    contributions: all
 
   - name: Zhijun Zhou
     name_zh: 周志君
     gitee: HIT-ZhouZhijun
     role: maintainer
-    contributions: all
+    work_modules: [B02]
 
   - name: Kunpeng Zhong
     name_zh: 钟昆硼
     role: maintainer
-    contributions: all
 
   - name: Yingjie Chen
     name_zh: 陈英杰
     gitee: jiaohuadetudouni
     role: maintainer
-    contributions: all
 
   - name: Changzheng Hu
     name_zh: 胡长征
     role: maintainer
-    contributions: all
+    avatar: docs/source/_static/contributors/huchangzheng.jpg
 
   - name: Wushun Zhang
     name_zh: 张武顺
     role: maintainer
-    contributions: all
 
   # --- contributor ----------------------------------------------------------
   - name: Bocong Zheng
