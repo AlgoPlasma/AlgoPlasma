@@ -1,0 +1,14 @@
+reaction_id,species,state,stoichiometry
+1,e-,ground,1
+1,M,ground,1
+2,e-,ground,1
+2,M,excited_1,1
+3,e-,ground,1
+3,M,ground,2
+4,e-,ground,2
+4,M+,ground,1
+5,M-,ground,1
+5,M,ground,1
+6,M,ground,1
+6,M+,ground,1
+7,M,ground,2

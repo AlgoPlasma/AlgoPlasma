@@ -1,0 +1,4 @@
+dataset_id,path,x_axis,x_unit,y_unit,interpolation,below_min_policy,above_max_policy,source,version,license,notes
+ds_e_M_M_elastic,tables/e_M_M_elastic.csv,temperature,K,m6/s,log-log,error,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_e_M_M2_elastic,tables/e_M_M2_elastic.csv,temperature,K,m6/s,log-log,error,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_e_Mplus_M_recombination,tables/e_Mplus_M_recombination.csv,temperature,K,m6/s,log-log,error,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only

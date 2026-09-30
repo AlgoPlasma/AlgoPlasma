@@ -1,0 +1,8 @@
+dataset_id,path,x_axis,x_unit,y_unit,interpolation,below_min_policy,above_max_policy,source,version,license,notes
+ds_e_M_elastic,tables/e_M_elastic.csv,energy,eV,m2,linear,zero,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_e_M_excitation,tables/e_M_excitation.csv,energy,eV,m2,linear,zero,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_e_M2_dissociation,tables/e_M2_dissociation.csv,energy,eV,m2,linear,zero,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_e_M_ionization,tables/e_M_ionization.csv,energy,eV,m2,linear,zero,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_e_M2_attachment,tables/e_M2_attachment.csv,energy,eV,m2,linear,zero,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_Mplus_M_charge_exchange,tables/Mplus_M_charge_exchange.csv,energy,eV,m2,linear,zero,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only
+ds_e_Mplus_recombination,tables/e_Mplus_recombination.csv,temperature,K,m3/s,log-log,error,error,synthetic,1.0,CC0-1.0,SYNTHETIC demonstration values only

@@ -1,0 +1,2 @@
+reaction_id,kind,dataset_id,x_source,x_species
+1,rate_coefficient,ds_elastic,temperature_k,B

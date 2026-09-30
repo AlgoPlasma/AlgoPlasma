@@ -1,0 +1,15 @@
+reaction_id,role,species,state,stoichiometry
+1,projectile,e-,ground,1
+1,background,M,ground,1
+2,projectile,e-,ground,1
+2,background,M,ground,1
+3,projectile,e-,ground,1
+3,background,M2,ground,1
+4,projectile,e-,ground,1
+4,background,M,ground,1
+5,projectile,e-,ground,1
+5,background,M2,ground,1
+6,projectile,M+,ground,1
+6,background,M,ground,1
+7,projectile,e-,ground,1
+7,background,M2+,ground,1

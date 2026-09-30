@@ -71,7 +71,7 @@ Tests
         - :doc:`H_MPI_Exchange </rst_files/H_MPI_Exchange>`
         - :doc:`008_mpi_exchange 测试总览 <008_mpi_exchange/index>`
       * - ``009_collision``
-        - G_Collision 截面表加载器的数组边界回归测试。
+        - G01 截面表加载器回归，以及 G02 碰撞网络和零维碰撞盒验证。
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision 测试总览 <009_collision/index>`
       * - ``kunpeng_compare``
@@ -81,8 +81,8 @@ Tests
 
    .. rubric:: 覆盖状态说明
 
-   ``G_Collision`` 当前由 ``tests/009_collision`` 覆盖截面表加载器的数组边界行为，
-   尚不包含完整 MCC 物理验证。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；
+   ``G_Collision`` 的 G01 测试覆盖截面表加载器边界；G02 测试覆盖算法、统计和零维碰撞盒，
+   使用合成数据。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；
    ``H_MPI_Exchange`` 已由 ``tests/008_mpi_exchange`` 覆盖。
 
 .. container:: ap-lang ap-lang-en
@@ -136,7 +136,7 @@ Tests
         - :doc:`H_MPI_Exchange </rst_files/H_MPI_Exchange>`
         - :doc:`008_mpi_exchange test overview <008_mpi_exchange/index>`
       * - ``009_collision``
-        - Array-bound regression tests for the G_Collision cross-section loader.
+        - G01 cross-section loader regressions plus G02 collision-network and zero-dimensional collision-box validation.
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision test overview <009_collision/index>`
       * - ``kunpeng_compare``
@@ -146,7 +146,7 @@ Tests
 
    .. rubric:: Coverage Notes
 
-   ``G_Collision`` currently has array-bound coverage for its cross-section
-   loader under ``tests/009_collision``; this is not a complete MCC physics
-   validation. ``J_Fluid`` has no standalone top-level regression directory.
+   ``G_Collision`` has G01 loader-boundary tests and G02 algorithm, statistical
+   and zero-dimensional collision-box tests using synthetic data.
+   ``J_Fluid`` has no standalone top-level regression directory.
    ``H_MPI_Exchange`` is covered by ``tests/008_mpi_exchange``.

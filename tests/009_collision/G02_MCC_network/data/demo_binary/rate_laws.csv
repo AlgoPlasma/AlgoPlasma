@@ -1,0 +1,8 @@
+reaction_id,kind,dataset_id,x_source,x_species
+1,cross_section,ds_e_M_elastic,relative_energy_ev,
+2,cross_section,ds_e_M_excitation,relative_energy_ev,
+3,cross_section,ds_e_M2_dissociation,relative_energy_ev,
+4,cross_section,ds_e_M_ionization,relative_energy_ev,
+5,cross_section,ds_e_M2_attachment,relative_energy_ev,
+6,cross_section,ds_Mplus_M_charge_exchange,relative_energy_ev,
+7,rate_coefficient,ds_e_Mplus_recombination,temperature_k,M2+

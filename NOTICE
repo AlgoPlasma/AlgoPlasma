@@ -6,3 +6,13 @@ Project lead: Yinjian Zhao (赵隐剑)
 Contact: contact@algoplasma.com
 
 AlgoPlasma is licensed under the Apache License, Version 2.0.
+
+G02_MCC_network
+Copyright 2026 the G02_MCC_network prototype contributors.
+
+The G02 collision-network implementation was developed with the MCC C01-C08
+reference program as a structural and algorithmic reference. Its author
+authorized reuse and contribution under Apache License, Version 2.0. The
+G02 module does not contain code from the GPL projects PICLas or eduPIC.
+The bundled demonstration cross sections and rate coefficients are synthetic;
+their packages identify the data as CC0-1.0.

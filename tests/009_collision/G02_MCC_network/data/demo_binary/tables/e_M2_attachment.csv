@@ -1,0 +1,9 @@
+# SYNTHETIC demonstration values only - not valid cross sections
+x,y
+0.0,0.0
+0.2,2.0e-21
+1.0,8.0e-21
+3.0,2.0e-21
+10.0,2.0e-22
+50.0,5.0e-23
+200.0,1.0e-23

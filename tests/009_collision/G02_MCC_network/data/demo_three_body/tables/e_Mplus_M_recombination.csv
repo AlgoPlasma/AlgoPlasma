@@ -1,0 +1,10 @@
+# SYNTHETIC demonstration values only - not valid rate coefficients
+x,y
+100.0,5.0e-39
+300.0,4.0e-39
+1000.0,3.0e-39
+3000.0,2.0e-39
+10000.0,1.0e-39
+100000.0,2.0e-40
+1000000.0,4.0e-41
+10000000.0,8.0e-42

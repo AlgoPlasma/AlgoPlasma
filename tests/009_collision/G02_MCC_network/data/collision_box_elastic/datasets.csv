@@ -1,0 +1,2 @@
+dataset_id,path,x_axis,x_unit,y_unit,interpolation,below_min_policy,above_max_policy,source,version,license,notes
+ds_elastic,tables/elastic.csv,temperature,K,m3/s,linear,error,error,synthetic,1.0,CC0-1.0,SYNTHETIC constant coefficient for code validation only

@@ -1,0 +1,14 @@
+key,value
+format,g02-mcc-model-package
+format_version,1
+name,demo_three_body
+version,1.0.0
+description,Synthetic three-body software-demonstration package. NOT FOR RESEARCH USE.
+species,species.csv
+states,states.csv
+composition,composition.csv
+reactions,reactions.csv
+reactants,reactants.csv
+products,products.csv
+rate_laws,rate_laws.csv
+datasets,datasets.csv
