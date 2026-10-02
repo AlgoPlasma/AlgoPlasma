@@ -22,7 +22,7 @@ subroutine sub_C03_check_grid(lo,hi,face,width)
     do i=lo,hi
         span=face(i)-face(i-1)
         if (.not. (span > 0.0)) error stop 'C03: faces must increase'
-        tol=64.0*epsilon(1.0)*max(1.0,abs(face(i-1)),abs(face(i)),abs(width(i)))
+        tol=64.0*epsilon(1.0)*max(abs(face(i-1)),abs(face(i)),abs(width(i)))
         if (abs(span-width(i)) > tol) error stop 'C03: inconsistent face/width'
     end do
 end subroutine sub_C03_check_grid
@@ -58,7 +58,7 @@ subroutine c03_axis_stencil(x,lo,hi,face,width,ic,ic0,wf,wc,cell)
 
     if (hi < lo) error stop 'C03: empty local grid'
 
-    tol=64.0*epsilon(1.0)*max(1.0,abs(face(lo-1)),abs(face(hi)),abs(face(hi)-face(lo-1)))
+    tol=64.0*epsilon(1.0)*max(abs(face(lo-1)),abs(face(hi)),abs(face(hi)-face(lo-1)))
     if (.not. (x >= face(lo-1)-tol .and. x <= face(hi)+tol)) &
         error stop 'C03: particle outside owned grid; route particle first'
     xx=min(face(hi),max(face(lo-1),x))
