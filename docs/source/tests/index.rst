@@ -63,7 +63,7 @@ Tests
         - :doc:`I_Initializer </rst_files/I_Initializer>`
         - :doc:`006_initializer 测试总览 <006_initializer/index>`
       * - ``007_gather``
-        - C_Gather 三线性 gather 和 B-spline 权重测试。
+        - C01 三线性、C02 B-spline，以及 :doc:`C03 非均匀柱坐标 gather <007_gather/C03_gather_3Draz_nonuniform>` 测试。
         - :doc:`C_Gather </rst_files/C_Gather>`
         - :doc:`007_gather 测试总览 <007_gather/index>`
       * - ``008_mpi_exchange``
@@ -128,7 +128,7 @@ Tests
         - :doc:`I_Initializer </rst_files/I_Initializer>`
         - :doc:`006_initializer test overview <006_initializer/index>`
       * - ``007_gather``
-        - C_Gather trilinear gather and B-spline weight tests.
+        - C01 trilinear, C02 B-spline, and :doc:`C03 nonuniform cylindrical gather <007_gather/C03_gather_3Draz_nonuniform>` tests.
         - :doc:`C_Gather </rst_files/C_Gather>`
         - :doc:`007_gather test overview <007_gather/index>`
       * - ``008_mpi_exchange``
