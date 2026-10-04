@@ -212,10 +212,10 @@ class ContributorWorkListTests(unittest.TestCase):
         self.assertTrue(no_account["generated_avatar"])
         shared = contributors._normalise(
             {"name": "Example User"}, 0, {},
-            default_avatar="docs/source/_static/contributors/placeholder.png",
+            default_avatar="docs/source/_static/contributors/zhaoyinjian.png",
         )
         self.assertEqual(
-            shared["avatar"], "docs/source/_static/contributors/placeholder.png"
+            shared["avatar"], "docs/source/_static/contributors/zhaoyinjian.png"
         )
         self.assertFalse(shared["generated_avatar"])
         with self.assertRaises(SystemExit):

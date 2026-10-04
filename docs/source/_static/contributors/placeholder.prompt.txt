@@ -1,5 +1,0 @@
-Generated with the built-in image_gen tool.
-Asset: placeholder.png, shared contributor portrait placeholder.
-
-Prompt:
-Use case: photorealistic-natural. Asset type: one shared placeholder portrait for AlgoPlasma contributor avatars, to be replaced later by team photos. Create a funny, charming studio portrait of a capybara dressed as a plasma scientist: white lab coat, oversized round transparent safety goggles, a small tuft of fur standing up from static electricity, and a wonderfully deadpan, slightly bewildered expression looking straight at the camera. Photorealistic fur and fabric with a gently absurd sense of humor. Centered head-and-shoulders framing; the face fills most of the image and remains immediately readable when cropped to a small circular avatar at 44 pixels. Keep ears, goggles and face safely within the central circular crop. Plain soft pale blue-gray studio background, flattering soft light, restrained colors to suit a clean blue-and-white scientific documentation website. Square 1:1 image. No text, no lettering, no logos, no watermark, no collage, no extra characters, no decorative border.
