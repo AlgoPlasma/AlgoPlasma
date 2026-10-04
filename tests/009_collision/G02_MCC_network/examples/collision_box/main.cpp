@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 #include "mcc.hpp"
+#include "package_builder.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -13,6 +14,7 @@
 #include <map>
 #include <numbers>
 #include <numeric>
+#include <optional>
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -28,6 +30,7 @@ using mcc::Vec3;
 
 struct Config {
     fs::path model;
+    bool model_supplied{false};
     fs::path output;
     std::size_t particles{50000};
     std::uint64_t seed{20260924};
@@ -127,9 +130,6 @@ Real parse_real(const std::string& text, const std::string& flag) {
 
 Config parse_args(int argc, char** argv) {
     Config config;
-#ifdef COLLISION_BOX_DEFAULT_MODEL_DIR
-    config.model = COLLISION_BOX_DEFAULT_MODEL_DIR;
-#endif
     for (int index = 1; index < argc; ++index) {
         const std::string key = argv[index];
         if (key == "--help" || key == "-h") usage();
@@ -139,7 +139,10 @@ Config parse_args(int argc, char** argv) {
         }
         if (index + 1 >= argc) throw std::runtime_error("missing value for " + key);
         const std::string value = argv[++index];
-        if (key == "--model") config.model = value;
+        if (key == "--model") {
+            config.model = value;
+            config.model_supplied = true;
+        }
         else if (key == "--output") config.output = value;
         else if (key == "--particles") config.particles = parse_uint(value, key);
         else if (key == "--steps") config.steps = parse_uint(value, key);
@@ -166,8 +169,10 @@ Config parse_args(int argc, char** argv) {
             else throw std::runtime_error("--sampler must be prefix or alias");
         } else throw std::runtime_error("unknown option: " + key);
     }
-    if (config.model.empty()) throw std::runtime_error("--model is required");
-    config.model = fs::absolute(config.model).lexically_normal();
+    if (config.model_supplied) {
+        if (config.model.empty()) throw std::runtime_error("--model requires a nonempty directory");
+        config.model = fs::absolute(config.model).lexically_normal();
+    }
     if (config.particles == 0 || config.particles > UINT32_MAX || config.steps == 0) {
         throw std::runtime_error("particles must be in [1, 2^32-1] and steps must be positive");
     }
@@ -657,7 +662,12 @@ void compare_backends(const Config& config, const mcc::MccEngine& engine,
 
 int main(int argc, char** argv) {
     try {
-        const Config config = parse_args(argc, argv);
+        Config config = parse_args(argc, argv);
+        std::optional<g02test::TemporaryPackage> default_model;
+        if (!config.model_supplied) {
+            default_model.emplace(g02test::collision_box_package(), "collision_box");
+            config.model = default_model->path();
+        }
         const mcc::MccEngine engine = mcc::MccEngine::load(config.model);
         const Real coefficient = validate_model(engine, config);
         const auto backend = config.compare_backends ? mcc::CpuBackend::Serial : config.backend;

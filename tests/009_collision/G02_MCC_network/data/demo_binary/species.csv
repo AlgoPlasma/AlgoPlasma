@@ -1,7 +1,0 @@
-id,name,mass_kg,charge_state,representation
-0,e-,9.1093837139e-31,-1,kinetic
-1,M,6.633521463e-26,0,background
-2,M2,1.326704293e-25,0,background
-3,M+,6.633521463e-26,1,kinetic
-4,M-,6.633612557e-26,-1,kinetic
-5,M2+,1.3266941219e-25,1,background

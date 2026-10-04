@@ -7,8 +7,7 @@ endif()
 
 add_executable(collision_box main.cpp)
 target_link_libraries(collision_box PRIVATE AlgoPlasma::G02_MCC)
-target_compile_definitions(collision_box PRIVATE
-    COLLISION_BOX_DEFAULT_MODEL_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../data/collision_box_elastic")
+target_include_directories(collision_box PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../cpp")
 if(COMMAND g02_mcc_configure_cxx)
     g02_mcc_configure_cxx(collision_box)
 endif()

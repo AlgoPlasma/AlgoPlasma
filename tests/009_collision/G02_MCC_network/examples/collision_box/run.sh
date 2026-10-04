@@ -10,10 +10,9 @@ if [ "$#" -gt 0 ]; then
 fi
 
 cmake -S "$repo_root/tests/009_collision/G02_MCC_network" -B "$build_dir" -DCMAKE_BUILD_TYPE=Release \
-    -DG02_MCC_BUILD_TESTS=ON -DG02_MCC_ENABLE_FORTRAN=OFF \
+    -DG02_MCC_BUILD_TESTS=ON \
     -DG02_MCC_ENABLE_OPENMP="${G02_MCC_ENABLE_OPENMP:-OFF}"
 cmake --build "$build_dir" --target collision_box -j 4
 "$build_dir/collision_box/collision_box" \
-    --model "$repo_root/tests/009_collision/G02_MCC_network/data/collision_box_elastic" \
     --output "$output_dir" "$@"
 python3 "$example_dir/plot.py" "$output_dir"

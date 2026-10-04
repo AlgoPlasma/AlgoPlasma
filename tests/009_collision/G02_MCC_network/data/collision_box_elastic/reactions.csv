@@ -1,2 +1,0 @@
-id,name,algorithm,threshold_ev,q_value_ev,ker_min_ev,radiated_energy_ev,angular_model,angular_cos_min,angular_cos_max,energy_model,enabled
-1,A_B_elastic,C02,0,0,0,0,isotropic,,,n_body_phase_space,true

@@ -221,6 +221,7 @@ make html
           <li><a href="docs/source/rst_files/F_IO/F02_par_output.rst">并行粒子数据输出</a></li>
           <li><a href="docs/source/rst_files/F_IO/F03_field_load.rst">并行场数据读取</a></li>
           <li><a href="docs/source/rst_files/F_IO/F04_field_output.rst">并行场数据输出</a></li>
+          <li><a href="docs/source/rst_files/G_Collision/G02_MCC_network.rst">C++ 蒙特卡洛碰撞网络（CSV 反应模型）</a></li>
         </ul>
       </td>
     </tr>
@@ -294,6 +295,7 @@ make html
       <td class="ap-work-cell" valign="top">
         <ul class="ap-work-items">
           <li><a href="docs/source/rst_files/G_Collision/G01_MCC.rst">基于空碰撞法的蒙特卡洛碰撞处理</a></li>
+          <li><a href="docs/source/rst_files/G_Collision/G02_MCC_network.rst">C++ 蒙特卡洛碰撞网络（CSV 反应模型）</a></li>
         </ul>
       </td>
     </tr>

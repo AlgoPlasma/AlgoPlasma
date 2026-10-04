@@ -126,6 +126,9 @@ work_catalog:
   G01:
     zh: 基于空碰撞法的蒙特卡洛碰撞处理
     en: Null-collision Monte Carlo collision handling
+  G02:
+    zh: C++ 蒙特卡洛碰撞网络（CSV 反应模型）
+    en: C++ Monte Carlo collision network (CSV reaction models)
   H01:
     zh: 标量场的 MPI 幽灵层交换
     en: MPI ghost-cell exchange for scalar fields
@@ -172,7 +175,7 @@ contributors:
     gitee: lzhe898
     role: maintainer
     avatar: https://gitee.com/lzhe898.png
-    work_modules: [E01, E02, E03, F01, F02, F03, F04]
+    work_modules: [E01, E02, E03, F01, F02, F03, F04, G02]
 
   - name: Baisheng Wang
     name_zh: 王佰胜
@@ -204,7 +207,7 @@ contributors:
     name_zh: 谢礼桓
     orcid: 0009-0009-6248-9781
     role: maintainer
-    work_modules: [G01]
+    work_modules: [G01, G02]
 
   - name: Xi Chen
     name_zh: 陈曦

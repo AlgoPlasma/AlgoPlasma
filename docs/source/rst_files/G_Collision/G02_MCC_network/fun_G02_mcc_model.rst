@@ -29,7 +29,7 @@
 
    .. include:: ../../../_includes/g02_schema_zh.inc
 
-   实现文件：``fun_G02_mcc_model.cpp``。下面保留对应 C++ / C 接口的实际名称，方便对照调用。
+   实现文件：``fun_G02_mcc_model.cpp``。下面保留对应 C++ 接口的实际名称，方便对照调用。
 
    .. rubric:: 直接用途
 
@@ -119,7 +119,7 @@
 
    .. include:: ../../../_includes/g02_schema_en.inc
 
-   Implementation: ``fun_G02_mcc_model.cpp``. The C++ / C interface names below match the callable API.
+   Implementation: ``fun_G02_mcc_model.cpp``. The C++ interface names below match the callable API.
 
    .. rubric:: Direct purpose
 
@@ -152,7 +152,7 @@
         - Relative conservation tolerance.
       * - max_events_per_step
         - 64
-        - Legacy collide cap; batch uses StepOptions.
+        - Bounded collide candidate cap; batch uses StepOptions.
 
    .. rubric:: Table operations
 

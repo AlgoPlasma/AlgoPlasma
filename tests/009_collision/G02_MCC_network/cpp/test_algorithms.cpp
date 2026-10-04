@@ -498,8 +498,14 @@ int main(int argc, char** argv) {
                 const StepOutcome outcome = states.collide(request);
                 if (outcome.real_events < 2U) continue;
                 ++observed;
-                if (outcome.events.size() < 2U || outcome.events[0].reaction != 1U ||
-                    outcome.events[1].reaction != 2U) {
+                // events also contains rejected null candidates. Check the
+                // first two real collisions, independently of their positions.
+                std::vector<ReactionId> real_reactions;
+                for (const EventRecord& event : outcome.events) {
+                    if (event.real_event) real_reactions.push_back(event.reaction);
+                }
+                if (real_reactions.size() < 2U || real_reactions[0] != 1U ||
+                    real_reactions[1] != 2U) {
                     wrong_second = true;
                 }
             }

@@ -83,9 +83,9 @@ A fixed background is an assumption of this example.
 ## 2. Run it once
 
 Run these commands in a Linux or WSL terminal from the AlgoPlasma repository root.
-You need CMake 3.20 or newer, a C++20 compiler and a C compiler.
+You need CMake 3.20 or newer and a C++20 compiler.
 Plotting also needs Python 3 and Matplotlib.
-This script disables Fortran; MPI and OpenMP are not required by default.
+MPI and OpenMP are not required by default. Without --model the executable generates a temporary synthetic package and cleans it on exit; --model DIR loads only the specified directory.
 
 ```sh
 bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
@@ -346,7 +346,7 @@ Run the default automated suite from the repository root:
 bash tests/009_collision/G02_MCC_network/run.sh
 ```
 
-This test script also requires a Fortran compiler.
+This suite requires a C++20 compiler and CMake.
 See the [test guide](../../README.en.md) for coverage and MPI/OpenMP commands.
 
 For a run without plotting, invoke the built executable directly.
@@ -355,7 +355,6 @@ the `COLLISION_BOX_BUILD_DIR` environment variable overrides it.
 
 ```sh
 /tmp/g02_collision_box_build/collision_box/collision_box \
-    --model tests/009_collision/G02_MCC_network/data/collision_box_elastic \
     --output /tmp/box
 ```
 
@@ -370,14 +369,13 @@ G02_MCC_ENABLE_OPENMP=ON bash tests/009_collision/G02_MCC_network/examples/colli
 The MPI example is in [`mpi_collision_box`](../mpi_collision_box/main.cpp).
 
 To link an installed G02, run from the repository root and replace `/path/to/g02/install`
-with your installation prefix. Model data are read from this repository’s `tests` directory:
+with your installation prefix. Without `--model`, the executable generates a temporary synthetic package:
 
 ```sh
 cmake -S tests/009_collision/G02_MCC_network/examples/collision_box \
     -B /tmp/collision_box_external -DCMAKE_PREFIX_PATH=/path/to/g02/install
 cmake --build /tmp/collision_box_external
 /tmp/collision_box_external/collision_box \
-    --model tests/009_collision/G02_MCC_network/data/collision_box_elastic \
     --output /tmp/box
 ```
 
@@ -401,7 +399,7 @@ main.cpp creates A particles and B background
     → write CSV; plot.py reads CSV and draws the plots
 ```
 
-The separate [architecture page](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/mod_G02_MCC_network.rst)
-and [Fortran routine directory](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/mod_G02_MCC_network.rst)
+The separate [architecture page](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network.rst)
+and [C++ batch API](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/fun_G02_mcc_batch.rst)
 cover parameters, types, errors and caller examples.
 This tutorial remains a self-contained physics introduction with its formulas, checks and run instructions.

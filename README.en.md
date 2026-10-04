@@ -221,6 +221,7 @@ Please keep algorithm units independent, interfaces clear, and dependencies expl
       <td class="ap-work-cell" valign="top">
         <ul class="ap-work-items">
           <li><a href="docs/source/rst_files/G_Collision/G01_MCC.rst">Null-collision Monte Carlo collision handling</a></li>
+          <li><a href="docs/source/rst_files/G_Collision/G02_MCC_network.rst">C++ Monte Carlo collision network (CSV reaction models)</a></li>
         </ul>
       </td>
     </tr>
@@ -301,6 +302,7 @@ Please keep algorithm units independent, interfaces clear, and dependencies expl
           <li><a href="docs/source/rst_files/F_IO/F02_par_output.rst">Parallel particle data output</a></li>
           <li><a href="docs/source/rst_files/F_IO/F03_field_load.rst">Parallel field data loading</a></li>
           <li><a href="docs/source/rst_files/F_IO/F04_field_output.rst">Parallel field data output</a></li>
+          <li><a href="docs/source/rst_files/G_Collision/G02_MCC_network.rst">C++ Monte Carlo collision network (CSV reaction models)</a></li>
         </ul>
       </td>
     </tr>

@@ -77,4 +77,4 @@ The allowed-values table lists recommended canonical spellings. The parser also 
    * - ``其他必需数值/字段``
      - Masses, IDs, stoichiometry, threshold_ev, q_value_ev and x/y have no generic defaults; obey model constraints
 
-Keep all template columns. A missing column and an empty cell are distinct and do not always have the same behavior. Allowed values do not imply every combination is valid: equal_share requires two products; identity_exchange requires strict resonance.
+Use the complete column list when creating headers. A missing column and an empty cell are distinct and do not always have the same behavior. Allowed values do not imply every combination is valid: equal_share requires two products; identity_exchange requires strict resonance.

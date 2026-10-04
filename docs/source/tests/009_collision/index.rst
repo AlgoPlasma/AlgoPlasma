@@ -5,7 +5,6 @@
    :maxdepth: 1
 
    G02_collision_box
-   G02_csv_templates
 
 .. raw:: html
 
@@ -52,17 +51,14 @@
 
    .. rubric:: G02 零维碰撞盒与回归测试
 
-   库的 C++ 源码和头文件直接位于 ``G_Collision/G02_MCC_network/``，
-   Fortran 接口位于其 ``fortran_interface/``。本测试目录中的 ``fortran/`` 存放测试主程序。
-   ``templates/`` 提供 CSV 模板，``tools/validate_model.cpp`` 是模型检查工具；
-   详见 :doc:`CSV 模板与检查 <G02_csv_templates>`。
+   库的 C++ 源码和头文件位于 ``G_Collision/G02_MCC_network/``。测试在运行时生成合成 CSV，不携带数据文件或空白表格。用户模型写法见 :doc:`CSV 数据格式 </rst_files/G_Collision/G02_MCC_network/csv_format>`。
 
    初学者先看 :ref:`碰撞盒教程 <g02-collision-box-zh>`：
    它观察热粒子与冷气体的碰撞，并解释“零维”、温度与整体运动，以及怎样读结果。
    下面的回归测试用于检查修改代码后原有功能是否仍正常。
 
    ``tests/009_collision/G02_MCC_network`` 独立构建 G02，验证模型包、插值、
-   碰撞算法、批量接口及 C/Fortran 适配层；启用 MPI/OpenMP 时还运行并行测试。
+   碰撞算法和 C++ 批量接口；启用 MPI/OpenMP 时还运行并行测试。
    :doc:`零维碰撞盒 <G02_collision_box>`
    使用合成等质量弹性模型，检查总动量与能量收支、随机碰撞次数、平均速度随时间的变化和末态分布，
    并包含零密度、零时间步等对照。检查失败时测试返回非零状态。
@@ -74,7 +70,7 @@
       bash tests/009_collision/G02_MCC_network/run.sh
       bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
 
-   默认测试需要 C/C++20、Fortran 编译器和 CMake 3.20 或以上。
+   默认测试需要 C++20 编译器和 CMake 3.20 或以上。
    CTest 是自动逐项运行测试的工具；默认脚本还检查内存越界等程序错误。
    完成时应看到 ``100% tests passed``；手动算例应打印 ``collision_box: PASS``。
    算例的 ``checks.csv`` 中 ``true`` 表示该项通过，``false`` 表示失败。
@@ -122,18 +118,14 @@
 
    .. rubric:: G02 Collision-Box and Regression Tests
 
-   Library C++ sources and headers are directly in ``G_Collision/G02_MCC_network/``;
-   its ``fortran_interface/`` contains the Fortran interface. The test directory’s ``fortran/`` contains test programs.
-   ``templates/`` holds CSV templates, and ``tools/validate_model.cpp`` is the model checker;
-   see :doc:`CSV templates and checking <G02_csv_templates>`.
+   Library C++ sources/headers are in ``G_Collision/G02_MCC_network/``. Tests generate synthetic CSV at runtime; no data files or blank tables are shipped. See :doc:`CSV format </rst_files/G_Collision/G02_MCC_network/csv_format>` for user input.
 
    Start with the :ref:`collision-box tutorial <g02-collision-box-en>` for hot particles in a cold gas,
    zero-dimensional modeling, temperature versus drift, and reading the output.
    Regression tests check that existing behavior still works after code changes.
 
    ``tests/009_collision/G02_MCC_network`` independently builds G02 and tests
-   model packages, interpolation, collision algorithms, batching, C/Fortran
-   adapters and optional MPI/OpenMP paths. The zero-dimensional collision box
+   model packages, interpolation, collision algorithms and C++ batching and optional MPI/OpenMP paths. The zero-dimensional collision box
    in :doc:`G02_collision_box <G02_collision_box>` uses a
    synthetic equal-mass elastic model. It checks conservation, Poisson collision
    counts, the time evolution of mean velocities, and the final distribution, with zero-density
@@ -146,7 +138,7 @@
       bash tests/009_collision/G02_MCC_network/run.sh
       bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
 
-   The default tests need C/C++20 and Fortran compilers, plus CMake 3.20 or newer.
+   The default tests need a C++20 compiler and CMake 3.20 or newer.
    CTest runs each test automatically; the default script also checks memory errors.
    Look for ``100% tests passed`` and, for the manual example, ``collision_box: PASS``.
    In its ``checks.csv``, ``true`` means a check passed and ``false`` means it failed.

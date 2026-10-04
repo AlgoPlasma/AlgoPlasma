@@ -19,22 +19,22 @@ MccStepper：批量碰撞步进器
 
       - AoS / SoA 是存储排法：AoS（Array of Structures）按粒子存放 {x,v,…}；SoA（Structure of Arrays）分别存放 x[]、v[] 等字段数组。物理模型相同，适配器负责用统一接口访问这些数据。
       - ParticleAdapter（粒子适配器）：把主程序已有的粒子存储接到 G02 的“转换接头”，负责读取粒子和提交更新，不是额外的物理粒子。
-      - workspace（工作区）是反复使用的临时内存；session（会话）是 C/Fortran 接口持有这类工作状态的对象。跨时间步复用可减少分配，但同一对象不能同时处理两个调用。
+      - workspace（工作区）是反复使用的临时内存。跨时间步复用可减少分配，但同一对象不能同时处理两个调用。
 
    .. tip:: cell 与 state 的特殊值
 
-      ``cell`` 是网格编号，不是数组下标。背景的 ``UINT32_MAX``（Fortran 的 ``-1_c_int32_t``）表示全域备用背景；正常网格编号必须与粒子一致。
-      ``invalid_state`` 是 C++ 的 65535 哨兵值，C 用 ``UINT16_MAX``，Fortran 用 ``-1_c_int16_t``。它只供旧版按物种合并的背景使用，不等于基态，也不代表自动分配各态密度。
-      入门时用 ``state_id(species, "ground")`` 或 Fortran 的 ``sub_G02_mcc_state_id`` 查询真实态；名称须存在于模型。被跟踪粒子的态必须有效。
+      ``cell`` 是网格编号，不是数组下标。背景的 ``UINT32_MAX``表示全域备用背景；正常网格编号必须与粒子一致。
+      ``invalid_state`` 是 C++ 的 65535 哨兵值，它只供按物种合并的背景使用，不等于基态，也不代表自动分配各态密度。
+      入门时用 ``state_id(species, "ground")`` 查询真实态；名称须存在于模型。被跟踪粒子的态必须有效。
 
    .. tip:: 可直接构建的最小调用程序
 
-      以下程序已给出必要声明和变量来源。运行参数为 ``tests/009_collision/G02_MCC_network/data/collision_box_elastic``，不要换成不含 A/B 的模型。
+      以下程序已给出必要声明和变量来源。运行参数为 ``BUILD_DIR/generated_models/collision_box_elastic``，不要换成不含 A/B 的模型。
 
    .. literalinclude:: ../../../../../tests/009_collision/G02_MCC_network/examples/doc_snippets/batch.cpp
       :language: cpp
 
-   实现文件：``fun_G02_mcc_batch.cpp``。下面保留对应 C++ / C 接口的实际名称，方便对照调用。
+   实现文件：``fun_G02_mcc_batch.cpp``。下面保留对应 C++ 接口的实际名称，方便对照调用。
 
    .. rubric:: 直接用途
 
@@ -112,24 +112,24 @@ MccStepper：批量碰撞步进器
 
       - AoS (Array of Structures) stores one record per particle; SoA (Structure of Arrays) stores separate arrays for fields such as x[] and v[]. Adapters expose either layout through one interface; the physical model is unchanged.
       - ParticleAdapter connects host-owned storage to G02, exposing particle reads and update commits. It is an interface, not another physical particle.
-      - A workspace is reusable scratch memory. A session holds this state for C/Fortran callers. Reuse reduces allocation, but one instance must not serve concurrent calls.
+      - A workspace is reusable scratch memory. Reuse reduces allocation, but one instance must not serve concurrent calls.
       - ABI (Application Binary Interface) defines how compiled code passes arguments and results. A handle refers to a library-owned object; use API functions rather than inspecting its internals.
       - Reservoir deltas track background gains/losses of particles, momentum and energy. A conservation ledger compares totals before and after reactions. Do not apply both as background source terms.
 
    .. tip:: Special cell and state values
 
-      cell is a mesh ID, not an array index. Background ``UINT32_MAX`` (Fortran ``-1_c_int32_t``) selects uniform fallback; local IDs must match particles.
-      C++ ``invalid_state`` is the 65535 sentinel (C ``UINT16_MAX``; Fortran ``-1_c_int16_t``), only for legacy species-aggregate backgrounds. It is not ground state and does not distribute density over states.
-      Prefer a real state obtained with ``state_id`` or ``sub_G02_mcc_state_id`` using a label in the model. Tracked particles must have valid states.
+      cell is a mesh ID, not an array index. Background ``UINT32_MAX`` selects uniform fallback; local IDs must match particles.
+      C++ ``invalid_state`` is the 65535 sentinel, only for species-aggregate backgrounds. It is not ground state and does not distribute density over states.
+      Beginners can look up a real state with ``state_id(species, "ground")``; the label must exist in the model. Tracked particles must have valid states.
 
    .. tip:: Complete buildable caller
 
-      Declarations and input initialization are included. Pass ``tests/009_collision/G02_MCC_network/data/collision_box_elastic``; the caller requires its A/B species.
+      Declarations and input initialization are included. Pass ``BUILD_DIR/generated_models/collision_box_elastic``; the caller requires its A/B species.
 
    .. literalinclude:: ../../../../../tests/009_collision/G02_MCC_network/examples/doc_snippets/batch.cpp
       :language: cpp
 
-   Implementation: ``fun_G02_mcc_batch.cpp``. The C++ / C interface names below match the callable API.
+   Implementation: ``fun_G02_mcc_batch.cpp``. The C++ interface names below match the callable API.
 
    .. rubric:: Direct purpose
 

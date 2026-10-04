@@ -1,4 +1,0 @@
-reaction_id,kind,dataset_id,x_source,x_species
-1,rate_coefficient,ds_e_M_M_elastic,temperature_k,M
-2,rate_coefficient,ds_e_M_M2_elastic,temperature_k,M
-3,rate_coefficient,ds_e_Mplus_M_recombination,temperature_k,M

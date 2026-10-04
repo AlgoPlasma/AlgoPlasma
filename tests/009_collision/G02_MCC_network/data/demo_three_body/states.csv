@@ -1,6 +1,0 @@
-id,species,label,energy_ev,degeneracy,is_ground
-0,e-,ground,0.0,1,true
-1,M,ground,0.0,1,true
-2,M2,ground,0.0,1,true
-3,M+,ground,0.0,1,true
-4,M-,ground,0.0,1,true

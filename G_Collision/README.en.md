@@ -16,12 +16,12 @@ See the [G02 module guide](G02_MCC_network/README.en.md) for interfaces.
 ## Subdirectories
 
 - `G01_MCC`: null-collision MCC with cross-section loading, cross-section interpolation, electron-neutral collisions, ion-neutral collisions, and ionization product handling.
-- `G02_MCC_network`: data-driven, whole-step MCC network with a C++20 core, C ABI and Fortran adapter, two- and three-body channels, and a zero-dimensional collision-box validation example. Its demonstration data are synthetic and must not be used for scientific conclusions.
+- `G02_MCC_network`: data-driven, whole-step MCC network with a C++20 core, two- and three-body channels, and a zero-dimensional collision-box validation example. Its tests generate synthetic data at runtime, which must not support scientific conclusions.
 
 ## Dependencies
 
 - `G01_MCC` uses MPI and Fortran `include`; callers need MPI, preprocessing and include paths, and consistent physical units.
-- `G02_MCC_network` uses CMake and C++20. Its Fortran `ISO_C_BINDING` adapter links the C++ library; MPI and OpenMP are optional. Its test directory configures independently.
+- `G02_MCC_network` uses CMake and C++20. MPI and OpenMP are optional. Its test directory configures independently.
 
 ## Documentation
 

@@ -23,7 +23,7 @@ for (std::uint64_t step = 0; step < steps; ++step) {
 ```
 
 不用 MPI 时，创建一次 `MccWorkspace workspace`，循环里调用
-`stepper.step(adapter, background, dt, step, seed, workspace)`。旧的无工作区重载
+`stepper.step(adapter, background, dt, step, seed, workspace)`。不带工作区的重载
 仍可用，但每步会重新分配临时缓冲区。
 
 每个 rank 都调用 `DistributedMccStepper::step()`。粒子 ID 必须全局唯一；宿主迁移
@@ -31,15 +31,9 @@ for (std::uint64_t step = 0; step < steps; ++step) {
 新产物 ID 按 `(parent_id, event_index, product_ordinal)` 的全局顺序分配，与粒子
 落在哪个 rank 或线程无关。一个 rank 的准备或容量检查失败时，所有 rank 在提交
 前退出，本步粒子不变。MPI 调用必须在主线程执行，线程支持至少为
-`MPI_THREAD_FUNNELED`；会话应在 `MPI_Finalize()` 前销毁。
+`MPI_THREAD_FUNNELED`；步进器应在 `MPI_Finalize()` 前销毁。
 
-C 宿主可用 `mpi_c_api.h` 中的 `ap_g02_mcc_mpi_session_*`；Fortran 宿主链接
-`AlgoPlasma::G02_MCC_Fortran_MPI`，使用 `mod_G02_MCC_network_mpi` 的
-`sub_G02_mcc_mpi_session_init`、`sub_G02_mcc_mpi_step` 和 `sub_G02_mcc_mpi_session_close`。
-非 MPI 的 C/Fortran 高频调用可用持久会话。C 会话容量不足时用
-`ap_g02_mcc_session_resume` 提交已经抽样的结果；MPI C/Fortran 扩容后重算同一步，
-计数器随机数使结果保持一致。会话和工作区均不支持并发重入；一个粒子群保持一个
-ID 高水位，不要让多个独立会话交替处理同一粒子群。
+工作区和适配器均不支持并发重入；一个粒子群保留稳定的 ID 高水位。
 
 ## 已实现的优化
 
@@ -61,11 +55,12 @@ cmake --build /tmp/g02_mcc_hybrid -j 4
 ctest --test-dir /tmp/g02_mcc_hybrid --output-on-failure
 /tmp/g02_mcc_hybrid/bench_batch 1000000 100 5 32 prefix
 /tmp/g02_mcc_hybrid/bench_batch 1000000 100 5 32 alias
+/tmp/g02_mcc_hybrid/g02_generate_test_data /tmp/g02_mcc_hybrid/generated_models
 mpirun -n 4 /tmp/g02_mcc_hybrid/mpi_collision_box \
-  tests/009_collision/G02_MCC_network/data/collision_box_elastic 1000000 5 4
+  /tmp/g02_mcc_hybrid/generated_models/collision_box_elastic 1000000 5 4
 ```
 
-本机 Release 实测（32 物理核、OpenMPI 4.1.6；5 次中位数，预热 2 至 3 次）：
+以下为本次随机数修复前保留的历史性能记录；本次没有复测这些数值。历史 Release 测量（32 物理核、OpenMPI 4.1.6；5 次中位数，预热 2 至 3 次）：
 
 | 负载 | 配置 | 整步时间 |
 | --- | --- | ---: |
@@ -77,7 +72,7 @@ mpirun -n 4 /tmp/g02_mcc_hybrid/mpi_collision_box \
 | 同上 | 4 rank x 1 线程 | 0.068 s |
 | 同上 | 4 rank x 4 线程 | 0.029 s |
 
-100 通道基准的旧实现此前约为 0.365 s（32 线程）；当前跨步工作区版本约为
+100 通道基准的旧实现此前约为 0.365 s（32 线程）；当时跨步工作区版本约为
 0.110 s。别名采样在这次并行测试里不到 5% 的整步收益，故保持前缀为默认。
 MPI 行使用不同的单通道模型，只用于比较同一模型的 rank/thread 扩展，不应和
 100 通道行直接比较。基准只测 MCC 整步，不含 Poisson、电荷沉积、电场、位置

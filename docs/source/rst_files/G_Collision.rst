@@ -33,7 +33,7 @@ G_Collision
         - 用 null-collision 方法抽样碰撞，更新粒子速度，并在电离时生成新电子/离子和源项。
       * - :doc:`G02_MCC_network <G_Collision/G02_MCC_network>`
         - 版本化 CSV 模型包、粒子与背景状态、碰撞结果和源项
-        - 每个 PIC 步批量处理粒子，支持二体与三体通道、C/C++/Fortran 接口及零维碰撞盒验证。
+        - 每个 PIC 步批量处理粒子，支持二体与三体通道、C++ 接口及零维碰撞盒验证。
 
    .. rubric:: 数据和调用边界
 
@@ -73,7 +73,7 @@ G_Collision
         - Sample collisions with the null-collision method, update particle velocities, and create electron/ion particles and source terms for ionization events.
       * - :doc:`G02_MCC_network <G_Collision/G02_MCC_network>`
         - Versioned CSV model packages, particle and background states, outcomes and source terms
-        - Process a whole PIC step with two- and three-body channels, C/C++/Fortran interfaces and a zero-dimensional collision-box validation case.
+        - Process a whole PIC step with two- and three-body channels, C++ interfaces and a zero-dimensional collision-box validation case.
 
    .. rubric:: Data and Call Boundaries
 

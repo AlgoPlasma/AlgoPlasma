@@ -14,7 +14,7 @@
 
 .. container:: ap-lang ap-lang-zh
 
-   实现文件：``fun_G02_mcc_kinematics.cpp``。下面保留对应 C++ / C 接口的实际名称，方便对照调用。
+   实现文件：``fun_G02_mcc_kinematics.cpp``。下面保留对应 C++ 接口的实际名称，方便对照调用。
 
    .. rubric:: 直接用途
 
@@ -71,7 +71,7 @@
 
 .. container:: ap-lang ap-lang-en
 
-   Implementation: ``fun_G02_mcc_kinematics.cpp``. The C++ / C interface names below match the callable API.
+   Implementation: ``fun_G02_mcc_kinematics.cpp``. The C++ interface names below match the callable API.
 
    .. rubric:: Direct purpose
 

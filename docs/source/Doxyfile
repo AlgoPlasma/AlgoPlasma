@@ -10,7 +10,7 @@ RECURSIVE              = YES
 
 # 输入
 INPUT                  = ../../
-FILE_PATTERNS          = *.f90 *.F90 *.md *.c
+FILE_PATTERNS          = *.f90 *.F90 *.c
 EXTENSION_MAPPING      = f90=Fortran
 OPTIMIZE_FOR_FORTRAN   = YES
 EXTRACT_ALL            = YES
@@ -43,4 +43,4 @@ INCLUDE_PATH += ../../D_Poisson/D01_hypre_3Dxyz
 
 # 标准输出进度信息
 QUIET = YES
-WARNINGS = NO
+WARNINGS = YES

@@ -1,7 +1,7 @@
 .. rst-class:: ap-g02 ap-g02-reference
 
 MPI
-================================================================================
+==================================================
 
 .. raw:: html
 
@@ -12,64 +12,26 @@ MPI
 
 .. container:: ap-lang ap-lang-zh
 
-   这一组包含下面这些源码文件。头文件（.hpp / .h）约定可使用的类型和接口，实现文件（.cpp）完成计算；部分小工具直接实现在头文件中。
+   每个 MPI 进程持有本地粒子和背景。``DistributedMccStepper`` 先准备本地碰撞，协调错误状态和新产物 ID，再共同提交。所有相关进程都要参与调用；主程序保留全局唯一粒子 ID，负责 MPI 初始化、网格划分和粒子迁移。
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 45 55
+   - :doc:`mpi.hpp <mpi>`：分布式批量接口。
+   - :doc:`fun_G02_mcc_mpi.cpp <fun_G02_mcc_mpi>`：准备、协调与提交的实现。
 
-      * - 程序文件
-        - 用途
-      * - :doc:`mpi.hpp <mpi>`
-        - 分布式批量推进接口
-      * - :doc:`fun_G02_mcc_mpi.cpp <fun_G02_mcc_mpi>`
-        - 协调多进程推进与新粒子编号
-      * - :doc:`mpi_c_api.h <mpi_c_api>`
-        - MPI 的 C 与 Fortran 桥接接口
-      * - :doc:`fun_G02_mcc_mpi_c_api.cpp <fun_G02_mcc_mpi_c_api>`
-        - 将跨语言数组交给 MPI 步进器
-      * - :doc:`mod_G02_MCC_network_mpi.f90 <mod_G02_MCC_network_mpi>`
-        - MPI：分布式碰撞接口
-      * - :doc:`sub_G02_mcc_mpi_session.f90 <sub_G02_mcc_mpi_session>`
-        - MPI 会话：初始化与资源管理
-      * - :doc:`sub_G02_mcc_mpi_step.f90 <sub_G02_mcc_mpi_step>`
-        - MPI 步进：多进程协同碰撞
+   构建时启用 ``G02_MCC_ENABLE_MPI``，链接 ``AlgoPlasma::G02_MCC_MPI``。MPI 线程支持至少为 ``MPI_THREAD_FUNNELED``；在 ``MPI_Finalize()`` 前销毁步进器。
 
 .. container:: ap-lang ap-lang-en
 
-   This group contains the source files below. Headers define types and interfaces; .cpp files implement them. Small utilities may be implemented inline in headers.
+   Each rank owns local particles/backgrounds. ``DistributedMccStepper`` prepares local collisions, agrees on errors and child IDs, then commits together. Every participating rank must call it. The host preserves globally unique IDs and owns MPI initialization, partitioning and particle migration.
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 45 55
+   - :doc:`mpi.hpp <mpi>`: distributed batch API.
+   - :doc:`fun_G02_mcc_mpi.cpp <fun_G02_mcc_mpi>`: preparation, agreement and commit.
 
-      * - Source file
-        - Purpose
-      * - :doc:`mpi.hpp <mpi>`
-        - Distributed batch-stepping interface
-      * - :doc:`fun_G02_mcc_mpi.cpp <fun_G02_mcc_mpi>`
-        - Coordinate distributed steps and child IDs
-      * - :doc:`mpi_c_api.h <mpi_c_api>`
-        - MPI bridge for C and Fortran
-      * - :doc:`fun_G02_mcc_mpi_c_api.cpp <fun_G02_mcc_mpi_c_api>`
-        - Connect cross-language arrays to MPI stepping
-      * - :doc:`mod_G02_MCC_network_mpi.f90 <mod_G02_MCC_network_mpi>`
-        - MPI: distributed collision interface
-      * - :doc:`sub_G02_mcc_mpi_session.f90 <sub_G02_mcc_mpi_session>`
-        - MPI sessions: initialization and resources
-      * - :doc:`sub_G02_mcc_mpi_step.f90 <sub_G02_mcc_mpi_step>`
-        - MPI stepping: collisions across processes
+   Enable ``G02_MCC_ENABLE_MPI`` and link ``AlgoPlasma::G02_MCC_MPI``. Require at least ``MPI_THREAD_FUNNELED`` and destroy the stepper before ``MPI_Finalize()``.
 
 .. toctree::
-   :maxdepth: 1
    :hidden:
 
    mpi.hpp <mpi>
    fun_G02_mcc_mpi.cpp <fun_G02_mcc_mpi>
-   mpi_c_api.h <mpi_c_api>
-   fun_G02_mcc_mpi_c_api.cpp <fun_G02_mcc_mpi_c_api>
-   mod_G02_MCC_network_mpi.f90 <mod_G02_MCC_network_mpi>
-   sub_G02_mcc_mpi_session.f90 <sub_G02_mcc_mpi_session>
-   sub_G02_mcc_mpi_step.f90 <sub_G02_mcc_mpi_step>
 
 :doc:`返回 G02 / Back to G02 <../G02_MCC_network>`

@@ -14,12 +14,12 @@
 ## 子目录
 
 - `G01_MCC`: null-collision MCC；包含截面表读取、截面插值、电子-中性粒子碰撞、离子-中性粒子碰撞和电离二次粒子处理。
-- `G02_MCC_network`: 数据驱动的批量 MCC 碰撞网络；提供 C++20 核心、C 接口和 Fortran 适配层，支持二体与三体通道及零维碰撞盒验证算例。其演示数据为合成值，不能用于科研结论。
+- `G02_MCC_network`: 数据驱动的批量 MCC 碰撞网络；提供 C++20 核心，支持二体与三体通道及零维碰撞盒验证算例。测试在运行时生成合成数据，不能用于科研结论。
 
 ## 依赖
 
 - `G01_MCC` 使用 MPI 和 Fortran `include`；调用方需要配置 MPI、预处理和 include 路径，并保持物理单位一致。
-- `G02_MCC_network` 使用 CMake 和 C++20；Fortran 接口通过 `ISO_C_BINDING` 链接 C++ 库，MPI 和 OpenMP 可选。其测试目录可独立配置和运行。
+- `G02_MCC_network` 使用 CMake 和 C++20；MPI 和 OpenMP 可选。其测试目录可独立配置和运行。
 
 ## 文档
 

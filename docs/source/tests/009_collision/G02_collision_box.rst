@@ -87,7 +87,7 @@ G02_collision_box
 
    在 Linux/WSL 终端中，从 AlgoPlasma 仓库根目录运行。
    需要 CMake 3.20 或以上、C/C++ 编译器（C++20），绘图需要 Python 3 和 Matplotlib。
-   此脚本关闭 Fortran，默认无需 MPI/OpenMP。
+   默认无需 MPI/OpenMP。未传 --model 时生成进程独占的临时合成模型，退出时清理；--model DIR 只加载用户指定目录。
 
    .. code-block:: bash
       :caption: 从 AlgoPlasma 仓库根目录运行
@@ -317,7 +317,7 @@ G02_collision_box
 
    Use a Linux/WSL terminal from the AlgoPlasma root.
    You need CMake 3.20 or newer, C/C++ compilers with C++20 support, and Python 3 with Matplotlib for plots.
-   The script disables Fortran and needs neither MPI nor OpenMP by default.
+   MPI and OpenMP are optional. Without --model the program creates a process-private temporary synthetic package and cleans it on exit; --model DIR loads only the specified directory.
 
    .. code-block:: bash
       :caption: Run from the AlgoPlasma repository root
@@ -468,4 +468,3 @@ G02_collision_box
    The example directory retains the more detailed
    :download:`English tutorial <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.en.md>` and
    :download:`Chinese tutorial <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md>`.
-

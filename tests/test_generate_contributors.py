@@ -38,11 +38,11 @@ class ContributorWorkListTests(unittest.TestCase):
         expected = {
             "赵隐剑": "A01 C01 D01 D02 D04 E01 E02 E03 F01 F02 F03 F04 H01 H02 I01 J01",
             "赵中平": "A01 A02 B03 C01 C02 I02",
-            "刘哲": "E01 E02 E03 F01 F02 F03 F04",
+            "刘哲": "E01 E02 E03 F01 F02 F03 F04 G02",
             "王佰胜": "D01 D02 D03 D04",
             "彭子龙": "A03 B01 D05 D06 H03",
             "罗鑫": "C02",
-            "谢礼桓": "G01",
+            "谢礼桓": "G01 G02",
             "周志君": "B02",
         }
         for name, module_ids in expected.items():

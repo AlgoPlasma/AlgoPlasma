@@ -77,8 +77,8 @@ B 被当作保持 300 K 的大背景。程序记录 B 收到的动量和能量�
 ## 2. 运行一次
 
 以下命令在 Linux 或 WSL 的终端执行，当前目录为 AlgoPlasma 仓库根目录。
-需要 CMake 3.20 或以上、支持 C++20 的 C++ 编译器和 C 编译器；
-生成图片还需要 Python 3 与 Matplotlib。这个运行脚本关闭 Fortran，默认不需要 MPI/OpenMP。
+需要 CMake 3.20 或以上、支持 C++20 的 C++ 编译器；
+生成图片还需要 Python 3 与 Matplotlib，默认不需要 MPI/OpenMP。未传 `--model` 时程序生成进程独占的临时合成包并在退出时清理；`--model DIR` 只加载指定目录。
 
 ```sh
 bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
@@ -327,7 +327,7 @@ T(t) = m × (Q(t) - |U(t)|^2) / (3 k_B)
 bash tests/009_collision/G02_MCC_network/run.sh
 ```
 
-该测试脚本还需要 Fortran 编译器。测试项和 MPI/OpenMP 运行方式见
+测试项和 MPI/OpenMP 运行方式见
 [测试说明](../../README.zh-CN.md)。
 
 如果只运行 C++ 程序、不画图，可以直接调用已构建的可执行文件。
@@ -336,7 +336,6 @@ bash tests/009_collision/G02_MCC_network/run.sh
 
 ```sh
 /tmp/g02_collision_box_build/collision_box/collision_box \
-    --model tests/009_collision/G02_MCC_network/data/collision_box_elastic \
     --output /tmp/box
 ```
 
@@ -351,14 +350,13 @@ G02_MCC_ENABLE_OPENMP=ON bash tests/009_collision/G02_MCC_network/examples/colli
 MPI 示例另见 [`mpi_collision_box`](../mpi_collision_box/main.cpp)。
 
 也可以链接已安装的 G02。从仓库根目录运行，将 `/path/to/g02/install` 换成自己的安装目录；
-模型数据仍从本仓库的 `tests` 中读取：
+未传 `--model` 时自动生成临时验证数据：
 
 ```sh
 cmake -S tests/009_collision/G02_MCC_network/examples/collision_box \
     -B /tmp/collision_box_external -DCMAKE_PREFIX_PATH=/path/to/g02/install
 cmake --build /tmp/collision_box_external
 /tmp/collision_box_external/collision_box \
-    --model tests/009_collision/G02_MCC_network/data/collision_box_elastic \
     --output /tmp/box
 ```
 
@@ -382,7 +380,7 @@ main.cpp 建立 A 和 B
     → 写 CSV；plot.py 读 CSV 画图
 ```
 
-完整的[架构说明页](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/mod_G02_MCC_network.rst)
-和 [Fortran 子程序目录](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/mod_G02_MCC_network.rst)
+完整的[架构说明页](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network.rst)
+和 [C++ 批量接口](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/fun_G02_mcc_batch.rst)
 另行保留参数、类型、失败处理与调用示例。
 本教程继续作为物理入门入口，前面的原理、公式、判据和运行方式都可独立阅读。

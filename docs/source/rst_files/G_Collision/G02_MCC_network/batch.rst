@@ -20,9 +20,9 @@ batch.hpp：粒子容器适配与整批推进接口
 
    .. tip:: cell 与 state 的特殊值
 
-      ``cell`` 是网格编号，不是数组下标。背景的 ``UINT32_MAX``（Fortran 的 ``-1_c_int32_t``）表示全域备用背景；正常网格编号必须与粒子一致。
-      ``invalid_state`` 是 C++ 的 65535 哨兵值，C 用 ``UINT16_MAX``，Fortran 用 ``-1_c_int16_t``。它只供旧版按物种合并的背景使用，不等于基态，也不代表自动分配各态密度。
-      入门时用 ``state_id(species, "ground")`` 或 Fortran 的 ``sub_G02_mcc_state_id`` 查询真实态；名称须存在于模型。被跟踪粒子的态必须有效。
+      ``cell`` 是网格编号，不是数组下标。背景的 ``UINT32_MAX``表示全域备用背景；正常网格编号必须与粒子一致。
+      ``invalid_state`` 是 C++ 的 65535 哨兵值，它只供按物种合并的背景使用，不等于基态，也不代表自动分配各态密度。
+      入门时用 ``state_id(species, "ground")`` 查询真实态；名称须存在于模型。被跟踪粒子的态必须有效。
 
    .. rubric:: 这个文件做什么
 
@@ -47,9 +47,9 @@ batch.hpp：粒子容器适配与整批推进接口
 
    .. tip:: Special cell and state values
 
-      cell is a mesh ID, not an array index. Background ``UINT32_MAX`` (Fortran ``-1_c_int32_t``) selects uniform fallback; local IDs must match particles.
-      C++ ``invalid_state`` is the 65535 sentinel (C ``UINT16_MAX``; Fortran ``-1_c_int16_t``), only for legacy species-aggregate backgrounds. It is not ground state and does not distribute density over states.
-      Prefer a real state obtained with ``state_id`` or ``sub_G02_mcc_state_id`` using a label in the model. Tracked particles must have valid states.
+      cell is a mesh ID, not an array index. Background ``UINT32_MAX`` selects uniform fallback; local IDs must match particles.
+      C++ ``invalid_state`` is the 65535 sentinel, only for species-aggregate backgrounds. It is not ground state and does not distribute density over states.
+      Beginners can look up a real state with ``state_id(species, "ground")``; the label must exist in the model. Tracked particles must have valid states.
 
    .. rubric:: What this file does
 

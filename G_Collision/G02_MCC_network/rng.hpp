@@ -23,8 +23,16 @@ public:
     CounterRng(const std::uint64_t seed, const std::uint64_t global_step,
                const std::uint64_t particle_id, const std::uint64_t event_index,
                const std::uint64_t slot) noexcept
-        : key_(mix(seed) ^ mix(global_step + 0x9e3779b97f4a7c15ULL) ^
-               mix(particle_id + 0xd1b54a32d192ed03ULL) ^ mix(event_index) ^ mix(slot)) {}
+        : key_(mix(seed ^ tag_seed)) {
+        // Give every tuple position its own domain and mix after each field.
+        // A commutative XOR of fields would reuse a stream when event_index
+        // and slot are swapped, correlating the clock and acceptance draws.
+        // 每个维度有独立标记，并按固定顺序逐层混合；交换事件号和用途号不会复用流。
+        key_ = mix(key_ ^ mix(global_step ^ tag_step));
+        key_ = mix(key_ ^ mix(particle_id ^ tag_particle));
+        key_ = mix(key_ ^ mix(event_index ^ tag_event));
+        key_ = mix(key_ ^ mix(slot ^ tag_slot));
+    }
 
     // 每取一次推进局部 counter；不读共享随机状态，因此不依赖线程执行先后。
     [[nodiscard]] std::uint64_t next_u64() noexcept {
@@ -81,6 +89,13 @@ public:
     }
 
 private:
+    // Domain labels identify tuple positions, rather than physical parameters.
+    static constexpr std::uint64_t tag_seed = 0xa0761d6478bd642fULL;
+    static constexpr std::uint64_t tag_step = 0xe7037ed1a0b428dbULL;
+    static constexpr std::uint64_t tag_particle = 0x8ebc6af09c88c6e3ULL;
+    static constexpr std::uint64_t tag_event = 0x589965cc75374cc3ULL;
+    static constexpr std::uint64_t tag_slot = 0x1d8e4e27c47d124fULL;
+
     // 位混合把相邻整数打散为伪随机位模式；这些常数不是物理参数。
     [[nodiscard]] static std::uint64_t mix(std::uint64_t value) noexcept {
         value += 0x9e3779b97f4a7c15ULL;

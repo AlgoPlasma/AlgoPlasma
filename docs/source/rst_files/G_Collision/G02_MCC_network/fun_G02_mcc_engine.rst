@@ -20,7 +20,7 @@ MccEngine：碰撞抽样与事件处理
       - majorant（频率上界）：一个不小于真实碰撞频率的数，用它安排候选事件，再按“真实频率÷上界”接受候选。上界过松会增加空碰撞；低于真实频率则报错。
       - projectile / primary：projectile 是当前跟踪的入射粒子；primary 是一次事件后对这条原粒子记录的处理结果，可更新、移除或改变物种。background 是用密度、温度等描述的碰撞伙伴。
 
-   实现文件：``fun_G02_mcc_engine.cpp``。下面保留对应 C++ / C 接口的实际名称，方便对照调用。
+   实现文件：``fun_G02_mcc_engine.cpp``。下面保留对应 C++ 接口的实际名称，方便对照调用。
 
    .. rubric:: 直接用途
 
@@ -55,14 +55,16 @@ MccEngine：碰撞抽样与事件处理
         - 行为
         - 限制/返回
       * - collide
-        - 旧单粒子调用；更新后可继续，物种改变或移除时停止。
-        - 默认 64 个候选；达到上限设置 event_limit_reached。
+        - 受限单粒子推进；更新后可继续，物种改变或移除时停止。
+        - request.max_events_per_step=0 选模型默认 64 个候选（包含空碰撞）；达到上限设置 event_limit_reached。
       * - collide_full
         - 物种改变后继续剩余 dt；移除则结束。
         - 超过 max_candidates 抛 Error，不返回截断成功；可选事件记录。
       * - evaluate_channels
         - 查询当前状态可用通道的频率上界和诊断。
         - 不推进粒子；温度速率系数通道给出实际速率，截面通道需看 rate_defined。
+
+   collide 的物种迁移停止不一定设置 event_limit_reached；返回结果不能当作完整 dt 已处理。推荐整步调用 collide_full 或批量 step。
 
    StepOutcome 不会自行写回粒子。需要整个容器更新时，调用 :doc:`fun_G02_mcc_batch`。
    输入无效、背景缺失、越出数据范围、上界失效或守恒失败都会抛 algoplasma::mcc::Error。
@@ -133,7 +135,7 @@ MccEngine：碰撞抽样与事件处理
       - A null collision is a rejected candidate: sampled waiting time is consumed but the particle state stays unchanged. It is a sampling device, not a physical reaction.
       - The projectile is the tracked incoming particle. The primary outcome tells what happens to that original particle record: update, removal or species change. Background partners are described by density and temperature.
 
-   Implementation: ``fun_G02_mcc_engine.cpp``. The C++ / C interface names below match the callable API.
+   Implementation: ``fun_G02_mcc_engine.cpp``. The C++ interface names below match the callable API.
 
    .. rubric:: Direct purpose
 
@@ -164,14 +166,16 @@ MccEngine：碰撞抽样与事件处理
         - Behavior
         - Limit/result
       * - collide
-        - Legacy path; stops on species move or removal.
-        - Default 64 candidates; event_limit_reached marks truncation.
+        - Bounded advancement; stops on MoveSpecies or Remove.
+        - request.max_events_per_step=0 selects model default 64 candidates, including nulls; reaching it sets event_limit_reached.
       * - collide_full
         - Continues remaining dt after species moves; removal stops.
         - Throws on candidate cap; optional event recording.
       * - evaluate_channels
         - Queries active channel bounds and diagnostics without a collision step.
         - Exact rates for temperature coefficients; inspect rate_defined for cross sections.
+
+   A species move can end collide without event_limit_reached. Do not treat its return as proof of full-dt completion; use collide_full or batch step for complete advancement.
 
    The host commits StepOutcome. Use :doc:`fun_G02_mcc_batch` for whole-container updates.
    Invalid inputs, missing backgrounds, domain/bound violations or conservation failures throw Error.

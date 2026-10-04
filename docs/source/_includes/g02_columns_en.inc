@@ -22,4 +22,3 @@
      - ``dataset_id, path, x_axis, x_unit, y_unit, interpolation, below_min_policy, above_max_policy, source, version, license, notes``
    * - ``tables/*.csv``
      - ``x, y``
-

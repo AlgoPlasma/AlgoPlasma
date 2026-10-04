@@ -294,6 +294,20 @@
     margin: 0 auto;
 }
 
+/* Scale portrait diagrams with the text column; keep the frame close to the image. */
+.ap-g02 :is(figure, .figure).g02-flowchart {
+    box-sizing: border-box;
+    width: 70%;
+    max-width: 720px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ap-g02 .g02-flowchart img {
+    width: 100%;
+    max-height: none;
+}
+
 .rst-content .ap-g02 :is(figure, .figure) :is(figcaption, .caption) {
     margin: 0.65rem 0 0;
     padding: 0.7rem 0.3rem 0;
@@ -380,6 +394,10 @@
 }
 
 @media (max-width: 700px) {
+    .ap-g02 :is(figure, .figure).g02-flowchart {
+        width: 100%;
+    }
+
     .ap-g02 .rubric.g02-chapter {
         padding: 0.75rem 0.85rem;
     }

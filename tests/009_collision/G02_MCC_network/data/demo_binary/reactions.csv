@@ -1,8 +1,0 @@
-id,name,algorithm,threshold_ev,q_value_ev,ker_min_ev,radiated_energy_ev,angular_model,angular_cos_min,angular_cos_max,energy_model,enabled
-1,e_M_elastic,C02,0.0,0.0,0.0,0.0,isotropic,,,n_body_phase_space,true
-2,e_M_excitation,C03,11.5,-11.5,0.0,0.0,isotropic,,,n_body_phase_space,true
-3,e_M2_dissociation,C04,8.0,-8.0,0.0,0.0,isotropic,,,n_body_phase_space,true
-4,e_M_ionization,C05,15.8,-15.8,0.0,0.0,isotropic,,,n_body_phase_space,true
-5,e_M2_attachment,C06,0.0,0.2,0.0,0.0,isotropic,,,n_body_phase_space,true
-6,Mplus_M_charge_exchange,C07,0.0,0.0,0.0,0.0,identity_exchange,,,n_body_phase_space,true
-7,e_Mplus_recombination,C08,0.0,15.8,0.0,15.8,isotropic,,,n_body_phase_space,true

@@ -2,100 +2,70 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-CSV preparation: [blank templates, original examples and checker](templates/README.en.md).
+Tests check input parsing and collision behavior under specified models. Begin with the [collision box](examples/collision_box/README.en.md), then the [module guide](../../../G_Collision/G02_MCC_network/README.en.md). User input is described in the [CSV format guide](../../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst).
 
-These tests ask whether inputs are read correctly and whether collisions follow the specified model.
-For a first introduction, read the [collision-box tutorial](examples/collision_box/README.en.md):
-it explains cooling, the three plots and what `PASS` means.
+## Layout and data
 
-The test data are synthetic. Passing these software checks does not supply the physical model or measured data needed for a real gas study.
+- Functional sources are in `G_Collision/G02_MCC_network/`; `cpp/` contains C++ regression tests and `examples/` C++ callers and collision boxes.
+- `CMakeLists.txt`, `cmake/` and `run.sh` provide build/install/test entry points; `tools/validate_model.cpp` checks user-created model directories.
+- No CSV data files or blank tables are shipped. C++ fixture builders generate minimal synthetic CSV packages at runtime. Shared packages live under build `generated_models/{demo_binary,demo_three_body,collision_box_elastic}`.
 
-## Where are the sources and examples?
+Synthetic masses, cross sections and rates validate software, not real-gas research. Installation does not ship fixtures.
 
-Functional sources are in [`G_Collision/G02_MCC_network`](../../../G_Collision/G02_MCC_network/README.en.md). This test directory contains:
+## Default suite
 
-- `examples/`: the collision box and complete C++, Fortran and MPI callers.
-- `data/`: synthetic models and invalid-input fixtures; `cpp/` and `fortran/`: regression tests.
-- `CMakeLists.txt`, `cmake/` and `run.sh`: build, installation and test entry points.
-- `templates/blank/`: blank CSV templates; `tools/validate_model.cpp`: the model-package checker.
-
-The `fortran/` directory here contains Fortran test programs. The library interface is in
-`G_Collision/G02_MCC_network/fortran_interface/`; C++ implementations and headers are directly in the G02 root.
-
-See the [module guide](../../../G_Collision/G02_MCC_network/README.en.md#build-and-test) for build commands.
-The default builds the library and tests. Add `-DG02_MCC_BUILD_TESTS=OFF` to build only the library using the same entry point.
-
-## Run the default tests
-
-Use a Linux/WSL terminal from the AlgoPlasma root.
-You need CMake 3.20 or newer, a C++20 compiler, and C and Fortran compilers, such as GCC/gfortran:
+From the repository root in Linux/WSL, with CMake 3.20 and a C++20 compiler:
 
 ```bash
 bash tests/009_collision/G02_MCC_network/run.sh
 ```
 
-The script builds in a temporary directory and uses CTest, CMake's test runner, to execute each test.
-Look for `100% tests passed` and `PASS: G02_MCC_network build and ctest suite`.
-A failure returns a nonzero status; use the failed test name to find its diagnostics.
-Old plots do not establish that a new run passed.
+The script builds in a temporary directory and uses CTest, which schedules fixture generation automatically. Look for `100% tests passed` and `PASS: G02_MCC_network build and ctest suite`. Failures return nonzero; read the failed test's diagnostics. The default script enables AddressSanitizer/UndefinedBehaviorSanitizer. MPI/OpenMP are off by default.
 
-The defaults also enable AddressSanitizer for memory errors and UndefinedBehaviorSanitizer for undefined behavior,
-helping detect errors such as out-of-bounds access. MPI and OpenMP are disabled by default.
-
-## What is being checked?
-
-| Group | Meaning |
+| Check | Coverage |
 |---|---|
-| Model package and interpolation | Correct file references, units and reactions; correct values between known table points |
-| C01 and samplers | Correct probability sampling of collision times and channels |
-| C02–C08 algorithms | Products, velocities and energy accounting consistent with each model |
-| Batch and C/Fortran interfaces | Correct transfer of results across particle batches and language boundaries, with data preserved on failure |
-| Collision box | Agreement of mean motion, temperature and collision counts with a simple theoretical model |
-| Optional parallel tests | Correct IDs, exchanges and results when threads or processes cooperate |
+| Packages and interpolation | CSV structure, references, units, reaction constraints and interpolated values |
+| RNG and C01 | Stream separation across events/purposes, waiting/channel probabilities and multi-collision mean/variance |
+| C02–C08 | Products, velocities, energy and charge ledgers |
+| Batching | Workspace reuse, child IDs, state changes, commit and failure preservation |
+| Collision box | Mean velocity, temperature, collision counts and final distribution against simple theory |
+| Optional CPU parallelism | Serial/OpenMP agreement, MPI global IDs and error agreement |
 
-## Enable parallel tests
-
-MPI coordinates multiple processes; OpenMP shares work among CPU threads within a process.
-With C++/Fortran MPI support and an OpenMP compiler, run the full suite:
+Build manually with parallel paths:
 
 ```bash
-cmake -S tests/009_collision/G02_MCC_network -B /tmp/g02_mcc_tests \
-  -DCMAKE_BUILD_TYPE=Debug -DG02_MCC_ENABLE_MPI=ON -DG02_MCC_ENABLE_OPENMP=ON
+cmake -S tests/009_collision/G02_MCC_network -B /tmp/g02_mcc_tests   -DCMAKE_BUILD_TYPE=Debug -DG02_MCC_ENABLE_MPI=ON -DG02_MCC_ENABLE_OPENMP=ON
 cmake --build /tmp/g02_mcc_tests -j 4
 ctest --test-dir /tmp/g02_mcc_tests --output-on-failure
 ```
 
-## Zero-dimensional collision box
+Use `-DG02_MCC_BUILD_TESTS=OFF` for the library only. MPI requires C++ MPI support; OpenMP requires compiler support.
 
-`tests/009_collision/G02_MCC_network/examples/collision_box/` follows A particles colliding elastically with a fixed B background of equal-mass particles.
-Each velocity has three components; zero-dimensional means no spatial variation.
+## Manual generation and validation
 
-| Control | Expected outcome |
-|---|---|
-| Hot A and cold B | Mean drift weakens, temperature approaches B, and counts follow the constant-rate Poisson prediction |
-| Zero background density | No collisions; initial velocities preserved |
-| Zero time step | No elapsed time; states unchanged |
-| A starts at B temperature with no drift | Statistics remain near equilibrium, allowing sampling fluctuations |
-| Different step sizes, same total time | Each run passes the same statistical reference; individual particle results need not match |
-| Different channel samplers | Alternative sampling implementations follow the same statistics |
-| Serial versus OpenMP | Identical particle results and collision counts for the same seed and settings |
+CTest generates shared packages automatically. Before manually running tests/callers or the MPI collision box that accept a package path:
 
-Velocity moments are statistics such as mean velocity and mean squared speed.
-Relaxation describes approaching equilibrium.
-The program compares these statistics with theory and balances momentum and energy including the background.
-It tests the final Maxwell distribution only near equilibrium; shorter runs skip unreached checkpoints.
-Any executed check that fails returns a nonzero status.
+```bash
+/tmp/g02_mcc_tests/g02_generate_test_data /tmp/g02_mcc_tests/generated_models
+/tmp/g02_mcc_tests/g02_validate_model /tmp/g02_mcc_tests/generated_models/collision_box_elastic
+```
 
-Run it manually to generate CSV files and plots:
+Pass your own directory to check user data. PASS covers parsing and implemented constraints, not physical validity.
+
+## Collision box and benchmark
+
+The box tracks A against a fixed equal-mass B gas. Velocities have three components; zero-dimensional means no spatial variation. Zero density/dt preserves state. Near equilibrium, check the Maxwell distribution. Different dt values compare statistics at equal total time. OpenMP runs can compare particles directly with serial results.
 
 ```bash
 bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
 ```
 
-Results go to the example's ignored `results/` directory. Plotting requires Python 3 and Matplotlib; neither the C++ validation nor CTest depends on plotting. See the [example README](examples/collision_box/README.en.md) for parameters, formulas and output details.
+Without `--model`, the executable generates a process-private temporary synthetic package and cleans it on exit. With `--model DIR`, it loads that directory only and validates the box's required single-channel equal-mass model. Plots need Python 3/Matplotlib; C++ checks and CTest do not.
 
-## Benchmark
+`bench_batch` arguments are particles, channels, measured repeats, OpenMP threads and sampler:
 
-The benchmark measures computing speed; the tests above establish the physical checks.
+```bash
+/tmp/g02_mcc_tests/bench_batch 1000000 100 7 8 prefix
+```
 
-The same test project builds `bench_batch`. Its arguments are particle count, channel count, measured repeats and OpenMP threads; for example, `/tmp/g02_mcc_tests/bench_batch 1000000 100 7 8`.
+Benchmarks measure elapsed time; tests check statistics and physical constraints. See [PERFORMANCE.md](PERFORMANCE.md) for parallel integration.
