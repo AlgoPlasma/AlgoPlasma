@@ -60,13 +60,18 @@ RTD_TABLE_CLASS = "ap-contributors"
 README_AVATAR_PX = 80
 RTD_AVATAR_PX = 96
 WORK_AVATAR_PX = 80
-MODULE_PAGE_RE = re.compile(r"^([A-J][0-9]{2})_.+\.rst$")
+MODULE_PAGE_RE = re.compile(r"^([A-K][0-9]{2})_.+\.rst$")
 WORK_TABLE_CLASS = "ap-work-list"
 WORK_HEADERS = {
     "zh": ("成员", "参与过的具体工作"),
     "en": ("Member", "Documented work"),
 }
 BIOGRAPHY_LABELS = {"zh": "个人简介", "en": "Biography"}
+HOMEPAGE_LABELS = {"zh": "个人主页", "en": "Homepage"}
+QUOTATION_INTROS = {
+    "zh": "与大家共勉：",
+    "en": "A thought to share:",
+}
 RESEARCH_LABELS = {"zh": "研究方向", "en": "Research Interests"}
 RESEARCH_WORK_HEADERS = {
     "zh": "研究方向与参与工作",
@@ -145,18 +150,18 @@ ROLE_LABELS_ZH = {
     "contributor": "贡献者",
 }
 DEFAULT_ROLE = "contributor"
+# Individual contributors remain recorded in the data, but are not listed here.
+HIDDEN_ROLES = {"contributor"}
 # Read the Docs sections: (English title, Chinese title, roles in this section).
 # Detailed rows show roles; ordinary contributor cards use the section heading.
 RTD_SECTIONS = (
     ("Project Lead", "项目负责人", ("lead",)),
-    ("Maintainers", "维护者", ("maintainer",)),
-    ("Contributors", "贡献者", ("contributor",)),
+    ("Current Maintainers", "现任维护者", ("maintainer",)),
 )
 # README groups: (English title, Chinese title, roles).
 README_SECTIONS = (
     ("Project Lead", "项目负责人", ("lead",)),
-    ("Maintainers", "维护者", ("maintainer",)),
-    ("Contributors", "贡献者", ("contributor",)),
+    ("Current Maintainers", "现任维护者", ("maintainer",)),
 )
 
 # --- Short blurbs ------------------------------------------------------------
@@ -170,23 +175,16 @@ README_INTRO = {
 README_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
 # The docs page is bilingual: each language lives in its own .ap-lang block, so
 # no page mixes the two languages.
-RTD_INTRO = {
-    "zh": "AlgoPlasma 由下列成员共同建设。项目负责人置顶，维护者按姓氏拼音排序。",
-    "en": (
-        "AlgoPlasma is built by the people below. The project lead appears "
-        "first; maintainers are sorted by given name."
-    ),
-}
 RTD_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
 # Plain HTML: Markdown is not parsed inside the generated HTML blocks.
 README_OUTRO = {
     "zh": (
-        "完整名单（含角色与链接）："
+        "项目负责人及现任维护者："
         '<a href="https://algoplasma.readthedocs.io/en/latest/community/'
         'contributors.html">Read the Docs</a>'
     ),
     "en": (
-        "Full list with roles and links: "
+        "Project lead and current maintainers: "
         '<a href="https://algoplasma.readthedocs.io/en/latest/community/'
         'contributors.html">Read the Docs</a>'
     ),
@@ -362,7 +360,7 @@ def _normalise_work_catalog(raw) -> dict:
     catalog = {}
     for module_id, labels in raw.items():
         if not isinstance(module_id, str) or not re.fullmatch(
-            r"[A-J][0-9]{2}", module_id
+            r"[A-K][0-9]{2}", module_id
         ):
             sys.exit(f"error: invalid work module ID {module_id!r}")
         if module_id not in pages:
@@ -374,7 +372,7 @@ def _normalise_work_catalog(raw) -> dict:
             value = labels.get(lang)
             if not isinstance(value, str) or not value.strip():
                 sys.exit(f"error: {module_id}: missing {lang} work description")
-            if re.search(r"\b[A-J][0-9]{2}\b", value):
+            if re.search(r"\b[A-K][0-9]{2}\b", value):
                 sys.exit(f"error: {module_id}: {lang} description contains a module ID")
             descriptions[lang] = value.strip()
         catalog[module_id] = {
@@ -441,10 +439,27 @@ def _normalise(
     if role == "contributor" and work_modules:
         sys.exit(f"error: {name}: 'work_modules' is only displayed for lead/maintainer")
     biography = _normalise_profile_text(entry.get("biography"), "biography", name)
+    personal_statement = _normalise_profile_text(
+        entry.get("personal_statement"), "personal_statement", name
+    )
+    raw_quotation = entry.get("quotation")
+    quotation = {}
+    if raw_quotation is not None:
+        if not isinstance(raw_quotation, dict):
+            sys.exit(f"error: {name}: 'quotation' must be a zh/en mapping")
+        for lang in ("zh", "en"):
+            quote_lines = raw_quotation.get(lang)
+            if not isinstance(quote_lines, list) or not quote_lines or any(
+                not isinstance(line, str) or not line.strip() for line in quote_lines
+            ):
+                sys.exit(f"error: {name}: {lang} quotation must contain non-empty lines")
+            quotation[lang] = [line.strip() for line in quote_lines]
     research_interests = _normalise_profile_text(
         entry.get("research_interests"), "research_interests", name
     )
-    if role == "contributor" and (biography or research_interests):
+    if role == "contributor" and (
+        biography or personal_statement or quotation or research_interests
+    ):
         sys.exit(f"error: {name}: profile text is only displayed for lead/maintainer")
     github = str(entry.get("github") or "").strip()
     gitee = str(entry.get("gitee") or "").strip()
@@ -463,9 +478,15 @@ def _normalise(
         "name": name,
         "name_zh": str(entry.get("name_zh") or "").strip(),
         "role": role,
+        "academic_status": _normalise_profile_text(
+            entry.get("academic_status"), "academic_status", name
+        ),
         "contributions": contributions,
         "work": [catalog[module_id] for module_id in work_modules],
         "biography": biography,
+        "personal_statement": personal_statement,
+        "quotation": quotation,
+        "homepage": str(entry.get("homepage") or "").strip(),
         "research_interests": research_interests,
         "github": github,
         "gitee": gitee,
@@ -664,6 +685,47 @@ def _work_href(work: dict, target_dir: str) -> str:
     return PurePosixPath(os.path.relpath(path, ROOT / target_dir)).as_posix()
 
 
+def _maintainer_table(entries, lang: str, target_dir: str) -> str:
+    """Compact three-column profiles, read left to right in the supplied order."""
+    cells = []
+    for entry in entries:
+        name = html_escape(display_name(entry, lang))
+        src = html_escape(_avatar_url(entry, target_dir), quote=True)
+        url, _ = _profile_url(entry)
+        safe_url = html_escape(url, quote=True)
+        image = f'<img src="{src}" width="72" height="72" alt="{name}">'
+        if url:
+            image = f'<a href="{safe_url}">{image}</a>'
+            name = f'<a href="{safe_url}">{name}</a>'
+        cell = [
+            '<td width="33.333%" valign="top">',
+            '  <div class="ap-member-profile">',
+            f'    <span class="ap-member-avatar">{image}</span>',
+            '    <div class="ap-member-identity">',
+            f'      <strong>{name}</strong><br>',
+        ]
+        status = entry.get("academic_status", {}).get(lang, "")
+        if status:
+            cell.append(
+                f'      <span class="ap-member-status">{html_escape(status)}</span>'
+            )
+        links = _profile_links(entry, separator=" ")
+        if links:
+            cell.append(f'      <br><small class="ap-member-links">{links}</small>')
+        cell.extend(['    </div>', '  </div>'])
+        research = entry.get("research_interests", {}).get(lang, "")
+        if research:
+            cell.append('  <div class="ap-member-details">')
+            cell.append(
+                f'    <p class="ap-member-research"><strong>{RESEARCH_LABELS[lang]}</strong>'
+                f'<br>{html_escape(research, quote=False)}</p>'
+            )
+            cell.append('  </div>')
+        cell.append('</td>')
+        cells.append(cell)
+    return _render_table(cells, 3, "ap-maintainers")
+
+
 def _work_table(entries, lang: str, target_dir: str) -> str:
     member_label, work_label = WORK_HEADERS[lang]
     if all(entry.get("biography") for entry in entries):
@@ -689,8 +751,9 @@ def _work_table(entries, lang: str, target_dir: str) -> str:
         src = html_escape(_avatar_url(entry, target_dir), quote=True)
         url, _ = _profile_url(entry)
         safe_url = html_escape(url, quote=True)
+        avatar_px = 160 if entry["role"] == "lead" else WORK_AVATAR_PX
         image = (
-            f'<img src="{src}" width="{WORK_AVATAR_PX}" height="{WORK_AVATAR_PX}" '
+            f'<img src="{src}" width="{avatar_px}" height="{avatar_px}" '
             f'alt="{name}">'
         )
         if url:
@@ -707,8 +770,13 @@ def _work_table(entries, lang: str, target_dir: str) -> str:
                 f'            <sub class="ap-member-role">{role_labels[entry["role"]]}</sub>',
             ]
         )
-        if target_dir == RTD_TARGET_DIR:
+        if target_dir == RTD_TARGET_DIR or entry.get("homepage"):
             links = _profile_links(entry, separator=" ")
+            if entry.get("homepage"):
+                homepage = html_escape(entry["homepage"], quote=True)
+                links = (
+                    f'<a href="{homepage}">{HOMEPAGE_LABELS[lang]}</a> {links}'
+                ).rstrip()
             if links:
                 lines.append(f'            <br><small class="ap-member-links">{links}</small>')
         lines.extend([
@@ -723,6 +791,20 @@ def _work_table(entries, lang: str, target_dir: str) -> str:
             lines.append(
                 f'        <p class="ap-member-biography">{html_escape(biography, quote=False)}</p>'
             )
+        personal_statement = entry.get("personal_statement", {}).get(lang, "")
+        if personal_statement:
+            lines.append(
+                '        <p class="ap-member-statement">'
+                f'{html_escape(personal_statement, quote=False)}</p>'
+            )
+        if entry.get("quotation"):
+            quote = "<br>".join(
+                html_escape(line, quote=False) for line in entry["quotation"][lang]
+            )
+            lines.extend([
+                f'        <p class="ap-member-quote-intro">{QUOTATION_INTROS[lang]}</p>',
+                f'        <blockquote class="ap-member-quote"><p>{quote}</p></blockquote>',
+            ])
         if research_interests:
             lines.append(
                 f'        <p class="ap-member-research"><strong>{RESEARCH_LABELS[lang]}</strong>'
@@ -750,7 +832,7 @@ def _work_table(entries, lang: str, target_dir: str) -> str:
 def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str:
     parts = []
     parts.append(f'<p align="center"><sub>{README_INTRO[lang]}</sub></p>')
-    assigned = set()
+    assigned = set(HIDDEN_ROLES)
     role_labels = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
     for title_en, title_zh, roles in README_SECTIONS:
         group = _readme_group(contributors, roles, lang)
@@ -761,7 +843,9 @@ def render_readme_section(contributors, lang: str, target_dir: str = ".") -> str
         parts.append("")
         parts.append(f"### {title}")
         parts.append("")
-        if any(role in ("lead", "maintainer") for role in roles):
+        if roles == ("maintainer",):
+            parts.append(_maintainer_table(group, lang, target_dir))
+        elif "lead" in roles:
             parts.append(_work_table(group, lang, target_dir))
         else:
             legend = _legend_text(group, lang)
@@ -801,20 +885,20 @@ def _name_sort_key(entry: dict, lang: str) -> tuple:
 
 
 def _sorted_group(contributors, roles, lang: str) -> list:
-    """Contributors of the given roles, sorted for the target language."""
+    """Keep leads first and maintainers in the same curated order in both views."""
     group = [entry for entry in contributors if entry["role"] in roles]
-    return sorted(group, key=lambda entry: _name_sort_key(entry, lang))
+    leads = [entry for entry in group if entry["role"] == "lead"]
+    maintainers = [entry for entry in group if entry["role"] == "maintainer"]
+    others = sorted(
+        (entry for entry in group if entry["role"] not in ("lead", "maintainer")),
+        key=lambda entry: _name_sort_key(entry, lang),
+    )
+    return leads + maintainers + others
 
 
 def _readme_group(contributors, roles, lang: str) -> list:
-    """Group for the README: project lead first, then language-specific order."""
-    group = [entry for entry in contributors if entry["role"] in roles]
-    lead = [entry for entry in group if entry["role"] == "lead"]
-    rest = sorted(
-        (entry for entry in group if entry["role"] != "lead"),
-        key=lambda entry: _name_sort_key(entry, lang),
-    )
-    return lead + rest
+    """Use the same contributor ordering in the README and documentation."""
+    return _sorted_group(contributors, roles, lang)
 
 
 def _rtd_block(contributors, lang: str, target_dir: str) -> str:
@@ -824,8 +908,7 @@ def _rtd_block(contributors, lang: str, target_dir: str) -> str:
     whole block stays a single HTML block in Markdown.
     """
     parts = [f'<div class="ap-lang ap-lang-{lang} ap-contributor-page">']
-    parts.append(f'<p class="ap-contributor-intro">{RTD_INTRO[lang]}</p>')
-    assigned = set()
+    assigned = set(HIDDEN_ROLES)
     role_titles = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
     for title_en, title_zh, roles in RTD_SECTIONS:
         group = _sorted_group(contributors, roles, lang)
@@ -833,7 +916,9 @@ def _rtd_block(contributors, lang: str, target_dir: str) -> str:
         if not group:
             continue
         parts.append(f'<h2 class="ap-contributor-heading">{title_en if lang == "en" else title_zh}</h2>')
-        if any(role in ("lead", "maintainer") for role in roles):
+        if roles == ("maintainer",):
+            parts.append(_maintainer_table(group, lang, target_dir))
+        elif "lead" in roles:
             parts.append(_work_table(group, lang, target_dir))
         else:
             legend = _legend_text(group, lang)

@@ -1,11 +1,5 @@
 /* Generated contributor tables on docs/source/community/contributors.md. */
 
-.ap-contributor-intro {
-    max-width: 52rem;
-    color: #576b7d;
-    line-height: 1.8;
-}
-
 .ap-contributor-page .ap-contributor-heading {
     margin: 2rem 0 0.85rem;
     color: #172f43;
@@ -89,6 +83,32 @@ table.ap-work-list .ap-member {
     box-shadow: 0 0 0 3px #edf2f6;
 }
 
+.ap-work-list--lead .ap-member-profile {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.ap-work-list--lead .ap-member-avatar {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+.ap-work-list--lead .ap-member-avatar img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.ap-work-list--lead .ap-member-identity {
+    text-align: center;
+}
+
+.ap-work-list--lead .ap-member-links {
+    justify-content: center;
+    margin-top: 0.65rem;
+    font-size: 0.78rem;
+}
+
 .ap-member-identity {
     min-width: 0;
     line-height: 1.4;
@@ -157,6 +177,31 @@ table.ap-work-list .ap-work-cell {
 
 .rst-content table.ap-work-list .ap-member-research {
     margin-bottom: 0.85rem;
+}
+
+.rst-content table.ap-work-list .ap-member-statement {
+    margin: 1rem 0;
+    line-height: 1.8;
+}
+
+.rst-content table.ap-work-list .ap-member-quote-intro {
+    margin: 0 0 0.6rem;
+    color: #576b7d;
+    font-size: 0.85rem;
+    line-height: 1.8;
+}
+
+.rst-content table.ap-work-list .ap-member-quote {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid #b9d7eb;
+    border-radius: 0 6px 6px 0;
+    background: #f5f9fc;
+}
+
+.rst-content table.ap-work-list .ap-member-quote p {
+    margin: 0;
+    line-height: 1.9;
 }
 
 .ap-member-research strong {
@@ -266,6 +311,94 @@ table.ap-work-list .ap-work-cell {
 
     .ap-work-items--long {
         columns: auto;
+    }
+}
+
+table.ap-maintainers {
+    width: 100%;
+    table-layout: fixed;
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0.75rem;
+    margin: -0.75rem 0 1.25rem;
+}
+
+table.ap-maintainers td {
+    width: 33.333%;
+    padding: 1rem;
+    border: 1px solid #dce5ed;
+    border-radius: 10px;
+    background: #fff;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+}
+
+.ap-maintainers .ap-member-profile {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ap-maintainers .ap-member-avatar {
+    flex: 0 0 72px;
+}
+
+.ap-maintainers .ap-member-avatar img {
+    width: 72px;
+    height: 72px;
+}
+
+.ap-maintainers .ap-member-avatar img[src$="/wangbaisheng.jpg"] {
+    object-position: center 30%;
+}
+
+.ap-maintainers .ap-member-details {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #e7edf2;
+    color: #334b5f;
+    font-size: 0.85rem;
+    line-height: 1.7;
+}
+
+.rst-content table.ap-maintainers .ap-member-research {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.ap-member-status {
+    display: block;
+    margin-top: 0.3rem;
+    color: #576b7d;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+    table.ap-maintainers,
+    table.ap-maintainers td {
+        display: block;
+        width: 100%;
+    }
+
+    table.ap-maintainers {
+        margin-top: 0;
+    }
+
+    table.ap-maintainers tbody {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    table.ap-maintainers tr {
+        display: contents;
+    }
+}
+
+@media (max-width: 600px) {
+    table.ap-maintainers tbody {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 

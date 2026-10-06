@@ -678,6 +678,13 @@ K04: Breathing Waveform Extraction
    数据较多时，可先把窄频带搬到低频，在较少时刻计算相位再还原到原采样点，详见 :doc:`知识点：窄带相位的省点计算 </knowledge/compact_phase>`。
 
 
+   .. raw:: html
+
+      <div class="ap-home-footer-band">
+        <p><strong>贡献者</strong></p>
+        <p class="ap-home-contact">赵隐剑 · 哈尔滨工业大学</p>
+      </div>
+
 .. container:: ap-lang ap-lang-en ap-diagnostics-foundations ap-k04
 
    .. rubric:: K04: from probe samples to the breathing waveform C
@@ -1342,3 +1349,10 @@ K04: Breathing Waveform Extraction
    .. rubric:: Appendix B. How can we evaluate fewer time points?
 
    For large records, shift the narrow band to low frequencies, evaluate phase at fewer times, and restore the original sampling grid; see :doc:`Knowledge note: fewer-point evaluation of narrowband phase </knowledge/compact_phase>`.
+
+   .. raw:: html
+
+      <div class="ap-home-footer-band">
+        <p><strong>Contributors</strong></p>
+        <p class="ap-home-contact">Yinjian ZHAO · Harbin Institute of Technology</p>
+      </div>

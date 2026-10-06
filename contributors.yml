@@ -11,9 +11,13 @@
 #   name           Latin/pinyin display name, given name first (required)
 #   name_zh        Chinese name, used on the Chinese README pages (optional)
 #   role           lead | maintainer | contributor   (default: contributor)
+#   academic_status  zh/en current academic or postdoctoral status (optional)
 #   contributions  list of contribution types, or `all` for every type
 #   work_modules   module IDs for documented work (lead/maintainer only)
 #   biography      zh/en personal introduction, shown instead of documented work
+#   personal_statement  zh/en personal aspirations (lead/maintainer only)
+#   quotation      zh/en lists of lines shared for encouragement (optional)
+#   homepage       personal website URL, shown below the photo (optional)
 #   research_interests  zh/en research interests, shown above documented work
 #   github         GitHub username (optional)
 #   gitee          Gitee username (optional)
@@ -45,7 +49,7 @@
 #
 # `work_catalog` supplies the public descriptions for `work_modules`.  Module
 # IDs are internal references: generated pages show the descriptions, not IDs.
-# Chinese pages sort maintainers by surname pinyin, English pages by given name;
+# Maintainers follow their order in this file in both Chinese and English;
 # the project lead always comes first.
 #
 # Adding a contributor
@@ -84,6 +88,9 @@ work_catalog:
   C02:
     zh: 三维直角坐标网格的 B 样条场插值
     en: B-spline field gathering on a 3D Cartesian grid
+  C03:
+    zh: 三维非均匀柱坐标网格的电磁场插值
+    en: Electromagnetic field gathering on a nonuniform 3D cylindrical grid
   D01:
     zh: 三维直角坐标 Poisson 方程的 HYPRE 求解接口
     en: HYPRE interface for the 3D Cartesian Poisson equation
@@ -147,6 +154,18 @@ work_catalog:
   J01:
     zh: 三维自由流连续性方程的有限体积更新
     en: Finite-volume updates for the 3D free-flow continuity equation
+  K01:
+    zh: 探针信号频谱、互相位及相干性分析
+    en: Spectral, cross-phase, and coherence analysis of probe signals
+  K02:
+    zh: Beall 统计色散谱及波数混叠分析
+    en: Beall statistical dispersion spectra and wavenumber aliasing analysis
+  K03:
+    zh: 基于最大似然的二维波矢联合反演
+    en: Joint two-dimensional wavevector inversion using maximum likelihood
+  K04:
+    zh: 探针信号的呼吸振荡波形提取
+    en: Breathing-oscillation waveform extraction from probe signals
 
 contributors:
   # --- project lead ---------------------------------------------------------
@@ -156,86 +175,162 @@ contributors:
     gitee: Yin-YinjianZhao
     role: lead
     avatar: docs/source/_static/contributors/zhaoyinjian.png
+    homepage: https://homepage.hit.edu.cn/zhaoyinjian
     biography:
-      zh: 哈尔滨工业大学副教授、博士生导师，美国南加州大学航天工程博士，曾在美国劳伦斯伯克利国家实验室从事博士后研究，并参与美国能源部百亿亿次级计算项目WarpX开源程序的研发。长期从事等离子体物理与数值模拟研究，研究方向涵盖电推进、等离子体不稳定性、粒子模拟算法及高性能并行计算等。发表SCI论文40余篇，主持国家级青年人才、国家自然科学基金面上项目等多项科研项目。现任Plasma Science and Technology期刊青年编委，并担任Plasma Sources Science and Technology、Physics of Plasmas、Computer Physics Communications多本国内外等离子体物理与计算物理期刊审稿人。
-      en: Associate Professor and PhD Supervisor at Harbin Institute of Technology. He received his PhD in Astronautical Engineering from the University of Southern California, USA, and conducted postdoctoral research at Lawrence Berkeley National Laboratory, USA. He contributed to the development of the open-source WarpX code under the U.S. Department of Energy's Exascale Computing Project. His research focuses on plasma physics and numerical simulation, including electric propulsion, plasma instabilities, particle simulation algorithms, and high-performance parallel computing. He has published more than 40 SCI-indexed papers and led several research projects, including a national young talent program and General Program projects funded by the National Natural Science Foundation of China. He serves on the Young Editorial Board of Plasma Science and Technology and reviews for Chinese and international journals in plasma physics and computational physics, including Plasma Sources Science and Technology, Physics of Plasmas, and Computer Physics Communications.
-    work_modules: [A01, C01, D01, D02, D04, E01, E02, E03, F01, F02, F03, F04, H01, H02, I01, J01]
+      zh: 哈尔滨工业大学副教授，曾在劳伦斯伯克利国家实验室从事博士后研究，获美国南加州大学航天工程博士学位。长期从事等离子体物理与数值模拟研究，研究方向涵盖空间电推进、核聚变、半导体、加速器、数值模拟算法及高性能并行计算等。
+      en: I am an Associate Professor at Harbin Institute of Technology. I conducted postdoctoral research at Lawrence Berkeley National Laboratory and earned my PhD in Astronautical Engineering from the University of Southern California. My research has long focused on plasma physics and numerical simulation, spanning space electric propulsion, nuclear fusion, semiconductors, accelerators, numerical simulation algorithms, and high-performance parallel computing.
+    personal_statement:
+      zh: 我希望在科研与教学的道路上，将 AlgoPlasma 作为一生耕耘的事业，服务于等离子体领域的科研、教育与产业，为这一领域的发展尽一份绵薄之力。
+      en: Throughout my career in research and teaching, I hope to make AlgoPlasma a lifelong endeavor, serving the plasma community across research, education, and industry, and contributing in my own small way to the field's progress.
+    quotation:
+      zh:
+        - 自持微光，不与群星争辉。
+        - 照亮己路，亦可温暖旁人。
+      en:
+        - Try to become not a man of success, but try rather to become a man of value. — Albert Einstein
+    work_modules: [A01, C01, D01, D02, D04, E01, E02, E03, F01, F02, F03, F04, H01, H02, I01, J01, K04]
 
   # --- maintainers ----------------------------------------------------------
+  - name: Baisheng Wang
+    name_zh: 王佰胜
+    gitee: HermiteCat
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    avatar: docs/source/_static/contributors/wangbaisheng.jpg
+    research_interests:
+      zh: 空间电推进空心阴极实验及模拟
+      en: Experiments and simulations of hollow cathodes for space electric propulsion
+    work_modules: [C03, D01, D02, D03, D04]
+
+  - name: Zhe Liu
+    name_zh: 刘哲
+    gitee: lzhe898
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    avatar: https://gitee.com/lzhe898.png
+    research_interests:
+      zh: 光致电离、稠密等离子体焦点
+      en: Photoionization and dense plasma focus
+    work_modules: [E01, E02, E03, F01, F02, F03, F04, G02]
+
   - name: Zhongping Zhao
     name_zh: 赵中平
     # contributes under the account name GooseGH
     github: GooseGH
     gitee: GooseGH
     role: maintainer
-    work_modules: [A01, A02, B03, C01, C02, I02]
-
-  - name: Zhe Liu
-    name_zh: 刘哲
-    gitee: lzhe898
-    role: maintainer
-    avatar: https://gitee.com/lzhe898.png
-    work_modules: [E01, E02, E03, F01, F02, F03, F04, G02]
-
-  - name: Baisheng Wang
-    name_zh: 王佰胜
-    gitee: HermiteCat
-    role: maintainer
-    avatar: docs/source/_static/contributors/wangbaisheng.jpg
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
     research_interests:
-      zh: 空间电推进空心阴极数值模拟
-      en: Numerical simulation of hollow cathodes for space electric propulsion
-    work_modules: [D01, D02, D03, D04]
+      zh: 霍尔推力器不稳定性实验及模拟
+      en: Experiments and simulations of instabilities in Hall thrusters
+    work_modules: [A01, A02, B03, C01, C02, I02]
 
   - name: Zilong Peng
     name_zh: 彭子龙
     gitee: peng-zilong123
     role: maintainer
+    academic_status:
+      zh: 硕士在读
+      en: Master's Student
     avatar: docs/source/_static/contributors/pengzilong.jpg
     research_interests:
-      zh: 研究方向为电推进等离子体波动诊断与动力学机制，重点开展色散测量与高阶谱分析，后续拟结合实验与粒子模拟，探究多尺度波动耦合及其与电子输运的联系
-      en: Research focuses on plasma fluctuation diagnostics and dynamical mechanisms in electric propulsion, with an emphasis on dispersion measurements and higher-order spectral analysis. Future work will combine experiments and particle simulations to investigate multiscale fluctuation coupling and its relationship with electron transport.
-    work_modules: [A03, B01, D05, D06, H03]
+      zh: 等离子体波动实验诊断
+      en: Experimental diagnostics of plasma waves
+    work_modules: [A03, B01, D05, D06, H03, K01, K02, K03]
 
   - name: Xin Luo
     name_zh: 罗鑫
     gitee: Luo-Xin-410
     role: maintainer
+    academic_status:
+      zh: 博后在站
+      en: Postdoctoral Researcher
+    research_interests:
+      zh: 霍尔推力器电子反常传导
+      en: Anomalous electron transport in Hall thrusters
     work_modules: [C02]
 
   - name: Lihuan Xie
     name_zh: 谢礼桓
     orcid: 0009-0009-6248-9781
     role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 碘工质霍尔推力器不稳定性
+      en: Instabilities in iodine-propellant Hall thrusters
     work_modules: [G01, G02]
 
   - name: Xi Chen
     name_zh: 陈曦
     role: maintainer
-
-  - name: Zhijun Zhou
-    name_zh: 周志君
-    gitee: HIT-ZhouZhijun
-    role: maintainer
-    work_modules: [B02]
-
-  - name: Kunpeng Zhong
-    name_zh: 钟昆硼
-    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 三维PIC加速方法及降维模型
+      en: Acceleration methods for 3D PIC simulations and reduced-dimensional models
 
   - name: Yingjie Chen
     name_zh: 陈英杰
     gitee: jiaohuadetudouni
     role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 柱坐标PIC算法优化
+      en: Optimization of PIC algorithms in cylindrical coordinates
 
-  - name: Changzheng Hu
-    name_zh: 胡长征
+  - name: Kunpeng Zhong
+    name_zh: 钟昆硼
     role: maintainer
-    avatar: docs/source/_static/contributors/huchangzheng.jpg
+    academic_status:
+      zh: 硕士在读
+      en: Master's Student
+    research_interests:
+      zh: 霍尔推力器磁聚焦机理
+      en: Magnetic focusing mechanisms in Hall thrusters
+
+  - name: Zhijun Zhou
+    name_zh: 周志君
+    gitee: HIT-ZhouZhijun
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 霍尔推力器周向非均匀及不稳定性
+      en: Azimuthal nonuniformity and instabilities in Hall thrusters
+    work_modules: [B02]
 
   - name: Wushun Zhang
     name_zh: 张武顺
     role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 高超声速飞行器电子发汗冷却
+      en: Electron transpiration cooling of hypersonic vehicles
+
+  - name: Changzheng Hu
+    name_zh: 胡长征
+    role: maintainer
+    academic_status:
+      zh: 硕士在读
+      en: Master's Student
+    avatar: docs/source/_static/contributors/huchangzheng.jpg
+    research_interests:
+      zh: 等离子体波动理论
+      en: Theory of plasma waves
 
   # --- contributor ----------------------------------------------------------
   - name: Bocong Zheng

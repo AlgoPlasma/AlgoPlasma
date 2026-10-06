@@ -36,11 +36,11 @@ class ContributorWorkListTests(unittest.TestCase):
         }
         self.assertEqual(len(detailed), 13)
         expected = {
-            "赵隐剑": "A01 C01 D01 D02 D04 E01 E02 E03 F01 F02 F03 F04 H01 H02 I01 J01",
+            "赵隐剑": "A01 C01 D01 D02 D04 E01 E02 E03 F01 F02 F03 F04 H01 H02 I01 J01 K04",
             "赵中平": "A01 A02 B03 C01 C02 I02",
             "刘哲": "E01 E02 E03 F01 F02 F03 F04 G02",
-            "王佰胜": "D01 D02 D03 D04",
-            "彭子龙": "A03 B01 D05 D06 H03",
+            "王佰胜": "C03 D01 D02 D03 D04",
+            "彭子龙": "A03 B01 D05 D06 H03 K01 K02 K03",
             "罗鑫": "C02",
             "谢礼桓": "G01 G02",
             "周志君": "B02",
@@ -74,15 +74,15 @@ class ContributorWorkListTests(unittest.TestCase):
             {"胡长征", "钟昆硼", "陈曦", "陈英杰", "张武顺"},
         )
 
-    def test_localized_order_and_visible_descriptions(self):
+    def test_curated_order_and_compact_profiles_in_both_languages(self):
         expected_zh = [
-            "赵隐剑", "陈曦", "陈英杰", "胡长征", "刘哲", "罗鑫", "彭子龙",
-            "王佰胜", "谢礼桓", "张武顺", "赵中平", "钟昆硼", "周志君",
+            "赵隐剑", "王佰胜", "刘哲", "赵中平", "彭子龙", "罗鑫", "谢礼桓",
+            "陈曦", "陈英杰", "钟昆硼", "周志君", "张武顺", "胡长征",
         ]
         expected_en = [
-            "Yinjian Zhao", "Baisheng Wang", "Changzheng Hu", "Kunpeng Zhong",
-            "Lihuan Xie", "Wushun Zhang", "Xi Chen", "Xin Luo", "Yingjie Chen",
-            "Zhe Liu", "Zhijun Zhou", "Zhongping Zhao", "Zilong Peng",
+            "Yinjian Zhao", "Baisheng Wang", "Zhe Liu", "Zhongping Zhao",
+            "Zilong Peng", "Xin Luo", "Lihuan Xie", "Xi Chen", "Yingjie Chen",
+            "Kunpeng Zhong", "Zhijun Zhou", "Wushun Zhang", "Changzheng Hu",
         ]
         group_roles = ("lead", "maintainer")
         for lang, expected in (("zh", expected_zh), ("en", expected_en)):
@@ -95,10 +95,10 @@ class ContributorWorkListTests(unittest.TestCase):
             visible.feed(page)
             text = " ".join(visible.parts)
             self.assertEqual([part for part in visible.parts if part in expected], expected)
-            self.assertIsNone(re.search(r"\b[A-J][0-9]{2}\b", text))
-            self.assertIn(contributors.WORK_PENDING[lang], text)
-            self.assertIn("docs/source/rst_files/A_Pusher/A01_Boris_3Dxyz.rst", page)
-            self.assertIn("Bocong Zheng", page)
+            self.assertIsNone(re.search(r"\b[A-K][0-9]{2}\b", text))
+            self.assertNotIn(contributors.WORK_PENDING[lang], text)
+            self.assertNotIn('class="ap-work-items', page)
+            self.assertNotIn("Bocong Zheng", page)
             docs_block = contributors._rtd_block(
                 self.entries, lang, contributors.RTD_TARGET_DIR
             )
@@ -108,9 +108,22 @@ class ContributorWorkListTests(unittest.TestCase):
                 [part for part in docs_visible.parts if part in expected], expected
             )
             self.assertIsNone(
-                re.search(r"\b[A-J][0-9]{2}\b", " ".join(docs_visible.parts))
+                re.search(r"\b[A-K][0-9]{2}\b", " ".join(docs_visible.parts))
             )
-            self.assertIn("../rst_files/A_Pusher/A01_Boris_3Dxyz.html", docs_block)
+            self.assertNotIn('class="ap-contributor-intro"', docs_block)
+            for rendered in (page, docs_block):
+                self.assertNotIn("Bocong Zheng", rendered)
+                self.assertNotIn('class="ap-contributors"', rendered)
+                self.assertIn('class="ap-maintainers"', rendered)
+                self.assertEqual(rendered.count('class="ap-member-status"'), 12)
+                for entry in group[1:]:
+                    self.assertIn(html_escape(entry["academic_status"][lang]), rendered)
+                    links = contributors._profile_links(entry, separator=" ")
+                    if links:
+                        self.assertIn(links, rendered)
+                    for work in entry["work"]:
+                        target_dir = "." if rendered == page else contributors.RTD_TARGET_DIR
+                        self.assertNotIn(contributors._work_href(work, target_dir), rendered)
 
     def test_catalog_rejects_invalid_entries(self):
         with self.assertRaises(SystemExit):
@@ -273,24 +286,20 @@ class ContributorWorkListTests(unittest.TestCase):
                 for work in lead["work"]:
                     self.assertNotIn(contributors._work_href(work, target_dir), table)
 
-    def test_research_interests_preserve_documented_work(self):
+    def test_research_interests_without_documented_work(self):
         maintainers = [
             entry for entry in self.entries if entry["role"] == "maintainer"
         ]
         research_members = [
             entry for entry in maintainers if entry["research_interests"]
         ]
-        self.assertEqual(
-            {entry["name_zh"] for entry in research_members}, {"王佰胜", "彭子龙"}
-        )
+        self.assertEqual(len(research_members), 12)
         for lang in ("zh", "en"):
             for target_dir in (".", contributors.RTD_TARGET_DIR):
-                group = contributors._work_table(maintainers, lang, target_dir)
-                self.assertIn(
-                    f'>{contributors.RESEARCH_WORK_HEADERS[lang]}</th>', group
-                )
+                group = contributors._maintainer_table(maintainers, lang, target_dir)
+                self.assertIn('class="ap-maintainers"', group)
                 for entry in research_members:
-                    table = contributors._work_table([entry], lang, target_dir)
+                    table = contributors._maintainer_table([entry], lang, target_dir)
                     self.assertIn(
                         html_escape(entry["research_interests"][lang], quote=False),
                         table,
@@ -298,21 +307,23 @@ class ContributorWorkListTests(unittest.TestCase):
                     self.assertIn(
                         f'<strong>{contributors.RESEARCH_LABELS[lang]}</strong>', table
                     )
-                    self.assertLess(
-                        table.index('class="ap-member-research"'),
-                        table.index('class="ap-work-items"'),
-                    )
+                    self.assertNotIn('class="ap-work-items"', table)
+                    self.assertNotIn(contributors.WORK_HEADERS[lang][1], table)
                     for work in entry["work"]:
-                        self.assertIn(contributors._work_href(work, target_dir), table)
+                        self.assertNotIn(contributors._work_href(work, target_dir), table)
                 page = (
                     contributors.render_readme_section(self.entries, lang)
                     if target_dir == "."
                     else contributors._rtd_block(self.entries, lang, target_dir)
                 )
                 self.assertIn(f'>{contributors.BIOGRAPHY_LABELS[lang]}</th>', page)
-                self.assertIn(
+                self.assertNotIn(
                     f'>{contributors.RESEARCH_WORK_HEADERS[lang]}</th>', page
                 )
+                for entry in research_members:
+                    self.assertIn(
+                        html_escape(entry["research_interests"][lang], quote=False), page
+                    )
 
     def test_profile_text_validation_and_html_escaping(self):
         for field in ("biography", "research_interests"):

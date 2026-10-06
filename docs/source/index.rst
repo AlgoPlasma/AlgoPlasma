@@ -77,7 +77,7 @@ AlgoPlasma
        </div>
        <p class="ap-home-caption">
         配图来自基于 AlgoPlasma 搭建的 AP-PIC-HET-3D 程序。<br>
-         <a href="https://arxiv.org/abs/2603.14849v1" target="_blank" rel="noopener noreferrer">arXiv: 2603.14849v1</a>, 16 Mar 2026.
+         <a href="https://doi.org/10.1103/p8v6-66mq" target="_blank" rel="noopener noreferrer">Physical Review E 114, 035211 (2026)</a>.
        </p>
      </section>
 
@@ -152,7 +152,7 @@ AlgoPlasma
        </div>
        <p class="ap-home-caption">
         Image rendered from an AP-PIC-HET-3D program built on AlgoPlasma.<br>
-         <a href="https://arxiv.org/abs/2603.14849v1" target="_blank" rel="noopener noreferrer">arXiv: 2603.14849v1</a>, 16 Mar 2026.
+         <a href="https://doi.org/10.1103/p8v6-66mq" target="_blank" rel="noopener noreferrer">Physical Review E 114, 035211 (2026)</a>.
        </p>
      </section>
 
