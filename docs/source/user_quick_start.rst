@@ -129,7 +129,7 @@ User Quick Start
            - ``A01_Boris_3Dxyz``，``A02_Boris_3Drtz``，``A03_Higuera_Cary_relativistic_3Dxyz``
          * - 碰撞
            - :doc:`G_Collision <rst_files/G_Collision>`
-           - ``G01_MCC``
+           - ``G01_MCC``，``G02_MCC_network``
          * - 粒子沉积到网格
            - :doc:`B_Scatter <rst_files/B_Scatter>`
            - ``B01_scatter_3Dxyz``，``B02_deposit_3d_cyl``
@@ -144,6 +144,27 @@ User Quick Start
            - ``F02_par_output``，``F04_field_output``
 
       静电 PIC 通常更关注 ``B_Scatter`` 得到电荷密度，然后用 ``D_Poisson`` 求电势或电场。电磁 PIC 通常还会沉积电流，并用 ``E_Maxwell`` 更新电磁场。并行程序里，``H_MPI_Exchange`` 可能会在场更新、沉积后、粒子跨区后分别出现。
+
+   .. container:: ap-onboarding-step ap-onboarding-user
+
+      .. rubric:: 学习碰撞：从 G02 零维算例开始
+
+      G02 的小算例能直接看到“一群热粒子怎样被较冷的气体逐渐冷却”。
+      零维表示忽略空间差异，粒子仍有三个方向的速度。只需要速度、动能和平均数的基础。
+      从仓库根目录运行：
+
+      .. code-block:: bash
+
+         bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
+
+      这个脚本自行构建，需要 CMake 3.20 或以上、C/C++ 编译器（C++20），
+      绘图需要 Python 3 和 Matplotlib；默认无需 Fortran 或 MPI。
+      看到 ``collision_box: PASS`` 后，在算例的 ``results/`` 中查看图片和 ``checks.csv``。
+      :ref:`碰撞盒入门教程 <g02-collision-box-zh>` 解释每张图与通过判据。
+      数据是合成值，只用于软件验证。
+
+      G02 的 Fortran 接口需要链接它的 C++ 库，接入方式见
+      :doc:`G02 模块页 <rst_files/G_Collision/G02_MCC_network>`。
 
    .. container:: ap-onboarding-grid
 
@@ -297,7 +318,7 @@ User Quick Start
            - ``A01_Boris_3Dxyz``, ``A02_Boris_3Drtz``, ``A03_Higuera_Cary_relativistic_3Dxyz``
          * - Collisions
            - :doc:`G_Collision <rst_files/G_Collision>`
-           - ``G01_MCC``
+           - ``G01_MCC``, ``G02_MCC_network``
          * - Deposit particles to grid
            - :doc:`B_Scatter <rst_files/B_Scatter>`
            - ``B01_scatter_3Dxyz``, ``B02_deposit_3d_cyl``
@@ -316,6 +337,27 @@ User Quick Start
       current too and updates fields with ``E_Maxwell``. In MPI programs,
       ``H_MPI_Exchange`` may appear after field updates, after deposition, and
       after particles cross subdomain boundaries.
+
+   .. container:: ap-onboarding-step ap-onboarding-user
+
+      .. rubric:: Learn Collisions with the G02 Example
+
+      This small example shows hot particles cooling through collisions with a colder gas.
+      Zero-dimensional means no spatial variation; each velocity still has three components.
+      Speed, kinetic energy and averages are enough to begin. From the repository root:
+
+      .. code-block:: bash
+
+         bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
+
+      The script builds automatically. It needs CMake 3.20 or newer and C/C++ compilers with C++20 support;
+      plots need Python 3 and Matplotlib. Fortran and MPI are not required by default.
+      After ``collision_box: PASS``, open the plots and ``checks.csv`` in the example's ``results/`` directory.
+      The :ref:`collision-box tutorial <g02-collision-box-en>` explains each plot and the pass criteria.
+      The data are synthetic and intended for software validation.
+
+      The G02 Fortran interface links its C++ library. See the
+      :doc:`G02 module page <rst_files/G_Collision/G02_MCC_network>` for integration.
 
    .. container:: ap-onboarding-grid
 

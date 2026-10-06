@@ -131,6 +131,13 @@ C03_gather_3Draz_nonuniform
    C03 读取场并输出粒子处的场，不更新粒子位置或速度。输出仍是柱坐标分量，
    也不进行坐标系转换。这里的交错布局用于静电电场和给定节点磁场，输入数组须符合上表。
 
+   .. raw:: html
+
+      <div class="ap-home-footer-band">
+        <p><strong>贡献者</strong></p>
+        <p class="ap-home-contact">王佰胜 · 哈尔滨工业大学</p>
+      </div>
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Module Role
@@ -262,6 +269,13 @@ C03_gather_3Draz_nonuniform
    C03 reads fields and returns fields at the particle without updating its position
    or velocity. Outputs remain cylindrical components. The table describes the
    electrostatic E and prescribed nodal B layout required by these routines.
+
+   .. raw:: html
+
+      <div class="ap-home-footer-band">
+        <p><strong>Contributors</strong></p>
+        <p class="ap-home-contact">Baisheng WANG · Harbin Institute of Technology</p>
+      </div>
 
 .. toctree::
    :maxdepth: 1

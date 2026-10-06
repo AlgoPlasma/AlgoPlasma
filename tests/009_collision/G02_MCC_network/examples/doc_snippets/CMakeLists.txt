@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.20)
+project(G02_documented_callers LANGUAGES CXX)
+include("${CMAKE_CURRENT_LIST_DIR}/../../cmake/BuildG02.cmake")
+add_executable(doc_batch batch.cpp)
+target_link_libraries(doc_batch PRIVATE AlgoPlasma::G02_MCC)
+enable_testing()
+include("${CMAKE_CURRENT_LIST_DIR}/../../cmake/TestData.cmake")
+add_test(NAME documented_cpp COMMAND doc_batch
+    "${G02_MCC_GENERATED_MODELS_DIR}/collision_box_elastic")
+set_tests_properties(documented_cpp PROPERTIES FIXTURES_REQUIRED G02_MCC_models)

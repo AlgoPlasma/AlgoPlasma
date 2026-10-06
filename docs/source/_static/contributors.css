@@ -1,0 +1,444 @@
+/* Generated contributor tables on docs/source/community/contributors.md. */
+
+.ap-contributor-page .ap-contributor-heading {
+    margin: 2rem 0 0.85rem;
+    color: #172f43;
+    font-size: 1.35rem;
+}
+
+table.ap-work-list {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    margin: 0 0 2rem;
+    border: 1px solid #dce5ed;
+    border-radius: 12px;
+    background: #fff;
+}
+
+table.ap-work-list thead th {
+    padding: 0.8rem 1.25rem;
+    border: 0;
+    border-bottom: 1px solid #dce5ed;
+    background: #f4f7fa;
+    color: #536b7e;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.035em;
+    text-align: left;
+}
+
+table.ap-work-list th:first-child,
+table.ap-work-list td:first-child {
+    width: 240px;
+}
+
+table.ap-work-list td {
+    padding: 1.25rem;
+    border: 0;
+    background: transparent;
+    overflow-wrap: anywhere;
+}
+
+table.ap-work-list tbody tr + tr td {
+    border-top: 1px solid #e7edf2;
+}
+
+table.ap-work-list tbody tr:hover,
+table.ap-work-list tbody tr:focus-within {
+    background: #f8fafc;
+}
+
+table.ap-work-list--lead {
+    border-top: 3px solid #2980b9;
+}
+
+table.ap-work-list--lead thead th {
+    background: #eef5fa;
+}
+
+table.ap-work-list .ap-member {
+    text-align: left;
+    vertical-align: top;
+}
+
+.ap-member-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.ap-member-avatar {
+    flex: 0 0 80px;
+    line-height: 0;
+}
+
+.ap-member-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 3px #edf2f6;
+}
+
+.ap-work-list--lead .ap-member-profile {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.ap-work-list--lead .ap-member-avatar {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+.ap-work-list--lead .ap-member-avatar img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.ap-work-list--lead .ap-member-identity {
+    text-align: center;
+}
+
+.ap-work-list--lead .ap-member-links {
+    justify-content: center;
+    margin-top: 0.65rem;
+    font-size: 0.78rem;
+}
+
+.ap-member-identity {
+    min-width: 0;
+    line-height: 1.4;
+}
+
+.ap-member-identity > br {
+    display: none;
+}
+
+.ap-member-identity strong {
+    display: block;
+    color: #172f43;
+    font-size: 0.98rem;
+    font-weight: 700;
+}
+
+.ap-member-identity strong a,
+.ap-member-identity strong a:visited {
+    color: inherit;
+}
+
+.ap-member-role {
+    display: inline-block;
+    position: static;
+    margin-top: 0.35rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: #edf2f6;
+    color: #556b7d;
+    font-size: 0.7rem;
+    line-height: 1.5;
+    vertical-align: baseline;
+}
+
+.ap-work-list--lead .ap-member-role {
+    background: #e6f1f9;
+    color: #23678f;
+}
+
+.ap-member-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.65rem;
+    margin-top: 0.4rem;
+    font-size: 0.72rem;
+    line-height: 1.6;
+}
+
+.ap-member-links a,
+.ap-member-links a:visited {
+    color: #5b7182;
+}
+
+table.ap-work-list .ap-work-cell {
+    vertical-align: middle;
+    color: #334b5f;
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+
+.rst-content table.ap-work-list .ap-member-biography,
+.rst-content table.ap-work-list .ap-member-research {
+    margin: 0;
+    line-height: 1.8;
+}
+
+.rst-content table.ap-work-list .ap-member-research {
+    margin-bottom: 0.85rem;
+}
+
+.rst-content table.ap-work-list .ap-member-statement {
+    margin: 1rem 0;
+    line-height: 1.8;
+}
+
+.rst-content table.ap-work-list .ap-member-quote-intro {
+    margin: 0 0 0.6rem;
+    color: #576b7d;
+    font-size: 0.85rem;
+    line-height: 1.8;
+}
+
+.rst-content table.ap-work-list .ap-member-quote {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid #b9d7eb;
+    border-radius: 0 6px 6px 0;
+    background: #f5f9fc;
+}
+
+.rst-content table.ap-work-list .ap-member-quote p {
+    margin: 0;
+    line-height: 1.9;
+}
+
+.ap-member-research strong {
+    color: #536b7e;
+    font-size: 0.85rem;
+}
+
+.rst-content table.ap-work-list .ap-work-items {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.rst-content table.ap-work-list .ap-work-items > li {
+    margin: 0 0 0.4rem;
+    padding-left: 0.15rem;
+    break-inside: avoid;
+    line-height: 1.7;
+}
+
+.rst-content table.ap-work-list .ap-work-items > li:last-child {
+    margin-bottom: 0;
+}
+
+.ap-work-items > li::marker {
+    color: #8ca5b8;
+    font-size: 0.8em;
+}
+
+.ap-work-items--long {
+    columns: 16rem 2;
+    column-gap: 2rem;
+}
+
+.ap-work-items a,
+.ap-work-items a:visited {
+    color: #334b5f;
+    text-decoration: underline;
+    text-decoration-color: #d4dfe7;
+    text-underline-offset: 0.2em;
+}
+
+.ap-contributor-page a:hover {
+    color: #176fa5;
+    text-decoration-color: currentColor;
+}
+
+.ap-contributor-page a:focus-visible {
+    outline: 2px solid #2980b9;
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+.ap-work-pending {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border: 1px dashed #cbd7e1;
+    border-radius: 5px;
+    color: #607586;
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 1100px) {
+    table.ap-work-list th:first-child,
+    table.ap-work-list td:first-child {
+        width: 156px;
+    }
+
+    .ap-member-profile {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.65rem;
+    }
+}
+
+@media (max-width: 600px) {
+    table.ap-work-list th:first-child,
+    table.ap-work-list td:first-child {
+        width: 108px;
+    }
+
+    table.ap-work-list thead th {
+        padding: 0.7rem;
+        font-size: 0.72rem;
+    }
+
+    table.ap-work-list td {
+        padding: 1rem 0.7rem;
+    }
+
+    .ap-member-avatar {
+        flex-basis: auto;
+    }
+
+    .ap-member-avatar img {
+        width: 64px;
+        height: 64px;
+    }
+
+    .ap-member-identity strong {
+        font-size: 0.85rem;
+    }
+
+    table.ap-work-list .ap-work-cell {
+        font-size: 0.85rem;
+    }
+
+    .ap-work-items--long {
+        columns: auto;
+    }
+}
+
+table.ap-maintainers {
+    width: 100%;
+    table-layout: fixed;
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0.75rem;
+    margin: -0.75rem 0 1.25rem;
+}
+
+table.ap-maintainers td {
+    width: 33.333%;
+    padding: 1rem;
+    border: 1px solid #dce5ed;
+    border-radius: 10px;
+    background: #fff;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+}
+
+.ap-maintainers .ap-member-profile {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ap-maintainers .ap-member-avatar {
+    flex: 0 0 72px;
+}
+
+.ap-maintainers .ap-member-avatar img {
+    width: 72px;
+    height: 72px;
+}
+
+.ap-maintainers .ap-member-avatar img[src$="/wangbaisheng.jpg"] {
+    object-position: center 30%;
+}
+
+.ap-maintainers .ap-member-details {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #e7edf2;
+    color: #334b5f;
+    font-size: 0.85rem;
+    line-height: 1.7;
+}
+
+.rst-content table.ap-maintainers .ap-member-research {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.ap-member-status {
+    display: block;
+    margin-top: 0.3rem;
+    color: #576b7d;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+    table.ap-maintainers,
+    table.ap-maintainers td {
+        display: block;
+        width: 100%;
+    }
+
+    table.ap-maintainers {
+        margin-top: 0;
+    }
+
+    table.ap-maintainers tbody {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    table.ap-maintainers tr {
+        display: contents;
+    }
+}
+
+@media (max-width: 600px) {
+    table.ap-maintainers tbody {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+table.ap-contributors {
+    width: 100%;
+    margin: 0.35rem 0 1.6rem;
+    border-collapse: separate;
+    border-spacing: 0.35rem 0.55rem;
+}
+
+table.ap-contributors,
+table.ap-contributors td {
+    border: 0;
+    background: transparent;
+}
+
+table.ap-contributors td {
+    padding: 0.55rem 0.4rem;
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+table.ap-contributors img {
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 1px 4px rgba(16, 34, 53, 0.22);
+}
+
+table.ap-contributors strong {
+    display: inline-block;
+    margin-top: 0.4rem;
+    color: #172b3a;
+}
+
+table.ap-contributors em {
+    color: #5b7285;
+    font-size: 0.9rem;
+}
+
+table.ap-contributors small {
+    color: #425466;
+    font-size: 0.82rem;
+}

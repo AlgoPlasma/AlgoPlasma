@@ -1,0 +1,434 @@
+/* G02 guide and interface reference. All rules stay inside G02 pages. */
+.ap-g02 {
+    --g02-ink: #19364b;
+    --g02-muted: #4c6272;
+    --g02-accent: #166e69;
+    --g02-line: #d9e4e9;
+    color: #293f4e;
+    line-height: 1.8;
+}
+
+.ap-g02 > h1 {
+    margin-bottom: 0.85rem;
+    color: var(--g02-ink);
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.ap-g02 p {
+    margin-bottom: 1.1rem;
+}
+
+.ap-g02 a.reference {
+    color: #126b88;
+    text-underline-offset: 0.2em;
+}
+
+.ap-g02 a.reference:hover {
+    text-decoration: underline;
+}
+
+.ap-g02 :is(a, summary, button):focus-visible {
+    outline: 3px solid #2e83a3;
+    outline-offset: 4px;
+}
+
+.ap-g02 :is([id], .rubric) {
+    scroll-margin-top: 1.5rem;
+}
+
+.ap-g02 .ap-language-switch {
+    border-color: var(--g02-line);
+    border-radius: 7px;
+}
+
+.ap-g02 .ap-lang-button.is-active {
+    background: var(--g02-accent);
+}
+
+.ap-g02 .rubric {
+    margin: 2rem 0 1rem;
+    color: var(--g02-ink);
+    font-size: 1.16rem;
+    font-weight: 700;
+    line-height: 1.55;
+}
+
+.ap-g02 .rubric.g02-chapter {
+    margin: 3.25rem 0 1.35rem;
+    padding: 0.9rem 1.15rem;
+    border-left: 5px solid var(--g02-accent);
+    border-radius: 0 8px 8px 0;
+    background: #edf5f5;
+    font-size: clamp(1.2rem, 2.6vw, 1.5rem);
+}
+
+.ap-g02 .ap-lang > .g02-chapter:first-child {
+    margin-top: 0.3rem;
+}
+
+.ap-g02 .g02-route {
+    margin: 1.5rem 0 2.25rem;
+}
+
+.ap-g02 .g02-route ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ap-g02 .g02-route li {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--g02-line);
+    border-radius: 8px;
+    background: #fbfdfd;
+    color: var(--g02-muted);
+    font-size: 0.87rem;
+    line-height: 1.65;
+    list-style: none;
+}
+
+.ap-g02 .g02-route li p {
+    margin: 0;
+}
+
+.ap-g02 .g02-route a {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--g02-accent);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.ap-g02 .admonition {
+    --g02-note: #166e69;
+    margin: 1.35rem 0;
+    padding: 0.95rem 1.15rem;
+    border: 1px solid var(--g02-line);
+    border-left: 4px solid var(--g02-note);
+    border-radius: 7px;
+    background: #f5faf9;
+    box-shadow: none;
+}
+
+.ap-g02 .admonition > .admonition-title {
+    margin: 0 0 0.55rem;
+    padding: 0;
+    background: transparent;
+    color: var(--g02-note);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.ap-g02 .admonition > .admonition-title::before {
+    display: none;
+}
+
+.ap-g02 .admonition > :last-child,
+.ap-g02 .g02-equation > :last-child,
+.ap-g02 .g02-checks > :last-child {
+    margin-bottom: 0;
+}
+
+/* Terminology explanations have their own color; ordinary tips keep green. */
+.ap-g02 .admonition.g02-terms {
+    --g02-note: #315f91;
+    border-color: #c9d9eb;
+    border-left-color: var(--g02-note);
+    background: #f0f6fd;
+}
+
+.ap-g02 .g02-caution {
+    --g02-note: #895715;
+    border-color: #e8dcc6;
+    border-left-color: var(--g02-note);
+    background: #fffbf3;
+}
+
+.ap-g02 .g02-equation {
+    margin: 1.25rem 0;
+    padding: 1rem 1.2rem;
+    border: 1px solid #d5e3ee;
+    border-radius: 8px;
+    background: #f5f9fd;
+}
+
+.ap-g02 .math {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.ap-g02 .g02-steps {
+    margin: 1.3rem 0 1.8rem;
+    padding: 0;
+    counter-reset: g02-step;
+    list-style: none;
+}
+
+.ap-g02.ap-g02-guide ol.g02-steps > li {
+    position: relative;
+    margin: 0 0 0.9rem;
+    padding: 0.15rem 0 0.9rem 3rem;
+    border-bottom: 1px solid var(--g02-line);
+    list-style: none;
+    counter-increment: g02-step;
+}
+
+.ap-g02 ol.g02-steps > li::before {
+    position: absolute;
+    top: 0.1rem;
+    left: 0;
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 50%;
+    background: #e6f2f0;
+    color: var(--g02-accent);
+    content: counter(g02-step);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.ap-g02 .g02-steps li p {
+    margin: 0;
+}
+
+.ap-g02 .wy-table-responsive {
+    margin: 1rem 0 1.75rem;
+    overflow-x: auto;
+    border: 1px solid var(--g02-line);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.ap-g02 table.docutils {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    table-layout: fixed;
+    font-size: 0.94rem;
+    line-height: 1.65;
+}
+
+.ap-g02 table.docutils caption {
+    padding: 0.75rem 0.9rem;
+    color: var(--g02-muted);
+    font-style: normal;
+    text-align: left;
+}
+
+.ap-g02 table.docutils :is(th, td) {
+    padding: 0.75rem 0.9rem;
+    border-color: #e3eaee;
+    white-space: normal;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+}
+
+.ap-g02 table.docutils th {
+    background: #edf3f7;
+    color: var(--g02-ink);
+    font-weight: 700;
+}
+
+.ap-g02 table.docutils tbody tr:nth-child(even) td {
+    background: #f8fafb;
+}
+
+.ap-g02 table.docutils td p {
+    margin-bottom: 0.4rem;
+}
+
+.ap-g02 table.docutils td p:last-child {
+    margin-bottom: 0;
+}
+
+.ap-g02 :is(p, li, td) > code.literal,
+.ap-g02 td p code.literal {
+    border-color: #dce5ec;
+    border-radius: 4px;
+    background: #f3f6f9;
+    color: #264d68;
+    font-size: 0.88em;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.ap-g02 div[class^="highlight-"] {
+    margin: 1rem 0 1.4rem;
+    overflow: hidden;
+    border: 1px solid #dce5ec;
+    border-radius: 7px;
+}
+
+.ap-g02 .highlight pre {
+    padding: 1rem 1.15rem;
+    border: 0;
+    background: #f6f8fb;
+    line-height: 1.7;
+}
+
+.ap-g02 .code-block-caption {
+    color: var(--g02-muted);
+    text-align: left;
+}
+
+.ap-g02 :is(figure, .figure) {
+    margin: 1.5rem 0 1.8rem;
+    padding: 0.75rem;
+    border: 1px solid var(--g02-line);
+    border-radius: 9px;
+    background: #fff;
+}
+
+.ap-g02 :is(figure, .figure) img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+/* Scale portrait diagrams with the text column; keep the frame close to the image. */
+.ap-g02 :is(figure, .figure).g02-flowchart {
+    box-sizing: border-box;
+    width: 70%;
+    max-width: 720px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ap-g02 .g02-flowchart img {
+    width: 100%;
+    max-height: none;
+}
+
+.rst-content .ap-g02 :is(figure, .figure) :is(figcaption, .caption) {
+    margin: 0.65rem 0 0;
+    padding: 0.7rem 0.3rem 0;
+    border-top: 1px solid var(--g02-line);
+    color: var(--g02-muted);
+    font-size: 0.88rem;
+    font-style: normal;
+    line-height: 1.65;
+    text-align: left;
+}
+
+.ap-g02 figcaption p {
+    margin: 0;
+}
+
+.ap-g02 .g02-details {
+    margin: 1.75rem 0;
+    padding: 0 1.1rem;
+    border: 1px solid var(--g02-line);
+    border-radius: 8px;
+    background: #fafbfd;
+}
+
+.ap-g02 .g02-details > summary {
+    padding: 1rem 0;
+    color: #294965;
+    cursor: pointer;
+    font-weight: 700;
+    line-height: 1.65;
+}
+
+.ap-g02 .g02-details > summary::marker {
+    color: var(--g02-accent);
+}
+
+.ap-g02 .g02-details[open] > summary {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--g02-line);
+}
+
+.ap-g02 .g02-checks {
+    margin: 1rem 0 1.5rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid #d1e4dc;
+    border-radius: 8px;
+    background: #f4faf6;
+}
+
+.ap-g02-reference .ap-lang > .rubric:first-child {
+    margin-top: 0.5rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 2px solid #cfe3df;
+    color: var(--g02-accent);
+}
+
+.ap-g02-reference table.docutils:has(th:nth-child(3)) {
+    min-width: 48rem;
+}
+
+.ap-g02 .g02-backlink {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--g02-line);
+}
+
+.ap-g02 .g02-backlink a {
+    font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+    .wy-nav-content:has(.ap-g02) .wy-breadcrumbs-aside {
+        float: none;
+        display: block;
+        margin-top: 0.35rem;
+    }
+
+    .ap-g02 .g02-route ul {
+        grid-template-columns: 1fr;
+    }
+
+    .ap-g02 .g02-route li {
+        padding: 0.6rem 0.85rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .ap-g02 :is(figure, .figure).g02-flowchart {
+        width: 100%;
+    }
+
+    .ap-g02 .rubric.g02-chapter {
+        padding: 0.75rem 0.85rem;
+    }
+
+    .ap-g02 table.docutils :is(th, td) {
+        padding: 0.65rem;
+    }
+
+    .ap-g02-reference table.docutils {
+        min-width: 34rem;
+    }
+
+    .ap-g02 .g02-details,
+    .ap-g02 .g02-checks,
+    .ap-g02 .admonition {
+        padding-right: 0.85rem;
+        padding-left: 0.85rem;
+    }
+}
+
+@media print {
+    .ap-g02 .ap-language-switch,
+    .ap-g02 .g02-route {
+        display: none;
+    }
+
+    .ap-g02 :is(.g02-chapter, figure, .figure, .admonition) {
+        break-inside: avoid;
+    }
+
+    .ap-g02 .g02-details::details-content {
+        content-visibility: visible;
+    }
+}
