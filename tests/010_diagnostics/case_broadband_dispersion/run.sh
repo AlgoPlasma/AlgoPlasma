@@ -9,8 +9,9 @@ cd "${SCRIPT_DIR}"
 # clean.sh cannot reach them, so bytecode writing is disabled instead.
 export PYTHONDONTWRITEBYTECODE=1
 
+python3 source_py/test_acceptance.py
 bash clean.sh
 bash make.sh
 
 mkdir -p output/figures
-python3 source_py/analyze.py
+python3 source_py/analyze.py "$@"

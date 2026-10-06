@@ -3,8 +3,10 @@
 
 @details
 The integer n such that k_proj - n 2 pi/|chi| lands inside the Nyquist interval.
-It is exactly the information a single pair cannot supply, and that several
-separation *lengths* jointly restore in K03.
+This routine requires a known projected wavenumber; a single pair's wrapped
+phase alone cannot determine the fold order. Complementary baseline geometries
+can recover it in K03 when identifiable within the search domain. Different
+lengths are neither necessary nor sufficient for unique alias selection.
 
 @author Zilong PENG (2026/09/02)
 

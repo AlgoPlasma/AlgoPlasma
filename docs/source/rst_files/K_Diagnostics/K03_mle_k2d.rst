@@ -19,7 +19,7 @@ K03_mle_k2d
 
    * :doc:`fun_K03_joint_log_likelihood.py <K03_mle_k2d/fun_K03_joint_log_likelihood>`:
 
-       ``fun_K03_joint_log_likelihood`` 是本单元的核心。单构型的似然是一族平行条纹，在垂直于 :math:`\boldsymbol{\chi}` 的方向上严格不变、沿该方向以 :math:`2\pi/|\boldsymbol{\chi}|` 为周期；多构型求和使条纹族相交，而不同**间距长度**的周期不可通约，这才能定出唯一的折叠阶数。
+       每条基线通过相位差约束波矢沿该方向的投影。将多个构型的对数似然相加，可以在二维波数平面上寻找共同支持的波矢。基线的方向和长度共同决定相位条纹的交汇位置。
 
    * :doc:`fun_K03_config_log_likelihood.py <K03_mle_k2d/fun_K03_config_log_likelihood>`:
 
@@ -27,7 +27,7 @@ K03_mle_k2d
 
    * :doc:`fun_K03_search_wavevector.py <K03_mle_k2d/fun_K03_search_wavevector>`:
 
-       ``fun_K03_search_wavevector`` 处理宽频带：波数跨越一个数量级以上时，单一均匀网格既要够到最大波矢又要分辨最小波矢，无法两全，因此先全域粗搜、再在粗峰附近细化。
+       在给定的二维波数范围内建立均匀网格，计算各网格点的联合对数似然，取最大值对应的波矢作为估计结果。n_grid 指定每个坐标轴的点数，block_rows 指定每批计算的网格行数。
 
    * :doc:`fun_K03_predicted_phase.py <K03_mle_k2d/fun_K03_predicted_phase>`:
 
@@ -35,7 +35,7 @@ K03_mle_k2d
 
       * :doc:`fun_K03_wavenumber_grid.py <K03_mle_k2d/fun_K03_wavenumber_grid>`:
 
-       ``fun_K03_wavenumber_grid`` 与 ``fun_K03_peak_wavevector`` 是搜索的两端：前者给出均匀网格，后者从似然读出峰位并同时返回直角与极坐标形式。估计值被限制在网格上，精度有半个网格步长的下限。
+       ``fun_K03_wavenumber_grid`` 与 ``fun_K03_peak_wavevector`` 是搜索的两端：前者给出均匀网格，后者从似然读出峰位并同时返回直角与极坐标形式。估计值被限制在网格上，精度与网格分辨率及混叠分支选择有关。
 
    * :doc:`fun_K03_peak_wavevector.py <K03_mle_k2d/fun_K03_peak_wavevector>`:
 
@@ -63,7 +63,7 @@ K03_mle_k2d
 
    * :doc:`fun_K03_joint_log_likelihood.py <K03_mle_k2d/fun_K03_joint_log_likelihood>`:
 
-       ``fun_K03_joint_log_likelihood`` is the core of the unit. A single configuration's likelihood is a family of parallel fringes, exactly invariant perpendicular to :math:`\boldsymbol{\chi}` and periodic along it with period :math:`2\pi/|\boldsymbol{\chi}|`; summing intersects those families, and only separations of different **length** have incommensurate periods and can fix the fold order.
+       Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
    * :doc:`fun_K03_config_log_likelihood.py <K03_mle_k2d/fun_K03_config_log_likelihood>`:
 
@@ -71,7 +71,7 @@ K03_mle_k2d
 
    * :doc:`fun_K03_search_wavevector.py <K03_mle_k2d/fun_K03_search_wavevector>`:
 
-       ``fun_K03_search_wavevector`` handles a wide band: once the wavenumbers span more than a decade a single uniform grid cannot both reach the largest and resolve the smallest, so the search runs coarse over the whole range and then fine around the coarse peak.
+       Build a uniform grid over the chosen two-dimensional wavenumber range, evaluate the joint log likelihood at every point, and report the wavevector at its maximum. n_grid sets the number of points per axis; block_rows sets the number of rows evaluated in each batch.
 
    * :doc:`fun_K03_predicted_phase.py <K03_mle_k2d/fun_K03_predicted_phase>`:
 
@@ -79,7 +79,7 @@ K03_mle_k2d
 
       * :doc:`fun_K03_wavenumber_grid.py <K03_mle_k2d/fun_K03_wavenumber_grid>`:
 
-       ``fun_K03_wavenumber_grid`` and ``fun_K03_peak_wavevector`` are the two ends of the search: the uniform grid, and the reading of the peak in both Cartesian and polar form. The estimate is confined to the grid, so the accuracy has a floor of half a grid step.
+       ``fun_K03_wavenumber_grid`` and ``fun_K03_peak_wavevector`` are the two ends of the search: the uniform grid, and the reading of the peak in both Cartesian and polar form. The estimate is confined to the grid, so the accuracy depends on grid resolution and alias selection.
 
    * :doc:`fun_K03_peak_wavevector.py <K03_mle_k2d/fun_K03_peak_wavevector>`:
 

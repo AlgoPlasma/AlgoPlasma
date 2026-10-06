@@ -35,67 +35,65 @@ them.
 ### Two probe sets
 
 The **inversion array** is 35 configurations, spacings 3.0–5.0 mm at
-orientations 0–90 deg, recorded for 16 segments each.
+orientations 0–90 deg, recorded for 256 segments each. The phase distribution is estimated from these repeated segments.
 
-The **Beall pair** is a single, deliberately coarse 20 mm pair recorded for 512
-segments.  Two reasons for treating it separately.  The number of aliasing folds
-a Beall map shows is `f_max / f_alias` with `f_alias = c_s / (2 d)`, so a coarse
-pair produces many folds over a modest band — the reference reaches the same
-pattern with a 4 mm pair and a 10 MHz band, which would push the inversion's
-search grid up by an order of magnitude.  And the Beall spectrum is a
-statistical estimator that spreads each sample over a wavenumber histogram, so
-it needs far more segments than the mean phase the inversion needs.
+The **Beall pair** is a separate aligned 20 mm pair with 512 segments. Its first
+alias boundary is `f_alias = c_s/(2d)`, but the full fold period is `c_s/d`.
+Generated modes occupy ten fold orders (1 through 10); `f_max/f_alias` is not
+the count of full folds. Longer separation exposes multiple folds without
+expanding the inversion search domain.
 
 ## What is checked
 
-| Unit | Criterion | Measured |
-| --- | --- | --- |
-| K01 | The generator's spectral exponent is recovered from the measured spectrum | −2.015 against −2 |
-| K01 | The lower band edge is recovered | 104 kHz, matching to within one bin |
-| K01 | The spectrum meets the noise floor where the `1/f^2` law predicts | 816 kHz measured against 733 kHz predicted (11 %) |
-| K01 | Coherence is high where modes stand clear of the floor, and at the `1/n_seg` floor above the band | 0.932 and 0.038 against a floor of 0.0625 (checked numerically; not plotted) |
-| K02 | For modes above ten times the noise floor, the measured folded-wavenumber peak lands within two grid bins of K02's closed-form prediction | 83 modes assessed; circular residual median 0.40 bins, p95 1.46 bins |
-| K02 | The generated branch is genuinely folded, many times over | all 238 modes aliased across 10 theoretical fold orders |
-| K03 | Fitting `f` against `\|k_hat\|` through the origin returns the ion sound speed | 3829.6 against 3824.6 m/s, relative error **1.3e-3** |
-| K03 | Per-mode accuracy | `\|k\|` error median 0.28 %, direction error median 0.26 deg |
+- K01: spectral exponent, lower edge, ten-times-noise-floor threshold crossing, and coherence.
+- K02: circular peak errors for strong modes, assessed in histogram bins.
+- K03: sound speed, magnitude and direction statistics, plus **every selected wavevector** and boundary/tie flags.
 
-Every criterion has the same shape: a quantity the generator was built from is
-recovered from the measurement and compared with it.  None of them is a
-tolerance chosen to make the test go green.
+Requirements are declared in `source_py/config.py: ACCEPTANCE`. They are engineering
+acceptance limits for this fixed synthetic case, not universal confidence bounds.
+The [bilingual test page](../../../docs/source/tests/010_diagnostics/case_broadband_dispersion.rst)
+explains each limit and includes tables and four figures from the same run.
 
-The wavenumbers span more than a decade, which one uniform search grid cannot
-cover at useful resolution, so K03 is driven through `search_wavevector`: a
-coarse grid over the whole range followed by a fine grid around the coarse peak.
+For total power `signal + noise > 10*noise`, the signal threshold is `9*noise`.
+The threshold prediction uses this definition, not signal/noise equality.
+For K03, each vector must satisfy `|K_est-K_true| <= 0.05*|K_true| + grid_step/sqrt(2)`.
+The grid term is the nearest-grid-point distance budget; the 5% term is the declared
+noisy-recovery requirement. No over-budget modes, boundary peaks or exact tied maxima
+are accepted in this reference case. These flags do not by themselves establish the
+validity or uniqueness of an estimate for general experimental data.
+
+This case covers one propagation direction per frequency. Multiple simultaneous waves
+at the same frequency and changes in noise/geometry need separate validation.
 
 ## Running
 
 ```bash
 bash run.sh
+# Also publish a consistent documentation snapshot after all checks pass:
+bash run.sh --publish-docs
 ```
 
-`make.sh` generates the records into `build/`, and `source_py/analyze.py`
-reduces them through the three units, writing `output/summary.json` and four
-figures under `output/figures/`.  The exit code is 0 when all three checks
-pass.  A full run takes a few seconds and leaves about 11 MB in `build/`, which
-`clean.sh` deletes.
+The driver runs four small acceptance counterexamples, regenerates the records, then
+runs K01–K03. `source_py/test_acceptance.py` can be run separately without waveform files.
+The basic analytic algorithm checks are in [basic_numerical tests](../case_basic_checks/).
+The vectorized inversion uses up to 48 workers with bounded-memory row blocks.
 
-## Figures
+Outputs:
 
-Under `output/figures/`:
+- `output/summary.json`: requirements, measurements, per-mode errors/reasons and source hashes.
+- `output/modes.csv`: one row per inverted frequency, including true/recovered components and search flags.
+- `output/results_zh.rst`, `output/results_en.rst`: tables generated from that run.
+- `output/figures/`: raw_waveform.png, power_spectrum.png, beall_skf.png, mle_dispersion.png.
 
-| File | Content |
-| --- | --- |
-| `raw_waveform.png` | Two panels: the noiseless segment against the recorded one, so the signal-to-noise ratio is visible; and the two noiseless probes, where the probe-to-probe phase difference can be seen. On the recorded traces it is buried, which is why the later units estimate it in the frequency domain |
-| `power_spectrum.png` | Both power spectra in log-log against the generator's `f^-2` law and the noise floor, showing the sharp band edge and where the spectrum sinks into the floor |
-| `beall_skf.png` | The measured `S(k, f)` inside the strip the coarse pair can represent, folded into a repeating sawtooth, with the folded branch and K02's per-mode prediction overlaid |
-| `mle_dispersion.png` | The same branch recovered straight by the joint inversion, against `f = c_s\|k\|/2 pi` |
-
-The last two are the point of the case: **the branch K02 can only show folded is
-the branch K03 recovers straight**, from identical data.
+`--publish-docs` updates the small numerical snapshot under
+`docs/source/tests/010_diagnostics/_generated/case_broadband_dispersion/` and the four
+figures under `docs/source/images/tests/010_diagnostics/case_broadband_dispersion/` together.
+A failed run leaves its diagnostics in output and does not replace the published snapshot.
+`clean.sh` removes runtime outputs and about 95 MB of generated records in build/.
 
 ## Related documentation
 
-[`K_Diagnostics`](../../../K_Diagnostics/),
-[`K01_signal_spectra`](../../../K_Diagnostics/K01_signal_spectra/),
-[`K02_beall`](../../../K_Diagnostics/K02_beall/),
-[`K03_mle_k2d`](../../../K_Diagnostics/K03_mle_k2d/).
+[K_Diagnostics](../../../K_Diagnostics/),
+[K01_signal_spectra](../../../K_Diagnostics/K01_signal_spectra/),
+[K02_beall](../../../K_Diagnostics/K02_beall/),
+[K03_mle_k2d](../../../K_Diagnostics/K03_mle_k2d/).

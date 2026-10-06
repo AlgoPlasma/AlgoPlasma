@@ -40,7 +40,7 @@ mod_K03_mle_k2d.py
         - 峰位及其极坐标形式。
         - 由 ``from ... import`` 汇入模块入口。
       * - ``fun_K03_search_wavevector``
-        - 粗搜加细化的两级搜索。
+        - 完整均匀网格遍历。
         - 由 ``from ... import`` 汇入模块入口。
 
    .. rubric:: 局部假设
@@ -60,7 +60,7 @@ mod_K03_mle_k2d.py
 
    .. rubric:: 模块说明
 
-   ``mod_K03_mle_k2d`` 是 K03 的模块入口。K03 把多个探针构型的相位测量联合成一次二维最大似然反演，是解除 K02 所暴露的混叠的环节：不同**间距长度**的条纹周期不可通约，才能定出唯一的折叠阶数。
+   每条基线通过相位差约束波矢沿该方向的投影。将多个构型的对数似然相加，可以在二维波数平面上寻找共同支持的波矢。基线的方向和长度共同决定相位条纹的交汇位置。
 
    .. rubric:: 使用说明
 
@@ -113,7 +113,7 @@ mod_K03_mle_k2d.py
         - Peak location, Cartesian and polar.
         - Re-exported by the module entry through ``from ... import``.
       * - ``fun_K03_search_wavevector``
-        - Coarse search followed by a refinement.
+        - Exhaustive uniform-grid search in row blocks.
         - Re-exported by the module entry through ``from ... import``.
 
    .. rubric:: Local Assumptions
@@ -133,7 +133,7 @@ mod_K03_mle_k2d.py
 
    .. rubric:: Module Description
 
-   ``mod_K03_mle_k2d`` is the module entry of K03, which combines the phase measurements of several configurations into one two-dimensional maximum-likelihood inversion. It is the stage that removes the aliasing K02 exposes: only separations of different **length** give incommensurate fringe periods and fix the fold order.
+   Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
    .. rubric:: Usage
 

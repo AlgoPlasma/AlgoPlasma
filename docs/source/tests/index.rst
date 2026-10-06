@@ -77,7 +77,7 @@ Tests
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision 测试总览 <009_collision/index>`
       * - ``010_diagnostics``
-        - K_Diagnostics 三个单元的合成宽带链路测试，判据取自信号生成器。
+        - K_Diagnostics 基础数值测试与合成宽带链路测试。
         - :doc:`K_Diagnostics </rst_files/K_Diagnostics>`
         - :doc:`010_diagnostics 测试总览 <010_diagnostics/index>`
       * - ``011_K04_breathing_waveform``
@@ -150,7 +150,7 @@ Tests
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision test overview <009_collision/index>`
       * - ``010_diagnostics``
-        - Synthetic broadband chain test of the three K_Diagnostics units, with criteria taken from the signal generator.
+        - basic_numerical tests and a synthetic broadband chain test for K_Diagnostics.
         - :doc:`K_Diagnostics </rst_files/K_Diagnostics>`
         - :doc:`010_diagnostics test overview <010_diagnostics/index>`
       * - ``011_K04_breathing_waveform``

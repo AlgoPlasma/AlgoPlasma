@@ -24,14 +24,7 @@ K04 learns a phase-repeatable waveform from repeated single-point records and su
 
 ## The Problem This Module Solves
 
-A single probe pair measures only the projection of the wavevector onto its
-separation, and only modulo `2 pi` of phase.  Once the wavelength drops below
-twice the spacing, the pair therefore reports a **folded, false wavenumber**: a
-straight dispersion branch appears broken into a sawtooth on the `S(k, f)` map.
-K02 supplies the closed-form geometry of that limit and makes it visible; K03
-removes it by combining separations of several **lengths**.  Changing only the
-orientation is not enough — different lengths give incommensurate fringe
-periods, and that is what fixes the fold order.
+Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
 ## Shared Convention
 
@@ -77,16 +70,11 @@ while examples and tests orchestrate the calculations. Plotting also needs Matpl
 
 ## Tests
 
-[`tests/010_diagnostics/case_broadband_dispersion/`](../tests/010_diagnostics/case_broadband_dispersion/):
-one synthetic broadband dataset drives all three units and produces four
-figures.  The criteria come from the generator rather than from chosen
-tolerances — the central one being that **fitting the recovered dispersion
-branch through the origin must return the ion sound speed used to build the
-signals**, measured at a relative error of 1.3e-3.
+- [basic_numerical tests](../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
+- [broadband_dispersion](../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
 
-```bash
-cd tests/010_diagnostics/case_broadband_dispersion && bash run.sh
-```
+The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
+
 
 ## Provenance
 

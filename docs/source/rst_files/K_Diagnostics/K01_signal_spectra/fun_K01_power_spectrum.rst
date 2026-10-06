@@ -11,6 +11,8 @@ fun_K01_power_spectrum.py
 
 .. container:: ap-lang ap-lang-zh
 
+   新增参数 window='boxcar'，或与 FFT 一致的 'hann'；要求非空完整 rFFT 和正采样率。
+
    .. rubric:: 直接用途
 
    给出一路探针的分段平均单边功率谱密度。
@@ -53,11 +55,11 @@ fun_K01_power_spectrum.py
    .. rubric:: 局部假设 / 前置条件
 
    - 单边约定：除直流外每个频点乘 2；``nperseg`` 为偶数时 Nyquist 频点同样不乘。
-   - 不做任何窗函数修正，因为 ``fun_K01_segment_ffts`` 不加窗。
+   - 窗口须与 segment_ffts 的 window 参数一致：boxcar（默认）或 hann。
 
    .. rubric:: 实现逻辑
 
-   - 先沿分段轴取 :math:`\langle|X|^2\rangle`，再除以 ``fs*nperseg``，最后施加单边因子。
+   - 先沿分段轴取 :math:`\langle|X|^2\rangle`，再除以 ``fs*sum(window**2)``，最后施加单边因子。
 
    .. rubric:: 调用注意
 
@@ -67,7 +69,7 @@ fun_K01_power_spectrum.py
 
    .. math::
 
-      S(f) = \frac{\alpha}{f_s N}\left\langle |X(f)|^2 \right\rangle,\qquad
+      S(f) = \frac{\alpha}{f_s\sum_n w_n^2}\left\langle |X(f)|^2 \right\rangle,\qquad
       \alpha = \begin{cases} 1 & \text{直流与 Nyquist} \\ 2 & \text{其余频点} \end{cases}
 
    .. raw:: html
@@ -78,6 +80,8 @@ fun_K01_power_spectrum.py
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   Optional window='boxcar', or 'hann' matching the FFT; requires complete nonempty rFFT arrays and positive sampling rate.
 
    .. rubric:: Direct Purpose
 
@@ -121,11 +125,11 @@ fun_K01_power_spectrum.py
    .. rubric:: Local Assumptions and Preconditions
 
    - One-sided convention: every bin is doubled except DC and, for even ``nperseg``, the Nyquist bin.
-   - No window correction is applied, since ``fun_K01_segment_ffts`` applies none.
+   - The window argument must match segment_ffts: boxcar (default) or hann.
 
    .. rubric:: Implementation Notes
 
-   - :math:`\langle|X|^2\rangle` is taken along the segment axis, divided by ``fs*nperseg``, then given the one-sided factor.
+   - :math:`\langle|X|^2\rangle` is taken along the segment axis, divided by ``fs*sum(window**2)``, then given the one-sided factor.
 
    .. rubric:: Calling Notes
 
@@ -135,7 +139,7 @@ fun_K01_power_spectrum.py
 
    .. math::
 
-      S(f) = \frac{\alpha}{f_s N}\left\langle |X(f)|^2 \right\rangle,\qquad
+      S(f) = \frac{\alpha}{f_s\sum_n w_n^2}\left\langle |X(f)|^2 \right\rangle,\qquad
       \alpha = \begin{cases} 1 & \text{DC and Nyquist} \\ 2 & \text{otherwise} \end{cases}
 
    .. raw:: html

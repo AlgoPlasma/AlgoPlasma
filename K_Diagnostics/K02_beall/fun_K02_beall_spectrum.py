@@ -2,7 +2,7 @@
 @brief Accumulate the Beall statistical dispersion spectrum S(k, f).
 
 @details
-Each (segment, frequency) sample contributes its cross-spectral magnitude to the
+Each valid (segment, frequency) sample contributes its mean pair auto-power to the
 single wavenumber bin holding wrap(theta)/|chi|, and the histogram is divided by
 the segment count. That is what makes the estimator statistical: incoherent
 segments spread their power along the wavenumber axis while coherent ones
@@ -15,8 +15,8 @@ Reference: J. M. Beall, Y. C. Kim, and E. J. Powers, J. Appl. Phys. 53(6),
 @author Zilong PENG (2026/09/02)
 
 @param[in] phase           array_like (nseg, nfreq), cross phase in radians.
-@param[in] magnitude       array_like (nseg, nfreq), cross-spectral magnitude,
-                           the accumulation weight.
+@param[in] magnitude       array_like (nseg, nfreq), mean pair auto-power
+                           (|X1|^2+|X2|^2)/2. Historical argument name retained.
 @param[in] frequencies_hz  array_like (nfreq,), centre frequency of each bin.
 @param[in] chi             array_like (2,), separation vector in metres.
 @param[in] k_edges         array_like, wavenumber histogram edges in rad/m.
@@ -49,12 +49,14 @@ def fun_K02_beall_spectrum(phase, magnitude, frequencies_hz, chi, k_edges, f_edg
     f_edges = np.asarray(f_edges, dtype=np.float64)
     wavenumber = fun_K02_beall_wavenumber(phase, chi)
     frequency = np.broadcast_to(frequencies_hz[None, :], wavenumber.shape)
+    valid = (np.isfinite(wavenumber) & np.isfinite(frequency)
+             & np.isfinite(magnitude) & (magnitude > 0))
 
     histogram, _, _ = np.histogram2d(
-        frequency.ravel(),
-        wavenumber.ravel(),
+        frequency[valid],
+        wavenumber[valid],
         bins=(f_edges, k_edges),
-        weights=magnitude.ravel(),
+        weights=magnitude[valid],
     )
     return {
         "spectrum": histogram / max(phase.shape[0], 1),

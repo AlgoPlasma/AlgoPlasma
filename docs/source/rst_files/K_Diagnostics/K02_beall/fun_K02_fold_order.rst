@@ -46,7 +46,7 @@ fun_K02_fold_order.py
 
    .. rubric:: 局部假设 / 前置条件
 
-   - 折叠阶数正是单对探针无法提供、而多个**不同长度**的间距联合起来才能在 K03 中恢复的信息。仅改变方向不够。
+   - 输入为已知投影波数，函数计算它跨越的折叠周期数。常用于比较理论波数与测得的折叠波数。
 
    .. rubric:: 实现逻辑
 
@@ -106,7 +106,7 @@ fun_K02_fold_order.py
 
    .. rubric:: Local Assumptions and Preconditions
 
-   - The fold order is exactly the information a single pair cannot supply, and that several separation **lengths** jointly restore in K03. Changing only the orientation is not enough.
+   - The input is a known projected wavenumber; the function counts its folding periods. It is useful when comparing theoretical wavenumbers with measured folded values.
 
    .. rubric:: Implementation Notes
 

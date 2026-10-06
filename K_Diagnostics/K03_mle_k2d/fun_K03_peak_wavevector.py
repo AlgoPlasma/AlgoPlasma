@@ -3,8 +3,9 @@
 
 @details
 Returns the grid point of highest likelihood in both Cartesian and polar form.
-The estimate is confined to the grid, so the accuracy has a floor of half a grid
-step and a peak on the boundary means the search range was too narrow.
+The estimate is confined to the grid; alias selection also depends on resolution.
+A boundary peak warrants a range check, but does not prove the range is wrong.
+Exactly tied grid maxima use the first row-major point; ties are not uniqueness.
 
 @author Zilong PENG (2026/09/02)
 
@@ -28,6 +29,11 @@ def fun_K03_peak_wavevector(log_likelihood, kx_values, ky_values):
             f"({ky_values.size}, {kx_values.size})"
         )
 
+    if any(a.ndim != 1 or not a.size or not np.all(np.isfinite(a))
+           for a in (kx_values, ky_values)):
+        raise ValueError("grid axes must be finite nonempty vectors")
+    if not np.all(np.isfinite(log_likelihood)) or np.ptp(log_likelihood) == 0:
+        raise ValueError("likelihood must be finite and informative on the grid")
     iy, ix = np.unravel_index(int(np.argmax(log_likelihood)), log_likelihood.shape)
     kx = float(kx_values[ix])
     ky = float(ky_values[iy])

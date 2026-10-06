@@ -11,6 +11,8 @@ mod_K01_signal_spectra.py
 
 .. container:: ap-lang ap-lang-zh
 
+   新增导出 fun_K01_pair_power，提供两路自功率平均权重。
+
    .. rubric:: 模块职责
 
    本页说明该模块入口的职责、公开入口和汇总关系；具体参数以各 routine 页为准。
@@ -40,7 +42,7 @@ mod_K01_signal_spectra.py
         - 每段的互相位与互谱幅度。
         - 由 ``from ... import`` 汇入模块入口。
       * - ``fun_K01_phase_mode_statistics``
-        - 众数参考的相位均值与方差。
+        - 众数估计的相位均值与方差。
         - 由 ``from ... import`` 汇入模块入口。
 
    .. rubric:: 局部假设
@@ -87,6 +89,8 @@ mod_K01_signal_spectra.py
 
 .. container:: ap-lang ap-lang-en
 
+   Also exports fun_K01_pair_power for the mean pair auto-power weight.
+
    .. rubric:: Module Role
 
    This page states the role of the module entry, its public entries and the aggregation relation; the arguments live on the routine pages.
@@ -116,7 +120,7 @@ mod_K01_signal_spectra.py
         - Per-segment cross phase and cross-spectral magnitude.
         - Re-exported by the module entry through ``from ... import``.
       * - ``fun_K01_phase_mode_statistics``
-        - Mode-referenced phase mean and variance.
+        - Histogram-mode phase mean and variance.
         - Re-exported by the module entry through ``from ... import``.
 
    .. rubric:: Local Assumptions

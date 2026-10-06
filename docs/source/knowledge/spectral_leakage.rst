@@ -16,31 +16,50 @@ Spectral Leakage and Windows
    本页只用无噪声信号，帮助区分有限记录造成的谱扩散与真实的多频波动。
    读完可 :ref:`返回探针诊断第 5 节 <foundations-zh-after-leakage>`。
 
-   .. rubric:: 1. 在频点上，就是在这一段里转了整数圈
+   .. _knowledge-leakage-zh-record:
 
-   固定 :math:`f_s=32000\ \mathrm{Hz}`、:math:`N=256`，段时长为 8 ms，
-   频点间隔为 125 Hz。对比两条振幅为 1 的余弦波：
+   .. rubric:: 1. 从截取、拼接到频谱和相位
 
-   - 1000 Hz 在一段里经历 8 个周期，正好是第 8 个频点。
-   - 1062.5 Hz 在一段里经历 8.5 个周期，处在 1000 和 1125 Hz 两个频点之间。
+   先看一条没有噪声的余弦波。记录时长为 :math:`T`，共采样 64 点；
+   一条记录恰好包含 2 个周期，另一条包含 1.25 个周期。
+   **把截取的片段原样接到自己后面，接缝处会发生什么？**
 
-   它们各自都只有一个真实频率。第二种情况下，DFT 的任何单个频点都不能完整表示这段数据，
-   必须用多个频点共同表示；本来期望集中在一个峰上的谱值因此分散，这叫 **谱泄漏**。
+   下图每行从左向右读。第一列画出保留的片段，第二列把它重复一遍，第三列再看它的频谱。
+   上行的 2 个周期能够平滑衔接；下行的 1.25 个周期在接缝处重新回到起始值 +1，
+   与原始余弦继续演化的灰色虚线分开了。
 
-   .. figure:: ../images/knowledge/leakage_repeated_record.png
+   .. figure:: ../tests/010_diagnostics/_generated/case_basic_checks/figures/spectral_leakage.png
+      :alt: 两行分别展示 2 周期和 1.25 周期记录的截取、重复拼接和离散频谱，标出真实频率与相位读取点。
       :width: 100%
-      :alt: 8 周期记录重复后平滑衔接，8.5 周期余弦记录重复后在 8 ms 接缝出现跳跃。
 
-      把同一段 8 ms 记录复制两遍，深灰色虚线标出拼接处。
-      上图 8 个周期可以平滑拼接；下图 8.5 个周期在这个余弦例子中从 −1 跳回 +1。
-      第二段画的是第一段的重复，不是原始无限长波在后半段的继续演化。
+      (a–c) 完整的 2 周期记录；(d–f) 1.25 周期记录。波形上的小点是保存的样本，实线是对应余弦的解析示意。
+      第二列的后半段重复同一片段，灰色虚线表示原始波的继续演化。
+      第三列使用测试保存的 FFT 幅值：竖虚线标记真实频率，黑圈标记读取互相位的频点。
 
-   周期拼接是理解 DFT 基函数的一种办法，不意味着程序真的复制了数据。
-   非整数周期通常在接缝出现数值或导数的不连续，因此需要更多频率来表示。
-   “首尾数值不相等”只是本例最直观的表现；某些初相位可以让首尾值相等，
-   但仍不满足整数周期条件，不能仅靠首尾两个值判断是否泄漏。
+   这种拼接帮助理解 DFT 的周期延拓：延拓周期是整段记录的长度 :math:`T`。
+   FFT 使用的离散频点，对应在 :math:`T` 内振荡 0、1、2、3……次的基函数。
+   2 周期余弦正好匹配第 2 个频点；1.25 周期余弦没有一个恰好匹配的频点，
+   需要多个频点共同表示，于是谱值分散到邻近和更远的频点，这就是本例的谱泄漏。
+   **这些非零频点来自有限记录的表示，不意味着原始信号里多出了许多真实波。**
+
+   接缝跳变是这个例子的直观表现。某些初相位可使接缝两侧数值相等，但仍存在导数不连续，
+   因而不能只比较首尾两个值来判断泄漏。加窗的作用将在第 3 节继续说明。
+
+   现在加入第二路余弦 :math:`y(t)=\cos(2\pi f t+0.8)`，第一路为
+   :math:`x(t)=\cos(2\pi f t)`。两路都去均值并使用矩形窗，
+   互谱 :math:`X_1X_2^*` 的参考相位为 −0.8 rad。
+   测试从最接近真实频率的频点读相位：2 周期记录用第 2 点，1.25 周期记录用第 1 点。
+   前者误差低于 :math:`10^{-12}` 度，后者约为 5.55°。
+   **选第 1 点读数，是后续估计的选择；FFT 本身仍保留了其他频点上的分量。**
+   这里的误差来自当前记录和读数方式，并不是所有非整周期信号都有固定的 5.55° 偏差。
+
+   :ref:`查看对应的基础数值测试与通过条件 <basic-checks-zh-spectrum>`。
 
    .. rubric:: 2. 看频谱：泄漏不是多了许多真实波
+
+   为了比较矩形窗和 Hann 窗，下面另取采样率32 kHz、256点的8 ms记录。
+   1000 Hz对应8个周期，1062.5 Hz对应8.5个周期，频点间隔为125 Hz。
+   这里换用更长的示例观察旁瓣；它与前面64点记录的数值不能直接混用。
 
    .. figure:: ../images/knowledge/leakage_spectra.png
       :width: 100%
@@ -88,7 +107,8 @@ Spectral Leakage and Windows
    - 增加真实记录长度会缩小 :math:`\Delta f=f_s/N`，但不保证未知信号正好成为整数周期。
    - 补零只把同一有限记录的频谱画得更密，不会增加观测时间，也不能消除泄漏。
    - 加窗需要同时考虑旁瓣、主瓣和归一化，不宜只看图上的峰是否漂亮。
-   - 当前 K01 分段函数不自动加窗，功率谱函数也不补偿窗；本页是知识解释，不改变算法行为。
+   - 当前 K01 默认使用矩形窗，可选择 ``window='hann'``；FFT 与功率谱函数须传入相同窗口。
+     K01 的 Hann 窗为对称的 ``numpy.hanning``，与上面示意的周期 Hann 定义不同；功率谱按窗口平方和归一化。
 
    :ref:`返回探针诊断第 5 节：继续读相干度 <foundations-zh-after-leakage>` ·
    :doc:`回顾 FFT <fft>` · :doc:`知识点目录 <index>`
@@ -101,33 +121,52 @@ Spectral Leakage and Windows
    to distinguish finite-record spreading from genuinely multiple components.
    Afterwards, :ref:`return to probe diagnostics section 5 <foundations-en-after-leakage>`.
 
-   .. rubric:: 1. Bin alignment means an integer number of cycles in the segment
+   .. _knowledge-leakage-en-record:
 
-   Fix :math:`f_s=32000\ \mathrm{Hz}` and :math:`N=256`: an 8 ms segment and 125 Hz bins.
-   Compare two unit-amplitude cosines:
+   .. rubric:: 1. From cropping and repetition to spectra and phase
 
-   - 1000 Hz completes 8 cycles and lies exactly on bin 8.
-   - 1062.5 Hz completes 8.5 cycles, halfway between 1000 and 1125 Hz.
+   Consider a noiseless cosine sampled at 64 points over a duration :math:`T`. One record contains
+   exactly 2 cycles, the other 1.25 cycles. **What happens at the join if the saved segment is
+   repeated immediately after itself?**
 
-   Each has just one true frequency. No single DFT bin can represent the second record;
-   several bins must contribute. Spectral strength spreads away from the expected single
-   peak: this is **spectral leakage**.
+   Read each row below from left to right: the retained segment, its periodic repetition, and its
+   spectrum. The 2-cycle record joins smoothly. The 1.25-cycle record restarts at +1, separating
+   from the grey dashed continuation of the original cosine.
 
-   .. figure:: ../images/knowledge/leakage_repeated_record.png
+   .. figure:: ../tests/010_diagnostics/_generated/case_basic_checks/figures/spectral_leakage.png
+      :alt: Two rows trace 2-cycle and 1.25-cycle records from cropping through periodic repetition to FFT bins and phase readout.
       :width: 100%
-      :alt: Repeating an eight-cycle record joins smoothly; an 8.5-cycle cosine record jumps at the join.
 
-      Repeat the same 8 ms record twice; the dark grey dashed line marks the join. The eight-cycle
-      trace joins smoothly. The 8.5-cycle cosine jumps from −1 to +1 in this example.
-      The second segment repeats the first; it is not the continuation of the original wave.
+      (a–c) Two complete cycles; (d–f) 1.25 cycles. Small waveform dots are saved samples; solid
+      curves are analytic guides for the corresponding cosine. The second column repeats the record;
+      dashed grey curves continue the original wave. The third column uses saved FFT magnitudes,
+      with the true frequency marked by a dashed line and the phase-readout bin circled in black.
 
-   Periodic repetition is a way to understand the DFT basis, not a claim that the program
-   copies data. Non-integer cycles generally create a discontinuity in value or derivatives
-   at the join, requiring more frequencies. Unequal endpoint values are only the most
-   visible symptom here. Some initial phases give equal endpoint values but still have
-   off-bin frequencies; checking two endpoint values alone is insufficient.
+   Repetition illustrates the DFT's periodic extension with period :math:`T`. Its discrete bins
+   correspond to basis functions completing 0, 1, 2, 3, … cycles within that interval. A 2-cycle
+   cosine matches bin 2. No single bin matches 1.25 cycles, so several bins must contribute to its
+   representation: the spectral values spread. **The extra nonzero bins do not imply that many
+   physical waves have appeared in the original signal.**
+
+   A jump is the visible symptom in this example. Some initial phases can give equal endpoint values
+   while leaving a derivative discontinuity, so comparing endpoint values alone is insufficient.
+   Section 3 below explains the effect of windowing.
+
+   Now add a second cosine :math:`y(t)=\cos(2\pi f t+0.8)` to compare with
+   :math:`x(t)=\cos(2\pi f t)`. Both records are demeaned and use a boxcar window.
+   The reference phase of :math:`X_1X_2^*` is −0.8 rad. The test reads phase at the nearest bin:
+   bin 2 for two cycles, bin 1 for 1.25 cycles. Their errors are below :math:`10^{-12}` degrees
+   and about 5.55°, respectively. **Reading bin 1 is an estimator choice; the FFT still retains
+   the other frequency components.** The 5.55° bias is specific to this construction.
+
+   :ref:`Check the numerical test and its comparison criteria <basic-checks-en-spectrum>`.
 
    .. rubric:: 2. Read the spectrum: leakage does not create many physical waves
+
+   To compare boxcar and Hann windows, now use a separate 256-sample record at 32 kHz,
+   lasting 8 ms. A 1000 Hz tone completes 8 cycles; 1062.5 Hz completes 8.5 cycles,
+   with bin spacing 125 Hz. This longer example illustrates sidelobes; its numerical
+   values should not be mixed with the preceding 64-sample test.
 
    .. figure:: ../images/knowledge/leakage_spectra.png
       :width: 100%
@@ -178,8 +217,9 @@ Spectral Leakage and Windows
    - Zero padding samples the same finite-record spectrum more densely; it adds no observation
      time and does not remove leakage.
    - Consider sidelobes, main-lobe width, and normalization together when choosing a window.
-   - Current K01 segmentation applies no extra window and its power routine makes no window
-     correction. This conceptual note changes no algorithm behaviour.
+   - K01 defaults to a boxcar window and supports ``window='hann'``; use the same window
+     in the FFT and PSD routines. K01 uses symmetric ``numpy.hanning``, unlike the periodic
+     Hann definition illustrated above, and normalizes PSD by the sum of squared window weights.
 
    :ref:`Return to probe diagnostics section 5: coherence <foundations-en-after-leakage>` ·
    :doc:`Review FFT <fft>` · :doc:`Knowledge index <index>`

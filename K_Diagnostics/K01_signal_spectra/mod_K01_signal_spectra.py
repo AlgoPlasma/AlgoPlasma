@@ -13,6 +13,7 @@ pair with its mean and variance. It performs no file I/O.
 
 from K_Diagnostics.K01_signal_spectra.fun_K01_coherence import fun_K01_coherence
 from K_Diagnostics.K01_signal_spectra.fun_K01_cross_phase import fun_K01_cross_phase
+from K_Diagnostics.K01_signal_spectra.fun_K01_pair_power import fun_K01_pair_power
 from K_Diagnostics.K01_signal_spectra.fun_K01_phase_mode_statistics import (
     fun_K01_phase_mode_statistics,
 )
@@ -28,5 +29,6 @@ __all__ = [
     "fun_K01_power_spectrum",
     "fun_K01_coherence",
     "fun_K01_cross_phase",
+    "fun_K01_pair_power",
     "fun_K01_phase_mode_statistics",
 ]

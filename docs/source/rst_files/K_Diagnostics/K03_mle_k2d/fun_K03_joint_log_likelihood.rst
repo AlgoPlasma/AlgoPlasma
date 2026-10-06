@@ -11,6 +11,8 @@ fun_K03_joint_log_likelihood.py
 
 .. container:: ap-lang ap-lang-zh
 
+   忽略无效相位或方差；有效基线不足两个独立方向时抛 ValueError。
+
    .. rubric:: 直接用途
 
    把多个探针构型的对数似然求和。
@@ -59,7 +61,7 @@ fun_K03_joint_log_likelihood.py
    .. rubric:: 局部假设 / 前置条件
 
    - 单构型是严格简并的：其似然在垂直于 :math:`\boldsymbol{\chi}` 的方向上不变、沿该方向以 :math:`2\pi/|\boldsymbol{\chi}|` 为周期。
-   - 必须有**不同的间距长度**：只含一个长度时所有条纹周期相同，折叠阶数无法确定。仅改变方向不够。
+   - 二维反演需要线性独立的有效基线，为两个波矢分量提供约束。多构型条纹的交汇确定候选波矢，几何示例见诊断基础页第 7 节。
 
    .. rubric:: 实现逻辑
 
@@ -83,6 +85,8 @@ fun_K03_joint_log_likelihood.py
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   Invalid phases/variances are omitted; fewer than two independent valid baselines raises ValueError.
 
    .. rubric:: Direct Purpose
 
@@ -132,7 +136,7 @@ fun_K03_joint_log_likelihood.py
    .. rubric:: Local Assumptions and Preconditions
 
    - One configuration is exactly degenerate: its likelihood is invariant perpendicular to :math:`\boldsymbol{\chi}` and periodic along it with period :math:`2\pi/|\boldsymbol{\chi}|`.
-   - Different separation **lengths** are required: with a single length every fringe period is the same and the fold order stays undetermined. Changing only the orientation is not enough.
+   - Independent valid baselines constrain the two wavevector components. Intersections of their phase fringes locate candidate wavevectors; see Section 7 of the foundations page for geometry examples.
 
    .. rubric:: Implementation Notes
 

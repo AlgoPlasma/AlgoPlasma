@@ -42,7 +42,7 @@ fun_K01_cross_phase.py
 
    .. rubric:: 返回值
 
-   两个 ``numpy.ndarray``，均为 ``(nseg, nfreq)``：互相位 :math:`\arg(X_1X_2^{*})` 与互谱幅度 :math:`|X_1X_2^{*}|`。后者是 K02 累积 Beall 谱时的权重。
+   两个 ``numpy.ndarray``，均为 ``(nseg, nfreq)``：互相位 :math:`\arg(X_1X_2^{*})` 与互谱幅度 :math:`|X_1X_2^{*}|`。互谱为零时辐角无定义，函数以 NaN 表示该相位；非有限互谱采用相同标记。Beall 累积所需的两路自功率平均由 fun_K01_pair_power 提供。
 
    .. rubric:: 局部假设 / 前置条件
 
@@ -105,7 +105,7 @@ fun_K01_cross_phase.py
 
    .. rubric:: Return Value
 
-   Two ``numpy.ndarray`` of shape ``(nseg, nfreq)``: the cross phase :math:`\arg(X_1X_2^{*})` and the magnitude :math:`|X_1X_2^{*}|`. The latter is the weight used by the Beall accumulation in K02.
+   Two ``numpy.ndarray`` of shape ``(nseg, nfreq)``: the cross phase :math:`\arg(X_1X_2^{*})` and the magnitude :math:`|X_1X_2^{*}|`. A zero cross spectrum has an undefined argument, represented by NaN; nonfinite cross spectra receive the same marker. fun_K01_pair_power supplies the mean pair auto-power for Beall accumulation.
 
    .. rubric:: Local Assumptions and Preconditions
 
