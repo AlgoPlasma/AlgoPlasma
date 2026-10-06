@@ -53,7 +53,8 @@ Diagnostics Learning Path
         - :doc:`Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
       * - 7
         - 怎样验证实现可信。
-        - :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` 和
+        - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`，再读
+          :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` 和
           :doc:`010_diagnostics </tests/010_diagnostics/index>`
 
    .. rubric:: 核心图景
@@ -144,7 +145,8 @@ Diagnostics Learning Path
         - :doc:`Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
       * - 7
         - How the implementation is shown to be trustworthy.
-        - :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` and
+        - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`, then
+          :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` and
           :doc:`010_diagnostics </tests/010_diagnostics/index>`
 
    .. rubric:: Core Mental Model

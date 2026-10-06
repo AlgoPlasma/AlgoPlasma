@@ -1,4 +1,4 @@
-"""Twelve deterministic diagnostics checks with recorded inputs and measurements."""
+"""Deterministic diagnostics checks with recorded inputs and measurements."""
 import sys
 import unittest
 from pathlib import Path
@@ -10,11 +10,13 @@ from K_Diagnostics.K01_signal_spectra.mod_K01_signal_spectra import (
     fun_K01_cross_phase as phase, fun_K01_pair_power as power,
     fun_K01_phase_mode_statistics as stats, fun_K01_segment_ffts as fft,
     fun_K01_power_spectrum as psd, fun_K01_wrap_to_pi as wrap,
+    fun_K01_coherence as coherence,
 )
 from K_Diagnostics.K02_beall.fun_K02_beall_spectrum import fun_K02_beall_spectrum as beall
 from K_Diagnostics.K02_beall.fun_K02_peak_wavenumber import fun_K02_peak_wavenumber as peak_k
 from K_Diagnostics.K03_mle_k2d.fun_K03_search_wavevector import fun_K03_search_wavevector as search
 from K_Diagnostics.K03_mle_k2d.fun_K03_joint_log_likelihood import fun_K03_joint_log_likelihood as joint
+from K_Diagnostics.K02_beall.fun_K02_separation_magnitude import fun_K02_separation_magnitude as distance
 
 
 def configs(chi, truth):
@@ -23,23 +25,82 @@ def configs(chi, truth):
 
 from report import RecordedCase
 
+# Explicit float64 regression budgets, not physical accuracy requirements.
+# 64 eps allows for short arithmetic chains and different evaluation orders;
+# 64*N eps additionally allows for 64-term reductions / direct DFT sums.
+# These conservative engineering margins are not rigorous forward-error bounds.
+EPS = np.finfo(np.float64).eps
+SHORT_RTOL = 64 * EPS
+SUM_RTOL = 64 * 64 * EPS
+ANGLE_ATOL = SHORT_RTOL * (2 * np.pi)
+VARIANCE_ATOL = SHORT_RTOL * (2 * np.pi)**2
+DFT_ANGLE_ATOL = SUM_RTOL * (2 * np.pi)
+
 
 class Regressions(RecordedCase):
+    def test_variance_weights_resolve_conflicting_observations(self):
+        # No wrapping in [-1,1]^2. Minimise x^2 + (x-1)^2/9 + y^2:
+        # derivative 2*x + 2*(x-1)/9 = 0 gives x=0.1, y=0.
+        cs = [([1, 0], 0., 1.), ([1, 0], 1., 9.), ([0, 1], 0., 1.)]
+        self.inputs = {'configurations': cs, 'range_rad_m': 1, 'grid_n': 21}
+        found = search(cs, 1, n_grid=21)
+        self.array_close([found['kx'], found['ky']], [.1, 0], rtol=0, atol=SHORT_RTOL)
+        self.array_close(found['peak_log_likelihood'], -.05, rtol=SHORT_RTOL, atol=0)
+        axis = np.linspace(-1, 1, 21)
+        dense = joint(cs, axis, axis, normalise=False)
+        # Check the score independently too; both implementations could share a bug.
+        self.array_close(dense[10, 11], -.05, rtol=SHORT_RTOL, atol=0)
+        equal = search([(c, t, 1.) for c, t, v in cs], 1, n_grid=21)
+        self.array_close([equal['kx'], equal['ky']], [.5, 0], rtol=0, atol=SHORT_RTOL)
+
+    def test_psd_units_and_endpoint_scaling(self):
+        self.inputs = {'lengths': [63, 64], 'sampling_rates_hz': [1000, 2000], 'detrend': False}
+        for n in [63, 64]:
+            j = np.arange(n)
+            # Highest rFFT bin: paired +/- frequencies for odd n, Nyquist for even n.
+            signal = 2. + np.cos(2*np.pi*(n//2)*j/n)
+            ffts = fft(signal, n, detrend=False)
+            for fs in [1000., 2000.]:
+                density = psd(ffts, fs, n)
+                expected_ac = 1. if n % 2 == 0 else .5
+                self.array_close(density[[0, -1]] * fs/n, [4., expected_ac], rtol=SUM_RTOL, atol=0)
+                self.array_close(density.sum()*fs/n, 4.+expected_ac, rtol=SUM_RTOL, atol=0)
+
+    def test_coherence_known_complex_pairs(self):
+        first = np.ones((4, 2), dtype=complex)
+        second = np.column_stack([np.full(4, 2j), [1, -1, 1, -1]])
+        self.inputs = {'first': 'ones (4,2)', 'second': 'constant 2j; cancelling signs'}
+        self.array_close(coherence(first, second), [1., 0.], rtol=SHORT_RTOL, atol=SHORT_RTOL)
+        self.array_close(coherence(first*3, second*5), [1., 0.], rtol=SHORT_RTOL, atol=SHORT_RTOL)
+
+    def test_reject_invalid_beall_baselines(self):
+        self.inputs = {'baselines': [[0, 0], [float('nan'), 0], [float('inf'), 0]]}
+        for chi in self.inputs['baselines']:
+            with self.assertRaises(ValueError):
+                distance(chi)
+            with self.assertRaises(ValueError):
+                beall([[0.]], [[1.]], [1.], chi, [-1, 0, 1], [.5, 1.5])
+
     def test_liu_returns_mode_not_arithmetic_or_circular_mean(self):
         samples = np.array([0.011, 0.012, 0.013, 0.22])
         self.inputs = {'phase_rad': samples, 'bins': 60}
         mean, variance = stats(samples)
         self.arrays = {'phase_rad': samples, 'mean_rad': mean, 'variance_rad2': variance}
-        self.assertAlmostEqual(mean, np.pi / 60)
-        self.assertAlmostEqual(variance, np.var(wrap(samples-mean), ddof=1) + 1e-12)
+        self.array_close(mean, np.pi / 60, rtol=0, atol=ANGLE_ATOL)
+        # All samples fit on one branch. Hand-derived deviations from 0.064:
+        expected_variance = ((-.053)**2 + (-.052)**2 + (-.051)**2 + .156**2) / 3 + 1e-12
+        self.array_close(variance, expected_variance, rtol=SHORT_RTOL, atol=VARIANCE_ATOL)
 
     def test_branch_cut(self):
         samples = np.deg2rad([179, -179, 178, 179])
         self.inputs = {'phase_deg': [179, -179, 178, 179], 'bins': 60}
         mean, variance = stats(samples)
         self.arrays = {'phase_rad': samples, 'mean_rad': mean, 'variance_rad2': variance}
-        self.assertLess(abs(wrap(mean - np.pi)), np.pi/30)
-        self.assertLess(variance, 0.01)
+        # Unwrap by inspection: [179, 181, 178, 179] degrees, mean 179.25.
+        # The most populated histogram bin is [174, 180), centered at 177.
+        expected_variance = (19 / 12) * (np.pi / 180)**2 + 1e-12
+        self.array_close(mean, 177 * np.pi / 180, rtol=0, atol=ANGLE_ATOL)
+        self.array_close(variance, expected_variance, rtol=SHORT_RTOL, atol=VARIANCE_ATOL)
 
     def test_missing_and_noiseless(self):
         self.inputs = {'shape': [4, 3], 'cases': ['zero/one FFT', 'one/one FFT', 'partly missing phases']}
@@ -59,7 +120,7 @@ class Regressions(RecordedCase):
     def test_beall_auto_power_changes_peak(self):
         first, second = np.array([[10.], [2.]]), np.array([[.1], [2.]])
         self.inputs = {'FFT1': first, 'FFT2': second, 'phase_rad': [-.5, .5]}
-        self.array_close(power(first, second).ravel(), [50.005, 4])
+        self.array_close(power(first, second).ravel(), [50.005, 4], rtol=SHORT_RTOL, atol=0)
         angles = np.array([[-.5], [.5]])
         result = beall(angles, power(first, second), [1.], [1., 0.], [-1, 0, 1], [.5, 1.5])
         self.assertEqual(peak_k(result['spectrum'], result['k_centers'])[0], -.5)
@@ -67,6 +128,9 @@ class Regressions(RecordedCase):
         self.assertEqual(peak_k(old['spectrum'], old['k_centers'])[0], .5)
         self.arrays = {'k_rad_m': result['k_centers'], 'auto_power_spectrum': result['spectrum'][0],
                        'cross_magnitude_spectrum': old['spectrum'][0]}
+        # Each occupied bin contains one weight divided by two segments.
+        self.array_close(result['spectrum'][0], [25.0025, 2], rtol=SHORT_RTOL, atol=0)
+        self.array_close(old['spectrum'][0], [.5, 2], rtol=SHORT_RTOL, atol=0)
 
     def test_no_beall_peak_without_phase(self):
         self.inputs = {'phase_rad': ['NaN'], 'power': [5.]}
@@ -113,7 +177,7 @@ class Regressions(RecordedCase):
         chi = np.array([[.005, 0], [.010, 0], [0, .005], [0, .010]])
         delta = np.array([2*np.pi/.005, 0])
         self.inputs = {'chi_m': chi, 'wavevector_difference_rad_m': delta}
-        self.array_close(wrap(chi @ delta), 0, atol=1e-12)
+        self.array_close(wrap(chi @ delta), 0, rtol=0, atol=SHORT_RTOL * (4 * np.pi))
 
     def test_invalid_and_collinear_constraints(self):
         self.inputs = {'invalid_cases': ['empty', 'one baseline', 'collinear', 'NaN phase', 'infinite variance'], 'range_rad_m': 200}
@@ -131,6 +195,7 @@ class Regressions(RecordedCase):
         self.inputs = {'samples': 64, 'cycles': [1.25, 2.], 'phase_difference_rad': .8, 'window': 'boxcar'}
         t = np.arange(64) / 64
         errors = []
+        measured_phases, reference_phases = [], []
         self.arrays = {'cycles': [1.25, 2.], 'time_fraction': t}
         for cycles in [1.25, 2.]:
             x, y = np.cos(2*np.pi*cycles*t), np.cos(2*np.pi*cycles*t + .8)
@@ -139,10 +204,21 @@ class Regressions(RecordedCase):
             self.arrays['amplitude_'+str(cycles)] = np.abs(fx[0])
             self.arrays['signal_'+str(cycles)] = x
             errors.append(abs(wrap(p[0, round(cycles)] + .8)))
+            # Independent direct sum, without the FFT or cross-phase routines.
+            kernel = np.exp(-2j * np.pi * round(cycles) * t)
+            dx = np.sum((x - x.mean()) * kernel)
+            dy = np.sum((y - y.mean()) * kernel)
+            cross = dx * dy.conjugate()
+            measured_phases.append(float(p[0, round(cycles)]))
+            reference_phases.append(float(np.arctan2(cross.imag, cross.real)))
         self.arrays['error_deg'] = np.rad2deg(errors)
         self.observed['phase_error_deg'] = np.rad2deg(errors)
-        self.assertGreater(errors[0], np.deg2rad(5))
-        self.assertLess(errors[1], 1e-12)
+        self.observed['reference_phase_rad'] = reference_phases
+        self.observed['measured_phase_rad'] = measured_phases
+        # These references lie well inside (-pi, pi); ordinary differences suffice.
+        self.array_close(measured_phases[0], reference_phases[0], rtol=0, atol=DFT_ANGLE_ATOL)
+        self.array_close(measured_phases[1], reference_phases[1], rtol=0, atol=DFT_ANGLE_ATOL)
+        self.array_close(measured_phases[1], -.8, rtol=0, atol=DFT_ANGLE_ATOL)
 
     def test_window_psd_normalization(self):
         self.inputs = {'seed': 42, 'segments': 4, 'nperseg': 64, 'fs_hz': 64, 'windows': ['boxcar', 'hann']}
@@ -151,10 +227,11 @@ class Regressions(RecordedCase):
         for window in ['boxcar', 'hann']:
             weights = np.ones(64) if window == 'boxcar' else np.hanning(64)
             spectrum = fft(samples.ravel(), 64, detrend=False, window=window)
-            measured = psd(spectrum, 64., 64, window=window).sum()
+            df = 64. / 64
+            measured = psd(spectrum, 64., 64, window=window).sum() * df
             expected = np.mean(np.sum((samples*weights)**2, axis=1)) / np.sum(weights**2)
             self.observed[window] = {'PSD_integral': measured, 'time_power': expected, 'absolute_error': abs(measured-expected)}
-            self.assertAlmostEqual(measured, expected)
+            self.array_close(measured, expected, rtol=SUM_RTOL, atol=0)
 
 
 if __name__ == '__main__':

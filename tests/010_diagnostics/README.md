@@ -7,8 +7,11 @@ series rather than particles or fields, and the `K_Diagnostics` units are
 subroutines only: they perform no file I/O and run no computation of their own.
 Test drivers provide inputs and call the numerical routines.
 
-- `case_basic_checks`: twelve small deterministic checks, numerical reports and
-  four explanatory figures for phase statistics, weights, grid sampling and leakage.
+- `case_basic_checks` — **basic_numerical tests / 基础数值测试**:
+  three verification groups with references, measurements, errors, acceptance rules
+  and status generated from the same run. Supporting figures are collapsible; the
+  six-panel leakage explanation is on the knowledge page. The complete report
+  retains the sixteen underlying regression checks.
   Run `bash case_basic_checks/run.sh`; add `--publish-docs` to update the documentation snapshot.
 
 - `case_broadband_dispersion`: drives K01, K02 and K03 as one chain on a single

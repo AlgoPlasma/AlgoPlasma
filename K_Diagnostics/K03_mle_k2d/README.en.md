@@ -76,20 +76,11 @@ result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, gri
 
 ## Tests
 
-`tests/010_diagnostics/case_broadband_dispersion`: 35 configurations jointly invert 80
-frequencies whose wavenumbers span 171 to 3286 rad/m. Fit a straight line through
-the origin to `f` against `|k_hat|`, infer the ion sound speed from its slope,
-and compare it with the generator value. Acceptance also checks wavenumber
-magnitude and direction errors.
+- [basic_numerical tests](../../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
+- [broadband_dispersion](../../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
 
-| Quantity | Measured |
-| --- | --- |
-| Fitted ion sound speed | 3833.2 m/s (true 3824.6, relative error **2.27e-3**) |
-| `\|k\|` relative error | median 0.388 %, p95 1.267 % |
-| Direction error | median 0.304 deg, p95 0.940 deg |
+The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
 
-The same data that K02 shows folded into a sawtooth on a single pair is
-recovered here as a straight branch.
 
 ## Provenance
 

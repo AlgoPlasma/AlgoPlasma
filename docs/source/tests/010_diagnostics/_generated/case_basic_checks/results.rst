@@ -4,7 +4,7 @@
 
 .. rubric:: 运行结果 / Run results
 
-通过 / Passed: 12/12.
+通过 / Passed: 16/16.
 
 .. list-table:: 测试总表 / Test summary
    :header-rows: 1
@@ -22,30 +22,42 @@
      - 跨越相位边界 / Phase branch cut
      - PASS
    * - 4
-     - 共同混叠周期 / Common alias period
+     - 相干度解析对照 / Analytic coherence checks
      - PASS
    * - 5
-     - 等长多方向基线 / Equal-length baselines
+     - 共同混叠周期 / Common alias period
      - PASS
    * - 6
-     - 分块网格一致性 / Blocked-grid agreement
+     - 等长多方向基线 / Equal-length baselines
      - PASS
    * - 7
-     - 有效二维约束 / Valid 2D constraints
+     - 分块网格一致性 / Blocked-grid agreement
      - PASS
    * - 8
-     - 非整周期记录 / Off-bin records
+     - 有效二维约束 / Valid 2D constraints
      - PASS
    * - 9
-     - 众数相位统计 / Histogram-mode statistics
+     - 非整周期记录 / Off-bin records
      - PASS
    * - 10
-     - 缺失与无噪声样本 / Missing and noiseless samples
+     - 众数相位统计 / Histogram-mode statistics
      - PASS
    * - 11
-     - 无有效相位的谱 / Spectrum without valid phase
+     - 缺失与无噪声样本 / Missing and noiseless samples
      - PASS
    * - 12
+     - 无有效相位的谱 / Spectrum without valid phase
+     - PASS
+   * - 13
+     - PSD 单位与端点 / PSD units and endpoints
+     - PASS
+   * - 14
+     - 拒绝非法基线 / Reject invalid baselines
+     - PASS
+   * - 15
+     - 相位方差权重 / Phase-variance weights
+     - PASS
+   * - 16
      - 窗口功率归一化 / Window-power normalization
      - PASS
 
@@ -105,7 +117,7 @@
    * - 自功率权重 / Auto-power weights
      - [50.005, 4]
      - [50.005, 4]
-     - abs(error) <= 0 + 1e-07*abs(reference)
+     - abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)
      - 0
      - PASS
    * - 自功率谱峰 / Auto-power peak (rad/m)
@@ -118,6 +130,18 @@
      - 0.5
      - 0.5
      - equal
+     - 0
+     - PASS
+   * - 自功率逐格谱值 / Auto-power spectrum
+     - [25.0025, 2]
+     - [25.0025, 2]
+     - abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)
+     - 0
+     - PASS
+   * - 互谱幅值逐格谱值 / Cross-magnitude spectrum
+     - [0.5, 2]
+     - [0.5, 2]
+     - abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)
      - 0
      - PASS
 
@@ -136,20 +160,48 @@
      - 判据 / Criterion
      - 最大绝对差 / Max absolute difference
      - 状态 / Status
-   * - 距 π 的圆周偏差 / Distance to pi (rad)
-     - 0.052359878
-     - 0.10471976
-     - actual < limit
-     - n/a
+   * - 众数格中心 / Modal bin center (rad)
+     - 3.0892328
+     - 3.0892328
+     - abs(error) <= 8.9289433549020973e-14 + 0*abs(reference)
+     - 4.4408921e-16
      - PASS
    * - 方差 / Variance (rad²)
      - 0.00048231092
-     - 0.01
-     - actual < limit
-     - n/a
+     - 0.00048231092
+     - abs(error) <= 5.610220569615966e-13 + 1.4210854715202004e-14*abs(reference)
+     - 4.4452289e-18
      - PASS
 
-.. rubric:: 4. 共同混叠周期 / Common alias period
+.. rubric:: 4. 相干度解析对照 / Analytic coherence checks
+
+输入 / Input::
+
+   {first: ones (4,2), second: constant 2j; cancelling signs}
+
+.. list-table:: 数值与行为检查 / Numerical and behavior checks
+   :header-rows: 1
+
+   * - 计算量 / Quantity
+     - 实际 / Actual
+     - 参考或界限 / Reference or limit
+     - 判据 / Criterion
+     - 最大绝对差 / Max absolute difference
+     - 状态 / Status
+   * - 相干与相消 / Coherent and cancelling
+     - [1, 0]
+     - [1, 0]
+     - abs(error) <= 1.4210854715202004e-14 + 1.4210854715202004e-14*abs(reference)
+     - 0
+     - PASS
+   * - 幅度缩放不变性 / Amplitude invariance
+     - [1, 0]
+     - [1, 0]
+     - abs(error) <= 1.4210854715202004e-14 + 1.4210854715202004e-14*abs(reference)
+     - 0
+     - PASS
+
+.. rubric:: 5. 共同混叠周期 / Common alias period
 
 输入 / Input::
 
@@ -167,11 +219,11 @@
    * - 各基线包裹相位差 / Wrapped differences (rad)
      - [0, 0, 0, 0]
      - 0
-     - abs(error) <= 1e-12 + 1e-07*abs(reference)
+     - abs(error) <= 1.7857886709804195e-13 + 0*abs(reference)
      - 0
      - PASS
 
-.. rubric:: 5. 等长多方向基线 / Equal-length baselines
+.. rubric:: 6. 等长多方向基线 / Equal-length baselines
 
 输入 / Input::
 
@@ -193,7 +245,7 @@
      - 0
      - PASS
 
-.. rubric:: 6. 分块网格一致性 / Blocked-grid agreement
+.. rubric:: 7. 分块网格一致性 / Blocked-grid agreement
 
 输入 / Input::
 
@@ -245,7 +297,7 @@
      - 0
      - PASS
 
-.. rubric:: 7. 有效二维约束 / Valid 2D constraints
+.. rubric:: 8. 有效二维约束 / Valid 2D constraints
 
 输入 / Input::
 
@@ -297,7 +349,7 @@
      - n/a
      - PASS
 
-.. rubric:: 8. 非整周期记录 / Off-bin records
+.. rubric:: 9. 非整周期记录 / Off-bin records
 
 输入 / Input::
 
@@ -305,7 +357,7 @@
 
 计算量 / Measurements::
 
-   {phase_error_deg: [5.5514466, 1.2722219e-14]}
+   {phase_error_deg: [5.5514466, 1.2722219e-14], reference_phase_rad: [-0.89689102, -0.8], measured_phase_rad: [-0.89689102, -0.8]}
 
 .. list-table:: 数值与行为检查 / Numerical and behavior checks
    :header-rows: 1
@@ -316,20 +368,26 @@
      - 判据 / Criterion
      - 最大绝对差 / Max absolute difference
      - 状态 / Status
-   * - 1.25 周期相位误差 / Phase error (rad)
-     - 0.096891022
-     - 0.087266463
-     - actual > limit
-     - n/a
-     - PASS
-   * - 2 周期相位误差 / Phase error (rad)
+   * - 1.25 周期相位：直接 DFT 参考 / Off-bin phase: direct DFT (rad)
+     - -0.89689102
+     - -0.89689102
+     - abs(error) <= 5.7145237471373423e-12 + 0*abs(reference)
      - 2.220446e-16
-     - 1e-12
-     - actual < limit
-     - n/a
+     - PASS
+   * - 2 周期相位：直接 DFT 参考 / On-bin phase: direct DFT (rad)
+     - -0.8
+     - -0.8
+     - abs(error) <= 5.7145237471373423e-12 + 0*abs(reference)
+     - 0
+     - PASS
+   * - 2 周期相位：解析参考 / On-bin phase: analytic (rad)
+     - -0.8
+     - -0.8
+     - abs(error) <= 5.7145237471373423e-12 + 0*abs(reference)
+     - 2.220446e-16
      - PASS
 
-.. rubric:: 9. 众数相位统计 / Histogram-mode statistics
+.. rubric:: 10. 众数相位统计 / Histogram-mode statistics
 
 输入 / Input::
 
@@ -344,20 +402,20 @@
      - 判据 / Criterion
      - 最大绝对差 / Max absolute difference
      - 状态 / Status
-   * - 相位均值 / Mean (rad)
+   * - 众数格中心 / Modal bin center (rad)
      - 0.052359878
      - 0.052359878
-     - round(abs(error), 7) == 0
+     - abs(error) <= 8.9289433549020973e-14 + 0*abs(reference)
      - 1.4571677e-16
      - PASS
    * - 相位方差 / Variance (rad²)
      - 0.010816667
      - 0.010816667
-     - round(abs(error), 7) == 0
+     - abs(error) <= 5.610220569615966e-13 + 1.4210854715202004e-14*abs(reference)
      - 0
      - PASS
 
-.. rubric:: 10. 缺失与无噪声样本 / Missing and noiseless samples
+.. rubric:: 11. 缺失与无噪声样本 / Missing and noiseless samples
 
 输入 / Input::
 
@@ -395,7 +453,7 @@
      - n/a
      - PASS
 
-.. rubric:: 11. 无有效相位的谱 / Spectrum without valid phase
+.. rubric:: 12. 无有效相位的谱 / Spectrum without valid phase
 
 输入 / Input::
 
@@ -421,7 +479,163 @@
      - n/a
      - PASS
 
-.. rubric:: 12. 窗口功率归一化 / Window-power normalization
+.. rubric:: 13. PSD 单位与端点 / PSD units and endpoints
+
+输入 / Input::
+
+   {lengths: [63, 64], sampling_rates_hz: [1000, 2000], detrend: False}
+
+.. list-table:: 数值与行为检查 / Numerical and behavior checks
+   :header-rows: 1
+
+   * - 计算量 / Quantity
+     - 实际 / Actual
+     - 参考或界限 / Reference or limit
+     - 判据 / Criterion
+     - 最大绝对差 / Max absolute difference
+     - 状态 / Status
+   * - N=63, fs=1000 Hz: 端点积分功率 / Endpoint power
+     - [4, 0.5]
+     - [4, 0.5]
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 1.9984014e-15
+     - PASS
+   * - N=63, fs=1000 Hz: 总积分功率 / Total power
+     - 4.5
+     - 4.5
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 1.7763568e-15
+     - PASS
+   * - N=63, fs=2000 Hz: 端点积分功率 / Endpoint power
+     - [4, 0.5]
+     - [4, 0.5]
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 1.9984014e-15
+     - PASS
+   * - N=63, fs=2000 Hz: 总积分功率 / Total power
+     - 4.5
+     - 4.5
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 1.7763568e-15
+     - PASS
+   * - N=64, fs=1000 Hz: 端点积分功率 / Endpoint power
+     - [4, 1]
+     - [4, 1]
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 0
+     - PASS
+   * - N=64, fs=1000 Hz: 总积分功率 / Total power
+     - 5
+     - 5
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 0
+     - PASS
+   * - N=64, fs=2000 Hz: 端点积分功率 / Endpoint power
+     - [4, 1]
+     - [4, 1]
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 0
+     - PASS
+   * - N=64, fs=2000 Hz: 总积分功率 / Total power
+     - 5
+     - 5
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
+     - 0
+     - PASS
+
+.. rubric:: 14. 拒绝非法基线 / Reject invalid baselines
+
+输入 / Input::
+
+   {baselines: [[0, 0], [nan, 0], [inf, 0]]}
+
+.. list-table:: 数值与行为检查 / Numerical and behavior checks
+   :header-rows: 1
+
+   * - 计算量 / Quantity
+     - 实际 / Actual
+     - 参考或界限 / Reference or limit
+     - 判据 / Criterion
+     - 最大绝对差 / Max absolute difference
+     - 状态 / Status
+   * - zero: length rejects
+     - ValueError
+     - ValueError
+     - exception type
+     - n/a
+     - PASS
+   * - zero: Beall rejects
+     - ValueError
+     - ValueError
+     - exception type
+     - n/a
+     - PASS
+   * - NaN: length rejects
+     - ValueError
+     - ValueError
+     - exception type
+     - n/a
+     - PASS
+   * - NaN: Beall rejects
+     - ValueError
+     - ValueError
+     - exception type
+     - n/a
+     - PASS
+   * - Inf: length rejects
+     - ValueError
+     - ValueError
+     - exception type
+     - n/a
+     - PASS
+   * - Inf: Beall rejects
+     - ValueError
+     - ValueError
+     - exception type
+     - n/a
+     - PASS
+
+.. rubric:: 15. 相位方差权重 / Phase-variance weights
+
+输入 / Input::
+
+   {configurations: [[[1, 0], 0, 1], [[1, 0], 1, 9], [[0, 1], 0, 1]], range_rad_m: 1, grid_n: 21}
+
+.. list-table:: 数值与行为检查 / Numerical and behavior checks
+   :header-rows: 1
+
+   * - 计算量 / Quantity
+     - 实际 / Actual
+     - 参考或界限 / Reference or limit
+     - 判据 / Criterion
+     - 最大绝对差 / Max absolute difference
+     - 状态 / Status
+   * - 加权波矢 / Weighted wavevector
+     - [0.1, 0]
+     - [0.1, 0]
+     - abs(error) <= 1.4210854715202004e-14 + 0*abs(reference)
+     - 8.3266727e-17
+     - PASS
+   * - 加权峰值评分 / Weighted peak score
+     - -0.05
+     - -0.05
+     - abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)
+     - 0
+     - PASS
+   * - 稠密评分解析对照 / Analytic dense score
+     - -0.05
+     - -0.05
+     - abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)
+     - 0
+     - PASS
+   * - 等权对照 / Equal-weight control
+     - [0.5, 0]
+     - [0.5, 0]
+     - abs(error) <= 1.4210854715202004e-14 + 0*abs(reference)
+     - 0
+     - PASS
+
+.. rubric:: 16. 窗口功率归一化 / Window-power normalization
 
 输入 / Input::
 
@@ -443,13 +657,13 @@
    * - 矩形窗积分功率 / Boxcar power
      - 0.87633965
      - 0.87633965
-     - round(abs(error), 7) == 0
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
      - 1.110223e-16
      - PASS
    * - Hann 窗积分功率 / Hann power
      - 0.78909869
      - 0.78909869
-     - round(abs(error), 7) == 0
+     - abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)
      - 0
      - PASS
 

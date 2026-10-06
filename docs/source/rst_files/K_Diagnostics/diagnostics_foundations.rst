@@ -312,6 +312,8 @@ Probe Diagnostics Foundations
       当前分段函数默认 ``window='boxcar'``，可选 ``window='hann'``；两路需使用相同窗口。
       功率谱函数必须传入相同的 ``window``，以 :math:`f_s\sum_n h_n^2` 为分母做窗口功率归一化。
 
+   数值示例：:ref:`基础数值测试：有限记录与频谱 <basic-checks-zh-spectrum>`，核对相位偏差与窗口功率。
+
    .. _foundations-zh-after-leakage:
 
    **相干度** 衡量两路在一个频率上的线性相位关系是否稳定。本实现计算幅度平方相干度：
@@ -362,6 +364,8 @@ Probe Diagnostics Foundations
    :math:`10^{-12}` 用于避免无噪数据导致后续除零。均值为最高直方图格中心，分箱与样本量会影响估计；不足两个有效样本返回 NaN。
    该方法适合围绕一个主要相位簇的样本；若同一频率混有多个传播方向、相位分布有多个峰，
    一个均值和方差就可能不足以描述数据。
+
+   数值示例：:ref:`基础数值测试：相位的圆周性质 <basic-checks-zh-phase>`，查看跨越 ±π 的样本与众数格中心。
 
    .. _foundations-zh-alias:
 
@@ -475,6 +479,8 @@ Probe Diagnostics Foundations
    归一化，因此这个 :math:`S(k,f)` 不应直接当成“每 Hz、每 rad/m 的能量密度”。
    格子越细，固定样本数下每格越稀；细网格本身不保证峰位更准确。
 
+   数值示例：:ref:`基础数值测试：Beall 谱的累积 <basic-checks-zh-beall>`，逐步核对两段样本的分箱与功率累积。
+
    .. _foundations-zh-inversion:
 
    .. rubric:: 7. 多个构型怎样帮助寻找二维波矢？
@@ -586,6 +592,8 @@ Probe Diagnostics Foundations
         - 按推荐顺序进入具体函数，遇到术语时回到本页相应部分。
       * - :doc:`Usage Cookbook <diagnostics_usage_cookbook>`
         - 怎样导入和组合现有函数，准备符合形状和单位约定的输入。
+      * - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`
+        - 核对三组测试的参考值、实测值、误差与验收判据；每节可返回对应原理。
       * - :doc:`宽带测试 </tests/010_diagnostics/case_broadband_dispersion>`
         - 已知生成真值时，怎样把估计结果与真值比较；它是验证案例，不是学习本页的前提。
 
@@ -921,6 +929,9 @@ Probe Diagnostics Foundations
       Both records must use the same window. Pass the matching ``window`` to the power-spectrum
       routine, whose window-power normalization uses the denominator :math:`f_s\sum_n h_n^2`.
 
+   Numerical example: :ref:`basic_numerical tests: finite records and spectra <basic-checks-en-spectrum>`
+   compares phase errors and window-normalized power.
+
    .. _foundations-en-after-leakage:
 
    **Coherence** measures the stability of the linear phase relationship at a frequency.
@@ -975,6 +986,9 @@ Probe Diagnostics Foundations
    :math:`10^{-12}` prevents later division by zero for noiseless input. The mean is the modal bin centre; binning and sample count matter. Fewer than two valid samples gives NaN. This approach suits
    samples clustered around one main phase; multiple directions at one frequency or multiple
    phase peaks may not be adequately described by one mean and variance.
+
+   Numerical example: :ref:`basic_numerical tests: circular phase statistics <basic-checks-en-phase>`
+   shows samples across ±π and their modal bin centers.
 
    .. _foundations-en-alias:
 
@@ -1101,6 +1115,9 @@ Probe Diagnostics Foundations
    rad/m. Finer bins contain fewer samples at fixed record length; a finer grid alone does
    not guarantee a more accurate peak.
 
+   Numerical example: :ref:`basic_numerical tests: Beall accumulation <basic-checks-en-beall>`
+   follows two samples through binning and power accumulation.
+
    .. _foundations-en-inversion:
 
    .. rubric:: 7. How do multiple configurations help recover a two-dimensional wavevector?
@@ -1222,6 +1239,8 @@ Probe Diagnostics Foundations
         - Follow the routine reading order and return here when a concept needs refreshing.
       * - :doc:`Usage Cookbook <diagnostics_usage_cookbook>`
         - Import and combine routines, preparing arrays with the correct shapes and units.
+      * - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`
+        - Compare references, measurements, errors and acceptance rules in three test groups; each links back to the theory.
       * - :doc:`Broadband test </tests/010_diagnostics/case_broadband_dispersion>`
         - Compare estimates with known generated truth; this verification case is not a prerequisite for this page.
 

@@ -5,24 +5,21 @@
 The three units form one chain on one synthetic dataset, and this is where the
 computation happens: the K_Diagnostics units are subroutines only. Every
 criterion has the same shape, a quantity the generator was built from recovered
-from the measurement and compared back, rather than a tolerance chosen to make
-the test pass.
+from the measurement and compared back, with explicit engineering acceptance limits for this fixed case.
+These limits are not universal accuracy or confidence bounds.
 
 K01 reduces the raw records to power spectra, coherence and cross phase. Because
 the generator uses A ~ 1/f the power spectrum must fall as 1/f^2, so the fitted
-exponent and the lower band edge are compared with the generator. The spectrum
-does not stay above the noise across the whole band: with A ~ 1/f the modes fade
-as 1/f^2 and meet the floor partway, so the crossing frequency is predicted from
-that law and the measured level and then looked for in the data, which tests the
-spectrum over its whole dynamic range rather than only where it is strong.
-Coherence is judged only on the bins that stand clear of the floor, since
-elsewhere it carries no information, and against the 1/n_segments value that
-uncorrelated bins average to rather than against zero.
+exponent and the lower band edge are compared with the generator. The assessment uses modes whose total PSD exceeds ten times the measured noise
+floor. Its threshold crossing is predicted from the f^-2 law with signal power
+nine times the floor. It is not the frequency where signal and noise are equal.
+In-band median coherence measures signal coherence; out-of-band mean coherence
+is compared with the independent-segment zero-coherence expectation 1/n_segments.
 
 K02 builds the Beall S(k, f) map of a single, deliberately coarse pair. The
 branch runs far past that pair's Nyquist wavenumber, so it must appear folded
-into a repeating sawtooth, and every mode's peak must land where K02's own
-closed form predicts. The residual is measured as a circular distance, because
+into a repeating sawtooth. Strong-mode histogram peaks are compared with K02's
+closed-form prediction using a 95th-percentile residual limit. The residual is measured as a circular distance, because
 the wavenumber axis is periodic. Only modes whose power stands clearly above
 the noise floor are assessed, and their peak residual is measured in wavenumber
 bins. This checks the folded-wavenumber trend; a single pair cannot recover the
@@ -31,14 +28,14 @@ lost fold order.
 K03 inverts the probe array jointly on a complete uniform grid. Resolution must
 be checked for alias selection as well as local error. Configurations have equal
 sample counts, but their likelihood weights still depend on phase variance.
-The pass criterion is that a line through the origin fitted to f against |k|
-returns the ion sound speed the generator used.
+Acceptance checks the recovered sound speed, magnitude and direction statistics,
+and every selected vector with its boundary/tie flags.
 
 @author Zilong PENG (2026/09/02)
 
 @details Routines
 load                read the generated records and reduce each pair with K01
-check_k01           spectral exponent, band edge, noise crossover, coherence
+check_k01           spectral exponent, band edge, ten-times-floor crossing, coherence
 check_k02           folded-wavenumber peaks on the coarse pair
 check_k03           joint inversion and the recovered sound speed
 _plot_waveform      noiseless against recorded, and the two noiseless probes
@@ -50,7 +47,13 @@ main                run the three checks, write output/summary.json and figures
 
 from __future__ import annotations
 
+import argparse
+import csv
+from datetime import datetime, timezone
+import hashlib
 import json
+import platform
+import shutil
 import sys
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
@@ -141,7 +144,7 @@ def check_k01(entries: list[dict]) -> dict:
     out_of_band[0] = False
     floor = float(np.median(psd_1[out_of_band]))
 
-    above_floor = psd_1[bins] > 10.0 * floor
+    above_floor = psd_1[bins] > config.ACCEPTANCE["power_to_floor"] * floor
     slope = float(
         np.polyfit(
             np.log(mode_frequencies[above_floor]),
@@ -150,18 +153,18 @@ def check_k01(entries: list[dict]) -> dict:
         )[0]
     )
 
-    clear = psd_1 > 10.0 * floor
+    clear = psd_1 > config.ACCEPTANCE["power_to_floor"] * floor
     clear[0] = False
     edges = np.flatnonzero(clear)
     band_low = float(frequencies[edges[0]])
     crossover_measured = float(frequencies[edges[-1]])
     level = float(psd_1[bins][0] - floor)
     crossover_predicted = float(
-        mode_frequencies[0] * np.sqrt(level / (10.0 * floor))
+        threshold_crossing(mode_frequencies[0], level, floor)
     )
     crossover_error = abs(crossover_measured - crossover_predicted) / crossover_predicted
 
-    measurable = psd_1[bins] > 10.0 * floor
+    measurable = psd_1[bins] > config.ACCEPTANCE["power_to_floor"] * floor
     in_band = gamma[bins][measurable]
     coherence_floor = 1.0 / config.N_SEGMENTS
     outside = out_of_band & (frequencies > config.BAND_MAX_HZ)
@@ -178,27 +181,28 @@ def check_k01(entries: list[dict]) -> dict:
         "band_low_measured_hz": band_low,
         "band_low_true_hz": float(mode_frequencies[0]),
         "band_top_generated_hz": float(mode_frequencies[-1]),
-        "noise_crossover_measured_hz": crossover_measured,
-        "noise_crossover_predicted_hz": crossover_predicted,
-        "noise_crossover_relative_error": crossover_error,
+        "threshold_crossing_measured_hz": crossover_measured,
+        "threshold_crossing_predicted_hz": crossover_predicted,
+        "threshold_crossing_relative_error": crossover_error,
         "modes_above_floor": int(np.count_nonzero(measurable)),
         "noise_floor_psd": floor,
         "median_coherence_above_floor": float(np.median(in_band)),
+        "mean_coherence_out_of_band": float(np.mean(gamma[outside])),
         "median_coherence_out_of_band": float(np.median(gamma[outside])),
         "coherence_floor_1_over_n": coherence_floor,
         "note": (
             "A ~ 1/f gives a power spectrum falling as 1/f^2.  The fitted "
             "exponent, the lower band edge and the frequency at which the "
-            "spectrum meets the noise floor are all compared with the "
+            "total spectrum reaches ten times the noise floor are all compared with the "
             "generator; bins above the generated band must sit at the "
             "1/n_segments coherence floor"
         ),
         "passed": bool(
-            abs(slope + 2.0) < 0.15
-            and abs(band_low - mode_frequencies[0]) <= 2.0 * config.BIN_WIDTH_HZ
-            and crossover_error < 0.15
-            and np.median(in_band) > 0.8
-            and np.median(gamma[outside]) < 2.0 * coherence_floor
+            abs(slope + 2.0) < config.ACCEPTANCE["slope_abs_error"]
+            and abs(band_low - mode_frequencies[0]) <= config.ACCEPTANCE["band_edge_bins"] * config.BIN_WIDTH_HZ
+            and crossover_error < config.ACCEPTANCE["threshold_crossing_relative_error"]
+            and np.median(in_band) > config.ACCEPTANCE["in_band_coherence_min"]
+            and np.mean(gamma[outside]) < config.ACCEPTANCE["out_of_band_coherence_mean_factor"] * coherence_floor
         ),
     }
 
@@ -242,7 +246,7 @@ def check_k02(entries: list[dict]) -> dict:
     out_of_band[bins] = False
     out_of_band[0] = False
     floor = float(np.median(psd[out_of_band]))
-    measurable = (psd[bins] > 10.0 * floor) & np.isfinite(residual)
+    measurable = (psd[bins] > config.ACCEPTANCE["power_to_floor"] * floor) & np.isfinite(residual)
     residual_in_bins = residual[measurable] / bin_width
     fold_period = 2.0 * result["k_nyquist"]
     aliased = int(np.sum(np.abs(projected) > result["k_nyquist"]))
@@ -274,7 +278,7 @@ def check_k02(entries: list[dict]) -> dict:
         "passed": bool(
             aliased > 0
             and np.count_nonzero(measurable) > 0
-            and np.percentile(residual_in_bins, 95) < 2.0
+            and np.percentile(residual_in_bins, 95) < config.ACCEPTANCE["beall_p95_bins"]
             and np.all(np.abs(measured) <= result["k_nyquist"] + 1.0e-9)
         ),
     }
@@ -296,49 +300,75 @@ def check_k03(entries: list[dict]) -> dict:
             k_range,
             n_grid=config.N_GRID,
         )
-        return peak["kx"], peak["ky"]
+        return peak
 
     with ThreadPoolExecutor(max_workers=min(config.MLE_WORKERS, selected.size)) as pool:
-        recovered = np.asarray(list(pool.map(recover, selected)))
+        peaks = list(pool.map(recover, selected))
+    recovered = np.array([[p["kx"], p["ky"]] for p in peaks])
 
     frequencies = frequencies[selected]
-    truth = np.hypot(*wavevectors[selected].T)
-    magnitude = np.hypot(*recovered.T)
-    angle = np.degrees(np.arctan2(recovered[:, 1], recovered[:, 0]))
+    diagnostics = evaluate_wavevectors(frequencies, recovered, wavevectors[selected], peaks,
+                                      2*k_range/(config.N_GRID-1))
+    _plot_dispersion(frequencies, np.hypot(*recovered.T), np.hypot(*wavevectors[selected].T))
+    return {"modes_inverted": int(selected.size), "configurations": len(array),
+            "grid_n": config.N_GRID, "wavenumber_range_rad_m": k_range, **diagnostics}
 
-    slope = float(np.sum(magnitude * frequencies) / np.sum(magnitude**2))
-    speed = 2.0 * np.pi * slope
-    speed_error = abs(speed - config.SOUND_SPEED_M_S) / config.SOUND_SPEED_M_S
 
-    relative = np.abs(magnitude - truth) / truth
-    angle_error = np.abs((angle - config.PHI_DEG + 180.0) % 360.0 - 180.0)
+def threshold_crossing(first_frequency, signal_level, noise_floor):
+    """For total PSD = signal + noise, ratio R requires signal=(R-1)*noise."""
+    return float(first_frequency * np.sqrt(
+        signal_level / ((config.ACCEPTANCE["power_to_floor"] - 1.0) * noise_floor)))
 
-    _plot_dispersion(frequencies, magnitude, truth)
 
-    return {
-        "modes_inverted": int(selected.size),
-        "configurations": len(array),
-        "grid_n": config.N_GRID,
-        "grid_step_rad_m": 2 * k_range / (config.N_GRID - 1),
-        "wavenumber_range_rad_m": k_range,
-        "sound_speed_true_m_s": config.SOUND_SPEED_M_S,
-        "sound_speed_fitted_m_s": speed,
-        "sound_speed_relative_error": speed_error,
-        "k_magnitude_relative_error_median": float(np.median(relative)),
-        "k_magnitude_relative_error_p95": float(np.percentile(relative, 95)),
-        "angle_error_deg_median": float(np.median(angle_error)),
-        "angle_error_deg_p95": float(np.percentile(angle_error, 95)),
-        "note": (
-            "the slope of f against |k| is the ion sound speed; the magnitude "
-            "and circular direction errors jointly verify the recovered "
-            "two-dimensional wavevector"
-        ),
-        "passed": bool(
-            speed_error < 5.0e-3
-            and float(np.median(relative)) < 0.05
-            and float(np.percentile(angle_error, 95)) < 2.0
-        ),
-    }
+def evaluate_wavevectors(frequencies, recovered, truth_vectors, peaks, grid_step):
+    """Assess every generated mode, as well as the fitted dispersion slope.
+
+    A square grid contributes at most step/sqrt(2) to nearest-point distance.
+    The additional 5% vector budget is a declared case requirement for noisy
+    recovery, not a statistical confidence interval. No bad modes are allowed.
+    Boundary/tie flags invalidate this reference case (truth lies inside its
+    search domain); these flags are not universal proof of an invalid estimate.
+    """
+    truth = np.linalg.norm(truth_vectors, axis=1)
+    magnitude = np.linalg.norm(recovered, axis=1)
+    relative = np.abs(magnitude-truth)/truth
+    delta_angle = np.arctan2(recovered[:, 1], recovered[:, 0]) - np.arctan2(truth_vectors[:, 1], truth_vectors[:, 0])
+    angle_error = np.abs(np.degrees(np.arctan2(np.sin(delta_angle), np.cos(delta_angle))))
+    vector_error = np.linalg.norm(recovered-truth_vectors, axis=1)
+    budget = config.ACCEPTANCE["vector_relative_error"]*truth + grid_step/np.sqrt(2)
+    speed = float(2*np.pi*np.sum(magnitude*frequencies)/np.sum(magnitude**2))
+    speed_error = abs(speed-config.SOUND_SPEED_M_S)/config.SOUND_SPEED_M_S
+    modes = []
+    for i, peak in enumerate(peaks):
+        reasons = []
+        if not np.isfinite(vector_error[i]) or vector_error[i] > budget[i]:
+            reasons.append("vector_error_exceeds_budget")
+        if peak["boundary"]:
+            reasons.append("boundary_peak")
+        if peak["tied_grid_points"] != 1:
+            reasons.append("tied_grid_maxima")
+        modes.append(dict(frequency_hz=float(frequencies[i]),
+                          kx_true=float(truth_vectors[i, 0]), ky_true=float(truth_vectors[i, 1]),
+                          kx=float(recovered[i, 0]), ky=float(recovered[i, 1]),
+                          magnitude_relative_error=float(relative[i]), angle_error_deg=float(angle_error[i]),
+                          vector_error_rad_m=float(vector_error[i]), vector_budget_rad_m=float(budget[i]),
+                          boundary=bool(peak["boundary"]), tied_grid_points=int(peak["tied_grid_points"]),
+                          passed=not reasons, reasons=reasons))
+    bad = sum(not m["passed"] for m in modes)
+    return dict(grid_step_rad_m=grid_step, sound_speed_true_m_s=config.SOUND_SPEED_M_S,
+                sound_speed_fitted_m_s=speed, sound_speed_relative_error=speed_error,
+                k_magnitude_relative_error_median=float(np.median(relative)),
+                k_magnitude_relative_error_p95=float(np.percentile(relative, 95)),
+                k_magnitude_relative_error_max=float(np.max(relative)),
+                angle_error_deg_median=float(np.median(angle_error)),
+                angle_error_deg_p95=float(np.percentile(angle_error, 95)),
+                vector_error_budget_ratio_max=float(np.max(vector_error/budget)),
+                bad_modes=bad, modes=modes,
+                note="Individual vector errors and search flags are checked before accepting the aggregate trend. Exact tie counts do not establish continuous uniqueness.",
+                passed=bool(speed_error < config.ACCEPTANCE["sound_speed_relative_error"]
+                            and np.median(relative) < config.ACCEPTANCE["magnitude_median_relative_error"]
+                            and np.percentile(angle_error, 95) < config.ACCEPTANCE["angle_p95_deg"]
+                            and bad <= config.ACCEPTANCE["allowed_bad_modes"]))
 
 
 def _plot_waveform(entry: dict) -> None:
@@ -379,6 +409,7 @@ def _plot_spectrum(frequencies, psd_1, psd_2, bins, floor, slope) -> None:
     axis.loglog(frequencies[1:] * 1e-3, psd_2[1:], lw=0.8, alpha=0.7, label="probe 2")
     axis.loglog(mode_frequencies * 1e-3, reference, "k--", lw=1.2,
                 label=r"generator $\propto f^{-2}$")
+    axis.axhline(config.ACCEPTANCE["power_to_floor"]*floor, color="0.4", ls="--", lw=0.8, label="assessment threshold (10 x floor)")
     axis.axhline(floor, color="tab:red", ls=":", lw=1.0, label="noise floor")
     axis.set_xlim(50.0, frequencies[-1] * 1e-3)
     axis.set_ylim(floor / 5.0, psd_1[bins].max() * 5.0)
@@ -404,7 +435,9 @@ def _plot_beall(result, predicted, mode_frequencies, chi) -> None:
         np.concatenate([[False], np.abs(np.diff(folded)) > nyquist]), np.nan, folded
     )
 
-    alias_hz = config.alias_frequency(config.BEALL_SPACING_MM * 1e-3)
+    occupied = np.unique(fun_K02_fold_order(
+        2*np.pi*mode_frequencies/config.SOUND_SPEED_M_S
+        * np.cos(np.deg2rad(config.PHI_DEG)-direction), chi)).size
     figure, axis = plt.subplots(figsize=(6.0, 4.4), constrained_layout=True)
     mesh = axis.pcolormesh(result["k_centers"], result["f_centers"] * 1e-3,
                            spectrum, shading="auto", cmap="magma",
@@ -422,7 +455,7 @@ def _plot_beall(result, predicted, mode_frequencies, chi) -> None:
         f"({config.BEALL_SPACING_MM:.0f} mm at {config.BEALL_ANGLE_DEG}$^\\circ$, "
         f"{result['segments']} segments)\n"
         rf"$k_{{\rm Nyq}}$ = {nyquist:.0f} rad/m, "
-        f"{mode_frequencies[-1] / alias_hz:.0f} folds across the band",
+        f"{occupied} occupied fold orders",
         fontsize=9,
     )
     axis.legend(fontsize=8, loc="lower left", framealpha=0.75)
@@ -451,27 +484,79 @@ def _plot_dispersion(frequencies, magnitude, truth) -> None:
     plt.close(figure)
 
 
-def main() -> int:
+def write_snapshot(summary, out):
+    """Build bilingual tables and an inspectable per-mode CSV from this run."""
+    checks = summary["checks"]
+    k1, k2, k3 = (checks[k] for k in ["k01_signal_spectra", "k02_beall", "k03_mle_k2d"])
+    limits = config.ACCEPTANCE
+    rows = [
+        ("谱指数误差", "Spectral exponent error", f"< {limits['slope_abs_error']}", f"{k1['spectral_slope_error']:.6g}"),
+        ("下带边误差", "Lower band-edge error", f"<= {limits['band_edge_bins']} frequency bins", f"{abs(k1['band_low_measured_hz']-k1['band_low_true_hz'])/config.BIN_WIDTH_HZ:.6g} bins"),
+        ("10 倍噪声底交点", "Ten-times-floor crossing", f"relative error < {limits['threshold_crossing_relative_error']:.0%}", f"{k1['threshold_crossing_measured_hz']/1000:.3f} / {k1['threshold_crossing_predicted_hz']/1000:.3f} kHz; error {k1['threshold_crossing_relative_error']:.3%}"),
+        ("带内相干度中位数", "In-band median coherence", f"> {limits['in_band_coherence_min']}", f"{k1['median_coherence_above_floor']:.6g}"),
+        ("带外相干度均值", "Out-of-band mean coherence", f"< {limits['out_of_band_coherence_mean_factor']}/N = {limits['out_of_band_coherence_mean_factor']/config.N_SEGMENTS:.6g}", f"{k1['mean_coherence_out_of_band']:.6g}"),
+        ("Beall 圆周残差 p95", "Beall circular residual p95", f"< {limits['beall_p95_bins']} bins", f"{k2['peak_residual_in_bins_p95']:.6g} bins; {k2['modes_above_floor']} modes"),
+        ("声速相对误差", "Sound-speed relative error", f"< {limits['sound_speed_relative_error']:.1%}", f"{k3['sound_speed_relative_error']:.4%}"),
+        ("模长相对误差中位数", "Median magnitude error", f"< {limits['magnitude_median_relative_error']:.0%}", f"{k3['k_magnitude_relative_error_median']:.4%}"),
+        ("方向误差 p95", "Direction error p95", f"< {limits['angle_p95_deg']} deg", f"{k3['angle_error_deg_p95']:.4f} deg"),
+        ("逐频点误差与搜索标记", "Per-mode errors and search flags", f"bad modes <= {limits['allowed_bad_modes']}", f"{k3['bad_modes']} / {k3['modes_inverted']}; max vector error/budget = {k3['vector_error_budget_ratio_max']:.4f}"),
+    ]
+    for lang in ["zh", "en"]:
+        zh = lang == "zh"
+        lines = [":orphan:", "", ".. snapshot-start", "",
+                 ("运行时间：" if zh else "Run time: ") + summary['provenance']['generated_at_utc'],
+                 "", " / ".join(f"{name.split('_')[0].upper()}: {'PASS' if result['passed'] else 'FAIL'}" for name, result in checks.items()), "",
+                 ".. list-table:: " + ("同次运行的验收结果" if zh else "Acceptance results from this run"),
+                 "   :header-rows: 1", "", "   * - " + ("检查量" if zh else "Quantity"),
+                 "     - " + ("要求" if zh else "Requirement"), "     - " + ("实测" if zh else "Measured")]
+        for cn, en, requirement, measured in rows:
+            lines += ["   * - " + (cn if zh else en), "     - " + requirement, "     - " + measured]
+        lines += ["", (f"生成模态覆盖 {k2['distinct_fold_orders']} 个折叠阶；K03 检查全部 {k3['modes_inverted']} 个选定频点。" if zh else
+                      f"Generated modes occupy {k2['distinct_fold_orders']} fold orders; K03 checks all {k3['modes_inverted']} selected frequencies."), ""]
+        (out/f'results_{lang}.rst').write_text('\n'.join(lines), encoding='utf-8')
+    with (out/'modes.csv').open('w', newline='') as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(k3['modes'][0]))
+        writer.writeheader()
+        for mode in k3['modes']:
+            writer.writerow({**mode, 'reasons': ';'.join(mode['reasons'])})
+
+
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--publish-docs', action='store_true', help='publish a consistent small snapshot after all checks pass')
+    args = parser.parse_args(argv)
     config.FIGURE_DIR.mkdir(parents=True, exist_ok=True)
     entries = load()
-
     checks = {
         "k01_signal_spectra": check_k01(entries),
         "k02_beall": check_k02(entries),
         "k03_mle_k2d": check_k03(entries),
     }
     passed = all(check["passed"] for check in checks.values())
-    (config.OUTPUT_DIR / "summary.json").write_text(
-        json.dumps(
-            {"case": "broadband_dispersion", "passed": passed, "checks": checks},
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-
+    sources = sorted((REPO_ROOT/'K_Diagnostics').rglob('*.py')) + sorted(HERE.glob('*.py'))
+    sources += [config.CASE_ROOT/name for name in ['run.sh', 'make.sh', 'clean.sh']]
+    provenance = dict(generated_at_utc=datetime.now(timezone.utc).isoformat(),
+                      python=platform.python_version(), numpy=np.__version__, matplotlib=matplotlib.__version__,
+                      seed=config.SEED, n_segments=config.N_SEGMENTS, nperseg=config.NPERSEG,
+                      n_grid=config.N_GRID, workers=config.MLE_WORKERS,
+                      source_sha256={str(p.relative_to(REPO_ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources})
+    summary = dict(case='broadband_dispersion', passed=passed, checks=checks,
+                   acceptance=config.ACCEPTANCE, provenance=provenance)
+    (config.OUTPUT_DIR/'summary.json').write_text(json.dumps(summary, indent=2)+'\n', encoding='utf-8')
+    write_snapshot(summary, config.OUTPUT_DIR)
+    if args.publish_docs and passed:
+        dest = REPO_ROOT/'docs/source/tests/010_diagnostics/_generated/case_broadband_dispersion'
+        dest.mkdir(parents=True, exist_ok=True)
+        for filename in ['summary.json', 'modes.csv', 'results_zh.rst', 'results_en.rst']:
+            shutil.copy2(config.OUTPUT_DIR/filename, dest/filename)
+        images = REPO_ROOT/'docs/source/images/tests/010_diagnostics/case_broadband_dispersion'
+        images.mkdir(parents=True, exist_ok=True)
+        for filename in ['raw_waveform.png', 'power_spectrum.png', 'beall_skf.png', 'mle_dispersion.png']:
+            shutil.copy2(config.FIGURE_DIR/filename, images/filename)
     for name, check in checks.items():
         print(f"  {'PASS' if check['passed'] else 'FAIL'}  {name}")
+    if not passed:
+        print(json.dumps(checks, indent=2))
     print(f"summary and figures written to {config.OUTPUT_DIR}")
     return 0 if passed else 1
 

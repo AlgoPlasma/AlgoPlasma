@@ -112,22 +112,11 @@ peaks = fun_K02_peak_wavenumber(result["spectrum"], result["k_centers"])
 
 ## Tests
 
-`tests/010_diagnostics/case_broadband_dispersion`: a deliberately **coarse** pair is
-used, 20 mm at 30 deg, whose alias frequency is `c_s/2d = 96 kHz`.  All 238
-generated modes are aliased and span ten theoretical fold orders; the measured
-`S(k, f)` shows the repeating sawtooth characteristic of a Beall map.
+- [basic_numerical tests](../../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
+- [broadband_dispersion](../../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
 
-The criterion assesses the 84 modes whose power exceeds ten times the noise
-floor and checks whether the 95th percentile of their folded-wavenumber residual lies near the
-closed-form prediction.  The circular residual has a median of 0.443 bins and a
-95th percentile of 1.466 bins, below the two-bin threshold.  This verifies the
-folded-wavenumber trend; it does not claim that one pair recovers the lost fold
-order.
+The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
 
-The number of visible folds is `f_max / f_alias` with `f_alias = c_s / (2 d)`,
-so coarsening the separation and widening the band are equivalent ways to
-display aliasing.  The test takes the former, because it does not inflate the
-cost of the inversion.
 
 ## Provenance
 

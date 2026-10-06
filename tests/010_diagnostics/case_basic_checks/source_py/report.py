@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import re
 import shutil
 import subprocess
 import unittest
@@ -14,6 +15,10 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[4]
 CASE = Path(__file__).resolve().parents[1]
 TITLES = {
+    'test_variance_weights_resolve_conflicting_observations': ('相位方差权重', 'Phase-variance weights'),
+    'test_psd_units_and_endpoint_scaling': ('PSD 单位与端点', 'PSD units and endpoints'),
+    'test_coherence_known_complex_pairs': ('相干度解析对照', 'Analytic coherence checks'),
+    'test_reject_invalid_beall_baselines': ('拒绝非法基线', 'Reject invalid baselines'),
     'test_liu_returns_mode_not_arithmetic_or_circular_mean': ('众数相位统计', 'Histogram-mode statistics'),
     'test_branch_cut': ('跨越相位边界', 'Phase branch cut'),
     'test_missing_and_noiseless': ('缺失与无噪声样本', 'Missing and noiseless samples'),
@@ -29,17 +34,21 @@ TITLES = {
 }
 
 LABELS = {
-    'test_liu_returns_mode_not_arithmetic_or_circular_mean': ['相位均值 / Mean (rad)', '相位方差 / Variance (rad²)'],
-    'test_branch_cut': ['距 π 的圆周偏差 / Distance to pi (rad)', '方差 / Variance (rad²)'],
+    'test_variance_weights_resolve_conflicting_observations': ['加权波矢 / Weighted wavevector', '加权峰值评分 / Weighted peak score', '稠密评分解析对照 / Analytic dense score', '等权对照 / Equal-weight control'],
+    'test_psd_units_and_endpoint_scaling': [f'N={n}, fs={fs} Hz: {q}' for n in [63, 64] for fs in [1000, 2000] for q in ['端点积分功率 / Endpoint power', '总积分功率 / Total power']],
+    'test_coherence_known_complex_pairs': ['相干与相消 / Coherent and cancelling', '幅度缩放不变性 / Amplitude invariance'],
+    'test_reject_invalid_beall_baselines': [f'{chi}: {q}' for chi in ['zero', 'NaN', 'Inf'] for q in ['length rejects', 'Beall rejects']],
+    'test_liu_returns_mode_not_arithmetic_or_circular_mean': ['众数格中心 / Modal bin center (rad)', '相位方差 / Variance (rad²)'],
+    'test_branch_cut': ['众数格中心 / Modal bin center (rad)', '方差 / Variance (rad²)'],
     'test_missing_and_noiseless': ['零互谱统计量均为 NaN / All zero-cross statistics NaN', '无噪声方差 / Noiseless variance (rad²)', '部分有效样本的标记 / Partial-data validity'],
-    'test_beall_auto_power_changes_peak': ['自功率权重 / Auto-power weights', '自功率谱峰 / Auto-power peak (rad/m)', '互谱幅值谱峰 / Cross-magnitude peak (rad/m)'],
+    'test_beall_auto_power_changes_peak': ['自功率权重 / Auto-power weights', '自功率谱峰 / Auto-power peak (rad/m)', '互谱幅值谱峰 / Cross-magnitude peak (rad/m)', '自功率逐格谱值 / Auto-power spectrum', '互谱幅值逐格谱值 / Cross-magnitude spectrum'],
     'test_no_beall_peak_without_phase': ['谱峰为 NaN / Peak is NaN'],
     'test_full_grid_matches_dense_reference_for_any_block_size': [f'{rows} 行/批：{quantity}' for rows in [1, 7, 100] for quantity in ['波矢 / Wavevector (rad/m)', '似然 / Log likelihood']],
     'test_alias_requires_grid_resolution_not_local_refinement': ['401 点 kx 误差 / kx error (rad/m)', '4001 点 kx 误差 / kx error (rad/m)', '4001 点 ky / ky (rad/m)'],
     'test_equal_length_baselines_can_resolve_alias': ['恢复波矢 / Recovered wavevector (rad/m)'],
     'test_different_lengths_do_not_guarantee_unique_alias': ['各基线包裹相位差 / Wrapped differences (rad)'],
     'test_invalid_and_collinear_constraints': ['空构型 / Empty', '单基线 / One baseline', '共线 / Collinear', '缺失相位 / Missing phase', '无限方差 / Infinite variance', '剔除无效构型后的结果 / Filtered result'],
-    'test_leakage_can_bias_real_signal_phase': ['1.25 周期相位误差 / Phase error (rad)', '2 周期相位误差 / Phase error (rad)'],
+    'test_leakage_can_bias_real_signal_phase': ['1.25 周期相位：直接 DFT 参考 / Off-bin phase: direct DFT (rad)', '2 周期相位：直接 DFT 参考 / On-bin phase: direct DFT (rad)', '2 周期相位：解析参考 / On-bin phase: analytic (rad)'],
     'test_window_psd_normalization': ['矩形窗积分功率 / Boxcar power', 'Hann 窗积分功率 / Hann power'],
 }
 
@@ -132,10 +141,11 @@ class RecordedCase(unittest.TestCase):
     def array_close(self, actual, expected, rtol=1e-7, atol=0):
         entry = dict(actual=serial(actual), expected=serial(expected),
                      max_abs_error=float(np.max(np.abs(np.asarray(actual)-expected))),
-                     criterion=f'abs(error) <= {atol:g} + {rtol:g}*abs(reference)')
+                     atol=float(atol), rtol=float(rtol),
+                     criterion=f'abs(error) <= {atol:.17g} + {rtol:.17g}*abs(reference)')
         self.measurements.append(entry)
         try:
-            np.testing.assert_allclose(actual, expected, rtol=rtol, atol=atol)
+            np.testing.assert_allclose(actual, expected, rtol=rtol, atol=atol, equal_nan=False)
         except Exception:
             entry['passed'] = False
             raise
@@ -213,6 +223,153 @@ def write_rst(summary, outdir):
               'Tables show eight significant digits and key dictionary fields; summary.json retains full values.', '']
     (outdir/'results.rst').write_text('\n'.join(lines), encoding='utf-8')
 
+
+# Select recorded assertions for the reader-facing page. Numerical values,
+# tolerances and statuses always come from the same report as the full table.
+FOCUSED_CHECKS = {
+    'spectrum': [
+        ('window_psd_normalization', 0, '矩形窗积分功率', 'Boxcar integrated power'),
+        ('window_psd_normalization', 1, 'Hann 窗积分功率', 'Hann integrated power'),
+        ('leakage_can_bias_real_signal_phase', 0, '1.25 周期相位：直接 DFT / °', 'Off-bin phase: direct DFT / °'),
+        ('leakage_can_bias_real_signal_phase', 1, '2 周期相位：直接 DFT / °', 'On-bin phase: direct DFT / °'),
+        ('leakage_can_bias_real_signal_phase', 2, '2 周期相位：解析参考 / °', 'On-bin phase: analytic / °'),
+    ],
+    'phase': [
+        ('liu_returns_mode_not_arithmetic_or_circular_mean', 0, '案例 A：众数格中心 / °', 'Case A: modal bin center / °'),
+        ('liu_returns_mode_not_arithmetic_or_circular_mean', 1, '案例 A：样本方差 / °²', 'Case A: sample variance / °²'),
+        ('branch_cut', 0, '案例 B：众数格中心 / °', 'Case B: modal bin center / °'),
+        ('branch_cut', 1, '案例 B：样本方差 / °²', 'Case B: sample variance / °²'),
+    ],
+    'beall': [
+        ('beall_auto_power_changes_peak', 0, '规定权重：平均自功率', 'Required weight: mean auto-power'),
+        ('beall_auto_power_changes_peak', 3, '规定权重：逐格谱值', 'Required weight: bin values'),
+        ('beall_auto_power_changes_peak', 1, '规定权重：谱峰 / rad m⁻¹', 'Required weight: peak / rad m⁻¹'),
+        ('beall_auto_power_changes_peak', 4, '误用对照：逐格谱值', 'Misuse control: bin values'),
+        ('beall_auto_power_changes_peak', 2, '误用对照：谱峰 / rad m⁻¹', 'Misuse control: peak / rad m⁻¹'),
+    ],
+}
+
+GROUP_CONCLUSIONS = {
+    'spectrum': ('这组输入的窗口功率归一化和互相位均符合参考计算。',
+                 'Window-power normalization and cross phases agree with the references for these inputs.'),
+    'phase': ('两个独立案例的众数格中心与样本方差均符合手算参考，包括跨越 ±180° 的样本。',
+              'Modal bin centers and sample variances match the hand calculations, including the branch-cut case.'),
+    'beall': ('规定权重的谱值与峰位符合手算参考；误用对照得到不同峰位，也符合其对照参考。',
+              'The required weight gives the reference spectrum and peak; the misuse control gives a different peak matching its own reference.'),
+
+}
+
+
+def focused_metric(name, index, metric):
+    """Convert phase display only; preserve recorded radians and pass/fail decisions.
+
+    Scaling the absolute error and tolerance alongside both compared values keeps
+    the displayed inequality equivalent. Relative tolerances are dimensionless.
+    """
+    factor = 1.0
+    if name in ('liu_returns_mode_not_arithmetic_or_circular_mean', 'branch_cut'):
+        factor = (180 / np.pi)**(2 if index == 1 else 1)
+    elif name == 'leakage_can_bias_real_signal_phase':
+        factor = 180 / np.pi
+    converted = dict(metric)
+    if factor != 1:
+        for key in ('actual', 'expected', 'max_abs_error'):
+            if key in metric:
+                converted[key] = serial(np.asarray(metric[key], dtype=float) * factor)
+        converted['atol'] = metric['atol'] * factor
+        converted['criterion'] = (f'abs(error) <= {converted["atol"]:.17g} + '
+                                  f'{metric["rtol"]:.17g}*abs(reference)')
+    return converted
+
+
+def group_outcome(records, selectors, language):
+    """Never infer group success from a partial set of successful assertions."""
+    failed, missing = [], []
+    for name, index, title_zh, title_en in selectors:
+        row = records.get('test_' + name, {})
+        title = title_zh if language == 'zh' else title_en
+        checks = row.get('checks', [])
+        if index >= len(checks):
+            missing.append(title)
+        elif not checks[index].get('passed'):
+            failed.append(title)
+    # A selected assertion may pass before a later assertion/error fails its test.
+    failed_tests = sorted({name for name, *_ in selectors
+                           if records.get('test_' + name, {}).get('status') in ('FAIL', 'ERROR')})
+    incomplete_tests = {name for name, *_ in selectors
+                        if records.get('test_' + name, {}).get('status') != 'PASS'}
+    if failed or failed_tests:
+        details = failed or [TITLES['test_' + name][0 if language == 'zh' else 1] for name in failed_tests]
+        return 'FAIL', ('未满足预期：' if language == 'zh' else 'Unmet expectations: ') + '；'.join(details)
+    if missing or incomplete_tests:
+        return 'NOT RUN', ('检查尚未全部完成，不能判定通过。' if language == 'zh' else
+                           'Checks are incomplete; success cannot be concluded.')
+    return 'PASS', ''
+
+
+def short_criterion(metric, language):
+    """Compact display of the recorded rule, without introducing new tolerances."""
+    criterion = metric['criterion']
+    if criterion == 'round(abs(error), 7) == 0':
+        return '差值按 7 位小数舍入为 0' if language == 'zh' else 'Round error to 7 decimals: 0'
+    if criterion == 'equal':
+        return '相等' if language == 'zh' else 'Equal'
+    if criterion == 'exception type':
+        return '异常类型一致' if language == 'zh' else 'Same exception type'
+    if criterion in ('actual < limit', 'actual > limit'):
+        sign = '<' if '<' in criterion else '>'
+        return f'{sign} {display(metric["expected"])}'
+    match = re.fullmatch(r'abs\(error\) <= (\S+) \+ (\S+)\*abs\(reference\)', criterion)
+    if match:
+        absolute, relative = match.groups()
+        return f'atol={display(float(absolute))}; rtol={display(float(relative))}'
+    return criterion
+
+
+def write_focused_rst(summary, outdir):
+    """Write bilingual, includable result tables directly from captured checks."""
+    records = {r['id']: r for r in summary['tests']}
+    for language in ('zh', 'en'):
+        zh = language == 'zh'
+        lines = [':orphan:', '', '.. checks-overview-start', '',
+                 ('下表由同次运行记录自动生成；显示 8 位有效数字，完整精度见数值报告。'
+                  if zh else 'Tables are generated from the same run, showing eight significant digits; the numerical report retains full precision.'), '',
+                 '.. checks-overview-end', '']
+        headers = (['检查量', '预期值', '实际值', '最大绝对差', '比较规则', '状态'] if zh else
+                   ['Quantity', 'Expected', 'Actual', 'Max absolute difference', 'Comparison rule', 'Status'])
+        for group, selectors in FOCUSED_CHECKS.items():
+            status, reason = group_outcome(records, selectors, language)
+            status_label = {'PASS': '通过', 'FAIL': '失败', 'NOT RUN': '未完成'}[status] if zh else status
+            lines += [f'.. checks-{group}-start', '',
+                      f'**本次核对：{status_label}（{status}）**' if zh else f'**This run: {status_label}**', '',
+                      '.. list-table::',
+                      '   :header-rows: 1', '   :widths: 22 16 16 12 24 10', '',
+                      '   * - ' + headers[0]]
+            lines += ['     - ' + h for h in headers[1:]]
+            for name, index, title_zh, title_en in selectors:
+                row = records.get('test_' + name, {})
+                checks = row.get('checks', [])
+                title = title_zh if zh else title_en
+                if index >= len(checks):
+                    cells = [title, '—', '—', '—', '—', 'NOT RUN']
+                else:
+                    metric = focused_metric(name, index, checks[index])
+                    cells = [title, table_value(metric.get('expected')), table_value(metric.get('actual')),
+                             display(metric['max_abs_error']) if 'max_abs_error' in metric else '—',
+                             short_criterion(metric, language), 'PASS' if metric.get('passed') else 'FAIL']
+                lines += ['   * - ' + cells[0]] + ['     - ' + c for c in cells[1:]]
+            conclusion = GROUP_CONCLUSIONS[group][0 if zh else 1] if status == 'PASS' else reason
+            lines += ['', ('**结论：** ' if zh else '**Conclusion:** ') + conclusion]
+            if group == 'spectrum':
+                errors = records.get('test_leakage_can_bias_real_signal_phase', {}).get('observed', {}).get('phase_error_deg')
+                if errors is not None:
+                    lines += ['', (f'相对输入相位差的偏差：1.25 周期为 {display(errors[0])}°，2 周期为 {display(errors[1])}°。'
+                                   '这是本次信号的读数偏差，不参与通过与否的判断。' if zh else
+                                   f'Bias relative to the input phase difference: {display(errors[0])}° for 1.25 cycles and '
+                                   f'{display(errors[1])}° for 2 cycles. These observations are not pass/fail thresholds.')]
+            lines += ['', f'.. checks-{group}-end', '']
+        (outdir / f'checks_{language}.rst').write_text('\n'.join(lines), encoding='utf-8')
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--outdir', type=Path, default=CASE/'output')
@@ -229,6 +386,7 @@ def main():
     (out/'summary.json').write_text(json.dumps(serial(summary), ensure_ascii=False, indent=2, allow_nan=False)+'\n', encoding='utf-8')
     (out/'provenance.json').write_text(json.dumps(summary['provenance'], indent=2)+'\n', encoding='utf-8')
     write_rst(summary, out)
+    write_focused_rst(summary, out)
     if result.wasSuccessful():
         from plot_results import plot_results
         plot_results(out)
@@ -236,7 +394,7 @@ def main():
             destination = ROOT/'docs/source/tests/010_diagnostics/_generated/case_basic_checks'
             destination.mkdir(parents=True, exist_ok=True)
             # Publish only this case's explicit artifact set.
-            for filename in ['summary.json', 'provenance.json', 'results.rst']:
+            for filename in ['summary.json', 'provenance.json', 'results.rst', 'checks_zh.rst', 'checks_en.rst']:
                 shutil.copy2(out/filename, destination/filename)
             for folder in ['details', 'figures']:
                 shutil.copytree(out/folder, destination/folder, dirs_exist_ok=True)

@@ -82,8 +82,8 @@ Diagnostics Usage Cookbook
 
    - 结合基线方向和长度检查联合似然中的候选峰，参见基础页的几何条件。
    - 此方差描述分段相位的散布，用于设置似然中的残差尺度。众数的估计误差另受样本数、分箱和相位分布影响。
-   - 用直接相减比较两个折叠波数，在 Nyquist 边附近得到整整一个周期的假误差。
-   - 在谱已沉入噪声底的频段上评估相干度判据。
+   - 比较折叠波数时使用圆周残差；直接相减会在 Nyquist 边附近产生接近一个周期的假误差。
+   - 先识别信号高于噪声底的频段，再判断信号相干性；带外相干度用于检查噪声基准，不能作为传播方向可靠的证据。
 
 .. container:: ap-lang ap-lang-en
 
@@ -163,7 +163,7 @@ Diagnostics Usage Cookbook
 
    - Inspect candidate peaks using both baseline directions and lengths; see the geometry conditions in the foundations.
    - Use the segment-phase variance as the likelihood residual scale, and examine mode stability across sample counts.
-   - Comparing two folded wavenumbers with a plain difference and reading a full period of
-     spurious error near a Nyquist edge.
-   - Evaluating a coherence criterion on bins where the spectrum has already sunk into the
-     noise floor.
+   - Use circular residuals for folded wavenumbers; ordinary subtraction can produce
+     nearly a full period of spurious error near a Nyquist edge.
+   - Assess signal coherence where power stands above the noise floor. Out-of-band coherence
+     checks the noise baseline; it does not establish a reliable propagation direction.

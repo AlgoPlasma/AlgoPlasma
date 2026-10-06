@@ -112,7 +112,9 @@
             4
           ],
           "max_abs_error": 0.0,
-          "criterion": "abs(error) <= 0 + 1e-07*abs(reference)",
+          "atol": 0.0,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)",
           "passed": true,
           "quantity": "自功率权重 / Auto-power weights"
         },
@@ -131,6 +133,38 @@
           "max_abs_error": 0.0,
           "passed": true,
           "quantity": "互谱幅值谱峰 / Cross-magnitude peak (rad/m)"
+        },
+        {
+          "actual": [
+            25.0025,
+            2.0
+          ],
+          "expected": [
+            25.0025,
+            2
+          ],
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)",
+          "passed": true,
+          "quantity": "自功率逐格谱值 / Auto-power spectrum"
+        },
+        {
+          "actual": [
+            0.5,
+            2.0
+          ],
+          "expected": [
+            0.5,
+            2
+          ],
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)",
+          "passed": true,
+          "quantity": "互谱幅值逐格谱值 / Cross-magnitude spectrum"
         }
       ],
       "data_file": "details/test_beall_auto_power_changes_peak.npz"
@@ -152,21 +186,72 @@
       "observed": {},
       "checks": [
         {
-          "actual": 0.05235987755983018,
-          "expected": 0.10471975511965977,
-          "criterion": "actual < limit",
+          "actual": 3.089232776029963,
+          "expected": 3.0892327760299634,
+          "max_abs_error": 4.440892098500626e-16,
+          "atol": 8.928943354902097e-14,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 8.9289433549020973e-14 + 0*abs(reference)",
           "passed": true,
-          "quantity": "距 π 的圆周偏差 / Distance to pi (rad)"
+          "quantity": "众数格中心 / Modal bin center (rad)"
         },
         {
           "actual": 0.0004823109156622841,
-          "expected": 0.01,
-          "criterion": "actual < limit",
+          "expected": 0.00048231091566228857,
+          "max_abs_error": 4.445228907190568e-18,
+          "atol": 5.610220569615966e-13,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 5.610220569615966e-13 + 1.4210854715202004e-14*abs(reference)",
           "passed": true,
           "quantity": "方差 / Variance (rad²)"
         }
       ],
       "data_file": "details/test_branch_cut.npz"
+    },
+    {
+      "id": "test_coherence_known_complex_pairs",
+      "title_zh": "相干度解析对照",
+      "title_en": "Analytic coherence checks",
+      "status": "PASS",
+      "inputs": {
+        "first": "ones (4,2)",
+        "second": "constant 2j; cancelling signs"
+      },
+      "observed": {},
+      "checks": [
+        {
+          "actual": [
+            1.0,
+            0.0
+          ],
+          "expected": [
+            1.0,
+            0.0
+          ],
+          "max_abs_error": 0.0,
+          "atol": 1.4210854715202004e-14,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 1.4210854715202004e-14 + 1.4210854715202004e-14*abs(reference)",
+          "passed": true,
+          "quantity": "相干与相消 / Coherent and cancelling"
+        },
+        {
+          "actual": [
+            1.0,
+            0.0
+          ],
+          "expected": [
+            1.0,
+            0.0
+          ],
+          "max_abs_error": 0.0,
+          "atol": 1.4210854715202004e-14,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 1.4210854715202004e-14 + 1.4210854715202004e-14*abs(reference)",
+          "passed": true,
+          "quantity": "幅度缩放不变性 / Amplitude invariance"
+        }
+      ]
     },
     {
       "id": "test_different_lengths_do_not_guarantee_unique_alias",
@@ -208,7 +293,9 @@
           ],
           "expected": 0,
           "max_abs_error": 0.0,
-          "criterion": "abs(error) <= 1e-12 + 1e-07*abs(reference)",
+          "atol": 1.7857886709804195e-13,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 1.7857886709804195e-13 + 0*abs(reference)",
           "passed": true,
           "quantity": "各基线包裹相位差 / Wrapped differences (rad)"
         }
@@ -466,22 +553,46 @@
         "phase_error_deg": [
           5.551446628877582,
           1.2722218725854067e-14
+        ],
+        "reference_phase_rad": [
+          -0.8968910219226534,
+          -0.8000000000000003
+        ],
+        "measured_phase_rad": [
+          -0.8968910219226536,
+          -0.8000000000000003
         ]
       },
       "checks": [
         {
-          "actual": 0.09689102192265353,
-          "expected": 0.08726646259971647,
-          "criterion": "actual > limit",
+          "actual": -0.8968910219226536,
+          "expected": -0.8968910219226534,
+          "max_abs_error": 2.220446049250313e-16,
+          "atol": 5.714523747137342e-12,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 5.7145237471373423e-12 + 0*abs(reference)",
           "passed": true,
-          "quantity": "1.25 周期相位误差 / Phase error (rad)"
+          "quantity": "1.25 周期相位：直接 DFT 参考 / Off-bin phase: direct DFT (rad)"
         },
         {
-          "actual": 2.220446049250313e-16,
-          "expected": 1e-12,
-          "criterion": "actual < limit",
+          "actual": -0.8000000000000003,
+          "expected": -0.8000000000000003,
+          "max_abs_error": 0.0,
+          "atol": 5.714523747137342e-12,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 5.7145237471373423e-12 + 0*abs(reference)",
           "passed": true,
-          "quantity": "2 周期相位误差 / Phase error (rad)"
+          "quantity": "2 周期相位：直接 DFT 参考 / On-bin phase: direct DFT (rad)"
+        },
+        {
+          "actual": -0.8000000000000003,
+          "expected": -0.8,
+          "max_abs_error": 2.220446049250313e-16,
+          "atol": 5.714523747137342e-12,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 5.7145237471373423e-12 + 0*abs(reference)",
+          "passed": true,
+          "quantity": "2 周期相位：解析参考 / On-bin phase: analytic (rad)"
         }
       ],
       "data_file": "details/test_leakage_can_bias_real_signal_phase.npz"
@@ -505,16 +616,20 @@
         {
           "actual": 0.05235987755982974,
           "expected": 0.05235987755982988,
-          "criterion": "round(abs(error), 7) == 0",
           "max_abs_error": 1.457167719820518e-16,
+          "atol": 8.928943354902097e-14,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 8.9289433549020973e-14 + 0*abs(reference)",
           "passed": true,
-          "quantity": "相位均值 / Mean (rad)"
+          "quantity": "众数格中心 / Modal bin center (rad)"
         },
         {
           "actual": 0.010816666667666668,
           "expected": 0.010816666667666668,
-          "criterion": "round(abs(error), 7) == 0",
           "max_abs_error": 0.0,
+          "atol": 5.610220569615966e-13,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 5.610220569615966e-13 + 1.4210854715202004e-14*abs(reference)",
           "passed": true,
           "quantity": "相位方差 / Variance (rad²)"
         }
@@ -573,6 +688,8 @@
           ],
           "expected": 1e-12,
           "max_abs_error": 0.0,
+          "atol": 1e-25,
+          "rtol": 0.0,
           "criterion": "abs(error) <= 1e-25 + 0*abs(reference)",
           "passed": true,
           "quantity": "无噪声方差 / Noiseless variance (rad²)"
@@ -621,6 +738,288 @@
       ]
     },
     {
+      "id": "test_psd_units_and_endpoint_scaling",
+      "title_zh": "PSD 单位与端点",
+      "title_en": "PSD units and endpoints",
+      "status": "PASS",
+      "inputs": {
+        "lengths": [
+          63,
+          64
+        ],
+        "sampling_rates_hz": [
+          1000,
+          2000
+        ],
+        "detrend": false
+      },
+      "observed": {},
+      "checks": [
+        {
+          "actual": [
+            4.0,
+            0.500000000000002
+          ],
+          "expected": [
+            4.0,
+            0.5
+          ],
+          "max_abs_error": 1.9984014443252818e-15,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=63, fs=1000 Hz: 端点积分功率 / Endpoint power"
+        },
+        {
+          "actual": 4.500000000000002,
+          "expected": 4.5,
+          "max_abs_error": 1.7763568394002505e-15,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=63, fs=1000 Hz: 总积分功率 / Total power"
+        },
+        {
+          "actual": [
+            4.0,
+            0.500000000000002
+          ],
+          "expected": [
+            4.0,
+            0.5
+          ],
+          "max_abs_error": 1.9984014443252818e-15,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=63, fs=2000 Hz: 端点积分功率 / Endpoint power"
+        },
+        {
+          "actual": 4.500000000000002,
+          "expected": 4.5,
+          "max_abs_error": 1.7763568394002505e-15,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=63, fs=2000 Hz: 总积分功率 / Total power"
+        },
+        {
+          "actual": [
+            4.0,
+            1.0
+          ],
+          "expected": [
+            4.0,
+            1.0
+          ],
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=64, fs=1000 Hz: 端点积分功率 / Endpoint power"
+        },
+        {
+          "actual": 5.0,
+          "expected": 5.0,
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=64, fs=1000 Hz: 总积分功率 / Total power"
+        },
+        {
+          "actual": [
+            4.0,
+            1.0
+          ],
+          "expected": [
+            4.0,
+            1.0
+          ],
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=64, fs=2000 Hz: 端点积分功率 / Endpoint power"
+        },
+        {
+          "actual": 5.0,
+          "expected": 5.0,
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
+          "passed": true,
+          "quantity": "N=64, fs=2000 Hz: 总积分功率 / Total power"
+        }
+      ]
+    },
+    {
+      "id": "test_reject_invalid_beall_baselines",
+      "title_zh": "拒绝非法基线",
+      "title_en": "Reject invalid baselines",
+      "status": "PASS",
+      "inputs": {
+        "baselines": [
+          [
+            0,
+            0
+          ],
+          [
+            "nan",
+            0
+          ],
+          [
+            "inf",
+            0
+          ]
+        ]
+      },
+      "observed": {},
+      "checks": [
+        {
+          "expected": "ValueError",
+          "criterion": "exception type",
+          "actual": "ValueError",
+          "passed": true,
+          "quantity": "zero: length rejects"
+        },
+        {
+          "expected": "ValueError",
+          "criterion": "exception type",
+          "actual": "ValueError",
+          "passed": true,
+          "quantity": "zero: Beall rejects"
+        },
+        {
+          "expected": "ValueError",
+          "criterion": "exception type",
+          "actual": "ValueError",
+          "passed": true,
+          "quantity": "NaN: length rejects"
+        },
+        {
+          "expected": "ValueError",
+          "criterion": "exception type",
+          "actual": "ValueError",
+          "passed": true,
+          "quantity": "NaN: Beall rejects"
+        },
+        {
+          "expected": "ValueError",
+          "criterion": "exception type",
+          "actual": "ValueError",
+          "passed": true,
+          "quantity": "Inf: length rejects"
+        },
+        {
+          "expected": "ValueError",
+          "criterion": "exception type",
+          "actual": "ValueError",
+          "passed": true,
+          "quantity": "Inf: Beall rejects"
+        }
+      ]
+    },
+    {
+      "id": "test_variance_weights_resolve_conflicting_observations",
+      "title_zh": "相位方差权重",
+      "title_en": "Phase-variance weights",
+      "status": "PASS",
+      "inputs": {
+        "configurations": [
+          [
+            [
+              1,
+              0
+            ],
+            0.0,
+            1.0
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            1.0,
+            9.0
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            0.0,
+            1.0
+          ]
+        ],
+        "range_rad_m": 1,
+        "grid_n": 21
+      },
+      "observed": {},
+      "checks": [
+        {
+          "actual": [
+            0.10000000000000009,
+            0.0
+          ],
+          "expected": [
+            0.1,
+            0
+          ],
+          "max_abs_error": 8.326672684688674e-17,
+          "atol": 1.4210854715202004e-14,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 1.4210854715202004e-14 + 0*abs(reference)",
+          "passed": true,
+          "quantity": "加权波矢 / Weighted wavevector"
+        },
+        {
+          "actual": -0.05,
+          "expected": -0.05,
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)",
+          "passed": true,
+          "quantity": "加权峰值评分 / Weighted peak score"
+        },
+        {
+          "actual": -0.05,
+          "expected": -0.05,
+          "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 1.4210854715202004e-14,
+          "criterion": "abs(error) <= 0 + 1.4210854715202004e-14*abs(reference)",
+          "passed": true,
+          "quantity": "稠密评分解析对照 / Analytic dense score"
+        },
+        {
+          "actual": [
+            0.5,
+            0.0
+          ],
+          "expected": [
+            0.5,
+            0
+          ],
+          "max_abs_error": 0.0,
+          "atol": 1.4210854715202004e-14,
+          "rtol": 0.0,
+          "criterion": "abs(error) <= 1.4210854715202004e-14 + 0*abs(reference)",
+          "passed": true,
+          "quantity": "等权对照 / Equal-weight control"
+        }
+      ]
+    },
+    {
       "id": "test_window_psd_normalization",
       "title_zh": "窗口功率归一化",
       "title_en": "Window-power normalization",
@@ -651,16 +1050,20 @@
         {
           "actual": 0.8763396539810355,
           "expected": 0.8763396539810354,
-          "criterion": "round(abs(error), 7) == 0",
           "max_abs_error": 1.1102230246251565e-16,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
           "passed": true,
           "quantity": "矩形窗积分功率 / Boxcar power"
         },
         {
           "actual": 0.7890986931090415,
           "expected": 0.7890986931090415,
-          "criterion": "round(abs(error), 7) == 0",
           "max_abs_error": 0.0,
+          "atol": 0.0,
+          "rtol": 9.094947017729282e-13,
+          "criterion": "abs(error) <= 0 + 9.0949470177292824e-13*abs(reference)",
           "passed": true,
           "quantity": "Hann 窗积分功率 / Hann power"
         }
@@ -668,8 +1071,8 @@
     }
   ],
   "provenance": {
-    "generated_at_utc": "2026-09-27T08:28:02.831273+00:00",
-    "git_head": "732d88f206bb59b2facff70e505135f4390efa92",
+    "generated_at_utc": "2026-10-05T11:57:27.821847+00:00",
+    "git_head": "1c0f6b1d3cde82e49d2920cab7742ab29f2f1738",
     "python": "3.10.12",
     "numpy": "1.24.4",
     "matplotlib": "3.10.9",
@@ -690,7 +1093,7 @@
       "K_Diagnostics/K02_beall/fun_K02_nyquist_wavenumber.py": "113a3a729d80b2d6323450c9c3c289a11ae05b2d5301e3c32ce1b19380760dbd",
       "K_Diagnostics/K02_beall/fun_K02_peak_wavenumber.py": "cbeda4dd2e78789ce858aa2a067fac1527ea5674b3f5ffd3159dd48053e148b3",
       "K_Diagnostics/K02_beall/fun_K02_project_wavenumber.py": "b86d434cccbc85838474f34d5074564e0f473510647c498c2c0cbdc3c37e31f5",
-      "K_Diagnostics/K02_beall/fun_K02_separation_magnitude.py": "2297fedbdcc669fe39104de47939fb56d8da34ed1d6d8d11998ba202d4330ea6",
+      "K_Diagnostics/K02_beall/fun_K02_separation_magnitude.py": "ee1b41da081d5aab5887ed22258102051ef855400dfc94d498b86b5ec71245ad",
       "K_Diagnostics/K02_beall/fun_K02_separation_vector.py": "e90da5355f0cc19f794a1e6ce92e714959d8211b889ef68f1707c52a87b7bb31",
       "K_Diagnostics/K02_beall/fun_K02_wavenumber_edges.py": "937a45b1e4ce15118d2a340cf2df33fa8791d9a87a3077d81a31cfd1c683b440",
       "K_Diagnostics/K02_beall/fun_K02_wavenumber_residual.py": "c5256e9def17454acaf28e6d8aa2c80b5ece14938b4cf8a80c8470609a9ccda1",
@@ -702,9 +1105,9 @@
       "K_Diagnostics/K03_mle_k2d/fun_K03_search_wavevector.py": "a41f573899f12a118dadf986c9c717f7ffbe41286f4727822da5e7dfefc907be",
       "K_Diagnostics/K03_mle_k2d/fun_K03_wavenumber_grid.py": "98aacff5485a3900d1ca8e7e67ca32e018c7a278b9ef96b29addf76b49942f57",
       "K_Diagnostics/K03_mle_k2d/mod_K03_mle_k2d.py": "6f35e69ea6ed211a2eaf8c0c0241702f3508c26899b65a6b57c0cdb0e4c00af7",
-      "tests/010_diagnostics/case_basic_checks/source_py/plot_results.py": "31492fe0a845e3fdbb806b1c5f1a3b0051375591e6caada612725cb779496115",
-      "tests/010_diagnostics/case_basic_checks/source_py/report.py": "8e83c70aad11ce2c84457d7b60d1be7a9c7122d0ec9ec4528b5e53e1c9e870bd",
-      "tests/010_diagnostics/case_basic_checks/source_py/test_regressions.py": "45ee5898e645552a9c7be36310f302c53779591d2e93e47f3bd18622b2481946",
+      "tests/010_diagnostics/case_basic_checks/source_py/plot_results.py": "945a2f6c8a880d59aa79b46ab18738e917f259e97799dcffbeded84d7becd511",
+      "tests/010_diagnostics/case_basic_checks/source_py/report.py": "a840bb5bfb5ba609a072c8973bb0eab6a52b499eaef0cd417ae8b6df5442d0b7",
+      "tests/010_diagnostics/case_basic_checks/source_py/test_regressions.py": "57b73f177114a096d3bc2b2c274bbc5edab243f4af1ee2bfb66527928d8bfa39",
       "tests/010_diagnostics/case_basic_checks/run.sh": "b67f70c809346032c52b1a9f3b9c79fe6d3d812b750d1b5740c4a41a655b9188",
       "tests/010_diagnostics/case_basic_checks/clean.sh": "d1f7f68a87fea0ef2cf22996a883513706f9acb19d7bcf0a35d1ecb41d815375"
     },

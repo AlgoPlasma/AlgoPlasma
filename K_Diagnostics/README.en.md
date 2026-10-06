@@ -63,16 +63,11 @@ and computation happens only in the test's main program.
 
 ## Tests
 
-[`tests/010_diagnostics/case_broadband_dispersion/`](../tests/010_diagnostics/case_broadband_dispersion/):
-one synthetic broadband dataset drives all three units and produces four
-figures. Reference values come from the generator and acceptance compares
-measured errors with explicit tolerances. Fitting the recovered dispersion
-branch through the origin estimates the ion sound speed; its relative error
-in this run is 2.27e-3.
+- [basic_numerical tests](../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
+- [broadband_dispersion](../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
 
-```bash
-cd tests/010_diagnostics/case_broadband_dispersion && bash run.sh
-```
+The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
+
 
 ## Provenance
 

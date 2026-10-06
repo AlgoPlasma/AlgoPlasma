@@ -82,8 +82,8 @@ K_Diagnostics
 
    :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`：一份合成宽带信号同时驱动三个单元，
    参考真值取自生成器，验收比较谱指数、折叠波数及恢复波矢的误差。
-   :doc:`基础与边界条件测试 </tests/010_diagnostics/case_basic_checks>` 则用小型已知输入
-   检查各计算环节，并展示数值结果与解释图。
+   :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>` 按三组比较参考值、实测值、误差和验收判据，
+   覆盖频谱功率与相位、相位统计、Beall 权重与谱峰。
 
 .. container:: ap-lang ap-lang-en
 
@@ -157,5 +157,6 @@ K_Diagnostics
    :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`: one synthetic broadband dataset
    drives all three units. Reference values come from the generator; acceptance uses explicit
    numerical tolerances for spectral slope, folded wavenumbers and recovered wavevectors.
-   :doc:`Basic and boundary-condition checks </tests/010_diagnostics/case_basic_checks>` use
-   small known inputs to examine individual operations, with numerical results and explanatory figures.
+   :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>` compare references, measured values,
+   errors and acceptance rules in three groups: spectral power and phase, phase statistics,
+   and Beall weights and peaks.

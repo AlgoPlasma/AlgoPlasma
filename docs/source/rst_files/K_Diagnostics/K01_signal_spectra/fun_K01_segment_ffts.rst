@@ -60,7 +60,7 @@ fun_K01_segment_ffts.py
 
    .. rubric:: 局部假设 / 前置条件
 
-   - 分段不重叠。重叠会使相位样本相关，而 ``fun_K01_phase_mode_statistics`` 估计方差时假定样本独立，K03 的似然权重会因此偏大。
+   - 分段不重叠，但不重叠不保证统计独立。相关性会影响有效样本量与众数估计的稳定性；当前返回的是单样本相位方差，不能仅由分段重叠断言 K03 权重必然偏大。
    - window 可选 boxcar（默认）或 hann（numpy.hanning）；去均值后乘窗。Hann 窗降低频谱旁瓣，同时使主瓣变宽。
 
    .. rubric:: 实现逻辑
@@ -130,7 +130,7 @@ fun_K01_segment_ffts.py
 
    .. rubric:: Local Assumptions and Preconditions
 
-   - Segments do not overlap. Overlapping them correlates the phase samples that ``fun_K01_phase_mode_statistics`` treats as independent when estimating the variance, which would inflate the K03 likelihood weights.
+   - Segments do not overlap, but non-overlap does not guarantee independence. Correlation affects effective sample size and mode stability. The returned variance describes individual phase samples; overlap alone does not establish that K03 weights are inflated.
    - window accepts boxcar (default) or hann (numpy.hanning); detrending precedes windowing. Hann reduces spectral sidelobes and broadens the main lobe.
 
    .. rubric:: Implementation Notes

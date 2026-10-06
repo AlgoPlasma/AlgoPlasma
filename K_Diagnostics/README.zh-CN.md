@@ -51,15 +51,15 @@ grid = fun_K03_wavenumber_grid(k_range_rad_m=3300.0, n_grid=301)
 result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, grid), grid, grid)
 ```
 
-依赖仅 NumPy。三个单元都**不做任何文件读写**——原始数据的读取和结果落盘由调用方负责，计算只在测试的主程序里发生。
+依赖仅 NumPy。三个单元都**不做任何文件读写**——原始数据的读取和结果落盘由调用方负责，由调用方提供数据并驱动计算。
 
 ## 测试
 
-[`tests/010_diagnostics/case_broadband_dispersion/`](../tests/010_diagnostics/case_broadband_dispersion/)：一份合成宽带信号同时驱动三个单元，出四张图。参考值由生成器给出，验收比较计算值与参考值的误差。其中，将恢复的频率与波数模长拟合为过原点的直线，可由斜率估计离子声速；本例声速相对误差为 2.27e-3。
+- [基础数值测试](../tests/010_diagnostics/case_basic_checks/)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
+- [宽带测试](../tests/010_diagnostics/case_broadband_dispersion/)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
 
-```bash
-cd tests/010_diagnostics/case_broadband_dispersion && bash run.sh
-```
+宽带页面的图、数值表、逐频点 CSV 和源码哈希来自同次运行。阈值是这个合成案例的工程验收要求，不代表普适精度保证。
+
 
 ## 方法来源
 

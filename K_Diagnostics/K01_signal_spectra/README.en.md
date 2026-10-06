@@ -56,8 +56,7 @@ sigma^2   = var(wrap(theta_i - theta_mode), ddof=1) + 1e-12
 
 ## Notes
 
-- **Segments do not overlap.**  Overlapping them correlates the phase samples,
-  whereas K03's likelihood weights assume independence.
+- **Segments do not overlap.** Non-overlap does not guarantee independence. Correlation affects effective sample size and mode stability. The returned variance describes individual samples; overlap alone does not establish inflated K03 weights.
 - Use window='boxcar' for bin-aligned data or window='hann' to reduce sidelobes while broadening the main lobe. Off-bin truncation can affect cross-phase estimates; power_spectrum uses the matching FFT window for power normalization.
 - **The coherence floor is not zero.**  With `n` independent segments,
   uncorrelated signals average to `1/n`, not 0.  That is the reference for
@@ -87,15 +86,7 @@ mean_phase, variance = fun_K01_phase_mode_statistics(phase[:, mode_bins])
 
 ## Tests
 
-`tests/010_diagnostics/case_broadband_dispersion`: the generator uses `A ~ 1/f`, so
-the power spectrum falls as `1/f^2`.  Three quantities of the generator are
-recovered from the measurement:
+- [basic_numerical tests](../../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
+- [broadband_dispersion](../../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
 
-- fitted spectral exponent **-2.002** against -2;
-- lower band edge 104 kHz, matching the generated value to within one bin;
-- the frequency at which the spectrum meets the noise floor, 752 kHz measured
-  against the 725 kHz the `1/f^2` law predicts (3.7 %).  This last one tests the
-  spectrum across its whole dynamic range rather than only where it is strong.
-
-Coherence has median 0.933 over the bins that stand clear of the floor, and
-out-of-band bins sit at 0.00248 against the `1/n_seg = 0.003906` floor.
+The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.

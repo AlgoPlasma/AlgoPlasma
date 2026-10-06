@@ -31,11 +31,11 @@ K02_beall
 
    * :doc:`fun_K02_nyquist_wavenumber.py <K02_beall/fun_K02_nyquist_wavenumber>`:
 
-       ``fun_K02_nyquist_wavenumber`` 给出该间距的硬限制 :math:`\pi/|\boldsymbol{\chi}|`，对应频率上限 :math:`v/(2|\boldsymbol{\chi}|)`。可见折叠条数为 :math:`f_{\max}/f_{\rm alias}`，所以加宽频带与加粗间距是等效的。
+       ``fun_K02_nyquist_wavenumber`` 给出该间距的硬限制 :math:`\pi/|\boldsymbol{\chi}|`，当基线平行于传播方向时，首次混叠频率为 :math:`v/(2|\boldsymbol{\chi}|)`，完整折叠周期为 :math:`v/|\boldsymbol{\chi}|`。占用的折叠阶数应按生成模态计数；斜向基线还需考虑投影。
 
       * :doc:`fun_K02_separation_vector.py <K02_beall/fun_K02_separation_vector>`:
 
-       ``fun_K02_separation_vector`` 与 ``fun_K02_separation_magnitude`` 是几何的两个基础件：前者由间距和方位角构造 :math:`\boldsymbol{\chi}`，后者给出其长度并集中做形状与零长度校验。间距的指向决定了整个模块族的符号约定。
+       ``fun_K02_separation_vector`` 与 ``fun_K02_separation_magnitude`` 是几何的两个基础件：前者由间距和方位角构造 :math:`\boldsymbol{\chi}`，后者给出其长度并集中做形状、有限性与零长度校验。间距的指向决定了整个模块族的符号约定。
 
    * :doc:`fun_K02_separation_magnitude.py <K02_beall/fun_K02_separation_magnitude>`:
 
@@ -95,11 +95,11 @@ K02_beall
 
    * :doc:`fun_K02_nyquist_wavenumber.py <K02_beall/fun_K02_nyquist_wavenumber>`:
 
-       ``fun_K02_nyquist_wavenumber`` gives the hard limit :math:`\pi/|\boldsymbol{\chi}|` of a separation, with the corresponding frequency limit :math:`v/(2|\boldsymbol{\chi}|)`. The number of visible folds is :math:`f_{\max}/f_{\rm alias}`, so widening the band and coarsening the separation are equivalent.
+       ``fun_K02_nyquist_wavenumber`` gives the hard limit :math:`\pi/|\boldsymbol{\chi}|` of a separation, with first alias frequency :math:`v/(2|\boldsymbol{\chi}|)` when aligned with propagation. The full fold period is :math:`v/|\boldsymbol{\chi}|`. Count occupied orders from the generated modes; oblique baselines also require projection.
 
       * :doc:`fun_K02_separation_vector.py <K02_beall/fun_K02_separation_vector>`:
 
-       ``fun_K02_separation_vector`` and ``fun_K02_separation_magnitude`` are the two geometric primitives: the first builds :math:`\boldsymbol{\chi}` from a spacing and an orientation, the second returns its length and performs the shape and zero-length checks once. The sense of the separation fixes the sign convention of the whole module family.
+       ``fun_K02_separation_vector`` and ``fun_K02_separation_magnitude`` are the two geometric primitives: the first builds :math:`\boldsymbol{\chi}` from a spacing and an orientation, the second returns its length and performs the shape, finiteness and zero-length checks once. The sense of the separation fixes the sign convention of the whole module family.
 
    * :doc:`fun_K02_separation_magnitude.py <K02_beall/fun_K02_separation_magnitude>`:
 

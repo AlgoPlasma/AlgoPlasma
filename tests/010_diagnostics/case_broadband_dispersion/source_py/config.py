@@ -19,8 +19,9 @@ the bin width. Neither changes the character of the signal: it stays one mode
 per frequency bin on the same branch with the same amplitude law.
 
 What the shorter band would have cost is the number of visible aliasing folds,
-and that is recovered through the separation of the Beall pair instead. The fold
-count is f_max / f_alias with f_alias = c_s / (2 d), so the deliberately coarse
+and that is recovered through the separation of the Beall pair instead. The first
+alias boundary is f_alias = c_s / (2 d); the fold period is 2*f_alias for an
+aligned pair. Thus the deliberately coarse
 BEALL_SPACING_MM pair produces the same repeating pattern a wider band would,
 without enlarging the inversion's search grid. That pair also carries
 BEALL_N_SEGMENTS rather than N_SEGMENTS, because the Beall spectrum is a
@@ -88,6 +89,23 @@ FFT_WINDOW = "boxcar"   # this generator uses exactly bin-aligned modes
 MLE_WORKERS = 48         # each worker uses bounded-memory row blocks
 MODE_STRIDE = 3          # inversion is run on every third mode
 BEALL_K_BINS = 80
+
+# Engineering acceptance requirements for this fixed synthetic case, not
+# universal estimator confidence bounds. Declare before the reference run.
+ACCEPTANCE = {
+    "power_to_floor": 10.0,  # total PSD; signal PSD is then nine times the floor
+    "slope_abs_error": 0.15,
+    "band_edge_bins": 2.0,
+    "threshold_crossing_relative_error": 0.15,
+    "in_band_coherence_min": 0.8,
+    "out_of_band_coherence_mean_factor": 2.0,
+    "beall_p95_bins": 2.0,
+    "sound_speed_relative_error": 0.005,
+    "magnitude_median_relative_error": 0.05,
+    "angle_p95_deg": 2.0,
+    "vector_relative_error": 0.05,
+    "allowed_bad_modes": 0,
+}
 
 
 def mode_frequencies() -> np.ndarray:

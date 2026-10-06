@@ -15,41 +15,19 @@ Diagnostics Testing Guide
 
    本页介绍两类互补测试：
 
-   - :doc:`基础与边界条件测试 </tests/010_diagnostics/case_basic_checks>`：用 12 组小型确定性输入
-     检查统计量、权重、网格和输入条件，展示实际数值、参考值、验收判据及 4 张解释图。
+   - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`：按频谱功率与相位、相位统计、
+     Beall 权重与谱峰展示三组验证。参考值、实测值、误差、判据和状态
+     从同次运行记录生成；底层 16 项检查的完整报告另附链接。
    - :doc:`宽频色散综合测试 </tests/010_diagnostics/case_broadband_dispersion>`：从合成波形出发，
      依次调用 K01、K02、K03，将输出与生成器参数比较。MLE 阵列每构型使用 256 段。
 
    两个案例各自提供 run.sh。基础测试以单进程向量化计算完成小型检查；
-   宽频测试按频点并行进行网格搜索。下表列出宽频参考运行的结果。
+   宽频测试按频点并行进行网格搜索。宽频结果统一发布在案例页面。
 
    .. rubric:: 2. 测试矩阵
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 12 50 38
-
-      * - 单元
-        - 判据
-        - 实测
-      * - K01
-        - 从测得的谱里拟合回生成器的谱指数
-        - −2.002 对 −2
-      * - K01
-        - 下带边；谱与噪声底相交的频率是否符合 :math:`1/f^2` 律的预言
-        - 104 kHz；752 kHz 对预言的 725 kHz
-      * - K01
-        - 相干度在高出噪声底的频点上接近 1，带外落到 :math:`1/n_{\rm seg}` 的底
-        - 0.933 与 0.00248，底为 0.003906
-      * - K02
-        - 高于 10 倍噪声底的模态，其折叠波数峰残差的 95 分位是否小于 2 个网格
-        - 评价 84 个模态；圆周残差中位数 0.443 格，p95 为 1.466 格
-      * - K02
-        - 生成的色散支确实被多次折叠
-        - 238 个模态全部混叠，跨越 10 个理论折叠阶
-      * - K03
-        - 把 :math:`f` 对 :math:`|\hat k|` 拟合成过原点的直线，斜率还原离子声速
-        - 3833.2 对 3824.6 m/s，相对误差 2.27e-3
+   K01 验证频谱、阈值交点和相干度；K02 验证折叠谱峰；K03 同时验证整体色散关系、逐频点波矢和搜索标记。
+   :doc:`宽带测试页 </tests/010_diagnostics/case_broadband_dispersion>` 提供同次运行生成的完整判据、图表及逐频点下载，避免多处手工复制结果。
 
    .. rubric:: 3. 快速运行命令
 
@@ -68,7 +46,7 @@ Diagnostics Testing Guide
 
    .. rubric:: 5. 结果解读
 
-   summary.json 记录验收状态及误差。先对照输入参数与参考量，再查看超出容差的频段或构型，
+   summary.json 记录验收状态、逐频点误差及失败原因，modes.csv 便于逐行检查。先对照输入参数与参考量，再查看超出容差的频段或构型，
    可定位误差来自频谱估计、相位统计还是波矢搜索。图件用于观察相应的谱形和色散关系。
 
    .. rubric:: 6. 说明
@@ -82,47 +60,23 @@ Diagnostics Testing Guide
 
    Two complementary cases exercise the diagnostics:
 
-   - :doc:`Basic and boundary-condition checks </tests/010_diagnostics/case_basic_checks>`:
-     twelve small deterministic cases covering statistics, weights, grids and input conditions,
-     with measured values, references, criteria and four explanatory figures.
+   - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`:
+     three verification groups for spectral power and phase, phase statistics, and Beall weights and peaks.
+     References, measurements, errors, criteria,
+     and status come from the same run; the complete report retains all sixteen regression checks.
    - :doc:`Broadband dispersion </tests/010_diagnostics/case_broadband_dispersion>`:
      synthetic waveforms pass through K01, K02 and K03; outputs are compared with generator
      parameters. The MLE array uses 256 segments per configuration.
 
    Each case has its own run.sh. Basic checks use small vectorized calculations in one process;
-   the broadband case searches frequency grids in parallel. The table below reports the broadband run.
+   the broadband case searches frequency grids in parallel. Broadband results are published on the case page.
 
    .. rubric:: 2. Test Matrix
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 12 50 38
-
-      * - Unit
-        - Criterion
-        - Measured
-      * - K01
-        - The generator's spectral exponent fitted back out of the measured spectrum
-        - −2.002 against −2
-      * - K01
-        - The lower band edge; the frequency at which the spectrum meets the noise floor as the
-          :math:`1/f^2` law predicts
-        - 104 kHz; 752 kHz against 725 kHz predicted
-      * - K01
-        - Coherence near 1 where modes stand clear of the floor, at the
-          :math:`1/n_{\rm seg}` floor outside the band
-        - 0.933 and 0.00248, against a floor of 0.003906
-      * - K02
-        - Folded-wavenumber peaks above ten times the noise floor stay within two grid bins at the 95th percentile of
-          the closed-form prediction
-        - 84 modes assessed; circular-residual median 0.443 bins, p95 1.466 bins
-      * - K02
-        - The generated branch is genuinely folded, many times over
-        - All 238 modes aliased across 10 theoretical fold orders
-      * - K03
-        - Fitting :math:`f` against :math:`|\hat k|` through the origin returns the ion sound
-          speed
-        - 3833.2 against 3824.6 m/s, relative error 2.27e-3
+   K01 checks spectra, the assessment-threshold crossing and coherence; K02 checks folded peaks;
+   K03 checks aggregate dispersion, each recovered vector and search flags.
+   The :doc:`broadband page </tests/010_diagnostics/case_broadband_dispersion>` contains acceptance limits,
+   figures and per-mode downloads from one run.
 
    .. rubric:: 3. Quick Run Commands
 
@@ -143,7 +97,7 @@ Diagnostics Testing Guide
 
    .. rubric:: 5. Reading the Results
 
-   summary.json records acceptance status and errors. Compare inputs and reference values, then inspect
+   summary.json records acceptance, per-mode errors and failure reasons; modes.csv provides the same per-mode records. Compare inputs and reference values, then inspect
    frequencies or configurations outside the tolerance to locate differences in spectral estimation,
    phase statistics or wavevector search. Figures show the corresponding spectra and dispersion.
 
