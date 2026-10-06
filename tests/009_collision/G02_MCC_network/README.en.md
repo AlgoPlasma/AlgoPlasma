@@ -69,3 +69,7 @@ Without `--model`, the executable generates a process-private temporary syntheti
 ```
 
 Benchmarks measure elapsed time; tests check statistics and physical constraints. See [PERFORMANCE.md](PERFORMANCE.md) for parallel integration.
+
+## Verification references
+
+[Probability checks, binary kinematics and the box derivation](../../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst) are mapped to individual tests. C01 checks the exponential clock and Poisson thinning; the box uses analytic moments of its specified equal-mass, constant-rate model, not fits to paper data. [Parodi–Petronio (2025)](https://doi.org/10.1063/5.0241527) is a reference for separate-module verification against analytical results; this suite does not reproduce its seven cases. Synthetic inputs and tolerances are defined by these tests.

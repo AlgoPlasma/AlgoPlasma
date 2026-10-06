@@ -384,3 +384,7 @@ main.cpp 建立 A 和 B
 和 [C++ 批量接口](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/fun_G02_mcc_batch.rst)
 另行保留参数、类型、失败处理与调用示例。
 本教程继续作为物理入门入口，前面的原理、公式、判据和运行方式都可独立阅读。
+
+## MCC 文献与解析依据
+
+本算例的时钟和两体碰撞使用标准随机抽样与质心运动学；文献、对应代码以及第 7 节曲线的完整推导见[方法与验证文献](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst)。这里的等质量、恒频率模型由本库构造，曲线从单次碰撞的条件期望及 Poisson 计数推导，不是某篇论文的气体数据或算例复现。恒定截面不能代替恒定频率假设。

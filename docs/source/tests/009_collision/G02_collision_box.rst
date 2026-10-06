@@ -201,6 +201,12 @@ G02_collision_box
    :math:`k_B=1.380649\times10^{-23}\,\mathrm{J/K}` 为联系温度与能量的玻尔兹曼常数。
    :math:`\nu` 为真实碰撞频率，:math:`t` 为经过的时间。
 
+   下面的曲线由本算例模型推导，完整条件期望与 Poisson 平均见
+   :ref:`碰撞盒理论曲线的推导 <g02-box-derivation-zh>`。两体运动学依据
+   Ristivojevic–Petrović (2012)，事件时钟依据 Skullerud (1968) 与 Gillespie (1977)。
+   本算例不声称复现这些论文的气体模型或数值结果；
+   :ref:`测试依据 <g02-test-references-zh>` 列出文献与各测试的对应。
+
    本算例的等质量、恒频率弹性模型给出：
 
    .. math::
@@ -430,6 +436,13 @@ G02_collision_box
    :math:`U_0,Q_0` are their measured initial values, :math:`m` is particle mass, and :math:`T_B` background temperature.
    The Boltzmann constant :math:`k_B=1.380649\times10^{-23}\,\mathrm{J/K}` connects temperature with energy.
    :math:`\nu` is real collision frequency and :math:`t` elapsed time.
+
+   The curves are derived for this test model; see the
+   :ref:`conditional-moment and Poisson derivation <g02-box-derivation-en>`.
+   Binary kinematics is grounded in Ristivojevic–Petrović (2012), and the clock in
+   Skullerud (1968) and Gillespie (1977). This case does not reproduce those papers
+   or their numerical data. See :ref:`verification references <g02-test-references-en>`
+   for the mapping to individual tests.
 
    This equal-mass elastic model with constant frequency gives:
 

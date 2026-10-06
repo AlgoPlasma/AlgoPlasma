@@ -69,3 +69,7 @@ bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
 ```
 
 基准测计算耗时，统计和物理约束由测试验证；并行说明见 [PERFORMANCE.md](PERFORMANCE.md)。
+
+## 测试依据与文献
+
+[C01 的概率依据、两体运动学及碰撞盒推导](../../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst)给出逐项对应。C01 核对指数时钟和 Poisson 筛选；碰撞盒用当前等质量、恒频率模型的解析矩，不是论文数据拟合。分模块与解析结果对照的方法可参见 [Parodi–Petronio (2025)](https://doi.org/10.1063/5.0241527)，本库未复现该文七个算例。合成数据和通过阈值由本测试定义。

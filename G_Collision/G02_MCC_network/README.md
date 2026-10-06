@@ -97,3 +97,7 @@ G02 的 C01 是公共事件抽样流程，C02–C08 分别处理弹性、离散�
 每条反应有一个 kinetic projectile 和一到两个 background 反应物；支持二体截面和二体/三体温度速率系数。背景速度按带漂移的 Maxwell 分布抽样。当前运动学为经典非相对论模型，角度模型为 isotropic、cone 或满足严格条件的 identity_exchange，能量模型为 n_body_phase_space 或恰好两个产物的 equal_share。
 
 G02 不推进位置、不求场、不处理壁面，也不划分 MPI 网格或迁移粒子。新增已有类型的反应可以改数据；新增散射律或其他物理机制需要扩展代码和对应验证。
+
+## 方法依据与文献
+
+空碰撞方法参见 [Skullerud (1968)](https://doi.org/10.1088/0022-3727/1/11/423)，PIC-MCC 背景参见 [Vahedi–Surendra (1995)](https://doi.org/10.1016/0010-4655(94)00171-W)。指数时钟、热背景速度和两体末态的出处及实现对应见[方法与验证文献](../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst)。其中也列出本库流程的适用条件及碰撞盒理论曲线的推导。

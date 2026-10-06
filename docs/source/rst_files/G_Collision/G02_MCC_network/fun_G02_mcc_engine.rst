@@ -82,6 +82,9 @@ MccEngine：碰撞抽样与事件处理
    .. rubric:: 碰撞事件与随机数抽样
       :class: g02-chapter
 
+   空碰撞、指数等待与热背景接受步骤的文献和公式见
+   :ref:`方法出处与实现对应 <g02-method-references-zh>`；该流程允许一步内多个候选。
+
    .. rubric:: G02 算法 C01 的位置
 
    G02 算法 C01 是碰撞事件的抽样流程，实现在 MccEngine 中；
@@ -188,6 +191,9 @@ MccEngine：碰撞抽样与事件处理
 
    .. rubric:: Collision events and random sampling
       :class: g02-chapter
+
+   See :ref:`methods and implementation mapping <g02-method-references-en>` for
+   null collisions, exponential waits and thermal-partner acceptance. The loop allows multiple candidates per step.
 
    .. rubric:: Where G02 algorithm C01 lives
 

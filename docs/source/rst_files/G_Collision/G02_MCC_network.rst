@@ -11,6 +11,7 @@ G02_MCC_network
    Model <G02_MCC_network/group_model_data>
    Collision <G02_MCC_network/group_collision>
    MPI <G02_MCC_network/group_mpi_interface>
+   References <G02_MCC_network/references>
 
 .. raw:: html
 
@@ -69,6 +70,9 @@ G02_MCC_network
    - ``engine``：按物种和内部态选择通道，抽样候选时间与接受/拒绝。
    - ``kinematics``：生成符合动量、能量和反应规则的末态。
    - 可选 ``mpi``：协调各进程准备、错误状态和全局新 ID；主程序仍负责网格划分和粒子迁移。
+
+   方法依据为 Skullerud (1968) 的空碰撞方法与 Vahedi–Surendra (1995) 的 PIC-MCC 文献；
+   指数时钟、热背景及本库流程的具体对应见 :ref:`方法出处 <g02-method-references-zh>`。
 
    .. rubric:: 2.3 每个时间步
 
@@ -173,6 +177,9 @@ G02_MCC_network
       </div>
 
 .. container:: ap-lang ap-lang-en
+
+   The null-collision basis is Skullerud (1968), with PIC-MCC context from Vahedi–Surendra (1995).
+   See :ref:`method references <g02-method-references-en>` for the clock, thermal partners and implementation mapping.
 
    .. _g02-mcc-basics-en:
 

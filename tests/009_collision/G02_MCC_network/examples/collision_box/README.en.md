@@ -403,3 +403,7 @@ The separate [architecture page](../../../../../docs/source/rst_files/G_Collisio
 and [C++ batch API](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/fun_G02_mcc_batch.rst)
 cover parameters, types, errors and caller examples.
 This tutorial remains a self-contained physics introduction with its formulas, checks and run instructions.
+
+## MCC literature and analytical basis
+
+This example uses standard stochastic clocks and centre-of-mass kinematics. [Methods and verification references](../../../../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst) supply sources, code mappings and the full derivation behind Section 7. The equal-mass, constant-rate case is constructed in this library: its curves follow from single-event conditional moments and Poisson counts, not a reproduction of a paper's gas data or benchmark. Constant cross section cannot replace the constant-frequency assumption.

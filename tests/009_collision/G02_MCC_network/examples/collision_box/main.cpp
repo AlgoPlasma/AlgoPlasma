@@ -256,6 +256,10 @@ Moments measure(const std::vector<mcc::ParticleState>& particles, Real mass) {
     return m;
 }
 
+// Equal-mass, isotropic, constant-rate test: one event halves the mean drift
+// and the excess second moment; E[2^(-N)] = exp(-nu*t/2) for Poisson N.
+// This local derivation and its method references are documented in
+// docs/source/rst_files/G_Collision/G02_MCC_network/references.rst.
 Reference reference(const Moments& initial, Real tau, Real gas_t, Real mass) {
     const Real decay = std::exp(-0.5 * tau);
     const Real equilibrium_v2 = 3 * mcc::boltzmann_j_per_k * gas_t / mass;

@@ -2,6 +2,10 @@
 // 阅读导引：输入校验/通道准备 → 背景抽样/末态构造 → 守恒检查 → 公开接口。
 // 第一次阅读可先跳到 collide_impl，看标有“步骤”的主流程，再回看辅助函数。
 // MCC（Monte Carlo Collision，蒙特卡洛碰撞）用概率抽样推进碰撞，不推进位置。
+// Method basis: Skullerud (1968), doi:10.1088/0022-3727/1/11/423;
+// Vahedi & Surendra (1995), doi:10.1016/0010-4655(94)00171-W.
+// Clock/channel and thermal-partner mapping (including assumptions):
+// docs/source/rst_files/G_Collision/G02_MCC_network/references.rst.
 #include "engine.hpp"
 
 #include "kinematics.hpp"

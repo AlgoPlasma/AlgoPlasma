@@ -97,3 +97,7 @@ G02 C01 is the common event-sampling flow. C02–C08 implement elastic collision
 Each reaction has one kinetic projectile and one or two background reactants. Two-body cross sections and two-/three-body temperature rate coefficients are supported. Background velocities follow drifting Maxwell distributions. Kinematics is classical and nonrelativistic; angular models are isotropic, cone or strictly constrained identity_exchange. Energy models are n_body_phase_space or equal_share with exactly two products.
 
 G02 does not advance positions, solve fields, handle walls, partition MPI domains or migrate particles. Adding supported reactions changes data; new scattering laws or physical mechanisms require code and dedicated validation.
+
+## Method references
+
+See [Skullerud (1968)](https://doi.org/10.1088/0022-3727/1/11/423) for null collisions and [Vahedi–Surendra (1995)](https://doi.org/10.1016/0010-4655(94)00171-W) for PIC-MCC context. [Methods and verification references](../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst) map the clock, thermal partners and binary outcomes to sources, state the implementation's assumptions, and derive the collision-box reference curves.

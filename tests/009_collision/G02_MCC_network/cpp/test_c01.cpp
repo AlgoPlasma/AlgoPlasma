@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // C01 continuous-time exponential candidate clock: Poisson statistics,
 // multi-channel ratios, null fraction, majorant violation and the event cap.
+// Analytical basis: exponential competing-event clocks (Gillespie 1977,
+// doi:10.1021/j100540a008) with null-collision thinning (Skullerud 1968).
+// These are synthetic probability checks, not a published gas benchmark.
+// See docs/source/rst_files/G_Collision/G02_MCC_network/references.rst.
 #include "package_builder.hpp"
 #include "test_util.hpp"
 

@@ -51,6 +51,9 @@
 
    .. rubric:: G02 零维碰撞盒与回归测试
 
+   :ref:`MCC 测试依据与文献 <g02-test-references-zh>` 对应 C01 概率检查、
+   两体守恒和碰撞盒解析曲线，并区分物理模型验证与软件回归。
+
    库的 C++ 源码和头文件位于 ``G_Collision/G02_MCC_network/``。测试在运行时生成合成 CSV，不携带数据文件或空白表格。用户模型写法见 :doc:`CSV 数据格式 </rst_files/G_Collision/G02_MCC_network/csv_format>`。
 
    初学者先看 :ref:`碰撞盒教程 <g02-collision-box-zh>`：
@@ -117,6 +120,10 @@
    The clean script removes only this test directory's ``build/`` directory.
 
    .. rubric:: G02 Collision-Box and Regression Tests
+
+   :ref:`MCC verification references <g02-test-references-en>` map the C01 probability
+   checks, binary conservation and analytic box curves to their bases, distinguishing
+   model verification from software regression.
 
    Library C++ sources/headers are in ``G_Collision/G02_MCC_network/``. Tests generate synthetic CSV at runtime; no data files or blank tables are shipped. See :doc:`CSV format </rst_files/G_Collision/G02_MCC_network/csv_format>` for user input.
 
