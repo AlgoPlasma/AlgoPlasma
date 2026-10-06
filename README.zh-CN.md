@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.en.md) | [在线文档](https://algoplasma.readthedocs.io/en/latest/index.html)
 
 AlgoPlasma 曾用名为 PMSL，致力于把等离子体建模中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的算法库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。AlgoPlasma 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
 
@@ -18,6 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI 数据交换
 ├── I_Initializer     # 初始化
 ├── J_Fluid           # 流体算法
+├── K_Diagnostics     # 探针诊断与信号反演
 ├── docs              # Sphinx + Doxygen 文档
 └── tests             # 算法测试与验证案例
 ```
@@ -86,6 +87,8 @@ bash run.sh
 
 ## 文档
 
+在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/latest/index.html)。
+
 项目文档基于 Sphinx、Doxygen 和 Breathe 构建：
 
 - 源码中的 Doxygen 注释用于生成 API 文档。
@@ -117,6 +120,210 @@ make html
 - 必要时提供 Python 可视化或数据分析脚本。
 
 贡献时请尽量保持算法单元独立、接口清晰、依赖明确。对于已有算法的改进，请同时说明数值行为是否改变，并补充或更新相应测试。
+
+## Contributors / 贡献者
+
+<!-- CONTRIBUTORS:START -->
+<p align="center"><sub>感谢每一位为 AlgoPlasma 贡献代码、测试、性能基准、文档、示例与缺陷修复的成员。</sub></p>
+
+### 项目负责人
+
+<table class="ap-work-list ap-work-list--lead">
+  <thead>
+    <tr>
+      <th scope="col" align="left" width="160">成员</th>
+      <th scope="col" align="left">个人简介</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://github.com/Yin-YinjianZhao"><img src="docs/source/_static/contributors/zhaoyinjian.png" width="160" height="160" alt="赵隐剑"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://github.com/Yin-YinjianZhao">赵隐剑</a></strong><br>
+            <sub class="ap-member-role">项目负责人</sub>
+            <br><small class="ap-member-links"><a href="https://homepage.hit.edu.cn/zhaoyinjian">个人主页</a> <a href="https://github.com/Yin-YinjianZhao">GitHub</a> <a href="https://gitee.com/Yin-YinjianZhao">Gitee</a></small>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <p class="ap-member-biography">哈尔滨工业大学副教授，曾在劳伦斯伯克利国家实验室从事博士后研究，获美国南加州大学航天工程博士学位。长期从事等离子体物理与数值模拟研究，研究方向涵盖空间电推进、核聚变、半导体、加速器、数值模拟算法及高性能并行计算等。</p>
+        <p class="ap-member-statement">我希望在科研与教学的道路上，将 AlgoPlasma 作为一生耕耘的事业，服务于等离子体领域的科研、教育与产业，为这一领域的发展尽一份绵薄之力。</p>
+        <p class="ap-member-quote-intro">与大家共勉：</p>
+        <blockquote class="ap-member-quote"><p>自持微光，不与群星争辉。<br>照亮己路，亦可温暖旁人。</p></blockquote>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### 现任维护者
+
+<table class="ap-maintainers">
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/wangbaisheng.jpg" width="72" height="72" alt="王佰胜"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/HermiteCat">王佰胜</a></strong><br>
+          <span class="ap-member-status">博士在读</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/HermiteCat">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>空间电推进空心阴极实验及模拟</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="72" height="72" alt="刘哲"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/lzhe898">刘哲</a></strong><br>
+          <span class="ap-member-status">博士在读</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/lzhe898">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>光致电离、稠密等离子体焦点</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="docs/source/_static/contributors/zhongping-zhao.svg" width="72" height="72" alt="赵中平"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://github.com/GooseGH">赵中平</a></strong><br>
+          <span class="ap-member-status">博士在读</span>
+          <br><small class="ap-member-links"><a href="https://github.com/GooseGH">GitHub</a> <a href="https://gitee.com/GooseGH">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>霍尔推力器不稳定性实验及模拟</p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/pengzilong.jpg" width="72" height="72" alt="彭子龙"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/peng-zilong123">彭子龙</a></strong><br>
+          <span class="ap-member-status">硕士在读</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/peng-zilong123">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>等离子体波动实验诊断</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="72" height="72" alt="罗鑫"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/Luo-Xin-410">罗鑫</a></strong><br>
+          <span class="ap-member-status">博后在站</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/Luo-Xin-410">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>霍尔推力器电子反常传导</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="72" height="72" alt="谢礼桓"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://orcid.org/0009-0009-6248-9781">谢礼桓</a></strong><br>
+          <span class="ap-member-status">博士在读</span>
+          <br><small class="ap-member-links"><a href="https://orcid.org/0009-0009-6248-9781">ORCID</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>碘工质霍尔推力器不稳定性</p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/xi-chen.svg" width="72" height="72" alt="陈曦"></span>
+        <div class="ap-member-identity">
+          <strong>陈曦</strong><br>
+          <span class="ap-member-status">博士在读</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>三维PIC加速方法及降维模型</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="72" height="72" alt="陈英杰"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/jiaohuadetudouni">陈英杰</a></strong><br>
+          <span class="ap-member-status">博士在读</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/jiaohuadetudouni">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>柱坐标PIC算法优化</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="72" height="72" alt="钟昆硼"></span>
+        <div class="ap-member-identity">
+          <strong>钟昆硼</strong><br>
+          <span class="ap-member-status">硕士在读</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>霍尔推力器磁聚焦机理</p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="72" height="72" alt="周志君"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/HIT-ZhouZhijun">周志君</a></strong><br>
+          <span class="ap-member-status">博士在读</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/HIT-ZhouZhijun">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>霍尔推力器周向非均匀及不稳定性</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/wushun-zhang.svg" width="72" height="72" alt="张武顺"></span>
+        <div class="ap-member-identity">
+          <strong>张武顺</strong><br>
+          <span class="ap-member-status">博士在读</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>高超声速飞行器电子发汗冷却</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/huchangzheng.jpg" width="72" height="72" alt="胡长征"></span>
+        <div class="ap-member-identity">
+          <strong>胡长征</strong><br>
+          <span class="ap-member-status">硕士在读</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>研究方向</strong><br>等离子体波动理论</p>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<p align="center"><sub>项目负责人及现任维护者：<a href="https://algoplasma.readthedocs.io/en/latest/community/contributors.html">Read the Docs</a></sub></p>
+<!-- CONTRIBUTORS:END -->
 
 ## 许可证
 

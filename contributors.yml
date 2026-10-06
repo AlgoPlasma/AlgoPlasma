@@ -1,0 +1,340 @@
+# AlgoPlasma contributors
+# ======================
+#
+# This file is the single source of truth for the contributor list.  The
+# README section and the Read the Docs page are both generated from it:
+#
+#     python3 tools/generate_contributors.py
+#
+# Fields
+# ------
+#   name           Latin/pinyin display name, given name first (required)
+#   name_zh        Chinese name, used on the Chinese README pages (optional)
+#   role           lead | maintainer | contributor   (default: contributor)
+#   academic_status  zh/en current academic or postdoctoral status (optional)
+#   contributions  list of contribution types, or `all` for every type
+#   work_modules   module IDs for documented work (lead/maintainer only)
+#   biography      zh/en personal introduction, shown instead of documented work
+#   personal_statement  zh/en personal aspirations (lead/maintainer only)
+#   quotation      zh/en lists of lines shared for encouragement (optional)
+#   homepage       personal website URL, shown below the photo (optional)
+#   research_interests  zh/en research interests, shown above documented work
+#   github         GitHub username (optional)
+#   gitee          Gitee username (optional)
+#   orcid          ORCID iD, e.g. 0000-0000-0000-0000 (optional)
+#   avatar         explicit avatar URL or repo-relative image path (optional)
+#
+# Leads and maintainers use `default_avatar` until their own photo is ready.
+# `initials` generates a colored avatar with the surname initial followed by
+# the given-name initial: Xi Chen -> CX, Yingjie Chen -> CY.
+# A shared image URL or repo-relative path is also accepted as `default_avatar`.
+# Ordinary contributors use their GitHub avatar, or Gitee avatar if GitHub is
+# absent; members without either account use `default_avatar`.
+# An explicit `avatar` overrides these defaults for any role.
+# To replace one person's image, put a square photo in
+# docs/source/_static/contributors/ and add an `avatar` field to that member:
+#     avatar: docs/source/_static/contributors/example-user.jpg
+# Then rerun the generator. Paths are relative to the repository root.
+# 中文：把个人方形照片放到上述目录，在对应成员下添加 avatar 路径，再运行生成器。
+#
+# Contribution types
+# ------------------
+#   code       💻 Code            docs       📖 Documentation
+#   tests      🧪 Tests           examples   🎓 Examples
+#   benchmark  📊 Benchmark       bug        🐛 Bug fixes
+#
+# Spelled-out aliases are accepted too (software, validation, performance,
+# writing, tutorial, fix, ...).  Unknown keys stop the generator with an error
+# so typos are caught early.
+#
+# `work_catalog` supplies the public descriptions for `work_modules`.  Module
+# IDs are internal references: generated pages show the descriptions, not IDs.
+# Maintainers follow their order in this file in both Chinese and English;
+# the project lead always comes first.
+#
+# Adding a contributor
+# --------------------
+#   - name: Example User
+#     github: example
+#     role: contributor
+#     contributions:
+#       - code
+#       - bug
+
+default_avatar: initials
+
+work_catalog:
+  A01:
+    zh: 三维直角坐标非相对论 Boris 粒子推进
+    en: Nonrelativistic Boris particle pushing in 3D Cartesian coordinates
+  A02:
+    zh: 三维柱坐标非相对论 Boris 粒子推进
+    en: Nonrelativistic Boris particle pushing in 3D cylindrical coordinates
+  A03:
+    zh: 三维直角坐标相对论 Higuera-Cary 粒子推进
+    en: Relativistic Higuera-Cary particle pushing in 3D Cartesian coordinates
+  B01:
+    zh: 三维直角坐标网格的粒子量沉积
+    en: Particle deposition on a 3D Cartesian grid
+  B02:
+    zh: 三维柱坐标网格的电荷与电流密度沉积
+    en: Charge and current deposition on a 3D cylindrical grid
+  B03:
+    zh: 三维直角坐标网格的 B 样条粒子沉积
+    en: B-spline particle deposition on a 3D Cartesian grid
+  C01:
+    zh: 三维直角坐标网格的三线性场插值
+    en: Trilinear field gathering on a 3D Cartesian grid
+  C02:
+    zh: 三维直角坐标网格的 B 样条场插值
+    en: B-spline field gathering on a 3D Cartesian grid
+  C03:
+    zh: 三维非均匀柱坐标网格的电磁场插值
+    en: Electromagnetic field gathering on a nonuniform 3D cylindrical grid
+  D01:
+    zh: 三维直角坐标 Poisson 方程的 HYPRE 求解接口
+    en: HYPRE interface for the 3D Cartesian Poisson equation
+  D02:
+    zh: 含边界条件的三维直角坐标 Poisson 求解
+    en: 3D Cartesian Poisson solving with boundary conditions
+  D03:
+    zh: 均匀柱坐标网格的三维 Poisson 求解
+    en: 3D Poisson solving on a uniform cylindrical grid
+  D04:
+    zh: 非均匀柱坐标网格的三维 Poisson 求解
+    en: 3D Poisson solving on a nonuniform cylindrical grid
+  D05:
+    zh: 电势数组转三维网格与 MPI 边界交换
+    en: Potential mapping to a 3D grid with MPI boundary exchange
+  D06:
+    zh: 由电势计算三维电场
+    en: Computing 3D electric fields from electrostatic potential
+  E01:
+    zh: 轴对称二维柱坐标 Maxwell 方程的 FDTD 更新
+    en: FDTD updates for axisymmetric 2D cylindrical Maxwell equations
+  E02:
+    zh: 三维柱坐标 Maxwell 方程的 FDTD 更新
+    en: FDTD updates for 3D cylindrical Maxwell equations
+  E03:
+    zh: 三维直角坐标 Maxwell 方程的 FDTD 更新
+    en: FDTD updates for 3D Cartesian Maxwell equations
+  F01:
+    zh: 并行粒子数据读取
+    en: Parallel particle data loading
+  F02:
+    zh: 并行粒子数据输出
+    en: Parallel particle data output
+  F03:
+    zh: 并行场数据读取
+    en: Parallel field data loading
+  F04:
+    zh: 并行场数据输出
+    en: Parallel field data output
+  G01:
+    zh: 基于空碰撞法的蒙特卡洛碰撞处理
+    en: Null-collision Monte Carlo collision handling
+  G02:
+    zh: C++ 蒙特卡洛碰撞网络（CSV 反应模型）
+    en: C++ Monte Carlo collision network (CSV reaction models)
+  H01:
+    zh: 标量场的 MPI 幽灵层交换
+    en: MPI ghost-cell exchange for scalar fields
+  H02:
+    zh: 多物种粒子的 MPI 跨域交换
+    en: MPI exchange of multispecies particles across subdomains
+  H03:
+    zh: 粒子沉积后密度数组的 MPI 边界交换
+    en: MPI boundary exchange of density arrays after particle deposition
+  I01:
+    zh: 内存中均匀生成粒子初始分布
+    en: In-memory generation of uniformly distributed initial particles
+  I02:
+    zh: 离线生成并行加载初始粒子
+    en: Offline particle initialization and parallel loading
+  J01:
+    zh: 三维自由流连续性方程的有限体积更新
+    en: Finite-volume updates for the 3D free-flow continuity equation
+  K01:
+    zh: 探针信号频谱、互相位及相干性分析
+    en: Spectral, cross-phase, and coherence analysis of probe signals
+  K02:
+    zh: Beall 统计色散谱及波数混叠分析
+    en: Beall statistical dispersion spectra and wavenumber aliasing analysis
+  K03:
+    zh: 基于最大似然的二维波矢联合反演
+    en: Joint two-dimensional wavevector inversion using maximum likelihood
+  K04:
+    zh: 探针信号的呼吸振荡波形提取
+    en: Breathing-oscillation waveform extraction from probe signals
+
+contributors:
+  # --- project lead ---------------------------------------------------------
+  - name: Yinjian Zhao
+    name_zh: 赵隐剑
+    github: Yin-YinjianZhao
+    gitee: Yin-YinjianZhao
+    role: lead
+    avatar: docs/source/_static/contributors/zhaoyinjian.png
+    homepage: https://homepage.hit.edu.cn/zhaoyinjian
+    biography:
+      zh: 哈尔滨工业大学副教授，曾在劳伦斯伯克利国家实验室从事博士后研究，获美国南加州大学航天工程博士学位。长期从事等离子体物理与数值模拟研究，研究方向涵盖空间电推进、核聚变、半导体、加速器、数值模拟算法及高性能并行计算等。
+      en: I am an Associate Professor at Harbin Institute of Technology. I conducted postdoctoral research at Lawrence Berkeley National Laboratory and earned my PhD in Astronautical Engineering from the University of Southern California. My research has long focused on plasma physics and numerical simulation, spanning space electric propulsion, nuclear fusion, semiconductors, accelerators, numerical simulation algorithms, and high-performance parallel computing.
+    personal_statement:
+      zh: 我希望在科研与教学的道路上，将 AlgoPlasma 作为一生耕耘的事业，服务于等离子体领域的科研、教育与产业，为这一领域的发展尽一份绵薄之力。
+      en: Throughout my career in research and teaching, I hope to make AlgoPlasma a lifelong endeavor, serving the plasma community across research, education, and industry, and contributing in my own small way to the field's progress.
+    quotation:
+      zh:
+        - 自持微光，不与群星争辉。
+        - 照亮己路，亦可温暖旁人。
+      en:
+        - Try to become not a man of success, but try rather to become a man of value. — Albert Einstein
+    work_modules: [A01, C01, D01, D02, D04, E01, E02, E03, F01, F02, F03, F04, H01, H02, I01, J01, K04]
+
+  # --- maintainers ----------------------------------------------------------
+  - name: Baisheng Wang
+    name_zh: 王佰胜
+    gitee: HermiteCat
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    avatar: docs/source/_static/contributors/wangbaisheng.jpg
+    research_interests:
+      zh: 空间电推进空心阴极实验及模拟
+      en: Experiments and simulations of hollow cathodes for space electric propulsion
+    work_modules: [C03, D01, D02, D03, D04]
+
+  - name: Zhe Liu
+    name_zh: 刘哲
+    gitee: lzhe898
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    avatar: https://gitee.com/lzhe898.png
+    research_interests:
+      zh: 光致电离、稠密等离子体焦点
+      en: Photoionization and dense plasma focus
+    work_modules: [E01, E02, E03, F01, F02, F03, F04, G02]
+
+  - name: Zhongping Zhao
+    name_zh: 赵中平
+    # contributes under the account name GooseGH
+    github: GooseGH
+    gitee: GooseGH
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 霍尔推力器不稳定性实验及模拟
+      en: Experiments and simulations of instabilities in Hall thrusters
+    work_modules: [A01, A02, B03, C01, C02, I02]
+
+  - name: Zilong Peng
+    name_zh: 彭子龙
+    gitee: peng-zilong123
+    role: maintainer
+    academic_status:
+      zh: 硕士在读
+      en: Master's Student
+    avatar: docs/source/_static/contributors/pengzilong.jpg
+    research_interests:
+      zh: 等离子体波动实验诊断
+      en: Experimental diagnostics of plasma waves
+    work_modules: [A03, B01, D05, D06, H03, K01, K02, K03]
+
+  - name: Xin Luo
+    name_zh: 罗鑫
+    gitee: Luo-Xin-410
+    role: maintainer
+    academic_status:
+      zh: 博后在站
+      en: Postdoctoral Researcher
+    research_interests:
+      zh: 霍尔推力器电子反常传导
+      en: Anomalous electron transport in Hall thrusters
+    work_modules: [C02]
+
+  - name: Lihuan Xie
+    name_zh: 谢礼桓
+    orcid: 0009-0009-6248-9781
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 碘工质霍尔推力器不稳定性
+      en: Instabilities in iodine-propellant Hall thrusters
+    work_modules: [G01, G02]
+
+  - name: Xi Chen
+    name_zh: 陈曦
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 三维PIC加速方法及降维模型
+      en: Acceleration methods for 3D PIC simulations and reduced-dimensional models
+
+  - name: Yingjie Chen
+    name_zh: 陈英杰
+    gitee: jiaohuadetudouni
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 柱坐标PIC算法优化
+      en: Optimization of PIC algorithms in cylindrical coordinates
+
+  - name: Kunpeng Zhong
+    name_zh: 钟昆硼
+    role: maintainer
+    academic_status:
+      zh: 硕士在读
+      en: Master's Student
+    research_interests:
+      zh: 霍尔推力器磁聚焦机理
+      en: Magnetic focusing mechanisms in Hall thrusters
+
+  - name: Zhijun Zhou
+    name_zh: 周志君
+    gitee: HIT-ZhouZhijun
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 霍尔推力器周向非均匀及不稳定性
+      en: Azimuthal nonuniformity and instabilities in Hall thrusters
+    work_modules: [B02]
+
+  - name: Wushun Zhang
+    name_zh: 张武顺
+    role: maintainer
+    academic_status:
+      zh: 博士在读
+      en: PhD Student
+    research_interests:
+      zh: 高超声速飞行器电子发汗冷却
+      en: Electron transpiration cooling of hypersonic vehicles
+
+  - name: Changzheng Hu
+    name_zh: 胡长征
+    role: maintainer
+    academic_status:
+      zh: 硕士在读
+      en: Master's Student
+    avatar: docs/source/_static/contributors/huchangzheng.jpg
+    research_interests:
+      zh: 等离子体波动理论
+      en: Theory of plasma waves
+
+  # --- contributor ----------------------------------------------------------
+  - name: Bocong Zheng
+    github: bocong-zheng
+    role: contributor
+    contributions:
+      - code

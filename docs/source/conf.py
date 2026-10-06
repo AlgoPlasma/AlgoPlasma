@@ -85,7 +85,7 @@ breathe_default_members = ()
 
 html_theme_options = {
     'collapse_navigation': False,
-    # Tests -> 012_fluid -> module group -> individual test page.
+    # Tests -> numbered group -> module group -> individual test page.
     'navigation_depth': 4,
 }
 
@@ -166,5 +166,8 @@ def mark_reference_links_in_html(app, exception):
 def setup(app):
     app.add_css_file("custom.css")  # Sphinx >= 1.8
     app.add_css_file("ap-home-hero.css")
+    app.add_css_file("contributors.css")
+    app.add_css_file("g02-docs.css")
     app.add_js_file("ap-language-switch.js")
+    app.add_js_file("g02-display-titles.js")
     app.connect("build-finished", mark_reference_links_in_html)

@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.en.md) | [Online documentation](https://algoplasma.readthedocs.io/en/latest/index.html)
 
 AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma modeling into an open, reusable, tested, and explainable algorithm library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, AlgoPlasma aims to build a shared algorithmic foundation so that others can build upon it instead of starting from scratch.
 
@@ -18,6 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI data exchange
 ├── I_Initializer     # Initialization
 ├── J_Fluid           # Fluid algorithms
+├── K_Diagnostics     # Probe diagnostics and signal inversion
 ├── docs              # Sphinx + Doxygen documentation
 └── tests             # Algorithm tests and validation cases
 ```
@@ -86,6 +87,8 @@ After changing an algorithm, start with the most local tests for that algorithm,
 
 ## Documentation
 
+Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/latest/index.html) online on Read the Docs.
+
 The documentation is built with Sphinx, Doxygen, and Breathe:
 
 - Doxygen comments in source files are used to generate API documentation.
@@ -117,6 +120,210 @@ A new algorithm contribution should ideally include:
 - Python visualization or data-analysis scripts when useful.
 
 Please keep algorithm units independent, interfaces clear, and dependencies explicit. For improvements to an existing algorithm, document whether the numerical behavior changes and update the corresponding tests when needed.
+
+## Contributors
+
+<!-- CONTRIBUTORS:START -->
+<p align="center"><sub>Thanks to everyone contributing code, tests, benchmarks, documentation, examples, and bug fixes to the project.</sub></p>
+
+### Project Lead
+
+<table class="ap-work-list ap-work-list--lead">
+  <thead>
+    <tr>
+      <th scope="col" align="left" width="160">Member</th>
+      <th scope="col" align="left">Biography</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="ap-member" align="center" width="160" valign="top">
+        <div class="ap-member-profile">
+          <span class="ap-member-avatar"><a href="https://github.com/Yin-YinjianZhao"><img src="docs/source/_static/contributors/zhaoyinjian.png" width="160" height="160" alt="Yinjian Zhao"></a></span>
+          <div class="ap-member-identity">
+            <strong><a href="https://github.com/Yin-YinjianZhao">Yinjian Zhao</a></strong><br>
+            <sub class="ap-member-role">Project Lead</sub>
+            <br><small class="ap-member-links"><a href="https://homepage.hit.edu.cn/zhaoyinjian">Homepage</a> <a href="https://github.com/Yin-YinjianZhao">GitHub</a> <a href="https://gitee.com/Yin-YinjianZhao">Gitee</a></small>
+          </div>
+        </div>
+      </td>
+      <td class="ap-work-cell" valign="top">
+        <p class="ap-member-biography">I am an Associate Professor at Harbin Institute of Technology. I conducted postdoctoral research at Lawrence Berkeley National Laboratory and earned my PhD in Astronautical Engineering from the University of Southern California. My research has long focused on plasma physics and numerical simulation, spanning space electric propulsion, nuclear fusion, semiconductors, accelerators, numerical simulation algorithms, and high-performance parallel computing.</p>
+        <p class="ap-member-statement">Throughout my career in research and teaching, I hope to make AlgoPlasma a lifelong endeavor, serving the plasma community across research, education, and industry, and contributing in my own small way to the field's progress.</p>
+        <p class="ap-member-quote-intro">A thought to share:</p>
+        <blockquote class="ap-member-quote"><p>Try to become not a man of success, but try rather to become a man of value. — Albert Einstein</p></blockquote>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Current Maintainers
+
+<table class="ap-maintainers">
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/HermiteCat"><img src="docs/source/_static/contributors/wangbaisheng.jpg" width="72" height="72" alt="Baisheng Wang"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/HermiteCat">Baisheng Wang</a></strong><br>
+          <span class="ap-member-status">PhD Student</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/HermiteCat">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Experiments and simulations of hollow cathodes for space electric propulsion</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/lzhe898"><img src="https://gitee.com/lzhe898.png" width="72" height="72" alt="Zhe Liu"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/lzhe898">Zhe Liu</a></strong><br>
+          <span class="ap-member-status">PhD Student</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/lzhe898">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Photoionization and dense plasma focus</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="docs/source/_static/contributors/zhongping-zhao.svg" width="72" height="72" alt="Zhongping Zhao"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://github.com/GooseGH">Zhongping Zhao</a></strong><br>
+          <span class="ap-member-status">PhD Student</span>
+          <br><small class="ap-member-links"><a href="https://github.com/GooseGH">GitHub</a> <a href="https://gitee.com/GooseGH">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Experiments and simulations of instabilities in Hall thrusters</p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/peng-zilong123"><img src="docs/source/_static/contributors/pengzilong.jpg" width="72" height="72" alt="Zilong Peng"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/peng-zilong123">Zilong Peng</a></strong><br>
+          <span class="ap-member-status">Master&#x27;s Student</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/peng-zilong123">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Experimental diagnostics of plasma waves</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/Luo-Xin-410"><img src="docs/source/_static/contributors/xin-luo.svg" width="72" height="72" alt="Xin Luo"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/Luo-Xin-410">Xin Luo</a></strong><br>
+          <span class="ap-member-status">Postdoctoral Researcher</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/Luo-Xin-410">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Anomalous electron transport in Hall thrusters</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://orcid.org/0009-0009-6248-9781"><img src="docs/source/_static/contributors/lihuan-xie.svg" width="72" height="72" alt="Lihuan Xie"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://orcid.org/0009-0009-6248-9781">Lihuan Xie</a></strong><br>
+          <span class="ap-member-status">PhD Student</span>
+          <br><small class="ap-member-links"><a href="https://orcid.org/0009-0009-6248-9781">ORCID</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Instabilities in iodine-propellant Hall thrusters</p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/xi-chen.svg" width="72" height="72" alt="Xi Chen"></span>
+        <div class="ap-member-identity">
+          <strong>Xi Chen</strong><br>
+          <span class="ap-member-status">PhD Student</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Acceleration methods for 3D PIC simulations and reduced-dimensional models</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/jiaohuadetudouni"><img src="docs/source/_static/contributors/yingjie-chen.svg" width="72" height="72" alt="Yingjie Chen"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/jiaohuadetudouni">Yingjie Chen</a></strong><br>
+          <span class="ap-member-status">PhD Student</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/jiaohuadetudouni">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Optimization of PIC algorithms in cylindrical coordinates</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/kunpeng-zhong.svg" width="72" height="72" alt="Kunpeng Zhong"></span>
+        <div class="ap-member-identity">
+          <strong>Kunpeng Zhong</strong><br>
+          <span class="ap-member-status">Master&#x27;s Student</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Magnetic focusing mechanisms in Hall thrusters</p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><a href="https://gitee.com/HIT-ZhouZhijun"><img src="docs/source/_static/contributors/zhijun-zhou.svg" width="72" height="72" alt="Zhijun Zhou"></a></span>
+        <div class="ap-member-identity">
+          <strong><a href="https://gitee.com/HIT-ZhouZhijun">Zhijun Zhou</a></strong><br>
+          <span class="ap-member-status">PhD Student</span>
+          <br><small class="ap-member-links"><a href="https://gitee.com/HIT-ZhouZhijun">Gitee</a></small>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Azimuthal nonuniformity and instabilities in Hall thrusters</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/wushun-zhang.svg" width="72" height="72" alt="Wushun Zhang"></span>
+        <div class="ap-member-identity">
+          <strong>Wushun Zhang</strong><br>
+          <span class="ap-member-status">PhD Student</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Electron transpiration cooling of hypersonic vehicles</p>
+      </div>
+    </td>
+    <td width="33.333%" valign="top">
+      <div class="ap-member-profile">
+        <span class="ap-member-avatar"><img src="docs/source/_static/contributors/huchangzheng.jpg" width="72" height="72" alt="Changzheng Hu"></span>
+        <div class="ap-member-identity">
+          <strong>Changzheng Hu</strong><br>
+          <span class="ap-member-status">Master&#x27;s Student</span>
+        </div>
+      </div>
+      <div class="ap-member-details">
+        <p class="ap-member-research"><strong>Research Interests</strong><br>Theory of plasma waves</p>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<p align="center"><sub>Project lead and current maintainers: <a href="https://algoplasma.readthedocs.io/en/latest/community/contributors.html">Read the Docs</a></sub></p>
+<!-- CONTRIBUTORS:END -->
 
 ## License
 

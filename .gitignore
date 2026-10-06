@@ -1,3 +1,7 @@
 # Documentation build outputs
 docs/build/
 docs/source/_doxygen/
+
+# Python bytecode caches
+__pycache__/
+*.py[cod]

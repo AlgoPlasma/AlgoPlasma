@@ -10,7 +10,7 @@ RECURSIVE              = YES
 
 # 输入
 INPUT                  = ../../
-FILE_PATTERNS          = *.f90 *.F90 *.md *.c
+FILE_PATTERNS          = *.f90 *.F90 *.c
 EXTENSION_MAPPING      = f90=Fortran
 OPTIMIZE_FOR_FORTRAN   = YES
 EXTRACT_ALL            = YES
@@ -40,7 +40,9 @@ EXCLUDE_PATTERNS += */H_MPI_Exchange/H03_mpi_exchange_den/inc_*.f90
 EXCLUDE_PATTERNS += */D_Poisson/D05_phi1d_to_phi3d/inc_*.f90
 EXCLUDE_PATTERNS += */tests/*/REPORT.md
 INCLUDE_PATH += ../../D_Poisson/D01_hypre_3Dxyz
+# D01 takes caller-provided C fragments; use the reference Poisson test for docs.
+INCLUDE_PATH += ../../tests/001_poisson/test00
 
 # 标准输出进度信息
 QUIET = YES
-WARNINGS = NO
+WARNINGS = YES
