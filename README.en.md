@@ -18,6 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI data exchange
 ├── I_Initializer     # Initialization
 ├── J_Fluid           # Fluid algorithms
+├── K_Diagnostics     # Probe diagnostics and signal inversion
 ├── docs              # Sphinx + Doxygen documentation
 └── tests             # Algorithm tests and validation cases
 ```
