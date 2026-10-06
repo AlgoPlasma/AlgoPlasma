@@ -1,11 +1,13 @@
 !> Physical-time finite-volume step, balance diagnostics, and optional steady iteration.
 
+    !> Conservative bound dt=cfl/max(nu+sum(A*abs(u))/V), returned in seconds.
+    !> Count all internal faces, not only outgoing ones; this can overrestrict dt.
     subroutine sub_J03_compute_stable_timestep(closure, cfl, dt, ierr)
         type(neutral_transport_closure_2drz_type), intent(in) :: closure
         real, intent(in) :: cfl
         real, intent(out) :: dt
         integer, intent(out) :: ierr
-        integer :: i, k
+        integer :: i, k, f
         real :: rate, max_rate
         ierr = J03_SUCCESS
         dt = 0.0
@@ -30,18 +32,13 @@
                 if (closure%face_type(J03_Z_HI, i, k) == J03_FACE_INTERIOR) &
                     rate = rate+closure%face_area(J03_Z_HI, i, k)* &
                     abs(closure%velocity_z_face(i, k))/closure%volume(i, k)
-                if (closure%face_type(J03_R_LO, i, k) == J03_FACE_OPEN) &
-                    rate = rate+closure%face_area(J03_R_LO, i, k)* &
-                    abs(closure%boundary_outflow_velocity(J03_R_LO, i, k))/closure%volume(i, k)
-                if (closure%face_type(J03_R_HI, i, k) == J03_FACE_OPEN) &
-                    rate = rate+closure%face_area(J03_R_HI, i, k)* &
-                    abs(closure%boundary_outflow_velocity(J03_R_HI, i, k))/closure%volume(i, k)
-                if (closure%face_type(J03_Z_LO, i, k) == J03_FACE_OPEN) &
-                    rate = rate+closure%face_area(J03_Z_LO, i, k)* &
-                    abs(closure%boundary_outflow_velocity(J03_Z_LO, i, k))/closure%volume(i, k)
-                if (closure%face_type(J03_Z_HI, i, k) == J03_FACE_OPEN) &
-                    rate = rate+closure%face_area(J03_Z_HI, i, k)* &
-                    abs(closure%boundary_outflow_velocity(J03_Z_HI, i, k))/closure%volume(i, k)
+                ! Fixed inflow does not remove current particles. Only the
+                ! density-dependent outflow coefficient enters this rate.
+                do f = J03_R_LO, J03_Z_HI
+                    if (closure%face_type(f, i, k) /= J03_FACE_OPEN) cycle
+                    rate = rate+closure%face_area(f, i, k)* &
+                        abs(closure%boundary_outflow_velocity(f, i, k))/closure%volume(i, k)
+                end do
                 max_rate = max(max_rate, rate)
             end do
         end do
@@ -62,8 +59,8 @@
         integer :: i, k
         real :: frlo, frhi, fzlo, fzhi, net, val
         ierr = J03_SUCCESS
-        if (size(density, 1) /= closure%nr .or. size(density, 2) /= closure%nz .or. &
-            size(source_rate, 1) /= closure%nr .or. size(source_rate, 2) /= closure%nz) then
+        if (any(shape(density) /= [closure%nr,closure%nz]) .or. &
+            any(shape(source_rate) /= [closure%nr,closure%nz])) then
             ierr = J03_ERR_SHAPE
             return
         end if
@@ -85,14 +82,20 @@
                     closure%face_area(J03_R_LO, i, k)*frlo+ &
                     closure%face_area(J03_Z_HI, i, k)*fzhi- &
                     closure%face_area(J03_Z_LO, i, k)*fzlo
+                ! net is an outward particle rate [1/s], not a flux density.
+                ! Transport and production use the old state; linear loss uses
+                ! the new state, giving the denominator 1 + dt*nu.
                 val = (density(i, k)-dt*net/closure%volume(i, k)+dt*source_rate(i, k))/ &
                     (1.0+dt*closure%loss_frequency(i, k))
+                ! Optional clipping changes particle number; it is not a CFL fix.
                 if (clip_negative .and. val < 0.0) val = 0.0
                 density_new(i, k) = val
             end do
         end do
     end subroutine sub_J03_continuity_step
 
+    !> Residual of the steady equation: div(Gamma)+nu*n-S, in density/time.
+    !> Its volume sum can cancel locally large errors; return both diagnostics.
     subroutine sub_J03_compute_residual(closure, density, source_rate, residual, &
         max_abs_residual, global_balance, ierr)
         type(neutral_transport_closure_2drz_type), intent(in) :: closure
@@ -105,8 +108,8 @@
         ierr = J03_SUCCESS
         max_abs_residual = 0.0
         global_balance = 0.0
-        if (size(density, 1) /= closure%nr .or. size(density, 2) /= closure%nz .or. &
-            size(source_rate, 1) /= closure%nr .or. size(source_rate, 2) /= closure%nz) then
+        if (any(shape(density) /= [closure%nr,closure%nz]) .or. &
+            any(shape(source_rate) /= [closure%nr,closure%nz])) then
             ierr = J03_ERR_SHAPE
             return
         end if
@@ -128,6 +131,8 @@
         end do
     end subroutine sub_J03_compute_residual
 
+    !> Fixed-condition iteration from reference density, not a physical-time driver.
+    !> Require BOTH iterate change and equation residual to avoid false convergence.
     subroutine sub_J03_solve_steady(closure, source_rate, cfl, tolerance, max_iterations, &
         clip_negative, density, converged, iterations, final_relative_change, &
         max_abs_residual, global_balance, ierr, progress_interval, residual_tolerance, final_scaled_residual)
@@ -205,9 +210,8 @@
             end if
         end do
         if (.not. converged) iterations = max_iterations
-        call sub_J03_compute_residual(closure, density, source_rate, residual, &
-            max_abs_residual, global_balance, ierr)
-        if (ierr /= J03_SUCCESS) return
+        ! The last iteration already evaluated these diagnostics on density.
+        ! Reusing them avoids a redundant full mesh traversal and allocation.
         if (.not. converged) ierr = J03_ERR_NOT_CONVERGED
     end subroutine sub_J03_solve_steady
 
@@ -233,6 +237,8 @@
     end subroutine sub_J03_reference_residual_scale
 
     ! Number rates (particles/s). Only open faces contribute boundary exchange.
+    ! A transient step needs outflow(old n) and removal(new n); a single call
+    ! evaluates all rates at one supplied density, not that mixed-time balance.
     subroutine sub_J03_compute_balance(closure, density, source_rate, inflow, outflow, &
         production, removal, relative_balance, ierr)
         type(neutral_transport_closure_2drz_type), intent(in) :: closure
@@ -273,6 +279,10 @@
         integer, intent(in) :: i, k
         real, intent(out) :: frlo, frhi, fzlo, fzhi
         real :: u
+        ! All four fluxes use positive r/z orientation, NOT outward normals.
+        ! The caller applies high-minus-low signs when forming divergence.
+        ! Walls retain zero net flux; internal faces use the same upwind state
+        ! on both neighboring cells, so their particle rates cancel globally.
         frlo = 0.0
         frhi = 0.0
         fzlo = 0.0

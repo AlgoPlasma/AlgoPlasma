@@ -1,13 +1,14 @@
 J_Fluid
-=================================================================
+==========================================================================================
 
 .. toctree::
    :maxdepth: 1
-   :hidden:
+   :titlesonly:
 
-   J_Fluid/J01_free_molecular
-   J_Fluid/J02_neutral_sn_transport_2Drz
-   J_Fluid/J03_neutral_continuity_faceflux_2Drz
+   J01 Free Molecular <J_Fluid/J01_free_molecular>
+   J02 Discrete Ordinates <J_Fluid/J02_neutral_sn_transport_2Drz>
+   J03 Continuity <J_Fluid/J03_neutral_continuity_faceflux_2Drz>
+   Legacy Utilities <J_Fluid/J01_free_molecular/continuity>
 
 .. raw:: html
 
@@ -18,53 +19,85 @@ J_Fluid
 
 .. container:: ap-lang ap-lang-zh ap-fluid-doc
 
-   .. rubric:: 模块职责
+   J_Fluid 提供中性气体的参考场计算与密度演化方法。
+   在 PIC（Particle-in-Cell，粒子网格法）应用中，它可提供碰撞计算所需的中性密度；
+   带电粒子推进、电磁场和反应率仍由其他模块负责。
 
-   J_Fluid 包含连续性方程更新和中性粒子输运前处理。三维接口和二维柱坐标接口采用不同的数据布局与源项约定。
+   .. rubric:: 模块分工
 
-   .. rubric:: 子模块
+   中性气体从入口进入，沿计算域运动，与壁面反射，最后从出口离开。
+   求参考场时，需要考虑粒子的速度分布；参考场建立后，可以用连续性方程继续更新密度。
+   这两类计算由不同模块承担。
+
+   .. figure:: /_static/J_Fluid/model_pipeline.svg
+      :alt: 从几何和物理输入选择一种参考场算法，再建立面输运系数并推进当前密度
+      :width: 900px
+
+      两个前处理模块是可选方法，不是必须依次调用的两个步骤。
+      连续性模块只接收场数组，不依赖前处理的内部实现。
 
    .. list-table::
       :header-rows: 1
+      :widths: 24 44 32
 
-      * - 模块
-        - 输入
-        - 输出与用途
-      * - :doc:`J01 <J_Fluid/J01_free_molecular>`
-        - 粒子方法输入网格、入口和壁面条件；连续性工具输入密度与给定速度
-        - 粒子方法输出参考密度与面通量；连续性工具输出通量或更新后的密度。
-      * - :doc:`J02 <J_Fluid/J02_neutral_sn_transport_2Drz>`
-        - 网格、速度求积、入口、反射条件、吸收系数
-        - 离散纵标分布、密度、速度及面通量。
-      * - :doc:`J03 <J_Fluid/J03_neutral_continuity_faceflux_2Drz>`
-        - 参考密度、面通量、几何、体源与损失频率
-        - 单步更新或稳态密度、残差与收敛信息。
+      * - 目录
+        - 本章内容
+        - 阅读后能完成的工作
+      * - J01 Free Molecular
+        - 入口采样、壁面反射、粒子跟踪、驻留与穿面统计
+        - 从独立粒子历史得到参考密度和通量
+      * - J02 Discrete Ordinates
+        - 速度求积、边界分布、单元方程、扫描与反射迭代
+        - 从离散速度分布得到参考密度和通量
+      * - J03 Continuity
+        - 参考场闭合、当前通量、瞬态单步、收支与稳态辅助求解
+        - 从给定初态推进密度，并组织完整调用
+      * - Legacy Utilities
+        - 已有三维归一化更新、二维给定速度通量工具
+        - 使用保留接口，不需要先学习粒子前处理
 
+   第一次阅读可完整阅读所需的一个前处理模块，再阅读 J03。
+   网格、数组位置和通量约定在使用它们的模块中说明。
+   若已有满足接口约定的参考密度与通量，可以直接进入 J03。
+   三维保留接口单独放在最后，不穿插在二维中性输运的阅读顺序中。
 
-   .. rubric:: 调用关系
+   .. rubric:: 模型范围与源码组织
 
-   二维应用先调用 J01 自由分子例程或 J02 输运例程，再把参考密度、内部面通量和开放边界通量传入 J03。J03 固定由参考场构造的面速度，后续通量随当前迎风密度变化。改变输运边界或速度分布后，应重新评估该闭合是否仍适用。
+   当前两种前处理均只保留 :math:`r,z` 和 :math:`v_r,v_z`，没有周向速度动力学；
+   柱坐标面积和体积不意味着实现了完整三速度轴对称模型。
+   各自的运动方程、边界模型和限制在相应章节说明，不要求两种方法的全部近似相同。
 
-   .. rubric:: 数据约定
+   J03 只演化单元密度；它不求速度分布，也不自动重算参考场。
+   当入口速度分布、壁温或输运条件明显变化时，调用程序需要判断原参考场是否仍适用。
 
-   三维 J01 使用带保护层的节点数组，``dx=dy=dz=dt=1``；更新式减去 ``s``，正值表示密度扣减。二维接口采用单元中心密度和实际几何量，正体源 ``source_rate`` 增加密度，损失为 ``loss_frequency*density``。
+   源码中，``mod_*.f90`` 定义类型与常量，在 ``contains`` 后包含功能文件。
+   构建时编译模块文件，不单独编译被包含的 ``sub_*.f90``；所有调用端应使用相同实数精度。
+   各章说明每个过程的任务和参数，不在网页重复粘贴源码声明。
 
-   面通量单位为粒子数每平方米每秒，符号相对于坐标正方向；计算净流出时，低端面取负号。四面顺序为径向低端、径向高端、轴向低端、轴向高端。
+   .. rubric:: 源码说明与测试分开阅读
 
-   .. rubric:: 测试入口
-
-   :doc:`011_fluid </tests/011_fluid/index>` 列出各子测试的实现与通过条件。
+   本目录讲模型、公式、接口和组装顺序。测试的运行命令、断言、误差与结果图集中在
+   :doc:`Tests / 012_fluid </tests/012_fluid/index>`。
+   讲解中的小示例用于解释算法，不代表已经执行过某个实际算例。
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   .. rubric:: Overview
+   J_Fluid supplies neutral reference fields and density evolution for applications.
+   Charged-particle pushing, electromagnetic fields, and reaction-rate models remain outside this group.
 
-   J01_neutral_free_molecular_2Drz provides particle preprocessing. Legacy Cartesian updates and prescribed-velocity utilities remain in J01_continuity_freeflow. J02 provides discrete-ordinates transport. J03 imports reference densities and fluxes to advance continuity.
+   Read one complete reference-field route, including its local geometry, indexing and signs,
+   followed by J03 for transient density evolution. J01 and J02 are alternatives, not successive stages.
+   Existing reference arrays can be passed directly to J03.
 
-   .. rubric:: Conventions
+   - J01: inlet sampling, wall reflection, particle histories, residence and crossing estimators.
+   - J02: velocity quadrature, boundary distributions, DG equations, sweeps, iteration and reconstruction.
+   - J03: reference-field closure, current fluxes, physical-time steps, balance diagnostics and an optional steady solver.
+   - Legacy Utilities: separate Cartesian and prescribed-velocity interfaces retained in the J01 directory.
 
-   The 3D J01 interface uses nodal arrays with guards and unit spacings; positive ``s`` is subtracted. Cylindrical interfaces use cell-centred density, physical geometry, positive production and loss frequency. Flux signs follow coordinate directions; low faces enter divergence with a minus sign.
+   The current kinetic preprocessors retain only r,z and two velocity components.
+   Cylindrical measures do not provide full axisymmetric three-velocity dynamics.
+   J03 evolves scalar density and never reruns a preprocessor.
 
-   .. rubric:: Tests
-
-   :doc:`011_fluid </tests/011_fluid/index>` describes unit and application tests.
+   Compile module files with preprocessing, not their included implementation files.
+   Use one real precision consistently. Detailed tests and results belong to
+   :doc:`Tests / 012_fluid </tests/012_fluid/index>`, separate from the algorithm documentation.

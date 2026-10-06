@@ -13,7 +13,12 @@ DOXYGENDIR    = source/_doxygen
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile
+.PHONY: help html Makefile
+
+# Every page embeds the shared sidebar. Always refresh it after tree changes.
+html:
+	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -E -a
+	@python3 scripts/check_fluid_navigation.py "$(BUILDDIR)/html"
 
 clean:
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

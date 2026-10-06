@@ -1,5 +1,6 @@
 !> @file mod_J03_neutral_continuity_faceflux_2Drz.f90
 !> @brief Transient cylindrical continuity with prescribed face velocities; optional steady iteration.
+!> Evolves scalar density, not a velocity distribution; no 2D3V claim applies.
 module mod_J03_neutral_continuity_faceflux_2Drz
     implicit none
 

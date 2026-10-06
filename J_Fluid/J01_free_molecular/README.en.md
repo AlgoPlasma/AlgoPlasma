@@ -1,22 +1,36 @@
 # J01_free_molecular
 
-All J01 sources share this directory. Two Fortran modules keep their original names and responsibilities:
+[中文](README.zh-CN.md) | [English](README.en.md)
 
-- `mod_J01_continuity_freeflow`: the existing 3D continuity API and prescribed-velocity 2D flux/update routines.
-- `mod_J01_neutral_free_molecular_2Drz`: particle preprocessing from mesh, inlet and wall conditions to density, velocity and signed face fluxes.
+Two Fortran modules in this directory separate particle preprocessing from retained continuity utilities.
 
-The particle implementation has five include files: `sub_J01_free_molecular_mc_2Drz.f90` orchestrates validation and histories; `sub_J01_fm_sampling.f90` prepares and samples injection; `sub_J01_fm_trajectory.f90` tracks crossings; `sub_J01_fm_reflection.f90` handles wall velocities; `sub_J01_fm_statistics.f90` normalizes residence and crossing tallies.
+## Particle preprocessing
 
-The application supplies matching boundary inflow and passes reference fields to `sub_J03_initialize_transport_closure`. J03 keeps face velocity fixed and updates flux using current upwind density. Case geometry, I/O and plots remain in application drivers.
+`mod_J01_neutral_free_molecular_2Drz` accepts mesh, inlet and wall conditions, generates independent histories, and returns reference density, mean velocity, internal fluxes and outgoing boundary fluxes. Its main entry is `sub_J01_free_molecular_mc_2Drz`.
 
-The model uses straight two-velocity r-z trajectories, without azimuthal motion, volume ionization or intermolecular collisions. Its truncated-normal inlet-event sampling is not reservoir flux-weighted Maxwell sampling. Density uses residence times; flux uses signed crossings, not cell-average velocity times density.
+| Implementation file | Responsibility |
+| --- | --- |
+| `sub_J01_fm_sampling.f90` | Effective inlet area, supply rate, position and velocity sampling |
+| `sub_J01_fm_reflection.f90` | Specular reflection or diffuse velocity sampling at the wall temperature |
+| `sub_J01_fm_trajectory.f90` | Next-face tracking, residence times and signed crossing counts |
+| `sub_J01_fm_statistics.f90` | Density, mean velocity and flux estimators |
+| `sub_J01_free_molecular_mc_2Drz.f90` | Validation, history loop, completion status and output |
 
-Compile the required `mod_*.f90` with preprocessing and this include path. Do not compile sub files separately. Use `only` imports if both modules are needed, since constants share names. Legacy 3D APIs remain unchanged; positive `s` is a per-step density decrement.
+The current model uses straight r-z trajectories without azimuthal motion, volume ionization or intermolecular collisions. Inlet velocities follow a positive-normal truncated drifting Gaussian distribution of incoming particles; no additional normal-speed weighting is applied. Density uses residence statistics, whereas flux uses signed crossings, not cell-average velocity times density.
 
-Run all J01 unit tests from the repository root:
+The radial injection interval does not turn the remainder of an OPEN face into a wall. Applications supply prescribed inflow using the same particle rate and area. Histories stopped by the tracking limit produce incomplete statistics.
 
-```bash
-bash tests/011_fluid/J01_free_molecular/run.sh
-```
+## Retained utilities
 
-The Sphinx `J01_free_molecular` section documents formulas, parameters and matching tests.
+`mod_J01_continuity_freeflow` includes:
+
+- `sub_J01_continuity_freeflow.f90`: original normalized Cartesian density update; `s` is a per-step decrement.
+- `sub_J01_continuity_freeflow_2Drz.f90`: prescribed-velocity cylindrical flux construction and prescribed-flux density stepping.
+
+These utilities do not sample or track particles. Their public interfaces and Cartesian indexing remain unchanged.
+
+## Build and documentation
+
+Compile only the required module files, with preprocessing and this directory on the include path. Do not compile include files separately. Keep real precision consistent, and use explicit `only` imports when both modules are needed because some constant names overlap.
+
+The Sphinx [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) route covers data, injection, reflection, tracking, estimators and the complete calculation. Retained interfaces are under Legacy Utilities; see [J01 tests](../../tests/012_fluid/J01_free_molecular/README.md) for test commands.

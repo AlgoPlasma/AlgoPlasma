@@ -1,5 +1,5 @@
-sub_J01_continuity_freeflow_2Drz.f90
-====================================
+Cylindrical Flux Utilities
+==========================================================================================
 
 .. raw:: html
 
@@ -10,117 +10,114 @@ sub_J01_continuity_freeflow_2Drz.f90
 
 .. container:: ap-lang ap-lang-zh ap-fluid-doc
 
-   .. rubric:: 二维给定速度通量与更新
+   ``sub_J01_continuity_freeflow_2Drz.f90`` 提供两个可分别调用的工具：
+   用已知单元密度和速度生成数值面通量，以及用已知面通量完成一次密度更新。
+   它们不生成粒子历史，也不求解速度分布。
+   本页使用物理单位和单元中心数组，不沿用三维工具的单位步长或保护层。
 
-   源码：``J_Fluid/J01_free_molecular/sub_J01_continuity_freeflow_2Drz.f90``。
-   由 ``mod_J01_continuity_freeflow`` 包含，不能作为独立模块编译。
-   :doc:`返回模块总览 <continuity>`。
-   正文中的简写过程名省略了所属模块的 sub 前缀，完整接口见下方声明。
+   .. rubric:: 1. 给定密度与速度，先计算内部面通量
 
-   .. rubric:: 二维给定速度通量与单步更新
-
-   ``sub_J01_build_faceflux_2Drz`` 对每个相邻有效单元采用前述局部 Lax-Friedrichs 公式。
-   具体通量为
+   ``sub_J01_build_faceflux_2Drz`` 对相邻的两个有效单元 L、R 使用
 
    .. math::
 
-      \Gamma_{L/R}=\tfrac12(u_Ln_L+u_Rn_R)
-      -\tfrac12\max(|u_L|,|u_R|)(n_R-n_L).
+      \Gamma_f=\frac{u_Ln_L+u_Rn_R}{2}
+         -\frac{\max(|u_L|,|u_R|)}{2}(n_R-n_L).
 
-   当面两侧速度相同，公式退化为迎风通量；速度不同时还包含耗散项。
-   开放面的出射通量仅在速度指向域外时取 n*u，否则为零。
-   参数 boundary_inflow_flux 在该函数内只作尺寸检查，不被加入输出，
-   实际入射项由单步更新函数或 J03 处理。
+   径向用 ``velocity_r``，轴向用 ``velocity_z``。
+   两侧速度相等时，这是迎风通量；不相等时包含相应的局部耗散项。
+   此时尚未乘面积，单位为 m⁻²s⁻¹。
 
-   ``sub_J01_continuity_step_2Drz`` 按 face_type 选择内部面通量、开放面入射加出射，
-   或壁面零通量，使用
+   该过程在相邻有效单元之间生成内部数组，不逐项根据 ``face_type`` 过滤这些相邻位置。
+   哪些通量实际参与更新，由后面的面类型选择决定。
+   不应把内部数组中某个位置的非零值自动理解为物理壁面穿透。
+
+   .. rubric:: 2. 开放面的出射与规定入射分别处理
+
+   若给定单元速度朝向开放面的域外，输出 :math:`u n`；
+   否则该面的出射输出为零。
+   因此径向/轴向低端出射为负，高端出射为正。
+
+   输入参数 ``boundary_inflow_flux`` 在通量生成过程中只检查形状，
+   不被加入输出。它不是遗漏的返回量：规定入流由调用者保存，
+   在单步更新时与这里算出的出射相加。
+
+   ``sub_J01_build_faceflux_2Drz`` 的输入与输出：
+
+   - 输入 ``active(nr,nz)``、``face_type(4,nr,nz)``。
+   - 输入 ``density,velocity_r,velocity_z``，形状均为 ``(nr,nz)``；
+     密度单位 m⁻³，速度 m/s。
+   - 输入 ``boundary_inflow_flux(4,nr,nz)``，单位 m⁻²s⁻¹。
+   - 输出分配的 ``flux_r(nr-1,nz)``、``flux_z(nr,nz-1)``、
+     ``boundary_outflow_flux(4,nr,nz)``，以及 ``ierr``。
+   - 检查形状和负密度；不全面验收拓扑、有限性或速度模型。
+
+   .. rubric:: 3. 使用已知通量推进一步
+
+   ``sub_J01_continuity_step_2Drz`` 按面类型选择通量：
+   内部面读取给定内部数组，开放面使用入射与出射之和，壁面保持零。
+   记净流出粒子率
 
    .. math::
 
-      Q=A_{r+}\Gamma_{r+}-A_{r-}\Gamma_{r-}
-       +A_{z+}\Gamma_{z+}-A_{z-}\Gamma_{z-},\qquad
-      n^{q+1}=\frac{n^q-\Delta t Q/V+\Delta t S}{1+\Delta t\nu}.
+      Q_K^{\mathrm{net}}
+         =A_{r+}\Gamma_{r+}-A_{r-}\Gamma_{r-}
+          +A_{z+}\Gamma_{z+}-A_{z-}\Gamma_{z-}.
 
-   volume 单位为 m³，face_area 为 m²，通量为 m⁻²s⁻¹，
-   source_rate 为 m⁻³s⁻¹，loss_frequency 为 s⁻¹，dt 为 s。
-   此接口分配并返回 density_new，不原地修改 density，也没有负值截断。
-   fun_J01_flux_r_at、fun_J01_flux_z_at 仅取指定内部面数组元素，不重新计算通量。
+   使用给定正时间步，更新为
 
-   .. rubric:: 参数说明
+   .. math::
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 34 66
+      n_K^{q+1}
+         =\frac{n_K^q-\Delta t Q_K^{\mathrm{net}}/V_K+\Delta t S_K}
+                {1+\Delta t\nu_K}.
 
-      * - 参数或字段
-        - 含义
-      * - ``active、face_type``
-        - 有效单元标记与四面类型；决定哪些面参与散度。
-      * - ``density、velocity_r/z``
-        - 单元数密度（m⁻³）及给定速度（m/s）。
-      * - ``flux_r/z、boundary_inflow/outflow_flux``
-        - 坐标正方向通量（m⁻²s⁻¹），边界入射和出射分开存储。
-      * - ``volume、face_area、dt``
-        - 物理体积、面积、时间步，分别为 m³、m²、s。
-      * - ``source_rate、loss_frequency、density_new``
-        - 非负体产生率、损失频率；返回更新后的数密度。
+   输运通量和产生项来自本步已知输入，线性损失采用新密度。
+   与三维工具的扣减量不同，这里的 :math:`S_K` 为非负体产生率，正值增加密度。
 
-   .. rubric:: 接口声明
+   .. rubric:: 4. 单步输入、输出与限制
 
-   以下声明来自本文件。``intent(in)`` 为输入，``intent(out)`` 为本次调用的输出，
-   ``intent(inout)`` 表示原值参与计算并被修改；``allocatable, intent(out)`` 数组由过程分配。
-   ``optional`` 可省略，数组形状中的 nr、nz 为网格单元数。过程名中的 sub/fun 前缀不改变 Fortran 调用规则。
+   - 输入 ``active,face_type``，以及 ``volume(nr,nz)`` （m³）、
+     ``face_area(4,nr,nz)`` （m²）。
+   - 输入 ``density,source_rate,loss_frequency``，均为 ``(nr,nz)``，
+     单位依次为 m⁻³、m⁻³s⁻¹、s⁻¹。
+   - 输入前述内部通量和分开的 ``boundary_inflow_flux,boundary_outflow_flux``，
+     以及 ``dt`` （s）。
+   - 输出分配的 ``density_new(nr,nz)`` 与 ``ierr``；输入密度不改，无效单元输出零。
+   - 检查尺寸、正时间步、非负密度/源损及有效体积。
+     不自动选择稳定步长，不完整检查拓扑和面积，也没有负输出截断。
 
-   .. rubric:: sub_J01_build_faceflux_2Drz
+   本次传入什么通量就使用什么通量，单步过程不根据更新后的密度自动重算它。
+   若反复使用这组工具推进，调用者负责每步准备所需通量。
+   这里也不建立参考面系数，因此不能把它与“从参考场建立固定闭合”的接口混为一谈。
 
-   .. code-block:: fortran
+   .. rubric:: 5. 状态码
 
-      subroutine sub_J01_build_faceflux_2Drz(active, face_type, density, velocity_r, &
-      velocity_z, boundary_inflow_flux, flux_r, flux_z, boundary_outflow_flux, ierr)
-      logical, intent(in) :: active(:, :)
-      integer, intent(in) :: face_type(:, :, :)
-      real, intent(in) :: density(:, :), velocity_r(:, :), velocity_z(:, :)
-      real, intent(in) :: boundary_inflow_flux(:, :, :)
-      real, allocatable, intent(out) :: flux_r(:, :), flux_z(:, :), boundary_outflow_flux(:, :, :)
-      integer, intent(out) :: ierr
-
-   .. rubric:: sub_J01_continuity_step_2Drz
-
-   .. code-block:: fortran
-
-      subroutine sub_J01_continuity_step_2Drz(active, face_type, volume, face_area, density, &
-      source_rate, loss_frequency, flux_r, flux_z, boundary_inflow_flux, &
-      boundary_outflow_flux, dt, density_new, ierr)
-      logical, intent(in) :: active(:, :)
-      integer, intent(in) :: face_type(:, :, :)
-      real, intent(in) :: volume(:, :), face_area(:, :, :), density(:, :), source_rate(:, :), &
-      loss_frequency(:, :), flux_r(:, :), flux_z(:, :), boundary_inflow_flux(:, :, :), &
-      boundary_outflow_flux(:, :, :), dt
-      real, allocatable, intent(out) :: density_new(:, :)
-      integer, intent(out) :: ierr
-
-   .. rubric:: fun_J01_flux_r_at
-
-   .. code-block:: fortran
-
-      real function fun_J01_flux_r_at(flux_r, i, k)
-      real, intent(in) :: flux_r(:, :)
-      integer, intent(in) :: i, k
-
-   .. rubric:: fun_J01_flux_z_at
-
-   .. code-block:: fortran
-
-      real function fun_J01_flux_z_at(flux_z, i, k)
-      real, intent(in) :: flux_z(:, :)
-      integer, intent(in) :: i, k
-
-   .. rubric:: 测试与源码
-
-   :doc:`对应测试及断言 </tests/011_fluid/J01_tests>` 列出调用本文件的测试项。
-   :download:`下载实现源码 <../../../../../J_Fluid/J01_free_molecular/sub_J01_continuity_freeflow_2Drz.f90>`。
+   本文件实际使用的返回码为成功 0、形状错误 101、负输入或无效体积 102、
+   非正时间步 103。它们属于保留工具模块，不应按粒子前处理模块或 J03 的错误码解释。
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   This file is included by ``mod_J01_continuity_freeflow``.
-   :doc:`Module overview <continuity>` · :doc:`Tests </tests/011_fluid/J01_tests>`.
+   This file has a prescribed-velocity flux builder and a prescribed-flux density step.
+   It uses physical cylindrical geometry and cell arrays, unlike the normalized Cartesian interface.
+
+   ``sub_J01_build_faceflux_2Drz`` reads active/face arrays, cell density and velocities,
+   and an incoming boundary array. It allocates radial/axial internal fluxes and outgoing boundary fluxes.
+   Interior arrays use the local Lax–Friedrichs formula for each adjacent active pair.
+   Face-type filtering of actual contributions occurs in the later step.
+   The incoming array is shape-checked only; it is not added to the flux outputs.
+
+   ``sub_J01_continuity_step_2Drz`` reads geometry, density, source, loss, all internal/incoming/outgoing
+   fluxes and dt. It selects flux by face type and computes
+
+   .. math::
+
+      n_K^{q+1}=
+      \frac{n_K^q-\Delta t\sum_f s_fA_f\Gamma_f/V_K+\Delta t S_K}
+           {1+\Delta t\nu_K}.
+
+   It allocates density_new, leaves input density unchanged and sets inactive cells to zero.
+   It does not recalculate supplied fluxes, determine a stable dt, or clip negative output.
+
+   Actual status codes here are 0 success, 101 shape, 102 negative input/invalid active volume,
+   103 nonpositive timestep, interpreted within the retained utilities module.

@@ -98,17 +98,32 @@
         end do
     end subroutine sub_J02_build_geometry
 
-    subroutine sub_J02_initialize_boundary_types(mesh, boundary, ierr)
+    !> @brief Classify local faces; with partition, collectively connect remote active neighbors.
+    !> @param[in] mesh Initialized owned-cell mesh.
+    !> @param[out] boundary Four face-type arrays of shape (nr,nz).
+    !> @param[out] ierr Zero on success; otherwise a J02 input or layout error.
+    !> @param[in] partition Optional borrowed spatial ownership; physical faces remain caller-configurable.
+    subroutine sub_J02_initialize_boundary_types(mesh, boundary, ierr, partition)
         type(sn_mesh_2drz_type), intent(in) :: mesh
         type(sn_boundary_2drz_type), intent(out) :: boundary
         integer, intent(out) :: ierr
+        type(sn_partition_type), optional, intent(in) :: partition
         integer :: i, k
 
+#ifndef J02_USE_MPI
+        if (present(partition)) then
+            ierr=SN_ERR_MPI_DISABLED
+            return
+        end if
+#endif
         ierr = SN_SUCCESS
         if (.not. allocated(mesh%active)) then
             ierr = SN_ERR_GEOMETRY_MESH
-            return
         end if
+#ifdef J02_USE_MPI
+        call sub_J02_sync_status(partition,ierr)
+#endif
+        if (ierr/=SN_SUCCESS) return
         allocate(boundary%face_r_lo(mesh%nr, mesh%nz), &
             boundary%face_r_hi(mesh%nr, mesh%nz), &
             boundary%face_z_lo(mesh%nr, mesh%nz), &
@@ -142,6 +157,9 @@
                 end if
             end do
         end do
+#ifdef J02_USE_MPI
+        if (present(partition)) call sub_J02_connect_partition_faces(mesh,boundary,partition,ierr)
+#endif
     end subroutine sub_J02_initialize_boundary_types
 
     subroutine sub_J02_configure_zlo_partial_inlet_boundary(mesh, face_fraction, boundary, ierr)
@@ -165,3 +183,22 @@
             end if
         end do
     end subroutine sub_J02_configure_zlo_partial_inlet_boundary
+
+    logical function fun_J02_geometry_is_valid(mesh, geometry)
+        type(sn_mesh_2drz_type), intent(in) :: mesh
+        type(sn_geometry_2drz_type), intent(in) :: geometry
+
+        fun_J02_geometry_is_valid = mesh%nr > 0 .and. mesh%nz > 0 .and. &
+            allocated(mesh%active)
+        if (.not. fun_J02_geometry_is_valid) return
+        fun_J02_geometry_is_valid = size(mesh%active, 1) == mesh%nr .and. &
+            size(mesh%active, 2) == mesh%nz
+        if (.not. fun_J02_geometry_is_valid) return
+        fun_J02_geometry_is_valid = allocated(geometry%rc) .and. &
+            allocated(geometry%hr) .and. allocated(geometry%hz) .and. &
+            allocated(geometry%xi_bar)
+        if (.not. fun_J02_geometry_is_valid) return
+        fun_J02_geometry_is_valid = size(geometry%rc) == mesh%nr .and. &
+            size(geometry%hr) == mesh%nr .and. size(geometry%hz) == mesh%nz .and. &
+            size(geometry%xi_bar) == mesh%nr
+    end function fun_J02_geometry_is_valid

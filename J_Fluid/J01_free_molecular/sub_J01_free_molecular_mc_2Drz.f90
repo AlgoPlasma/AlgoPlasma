@@ -95,6 +95,9 @@
         if (present(progress_interval)) report_every = progress_interval
         call sub_J01_set_random_seed(random_seed_value)
 
+        ! Each history represents a steady injection rate, not one PIC timestep.
+        ! Track one particle to escape, accumulate its residence/crossings, then
+        ! start an independent history. There is no global physical-time loop.
         do p = 1, n_histories
             call sub_J01_sample_fm_inlet(inlet, z_edge(1)+eps_z, inlet_drift_z, r, z, ur, uz)
             call sub_J01_trace_fm_history(r_edge, z_edge, active, face_type, diffuse_fraction, &
@@ -109,5 +112,7 @@
         end do
         call sub_J01_finalize_fm_tally(r_edge, z_edge, theta_span, active, history_rate, &
             tally, density, velocity_r, velocity_z, flux_r, flux_z, boundary_outflow_flux)
+        ! Partial tallies remain available for diagnostics, but a truncated
+        ! history set must not be accepted as a completed reference solution.
         if (n_truncated > 0) ierr = J01_ERR_PARTICLE_TRACKING
     end subroutine sub_J01_free_molecular_mc_2Drz

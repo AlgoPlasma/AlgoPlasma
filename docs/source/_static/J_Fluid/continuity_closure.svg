@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="500" viewBox="0 0 1080 500" role="img" aria-labelledby="title desc">
+<title id="title">面输运系数与当前通量</title><desc id="desc">正通量使用左侧密度，负通量使用右侧密度。参考场只决定系数，当前密度改变时通量随之改变。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
+<rect width="1080" height="500" rx="12" fill="#f7f9fc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+<text x="32" y="39" font-size="24" font-weight="bold">先由参考场定系数，再用当前密度算通量</text>
+<g fill="white" stroke="#c1d0da"><rect x="28" y="65" width="502" height="342" rx="9"/><rect x="550" y="65" width="502" height="342" rx="9"/></g>
+<text x="52" y="103" font-size="21" font-weight="bold">正通量：左侧 L 是上游</text>
+<text x="576" y="103" font-size="21" font-weight="bold">负通量：右侧 R 是上游</text>
+<g stroke="#a8bbc8"><rect x="62" y="131" width="174" height="69" fill="#daeeea"/><rect x="326" y="131" width="174" height="69" fill="#edf2f7"/><rect x="582" y="131" width="174" height="69" fill="#edf2f7"/><rect x="846" y="131" width="174" height="69" fill="#daeeea"/></g>
+<g font-size="21" text-anchor="middle"><text x="149" y="173">L：参考密度 3</text><text x="413" y="173">R：参考密度 6</text><text x="669" y="173">L：参考密度 3</text><text x="933" y="173">R：参考密度 6</text></g>
+<g stroke="#267d8d" stroke-width="3" marker-end="url(#arrow)"><path d="M242 166H315"/><path d="M839 166H766"/></g>
+<g font-size="20"><text x="54" y="236">参考通量 +12 → 系数 12 ÷ 3 = +4</text><text x="576" y="236">参考通量 −12 → 系数 −12 ÷ 6 = −2</text>
+<text x="54" y="284">后来：左侧当前密度降为 1</text><text x="576" y="284">后来：右侧当前密度降为 2</text>
+<text x="54" y="331" fill="#217b78">当前通量 = 4 × 1 = +4</text><text x="576" y="331" fill="#217b78">当前通量 = −2 × 2 = −4</text>
+<text x="54" y="377" font-size="18">右侧当前密度不参与这个面的迎风取值</text><text x="576" y="377" font-size="18">左侧当前密度不参与这个面的迎风取值</text></g>
+<text x="32" y="449" font-size="18">示例中密度单位为 m⁻³，通量为 m⁻²s⁻¹，系数为 m/s；假设密度下限未生效。</text>
+<text x="32" y="477" font-size="18">绿色表示上游单元。系数是通量与密度的比例，不是输入的单元平均速度。</text>
+</g></svg>

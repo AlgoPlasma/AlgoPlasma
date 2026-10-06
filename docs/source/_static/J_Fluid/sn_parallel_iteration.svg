@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+  <title id="title">反射迭代中的方向并行与同步</title>
+  <desc id="desc">每轮先根据上一轮分布计算壁面数据，随后 OpenMP 线程独立扫描不同离散速度，等待全部完成后按固定顺序检查错误与变化量。收敛后重构，否则交换新旧场进入下一轮。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#516578"/></marker></defs>
+  <rect width="1000" height="620" rx="12" fill="#f7f9fc"/>
+  <g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+    <text x="30" y="38" font-size="23" font-weight="bold">一轮内按离散速度并行，轮与轮之间保持顺序</text>
+    <rect x="145" y="70" width="710" height="58" rx="8" fill="#eaf0f7" stroke="#b3c5d4"/>
+    <text x="500" y="105" text-anchor="middle" font-size="20">用上一轮分布计算本轮的镜面与漫反射入流</text>
+    <g fill="none" stroke="#516578" stroke-width="2" marker-end="url(#arrow)">
+      <path d="M500 128V155H260V178"/><path d="M500 128V178"/><path d="M500 155H740V178"/>
+    </g>
+    <g fill="#e9f3f4" stroke="#a6cbc6">
+      <rect x="150" y="180" width="220" height="130" rx="8"/>
+      <rect x="390" y="180" width="220" height="130" rx="8"/>
+      <rect x="630" y="180" width="220" height="130" rx="8"/>
+    </g>
+    <g text-anchor="middle">
+      <g font-size="20" font-weight="bold"><text x="260" y="213">线程 1</text><text x="500" y="213">线程 2</text><text x="740" y="213">线程 …</text></g>
+      <g font-size="18">
+        <text x="260" y="249">分配到的离散速度</text><text x="500" y="249">分配到的离散速度</text><text x="740" y="249">分配到的离散速度</text>
+        <text x="260" y="279">各自完成迎风扫描</text><text x="500" y="279">各自完成迎风扫描</text><text x="740" y="279">各自完成迎风扫描</text>
+      </g>
+    </g>
+    <g fill="none" stroke="#516578" stroke-width="2" marker-end="url(#arrow)">
+      <path d="M260 310V343"/><path d="M500 310V343"/><path d="M740 310V343"/>
+    </g>
+    <path d="M150 347H850" stroke="#267d8d" stroke-width="5"/>
+    <text x="860" y="353" font-size="16" fill="#267d8d">同步</text>
+    <path d="M500 350V377" stroke="#516578" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="145" y="380" width="710" height="65" rx="8" fill="#fff3dc" stroke="#dfbd82"/>
+    <text x="500" y="406" text-anchor="middle" font-size="19">按固定顺序处理错误、计算相邻两轮变化量</text>
+    <text x="500" y="432" text-anchor="middle" font-size="17">失败则返回诊断；成功才判断收敛</text>
+    <path d="M500 445V494" stroke="#516578" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="516" y="477" font-size="17">收敛</text>
+    <rect x="260" y="497" width="480" height="57" rx="8" fill="#eaf0f7" stroke="#b3c5d4"/>
+    <text x="500" y="532" text-anchor="middle" font-size="20">重构密度、平均速度与面通量</text>
+    <path d="M145 413H78V98H142" fill="none" stroke="#516578" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="85" y="477" font-size="17">未收敛：</text><text x="85" y="504" font-size="17">新场作为旧场</text>
+    <text x="38" y="590" font-size="18" fill="#516578">入口与损失保持不变。线程数改变任务分配，不改变物理模型或迭代顺序。</text>
+  </g>
+</svg>

@@ -1,242 +1,186 @@
-sub_J02_sn_reflection.f90
-=========================
+Reflection Iteration
+==========================================================================================
 
-.. raw:: html
+``sub_J02_sn_reflection.f90`` 反复更新壁面入流并调用迎风扫描，求出稳态分布。
+之所以不能只扫描一次，是因为反射入流依赖未知的撞壁分布；
+而撞壁分布必须先解域内输运方程才能得到。
 
-   <div class="ap-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
-     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
-   </div>
+本文件采用固定点迭代：先用已有分布估计反射入流，求得新的域内分布，
+再重新估计反射入流，直到变化足够小。迭代次数不代表物理时间，
+过程中没有时间步长，也不是在计算粒子随真实时间的演化。
 
-.. container:: ap-lang ap-lang-zh ap-fluid-doc
+.. rubric:: 1. 从上一轮分布得到下一轮分布
 
-   .. rubric:: 反射边界与源迭代
+令 :math:`\ell=0,1,2,\ldots` 为已完成的迭代轮数。
+:math:`\psi_m^{(\ell)}` 表示该轮的空间分布；
+其单元内三个系数记为
+:math:`\boldsymbol c_{K,m}^{(\ell)}=(c_{0,K,m}^{(\ell)},c_{1,K,m}^{(\ell)},c_{2,K,m}^{(\ell)})^{\mathsf T}`。
+上标 :math:`(\ell)` 只表示轮次，不是幂。
 
-   源码：``J_Fluid/J02_neutral_sn_transport_2Drz/sub_J02_sn_reflection.f90``。
-   由 ``mod_J02_neutral_sn_transport_2Drz`` 包含，不能作为独立模块编译。
-   :doc:`返回模块总览 <../J02_neutral_sn_transport_2Drz>`。
-   正文中的简写过程名省略了所属模块的 sub 前缀，完整接口见下方声明。
+**第一步：使用上一轮分布，计算各壁面区域的反射系数。**
 
-   .. rubric:: 反射文件：部分入口与方向耦合
+沿用壁面页定义的 :math:`W`、:math:`A_W` 和 :math:`g_{\mathrm w,m}`，
+从上一轮的出射分布计算撞壁粒子率，再归一化漫反射：
 
-   ``sub_J02_sn_reflection.f90`` 的 ``build_partial_zlo_inlet`` 将入口范围与网格面求交。
-   若交集为 [a,b]，返回入口面积份额及局部坐标：
+.. math::
 
-   .. math::
+   Q_W^{\mathrm{out},(\ell)}
+      =\sum_{\beta_{f,m}>0}w_mv_m\beta_{f,m}
+          \int_W\psi_{W,m}^{\mathrm{out},(\ell)}(\boldsymbol x)\,\mathrm dA,
 
-      f_{\rm inlet}=\frac{b^2-a^2}{r_+^2-r_-^2},\qquad
-      \xi_a=(a-r_c)/h_r,\quad \xi_b=(b-r_c)/h_r.
+.. math::
 
-   ``fun_J02_reflected_direction_index`` 查找同速率组中的镜面方向
-   :math:`\boldsymbol\Omega'=\boldsymbol\Omega-2(\boldsymbol\Omega\cdot\boldsymbol n)\boldsymbol n`。
-   ``build_wall_maxwell_shape`` 生成壁温分布，``compute_diffuse_wall_constants`` 根据旧出射场
-   计算再发射系数。漫反射份额为 d 时，
+   C_W^{(\ell)}
+      =\frac{Q_W^{\mathrm{out},(\ell)}}
+             {A_W\displaystyle\sum_{\beta_{f,m}<0}
+                  w_mv_m|\beta_{f,m}|g_{\mathrm w,m}}.
 
-   .. math::
+镜面项同样读取上一轮对应出射速度的分布。因此本轮扫描采用的已知壁面入流为
 
-      \psi_{\rm wall,in}=(1-d)\psi_{\rm specular}+dCg_{\rm wall},\qquad
-      C=\frac{\sum_{\rm out}w_mv_m(\boldsymbol\Omega_m\cdot\boldsymbol n)
-      \langle\psi_m\rangle_f}
-      {\sum_{\rm in}w_mv_m|\boldsymbol\Omega_m\cdot\boldsymbol n|g_{{\rm wall},m}}.
+.. math::
 
-   代码把上述 C 的负值截为零，分母为零时保持零；出现负出射积分时，反射不再保持该负通量。壁温形状使用未归一化的指数函数，其常数因子由 C 抵消。
+   \psi_{W,m}^{\mathrm{in},(\ell+1)}(\boldsymbol x)
+     =(1-d)\psi_{W,R_f(m)}^{\mathrm{out},(\ell)}(\boldsymbol x)
+       +dC_W^{(\ell)}g_{\mathrm w,m},\qquad \beta_{f,m}<0.
 
-   部分入口面只在剩余壁面区间计算反射。``sweep_reflecting`` 输入旧角分布，
-   固定本轮反射入射后扫描，输出新角分布；``solve_source_iteration`` 从零场开始重复，
-   至少两次后才检查收敛：
+式子左侧标为 :math:`\ell+1`，表示它将用于下一轮输运求解；
+右侧全部来自已知的第 :math:`\ell` 轮，所以各离散速度可以分别计算。
+规定入口 :math:`h_m`、壁温、反射比例和损失系数在这些轮次中保持不变。
 
-   .. math::
+**第二步：固定本轮壁面入流，按迎风顺序求解空间单元。**
 
-      \epsilon_\psi=\frac{\sum|\psi^{q+1}-\psi^q|}{\max(\sum|\psi^q|,1)}.
+对第 :math:`m` 个离散速度和当前单元 :math:`K`，组装
 
-   求和覆盖全部局部系数，不是只对密度求和。tolerance 与 max_iterations 控制停止，
-   progress_interval 只控制日志。失败位置由 failed_direction、failed_i、failed_k 返回。
-   文件内 add_face 分派面类型，两个 add_zlo_complement 辅助过程积分入口之外的壁面，
-   fun_boundary_value 读取完整边界输入或紧凑轴向入口数组。
+.. math::
 
-   .. rubric:: 参数含义速查
+   \mathsf A_{K,m}\boldsymbol c_{K,m}^{(\ell+1)}
+     =\boldsymbol b_{K,m}^{\mathrm{interior},(\ell+1)}
+       +\boldsymbol b_{K,m}^{\mathrm{inlet}}
+       +\boldsymbol b_{K,m}^{\mathrm{wall},(\ell+1)}.
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 34 66
+三个右端分别表示：
 
-      * - 参数或字段
-        - 含义
-      * - ``r_min/max、face_fraction、xi_lo/hi``
-        - 入口物理半径范围，输出交叠面积份额与局部积分区间。
-      * - ``wall_shape、diffuse_fraction、diffuse_constant``
-        - 壁温分布形状、漫反射比例及按出射通量计算的再发射系数。
-      * - ``psi_old、psi_new、psi``
-        - 上一轮角分布、本轮扫描输出、最终迭代角分布；均按三系数×网格×方向存储。
-      * - ``boundary_inflow、zlo_inflow``
-        - 完整四面入口分布或仅轴向下端入口的紧凑方向数组，完整数组存在时优先。
-      * - ``zlo_source_xi_lo/hi``
-        - 各径向网格上入口的局部区间；成对提供，剩余区间用于壁面反射。
-      * - ``tolerance、max_iterations、converged、final_relative_change``
-        - 系数变化阈值、迭代上限、收敛标记及最终相对变化；失败位置另由可选索引输出。
+- 内部入流：读取本轮已算完的上游单元系数，所以标为 :math:`\ell+1`；
+- 规定入口：读取不随迭代改变的 :math:`h_m`；无外部入射的出口贡献为零；
+- 壁面入流：把第一步得到的反射分布代入 DG 面积分。
 
-   .. rubric:: 逐个过程的接口声明
+并非每个单元都具有这三类入流；不存在的贡献为零。
+矩阵 :math:`\mathsf A_{K,m}` 由几何、方向和损失决定，不因反射轮次改变。
+每个单元求解后执行保正处理，得到的系数再供本轮下游单元使用。
 
-   以下声明来自本文件。``intent(in)`` 为输入，``intent(out)`` 为本次调用的输出，
-   ``intent(inout)`` 表示原值参与计算并被修改；``allocatable, intent(out)`` 数组由过程分配。
-   ``optional`` 可省略，数组形状中的 nr、nz 为网格单元数。过程名中的 sub/fun 前缀不改变 Fortran 调用规则。
+**第三步：所有离散速度计算完成后，检查新旧分布的变化。**
 
-   .. rubric:: sub_J02_build_partial_zlo_inlet
+达到下节判据就返回新分布；否则将新分布作为上一轮分布，再回到第一步。
+“同一轮内部面用新值、壁面用上一轮值”是两种明确的数据依赖，不能相互替换。
 
-   .. code-block:: fortran
+初始时全部系数为零。因此第一轮的撞壁粒子率和反射入流都为零，
+只有规定入口产生分布。第二轮开始使用这些粒子的出射分布计算反射入流。
+中间轮次的壁面入流对应上一轮出射值，未必与本轮出射值平衡；
+收敛后两轮分布一致，才满足稳态反射条件。
 
-      subroutine sub_J02_build_partial_zlo_inlet(mesh, r_min, r_max, face_fraction, &
-      xi_lo, xi_hi, ierr)
-      type(sn_mesh_2drz_type), intent(in) :: mesh
-      real, intent(in) :: r_min, r_max
-      real, allocatable, intent(out) :: face_fraction(:), xi_lo(:), xi_hi(:)
-      integer, intent(out) :: ierr
+若持续有入口供应，却没有开放出口、体损失或吸附等移除机制，就可能不存在有限稳态解。
+此时增加迭代上限不能解决物理收支问题。
 
-   .. rubric:: sub_J02_build_wall_maxwell_shape
+.. figure:: /_static/J_Fluid/sn_parallel_iteration.svg
+   :alt: 上一轮分布确定壁面入流，各线程计算不同离散速度的空间分布，全部完成后检查收敛
+   :width: 900px
 
-   .. code-block:: fortran
+   一轮内的不同速度任务可以使用 OpenMP 并行；下一轮必须等待本轮完整结果。
+   图中的同步表示等待本轮所有线程完成，不是物理时间步。
 
-      subroutine sub_J02_build_wall_maxwell_shape(quadrature, temperature, particle_mass, &
-      wall_shape, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: temperature, particle_mass
-      real, allocatable, intent(out) :: wall_shape(:)
-      integer, intent(out) :: ierr
-
-   .. rubric:: fun_J02_reflected_direction_index
-
-   .. code-block:: fortran
-
-      integer function fun_J02_reflected_direction_index(quadrature, direction, normal_r, normal_z)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      integer, intent(in) :: direction
-      real, intent(in) :: normal_r, normal_z
-
-   .. rubric:: sub_J02_compute_diffuse_wall_constants
-
-   .. code-block:: fortran
-
-      subroutine sub_J02_compute_diffuse_wall_constants(mesh, geometry, quadrature, boundary, &
-      wall_shape, psi_old, diffuse_constant, ierr, zlo_source_xi_lo, zlo_source_xi_hi)
-      type(sn_mesh_2drz_type), intent(in) :: mesh
-      type(sn_geometry_2drz_type), intent(in) :: geometry
-      type(sn_quadrature_type), intent(in) :: quadrature
-      type(sn_boundary_2drz_type), intent(in) :: boundary
-      real, intent(in) :: wall_shape(:), psi_old(:, :, :, :)
-      real, allocatable, intent(out) :: diffuse_constant(:, :, :)
-      integer, intent(out) :: ierr
-      real, intent(in), optional :: zlo_source_xi_lo(:), zlo_source_xi_hi(:)
+.. rubric:: 2. 怎样衡量新旧分布的变化
 
-   .. rubric:: sub_J02_sweep_reflecting
+代码比较全部多项式系数，而不是只比较密度。这样不会遗漏两个分布具有相近密度、
+但速度分布或空间一次项仍有变化的情况。
+求和范围是所有有效空间单元、所有离散速度以及每组的三个系数。
+无效单元始终为零，实际数组求和包含它们也不影响结果。
 
-   .. code-block:: fortran
+为避免数据过大或过小时的数值问题，先用新旧分布中最大的系数绝对值作共同缩放：
 
-      subroutine sub_J02_sweep_reflecting(mesh, geometry, quadrature, sigma_t, boundary_inflow, &
-      boundary, wall_shape, diffuse_fraction, psi_old, psi, ierr, failed_direction, &
-      failed_i, failed_k, zlo_source_xi_lo, zlo_source_xi_hi, zlo_inflow, &
-      progress_interval)
-      type(sn_mesh_2drz_type), intent(in) :: mesh
-      type(sn_geometry_2drz_type), intent(in) :: geometry
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: sigma_t(:, :, :), wall_shape(:)
-      real, intent(in), optional :: boundary_inflow(:, :, :, :), zlo_inflow(:)
-      type(sn_boundary_2drz_type), intent(in) :: boundary
-      real, intent(in) :: diffuse_fraction, psi_old(:, :, :, :)
-      real, allocatable, intent(out) :: psi(:, :, :, :)
-      integer, intent(out) :: ierr
-      integer, intent(out), optional :: failed_direction, failed_i, failed_k
-      integer, intent(in), optional :: progress_interval
-      real, intent(in), optional :: zlo_source_xi_lo(:), zlo_source_xi_hi(:)
+.. math::
 
-   .. rubric:: add_face
-
-   .. code-block:: fortran
-
-      subroutine add_face(face_id, outward_dot, neighbor_i, neighbor_k)
-      integer, intent(in) :: face_id, neighbor_i, neighbor_k
-      real, intent(in) :: outward_dot
-
-   .. rubric:: add_zlo_complement_coeff
-
-   .. code-block:: fortran
-
-      subroutine add_zlo_complement_coeff(vector, s, coefficient)
-      real, intent(inout) :: vector(3)
-      real, intent(in) :: s, coefficient(3)
-
-   .. rubric:: add_zlo_complement_constant
-
-   .. code-block:: fortran
-
-      subroutine add_zlo_complement_constant(vector, s, value)
-      real, intent(inout) :: vector(3)
-      real, intent(in) :: s, value
-
-   .. rubric:: fun_boundary_value
-
-   .. code-block:: fortran
-
-      real function fun_boundary_value(face_id, cell_i, cell_k, direction)
-      integer, intent(in) :: face_id, cell_i, cell_k, direction
-
-   .. rubric:: sub_J02_solve_source_iteration
-
-   .. code-block:: fortran
-
-      subroutine sub_J02_solve_source_iteration(mesh, geometry, quadrature, sigma_t, &
-      boundary_inflow, boundary, wall_shape, diffuse_fraction, max_iterations, tolerance, &
-      psi, converged, iterations, final_relative_change, ierr, failed_direction, failed_i, &
-      failed_k, zlo_source_xi_lo, zlo_source_xi_hi, zlo_inflow, progress_interval)
-      type(sn_mesh_2drz_type), intent(in) :: mesh
-      type(sn_geometry_2drz_type), intent(in) :: geometry
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: sigma_t(:, :, :), wall_shape(:)
-      real, intent(in), optional :: boundary_inflow(:, :, :, :), zlo_inflow(:)
-      type(sn_boundary_2drz_type), intent(in) :: boundary
-      real, intent(in) :: diffuse_fraction, tolerance
-      integer, intent(in) :: max_iterations
-      real, allocatable, intent(out) :: psi(:, :, :, :)
-      logical, intent(out) :: converged
-      integer, intent(out) :: iterations, ierr
-      real, intent(out) :: final_relative_change
-      integer, intent(out), optional :: failed_direction, failed_i, failed_k
-      integer, intent(in), optional :: progress_interval
-      real, intent(in), optional :: zlo_source_xi_lo(:), zlo_source_xi_hi(:)
-
-   .. rubric:: fun_J02_reflection_inputs_valid
-
-   .. code-block:: fortran
-
-      logical function fun_J02_reflection_inputs_valid(mesh, quadrature, boundary, wall_shape, &
-      psi_old, zlo_source_xi_lo, zlo_source_xi_hi)
-      type(sn_mesh_2drz_type), intent(in) :: mesh
-      type(sn_quadrature_type), intent(in) :: quadrature
-      type(sn_boundary_2drz_type), intent(in) :: boundary
-      real, intent(in) :: wall_shape(:), psi_old(:, :, :, :)
-      real, intent(in), optional :: zlo_source_xi_lo(:), zlo_source_xi_hi(:)
-
-   .. rubric:: fun_face_normal
-
-   .. code-block:: fortran
-
-      subroutine fun_face_normal(face_id, normal_r, normal_z)
-      integer, intent(in) :: face_id
-      real, intent(out) :: normal_r, normal_z
-
-   .. rubric:: fun_face_trace
-
-   .. code-block:: fortran
-
-      real function fun_face_trace(coeff, face_id, xi_bar)
-      real, intent(in) :: coeff(3), xi_bar
-      integer, intent(in) :: face_id
-
-   .. rubric:: 测试与源码
-
-   :doc:`对应测试及断言 </tests/011_fluid/J02_tests>` 列出调用本文件的测试项。
-   :download:`下载实现源码 <../../../../../J_Fluid/J02_neutral_sn_transport_2Drz/sub_J02_sn_reflection.f90>`。
-
-.. container:: ap-lang ap-lang-en ap-fluid-doc
-
-   This file is included by ``mod_J02_neutral_sn_transport_2Drz``.
-   :doc:`Module overview <../J02_neutral_sn_transport_2Drz>` · :doc:`Tests </tests/011_fluid/J02_tests>`.
+   S=\max_{K,m,\;a=0,1,2}
+       \left(|c_{a,K,m}^{(\ell)}|,
+             |c_{a,K,m}^{(\ell+1)}|\right).
+
+:math:`S=0` 时，两轮都为零，定义相对变化为零。
+:math:`S>0` 时，先算三个量：
+
+.. math::
+
+   \begin{aligned}
+   D&=\sum_{K,m}\sum_{a=0}^2
+       \left|\frac{c_{a,K,m}^{(\ell+1)}}S
+                    -\frac{c_{a,K,m}^{(\ell)}}S\right|,\\
+   B_{\mathrm{old}}&=\sum_{K,m}\sum_{a=0}^2
+                       \left|\frac{c_{a,K,m}^{(\ell)}}S\right|,\\
+   B_{\mathrm{new}}&=\sum_{K,m}\sum_{a=0}^2
+                       \left|\frac{c_{a,K,m}^{(\ell+1)}}S\right|.
+   \end{aligned}
+
+:math:`D` 是变化量，:math:`B_{\mathrm{old}},B_{\mathrm{new}}`
+是两轮分布各自的大小。最后使用
+
+.. math::
+
+   E_{\ell+1}=\frac{D}{\max(B_{\mathrm{old}},B_{\mathrm{new}})}.
+
+共同缩放 :math:`S` 在比值中抵消，只改变计算时的数值大小，不改变判据含义。
+例如，所有系数统一乘一个正数，只要不发生浮点溢出或下溢，:math:`E_{\ell+1}` 就不变。
+取新旧大小中的较大者，还避免只用旧场作分母时第一轮全零导致除零。
+
+至少完成两轮，并满足 :math:`E_{\ell+1}\leq\text{tolerance}`，程序才报告收敛。
+这表明反射更新已足够小，不直接说明网格、角度和速率离散误差的大小，
+也不是对局部方程残差或全局粒子收支作了单独验收。
+
+MPI 分区时，上述最大值和求和都覆盖所有进程。
+各进程不能只用自己区域的变化量决定是否停止；13–14 页说明这些全局计算怎样执行。
+
+.. rubric:: 3. 主过程的输入
+
+本文件只有 ``sub_J02_solve_source_iteration`` 一个过程。
+
+- 输入 ``mesh``、``geometry``、``quadrature``、``boundary``，
+  以及 ``sigma_t(nr,nz,n_dir)``。
+- 入流二选一：``boundary_inflow(4,nr,nz,n_dir)``
+  或 ``zlo_inflow(n_dir)``，含义与扫描接口相同。
+- 输入 ``wall_shape(n_dir)`` 与 ``diffuse_fraction``。
+  漫反射比例为零，即纯镜面反射时，可将 ``wall_shape`` 全部设为零；
+  有漫反射时，则要求它能按壁面入射通量归一化。
+- 输入 ``max_iterations``：至少为二；``tolerance``：有限且严格为正。
+- 可选输入 ``partition``：本地空间分区信息；传入后所有进程共同迭代，失败索引使用全局坐标。
+- 可选的两个下端入口区间数组必须同时传入，尺寸均为 ``nr``。
+- 可选 ``progress_interval``：非负整数，零表示关闭迭代进度；
+  正数控制每隔多少轮打印相对变化，首轮也打印。
+  当前启用迭代进度时，内部方向进度另按 800 个离散速度的间隔报告。
+
+本过程不接收初始场，始终从零初始化。
+若未来需要续算或使用已有解作初值，需要增加相应的初始分布输入；当前接口不读取上一次计算结果。
+
+.. rubric:: 4. 输出与失败处理
+
+- 输出 ``psi(3,nr,nz,n_dir)``：最后保留的完整一轮系数。
+- 输出 ``converged``：逻辑收敛状态；
+  ``iterations``：迭代计数；
+  ``final_relative_change``：最后一次计算的无量纲变化量。
+- 输出 ``ierr``：成功为零，达到迭代上限仍未满足判据时为
+  ``SN_ERR_SOURCE_ITERATION_NOT_CONVERGED``；
+  扫描失败时传播其错误码。
+- 可选输出 ``failed_direction``、``failed_i``、``failed_k``：
+  用于定位扫描中发生的方向和单元错误。
+
+正常收敛时，迭代计数就是完成轮数。用尽上限时返回 ``max_iterations``；
+若单轮中途失败，计数表示尝试到的那一轮，不能把它解释成已完成一轮。
+
+若中途扫描失败，过程保留上一轮完整场，而不是本次半完成的新场。
+在参数检查很早就失败时，场可能尚未分配，失败位置初始化为零；
+所有输出都应在检查 ``ierr`` 后按失败类型使用。
+未收敛的分布可用于排查问题，但不能作为收敛的稳态解。
+
+.. rubric:: 5. 与后续重构的衔接
+
+迭代成功后，完整求解接口才调用重构过程，
+由同一组系数和原求积权重计算密度、速度与面通量。
+迭代期间，规定入口分布保持不变；密度由收敛后的分布积分得到。
+对近乎封闭或弱损失的系统，粒子可能多次碰壁反射，收敛较慢；
+此时应结合边界逃逸和损失条件分析，而不是把迭代轮数当作实际驻留时间。

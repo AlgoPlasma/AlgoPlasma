@@ -3,8 +3,17 @@
 !> @details The module owns the shared mesh, geometry, and quadrature types and
 !> includes separately testable implementation files for geometry, quadrature,
 !> sources, local DG operators, sweeps, and reconstruction.
+!> Reduced two-velocity r-z transport, not full axisymmetric 2D3V kinetics.
+!> Speed and one in-plane angle supply vr/vz; v_theta is not represented.
 module mod_J02_neutral_sn_transport_2Drz
     implicit none
+    private :: sub_J02_sweep_velocity, sub_J02_sweep_batch, sn_sweep_halo_type
+#ifdef J02_USE_MPI
+    private :: sub_J02_mpi_sweep, sub_J02_connect_partition_faces, sub_J02_sync_status
+    private :: sub_J02_partition_check, sub_J02_partition_real_reduce, sub_J02_partition_any
+    private :: sub_J02_check_mpi, sub_J02_partition_quadrature
+    private :: sub_J02_partition_iteration_options, sub_J02_reconstruct_partition_fluxes
+#endif
 
     integer, parameter :: SN_R_LO = 1
     integer, parameter :: SN_R_HI = 2
@@ -14,8 +23,9 @@ module mod_J02_neutral_sn_transport_2Drz
     integer, parameter :: SN_FACE_INTERIOR = 0
     integer, parameter :: SN_FACE_OPEN = 1
     integer, parameter :: SN_FACE_WALL = 2
+    integer, parameter :: SN_FACE_REMOTE = 3
 
-! Globally unique status codes returned by the J02 public interfaces.
+! Status codes unique within the J02 public interfaces.
     integer, parameter :: SN_SUCCESS = 0
     integer, parameter :: SN_ERR_MESH_EDGE_COUNT = 101
     integer, parameter :: SN_ERR_MESH_ACTIVE_SHAPE = 102
@@ -46,21 +56,35 @@ module mod_J02_neutral_sn_transport_2Drz
     integer, parameter :: SN_ERR_SWEEP_SIGMA_SHAPE = 601
     integer, parameter :: SN_ERR_SWEEP_BOUNDARY_SHAPE = 602
     integer, parameter :: SN_ERR_SWEEP_GEOMETRY_SHAPE = 603
-    integer, parameter :: SN_ERR_SWEEP_DIRECTION = 604
-    integer, parameter :: SN_ERR_SWEEP_DIRECTION_SIGMA_SHAPE = 605
-    integer, parameter :: SN_ERR_SWEEP_DIRECTION_BOUNDARY_SHAPE = 606
-    integer, parameter :: SN_ERR_SWEEP_DIRECTION_PSI_SHAPE = 607
     integer, parameter :: SN_ERR_SWEEP_AXIS_DIRECTION = 608
     integer, parameter :: SN_ERR_SWEEP_LOCAL_SOLVE = 609
     integer, parameter :: SN_ERR_SWEEP_NEGATIVE_SIGMA = 610
-    integer, parameter :: SN_ERR_SWEEP_WALL_UNSUPPORTED = 611
     integer, parameter :: SN_ERR_SWEEP_FACE_TOPOLOGY = 612
     integer, parameter :: SN_ERR_REFLECTION_INPUT = 613
     integer, parameter :: SN_ERR_SOURCE_ITERATION_OPTIONS = 614
     integer, parameter :: SN_ERR_SOURCE_ITERATION_NOT_CONVERGED = 615
+    integer, parameter :: SN_ERR_WALL_NORMALIZATION = 617
     integer, parameter :: SN_ERR_PARTIAL_INLET = 616
     integer, parameter :: SN_ERR_RECONSTRUCTION_PSI_SHAPE = 701
     integer, parameter :: SN_ERR_RECONSTRUCTION_BOUNDARY_SHAPE = 702
+
+    integer, parameter :: SN_ERR_MPI_DISABLED = 801
+    integer, parameter :: SN_ERR_MPI_LAYOUT = 802
+    integer, parameter :: SN_ERR_MPI_INPUT = 803
+    integer, parameter :: SN_ERR_MPI_THREAD = 804
+
+    ! Borrowed nonperiodic 2D Cartesian communicator. MPI lifetime belongs to the caller.
+    ! first/count describe owned cells (global one-based indices); public fields have no ghosts.
+    type :: sn_partition_type
+        integer :: comm = -1, rank = -1, n_ranks = 0, real_type = 0
+        integer :: dims(2) = 0, coords(2) = 0, global_shape(2) = 0
+        integer :: first(2) = 0, count(2) = 0, neighbor(4) = -1
+    end type sn_partition_type
+
+    ! The two upstream coefficient planes for a group of velocity nodes.
+    type :: sn_sweep_halo_type
+        real, allocatable :: r(:,:,:), z(:,:,:)
+    end type sn_sweep_halo_type
 
     type :: sn_mesh_2drz_type
         integer :: nr = 0
@@ -101,15 +125,47 @@ module mod_J02_neutral_sn_transport_2Drz
         integer, allocatable :: face_z_hi(:, :)
     end type sn_boundary_2drz_type
 
+    ! Reference fields and solver diagnostics belong to one completed solve.
+    type :: sn_transport_options_type
+        real :: diffuse_fraction = 0.0
+        real :: tolerance = 1.0e-6
+        integer :: max_iterations = 200
+        integer :: progress_interval = 0
+    end type sn_transport_options_type
+
+    type :: sn_transport_result_type
+        logical :: converged = .false.
+        integer :: iterations = 0
+        integer :: failed_direction = 0, failed_i = 0, failed_k = 0
+        real :: relative_change = 0.0
+        real, allocatable :: psi(:,:,:,:)
+        real, allocatable :: density(:,:), velocity_r(:,:), velocity_z(:,:)
+        real, allocatable :: flux_r(:,:), flux_z(:,:)
+        real, allocatable :: inflow_flux(:,:,:), outflow_flux(:,:,:)
+        ! Coordinate-signed flux density on REMOTE faces only; local ownership on each rank.
+        real, allocatable :: partition_flux(:,:,:)
+    end type sn_transport_result_type
+
 contains
 
 #   include "sub_J02_sn_error.f90"
+#ifdef J02_USE_MPI
+#   include "sub_J02_sn_partition.f90"
+#endif
 #   include "sub_J02_sn_geometry.f90"
 #   include "sub_J02_sn_quadrature.f90"
+#   include "sub_J02_sn_inflow.f90"
 #   include "sub_J02_sn_source.f90"
+#   include "sub_J02_sn_loss.f90"
+#   include "sub_J02_sn_boundary.f90"
+#   include "sub_J02_sn_wall.f90"
 #   include "sub_J02_sn_dg_operator.f90"
 #   include "sub_J02_sn_sweep.f90"
+#ifdef J02_USE_MPI
+#   include "sub_J02_sn_mpi_sweep.f90"
+#endif
 #   include "sub_J02_sn_reflection.f90"
 #   include "sub_J02_sn_reconstruction.f90"
+#   include "sub_J02_sn_transport.f90"
 
 end module mod_J02_neutral_sn_transport_2Drz

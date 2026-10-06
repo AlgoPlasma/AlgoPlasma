@@ -1,4 +1,6 @@
-!> Convert a reference density and reference face fluxes into frozen velocities.
+!> Build fixed face transport coefficients from reference density and signed fluxes.
+!> Coefficients have velocity units but are not cell-mean particle velocities.
+!> Initialization copies inputs; changing the caller's arrays later has no effect.
 
     subroutine sub_J03_initialize_transport_closure(active, face_type, volume, face_area, &
         density_ref, flux_r_ref, flux_z_ref, boundary_inflow_flux, &
@@ -23,19 +25,16 @@
             ierr = J03_ERR_OPTIONS
             return
         end if
-        if (size(face_type, 1) /= J03_N_FACES .or. size(face_type, 2) /= nr .or. &
-            size(face_type, 3) /= nz .or. size(volume, 1) /= nr .or. size(volume, 2) /= nz .or. &
-            size(face_area, 1) /= J03_N_FACES .or. size(face_area, 2) /= nr .or. &
-            size(face_area, 3) /= nz .or. size(density_ref, 1) /= nr .or. &
-            size(density_ref, 2) /= nz .or. size(flux_r_ref, 1) /= max(nr-1, 0) .or. &
-            size(flux_r_ref, 2) /= nz .or. size(flux_z_ref, 1) /= nr .or. &
-            size(flux_z_ref, 2) /= max(nz-1, 0) .or. &
-            size(boundary_inflow_flux, 1) /= J03_N_FACES .or. &
-            size(boundary_inflow_flux, 2) /= nr .or. size(boundary_inflow_flux, 3) /= nz .or. &
-            size(boundary_outflow_flux_ref, 1) /= J03_N_FACES .or. &
-            size(boundary_outflow_flux_ref, 2) /= nr .or. &
-            size(boundary_outflow_flux_ref, 3) /= nz .or. &
-            size(loss_frequency, 1) /= nr .or. size(loss_frequency, 2) /= nz) then
+        ! Cell arrays, unique internal faces, and four per-cell boundary faces
+        ! have distinct layouts. Check layouts before accessing any element.
+        if (any(shape(face_type) /= [J03_N_FACES,nr,nz]) .or. &
+            any(shape(volume) /= [nr,nz]) .or. any(shape(density_ref) /= [nr,nz]) .or. &
+            any(shape(face_area) /= [J03_N_FACES,nr,nz]) .or. &
+            any(shape(flux_r_ref) /= [max(nr-1,0),nz]) .or. &
+            any(shape(flux_z_ref) /= [nr,max(nz-1,0)]) .or. &
+            any(shape(boundary_inflow_flux) /= [J03_N_FACES,nr,nz]) .or. &
+            any(shape(boundary_outflow_flux_ref) /= [J03_N_FACES,nr,nz]) .or. &
+            any(shape(loss_frequency) /= [nr,nz])) then
             ierr = J03_ERR_SHAPE
             return
         end if
@@ -100,6 +99,9 @@
         closure%velocity_z_face = 0.0
         closure%boundary_outflow_velocity = 0.0
         scale = maxval(abs(density_ref), mask = active)
+        ! The floor regularizes Gamma_ref / n_up_ref. It does not repair an
+        ! invalid reference field; applications must check finite/nonnegative n.
+        ! The resulting face coefficient stays fixed while J03 advances n.
         floor = max(scale*density_floor_fraction, tiny(1.0))
         do k = 1, nz
             do i = 1, nr-1
@@ -134,39 +136,3 @@
             end do
         end do
     end subroutine sub_J03_initialize_transport_closure
-
-    subroutine sub_J03_import_J01_closure(active, face_type, volume, face_area, density_ref, &
-        flux_r_ref, flux_z_ref, boundary_inflow_flux, boundary_outflow_flux_ref, &
-        loss_frequency, density_floor_fraction, closure, ierr)
-        logical, intent(in) :: active(:, :)
-        integer, intent(in) :: face_type(:, :, :)
-        real, intent(in) :: volume(:, :), face_area(:, :, :), density_ref(:, :), flux_r_ref(:, :), &
-            flux_z_ref(:, :), boundary_inflow_flux(:, :, :), boundary_outflow_flux_ref(:, :, :), &
-            loss_frequency(:, :), density_floor_fraction
-        type(neutral_transport_closure_2drz_type), intent(out) :: closure
-        integer, intent(out) :: ierr
-        call sub_J03_initialize_transport_closure(active, face_type, volume, face_area, &
-            density_ref, flux_r_ref, flux_z_ref, boundary_inflow_flux, &
-            boundary_outflow_flux_ref, loss_frequency, density_floor_fraction, closure, ierr)
-    end subroutine sub_J03_import_J01_closure
-
-    subroutine sub_J03_import_J02_closure(active, face_type, volume, face_area, density_ref, &
-        flux_r_ref, flux_z_ref, boundary_inflow_flux, boundary_outflow_flux_ref, &
-        loss_frequency, density_floor_fraction, closure, ierr)
-        logical, intent(in) :: active(:, :)
-        integer, intent(in) :: face_type(:, :, :)
-        real, intent(in) :: volume(:, :), face_area(:, :, :), density_ref(:, :), flux_r_ref(:, :), &
-            flux_z_ref(:, :), boundary_inflow_flux(:, :, :), boundary_outflow_flux_ref(:, :, :), &
-            loss_frequency(:, :), density_floor_fraction
-        type(neutral_transport_closure_2drz_type), intent(out) :: closure
-        integer, intent(out) :: ierr
-        call sub_J03_initialize_transport_closure(active, face_type, volume, face_area, &
-            density_ref, flux_r_ref, flux_z_ref, boundary_inflow_flux, &
-            boundary_outflow_flux_ref, loss_frequency, density_floor_fraction, closure, ierr)
-    end subroutine sub_J03_import_J02_closure
-
-    logical function fun_J03_active_at(active, i, k)
-        logical, intent(in) :: active(:, :)
-        integer, intent(in) :: i, k
-        fun_J03_active_at = active(i, k)
-    end function fun_J03_active_at

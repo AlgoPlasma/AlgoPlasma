@@ -1,5 +1,5 @@
-sub_J01_continuity_freeflow.f90
--------------------------------
+Cartesian Step
+==========================================================================================
 
 .. raw:: html
 
@@ -8,169 +8,152 @@ sub_J01_continuity_freeflow.f90
      <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: ap-lang ap-lang-zh
+.. container:: ap-lang ap-lang-zh ap-fluid-doc
 
-   .. rubric:: 用途
+   ``sub_J01_continuity_freeflow.f90`` 保留原三维笛卡尔连续性单步接口。
+   它输入节点存储的密度、给定速度和本步扣减量，先生成数值面通量，
+   再原地更新密度。此过程不追踪粒子、不建立参考场，也不返回内部通量数组。
 
-   ``sub_J01_continuity_freeflow`` 在当前代码实现的密度更新区间
-   ``i=il(1)-1:iu(1)``, ``j=il(2)-1:iu(2)``, ``k=il(3)-1:iu(3)``
-   上推进三维自由流连续性方程。
+   .. rubric:: 1. 数组索引与更新范围
 
-   .. rubric:: 参数表
+   输入整数向量 ``il(1:3),iu(1:3)``。
+   六个实数数组 ``n,s,ux,uy,uz,n0`` 的每个方向声明范围都是
+
+   .. math::
+
+      \mathrm{il}(d)-2:\mathrm{iu}(d)+1,\qquad d=1,2,3.
+
+   实际更新区间是
+   ``i=il(1)-1:iu(1)``、``j=il(2)-1:iu(2)``、
+   ``k=il(3)-1:iu(3)``。
+   最外一层用于相邻取值，由调用者在进入过程前设置边界和保护层。
+
+   ``n0=n`` 先保存整个旧数组，包括保护层。
+   后面的三个方向都读取这份旧场，因此不是先更新 x、再用新密度更新 y 的分裂推进。
+
+   .. rubric:: 2. 相邻节点之间的数值通量
+
+   对于一个方向上的相邻位置 L、R，使用局部 Lax–Friedrichs（LF）通量：
+
+   .. math::
+
+      F_{L/R}=\frac{u_Ln_L^0+u_Rn_R^0}{2}
+           -\frac{\alpha_{L/R}}{2}(n_R^0-n_L^0),
+      \qquad \alpha_{L/R}=\max(|u_L|,|u_R|).
+
+   第一项是两侧物理通量的平均，第二项是与密度跳跃有关的数值耗散。
+   当 :math:`u_L=u_R=u` 时，
+
+   .. math::
+
+      F_{L/R}=
+      \begin{cases}u n_L^0,&u\ge0,\\u n_R^0,&u<0.\end{cases}
+
+   因此常速度下退化为迎风通量。三个方向分别使用 ``ux,uy,uz``。
 
    .. list-table::
       :header-rows: 1
-      :widths: 18 10 24 48
+      :widths: 17 40 43
+
+      * - 工作数组
+        - 含义
+        - 索引范围
+      * - ``Fx(i,j,k)``
+        - :math:`i` 与 :math:`i+1` 之间的 x 向通量
+        - x 为 ``il-2:iu``，其余为 ``il-1:iu``
+      * - ``Fy(i,j,k)``
+        - :math:`j` 与 :math:`j+1` 之间的 y 向通量
+        - y 为 ``il-2:iu``，其余为 ``il-1:iu``
+      * - ``Fz(i,j,k)``
+        - :math:`k` 与 :math:`k+1` 之间的 z 向通量
+        - z 为 ``il-2:iu``，其余为 ``il-1:iu``
+
+   这些是过程内部临时数组，调用者不会接收到它们。
+
+   .. rubric:: 3. 一次更新与源项符号
+
+   代码将三个方向的通量差同时从旧密度扣除：
+
+   .. math::
+
+      \begin{aligned}
+      n_{i,j,k}^{\mathrm{new}}={}&n_{i,j,k}^0
+         -[F^x_{i,j,k}-F^x_{i-1,j,k}]\\
+         &-[F^y_{i,j,k}-F^y_{i,j-1,k}]
+          -[F^z_{i,j,k}-F^z_{i,j,k-1}]
+          -s_{i,j,k}.
+      \end{aligned}
+
+   当前约定是 :math:`\Delta t=\Delta x=\Delta y=\Delta z=1`，
+   没有另外传入物理时间步或网格宽度。
+   输入速度和扣减量必须已经满足这一归一化约定，不能直接将任意 SI 速度传入。
+
+   ``s`` 是本次更新的密度扣减量，正值减少密度；
+   它不是二维接口中正值增加粒子的每秒体产生率。
+   没有输运时，结果就是 :math:`n^{\mathrm{new}}=n^0-s`。
+
+   .. rubric:: 4. 每个参数的输入输出
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 22 19 59
 
       * - 参数
         - 方向
-        - shape/范围
-        - 含义与局部约定
-      * - ``il``
-        - in
-        - ``(1:3)``
-        - 调用方传入的参考下界索引；对节点存储密度而言，最终更新从 ``il-1`` 开始。
-      * - ``iu``
-        - in
-        - ``(1:3)``
-        - 调用方传入的参考上界索引。
+        - 含义
+      * - ``il,iu``
+        - 输入
+        - 三个方向的参考上下索引，决定上述声明和循环范围
       * - ``n``
-        - in/out
-        - ``real(il(1)-2:iu(1)+1, il(2)-2:iu(2)+1, il(3)-2:iu(3)+1)``
-        - 节点存储的密度数组，含 guard/ghost cells；例程最终回写的区间是
-          ``il(1)-1:iu(1)``, ``il(2)-1:iu(2)``, ``il(3)-1:iu(3)``。
+        - 输入输出
+        - 旧密度进入，更新区域被新密度覆盖，其余位置不改
       * - ``s``
-        - in
-        - ``real(il(1)-2:iu(1)+1, il(2)-2:iu(2)+1, il(3)-2:iu(3)+1)``
-        - 与 ``n`` 同索引布局的密度扣减项；更新式使用 ``-s``，正值减少密度。
-      * - ``ux``
-        - in
-        - ``real(il(1)-2:iu(1)+1, il(2)-2:iu(2)+1, il(3)-2:iu(3)+1)``
-        - 与节点密度 ``n`` 同索引布局的 x 方向速度数组。
-      * - ``uy``
-        - in
-        - ``real(il(1)-2:iu(1)+1, il(2)-2:iu(2)+1, il(3)-2:iu(3)+1)``
-        - 与节点密度 ``n`` 同索引布局的 y 方向速度数组。
-      * - ``uz``
-        - in
-        - ``real(il(1)-2:iu(1)+1, il(2)-2:iu(2)+1, il(3)-2:iu(3)+1)``
-        - 与节点密度 ``n`` 同索引布局的 z 方向速度数组。
+        - 输入
+        - 与密度同布局、同单位的本步扣减量
+      * - ``ux,uy,uz``
+        - 输入
+        - 同布局的三个归一化速度分量，本次调用内固定
       * - ``n0``
-        - inout/work
-        - ``real(il(1)-2:iu(1)+1, il(2)-2:iu(2)+1, il(3)-2:iu(3)+1)``
-        - 工作缓冲区；先复制旧 ``n``，随后作为更新公式右端中的 ``n^0`` 使用。
+        - 工作输出
+        - 接收整块旧密度副本，调用者须提供存储空间
 
-   .. rubric:: 使用条件
+   本过程没有 ``ierr``、数组分配、边界更新或负值修复。
+   调用者负责索引、保护层、输入尺度及稳定性。
 
-   当前实现采用归一化 ``dx=dy=dz=dt=1``；边界和 ghost cell 需要调用方在进入本例程前准备好。
-   这里不应把 ``il``/``iu`` 机械理解成 cell-centered ``n(il:iu)`` 的下上界。
-   对当前节点存储实现，最终更新循环实际写回的是 ``il-1:iu``。
+   .. rubric:: 5. 稳定性与重复调用
 
-   .. rubric:: 计算过程
+   对恒定速度、无扣减项，常用充分条件是
 
-   实现先把 ``n`` 复制到 ``n0``，再构造面通量工作数组 ``Fx/Fy/Fz``，
-   最后用一阶 Lax-Friedrichs 型有限体积更新把结果写回密度数组。
+   .. math::
 
-   .. rubric:: 调用说明
+      |u_x|+|u_y|+|u_z|\le1.
 
-   本页只说明该例程本身的调用边界和实现事实；完整接口声明和源码级 API 仍以英文侧的 generated API 为准。
+   不能只分别检查每个方向小于一。
+   变速度需要结合局部面耗散系数检查具体更新；
+   过大的扣减量即使在稳定步长下也可能使密度为负。
 
-.. container:: ap-lang ap-lang-en
+   下一次调用前，应用需要更新边界/保护层，以及需要变化的速度和扣减量。
+   过程本身只执行一次更新，不判断稳态，也不推进调用者的物理时钟。
 
-   .. rubric:: Direct Purpose
+.. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   ``sub_J01_continuity_freeflow`` solve the free-flow continuity equation using a 3D Lax-Friedrichs scheme.
+   The retained Cartesian routine forms local Lax–Friedrichs fluxes from old node-stored density
+   and prescribed velocities, then overwrites density in place.
 
-   .. rubric:: Parameter Table
+   All six real arrays use il(d)-2:iu(d)+1. The updated region is il(d)-1:iu(d),
+   not simply il:iu. The caller fills guards. n0 receives the entire old density;
+   all three flux directions use it before the unsplit update.
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 18 10 24 48
+   .. math::
 
-      * - Parameter
-        - Direction
-        - Shape/range
-        - Meaning and local convention
-      * - ``il``
-        - in
-        - ``(1:3)``
-        - integer(1:3), reference lower indices passed in by the caller. For
-          the node-stored density used here, the updated region starts from
-          ``il-1`` rather than exactly at ``il``.
-      * - ``iu``
-        - in
-        - ``(1:3)``
-        - integer(1:3), reference upper indices passed in by the caller.
-      * - ``n``
-        - in/out
-        - scalar or caller-provided array
-        - real,dimension(il(1)-2:iu(1)+1,il(2)-2:iu(2)+1, &
-          il(3)-2:iu(3)+1), node-stored density array including guard cells, updated
-          in-place. The active update region is
-          ``il(1)-1:iu(1)``, ``il(2)-1:iu(2)``, ``il(3)-1:iu(3)``.
-      * - ``s``
-        - in
-        - scalar or caller-provided array
-        - real,dimension(il(1)-2:iu(1)+1,il(2)-2:iu(2)+1, &
-          il(3)-2:iu(3)+1), source-term array on the same indexing layout
-          expected by the update.
-      * - ``ux``
-        - in
-        - scalar or caller-provided array
-        - real,dimension(il(1)-2:iu(1)+1,il(2)-2:iu(2)+1, &
-          il(3)-2:iu(3)+1), x-velocity array on the same indexing layout
-          expected by the flux construction.
-      * - ``uy``
-        - in
-        - scalar or caller-provided array
-        - real,dimension(il(1)-2:iu(1)+1,il(2)-2:iu(2)+1, &
-          il(3)-2:iu(3)+1), y-velocity array on the same indexing layout
-          expected by the flux construction.
-      * - ``uz``
-        - in
-        - scalar or caller-provided array
-        - real,dimension(il(1)-2:iu(1)+1,il(2)-2:iu(2)+1, &
-          il(3)-2:iu(3)+1), z-velocity array on the same indexing layout
-          expected by the flux construction.
-      * - ``n0``
-        - out
-        - scalar or caller-provided array
-        - real,dimension(il(1)-2:iu(1)+1,il(2)-2:iu(2)+1, &
-          il(3)-2:iu(3)+1), buffer storing the old values of ``n`` over all
-          cells (including guard cells).
+      F_{L/R}=\tfrac12(u_Ln_L+u_Rn_R)
+              -\tfrac12\max(|u_L|,|u_R|)(n_R-n_L).
 
-   .. rubric:: Local Assumptions
+   Fx/Fy/Fz stagger across the corresponding adjacent nodes and remain internal work arrays.
+   The update subtracts the three high-minus-low differences and s.
+   The normalization is dt=dx=dy=dz=1: s is a per-step density decrement, not a positive physical source rate.
 
-   The current implementation uses normalized ``dx=dy=dz=dt=1``; boundary and
-   ghost-cell values must be prepared by the caller before entry. Because the
-   density is node-stored, the update
-   should be interpreted from the explicit loops in the source:
-   ``n(i,j,k)`` is updated for
-   ``i=il(1)-1:iu(1)``, ``j=il(2)-1:iu(2)``, ``k=il(3)-1:iu(3)``.
-
-   .. rubric:: Implementation Notes
-
-   The implementation first copies ``n`` into ``n0``, then forms the
-   face-staggered work arrays ``Fx/Fy/Fz`` from first-order Lax-Friedrichs
-   fluxes plus source terms, and finally writes the updated density back over
-   the implemented ``il-1:iu`` update region.
-
-   .. rubric:: Indexing Convention
-
-   The routine does not use a simple cell-centered ``n(il:iu)`` interpretation.
-   Instead, the density is node-stored and:
-
-   - ``n``, ``s``, ``ux``, ``uy``, ``uz``, and ``n0`` are declared on
-     ``il(*)-2:iu(*)+1``.
-   - ``Fx`` is declared on
-     ``il(1)-2:iu(1)``, ``il(2)-1:iu(2)``, ``il(3)-1:iu(3)``.
-   - ``Fy`` is declared on
-     ``il(1)-1:iu(1)``, ``il(2)-2:iu(2)``, ``il(3)-1:iu(3)``.
-   - ``Fz`` is declared on
-     ``il(1)-1:iu(1)``, ``il(2)-1:iu(2)``, ``il(3)-2:iu(3)``.
-   - The final density update uses
-     ``n(il(1)-1:iu(1), il(2)-1:iu(2), il(3)-1:iu(3))``.
-
-   .. rubric:: Generated API
-
-   .. doxygenfile:: sub_J01_continuity_freeflow.f90
+   Inputs are il,iu,s,ux,uy,uz; n is inout and n0 stores the previous field.
+   There is no ierr, allocation, boundary update or positivity repair.
+   For constant velocity without decrement, :math:`|u_x|+|u_y|+|u_z|\le 1` is sufficient;
+   variable velocities and removal require additional local checks.

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-label="J02 complete transport problem">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#267d8d" stroke-width="1.4"/></marker></defs>
+<rect width="900" height="470" rx="12" fill="#f7f9fc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+<text x="34" y="36" font-size="20">J02：完整问题与待求分布</text>
+<rect x="155" y="106" width="310" height="270" fill="#eaf2f5" stroke="#647583" stroke-width="5"/>
+<path d="M155 106H465" stroke="#267d8d" stroke-width="5" stroke-dasharray="9 6"/>
+<path d="M217 376H403" stroke="#cd7929" stroke-width="7"/>
+<g stroke="#d0dce3" stroke-width="1"><path d="M232 108V373 M310 108V373 M387 108V373 M158 160H462 M158 214H462 M158 268H462 M158 322H462"/></g>
+<g stroke="#267d8d" stroke-width="2" marker-end="url(#arrow)"><path d="M230 102V68 M310 102V68 M390 102V68 M250 411V382 M310 411V382 M370 411V382"/></g>
+<text x="190" y="58" font-size="17">开放出口：外部入射为零</text>
+<text x="221" y="438" font-size="17">入口环带：粒子率 Q，入射速度概率密度 p</text>
+<text x="172" y="399" font-size="13">入口下限</text><text x="380" y="399" font-size="13">入口上限</text>
+<text x="173" y="239" font-size="17">域内：给定损失频率 ν</text>
+<text x="173" y="266" font-size="17">未知：每个速度上的 ψ</text>
+<text x="495" y="164" font-size="18">反射壁</text>
+<text x="495" y="197" font-size="16">左右侧面 + 入口外的下端</text>
+<text x="495" y="228" font-size="16">镜面比例 1−d，热漫反射比例 d</text>
+<text x="495" y="259" font-size="16">壁温 T<tspan baseline-shift="sub" font-size="12">w</tspan>；反射粒子率等于撞壁粒子率</text>
+<path d="M482 167L465 188 M480 306L449 375" stroke="#647583" fill="none"/>
+<g stroke="#233446" stroke-width="2"><path d="M75 372V100 M75 372H131"/></g>
+<text x="57" y="96" font-size="18">z</text><text x="126" y="393" font-size="18">r</text>
+<text x="493" y="335" font-size="16">空间：r、z；速度：v<tspan baseline-shift="sub" font-size="12">r</tspan>、v<tspan baseline-shift="sub" font-size="12">z</tspan></text>
+<text x="493" y="365" font-size="16">图为环形通道截面，不包含 r=0 轴</text>
+</g></svg>

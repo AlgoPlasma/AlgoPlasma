@@ -1,11 +1,16 @@
-J01_free_molecular
-=================================================================
+J01 Free Molecular
+==========================================================================================
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
-   J01_free_molecular/particle_transport
-   J01_free_molecular/continuity
+   01 Module and Data <J01_free_molecular/mod_J01_neutral_free_molecular_2Drz>
+   02 Inlet Sampling <J01_free_molecular/sub_J01_fm_sampling>
+   03 Wall Reflection <J01_free_molecular/sub_J01_fm_reflection>
+   04 Particle Tracking <J01_free_molecular/sub_J01_fm_trajectory>
+   05 Field Estimators <J01_free_molecular/sub_J01_fm_statistics>
+   06 Complete Calculation <J01_free_molecular/sub_J01_free_molecular_mc_2Drz>
 
 .. raw:: html
 
@@ -14,72 +19,104 @@ J01_free_molecular
      <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-
 .. container:: ap-lang ap-lang-zh ap-fluid-doc
 
-   .. rubric:: 这部分代码做什么
+   J01 的粒子前处理用许多独立轨迹统计稳态中性气体场。
+   这里的自由分子输运（Free Molecular，FM）指不计算分子间碰撞的运动；
+   蒙特卡洛方法（Monte Carlo，MC）用于抽取入口位置、速度以及碰壁后的反射速度。
 
-   J01 的文件统一放在 ``J_Fluid/J01_free_molecular``。其中有两类计算：
-   一类从入口发射粒子，得到稳态中性场；另一类使用给定速度，计算连续性方程的通量或密度更新。
-   两类计算各自保留一个 mod 文件，避免把不同的输入和算法混在同一个调用入口。
+   它解决的问题是：入口以给定速率持续供气时，粒子在各单元停留多久，
+   以什么平均速度运动，又有多少粒子穿过每个面。
+   输出是单元密度、单元平均速度和面通量，不是粒子随某个共同物理时钟演化的快照。
+
+   .. rubric:: 贯穿本章的物理问题
+
+   考虑一个 :math:`r_a<r<r_b`、:math:`0<z<L` 的环形通道截面，
+   其中 :math:`r_a>0`。下端面注入粒子，上端开放，两个径向侧面反射。
+   下端也是开放面，已经进入通道的粒子可以从那里反向逃逸。
+   本章先采用整个下端面均匀供气；入口半径只覆盖部分开放面时的含义在采样页说明。
+
+   .. figure:: /_static/J_Fluid/fm_history.svg
+      :alt: 粒子从下端注入，沿网格内直线飞行，碰壁改变速度，最终从开放边界逃逸
+      :width: 900px
+
+      一个历史包含从注入到逃逸的全部飞行段，遇到壁面不会新建历史。
+
+   输入包括入口温度 :math:`T_{\mathrm{in}}`、轴向漂移 :math:`U_z`、
+   供应强度参数 :math:`n_{\mathrm{in}}`、粒子质量 :math:`M`、
+   壁温 :math:`T_{\mathrm w}` 和漫反射概率 :math:`d`。
+   入口直接抽取 :math:`v_z>0` 的截断漂移正态速度；壁面以概率 :math:`d` 热漫反射，
+   其余镜面反射。当前没有体产生、体损失、吸附和分子间碰撞。
+   有限稳态需要粒子最终能够逃逸；完全封闭且持续供气的问题不属于这一稳态计算的适用范围。
+
+   .. rubric:: 从一条轨迹到稳态密度
+
+   一条历史不是固定数量的宏粒子，而是代表持续注入粒子率 :math:`\dot w` 的统计样本。
+   若它在单元 :math:`K` 停留 :math:`\tau` 秒，就贡献 :math:`\dot w\tau` 个稳态粒子。
+   把全部历史的贡献相加，再除以单元体积，得到密度。
+   面通量则由有符号穿面次数计算，不能从单元平均速度直接替代。
+
+   程序每次只追踪一条历史，完成后再抽取下一条。增加历史数是增加统计样本，
+   不是延长某个连续性计算的物理时间。
+
+   .. rubric:: 按以下顺序阅读实现
 
    .. list-table::
       :header-rows: 1
-      :widths: 30 35 35
+      :widths: 24 38 38
 
-      * - 计算
-        - 输入
-        - 输出
-      * - :doc:`粒子前处理 <J01_free_molecular/particle_transport>`
-        - 网格、入口分布、壁面条件、采样参数
-        - 参考密度、平均速度、带符号面通量
-      * - :doc:`连续性与通量工具 <J01_free_molecular/continuity>`
-        - 已有密度、给定速度或面通量、源损项
-        - 面通量或一步更新后的密度
+      * - 页面
+        - 解释的计算
+        - 对应文件
+      * - 01 Module and Data
+        - 网格、面类型、粒子状态、入口结构和累计数组
+        - ``mod_J01_neutral_free_molecular_2Drz.f90``
+      * - 02 Inlet Sampling
+        - 注入区域、粒子率、位置与速度的概率分布
+        - ``sub_J01_fm_sampling.f90``
+      * - 03 Wall Reflection
+        - 镜面变换和热漫反射的抽样公式
+        - ``sub_J01_fm_reflection.f90``
+      * - 04 Particle Tracking
+        - 最近碰面时间、内部穿越、碰壁、逃逸和角点
+        - ``sub_J01_fm_trajectory.f90``
+      * - 05 Field Estimators
+        - 驻留时间与穿面次数怎样转换为物理场
+        - ``sub_J01_fm_statistics.f90``
+      * - 06 Complete Calculation
+        - 组装所有过程，检查结果，交付参考场
+        - ``sub_J01_free_molecular_mc_2Drz.f90``
 
-   .. rubric:: 如何选择
+   .. rubric:: 当前运动模型的限制
 
-   要从入口和壁面条件计算自由分子场，调用 ``mod_J01_neutral_free_molecular_2Drz``。
-   它的采样、轨迹、反射和统计各有一个 sub 文件，主过程负责按顺序调用。
-   计算完成后，应用驱动将参考场传给 J03，继续求解连续性方程。
+   单元内按 :math:`\mathrm dr/\mathrm dt=v_r`、
+   :math:`\mathrm dz/\mathrm dt=v_z` 直线飞行，两速度分量只在碰壁时改变。
+   入口面积与最终体积采用柱坐标几何，但没有周向速度及相关惯性运动；
+   这不是完整的三速度轴对称分子动力学模型。
 
-   要沿用三维连续性更新，或在已有速度场上计算二维 LF 通量，调用 ``mod_J01_continuity_freeflow``。
-   它不跟踪粒子，也不替代粒子前处理。原过程名与参数保留。
-
-   .. rubric:: 与 J02、J03 的区别
-
-   J01 的粒子方法通过多条轨迹统计输运；J02 用离散纵标和 DG 求解分布。
-   二者是不同的前处理方法，各自将密度和面通量交给 J03。
-   J03 根据参考密度和通量确定面速度，再用当前密度更新通量。
-   因此后续冻结的是面速度，不是通量本身。
-
-   当前 FM 模型只有 r、z 两个速度分量，不含周向运动和体内电离；入口采用截断正态事件分布。
-   这些条件会影响结果，不能只因网格相同就认为 FM 与 SN 的物理模型相同。
-   各过程页面分别给出公式、单位、数组形状、前置条件和对应测试。
-
-   .. rubric:: 编译与测试
-
-   源码目录内的两个 mod 文件分别包含所需 sub 文件，编译器需启用预处理。
-   不单独编译 sub 文件；同时引入两个模块时用 ``only`` 选择过程，避免同名常量冲突。
-   所有 J01 小测试统一由以下命令运行：
-
-   .. code-block:: bash
-
-      bash tests/011_fluid/J01_free_molecular/run.sh
-
-   测试说明：:doc:`连续性与通量 </tests/011_fluid/J01_tests>`、
-   :doc:`粒子模块 </tests/011_fluid/J01_fm_tests>`。
-   FM 与 J03 的完整连接算例见 :doc:`应用测试 </tests/011_fluid/application_tests>`。
+   当前历史循环是串行的，使用 Fortran 运行时的随机数状态。
+   源码没有独立线程随机流或空间分区通信接口，不能仅通过增加线程数就获得并行。
+   改变采样或壁面模型时，应在对应功能文件中修改，同时保持统计权重与新模型一致。
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   All J01 sources are in one directory. ``mod_J01_neutral_free_molecular_2Drz`` computes particle
-   preprocessing fields from inlet and wall conditions. ``mod_J01_continuity_freeflow`` retains
-   the existing 3D continuity update and 2D prescribed-velocity utilities.
-   Compile the required modules, not individual include files. Use selective imports when using both.
+   J01 estimates steady neutral fields from independent collisionless particle histories.
+   It uses Monte Carlo sampling for inlet positions, inlet velocities and diffuse wall reflection.
+   The outputs are cell density, residence-weighted mean velocities, internal face fluxes,
+   and outgoing physical-boundary fluxes.
 
-   J01 particle transport and J02 SN transport are alternative preprocessors. Both provide reference
-   density and face fluxes to J03, which freezes face velocity rather than flux. The FM model is
-   reduced two-velocity r-z transport without volume ionization or azimuthal motion.
+   The running problem is an annular r-z channel with an open lower inlet, an open upper outlet
+   and reflecting radial walls. The lower inlet also allows reverse escape.
+   The current inlet is a truncated drifted normal distribution of incoming particles.
+   Walls mix specular and flux-weighted thermal reflection. There are no volume sources,
+   volume losses, adsorption, or intermolecular collisions.
 
-   Run ``bash tests/011_fluid/J01_free_molecular/run.sh`` for all J01 unit tests.
+   A history carries a steady injection rate, not a PIC macro-particle population.
+   Its residence time times that rate contributes to the steady particle inventory.
+   Signed crossings provide face fluxes independently of cell velocity moments.
+
+   Read Module and Data, Inlet Sampling, Wall Reflection, Particle Tracking, Field Estimators,
+   then Complete Calculation. The six pages map to the module and its five included files.
+   The current model uses straight r-z paths with two velocity components and cylindrical measures,
+   not full axisymmetric three-velocity dynamics. Histories are currently serial and share
+   the Fortran runtime random state.

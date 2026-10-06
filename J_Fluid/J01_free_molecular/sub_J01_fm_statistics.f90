@@ -38,6 +38,8 @@
                 if (.not. active(i, k)) cycle
                 volume = 0.5*theta_span*(r_edge(i+1)**2-r_edge(i)**2)* &
                     (z_edge(k+1)-z_edge(k))
+                ! history_rate [1/s/history] times summed residence [s]
+                ! estimates particles in the cell; divide by sector volume [m^3].
                 density(i, k) = history_rate*tally%residence(i, k)/volume
                 if (tally%residence(i, k) > 0.0) then
                     velocity_r(i, k) = tally%moment_r(i, k)/tally%residence(i, k)
@@ -56,6 +58,9 @@
                     history_rate*tally%boundary_count(J01_Z_HI, i, k)/area
             end do
         end do
+        ! Signed crossings / full face area give Gamma [1/(m^2 s)].
+        ! Do not replace these estimators by density times cell-mean velocity:
+        ! residence moments and crossing counts sample different quantities.
         do k = 1, nz
             do i = 1, nr-1
                 area = theta_span*r_edge(i+1)*(z_edge(k+1)-z_edge(k))

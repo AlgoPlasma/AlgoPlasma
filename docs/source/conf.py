@@ -77,6 +77,7 @@ exclude_patterns = ["sphinx_rtd_theme"]
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_js_files = globals().get('html_js_files', []) + ['J_Fluid/sn_walkthrough_embed.js']
 html_extra_path = ['../../LICENSE', '../../NOTICE']
 html_show_copyright = False
 
@@ -84,7 +85,8 @@ breathe_default_members = ()
 
 html_theme_options = {
     'collapse_navigation': False,
-    'navigation_depth': 3,
+    # Tests -> 012_fluid -> module group -> individual test page.
+    'navigation_depth': 4,
 }
 
 # ===== matplotlib plot directive settings =====

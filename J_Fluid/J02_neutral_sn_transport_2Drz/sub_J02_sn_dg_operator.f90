@@ -1,27 +1,29 @@
 !> Local P1-DG operators for the cylindrical r-z streaming equation.
+! Basis order is (1, xi, zeta), with xi=(r-rc)/hr and zeta=(z-zc)/hz.
+! Matrix rows are test functions and columns are unknown coefficients.
+! All add_* procedures ACCUMULATE: the sweep must first zero a and rhs.
+! s is the nonnegative magnitude of Omega dot outward_normal on that face.
+! Integrals include the cylindrical r weight; the common sector angle cancels.
 
+    ! Outgoing trace: A_ab += s * integral_face(r*phi_a*phi_b).
     subroutine sub_J02_add_self_face_matrix(a, face_id, s, rc, hr, hz)
         real, intent(inout) :: a(3, 3)
         integer, intent(in) :: face_id
         real, intent(in) :: s, rc, hr, hz
-        real :: c, c0, c1, c11
+        real :: side, c, c0, c1, c11
 
-        select case (face_id)
-          case (SN_R_LO)
-            c = s*hz*(rc-hr)
+        if (face_id == SN_R_LO .or. face_id == SN_R_HI) then
+            side = merge(-1.0, 1.0, face_id == SN_R_LO)
+            c = s*hz*(rc+side*hr)
+            ! On a radial face phi=(1,side,zeta); odd zeta moments vanish.
             a(1, 1) = a(1, 1)+2*c
-            a(1, 2) = a(1, 2)-2*c
-            a(2, 1) = a(2, 1)-2*c
+            a(1, 2) = a(1, 2)+side*2*c
+            a(2, 1) = a(2, 1)+side*2*c
             a(2, 2) = a(2, 2)+2*c
             a(3, 3) = a(3, 3)+(2.0/3.0)*c
-          case (SN_R_HI)
-            c = s*hz*(rc+hr)
-            a(1, 1) = a(1, 1)+2*c
-            a(1, 2) = a(1, 2)+2*c
-            a(2, 1) = a(2, 1)+2*c
-            a(2, 2) = a(2, 2)+2*c
-            a(3, 3) = a(3, 3)+(2.0/3.0)*c
-          case default
+        else
+            side = merge(-1.0, 1.0, face_id == SN_Z_LO)
+            ! Integrals of 1, xi and xi^2 with measure hr*(rc+hr*xi) dxi.
             c0 = s*hr*(2*rc)
             c1 = s*hr*((2.0/3.0)*hr)
             c11 = s*hr*((2.0/3.0)*rc)
@@ -29,80 +31,59 @@
             a(1, 2) = a(1, 2)+c1
             a(2, 1) = a(2, 1)+c1
             a(2, 2) = a(2, 2)+c11
-            if (face_id == SN_Z_LO) then
-                a(1, 3) = a(1, 3)-c0
-                a(2, 3) = a(2, 3)-c1
-                a(3, 1) = a(3, 1)-c0
-                a(3, 2) = a(3, 2)-c1
-            else
-                a(1, 3) = a(1, 3)+c0
-                a(2, 3) = a(2, 3)+c1
-                a(3, 1) = a(3, 1)+c0
-                a(3, 2) = a(3, 2)+c1
-            end if
+            a(1, 3) = a(1, 3)+side*c0
+            a(2, 3) = a(2, 3)+side*c1
+            a(3, 1) = a(3, 1)+side*c0
+            a(3, 2) = a(3, 2)+side*c1
             a(3, 3) = a(3, 3)+c0
-        end select
+        end if
     end subroutine sub_J02_add_self_face_matrix
 
+    ! Incoming neighbour trace is evaluated on its OPPOSITE face.
+    ! The test basis still belongs to this cell, so the two normal signs differ.
     subroutine sub_J02_add_neighbor_rhs(rhs, face_id, s, coeff_up, rc, hr, hz)
         real, intent(inout) :: rhs(3)
         integer, intent(in) :: face_id
         real, intent(in) :: s, coeff_up(3), rc, hr, hz
-        real :: c, c0, c1, c11, t
+        real :: side, c, c0, c1, c11, trace0
 
-        select case (face_id)
-          case (SN_R_LO)
-            c = s*hz*(rc-hr)
-            t = coeff_up(1)+coeff_up(2)
-            rhs(1) = rhs(1)+2*c*t
-            rhs(2) = rhs(2)-2*c*t
+        if (face_id == SN_R_LO .or. face_id == SN_R_HI) then
+            side = merge(-1.0, 1.0, face_id == SN_R_LO)
+            c = s*hz*(rc+side*hr)
+            trace0 = coeff_up(1)-side*coeff_up(2)
+            rhs(1) = rhs(1)+2*c*trace0
+            rhs(2) = rhs(2)+side*2*c*trace0
             rhs(3) = rhs(3)+(2.0/3.0)*c*coeff_up(3)
-          case (SN_R_HI)
-            c = s*hz*(rc+hr)
-            t = coeff_up(1)-coeff_up(2)
-            rhs(1) = rhs(1)+2*c*t
-            rhs(2) = rhs(2)+2*c*t
-            rhs(3) = rhs(3)+(2.0/3.0)*c*coeff_up(3)
-          case default
+        else
+            side = merge(-1.0, 1.0, face_id == SN_Z_LO)
             c0 = s*hr*(2*rc)
             c1 = s*hr*((2.0/3.0)*hr)
             c11 = s*hr*((2.0/3.0)*rc)
-            if (face_id == SN_Z_LO) then
-                rhs(1) = rhs(1)+c0*coeff_up(1)+c1*coeff_up(2)+c0*coeff_up(3)
-                rhs(2) = rhs(2)+c1*coeff_up(1)+c11*coeff_up(2)+c1*coeff_up(3)
-                rhs(3) = rhs(3)-c0*coeff_up(1)-c1*coeff_up(2)-c0*coeff_up(3)
-            else
-                rhs(1) = rhs(1)+c0*coeff_up(1)+c1*coeff_up(2)-c0*coeff_up(3)
-                rhs(2) = rhs(2)+c1*coeff_up(1)+c11*coeff_up(2)-c1*coeff_up(3)
-                rhs(3) = rhs(3)+c0*coeff_up(1)+c1*coeff_up(2)-c0*coeff_up(3)
-            end if
-        end select
+            trace0 = coeff_up(1)-side*coeff_up(3)
+            rhs(1) = rhs(1)+c0*trace0+c1*coeff_up(2)
+            rhs(2) = rhs(2)+c1*trace0+c11*coeff_up(2)
+            rhs(3) = rhs(3)+side*(c0*trace0+c1*coeff_up(2))
+        end if
     end subroutine sub_J02_add_neighbor_rhs
 
+    ! Prescribed incoming phase density is constant over this complete face.
     subroutine sub_J02_add_constant_rhs(rhs, face_id, s, g, rc, hr, hz)
         real, intent(inout) :: rhs(3)
         integer, intent(in) :: face_id
         real, intent(in) :: s, g, rc, hr, hz
-        real :: c
+        real :: side, c
 
-        select case (face_id)
-          case (SN_R_LO)
-            c = s*hz*(rc-hr)*g
+        if (face_id == SN_R_LO .or. face_id == SN_R_HI) then
+            side = merge(-1.0, 1.0, face_id == SN_R_LO)
+            c = s*hz*(rc+side*hr)*g
             rhs(1) = rhs(1)+2*c
-            rhs(2) = rhs(2)-2*c
-          case (SN_R_HI)
-            c = s*hz*(rc+hr)*g
-            rhs(1) = rhs(1)+2*c
-            rhs(2) = rhs(2)+2*c
-          case (SN_Z_LO)
+            rhs(2) = rhs(2)+side*2*c
+        else
+            side = merge(-1.0, 1.0, face_id == SN_Z_LO)
             rhs(1) = rhs(1)+s*hr*g*(2*rc)
             rhs(2) = rhs(2)+s*hr*g*((2.0/3.0)*hr)
-            rhs(3) = rhs(3)-s*hr*g*(2*rc)
-          case default
-            rhs(1) = rhs(1)+s*hr*g*(2*rc)
-            rhs(2) = rhs(2)+s*hr*g*((2.0/3.0)*hr)
-            rhs(3) = rhs(3)+s*hr*g*(2*rc)
-        end select
+            rhs(3) = rhs(3)+side*s*hr*g*(2*rc)
+        end if
     end subroutine sub_J02_add_constant_rhs
 
     subroutine sub_J02_zface_interval_moments(rc, hr, xi_lo, xi_hi, m0, m1, m2)
@@ -115,6 +96,9 @@
             m2 = 0.0
             return
         end if
+        ! M_j = hr * integral[(rc + hr*xi) * xi**j dxi], j=0,1,2.
+        ! Exact interval moments let inlet and remaining wall share one face
+        ! without multiplying a full-face contribution by an approximate fraction.
         d1 = xi_hi-xi_lo
         d2 = xi_hi**2-xi_lo**2
         d3 = xi_hi**3-xi_lo**3
@@ -166,6 +150,8 @@
     subroutine sub_J02_add_volume_matrix(a, mu, eta, rc, hr, hz)
         real, intent(inout) :: a(3, 3)
         real, intent(in) :: mu, eta, rc, hr, hz
+        ! -integral r*phi_b*(Omega dot grad(phi_a)) dr dz.
+        ! grad(1)=0, hence the constant-test row has no volume streaming term.
         a(2, 1) = a(2, 1)-4*mu*rc*hz
         a(2, 2) = a(2, 2)-(4.0/3.0)*mu*hr*hz
         a(3, 1) = a(3, 1)-4*eta*rc*hr
@@ -175,6 +161,7 @@
     subroutine sub_J02_add_absorption_matrix(a, sigma, rc, hr, hz)
         real, intent(inout) :: a(3, 3)
         real, intent(in) :: sigma, rc, hr, hz
+        ! sigma * integral r*phi_a*phi_b dr dz; radial weighting couples 1 and xi.
         if (sigma <= 0.0) return
         a(1, 1) = a(1, 1)+sigma*4*rc*hr*hz
         a(1, 2) = a(1, 2)+sigma*(4.0/3.0)*hr*hr*hz
@@ -221,6 +208,8 @@
         real :: m(3, 3), rhs(3), row_tmp(3), scalar_tmp, factor, pivot_abs
         integer :: col, row, pivot
 
+        ! Partial pivoting solves a working copy; the caller keeps the original
+        ! constant-test row for the subsequent conservative positivity recovery.
         m = a
         rhs = b
         ierr = SN_SUCCESS

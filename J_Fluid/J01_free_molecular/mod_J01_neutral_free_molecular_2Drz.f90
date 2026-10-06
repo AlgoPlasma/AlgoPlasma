@@ -1,4 +1,6 @@
 !> Free-molecular particle preprocessing; no continuity update is performed here.
+!> Reduced r-z straight-path model with vr and vz only, not axisymmetric 2D3V.
+!> Cylindrical area/volume normalization does not supply azimuthal dynamics.
 module mod_J01_neutral_free_molecular_2Drz
     implicit none
 

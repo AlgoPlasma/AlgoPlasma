@@ -30,7 +30,7 @@
         inlet%segment_area = 0.0
         inlet%segment_lo = 0.0
         inlet%segment_hi = 0.0
-! Area-weighted inlet distribution over active open z-low segments.
+        ! Area-weighted inlet distribution over active open z-low segments.
         inlet%inlet_area = 0.0
         do i = 1, nr
             if (.not. active(i, 1)) cycle
@@ -53,6 +53,9 @@
             inlet%sigma_inlet*exp(-0.5*(inlet_drift_z/inlet%sigma_inlet)**2)/ &
             sqrt(2.0*acos(-1.0))/max(0.5*(1.0+erf(inlet_drift_z/ &
             (inlet%sigma_inlet*sqrt(2.0)))), tiny(1.0))
+        ! mean_positive_z is E[vz | vz>0] for the truncated Gaussian below.
+        ! This event-distribution convention differs from reservoir Maxwell
+        ! flux sampling, which weights the incoming velocity PDF by vz.
         history_rate = inlet_density*inlet%inlet_area*mean_positive_z/real(n_histories)
 
     end subroutine sub_J01_prepare_fm_inlet
@@ -77,6 +80,7 @@
             end if
         end do
         call random_number(u)
+        ! Uniform annular area means uniform r^2, not uniform r.
         r = sqrt(inlet%segment_lo(i)**2+u*(inlet%segment_hi(i)**2-inlet%segment_lo(i)**2))
         z = z_start
         ur = inlet%sigma_inlet*fun_J01_standard_normal()

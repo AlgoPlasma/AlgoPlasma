@@ -1,28 +1,42 @@
 # J03_neutral_continuity_faceflux_2Drz
 
-J03 用固定面速度推进二维柱坐标瞬态连续性方程。J01 或 J02 提供参考密度和面通量；J03 将参考通量除以迎风参考密度得到面速度，后续通量为面速度乘当前迎风密度。
+[中文](README.zh-CN.md) | [English](README.en.md)
 
-## 调用方式
+J03 从参考密度和有符号面通量建立固定的面输运系数，随后按当前迎风密度计算通量，推进二维柱坐标瞬态连续性方程。它不跟踪粒子、不求速度分布，也不自动重算参考场。
 
-1. `sub_J03_initialize_transport_closure` 检查输入，建立面速度与几何。两个 import 过程是兼容入口。
-2. 每个物理时间步更新 `source_rate` 和 `closure%loss_frequency`；有时变入口时更新 `closure%boundary_inflow_flux`。
-3. `sub_J03_compute_stable_timestep` 返回保守 CFL 上限，再结合物理时间分辨率选择 dt。
-4. `sub_J03_continuity_step` 返回新密度，调用方推进时钟；不必等待稳态。
+面输运系数具有速度单位，但不等于单元平均速度。输入可以来自任何满足数组、几何与符号约定的参考场算法。
 
-更新式为 `n_new=(n-dt*div(flux)+dt*S)/(1+dt*nu)`。源项单位 m⁻³s⁻¹，损失频率 s⁻¹，dt 单位 s。单步过程不自动拒绝超过 CFL 的时间步。负值截断会改变总量，不应代替稳定性检查。
+## 文件分工
 
-## 辅助稳态入口
+| 文件 | 任务 |
+| --- | --- |
+| `mod_J03_neutral_continuity_faceflux_2Drz.f90` | 定义闭合对象、面类型与状态码，包含实现文件 |
+| `sub_J03_transport_closure.f90` | 检查几何与拓扑，保存参考场并建立内部面及边界出射系数 |
+| `sub_J03_continuity_solver.f90` | 当前通量、稳定步长、瞬态单步、残差、收支及可选稳态求解 |
+| `sub_J03_error.f90` | 将状态码转换成错误说明 |
 
-`sub_J03_solve_steady` 用固定源损和边界反复推进，必须同时满足密度变化阈值与归一化残差阈值。可选 `residual_tolerance` 指定后者，默认 `max(tolerance,100*epsilon(1.0))`；可选 `final_scaled_residual` 返回最后残差。尺度由初始参考输运及源损项确定，不依赖 dt。
+## 瞬态调用顺序
 
-`sub_J03_compute_residual` 返回局部残差和体积积分；`sub_J03_compute_balance` 返回入射、出射、体源、体损失粒子率以及相对总量失衡。瞬态允许总量变化，稳态才要求入射加体源等于出射加损失。
+1. `sub_J03_initialize_transport_closure` 初始化一次闭合；检查返回状态。
+2. 应用另外指定初始密度和物理时间。
+3. 每步更新 `source_rate`、`closure%loss_frequency` 和 `closure%boundary_inflow_flux`。
+4. `sub_J03_compute_stable_timestep` 返回保守稳定上限；结合物理精度选择实际时间步。
+5. `sub_J03_continuity_step` 返回新密度；检查本步收支后由应用推进时钟。
 
-## 几何要求与测试
+单步公式为 `n_new=(n_old-dt*div(flux_old)+dt*S)/(1+dt*nu)`。`S` 为产生率，单位 m⁻³s⁻¹；`nu` 为损失频率，单位 s⁻¹。瞬态收支应使用旧密度出流和新密度损失，而非要求流入与流出立即相等。
 
-内部面的两侧标记必须一致，共享面积差不得超过 `100*epsilon(1.0)*max(A_left,A_right)`。轴线的零面积边界合法，内部面面积必须为正。
+单步接口不强制检查稳定步长，也不自动拒绝负的新密度。可选负值截断改变粒子总数，不能代替稳定性检查。初始参考密度的有限性、非负性和边界通量方向也需调用者确认。
 
-```bash
-bash tests/011_fluid/J03_neutral_continuity_faceflux_2Drz/run.sh
-```
+## 辅助入口与限制
 
-测试包括瞬态指数衰减、源损演化、时变损失、两单元输运、时间步收敛、守恒及错误诊断。完整应用测试使用仓库中的输入数据，但仍需单独运行，不能由小测试结果代替。
+- `sub_J03_compute_residual` 和 `sub_J03_compute_balance` 分别返回局部残差与全域粒子收支。
+- `sub_J03_solve_steady` 用固定条件反复推进，同时检查迭代变化和归一化残差；不是物理时间循环的替代品。
+- 不同来源的参考场统一调用 `sub_J03_initialize_transport_closure`。
+- 修改参考场或几何后须重新初始化系数；单独改参考场副本不会更新闭合。
+- 当前为单域求解，不包含 MPI 分区通信或结果汇集。
+
+## 构建与文档
+
+编译模块文件并启用预处理，将本目录加入 include 路径；不要单独编译实现文件。调用方与模块须采用相同实数精度。
+
+Sphinx 的 [J03](../../docs/source/rst_files/J_Fluid/J03_neutral_continuity_faceflux_2Drz.rst) 给出闭合推导、各过程输入输出、完整调用流程和错误说明。运行命令与断言见 [J03 tests](../../tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/README.md)。

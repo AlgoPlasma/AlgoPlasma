@@ -1,182 +1,151 @@
-sub_J02_sn_source.f90
-=====================
+Inlet Normalization
+==========================================================================================
 
-.. raw:: html
+``sub_J02_sn_source.f90`` 根据给定的入口通量，将前面得到的速度分布
+:math:`g_m` 归一化为实际入射分布函数 :math:`h_m`。
+本页先由总粒子率和入口面积计算单位面积通量，再求分布的归一化系数。
+文件名中的 source 在这里指边界入流，本过程不添加体积源项。
 
-   <div class="ap-language-switch" role="group" aria-label="Language switch">
-     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
-     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
-   </div>
+.. rubric:: 1. 从总粒子率得到单位面积通量
 
-.. container:: ap-lang ap-lang-zh ap-fluid-doc
+设入口总粒子率为 :math:`Q`，单位 :math:`\mathrm{s^{-1}}`，
+实际入口面积为 :math:`A_{\mathrm{in}}`。当前组装示例在入口区域采用均匀的入流强度：
 
-   .. rubric:: 入口分布与损失系数
+.. math::
 
-   源码：``J_Fluid/J02_neutral_sn_transport_2Drz/sub_J02_sn_source.f90``。
-   由 ``mod_J02_neutral_sn_transport_2Drz`` 包含，不能作为独立模块编译。
-   :doc:`返回模块总览 <../J02_neutral_sn_transport_2Drz>`。
-   正文中的简写过程名省略了所属模块的 sub 前缀，完整接口见下方声明。
+   A_{\mathrm{in}}=\sum_i\chi_iA_{z-,i,1},\qquad
+   J_{\mathrm{in}}=\frac{Q}{A_{\mathrm{in}}}.
 
-   .. rubric:: 入口文件：三类输入不能混用
+:math:`J_{\mathrm{in}}` 的单位为 :math:`\mathrm{m^{-2}\,s^{-1}}`。
+对部分入口，应在这里使用真实开口面积，而不是所有下端面的总面积。
+随后 DG 积分已经限定到入口区间，不应再把归一化后的分布函数乘面积比例。
 
-   ``sub_J02_sn_source.f90`` 中，``build_maxwellian_inflow_shape`` 是零漂移包装；
-   ``build_drifted_maxwellian_inflow_shape`` 输入温度 T（K）、质量 M（kg）及漂移速度，
-   返回各节点上的二维单位密度麦克斯韦分布形状：
+.. rubric:: 2. 使用离散速度与权重归一化
 
-   .. math::
+入射分布函数 :math:`h_m` 必须满足
 
-      g_m=\frac{\alpha}{\pi}
-      e^{-\alpha[(v_m\mu_m-U_r)^2+(v_m\eta_m-U_z)^2]},\qquad
-      \alpha=\frac{M}{2k_BT}.
+.. math::
 
-   ``build_mc_crossing_inflow_shape`` 及其 bins 别名输入速度格的穿面概率质量 P；
-   ``build_mc_crossing_pdf_inflow_shape`` 输入相对于速度面积的穿面概率密度 p。
-   设外法向为 n，入射法向速率为 :math:`c_m=v_m|\boldsymbol\Omega_m\cdot\boldsymbol n|`，则
+   J_{\mathrm{in}}
+       =\sum_{\beta_{f,m}<0}w_mv_m|\beta_{f,m}|h_m.
 
-   .. math::
+令 :math:`h_m=C_{\mathrm{in}}g_m`，先将 :math:`g_m` 代入离散通量求和
 
-      g_m^{\rm bins}=\frac{P_m}{w_mc_m},\qquad
-      g_m^{\rm pdf}=\frac{p_m}{c_m},\qquad P_m=w_mp_m.
+.. math::
 
-   最后一个关系成立时两种输入才等价。``normalize_inflow_flux`` 把形状变为实际入口相密度：
+   D_{\mathrm{in}}
+       =\sum_{\beta_{f,m}<0}w_mv_m|\beta_{f,m}|g_m,
+   \qquad
+   C_{\mathrm{in}}=\frac{J_{\mathrm{in}}}{D_{\mathrm{in}}}.
 
-   .. math::
+于是
 
-      \psi_{{\rm in},m}=
-      \frac{J_{\rm in}g_m}{\sum_{\boldsymbol\Omega_l\cdot\boldsymbol n<0}w_lc_lg_l}
-      \quad(\boldsymbol\Omega_m\cdot\boldsymbol n<0).
+.. math::
+   :label: sn-inflow-normalization
 
-   出射方向输出零。目标入射通量 J_in 是非负大小，法向须为单位向量；
-   零分母返回错误。``build_sigma_from_frequency`` 输出
-   :math:`\sigma_{ikm}=\nu_{ik}/v_m`，将 s⁻¹ 转为 m⁻¹。
-   ``quadrature_is_valid`` 与 ``normal_is_unit`` 检查节点布局和法向，不执行输运。
+   h_m=
+   \begin{cases}
+      J_{\mathrm{in}}g_m/D_{\mathrm{in}},&\beta_{f,m}<0,\\
+      0,&\beta_{f,m}\geq0.
+   \end{cases}
 
-   .. rubric:: 参数含义速查
+代回第一式，离散通量就等于目标值。
+归一化保证离散入口通量等于给定值；速度分布是否被充分解析，还需检查角度和速率的分辨率。
+相同的离散速度与权重必须继续用于求解和通量重构。
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 34 66
+对于连续概率密度输入，代入 :math:`g_m=p_m/(v_m|\beta_{f,m}|)` 后，
+:math:`D_{\mathrm{in}}=\sum_{\mathrm{in}}w_mp_m`；
+对于速度网格单元内的概率输入，则
+:math:`D_{\mathrm{in}}=\sum_{\mathrm{in}}P_m`。
+这也解释了输入概率尚未归一化时，公共比例仍会自动消去。
 
-      * - 参数或字段
-        - 含义
-      * - ``quadrature、normal_r/z``
-        - 组合节点及边界外法向；与法向点积小于零为入射。
-      * - ``temperature、particle_mass、drift_velocity_r/z``
-        - 温度（K）、质量（kg）、漂移速度（m/s），定义入口速度分布。
-      * - ``crossing_bin_probability、crossing_pdf``
-        - 每个离散格的事件概率质量与相对于速度面积的概率密度，二者单位和权重不同。
-      * - ``inflow_shape、target_flux、psi_in``
-        - 未定总粒子率的形状、目标入射通量（m⁻²s⁻¹）、归一化后入口相密度。
-      * - ``ionization_frequency、sigma_t``
-        - 输入损失频率（s⁻¹），输出随速度组变化的吸收系数（m⁻¹）。
+.. rubric:: 3. 通量归一化过程
 
-   .. rubric:: 逐个过程的接口声明
+``sub_J02_normalize_inflow_flux`` 的职责是计算上式。
 
-   以下声明来自本文件。``intent(in)`` 为输入，``intent(out)`` 为本次调用的输出，
-   ``intent(inout)`` 表示原值参与计算并被修改；``allocatable, intent(out)`` 数组由过程分配。
-   ``optional`` 可省略，数组形状中的 nr、nz 为网格单元数。过程名中的 sub/fun 前缀不改变 Fortran 调用规则。
+- 输入 ``quadrature``：与后续求解相同的求积对象。
+- 输入 ``normal_r``、``normal_z``：无量纲单位外法向。
+  下端入口使用 :math:`(0,-1)`，其入射速度满足 :math:`\eta_m>0`。
+- 输入 ``target_flux``：目标入射通量 :math:`J_{\mathrm{in}}\geq0`，
+  单位 :math:`\mathrm{m^{-2}\,s^{-1}}`。
+- 输入 ``inflow_shape(n_dir)``：非负的 :math:`g_m`。只有入射速度参与归一化，
+  因此入口外侧气体分布接口生成的全速度分布可直接传入。
+- 输出并分配 ``psi_in(n_dir)``：:math:`h_m`，单位
+  :math:`\mathrm{s^2\,m^{-5}}`；出射速度置零。
+- 输出 ``ierr``。无效求积、尺寸不匹配、非单位法向、负目标通量、
+  分布中有负值或入射归一化因子为零时均返回错误。
 
-   .. rubric:: sub_J02_build_maxwellian_inflow_shape
+即使 ``target_flux`` 为零，本过程仍要求 :math:`g_m` 的入射归一化因子非零。
+若只需无外部入射的出口，应直接给对应边界零值，
+无需用全零分布调用归一化过程。
 
-   .. code-block:: fortran
+.. rubric:: 4. 本文件中的公共检查函数
 
-      subroutine sub_J02_build_maxwellian_inflow_shape(quadrature, temperature, &
-      particle_mass, inflow_shape, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: temperature, particle_mass
-      real, allocatable, intent(out) :: inflow_shape(:)
-      integer, intent(out) :: ierr
+``fun_J02_quadrature_is_valid``：
 
-   .. rubric:: sub_J02_build_drifted_maxwellian_inflow_shape
+- 输入 ``quadrature``，返回逻辑值。
+- 检查 ``n_dir`` 为正，四个离散速度数据数组已分配且长度匹配，所有速率和权重为正。
+- 不检查方向余弦是否构成单位向量，也不检查镜面反射配对或分组布局。
+  自定义求积对象仍须自行保证这些条件。
 
-   .. code-block:: fortran
+``fun_J02_normal_is_unit``：
 
-      subroutine sub_J02_build_drifted_maxwellian_inflow_shape(quadrature, &
-      temperature, particle_mass, drift_velocity_r, drift_velocity_z, &
-      inflow_shape, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: temperature, particle_mass
-      real, intent(in) :: drift_velocity_r, drift_velocity_z
-      real, allocatable, intent(out) :: inflow_shape(:)
-      integer, intent(out) :: ierr
+- 输入 ``normal_r``、``normal_z``；返回逻辑值，无副作用。
+- 当前判断为
+  :math:`|n_r^2+n_z^2-1|\leq100\,\operatorname{epsilon}(1)`，
+  容差由实际编译实数精度决定。
+- 它检查法向长度，不会自动归一化输入向量。
 
-   .. rubric:: sub_J02_build_mc_crossing_inflow_shape
+.. rubric:: 5. 归一化结果如何成为边界数据
 
-   .. code-block:: fortran
+若整个问题只有下端入口，可把输出作为 ``zlo_inflow(n_dir)``。
+其他开放面默认无外部入射。若多个面有不同规定入流，
+应填写 ``boundary_inflow(4,nr,nz,n_dir)``，把各面的分布函数放在相应位置。
 
-      subroutine sub_J02_build_mc_crossing_inflow_shape(quadrature, normal_r, &
-      normal_z, crossing_bin_probability, inflow_shape, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: normal_r, normal_z
-      real, intent(in) :: crossing_bin_probability(:)
-      real, allocatable, intent(out) :: inflow_shape(:)
-      integer, intent(out) :: ierr
+调用完整求解过程时，``zlo_inflow`` 和 ``boundary_inflow`` 只能选择一种。
+它们传递的是分布函数，不是通量；面通量由求解器或重构过程再乘
+:math:`w_mv_m\beta_{f,m}` 得到。部分入口仍需另传局部区间，
+归一化数组本身不携带几何位置。
 
-   .. rubric:: sub_J02_build_mc_crossing_bins_inflow_shape
+.. rubric:: 6. 入射分布怎样用于输运求解
 
-   .. code-block:: fortran
+:math:`h_m` 是第 :math:`m` 个离散速度在入口处的分布函数值，
+作为已知边界条件进入相邻单元方程的右端项。
 
-      subroutine sub_J02_build_mc_crossing_bins_inflow_shape(quadrature, normal_r, &
-      normal_z, crossing_bin_probability, inflow_shape, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: normal_r, normal_z, crossing_bin_probability(:)
-      real, allocatable, intent(out) :: inflow_shape(:)
-      integer, intent(out) :: ierr
+对下端入口，:math:`\eta_m>0` 表示入射，求解器使用 :math:`h_m`；
+:math:`\eta_m<0` 表示粒子从域内离开，使用靠近该面的单元内分布。
+因此入口允许两个方向的运动，但只有入射方向由调用者给定。
 
-   .. rubric:: sub_J02_build_mc_crossing_pdf_inflow_shape
+在 DG 单元方程中，已知入口数据进入右端向量。设第 :math:`a` 个检验函数为
+:math:`\phi_a`，入口占当前面的区域为 :math:`I_f`，则入口贡献为
 
-   .. code-block:: fortran
+.. math::
 
-      subroutine sub_J02_build_mc_crossing_pdf_inflow_shape(quadrature, normal_r, &
-      normal_z, crossing_pdf, inflow_shape, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: normal_r, normal_z, crossing_pdf(:)
-      real, allocatable, intent(out) :: inflow_shape(:)
-      integer, intent(out) :: ierr
+   b_{a}^{\mathrm{inlet}}
+     =|\beta_{f,m}|\int_{I_f}r\,\phi_a h_m\,\mathrm ds.
 
-   .. rubric:: sub_J02_build_sigma_from_frequency
+:math:`\mathrm ds` 是 r-z 截面上的边界线元，:math:`r\,\mathrm ds`
+是约去共同周向张角后的面积元。式中没有速率 :math:`v_m`，
+因为这里使用的输运方程已经除以速率；也没有速度积分权重 :math:`w_m`，
+因为此时只在求一个确定速度的分布。
 
-   .. code-block:: fortran
+例如，下端整个面都是均匀入口时，局部坐标 :math:`\zeta=-1`，
+检验函数为 :math:`(1,\xi,-1)`，于是
 
-      subroutine sub_J02_build_sigma_from_frequency(quadrature, ionization_frequency, &
-      sigma_t, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: ionization_frequency(:, :)
-      real, allocatable, intent(out) :: sigma_t(:, :, :)
-      integer, intent(out) :: ierr
+.. math::
 
-   .. rubric:: sub_J02_normalize_inflow_flux
+   \boldsymbol b^{\mathrm{inlet}}
+     =\eta_m h_m
+       \begin{pmatrix}
+         2r_ch_r\\[2pt]2h_r^2/3\\[2pt]-2r_ch_r
+       \end{pmatrix},
+       \qquad \eta_m>0.
 
-   .. code-block:: fortran
+若入口只占面的一部分，则把积分范围换成实际入口区间。
+扫描文件根据面类型调用 ``sub_J02_add_constant_rhs`` 或
+``sub_J02_add_zface_constant_interval_rhs``，将此贡献加入 ``rhs(3)``。
+随后 DG 局部求解过程解出第一个单元的分布系数，其出射值又成为下游单元的已知入流。
 
-      subroutine sub_J02_normalize_inflow_flux(quadrature, normal_r, normal_z, &
-      target_flux, inflow_shape, psi_in, ierr)
-      type(sn_quadrature_type), intent(in) :: quadrature
-      real, intent(in) :: normal_r, normal_z, target_flux
-      real, intent(in) :: inflow_shape(:)
-      real, allocatable, intent(out) :: psi_in(:)
-      integer, intent(out) :: ierr
-
-   .. rubric:: fun_J02_quadrature_is_valid
-
-   .. code-block:: fortran
-
-      logical function fun_J02_quadrature_is_valid(quadrature)
-      type(sn_quadrature_type), intent(in) :: quadrature
-
-   .. rubric:: fun_J02_normal_is_unit
-
-   .. code-block:: fortran
-
-      logical function fun_J02_normal_is_unit(normal_r, normal_z)
-      real, intent(in) :: normal_r, normal_z
-
-   .. rubric:: 测试与源码
-
-   :doc:`对应测试及断言 </tests/011_fluid/J02_tests>` 列出调用本文件的测试项。
-   :download:`下载实现源码 <../../../../../J_Fluid/J02_neutral_sn_transport_2Drz/sub_J02_sn_source.f90>`。
-
-.. container:: ap-lang ap-lang-en ap-fluid-doc
-
-   This file is included by ``mod_J02_neutral_sn_transport_2Drz``.
-   :doc:`Module overview <../J02_neutral_sn_transport_2Drz>` · :doc:`Tests </tests/011_fluid/J02_tests>`.
+因此，实际传递顺序是：入口速度模型给出 :math:`g_m`，
+本文件给出 :math:`h_m`，扫描将 :math:`h_m` 写入单元方程右端，
+求解得到空间分布 :math:`\psi_m(r,z)`，最后才对全部离散速度积分得到密度与通量。

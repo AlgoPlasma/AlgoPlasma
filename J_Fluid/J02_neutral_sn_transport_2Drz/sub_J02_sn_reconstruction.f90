@@ -211,34 +211,3 @@
             end if
         end function fun_prescribed_value
     end subroutine sub_J02_reconstruct_open_boundary_fluxes
-
-    logical function fun_J02_boundary_is_valid(mesh, boundary)
-        type(sn_mesh_2drz_type), intent(in) :: mesh
-        type(sn_boundary_2drz_type), intent(in) :: boundary
-        fun_J02_boundary_is_valid = allocated(boundary%face_r_lo) .and. &
-            allocated(boundary%face_r_hi) .and. allocated(boundary%face_z_lo) .and. &
-            allocated(boundary%face_z_hi)
-        if (.not. fun_J02_boundary_is_valid) return
-        fun_J02_boundary_is_valid = size(boundary%face_r_lo, 1) == mesh%nr .and. &
-            size(boundary%face_r_lo, 2) == mesh%nz .and. &
-            size(boundary%face_r_hi, 1) == mesh%nr .and. size(boundary%face_r_hi, 2) == mesh%nz .and. &
-            size(boundary%face_z_lo, 1) == mesh%nr .and. size(boundary%face_z_lo, 2) == mesh%nz .and. &
-            size(boundary%face_z_hi, 1) == mesh%nr .and. size(boundary%face_z_hi, 2) == mesh%nz
-    end function fun_J02_boundary_is_valid
-
-    integer function fun_J02_face_type(boundary, face_id, i, k)
-        type(sn_boundary_2drz_type), intent(in) :: boundary
-        integer, intent(in) :: face_id, i, k
-        select case (face_id)
-          case (SN_R_LO)
-            fun_J02_face_type = boundary%face_r_lo(i, k)
-          case (SN_R_HI)
-            fun_J02_face_type = boundary%face_r_hi(i, k)
-          case (SN_Z_LO)
-            fun_J02_face_type = boundary%face_z_lo(i, k)
-          case (SN_Z_HI)
-            fun_J02_face_type = boundary%face_z_hi(i, k)
-          case default
-            fun_J02_face_type = -1
-        end select
-    end function fun_J02_face_type

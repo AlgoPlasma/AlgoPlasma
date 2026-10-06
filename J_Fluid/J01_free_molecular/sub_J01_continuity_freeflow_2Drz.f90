@@ -73,7 +73,7 @@
             boundary_outflow_flux(:, :, :), dt
         real, allocatable, intent(out) :: density_new(:, :)
         integer, intent(out) :: ierr
-        integer :: nr, nz, i, k
+        integer :: nr, nz, i, k, lower_face
         real :: frlo, frhi, fzlo, fzhi, net
 
         ierr = J01_SUCCESS
@@ -124,15 +124,17 @@
                 fzlo = 0.0
                 fzhi = 0.0
                 if (i > 1) then
+                    lower_face = i-1
                     if (face_type(J01_R_LO, i, k) == J01_FACE_INTERIOR) &
-                        frlo = fun_J01_flux_r_at(flux_r, i-1, k)
+                        frlo = flux_r(lower_face, k)
                 end if
                 if (i < nr) then
                     if (face_type(J01_R_HI, i, k) == J01_FACE_INTERIOR) frhi = flux_r(i, k)
                 end if
                 if (k > 1) then
+                    lower_face = k-1
                     if (face_type(J01_Z_LO, i, k) == J01_FACE_INTERIOR) &
-                        fzlo = fun_J01_flux_z_at(flux_z, i, k-1)
+                        fzlo = flux_z(i, lower_face)
                 end if
                 if (k < nz) then
                     if (face_type(J01_Z_HI, i, k) == J01_FACE_INTERIOR) fzhi = flux_z(i, k)
@@ -152,15 +154,3 @@
             end do
         end do
     end subroutine sub_J01_continuity_step_2Drz
-
-    real function fun_J01_flux_r_at(flux_r, i, k)
-        real, intent(in) :: flux_r(:, :)
-        integer, intent(in) :: i, k
-        fun_J01_flux_r_at = flux_r(i, k)
-    end function fun_J01_flux_r_at
-
-    real function fun_J01_flux_z_at(flux_z, i, k)
-        real, intent(in) :: flux_z(:, :)
-        integer, intent(in) :: i, k
-        fun_J01_flux_z_at = flux_z(i, k)
-    end function fun_J01_flux_z_at
