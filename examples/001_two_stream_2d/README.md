@@ -27,7 +27,7 @@ to a 0.5% density perturbation to first order.
 The example requires GNU Fortran, CMake, MPI, HYPRE 3.1 or later, NumPy,
 SciPy, and Matplotlib.
 
-One tested way to install HYPRE is to download it from
+One way to build HYPRE from source is to download it from
 <https://github.com/hypre-space/hypre> and place the `hypre/` directory next
 to the `algoplasma/` directory:
 
@@ -45,28 +45,33 @@ cd hypre/src
 make install -j 8
 ```
 
-Here, `-j 8` uses eight CPU cores for parallel compilation. After the
-installation is complete, enter the example directory and run:
+Here, `-j 8` requests up to eight concurrent compilation jobs. After the
+installation is complete, enter the example directory and specify the
+HYPRE installation prefix (replace the placeholder with its absolute path):
 
 ```bash
 cd ../../algoplasma/examples/001_two_stream_2d
-./run.sh
+HYPRE_ROOT=/absolute/path/to/hypre/src/hypre bash run.sh
 ```
 
-With the directory layout shown above, `run.sh` automatically uses the HYPRE
-installation under `hypre/src/hypre`. If HYPRE is installed elsewhere, its
-installation prefix can be specified explicitly:
+`HYPRE_ROOT` must contain `include/HYPRE.h` and `lib/libHYPRE.*`.
+The current `run.sh` defaults to `/opt/hypre-3.1.0`; it does not
+automatically select the sibling source-build installation.
 
-```bash
-HYPRE_ROOT=/path/to/hypre/src/hypre ./run.sh
-```
-
-If you are already in the AlgoPlasma repository root, simply run:
+For the reference WSL installation, run the following from the AlgoPlasma
+repository root:
 
 ```bash
 cd examples/001_two_stream_2d
+HYPRE_ROOT=/opt/hypre-3.1.0 \
+OMP_NUM_THREADS=8 OMP_PROC_BIND=close OMP_PLACES=cores \
 bash run.sh
 ```
+
+`run.sh` configures and builds the example with CMake, runs the simulation,
+and calls `plot.py`. Its default OpenMP settings are eight threads,
+`OMP_PROC_BIND=close`, and `OMP_PLACES=cores`; environment variables
+can override these settings.
 
 The current example runs with a single MPI process. Except at the initial
 state and the first time step, field data are written to `output/` every five
@@ -80,6 +85,101 @@ After the calculation, `plot.py` generates two publication figures in the
 
 - `fig1_phase_space_evolution.png`
 - `fig2_field_growth_energy.png`
+
+These correspond to the phase-space and field-growth/energy figures
+(Figures 4 and 5) in the manuscript. To regenerate the figures from existing
+simulation output, run `python3 plot.py` from this example directory.
+
+## Reproducibility
+
+The reference run was checked on 4 October 2026 using the `develop`
+working tree based on commit
+`105fe3cc5740a852ccb96b74c339a152272b058a`, with the default HYPRE path
+in `run.sh` adjusted to `/opt/hypre-3.1.0`. This is a pre-release
+verification record, not a published `v1.1.0` result. The provenance and
+results must be checked against the final release before publication.
+
+### Reference Environment
+
+| Item | Reference configuration |
+| --- | --- |
+| Operating system | Ubuntu 22.04.5 LTS under WSL2 |
+| Linux kernel | 5.10.16.3-microsoft-standard-WSL2 |
+| CPU reported by WSL | AMD EPYC 7502 32-Core Processor; 64 logical CPUs |
+| WSL-visible memory | Approximately 62.7 GiB |
+| GNU Fortran / GCC | 11.4.0 |
+| CMake | 3.22.1 |
+| MPI implementation | Open MPI 4.1.2 |
+| HYPRE | 3.1.0; double-precision real arithmetic; MPI and OpenMP enabled |
+| Python | 3.10.12 |
+| NumPy / SciPy / Matplotlib | 2.2.6 / 1.15.3 / 3.10.6 |
+| Execution configuration | One MPI rank; eight OpenMP threads; close binding to cores |
+
+The GNU Fortran build uses `-cpp -DUSE_HDF5=0 -O3 -fdefault-real-8 -fopenmp`.
+HDF5 output is disabled for this example, so HDF5 is not required to run it.
+These are the versions tested in this run, not a claim of compatibility with
+every other compiler or dependency version.
+
+### Initialization and Reference Results
+
+The seed base is `random_seed_base = 20260810` in
+`src/case_parameters.f90`. The Fortran random-number generator is
+initialized in `src/two_stream_case.f90` with
+`seed_values(j) = 20260810 + 104729*j`, for `j = 1, ..., nseed`;
+`nseed` is obtained from `random_seed(size=nseed)`.
+
+The run completed all 800 steps, reaching `omega_pe*t = 40`.
+Diagnostics in `plot.py` gave the following reference values:
+
+| Quantity | Reference value |
+| --- | --- |
+| PIC growth rate, gamma_PIC / omega_pe | 0.2603342007 |
+| Theoretical growth rate, gamma_theory / omega_pe | 0.2615993751 |
+| Log-amplitude fit R-squared | 0.9835732215 |
+| Maximum recorded absolute total-energy error, percent | 0.01825332345 |
+
+The growth-rate fit uses `10 <= omega_pe*t <= 19`. The energy error is
+`100*abs((W(t)-W(0))/W(0))`, evaluated at the stored diagnostics;
+`W` is the sum of electrostatic field energy and time-centered particle
+kinetic energy. Rounded to manuscript precision, these values are
+`0.2603`, `0.2616`, `0.9836`, and `0.0183%`, respectively.
+
+These are numerical reference values from one configuration, not
+cross-platform pass/fail tolerances. Random-number implementations and
+floating-point operation order can differ across toolchains or thread
+configurations; byte-identical output files or PNGs are not guaranteed.
+
+### Runtime and Memory
+
+The complete configure/build/run/plot workflow took **39.57 seconds** in
+the reference run, including the initial example build. This is a
+machine-specific observation, not the simulation-only runtime.
+
+| Simulation-only measurement | Reference value |
+| --- | --- |
+| Wall-clock time, including diagnostic output | 28.45 seconds |
+| Peak resident memory (maximum RSS) | 64,928 KiB (approximately 63.41 MiB) |
+
+The simulation-only measurement used one MPI rank and eight OpenMP threads
+with the reference configuration above. It includes initialization and
+diagnostic output, but excludes compilation and Python plotting.
+
+To repeat the measurement after building the example, run GNU `time` from
+this example directory:
+
+```bash
+cd output
+OMP_NUM_THREADS=8 OMP_PROC_BIND=close OMP_PLACES=cores \
+  /usr/bin/time -v -o resources.log ../build/two_stream_2d
+```
+
+This reruns the simulation and overwrites its existing diagnostic output.
+The log, `output/resources.log`, records elapsed wall-clock time and maximum
+resident set size (reported as `kbytes`, in KiB on Linux). These measurements
+are observations from this machine, not performance guarantees; they should
+be checked again against the final release.
+
+## Cleanup
 
 To remove the build files, simulation output, and generated figures and return
 the example to its initial state, run:

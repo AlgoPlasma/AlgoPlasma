@@ -379,7 +379,7 @@ def field_growth_energy_figure():
     )
     error_axis.yaxis.label.set_color(error_color)
     energy_limit = 1.08 * max(np.max(abs(field_change)), np.max(abs(kinetic_change)))
-    energy_axis.set_ylim(-energy_limit, energy_limit)
+    energy_axis.set_ylim(-0.04, 0.04)
     error_axis.set_ylim(-0.04, 0.04)
     error_axis.set_yticks([-0.04, -0.02, 0.0, 0.02, 0.04])
     energy_axis.set_xlim(energy_time.min(), energy_time.max())
@@ -398,6 +398,7 @@ def field_growth_energy_figure():
         handles=[total_line], frameon=False, loc="upper left",
         bbox_to_anchor=(0.745, 1.0), handlelength=2.0,
         labelspacing=0.35, borderaxespad=0.25,
+        labelcolor=error_color,
     )
 
     # Render the legends before placing the maximum-error annotation.
