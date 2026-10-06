@@ -1,11 +1,14 @@
 program two_stream_2d
     use mpi
+    use omp_lib
     use two_stream_parameters
     use two_stream_case
     implicit none
-    integer :: step, ierr
+    integer :: step, ierr, nproc
 
     call mpi_init(ierr)
+    call mpi_comm_size(mpi_comm_world,nproc,ierr)
+    write(*,'(A,I0,A,I0)') 'MPI ranks: ',nproc,', OpenMP threads: ',omp_get_max_threads()
     call initialize_case                        ! sub_I01_par_distribute_equilibrium
     call update_electric_field                  ! sub_B01_scatter_3Dxyz, sub_D02_hypre_3Dxyz_bc_A, sub_D02_hypre_3Dxyz_bc_fortran, sub_D05_phi1d_to_phi3d, sub_D06_phi_to_E
     call push_velocities(initial_half_push)     ! sub_C01_gather_3Dxyz, sub_A01_Boris_3Dxyz
@@ -24,4 +27,3 @@ program two_stream_2d
     call finalize_case                          ! sub_D02_hypre_3Dxyz_bc_fortran
     call mpi_finalize(ierr)
 end program two_stream_2d
-

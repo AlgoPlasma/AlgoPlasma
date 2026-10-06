@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.en.md) | [Online documentation](https://algoplasma.readthedocs.io/en/latest/index.html)
 
 AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma modeling into an open, reusable, tested, and explainable algorithm library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, AlgoPlasma aims to build a shared algorithmic foundation so that others can build upon it instead of starting from scratch.
 
@@ -18,6 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI data exchange
 ├── I_Initializer     # Initialization
 ├── J_Fluid           # Fluid algorithms
+├── K_Diagnostics     # Probe diagnostics and signal inversion
 ├── docs              # Sphinx + Doxygen documentation
 └── tests             # Algorithm tests and validation cases
 ```
@@ -85,6 +86,8 @@ bash run.sh
 After changing an algorithm, start with the most local tests for that algorithm, then run longer or more complete physical validation cases as needed.
 
 ## Documentation
+
+Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/latest/index.html) online on Read the Docs.
 
 The documentation is built with Sphinx, Doxygen, and Breathe:
 

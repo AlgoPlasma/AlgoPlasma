@@ -34,6 +34,7 @@ AlgoPlasma
 
     ./developer_onboarding
     ./glossary
+    ./knowledge/index
     ./maintenance_checklist
 
 .. toctree::
@@ -96,6 +97,7 @@ AlgoPlasma
          <a class="ap-module-card" style="--accent:#178f66" href="rst_files/H_MPI_Exchange.html"><strong>H_MPI_Exchange</strong><span>MPI 数据交换</span></a>
          <a class="ap-module-card" style="--accent:#b7791f" href="rst_files/I_Initializer.html"><strong>I_Initializer</strong><span>初始化</span></a>
          <a class="ap-module-card" style="--accent:#4a78a6" href="rst_files/J_Fluid.html"><strong>J_Fluid</strong><span>流体算法</span></a>
+         <a class="ap-module-card" style="--accent:#6b46a6" href="rst_files/K_Diagnostics.html"><strong>K_Diagnostics</strong><span>探针诊断与信号反演</span></a>
        </div>
      </section>
 
@@ -170,6 +172,7 @@ AlgoPlasma
          <a class="ap-module-card" style="--accent:#178f66" href="rst_files/H_MPI_Exchange.html"><strong>H_MPI_Exchange</strong><span>MPI data exchange</span></a>
          <a class="ap-module-card" style="--accent:#b7791f" href="rst_files/I_Initializer.html"><strong>I_Initializer</strong><span>Initialization</span></a>
          <a class="ap-module-card" style="--accent:#4a78a6" href="rst_files/J_Fluid.html"><strong>J_Fluid</strong><span>Fluid algorithms</span></a>
+         <a class="ap-module-card" style="--accent:#6b46a6" href="rst_files/K_Diagnostics.html"><strong>K_Diagnostics</strong><span>Probe diagnostics and signal inversion</span></a>
        </div>
      </section>
 

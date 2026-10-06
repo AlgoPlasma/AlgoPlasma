@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.en.md) | [在线文档](https://algoplasma.readthedocs.io/en/latest/index.html)
 
 AlgoPlasma 曾用名为 PMSL，致力于把等离子体建模中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的算法库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。AlgoPlasma 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
 
@@ -18,6 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI 数据交换
 ├── I_Initializer     # 初始化
 ├── J_Fluid           # 流体算法
+├── K_Diagnostics     # 探针诊断与信号反演
 ├── docs              # Sphinx + Doxygen 文档
 └── tests             # 算法测试与验证案例
 ```
@@ -85,6 +86,8 @@ bash run.sh
 修改某个算法后，建议优先运行与该算法直接相关的局部测试，再运行更长时间尺度或更完整的物理验证案例。
 
 ## 文档
+
+在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/latest/index.html)。
 
 项目文档基于 Sphinx、Doxygen 和 Breathe 构建：
 
