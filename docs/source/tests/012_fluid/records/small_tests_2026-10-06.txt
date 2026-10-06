@@ -10,6 +10,10 @@ Fingerprint: SHA256 of sorted sha256sum records for all *.f90 and *.sh
 under J_Fluid and tests/012_fluid, excluding */build/*:
 708769c187291740ad2a0abf925ce45ab14545b4d45dad5ec82ba7942ece231e
 
+This fingerprint identifies the verification snapshot before PR cleanup.
+That cleanup removed a non-numerical submission helper included in the hash;
+the solver sources and numerical build/run scripts were unchanged.
+
 Commands (repository root):
 bash tests/012_fluid/J01_free_molecular/run.sh
 bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run.sh

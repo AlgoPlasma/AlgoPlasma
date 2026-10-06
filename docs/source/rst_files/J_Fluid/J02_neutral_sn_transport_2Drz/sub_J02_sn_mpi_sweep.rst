@@ -216,27 +216,26 @@ Distributed Sweep and Flux
    这保证已检查到的数值错误不会让其他进程永久等候上游数据；
    不涵盖进程崩溃、网络故障或违反通信器调用约定的程序错误。
 
-   .. rubric:: 6. 构建、调用示例与后续连续性计算
+   .. rubric:: 6. 构建、调用顺序与后续连续性计算
 
    MPI 构建使用 MPI Fortran 编译器并定义 ``-DJ02_USE_MPI``；
    混合构建还需编译和链接时均加 ``-fopenmp``。
    普通构建只需 ``-cpp``，不链接 MPI。所有调用端与模块的实数精度必须一致。
 
-   ``examples/J02_sn_channel/sn_channel.f90`` 在同一个程序内展示两种构建：
-   物理输入与求解步骤共用，MPI 条件段只负责分区、入口面积归约和输出归约。
-   在仓库根目录运行：
+   应用程序按以下顺序准备分布式计算：
 
-   .. code-block:: bash
+   1. 初始化 MPI，建立非周期二维 Cartesian 通信器。
+   2. 调用 ``sub_J02_initialize_partition``，根据 ``first/count`` 准备本地网格与场。
+   3. 初始化带分区的面类型；各进程只设置自己拥有的物理边界。
+   4. 对入口面积作全局求和，再按总入口粒子率归一化入流。
+   5. 所有进程共同调用 ``sub_J02_solve_transport(..., partition=part)``。
+   6. 检查返回码后读取本地场，对入口、出口及体损失粒子率作全局求和。
+   7. 应用释放通信器并结束 MPI。
 
-      # 4 个空间分区进程，每个进程使用 2 个线程
-      MPI_NP=4 OMP_NUM_THREADS=2 bash examples/J02_sn_channel/run_mpi.sh
-
-      # 只使用 MPI，各进程内部串行计算
-      OPENMP=0 MPI_NP=4 bash examples/J02_sn_channel/run_mpi.sh
-
-   如果本机 Open MPI 报可用 slot 不足，小规模功能运行可加
-   ``MPIEXEC_FLAGS=--oversubscribe``；这会让多个任务共享处理器资源，不适合用于衡量并行性能。
-   B0/ION 应用脚本没有自动改成空间分区程序，直接用 mpirun 启动它们仍会重复执行完整算例。
+   使用 Open MPI 时，``mpiexec -np N`` 指定空间分区的进程数；
+   混合构建中的 ``OMP_NUM_THREADS`` 指定每个进程的线程数。
+   不添加 ``-fopenmp`` 时，每个进程内部串行扫描。
+   直接启动多个未传入 ``partition`` 的程序，只会重复执行单域计算。
 
    当前 J03 仍使用单域网格，没有 MPI 通信过程。
    要把分区后的 J02 结果交给现有 J03，应用需先按 ``first/count`` 组装全局单元场与内部面；
@@ -321,15 +320,17 @@ Distributed Sweep and Flux
 
    Use an MPI Fortran compiler with ``-cpp -DJ02_USE_MPI``; add ``-fopenmp`` to compile and link
    for hybrid execution. All sources must share the same default-real width.
-   The same channel example supports both serial and distributed builds:
+   The application initializes MPI and a nonperiodic 2D Cartesian communicator,
+   initializes the partition, and prepares local meshes and physical boundaries.
+   Reduce inlet area globally before normalizing the prescribed particle rate,
+   then call ``sub_J02_solve_transport(..., partition=part)`` on every rank.
+   Check errors before reading local results or reducing physical particle rates.
+   The application owns communicator cleanup and MPI finalization.
 
-   .. code-block:: bash
-
-      MPI_NP=4 OMP_NUM_THREADS=2 bash examples/J02_sn_channel/run_mpi.sh
-      OPENMP=0 MPI_NP=4 bash examples/J02_sn_channel/run_mpi.sh
-
-   For local Open MPI functional runs with insufficient slots, set ``MPIEXEC_FLAGS=--oversubscribe``.
-   This is not a performance recommendation. B0/ION application drivers remain single-domain.
+   With Open MPI, ``mpiexec -np N`` selects the process count;
+   ``OMP_NUM_THREADS`` sets the requested threads per rank in a hybrid build.
+   Omitting ``-fopenmp`` gives pure MPI. Launching multiple single-domain programs
+   without a partition repeats the whole calculation rather than distributing it.
 
    J03 is not MPI-distributed. To use the current J03 entry, the application must assemble global
    cell fields and internal faces using ``first/count``, taking one copy of each REMOTE flux.

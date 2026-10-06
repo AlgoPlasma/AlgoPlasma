@@ -53,7 +53,7 @@
       "run_directory": "fluid-fix-20261006-233223/FM_B0",
       "source_manifest": "fluid-fix-20261006-233223/source_and_scripts.sha256",
       "source_manifest_sha256": "87e9a292a6a7554724843922cad8f2eb4ac4e872486e5a4a8973cc253762aadc",
-      "note": "Source and shell manifest saved before this rerun; includes the J01 near-corner correction. A subsequent submission-guard edit changes only check_pr_files.sh, not the numerical build."
+      "note": "Source and shell manifest saved before this rerun; includes the J01 near-corner correction. The manifest predates non-numerical submission-helper edits and removal; these do not change the numerical build."
     }
   },
   "SN_B0": {

@@ -8,7 +8,6 @@
    J01_test_overview
    J02_test_overview
    J03_test_overview
-   Validation Checklist <validation_checklist>
 
 .. raw:: html
 
@@ -124,6 +123,12 @@
    例如 ``self-face integral and accumulation`` 对应 J02 面矩阵积分，
    ``transient storage equals ...`` 对应 J03 新旧时间层的总粒子数收支。
 
+   .. rubric:: 验证范围
+
+   小测试验证解析公式、离散算子、数据传递及同机并行一致性；
+   完整应用验证当前设置下的收敛、非负性与粒子收支。
+   这些结果不替代大型算例的空间与速度网格收敛、FM 采样误差或多节点性能评估。
+
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
    .. rubric:: Organization and progression
@@ -178,3 +183,11 @@
    FM B0 was rerun after the near-corner correction; SN B0 and ION retain their
    completed runs from the same date.
    A successful run requires all assertions to pass and a zero process exit status.
+
+   .. rubric:: Verification scope
+
+   Small tests check analytical formulas, discrete operators, data transfer and
+   same-machine parallel consistency. Full applications check convergence,
+   nonnegativity and particle balance for the stated setup. They do not establish
+   large-case spatial or velocity-grid convergence, FM sampling uncertainty,
+   or multi-node performance.

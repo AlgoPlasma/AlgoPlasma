@@ -126,7 +126,7 @@ MPI 构建还会交换上游系数，并对收敛量作全局归约。
 多个离散速度的任务同时失败时，待所有任务结束后报告编号最小的失败任务；
 失败返回的场不能继续当作有效解使用。
 
-小通道示例和 SN 应用脚本默认启用 OpenMP，`OPENMP=0` 可关闭。
+SN 应用测试脚本默认启用 OpenMP，`OPENMP=0` 可关闭。
 普通模块测试默认串行，`OPENMP=1` 可启用；独立的
 `run_parallel.sh` 同时检查两种构建。
 线程数不等于加速比；小网格、内存带宽和串行步骤都可能限制实际性能。
@@ -158,14 +158,11 @@ MPI 把 r-z 网格分成相邻面匹配的矩形块，每个进程只存储本�
 同一通信器上不能交叠启动多次求解。
 当前不支持周期分区、非匹配网格或零单元块；支持包含单元但全部标记为无效的分区。
 
-同一个小通道示例支持两种 MPI 构建：
+应用先建立 Cartesian 通信器和空间分区，用全局入口面积归一化入流，
+再由各进程共同调用输运接口。使用 Open MPI 时，`mpiexec -np N`
+指定进程数，混合构建中的 `OMP_NUM_THREADS` 指定每个进程的线程数。
+纯 MPI 构建不添加 `-fopenmp` 编译和链接选项。
 
-```bash
-MPI_NP=4 OMP_NUM_THREADS=2 bash examples/J02_sn_channel/run_mpi.sh
-OPENMP=0 MPI_NP=4 bash examples/J02_sn_channel/run_mpi.sh
-```
-
-仅在本机 Open MPI 的 slot 不足时，功能运行可加 `MPIEXEC_FLAGS=--oversubscribe`。
 一致性检查使用 `tests/012_fluid/J02_neutral_sn_transport_2Drz/run_mpi.sh`。
 B0/ION 应用程序与 J03 当前仍是单域接口；分区结果交给现有 J03 前，
 需要应用自行组装全局单元场与内部面，当前尚未实现分布式 J03 或自动汇集过程。

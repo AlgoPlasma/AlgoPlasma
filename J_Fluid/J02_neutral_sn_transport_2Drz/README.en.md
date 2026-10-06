@@ -132,7 +132,7 @@ MPI builds additionally exchange upstream data and globally reduce convergence n
 When several nodes fail, the lowest failing node index is reported after all
 tasks finish. A failed sweep must not be used as a valid field.
 
-The small channel example and the SN application build enable OpenMP by default;
+The SN application test build enables OpenMP by default;
 set `OPENMP=0` for a serial build. Ordinary module tests default to serial,
 with `OPENMP=1` available. The separate `run_parallel.sh` checks both builds.
 Thread count is not a speedup estimate: small grids, memory bandwidth and
@@ -165,14 +165,12 @@ borrowed communicator alive and avoid overlapping solves on it. No periodic,
 nonconforming or zero-cell partitions are supported; wholly inactive blocks
 with positive cell counts are supported.
 
-The channel example uses the same physical setup for both build modes:
+Applications create the Cartesian communicator and partition, normalize the
+inlet by its global area, then call the transport entry on every rank.
+With Open MPI, use `mpiexec -np N` to select the number of processes and
+`OMP_NUM_THREADS` to select the threads per process in a hybrid build.
+Omit `-fopenmp` during compilation and linking for pure MPI.
 
-```bash
-MPI_NP=4 OMP_NUM_THREADS=2 bash examples/J02_sn_channel/run_mpi.sh
-OPENMP=0 MPI_NP=4 bash examples/J02_sn_channel/run_mpi.sh
-```
-
-Use `MPIEXEC_FLAGS=--oversubscribe` only if needed for local Open MPI slots.
 The MPI consistency runner is `tests/012_fluid/J02_neutral_sn_transport_2Drz/run_mpi.sh`.
 B0/ION drivers and J03 remain single-domain. Using MPI output with the existing
 J03 requires application-side global field/face assembly; no distributed J03
