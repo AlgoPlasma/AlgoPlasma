@@ -11,6 +11,7 @@ K_Diagnostics
     K_Diagnostics/K01_signal_spectra
     K_Diagnostics/K02_beall
     K_Diagnostics/K03_mle_k2d
+    K_Diagnostics/K04_breathing_waveform
 
 .. raw:: html
 
@@ -29,7 +30,7 @@ K_Diagnostics
 
    本模块以 Python 实现，是仓库中第一个非 Fortran 的算法模块。文件组织仍遵循一个 routine 一个
    文件、``mod_`` 只做汇总的约定：``mod_`` 用 ``from ... import`` 汇总，对应 Fortran 侧的
-   ``#include``。三个单元均不做任何文件读写，计算只发生在测试的主程序里。
+   ``#include``。各单元的计算函数均不做文件读写；示例与测试负责调度计算。
 
    .. list-table:: 算法选择
       :header-rows: 1
@@ -51,6 +52,15 @@ K_Diagnostics
         - :doc:`二维联合最大似然反演 <K_Diagnostics/K03_mle_k2d>`
         - 多构型的相位均值与方差
         - 每频点的二维波矢 ``(K_x, K_y)``
+
+      * - K04
+        - :doc:`呼吸波形分离：从探针数据到 C <K_Diagnostics/K04_breathing_waveform>`
+        - 同一空间点、相同条件下的多条电压记录
+        - 相位重复波形 C 与残差 R
+
+   K04 从人工数据逐步讲到呼吸波形 C。计算函数位于 ``K_Diagnostics/K04_breathing_waveform/``，
+   人工示例、测试和画图脚本位于 ``tests/011_K04_breathing_waveform/``；
+   运行步骤见 :doc:`K04 测试与复现说明 </tests/011_K04_breathing_waveform/index>`。
 
    .. rubric:: 本模块解决的问题
 
@@ -78,6 +88,8 @@ K_Diagnostics
    :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`：一份合成宽带信号同时驱动三个单元，
    判据取自生成器本身而非人为容差。
 
+   :doc:`tests/011_K04_breathing_waveform </tests/011_K04_breathing_waveform/index>`：K04 的本地测试、人工示例和文档图片复现。
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Overview
@@ -90,8 +102,8 @@ K_Diagnostics
    The module is written in Python, the first non-Fortran algorithm module in the repository.
    Its file organisation still follows the convention of one routine per file with a ``mod_``
    wrapper that only aggregates: here the wrapper re-exports through ``from ... import``, the
-   counterpart of the Fortran ``#include``. None of the three units performs any file I/O;
-   computation happens only in the main program of the test.
+   counterpart of the Fortran ``#include``. Numerical routines perform no file I/O;
+   examples and tests orchestrate the computations.
 
    .. list-table:: Algorithm Selection
       :header-rows: 1
@@ -113,6 +125,16 @@ K_Diagnostics
         - :doc:`Joint 2-D maximum-likelihood inversion <K_Diagnostics/K03_mle_k2d>`
         - Phase means and variances of many configurations
         - Two-dimensional wavevector ``(K_x, K_y)`` per frequency
+
+      * - K04
+        - :doc:`Breathing waveform extraction: from samples to C <K_Diagnostics/K04_breathing_waveform>`
+        - Repeated voltage records at one spatial point under the same conditions
+        - Phase-repeatable waveform C and residual R
+
+   K04 explains waveform extraction using artificial data. Numerical routines live in
+   ``K_Diagnostics/K04_breathing_waveform/``; examples, tests and plots live in
+   ``tests/011_K04_breathing_waveform/``. See the
+   :doc:`K04 test and reproduction guide </tests/011_K04_breathing_waveform/index>`.
 
    .. rubric:: The Problem This Module Solves
 
@@ -145,3 +167,6 @@ K_Diagnostics
    :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`: one synthetic broadband dataset
    drives all three units, with criteria taken from the generator rather than from chosen
    tolerances.
+
+   :doc:`tests/011_K04_breathing_waveform </tests/011_K04_breathing_waveform/index>`:
+   K04 local tests, artificial examples and documentation figure reproduction.

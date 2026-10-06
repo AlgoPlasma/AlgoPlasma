@@ -15,6 +15,13 @@ The three units are three stages of one diagnostic chain:
 | K02 | [`K02_beall`](K02_beall/) | Cross phase of one pair | Aliasing algebra and the Beall dispersion spectrum `S(k, f)` |
 | K03 | [`K03_mle_k2d`](K03_mle_k2d/) | Phase means and variances of many configurations | Two-dimensional wavevector `(K_x, K_y)` per frequency |
 
+[K04_breathing_waveform](K04_breathing_waveform/) contains the breathing-waveform extraction routines.
+The [learning page](../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst) explains the method;
+the [routine README](K04_breathing_waveform/README.en.md) describes the Python interface.
+Artificial examples, local tests, plotting and cleanup live in
+[`tests/011_K04_breathing_waveform`](../tests/011_K04_breathing_waveform/README.en.md), with running instructions.
+K04 learns a phase-repeatable waveform from repeated single-point records and supplies residuals for later spectral analysis.
+
 ## The Problem This Module Solves
 
 A single probe pair measures only the projection of the wavevector onto its
@@ -64,9 +71,9 @@ grid = fun_K03_wavenumber_grid(k_range_rad_m=3300.0, n_grid=301)
 result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, grid), grid, grid)
 ```
 
-NumPy is the only dependency.  None of the three units performs **any file
+NumPy is the only dependency.  None of the numerical routines performs **any file
 I/O** — reading raw data and writing results are the caller's responsibility,
-and computation happens only in the test's main program.
+while examples and tests orchestrate the calculations. Plotting also needs Matplotlib.
 
 ## Tests
 

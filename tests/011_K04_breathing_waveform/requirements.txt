@@ -1,0 +1,3 @@
+# Python >=3.10; NumPy for calculations/tests, Matplotlib for figures.
+numpy>=1.24
+matplotlib>=3.6

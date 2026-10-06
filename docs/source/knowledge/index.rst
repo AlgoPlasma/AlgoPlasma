@@ -7,6 +7,7 @@ Knowledge Notes
 
    fft
    spectral_leakage
+   compact_phase
 
 .. raw:: html
 
@@ -26,6 +27,8 @@ Knowledge Notes
      FFT 输出的振幅与相位，以及采样的频率限制。
    - :doc:`谱泄漏与窗函数 <spectral_leakage>`：用周期拼接图和频谱比较图理解
      “不在频点上”的单频信号为什么会出现在很多频点中。
+   - :doc:`窄带相位的省点计算 <compact_phase>`：把频带搬到低频，用较少时刻计算慢相位，
+     再还原到原采样点；配有移频图、误差图和 Python 示例。
 
    应用入口：:doc:`探针诊断基础 </rst_files/K_Diagnostics/diagnostics_foundations>`。
 
@@ -40,5 +43,8 @@ Knowledge Notes
      spectra, and complex-plane diagrams to amplitude, phase, and sampling limits.
    - :doc:`Spectral leakage and windows <spectral_leakage>`: use repeated-record and
      spectrum plots to see why an off-bin tone contributes to multiple bins.
+   - :doc:`Fewer-point evaluation of narrowband phase <compact_phase>`: shift a band
+     to low frequencies, evaluate slow phase on fewer time points, and restore the original
+     sampling grid, with frequency-shift plots, error plots, and Python examples.
 
    Application: :doc:`Probe Diagnostics Foundations </rst_files/K_Diagnostics/diagnostics_foundations>`.

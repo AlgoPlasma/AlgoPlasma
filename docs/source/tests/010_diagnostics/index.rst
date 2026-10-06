@@ -18,7 +18,7 @@
 
    本节整理 ``tests/010_diagnostics`` 中的 :doc:`K_Diagnostics </rst_files/K_Diagnostics>` 测试。
    与其他测试分类不同，这里被测算法的输入是探针时间序列而不是粒子或场；``K_Diagnostics``
-   的单元只是子程序，不做任何文件读写，也不调度计算——计算全部发生在测试里。
+   的计算函数不做文件读写；示例与测试的主程序负责调度计算。
 
    .. list-table:: 当前测试页面
       :header-rows: 1
@@ -33,6 +33,9 @@
           该信号的参数。判据比较谱指数、折叠波数峰和离子声速；单探针对的 K02 检查不声称
           恢复混叠所丢失的折叠阶。
 
+   K04 有独立测试目录 ``tests/011_K04_breathing_waveform/``；
+   命令及判据见 :doc:`K04 代码与运行说明 </tests/011_K04_breathing_waveform/index>`。
+
    静态图片来自一次参考运行，并保存到 ``docs/source/images/tests/010_diagnostics``。
    如果修改了测试程序或绘图脚本，应重新运行并更新这些图片。
 
@@ -41,8 +44,8 @@
    This section collects the :doc:`K_Diagnostics </rst_files/K_Diagnostics>` tests under
    ``tests/010_diagnostics``. Unlike the other test categories, the algorithms under test take
    probe time series rather than particles or fields, and the ``K_Diagnostics`` units are
-   subroutines only: they perform no file I/O and schedule no computation of their own — all of
-   it happens in the test.
+   numerical routines only: they perform no file I/O; examples and test drivers orchestrate
+   the computation.
 
    .. list-table:: Available test pages
       :header-rows: 1
@@ -57,6 +60,9 @@
           checks each unit's output against the parameters that produced it. The criteria are
           generator-fixed quantities — a spectral exponent, folded-wavenumber peaks and an ion
           sound speed. The single-pair K02 check does not claim to recover the lost fold order.
+
+   K04 tests live in the separate ``tests/011_K04_breathing_waveform/`` directory;
+   see the :doc:`K04 running guide </tests/011_K04_breathing_waveform/index>` for commands and criteria.
 
    The static figures come from one reference run and are stored under
    ``docs/source/images/tests/010_diagnostics``. Regenerate and update them if the test program
