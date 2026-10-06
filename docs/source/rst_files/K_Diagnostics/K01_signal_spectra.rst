@@ -30,7 +30,7 @@ K01_signal_spectra
 
    * :doc:`fun_K01_phase_mode_statistics.py <K01_signal_spectra/fun_K01_phase_mode_statistics>`:
 
-       ``fun_K01_phase_mode_statistics`` 把每分段的折叠相位约化为 K03 的似然所需的均值与方差。相位分布可能横跨 :math:`\pm\pi` 的分支切割线，此时算术平均会塌向零，因此先在直方图上定位众数、把切割线移到众数对面再平均。
+       ``fun_K01_phase_mode_statistics`` 把每分段的折叠相位约化为 K03 的似然所需的均值与方差。相位分布可能横跨 :math:`\pm\pi` 的分支切割线，此时算术平均会塌向零，因此先在直方图上定位众数、直接用众数估计均值，并将切割线移到众数对面计算方差。
 
    * :doc:`fun_K01_segment_ffts.py <K01_signal_spectra/fun_K01_segment_ffts>`:
 
@@ -81,7 +81,7 @@ K01_signal_spectra
 
    * :doc:`fun_K01_phase_mode_statistics.py <K01_signal_spectra/fun_K01_phase_mode_statistics>`:
 
-       ``fun_K01_phase_mode_statistics`` reduces the per-segment wrapped phases to the mean and variance the K03 likelihood needs. The distribution can straddle the :math:`\pm\pi` branch cut, where an arithmetic mean collapses towards zero, so the mode is located on a histogram and the cut moved opposite it before averaging.
+       ``fun_K01_phase_mode_statistics`` reduces the per-segment wrapped phases to the mean and variance the K03 likelihood needs. The distribution can straddle the :math:`\pm\pi` branch cut, where an arithmetic mean collapses towards zero, so the histogram mode estimates the mean directly; shifted samples give the variance.
 
    * :doc:`fun_K01_segment_ffts.py <K01_signal_spectra/fun_K01_segment_ffts>`:
 
@@ -117,6 +117,7 @@ K01_signal_spectra
 
     K01_signal_spectra/mod_K01_signal_spectra
     K01_signal_spectra/fun_K01_cross_phase
+    K01_signal_spectra/fun_K01_pair_power
     K01_signal_spectra/fun_K01_phase_mode_statistics
     K01_signal_spectra/fun_K01_segment_ffts
     K01_signal_spectra/fun_K01_power_spectrum

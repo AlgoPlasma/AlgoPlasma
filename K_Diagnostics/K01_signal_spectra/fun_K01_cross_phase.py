@@ -15,8 +15,9 @@ wavevector.
 @param[in] ffts_2  array_like, complex (nseg, nfreq) for probe 2, the one
                    displaced by +chi.
 @return tuple of numpy.ndarray: the phase arg(X_1 X_2*) and the magnitude
-        |X_1 X_2*|, both (nseg, nfreq). The magnitude is the weight used by the
-        Beall accumulation in K02.
+        |X_1 X_2*|, both (nseg, nfreq). Undefined phases (zero or nonfinite
+        cross spectrum) are NaN. The magnitude is NOT the Beall weight;
+        use fun_K01_pair_power for that quantity.
 """
 
 import numpy as np
@@ -28,5 +29,8 @@ def fun_K01_cross_phase(ffts_1, ffts_2):
     if ffts_1.shape != ffts_2.shape:
         raise ValueError("probe spectra must have equal shape")
 
-    cross = ffts_1 * np.conj(ffts_2)
-    return np.angle(cross), np.abs(cross)
+    with np.errstate(invalid="ignore", over="ignore"):
+        cross = ffts_1 * np.conj(ffts_2)
+        magnitude = np.abs(cross)
+    phase = np.where(np.isfinite(cross) & (magnitude > 0), np.angle(cross), np.nan)
+    return phase, magnitude

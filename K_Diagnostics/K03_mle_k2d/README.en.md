@@ -2,12 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`K03_mle_k2d` combines the phase measurements of several probe configurations
-into one two-dimensional maximum-likelihood inversion, returning `(K_x, K_y)`
-per frequency.  It is the stage that removes the aliasing: a single
-configuration's likelihood is a family of parallel fringes, combining
-configurations intersects those families, and different separation **lengths**
-have incommensurate fringe periods, which fixes the fold order.
+Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
 ## Files
 
@@ -21,7 +16,7 @@ One routine per file, as elsewhere in the repository; `mod_` only aggregates.
 | `fun_K03_config_log_likelihood.py` | Log-likelihood of one configuration. |
 | `fun_K03_joint_log_likelihood.py` | Sum over configurations. |
 | `fun_K03_peak_wavevector.py` | Peak location, Cartesian and polar. |
-| `fun_K03_search_wavevector.py` | Coarse search followed by a refinement. |
+| `fun_K03_search_wavevector.py` | Exhaustive uniform-grid search in row blocks. |
 
 ## Interface
 
@@ -32,7 +27,7 @@ One routine per file, as elsewhere in the repository; `mod_` only aggregates.
 | `fun_K03_config_log_likelihood(chi, delta_theta, variance, kx_values, ky_values)` | Log-likelihood of one configuration. |
 | `fun_K03_joint_log_likelihood(configurations, kx_values, ky_values, normalise=True)` | Sum over configurations. |
 | `fun_K03_peak_wavevector(log_likelihood, kx_values, ky_values)` | Peak location, Cartesian and polar. |
-| `fun_K03_search_wavevector(configurations, k_range_rad_m, ...)` | Coarse search over the whole range, then a refinement around the peak. |
+| `fun_K03_search_wavevector(configurations, k_range_rad_m, ...)` | Exhaustive uniform-grid search in row blocks. |
 
 Arrays are indexed `[iy, ix]`, matching the default ordering of
 `numpy.meshgrid`.
@@ -54,27 +49,13 @@ likelihood and can be resolved by the other configurations.
 
 ## Notes
 
-- **Different separation lengths are required.**  With a single length every
-  configuration has the same fringe period, the fold order stays undetermined,
-  and the inversion cannot exceed that length's Nyquist wavenumber.  Changing
-  only the orientation is not enough.
+- **Geometry.** Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 - **Search range.**  The estimate is confined to the grid, so `k_range` must
-  contain the true wavevector; a peak on the boundary means the range was too
-  narrow.  Grid discretisation puts a floor of half a grid step on the accuracy.
-- **The variance is a single-sample variance.**  `K01` returns the variance of
-  one segment sample.  With equal segment counts this is only an overall
-  constant and does not move the peak; with unequal counts, weight by the
-  variance of the mean, `sigma^2/n`.
+  contain the true wavevector; a boundary peak warrants a range check.  Grid discretisation puts a floor of a resolution-dependent limitation on accuracy.
+- The variance describes segment-phase scatter and scales the phase residual in the likelihood. Vary sample count and histogram binning to assess the stability of the mode estimate.
 - **Memory.**  The likelihood array holds `n_grid^2` float64 values: about
   1.3 MB at 401x401, accumulated configuration by configuration.
-- **A wide band needs the two-stage search.**  One uniform grid must reach the
-  largest wavevector while still resolving the smallest, and three decades would
-  need thousands of points per axis.  `search_wavevector` searches coarse, then
-  rebuilds a fine grid around the coarse peak.  The coarse stage only has to
-  pick the right fringe.  Since the fringe period `2 pi/|chi|` decreases as the
-  separation grows, the longest separation sets the smallest period and the
-  strictest grid-spacing requirement.  Keep the coarse step well below that
-  period; check this first if a result looks locked to the wrong fold.
+- Build a uniform grid over the chosen two-dimensional wavenumber range, evaluate the joint log likelihood at every point, and report the wavevector at its maximum. n_grid sets the number of points per axis; block_rows sets the number of rows evaluated in each batch.
 
 ## Usage
 
@@ -95,20 +76,11 @@ result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, gri
 
 ## Tests
 
-`tests/010_diagnostics/case_broadband_dispersion`: 35 configurations jointly invert 80
-frequencies whose wavenumbers span 171 to 3286 rad/m.  The criterion is a
-straight line through the origin fitted to `f` against `|k_hat|`, whose slope
-must return the ion sound speed used to build the signals — a physical constant,
-not a chosen tolerance.
+- [basic_numerical tests](../../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
+- [broadband_dispersion](../../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
 
-| Quantity | Measured |
-| --- | --- |
-| Fitted ion sound speed | 3829.6 m/s (true 3824.6, relative error **1.3e-3**) |
-| `\|k\|` relative error | median 0.28 %, p95 0.83 % |
-| Direction error | median 0.26 deg, p95 0.62 deg |
+The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
 
-The same data that K02 shows folded into a sawtooth on a single pair is
-recovered here as a straight branch.
 
 ## Provenance
 

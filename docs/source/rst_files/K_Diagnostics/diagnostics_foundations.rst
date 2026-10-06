@@ -203,12 +203,12 @@ Probe Diagnostics Foundations
 
    .. _foundations-zh-after-fft:
 
-   **功率谱回答“哪个频率的波动强”。** 先取 :math:`|X|^2`，再按采样率、样本数归一化。
-   本实现的单边功率谱密度为
+   **功率谱回答“哪个频率的波动强”。** 先取加窗 FFT 的 :math:`|X|^2`，再按采样率、窗口功率归一化。
+   设窗口系数为 :math:`h_n`，本实现的单边功率谱密度为
 
    .. math::
 
-      P_j(f_m)=\frac{a_m}{f_sN}\left\langle |X_j(f_m)|^2\right\rangle,
+      P_j(f_m)=\frac{a_m}{f_s\sum_n h_n^2}\left\langle |X_j(f_m)|^2\right\rangle,
 
    其中 :math:`\langle\cdot\rangle` 表示对多段求平均（下一节解释分段），
    :math:`a_m` 在普通正频率处为 2，在直流及偶数 :math:`N` 的 Nyquist 频点为 1。
@@ -221,7 +221,8 @@ Probe Diagnostics Foundations
       :dedent: 4
 
    ``np.abs(ffts) ** 2`` 对应 :math:`|X|^2`，``mean(axis=0)`` 沿分段方向平均，
-   ``scale`` 处理单边谱倍数。这个归一化与当前未加窗的 FFT 对应。
+   ``scale`` 处理单边谱倍数。本例用矩形窗 :math:`h_n=1`，分母退化为 :math:`f_sN`；
+   选择 Hann 窗时，FFT 与功率谱必须传入相同的 ``window``。
 
    **互谱回答“两路同一频率差了多少相位”。** 设
    :math:`X_1=R_1e^{i\phi_1}`、:math:`X_2=R_2e^{i\phi_2}`，则
@@ -229,7 +230,7 @@ Probe Diagnostics Foundations
    .. math::
 
       C=X_1X_2^*=R_1R_2e^{i(\phi_1-\phi_2)},\qquad
-      \theta=\arg C,\qquad w=|C|.
+      \theta=\arg C,\qquad w=(|X_1|^2+|X_2|^2)/2.
 
    :math:`C` 是互谱，:math:`\theta` 是互相位，:math:`w` 是后面 Beall 谱的累积权重。
    对本页的真实余弦信号，正频率的时间相位为 :math:`-\mathbf K\cdot\mathbf r_j-\phi_0`，
@@ -237,8 +238,8 @@ Probe Diagnostics Foundations
 
    .. literalinclude:: ../../../../K_Diagnostics/K01_signal_spectra/fun_K01_cross_phase.py
       :language: python
-      :start-at:     cross =
-      :end-at:     return np.angle(cross), np.abs(cross)
+      :start-at:     with np.errstate
+      :end-at:     return phase, magnitude
       :dedent: 4
 
    ``np.conj`` 是共轭，``np.angle`` 取角度，``np.abs`` 取长度。
@@ -290,7 +291,7 @@ Probe Diagnostics Foundations
    .. literalinclude:: ../../../../K_Diagnostics/K01_signal_spectra/fun_K01_segment_ffts.py
       :language: python
       :start-at:     block =
-      :end-at:     return np.fft.rfft(block, axis=1)
+      :end-at:     return np.fft.rfft(block * weights, axis=1)
       :dedent: 4
 
    ``reshape(count, nperseg)`` 把一维记录排成“分段 × 时间样本”；FFT 后则是
@@ -306,8 +307,12 @@ Probe Diagnostics Foundations
       :doc:`点击看周期拼接图和频谱对比图 </knowledge/spectral_leakage>`，
       了解整数周期、非整数周期和加 Hann 窗的区别，再返回这里继续读。
 
-      窗函数能缓解远处旁瓣，但会改变主峰宽度和归一化。
-      当前分段函数不自动加窗，功率谱函数也不补偿窗。
+      非整周期截断会使频谱分布到邻近频点，并可能影响互相位估计。
+      Hann 窗通过平滑记录两端降低旁瓣，同时使主峰变宽。
+      当前分段函数默认 ``window='boxcar'``，可选 ``window='hann'``；两路需使用相同窗口。
+      功率谱函数必须传入相同的 ``window``，以 :math:`f_s\sum_n h_n^2` 为分母做窗口功率归一化。
+
+   数值示例：:ref:`基础数值测试：有限记录与频谱 <basic-checks-zh-spectrum>`，核对相位偏差与窗口功率。
 
    .. _foundations-zh-after-leakage:
 
@@ -343,7 +348,7 @@ Probe Diagnostics Foundations
    .. math::
 
       \delta_s=\operatorname{wrap}(\theta_s-\theta_{\rm mode}),\quad
-      \bar\theta=\theta_{\rm mode}+\frac1M\sum_s\delta_s,\quad
+      \bar\theta=\theta_{\rm mode},\quad
       s_\theta^2=\frac{\sum_s(\delta_s-\bar\delta)^2}{M-1}.
 
    :math:`s` 是分段序号，:math:`\bar\delta` 是偏差平均值，:math:`s_\theta^2` 是样本方差（rad²）。
@@ -356,9 +361,11 @@ Probe Diagnostics Foundations
       :dedent: 4
 
    ``shifted`` 对应 :math:`\delta_s`，``ddof=1`` 对应分母 :math:`M-1`，
-   :math:`10^{-12}` 用于避免无噪数据导致后续除零。均值可能略超出主值区间，表示同一个圆上的角度。
+   :math:`10^{-12}` 用于避免无噪数据导致后续除零。均值为最高直方图格中心，分箱与样本量会影响估计；不足两个有效样本返回 NaN。
    该方法适合围绕一个主要相位簇的样本；若同一频率混有多个传播方向、相位分布有多个峰，
    一个均值和方差就可能不足以描述数据。
+
+   数值示例：:ref:`基础数值测试：相位的圆周性质 <basic-checks-zh-phase>`，查看跨越 ±π 的样本与众数格中心。
 
    .. _foundations-zh-alias:
 
@@ -450,7 +457,7 @@ Probe Diagnostics Foundations
       3 kHz 的亮格落在负波数一侧；只有两个离散频率，所以这里是两个亮格而不是连续色散曲线。
 
    **Beall 谱是把多段估计放进二维直方图。** 每个“分段、频点”产生
-   :math:`(k_{\rm meas},f)` 和权重 :math:`w=|X_1X_2^*|`。
+   :math:`(k_{\rm meas},f)` 和权重 :math:`w=(|X_1|^2+|X_2|^2)/2`。
    把波数轴、频率轴切成小格，把落入每格的权重相加，最后除以分段数：
 
    .. math::
@@ -467,10 +474,12 @@ Probe Diagnostics Foundations
       :start-at:     histogram, _, _ =
       :dedent: 4
 
-   返回字典的 ``spectrum`` 项就是累积结果。``ravel()`` 把所有段和频点展开成样本列表；
+   返回字典的 ``spectrum`` 项就是累积结果。布尔掩码只选取相位、权重有效的样本；
    ``bins`` 给定格边界，``weights`` 给定各样本权重。此实现没有除以格宽或采用 K01 的 PSD
    归一化，因此这个 :math:`S(k,f)` 不应直接当成“每 Hz、每 rad/m 的能量密度”。
    格子越细，固定样本数下每格越稀；细网格本身不保证峰位更准确。
+
+   数值示例：:ref:`基础数值测试：Beall 谱的累积 <basic-checks-zh-beall>`，逐步核对两段样本的分箱与功率累积。
 
    .. _foundations-zh-inversion:
 
@@ -528,25 +537,21 @@ Probe Diagnostics Foundations
 
    .. literalinclude:: ../../../../K_Diagnostics/K03_mle_k2d/fun_K03_joint_log_likelihood.py
       :language: python
-      :start-at:     for chi, delta_theta, variance in configurations:
-      :end-at:         count += 1
+      :start-at:     for chi, delta_theta, variance in _valid_configurations(configurations):
+      :end-at:     return total
       :dedent: 4
 
-   K03 在指定的 :math:`K_x,K_y` 网格上找最高分，也提供粗搜后局部细化。
-   这给出搜索范围和网格分辨率内的估计；网格峰位不是连续空间中真值的证明，
-   峰落在边界也可能意味着范围不够。
+   在给定的二维波数范围内建立均匀网格，计算各网格点的联合对数似然，取最大值对应的波矢作为估计结果。n_grid 指定每个坐标轴的点数，block_rows 指定每批计算的网格行数。
 
-   有三点需要带着条件理解：
+   .. rubric:: 几何与统计条件
 
-   - **几何决定还有没有歧义。** 方向和长度共同决定条纹交点；多个不同长度并不自动意味着
-     周期不可通约，也不自动保证唯一解。若存在非零 :math:`\Delta\mathbf K`，使所有构型的
-     :math:`\Delta\mathbf K\cdot\boldsymbol\chi_j` 都是 :math:`2\pi` 的整数倍，
-     那么两组波矢仍不可区分。应在实际搜索范围和噪声水平下检查竞争峰。
-   - **均值的不确定性不等于单段方差。** K01 返回单段样本方差 :math:`s_{\theta,j}^2`。
-     若 :math:`M_j` 段近似独立，均值方差约为 :math:`s_{\theta,j}^2/M_j`。
-     当前接口不自动做此转换；所有构型段数相同时省略这个公因子不改变峰位，
-     段数不同时调用者应调整权重。
-   - **相加也有统计假设。** 上面的简单评分把构型误差视为独立。
+   - **几何。** 一条基线产生一族相位条纹，多条基线的条纹交汇形成候选波矢。
+     等长的多方向基线也能提供互补约束。若两个候选波矢之差 :math:`\Delta\mathbf K`
+     对所有基线都满足 :math:`\Delta\mathbf K\cdot\boldsymbol\chi_j\in2\pi\mathbb Z`，
+     两者会产生相同的包裹相位。这是精确混叠；可在给定搜索范围内检查这些候选点。
+   - **统计权重。** K01 方差描述分段相位的散布，用于设置相位残差的尺度。
+     众数位置的估计误差还取决于样本量、分箱和相位分布。
+   - **构型间的统计关系。** 上面的简单评分把构型误差视为独立。
      共用探针可能带来相关误差；同频多个波、低相干度、变化中的波场也会使单个波矢解释不足。
      这些情况下，应先检查模型是否适用，而非只增加搜索网格。
 
@@ -567,7 +572,7 @@ Probe Diagnostics Foundations
           +-------+---------------------+
           |                             |
       单对探针                       多个构型
-      相位和互谱幅度                 各自的相位均值与方差
+      相位和两路自功率平均           各自的相位均值与方差
           |                             |
       K02: 投影波数、S(k,f)          K03: 联合评分、搜索 (Kx, Ky)
 
@@ -587,6 +592,8 @@ Probe Diagnostics Foundations
         - 按推荐顺序进入具体函数，遇到术语时回到本页相应部分。
       * - :doc:`Usage Cookbook <diagnostics_usage_cookbook>`
         - 怎样导入和组合现有函数，准备符合形状和单位约定的输入。
+      * - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`
+        - 核对三组测试的参考值、实测值、误差与验收判据；每节可返回对应原理。
       * - :doc:`宽带测试 </tests/010_diagnostics/case_broadband_dispersion>`
         - 已知生成真值时，怎样把估计结果与真值比较；它是验证案例，不是学习本页的前提。
 
@@ -804,14 +811,15 @@ Probe Diagnostics Foundations
 
    .. _foundations-en-after-fft:
 
-   **A power spectrum identifies strong frequency components.** We square the magnitude and
-   normalize by sampling rate and length. This implementation's one-sided power spectral
+   **A power spectrum identifies strong frequency components.** We square the windowed FFT magnitude and
+   normalize by sampling rate and window power. This implementation's one-sided power spectral
    density is
 
    .. math::
 
-      P_j(f_m)=\frac{a_m}{f_sN}\left\langle |X_j(f_m)|^2\right\rangle.
+      P_j(f_m)=\frac{a_m}{f_s\sum_n h_n^2}\left\langle |X_j(f_m)|^2\right\rangle.
 
+   Here :math:`h_n` is the analysis window and :math:`X_j` is the windowed FFT.
    Angle brackets denote an average over segments, explained next. The factor :math:`a_m`
    is 2 at ordinary positive frequencies and 1 at DC and the Nyquist bin for even :math:`N`.
    A signal in volts gives a density in V²/Hz. This describes mean-square signal strength,
@@ -824,8 +832,8 @@ Probe Diagnostics Foundations
       :dedent: 4
 
    ``np.abs(ffts) ** 2`` is :math:`|X|^2`, ``mean(axis=0)`` averages over segments, and
-   ``scale`` handles the one-sided factors. This normalization matches the current FFT
-   without an additional analysis window.
+   ``scale`` handles the one-sided factors. This example uses a boxcar window :math:`h_n=1`,
+   giving denominator :math:`f_sN`. With Hann, pass the same ``window`` to both FFT and PSD routines.
 
    **The cross spectrum compares the phases at the same frequency.** Write
    :math:`X_1=R_1e^{i\phi_1}` and :math:`X_2=R_2e^{i\phi_2}`. Then
@@ -833,7 +841,7 @@ Probe Diagnostics Foundations
    .. math::
 
       C=X_1X_2^*=R_1R_2e^{i(\phi_1-\phi_2)},\qquad
-      \theta=\arg C,\qquad w=|C|.
+      \theta=\arg C,\qquad w=(|X_1|^2+|X_2|^2)/2.
 
    :math:`C` is the cross spectrum, :math:`\theta` the cross phase, and :math:`w` the weight
    later used in the Beall spectrum. Our real cosine has positive-frequency temporal phase
@@ -842,8 +850,8 @@ Probe Diagnostics Foundations
 
    .. literalinclude:: ../../../../K_Diagnostics/K01_signal_spectra/fun_K01_cross_phase.py
       :language: python
-      :start-at:     cross =
-      :end-at:     return np.angle(cross), np.abs(cross)
+      :start-at:     with np.errstate
+      :end-at:     return phase, magnitude
       :dedent: 4
 
    ``np.conj`` conjugates, ``np.angle`` extracts the angle, and ``np.abs`` extracts magnitude.
@@ -899,7 +907,7 @@ Probe Diagnostics Foundations
    .. literalinclude:: ../../../../K_Diagnostics/K01_signal_spectra/fun_K01_segment_ffts.py
       :language: python
       :start-at:     block =
-      :end-at:     return np.fft.rfft(block, axis=1)
+      :end-at:     return np.fft.rfft(block * weights, axis=1)
       :dedent: 4
 
    ``reshape(count, nperseg)`` arranges the record as “segments × time samples.” The FFT
@@ -915,8 +923,14 @@ Probe Diagnostics Foundations
       :doc:`Open the repeated-record and spectrum comparison diagrams </knowledge/spectral_leakage>`
       to compare integer cycles, non-integer cycles, and a Hann window, then return here.
 
-      Windows can reduce distant sidelobes but change main-lobe width and normalization.
-      Current segmentation applies no extra window, and the power routine makes no window correction.
+      Off-bin truncation spreads a tone across neighboring bins and can affect cross-phase estimates.
+      A Hann window smooths the record ends to reduce sidelobes while broadening the main lobe.
+      Segmentation defaults to ``window='boxcar'`` and also supports ``window='hann'``.
+      Both records must use the same window. Pass the matching ``window`` to the power-spectrum
+      routine, whose window-power normalization uses the denominator :math:`f_s\sum_n h_n^2`.
+
+   Numerical example: :ref:`basic_numerical tests: finite records and spectra <basic-checks-en-spectrum>`
+   compares phase errors and window-normalized power.
 
    .. _foundations-en-after-leakage:
 
@@ -955,7 +969,7 @@ Probe Diagnostics Foundations
    .. math::
 
       \delta_s=\operatorname{wrap}(\theta_s-\theta_{\rm mode}),\quad
-      \bar\theta=\theta_{\rm mode}+\frac1M\sum_s\delta_s,\quad
+      \bar\theta=\theta_{\rm mode},\quad
       s_\theta^2=\frac{\sum_s(\delta_s-\bar\delta)^2}{M-1}.
 
    Here :math:`s` indexes segments, :math:`\bar\delta` is the mean offset, and
@@ -969,10 +983,12 @@ Probe Diagnostics Foundations
       :dedent: 4
 
    ``shifted`` is :math:`\delta_s`, ``ddof=1`` supplies the denominator :math:`M-1`, and
-   :math:`10^{-12}` prevents later division by zero for noiseless input. The mean may slightly
-   leave the principal range while representing the same circular angle. This approach suits
+   :math:`10^{-12}` prevents later division by zero for noiseless input. The mean is the modal bin centre; binning and sample count matter. Fewer than two valid samples gives NaN. This approach suits
    samples clustered around one main phase; multiple directions at one frequency or multiple
    phase peaks may not be adequately described by one mean and variance.
+
+   Numerical example: :ref:`basic_numerical tests: circular phase statistics <basic-checks-en-phase>`
+   shows samples across ±π and their modal bin centers.
 
    .. _foundations-en-alias:
 
@@ -1075,7 +1091,7 @@ Probe Diagnostics Foundations
 
    **The Beall spectrum is a weighted two-dimensional histogram of segment estimates.**
    Each segment-frequency sample supplies :math:`(k_{\rm meas},f)` and weight
-   :math:`w=|X_1X_2^*|`. Divide the frequency and wavenumber axes into bins, add the weights
+   :math:`w=(|X_1|^2+|X_2|^2)/2`. Divide the frequency and wavenumber axes into bins, add the weights
    falling in each cell, and divide by segment count:
 
    .. math::
@@ -1093,12 +1109,14 @@ Probe Diagnostics Foundations
       :start-at:     histogram, _, _ =
       :dedent: 4
 
-   The returned dictionary's ``spectrum`` entry holds the accumulation. ``ravel()`` flattens
-   segments and frequencies into a sample list, ``bins`` supplies boundaries, and ``weights``
+   The returned dictionary's ``spectrum`` entry holds the accumulation. a Boolean mask selects valid phase/power samples, ``bins`` supplies boundaries, and ``weights``
    supplies contributions. This implementation divides neither by bin widths nor by the
    K01 PSD normalization, so its :math:`S(k,f)` is not directly an energy density per Hz per
    rad/m. Finer bins contain fewer samples at fixed record length; a finer grid alone does
    not guarantee a more accurate peak.
+
+   Numerical example: :ref:`basic_numerical tests: Beall accumulation <basic-checks-en-beall>`
+   follows two samples through binning and power accumulation.
 
    .. _foundations-en-inversion:
 
@@ -1163,29 +1181,22 @@ Probe Diagnostics Foundations
 
    .. literalinclude:: ../../../../K_Diagnostics/K03_mle_k2d/fun_K03_joint_log_likelihood.py
       :language: python
-      :start-at:     for chi, delta_theta, variance in configurations:
-      :end-at:         count += 1
+      :start-at:     for chi, delta_theta, variance in _valid_configurations(configurations):
+      :end-at:     return total
       :dedent: 4
 
-   K03 finds the highest score on a specified :math:`K_x,K_y` grid and also offers a coarse
-   search followed by local refinement. The result depends on search extent and resolution;
-   a grid maximum is not proof of the continuous-space truth. A boundary peak can indicate
-   insufficient search extent.
+   Build a uniform grid over the chosen two-dimensional wavenumber range, evaluate the joint log likelihood at every point, and report the wavevector at its maximum. n_grid sets the number of points per axis; block_rows sets the number of rows evaluated in each batch.
 
-   Three qualifications matter:
+   .. rubric:: Geometry and statistical conditions
 
-   - **Geometry determines remaining ambiguity.** Orientations and lengths jointly determine
-     fringe crossings. Different lengths do not automatically give incommensurate periods or
-     a unique solution. If a nonzero :math:`\Delta\mathbf K` makes every
-     :math:`\Delta\mathbf K\cdot\boldsymbol\chi_j` an integer multiple of :math:`2\pi`,
-     two wavevectors remain indistinguishable. Inspect competing peaks within the actual
-     search domain and noise level.
-   - **Mean uncertainty differs from single-segment variance.** K01 returns sample variance
-     :math:`s_{\theta,j}^2`. For :math:`M_j` approximately independent segments, the mean's
-     variance is about :math:`s_{\theta,j}^2/M_j`. The interface does not perform this
-     conversion automatically. Omitting a common segment count does not change the peak,
-     but unequal counts require caller-adjusted weights.
-   - **Summation has statistical assumptions.** This simple score treats configuration
+   - **Geometry.** Each baseline produces a family of phase fringes; their intersections locate candidate
+     wavevectors. Equal-length baselines with different directions can supply complementary constraints.
+     Two candidates separated by :math:`\Delta\mathbf K` produce identical wrapped phases when
+     :math:`\Delta\mathbf K\cdot\boldsymbol\chi_j\in2\pi\mathbb Z` for every baseline.
+     These exact aliases can be checked within the chosen search domain.
+   - **Statistical weights.** The K01 variance describes segment-phase scatter and scales the phase residual.
+     Mode-location uncertainty also depends on sample count, histogram binning and the distribution.
+   - **Relations between configurations.** This simple score treats configuration
      errors as independent. Shared probes can correlate errors. Multiple waves at one
      frequency, low coherence, or a changing wave field can also defeat a single-wavevector
      description. Reassess the model rather than only enlarging the grid.
@@ -1208,7 +1219,7 @@ Probe Diagnostics Foundations
               +--------+-----------------------+
               |                                |
           One probe pair                 Multiple configurations
-          Phase and magnitude            Phase means and variances
+          Phase and mean auto-power      Phase means and variances
               |                                |
           K02: projected k, S(k,f)       K03: joint score, search (Kx, Ky)
 
@@ -1228,6 +1239,8 @@ Probe Diagnostics Foundations
         - Follow the routine reading order and return here when a concept needs refreshing.
       * - :doc:`Usage Cookbook <diagnostics_usage_cookbook>`
         - Import and combine routines, preparing arrays with the correct shapes and units.
+      * - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`
+        - Compare references, measurements, errors and acceptance rules in three test groups; each links back to the theory.
       * - :doc:`Broadband test </tests/010_diagnostics/case_broadband_dispersion>`
         - Compare estimates with known generated truth; this verification case is not a prerequisite for this page.
 

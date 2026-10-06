@@ -94,10 +94,13 @@ def main() -> int:
         f"{magnitude.min():.0f}-{magnitude.max():.0f} rad/m"
     )
     beall_alias = config.alias_frequency(config.BEALL_SPACING_MM * 1e-3)
+    # This pair is aligned with propagation. Count occupied fold orders,
+    # rather than dividing frequency by the first Nyquist crossing.
+    orders = np.floor(frequencies / (2.0 * beall_alias) + 0.5).astype(int)
     print(
         f"Beall pair {config.BEALL_SPACING_MM:.0f} mm: f_alias = "
         f"{beall_alias / 1e3:.0f} kHz, so about "
-        f"{frequencies[-1] / beall_alias:.0f} folds across the band"
+        f"{np.unique(orders).size} occupied fold orders across the band"
     )
 
     reference_1, reference_2 = clean_segment_pair(

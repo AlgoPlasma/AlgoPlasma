@@ -1,18 +1,20 @@
 """@file fun_K01_phase_mode_statistics.py
-@brief Mode-referenced mean and variance of wrapped phase samples.
+@brief Liu histogram-mode mean estimate and shifted phase variance.
 
 @details
 A distribution of wrapped phases can straddle the +-pi branch cut, where a plain
 arithmetic mean collapses towards zero. This routine locates the mode on an
-nbins histogram, moves the branch cut opposite it, and averages there:
+nbins histogram and moves the branch cut opposite it:
 
-    theta_bar = theta_mode + < wrap(theta_i - theta_mode) >
+    theta_bar = theta_mode
     sigma^2   = var(wrap(theta_i - theta_mode), ddof=1) + 1e-12
 
-The returned mean is not re-wrapped, so it may leave (-pi, pi] by up to one
-histogram bin when the mode sits on the cut. The variance is that of an
-individual sample, not of the mean, and the floor keeps noiseless input from
-dividing by zero in the K03 likelihood.
+This follows Liu and Jorns (AIAA 2025-1293, II.E): use the histogram mode as a
+proxy for the mean. ddof=1 is our explicit convention, not specified by Liu.
+The first modal bin wins an exact tie; bin choice matters. Nonfinite samples
+are omitted. Fewer than two valid samples gives NaN mean and variance. The
+variance describes individual samples, not the mean. The positive floor only
+regularises valid noiseless samples; it cannot validate missing measurements.
 
 @author Zilong PENG (2026/09/02)
 
@@ -46,14 +48,21 @@ def fun_K01_phase_mode_statistics(phase, nbins=60):
         raise ValueError("nbins must be at least 2")
 
     width = 2.0 * np.pi / nbins
-    index = np.clip(np.floor((phase + np.pi) / width), 0, nbins - 1).astype(np.int64)
+    finite = np.isfinite(phase)
+    valid_counts = finite.sum(axis=0)
+    wrapped = fun_K01_wrap_to_pi(np.where(finite, phase, 0.0))
+    index = np.clip(np.floor((wrapped + np.pi) / width), 0, nbins - 1).astype(np.int64)
     offsets = np.arange(n_freq, dtype=np.int64)[None, :] * nbins
-    counts = np.bincount((offsets + index).ravel(), minlength=n_freq * nbins)
+    counts = np.bincount((offsets + index)[finite], minlength=n_freq * nbins)
     mode = -np.pi + (np.argmax(counts.reshape(n_freq, nbins), axis=1) + 0.5) * width
 
-    shifted = fun_K01_wrap_to_pi(phase - mode[None, :])
-    mean_phase = mode + shifted.mean(axis=0)
-    variance = shifted.var(axis=0, ddof=1) + 1.0e-12
+    shifted = fun_K01_wrap_to_pi(wrapped - mode[None, :])
+    shifted = np.where(finite, shifted, 0.0)
+    center = shifted.sum(axis=0) / np.maximum(valid_counts, 1)
+    squares = np.where(finite, (shifted - center)**2, 0.0).sum(axis=0)
+    variance = squares / np.maximum(valid_counts - 1, 1) + 1.0e-12
+    mean_phase = np.where(valid_counts >= 2, mode, np.nan)
+    variance = np.where(valid_counts >= 2, variance, np.nan)
 
     if scalar:
         return mean_phase[0], variance[0]

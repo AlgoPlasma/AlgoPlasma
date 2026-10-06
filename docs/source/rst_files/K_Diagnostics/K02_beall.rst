@@ -23,7 +23,7 @@ K02_beall
 
    * :doc:`fun_K02_beall_spectrum.py <K02_beall/fun_K02_beall_spectrum>`:
 
-       ``fun_K02_beall_spectrum`` 累积 :math:`S(k,f)`：每个 (分段, 频点) 样本按互谱幅度加权投进一个波数格。这是**统计**估计器，不相干的分段散开、相干的堆叠，因此需要的分段数远多于求一个均值相位所需。
+       ``fun_K02_beall_spectrum`` 累积 :math:`S(k,f)`：每个 (分段, 频点) 样本按两路自功率平均加权投进一个波数格。这是**统计**估计器，不相干的分段散开、相干的堆叠，因此需要的分段数远多于求一个均值相位所需。
 
    * :doc:`fun_K02_wavenumber_residual.py <K02_beall/fun_K02_wavenumber_residual>`:
 
@@ -31,11 +31,11 @@ K02_beall
 
    * :doc:`fun_K02_nyquist_wavenumber.py <K02_beall/fun_K02_nyquist_wavenumber>`:
 
-       ``fun_K02_nyquist_wavenumber`` 给出该间距的硬限制 :math:`\pi/|\boldsymbol{\chi}|`，对应频率上限 :math:`v/(2|\boldsymbol{\chi}|)`。可见折叠条数为 :math:`f_{\max}/f_{\rm alias}`，所以加宽频带与加粗间距是等效的。
+       ``fun_K02_nyquist_wavenumber`` 给出该间距的硬限制 :math:`\pi/|\boldsymbol{\chi}|`，当基线平行于传播方向时，首次混叠频率为 :math:`v/(2|\boldsymbol{\chi}|)`，完整折叠周期为 :math:`v/|\boldsymbol{\chi}|`。占用的折叠阶数应按生成模态计数；斜向基线还需考虑投影。
 
       * :doc:`fun_K02_separation_vector.py <K02_beall/fun_K02_separation_vector>`:
 
-       ``fun_K02_separation_vector`` 与 ``fun_K02_separation_magnitude`` 是几何的两个基础件：前者由间距和方位角构造 :math:`\boldsymbol{\chi}`，后者给出其长度并集中做形状与零长度校验。间距的指向决定了整个模块族的符号约定。
+       ``fun_K02_separation_vector`` 与 ``fun_K02_separation_magnitude`` 是几何的两个基础件：前者由间距和方位角构造 :math:`\boldsymbol{\chi}`，后者给出其长度并集中做形状、有限性与零长度校验。间距的指向决定了整个模块族的符号约定。
 
    * :doc:`fun_K02_separation_magnitude.py <K02_beall/fun_K02_separation_magnitude>`:
 
@@ -47,7 +47,7 @@ K02_beall
 
    * :doc:`fun_K02_fold_order.py <K02_beall/fun_K02_fold_order>`:
 
-       ``fun_K02_fold_order`` 给出折叠阶数 :math:`n`——单对探针无法提供、而多个不同间距长度联合起来才能在 K03 中恢复的那个整数。
+       ``fun_K02_fold_order`` 从已知投影波数计算折叠阶数 :math:`n`，用于比较理论波数与主值区间内的折叠波数。
 
    * :doc:`fun_K02_wavenumber_edges.py <K02_beall/fun_K02_wavenumber_edges>`:
 
@@ -87,7 +87,7 @@ K02_beall
 
    * :doc:`fun_K02_beall_spectrum.py <K02_beall/fun_K02_beall_spectrum>`:
 
-       ``fun_K02_beall_spectrum`` accumulates :math:`S(k,f)`: each (segment, frequency) sample is weighted by the cross-spectral magnitude and dropped into one wavenumber bin. It is a **statistical** estimator in which incoherent segments spread out and coherent ones pile up, so it needs many more segments than a mean phase does.
+       ``fun_K02_beall_spectrum`` accumulates :math:`S(k,f)`: each (segment, frequency) sample is weighted by the mean of the two auto-powers and dropped into one wavenumber bin. It is a **statistical** estimator in which incoherent segments spread out and coherent ones pile up, so it needs many more segments than a mean phase does.
 
    * :doc:`fun_K02_wavenumber_residual.py <K02_beall/fun_K02_wavenumber_residual>`:
 
@@ -95,11 +95,11 @@ K02_beall
 
    * :doc:`fun_K02_nyquist_wavenumber.py <K02_beall/fun_K02_nyquist_wavenumber>`:
 
-       ``fun_K02_nyquist_wavenumber`` gives the hard limit :math:`\pi/|\boldsymbol{\chi}|` of a separation, with the corresponding frequency limit :math:`v/(2|\boldsymbol{\chi}|)`. The number of visible folds is :math:`f_{\max}/f_{\rm alias}`, so widening the band and coarsening the separation are equivalent.
+       ``fun_K02_nyquist_wavenumber`` gives the hard limit :math:`\pi/|\boldsymbol{\chi}|` of a separation, with first alias frequency :math:`v/(2|\boldsymbol{\chi}|)` when aligned with propagation. The full fold period is :math:`v/|\boldsymbol{\chi}|`. Count occupied orders from the generated modes; oblique baselines also require projection.
 
       * :doc:`fun_K02_separation_vector.py <K02_beall/fun_K02_separation_vector>`:
 
-       ``fun_K02_separation_vector`` and ``fun_K02_separation_magnitude`` are the two geometric primitives: the first builds :math:`\boldsymbol{\chi}` from a spacing and an orientation, the second returns its length and performs the shape and zero-length checks once. The sense of the separation fixes the sign convention of the whole module family.
+       ``fun_K02_separation_vector`` and ``fun_K02_separation_magnitude`` are the two geometric primitives: the first builds :math:`\boldsymbol{\chi}` from a spacing and an orientation, the second returns its length and performs the shape, finiteness and zero-length checks once. The sense of the separation fixes the sign convention of the whole module family.
 
    * :doc:`fun_K02_separation_magnitude.py <K02_beall/fun_K02_separation_magnitude>`:
 
@@ -111,7 +111,7 @@ K02_beall
 
    * :doc:`fun_K02_fold_order.py <K02_beall/fun_K02_fold_order>`:
 
-       ``fun_K02_fold_order`` returns the fold order :math:`n`, the integer a single pair cannot supply and that several separation lengths jointly restore in K03.
+       ``fun_K02_fold_order`` computes the fold order :math:`n` from a known projected wavenumber, for comparing theoretical wavenumbers with their values in the principal interval.
 
    * :doc:`fun_K02_wavenumber_edges.py <K02_beall/fun_K02_wavenumber_edges>`:
 

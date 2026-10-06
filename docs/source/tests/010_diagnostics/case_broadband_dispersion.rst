@@ -32,7 +32,7 @@ case_broadband_dispersion Test
    每路探针加独立白高斯噪声，宽带信噪比为 10。
 
    反演阵列是 35 个构型（3.0–5.0 mm × 0–90°）。Beall 另用一对**故意选粗的 20 mm 探针**：
-   可见折叠条数为 ``f_max/f_alias``、``f_alias = c_s/(2d)``，所以加粗间距与加宽频带等效，
+   本例探针对与传播方向平行，首次混叠边界为 ``f_alias = c_s/(2d)``，完整折叠周期为其两倍；加粗间距可增加折叠，
    而前者不会推高反演网格的成本。
 
    .. rubric:: 程序结构
@@ -42,79 +42,70 @@ case_broadband_dispersion Test
    - ``source_py/analyze.py`` 把记录送过 K01/K02/K03，写出 ``output/summary.json`` 和四张图。
    - ``make.sh`` 不编译，只负责生成合成记录；``run.sh`` 负责归约。
 
-   .. rubric:: 运行方式
+   .. rubric:: 运行与结果来源
 
    .. code-block:: bash
 
-      cd tests/010_diagnostics/case_broadband_dispersion
-      bash clean.sh && bash make.sh && bash run.sh
+      bash tests/010_diagnostics/case_broadband_dispersion/run.sh --publish-docs
 
-   ``make.sh`` 把记录写进 ``build/``，``run.sh`` 把结果写进 ``output/summary.json`` 和
-   ``output/figures/`` 下的四张图。三项检验全部通过时退出码为 0。整次运行约数秒，
-   ``build/`` 约 11 MB，由 ``clean.sh`` 删除。
+   run.sh 先执行四项小型验收反例检查，再生成记录、运行宽带计算；任一步失败均返回非零退出码。
+   ``--publish-docs`` 仅在全部通过后更新下方表格和四张图。
+   运行输出位于案例的 ``output/``；约 95 MB 的临时波形位于 ``build/``，可用案例的 clean.sh 清理。
 
-   .. rubric:: 判据
+   :download:`完整结果与运行来源 <_generated/case_broadband_dispersion/summary.json>` ·
+   :download:`逐频点结果 CSV <_generated/case_broadband_dispersion/modes.csv>`
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 12 52 36
+   .. rubric:: 验收要求及依据
 
-      * - 单元
-        - 判据
-        - 实测
-      * - K01
-        - 从测得的谱里拟合回生成器的谱指数
-        - −2.015 对 −2
-      * - K01
-        - 下带边，以及谱与噪声底相交的频率是否符合 ``1/f²`` 律的预言
-        - 104 kHz 对 104 kHz；816 kHz 对预言的 733 kHz
-      * - K01
-        - 生成频带以外的相干度应落在 ``1/n_segments`` 底线上
-        - 带外 0.038、带内 0.932，底线 0.0625
-      * - K02
-        - 高于 10 倍噪声底的模态，其折叠波数峰是否落在闭式预测的 2 个网格以内
-        - 评价 83 个模态；圆周残差中位数 0.40 格、p95 为 1.46 格；生成真值的 238 个模态
-          全部混叠并跨越 10 个理论折叠阶
-      * - K03
-        - 把 ``f`` 对 ``|k̂|`` 拟合成过原点的直线，斜率还原离子声速
-        - 3829.6 对 3824.6 m/s，相对误差 1.3e-3
-      * - K03
-        - 波数模长与方向的逐模态误差
-        - ``|k|`` 相对误差中位数 0.28%、p95 0.83%；方向误差中位数 0.26°、p95 0.62°
+   本例固定生成器、随机种子和网格。以下阈值是预先声明的工程验收要求，集中定义于
+   ``source_py/config.py`` 的 ``ACCEPTANCE``，不是理论误差上限或统计置信区间。
 
-   每条判据形式相同：把生成信号时用到的某个量从测量里测回来再对比，而不是取一个能让测试通过的容差。
+   - **K01：** 总 PSD 高于 10 倍噪声底的频点用于强信号评价。若 PSD = 信号 + 噪声，
+     阈值处信号部分为 9 倍噪声底；交点预言采用这一口径。它是评价频段的阈值，
+     不是信号与噪声相等的位置。谱指数误差 0.15、交点相对误差 15% 是允许的拟合偏差；
+     下带边允许两格离散误差。带内相干度中位数要求大于 0.8；
+     带外使用均值与独立分段零相干条件下的 1/N 比较，允许两倍余量，不把均值当作中位数。
+   - **K02：** 有效频点的圆周峰位残差 p95 小于两格。这是带噪直方图谱峰的案例要求，
+     不等于无噪量化误差必然小于半格，也不声称单探针对恢复折叠阶。
+   - **K03：** 声速相对误差小于 0.5%，模长误差中位数小于 5%，方向误差 p95 小于 2°。
+     此外，每个选定频点都必须满足
+     ``|K_est - K_true| <= 0.05*|K_true| + grid_step/sqrt(2)``。
+     前一项是允许的带噪矢量误差；后一项来自方形网格最近点的最大距离，
+     只用于预算网格量化影响，不保证搜索一定选择最近真值的点。允许超限频点数为零。
+     本例真值位于搜索域内，因此边界峰或并列网格最大值也使本例验收失败，CSV 保留原因。
+     一般实测数据中的边界峰需要核查范围，精确并列计数也不能证明连续解唯一。
 
-   .. rubric:: 参考图
+   这些要求用于防止当前案例退化。若改变信噪比、构型或传播模型，需重新论证适用范围，
+   不能仅为了通过而调宽阈值。当前案例只有每频点一个传播方向，未验证同频多波的可辨识性。
+
+   .. include:: _generated/case_broadband_dispersion/results_zh.rst
+      :start-after: .. snapshot-start
+
+   .. rubric:: 同次运行的图
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/raw_waveform.png
       :align: center
       :width: 92%
 
-      原始波形。左图为 1 号探针加噪前后的对比，宽带信噪比为 10；右图为 3.0 mm、0° 构型下
-      两路探针的无噪波形，可直接看出一对探针之间的时移，即互相位的来源。
+      原始波形：左图对照加噪前后的探针记录，右图比较两路无噪信号。
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/power_spectrum.png
       :align: center
       :width: 92%
 
-      功率谱。两路探针的谱在生成频带内与 ``∝ f⁻²`` 的生成器律重合，拟合斜率 −2.01；
-      下带边落在 104 kHz，谱在 816 kHz 附近沉入噪声底，与 ``1/f²`` 律的预言 733 kHz 同量级。
+      功率谱：同时标出噪声底和 10 倍底噪评价线；交点采用后者。谱指数与验收数值见上表。
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/beall_skf.png
       :align: center
       :width: 92%
 
-      Beall 统计色散谱 ``S(k, f)``，取 20 mm 粗间距探针对、512 个分段。一条直的色散支被
-      混叠切成锯齿状的多条折叠支；青线为混叠理论，白圈为 K02 闭式预言，两者与谱的亮脊逐条重合。
-      ``k_Nyq = 157 rad/m``，全带共 21 条折叠。
+      Beall 折叠谱：亮脊与理论折叠支比较。折叠数量按生成模态实际覆盖的阶数计数；不把首次 Nyquist 边界当作完整周期。
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/mle_dispersion.png
       :align: center
       :width: 92%
 
-      K03 的二维 MLE 反演结果，35 个构型联合。上一张图里被折叠成锯齿的色散支在这里被展直，
-      橙点为反演所得，蓝线为理论支 ``f = c_s|k|/2π``。拟合斜率还原出的离子声速与生成值相差
-      1.3e-3，这是全案例最核心的一条判据。
+      联合反演的色散关系：拟合直线用于检查声速，逐频点矢量误差与搜索标记另由 CSV 和验收表核对。
 
 .. container:: ap-lang ap-lang-en
 
@@ -145,8 +136,8 @@ case_broadband_dispersion Test
    broadband ratio of 10.
 
    The inversion array is 35 configurations (3.0–5.0 mm at 0–90 deg). The Beall map uses a
-   separate, **deliberately coarse 20 mm pair**: the number of visible folds is
-   ``f_max / f_alias`` with ``f_alias = c_s / (2 d)``, so coarsening the separation and widening
+   separate, **deliberately coarse 20 mm pair**: the first alias boundary is
+   ``f_alias = c_s / (2 d)`` and the fold period is twice this value for this aligned pair, so coarsening the separation and widening
    the band are equivalent and only the former leaves the inversion grid untouched.
 
    .. rubric:: Program Structure
@@ -158,88 +149,72 @@ case_broadband_dispersion Test
      together with the four figures.
    - ``make.sh`` compiles nothing and only generates the records; ``run.sh`` reduces them.
 
-   .. rubric:: Run Command
+   .. rubric:: Running and provenance
 
    .. code-block:: bash
 
-      cd tests/010_diagnostics/case_broadband_dispersion
-      bash clean.sh && bash make.sh && bash run.sh
+      bash tests/010_diagnostics/case_broadband_dispersion/run.sh --publish-docs
 
-   ``make.sh`` writes the records into ``build/`` and ``run.sh`` writes ``output/summary.json``
-   together with four figures under ``output/figures/``. The exit code is 0 when all three
-   checks pass. A full run takes a few seconds and leaves about 11 MB in ``build/``, removed by
-   ``clean.sh``.
+   The driver first runs four small acceptance counterexamples, then generates and analyzes the
+   records. Any failure gives a nonzero exit code. With ``--publish-docs``, tables and all four
+   figures are published together only after every check passes. Runtime results are in ``output/``;
+   clean.sh removes these and the approximately 95 MB of temporary waveforms in ``build/``.
 
-   .. rubric:: Criteria
+   :download:`Full results and provenance <_generated/case_broadband_dispersion/summary.json>` ·
+   :download:`Per-mode CSV <_generated/case_broadband_dispersion/modes.csv>`
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 12 52 36
+   .. rubric:: Acceptance requirements and basis
 
-      * - Unit
-        - Criterion
-        - Measured
-      * - K01
-        - The generator's spectral exponent is fitted back out of the measured spectrum
-        - −2.015 against −2
-      * - K01
-        - The lower band edge, and the frequency at which the spectrum meets the noise floor as
-          the ``1/f^2`` law predicts
-        - 104 kHz against 104 kHz; 816 kHz against 733 kHz predicted
-      * - K01
-        - Coherence outside the generated band must sit at the ``1/n_segments`` floor
-        - 0.038 out of band against 0.932 in band, floor 0.0625
-      * - K02
-        - Folded-wavenumber peaks above ten times the noise floor stay within two grid bins of
-          the closed-form prediction
-        - 83 modes assessed; circular-residual median 0.40 bins and p95 1.46 bins; all 238
-          generated modes aliased across 10 theoretical fold orders
-      * - K03
-        - Fitting ``f`` against ``|k_hat|`` through the origin returns the ion sound speed
-        - 3829.6 against 3824.6 m/s, relative error 1.3e-3
-      * - K03
-        - Per-mode error in wavenumber magnitude and direction
-        - ``|k|`` relative error median 0.28 %, p95 0.83 %; angle error median 0.26 deg, p95
-          0.62 deg
+   This fixed generator, seed and grid use declared engineering requirements in
+   ``source_py/config.py: ACCEPTANCE``. These are not universal error bounds or confidence intervals.
 
-   Every criterion has the same shape: a quantity the generator was built from is recovered from
-   the measurement and compared back, rather than a tolerance chosen to make the test pass.
+   - **K01:** Assess strong signals above ten times the noise floor in total PSD. Since total PSD
+     is signal plus noise, the signal at this threshold is nine times the floor; the prediction
+     uses this same definition. This is an assessment threshold, not a signal/noise equality.
+     Exponent error 0.15 and crossing error 15% are allowed fit deviations; the band edge allows
+     two frequency bins. In-band median coherence must exceed 0.8. Out-of-band mean coherence is
+     compared with the independent-segment zero-coherence expectation 1/N, allowing a factor of two.
+     That expectation is not the median.
+   - **K02:** Circular peak residual p95 must be below two bins for assessed modes. This is a
+     requirement for a noisy histogram, not a half-bin quantization guarantee or recovery of fold order.
+   - **K03:** Speed error must be below 0.5%, median magnitude error below 5%, and direction-error
+     p95 below 2 degrees. Every selected mode must also satisfy
+     ``|K_est - K_true| <= 0.05*|K_true| + grid_step/sqrt(2)``.
+     The first term is the allowed noisy vector error; the second is the maximum distance to the
+     nearest point on a square grid, budgeting quantization without guaranteeing alias selection.
+     Zero over-budget modes are allowed. Boundary or tied maxima fail this reference case, whose
+     truth is inside the search domain; reasons remain in the CSV. In general data a boundary peak
+     warrants a range check, and exact grid tie counts do not establish continuous uniqueness.
 
-   .. rubric:: Reference Figures
+   Changing noise, geometry or propagation requires reconsidering the scope of these requirements,
+   not widening them merely to pass. This case has one direction per frequency and does not validate
+   identification of multiple waves at the same frequency.
+
+   .. include:: _generated/case_broadband_dispersion/results_en.rst
+      :start-after: .. snapshot-start
+
+   .. rubric:: Figures from the same run
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/raw_waveform.png
       :align: center
       :width: 92%
 
-      Raw waveforms. Left: probe 1 before and after noise is added, at a broadband ratio of 10.
-      Right: the noiseless pair for the 3.0 mm, 0 deg configuration, where the time shift
-      between the two probes — the origin of the cross phase — is directly visible.
+      Raw records: noisy versus clean at left, and the two clean probes at right.
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/power_spectrum.png
       :align: center
       :width: 92%
 
-      Power spectra. Both probes follow the generator's ``~ f^-2`` law across the generated
-      band, with a fitted slope of −2.01. The lower band edge sits at 104 kHz and the spectrum
-      sinks into the noise floor near 816 kHz, the same order as the 733 kHz predicted by the
-      ``1/f^2`` law.
+      Power spectra show both the noise floor and the ten-times-floor assessment line. The crossing uses the latter; see the table for fit and acceptance values.
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/beall_skf.png
       :align: center
       :width: 92%
 
-      The Beall statistical dispersion spectrum ``S(k, f)`` for the coarse 20 mm pair over 512
-      segments. A single straight dispersion branch is cut by aliasing into a sawtooth of folded
-      branches; the cyan lines are the aliasing theory and the white circles are K02's
-      closed-form prediction, both tracking the bright ridges branch by branch.
-      ``k_Nyq = 157 rad/m``, with 21 folds across the band.
+      Beall map versus the folded branch. Fold count means occupied orders among generated modes; the first Nyquist crossing is not a full fold period.
 
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/mle_dispersion.png
       :align: center
       :width: 92%
 
-      K03's two-dimensional MLE inversion from the 35 configurations jointly. The branch that
-      the previous figure shows folded into a sawtooth is recovered straight: orange points are
-      the inversion, the blue line is the theoretical branch ``f = c_s |k| / 2 pi``. The ion
-      sound speed recovered from the fitted slope differs from the generated value by 1.3e-3,
-      the central criterion of the whole case.
+      Jointly recovered dispersion: the fitted slope checks sound speed; the table and CSV additionally assess individual vectors and search flags.

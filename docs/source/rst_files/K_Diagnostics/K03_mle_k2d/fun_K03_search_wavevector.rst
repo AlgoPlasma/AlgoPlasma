@@ -1,6 +1,5 @@
-----------------------------
 fun_K03_search_wavevector.py
-----------------------------
+==============================
 
 .. raw:: html
 
@@ -11,147 +10,71 @@ fun_K03_search_wavevector.py
 
 .. container:: ap-lang ap-lang-zh
 
-   .. rubric:: 直接用途
+   .. rubric:: 网格搜索
 
-   先在全域粗搜、再在粗峰附近细化。
+   在给定的二维波数范围内建立均匀网格，计算各网格点的联合对数似然，
+   取最大值对应的波矢作为估计结果。计算按行分批进行，各批次使用同一个网格步长。
 
-   .. rubric:: 参数表
+   .. rubric:: 参数
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 14 10 28 34 26 40
+   调用：``fun_K03_search_wavevector(configurations, k_range_rad_m, n_grid=1501, block_rows=32)``。
 
-      * - 参数
-        - 方向
-        - shape / 范围
-        - 含义
-        - 单位 / 归一化
-        - 索引 / 轴约定
-      * - ``configurations``
-        - ``in``
-        - iterable
-        - 每项为 :math:`(\boldsymbol{\chi}, \bar\theta, \sigma^2)`；会被 materialize，因为要遍历两次。
-        - 见各分量
-        - 两阶段使用同一批构型。
-      * - ``k_range_rad_m``
-        - ``in``
-        - ``scalar``，正
-        - 粗网格半宽，必须包含真实波矢。
-        - rad/m
-        - 只作用于第一阶段。
-      * - ``n_coarse``
-        - ``in``
-        - ``scalar``，可选
-        - 第一阶段每轴点数，默认 401。
-        - 点数，无量纲
-        - 决定粗步长。
-      * - ``n_fine``
-        - ``in``
-        - ``scalar``，可选
-        - 第二阶段每轴点数，默认 201。
-        - 点数，无量纲
-        - 决定最终精度。
-      * - ``refine_span``
-        - ``in``
-        - ``scalar``，可选
-        - 细化窗口在粗峰两侧各保留的粗步长数，默认 2.0。
-        - 粗步长数，无量纲
-        - 窗口关于粗峰对称。
+   - ``configurations``：每项为 (chi, delta_theta, variance)，分别为基线向量、相位均值和方差，单位 m、rad、rad²。
+   - ``k_range_rad_m``：两个坐标轴的搜索半宽，取有限正数。
+   - ``n_grid``：每轴点数，至少 2；步长为 2*k_range_rad_m/(n_grid-1)。
+   - ``block_rows``：每批计算的网格行数，默认 32，控制临时数组的内存。
 
-   .. rubric:: 返回值
+   .. rubric:: 返回值与输入条件
 
-   ``dict``，同 ``fun_K03_peak_wavevector``，另加 ``coarse_step`` 与 ``fine_step``。
+   返回字典含 ``kx, ky, k_magnitude, angle_deg, peak_log_likelihood``，
+   以及 ``grid_step, n_grid, boundary, valid_configurations, tied_grid_points``。
+   相等最大值按先 y 后 x 的扫描顺序取第一个；tied_grid_points 记录达到该最大值的网格点数。
+   peak_log_likelihood 为直接累加的对数似然值。
 
-   .. rubric:: 局部假设 / 前置条件
+   非有限相位、非有限或非正方差的构型被剔除。其余构型应至少含两条线性独立基线，
+   以约束两个波矢分量；有效约束不足或似然完全平坦时抛 ValueError。
 
-   - 单一均匀网格无法服务宽频带：它既要够到最大波矢又要分辨最小波矢，跨三个数量级需要每轴数千点。
-   - 细化窗口假定真峰落在粗峰的 ``refine_span`` 个粗步长之内。
+   .. rubric:: 网格设置
 
-   .. rubric:: 实现逻辑
+   搜索范围根据目标波长和传播方向选取。固定范围后，可逐步增加 n_grid，
+   比较估计波矢的变化，确定所需的数值分辨率。边界峰可通过扩大范围进一步检查。
+   多个相位条纹交点形成的候选波矢，见 :doc:`诊断基础 <../diagnostics_foundations>` 第 7 节。
 
-   - 第一阶段在全域粗网格上取峰，第二阶段在粗峰附近重建细网格再取峰。
-
-   .. rubric:: 调用注意
-
-   - 粗搜阶段只需选对条纹、而非条纹内的具体位置。条纹周期 :math:`2\pi/|\boldsymbol{\chi}|` 随间距增大而减小，因此最长间距产生最小周期并给出最严格的限制；粗步长必须显著小于该周期。结果若像是被锁到错误的折叠阶，先查这一条。
-
-   .. raw:: html
-
-      <div class="ap-home-footer-band">
-        <p><strong>贡献者</strong></p>
-        <p class="ap-home-contact">彭子龙 (2026/09/02) · 哈尔滨工业大学</p>
-      </div>
-
+   贡献者：彭子龙 (2026/09/02) · Harbin Institute of Technology
 
 .. container:: ap-lang ap-lang-en
 
-   .. rubric:: Direct Purpose
+   .. rubric:: Grid search
 
-   Run a coarse grid search over the whole range, then refine around the coarse peak.
+   Build a uniform grid over the chosen two-dimensional wavenumber range, evaluate the joint
+   log likelihood at every point, and report the wavevector at its maximum.
+   Rows are evaluated in batches with a common grid spacing.
 
-   .. rubric:: Parameter Table
+   .. rubric:: Parameters
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 14 10 28 34 26 40
+   Call: ``fun_K03_search_wavevector(configurations, k_range_rad_m, n_grid=1501, block_rows=32)``.
 
-      * - Parameter
-        - Direction
-        - Shape / range
-        - Meaning
-        - Units / normalisation
-        - Indexing / axis convention
-      * - ``configurations``
-        - ``in``
-        - iterable
-        - Each item is :math:`(\boldsymbol{\chi}, \bar\theta, \sigma^2)`; materialised, since it is traversed twice.
-        - See each component
-        - The same set is used in both stages.
-      * - ``k_range_rad_m``
-        - ``in``
-        - ``scalar``, positive
-        - Half-width of the coarse grid; it must contain the true wavevector.
-        - rad/m
-        - Applies to the first stage only.
-      * - ``n_coarse``
-        - ``in``
-        - ``scalar``, optional
-        - Points per axis in the first stage. Default 401.
-        - Point count, dimensionless
-        - Sets the coarse step.
-      * - ``n_fine``
-        - ``in``
-        - ``scalar``, optional
-        - Points per axis in the second stage. Default 201.
-        - Point count, dimensionless
-        - Sets the final accuracy.
-      * - ``refine_span``
-        - ``in``
-        - ``scalar``, optional
-        - Coarse steps kept on each side of the coarse peak. Default 2.0.
-        - Coarse steps, dimensionless
-        - The window is symmetric about the coarse peak.
+   - ``configurations``: triples (chi, delta_theta, variance): baseline vector, phase mean and variance, in m, rad and rad².
+   - ``k_range_rad_m``: finite positive half-width of both coordinate axes.
+   - ``n_grid``: at least two points per axis; spacing = 2*k_range_rad_m/(n_grid-1).
+   - ``block_rows``: rows per batch (default 32), controlling temporary-array memory.
 
-   .. rubric:: Return Value
+   .. rubric:: Returns and input conditions
 
-   ``dict`` as ``fun_K03_peak_wavevector``, with ``coarse_step`` and ``fine_step`` added.
+   The dictionary contains ``kx, ky, k_magnitude, angle_deg, peak_log_likelihood``,
+   plus ``grid_step, n_grid, boundary, valid_configurations, tied_grid_points``.
+   Exact ties select the first point in y-then-x order; tied_grid_points counts grid points
+   at that maximum. peak_log_likelihood is the directly summed log likelihood.
 
-   .. rubric:: Local Assumptions and Preconditions
+   Configurations with nonfinite phases or nonfinite/nonpositive variances are omitted.
+   At least two independent valid baselines are required to constrain both components.
+   Insufficient constraints or a flat likelihood raises ValueError.
 
-   - A single uniform grid cannot serve a wide band: it must reach the largest wavevector present while still resolving the smallest, and three decades would need thousands of points per axis.
-   - The refinement window assumes the true peak lies within ``refine_span`` coarse steps of the coarse one.
+   .. rubric:: Choosing the grid
 
-   .. rubric:: Implementation Notes
+   Choose the range for the wavelengths and propagation directions of interest. At fixed range,
+   increase n_grid and compare wavevector estimates to assess numerical resolution.
+   Expand the range to inspect boundary peaks. Section 7 of
+   :doc:`the foundations <../diagnostics_foundations>` explains candidates at phase-fringe intersections.
 
-   - The first stage takes the peak on a coarse grid over the whole range; the second rebuilds a fine grid around it and takes the peak again.
-
-   .. rubric:: Calling Notes
-
-   - The coarse stage only has to pick the right fringe, not the right point within it. Since the fringe period :math:`2\pi/|\boldsymbol{\chi}|` decreases as the separation grows, the longest separation sets the smallest period and the strictest limit; the coarse step must stay well below that period. Check this first if a result looks locked to the wrong fold.
-
-   .. raw:: html
-
-      <div class="ap-home-footer-band">
-        <p><strong>Contributors</strong></p>
-        <p class="ap-home-contact">Zilong PENG (2026/09/02) · Harbin Institute of Technology</p>
-      </div>
+   Contributor: Zilong PENG (2026/09/02) · Harbin Institute of Technology

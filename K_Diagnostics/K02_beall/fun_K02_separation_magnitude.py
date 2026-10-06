@@ -19,6 +19,6 @@ def fun_K02_separation_magnitude(chi):
     if chi.shape != (2,):
         raise ValueError(f"chi must have shape (2,), got {chi.shape}")
     magnitude = float(np.hypot(chi[0], chi[1]))
-    if magnitude <= 0.0:
-        raise ValueError("chi must have non-zero length")
+    if not np.isfinite(magnitude) or magnitude <= 0.0:
+        raise ValueError("chi must have finite non-zero length")
     return magnitude

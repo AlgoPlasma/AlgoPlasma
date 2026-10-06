@@ -46,14 +46,15 @@ Diagnostics Learning Path
         - 混叠在 :math:`S(k,f)` 图上长什么样，以及为什么单对探针无法自行解开。
         - ``fun_K02_beall_spectrum`` 与测试里的 ``beall_skf.png``
       * - 5
-        - 多构型联合为什么能解开：条纹相交与周期不可通约。
+        - 多构型联合为什么能解开：条纹相交与几何可辨识性。
         - :doc:`K03_mle_k2d <K03_mle_k2d>` 的 ``fun_K03_joint_log_likelihood``
       * - 6
         - 怎么用、怎么接进自己的分析流程。
         - :doc:`Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
       * - 7
         - 怎样验证实现可信。
-        - :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` 和
+        - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`，再读
+          :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` 和
           :doc:`010_diagnostics </tests/010_diagnostics/index>`
 
    .. rubric:: 核心图景
@@ -74,17 +75,14 @@ Diagnostics Learning Path
    - **折叠阶数是丢失的信息**。真值与测量值差整数个 :math:`2\pi/|\boldsymbol{\chi}|`，这个整数
      无法从单次测量恢复。
 
-   K02 把后两条写成闭式并让它在 :math:`S(k,f)` 图上显形；K03 用多个**不同长度**的间距把折叠阶数
-   找回来——不同长度给出不可通约的条纹周期，只有一个波矢能同时满足所有构型。
+   每条基线通过相位差约束波矢沿该方向的投影。将多个构型的对数似然相加，可以在二维波数平面上寻找共同支持的波矢。基线的方向和长度共同决定相位条纹的交汇位置。
 
    .. rubric:: 初学者最容易混的点
 
-   - **方向不等于长度**。多加几个不同**方向**的构型能缩小候选集，但解不开混叠；解混叠靠的是不同的
-     **间距长度**。只用一种长度时，无论几个方向都无法超出该长度的 Nyquist 波数。
+   - **基线几何**。沿不同方向布置基线，可以共同约束两个波矢分量；第 7 节基础说明给出条纹交汇和精确混叠条件。
    - **相干度的底不是零**。:math:`n` 个分段下不相关信号的相干度平均到 :math:`1/n`。把空频带的
      相干度当成"应该接近 0"会得出错误结论。
-   - **Beall 谱是统计估计器**。分段数远少于波数格数时，所谓"峰"只是最强的单个样本。它需要的分段数
-     远多于求一个均值相位所需。
+   - 分段数决定相位直方图的样本量。可增加分段数并比较众数位置的变化，检查当前噪声水平与分箱下的统计稳定性。
    - **波数轴是周期的**。比较两个折叠波数必须用圆周距离；直接相减会在贴近 Nyquist 边时报出整整
      一个周期的假误差。
    - **符号约定由探针顺序决定**。交换两路探针会让所有相位反号、所有反演出的波矢镜像，而波数的
@@ -140,14 +138,15 @@ Diagnostics Learning Path
         - What aliasing looks like on an :math:`S(k,f)` map, and why one pair cannot undo it.
         - ``fun_K02_beall_spectrum`` and ``beall_skf.png`` in the test
       * - 5
-        - Why combining configurations works: intersecting fringes and incommensurate periods.
+        - Why combining configurations works: intersecting fringes and geometric identifiability.
         - ``fun_K03_joint_log_likelihood`` in :doc:`K03_mle_k2d <K03_mle_k2d>`
       * - 6
         - How to use it and wire it into your own analysis.
         - :doc:`Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
       * - 7
         - How the implementation is shown to be trustworthy.
-        - :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` and
+        - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`, then
+          :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` and
           :doc:`010_diagnostics </tests/010_diagnostics/index>`
 
    .. rubric:: Core Mental Model
@@ -172,15 +171,11 @@ Diagnostics Learning Path
      number of :math:`2\pi/|\boldsymbol{\chi}|`, and that integer cannot be recovered from a
      single measurement.
 
-   K02 writes the last two as closed forms and makes them visible on an :math:`S(k,f)` map; K03
-   recovers the fold order using separations of several **lengths**, which give incommensurate
-   fringe periods so that only one wavevector satisfies every configuration at once.
+   Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
    .. rubric:: Common Beginner Traps
 
-   - **Orientation is not length.** Adding configurations at more **orientations** shrinks the
-     candidate set but does not break the aliasing; that needs different separation **lengths**.
-     With one length, no number of orientations exceeds that length's Nyquist wavenumber.
+   - **Baseline geometry.** Different directions constrain the two wavevector components; Section 7 of the foundations explains fringe intersections and exact aliases.
    - **The coherence floor is not zero.** Over :math:`n` segments, uncorrelated signals average
      to :math:`1/n`. Expecting an empty band to sit near zero leads to wrong conclusions.
    - **The Beall spectrum is a statistical estimator.** With far fewer segments than wavenumber

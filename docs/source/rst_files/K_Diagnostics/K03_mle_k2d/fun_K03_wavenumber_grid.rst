@@ -47,7 +47,7 @@ fun_K03_wavenumber_grid.py
    .. rubric:: 局部假设 / 前置条件
 
    - 似然在网格上取极大，估计值被限制在网格内：范围必须包含真实波矢。
-   - 网格离散化给出半个网格步长的精度下限。
+   - 网格分辨率同时影响局部峰位与混叠分支选择。
 
    .. rubric:: 实现逻辑
 
@@ -55,7 +55,7 @@ fun_K03_wavenumber_grid.py
 
    .. rubric:: 调用注意
 
-   - 峰位落在网格边界说明范围设得过窄，应扩大 :math:`k_{\rm range}` 后重算。
+   - 峰位落在边界时，扩大搜索范围并比较结果；增加网格点数可检查峰位的数值收敛。
 
    .. raw:: html
 
@@ -102,7 +102,7 @@ fun_K03_wavenumber_grid.py
    .. rubric:: Local Assumptions and Preconditions
 
    - The likelihood is maximised on the grid, so the estimate is confined to it: the range must contain the true wavevector.
-   - Grid discretisation puts a floor of half a grid step on the accuracy.
+   - Grid discretisation puts a floor of a resolution-dependent limitation on accuracy.
 
    .. rubric:: Implementation Notes
 
@@ -110,7 +110,7 @@ fun_K03_wavenumber_grid.py
 
    .. rubric:: Calling Notes
 
-   - A peak on the grid boundary means the range was too narrow; widen :math:`k_{\rm range}` and search again.
+   - For a boundary peak, expand the search range and compare estimates. Increasing the grid point count tests numerical convergence of the peak location.
 
    .. raw:: html
 
