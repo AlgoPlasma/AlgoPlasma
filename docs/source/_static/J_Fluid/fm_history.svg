@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="570" viewBox="0 0 1080 570" role="img" aria-labelledby="title desc">
+<title id="title">一条自由分子历史：注入、飞行、反射、逃逸</title>
+<desc id="desc">横轴是半径，纵轴是轴向位置。粒子从下端注入，沿直线穿过内部网格，碰右壁后改变速度，最后从上端逃逸。每段飞行累计驻留时间，穿内部面记录有符号次数。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
+<rect width="1080" height="570" rx="12" fill="#f7f9fc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+<text x="32" y="40" font-size="25" font-weight="bold">同一条历史，速度只在碰壁时改变</text>
+<rect x="90" y="100" width="440" height="320" fill="#eaf2f5"/>
+<g stroke="#c6d4df" stroke-width="1.3"><path d="M200 100V420 M310 100V420 M420 100V420 M90 180H530 M90 260H530 M90 340H530"/></g>
+<path d="M90 100V420 M530 100V420" stroke="#657787" stroke-width="6"/>
+<path d="M90 100H530" stroke="#267d8d" stroke-width="5" stroke-dasharray="9 6"/>
+<path d="M90 420H530" stroke="#cc8b39" stroke-width="6"/>
+<g fill="none" stroke="#267d8d" stroke-width="3" marker-end="url(#arrow)">
+<path d="M210 476V423"/><path d="M210 413L526 215"/><path d="M526 215L375 72"/>
+<path d="M55 440H550" stroke-width="2"/><path d="M55 440V82" stroke-width="2"/>
+</g>
+<circle cx="210" cy="413" r="6" fill="#cc8b39"/><circle cx="526" cy="215" r="7" fill="#cc8b39"/>
+<text x="562" y="446" font-size="22" font-family="Georgia, serif">r</text><text x="44" y="72" font-size="22" font-family="Georgia, serif">z</text>
+<text x="182" y="505" font-size="20">下端均匀面积注入</text>
+<text x="220" y="80" font-size="19">上端开放出口</text>
+<text x="111" y="240" font-size="18">直线飞行</text><path d="M198 235L277 370" stroke="#849aa8" fill="none"/>
+<rect x="590" y="100" width="450" height="108" rx="8" fill="#e9f3f4" stroke="#adcac9"/>
+<text x="610" y="131" font-size="21" font-weight="bold">① 每段飞行</text>
+<text x="610" y="162" font-size="19">把时间和“速度 × 时间”累计到所在单元</text>
+<text x="610" y="190" font-size="17">跨内部面：按正、反方向记录 +1 或 −1</text>
+<rect x="590" y="226" width="450" height="108" rx="8" fill="#fff1dc" stroke="#ddbf91"/>
+<text x="610" y="257" font-size="21" font-weight="bold">② 碰到反射壁</text>
+<text x="610" y="288" font-size="19">镜面或热漫反射，更新两个速度分量</text>
+<text x="610" y="316" font-size="17">保留本条历史与粒子率权重，不计净流出</text>
+<rect x="590" y="352" width="450" height="108" rx="8" fill="#e9f3f4" stroke="#adcac9"/>
+<text x="610" y="383" font-size="21" font-weight="bold">③ 穿过开放边界</text>
+<text x="610" y="414" font-size="19">记录逃逸，结束本条历史，再采样下一条</text>
+<text x="610" y="442" font-size="17">下端开放入口也允许反向逃逸</text>
+<text x="32" y="548" font-size="18" fill="#526779">示意图只画一条轨迹；全部历史完成后，才按入口粒子率和几何量计算场。</text>
+</g></svg>

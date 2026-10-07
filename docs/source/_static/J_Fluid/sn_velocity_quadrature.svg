@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520" role="img" aria-labelledby="title desc">
+  <title id="title">二维速度平面上的乘积求积</title>
+  <desc id="desc">圆盘用八个等角区间和三个等宽速率区间划分。每个扇环中点有一个离散速度。权重是扇环的速度面积，不是节点数量。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#516578"/></marker>
+  </defs>
+  <rect width="1000" height="520" rx="12" fill="#f7f9fc"/>
+  <g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+    <text x="30" y="38" font-size="23" font-weight="bold">离散速度：角度中点 × 速率区间中点</text>
+    <text x="30" y="68" font-size="17" fill="#516578">示意取 8 个角区间、3 个速率区间；实际数量由输入指定。</text>
+    <g transform="translate(240 286)">
+      <circle r="160" fill="#edf3f7" stroke="#7c91a4" stroke-width="2"/>
+      <circle r="106.667" fill="none" stroke="#b8c7d4"/>
+      <circle r="53.333" fill="none" stroke="#b8c7d4"/>
+      <path d="M106.667 0H160A160 160 0 0 0 113.137 -113.137L75.425 -75.425A106.667 106.667 0 0 1 106.667 0Z" fill="#ffe4b2" stroke="#c77b21" stroke-width="1.5"/>
+      <g stroke="#b8c7d4" stroke-dasharray="4 5">
+        <path d="M-160 0H160M0 -160V160M-113.137 -113.137L113.137 113.137M-113.137 113.137L113.137 -113.137"/>
+      </g>
+      <g fill="#267d8d">
+        <circle cx="24.637" cy="-10.205" r="4"/><circle cx="10.205" cy="-24.637" r="4"/>
+        <circle cx="-10.205" cy="-24.637" r="4"/><circle cx="-24.637" cy="-10.205" r="4"/>
+        <circle cx="-24.637" cy="10.205" r="4"/><circle cx="-10.205" cy="24.637" r="4"/>
+        <circle cx="10.205" cy="24.637" r="4"/><circle cx="24.637" cy="10.205" r="4"/>
+        <circle cx="73.91" cy="-30.615" r="4"/><circle cx="30.615" cy="-73.91" r="4"/>
+        <circle cx="-30.615" cy="-73.91" r="4"/><circle cx="-73.91" cy="-30.615" r="4"/>
+        <circle cx="-73.91" cy="30.615" r="4"/><circle cx="-30.615" cy="73.91" r="4"/>
+        <circle cx="30.615" cy="73.91" r="4"/><circle cx="73.91" cy="30.615" r="4"/>
+        <circle cx="123.184" cy="-51.024" r="6" fill="#a96017"/>
+        <circle cx="51.024" cy="-123.184" r="4"/><circle cx="-51.024" cy="-123.184" r="4"/>
+        <circle cx="-123.184" cy="-51.024" r="4"/><circle cx="-123.184" cy="51.024" r="4"/>
+        <circle cx="-51.024" cy="123.184" r="4"/><circle cx="51.024" cy="123.184" r="4"/>
+        <circle cx="123.184" cy="51.024" r="4"/>
+      </g>
+      <g stroke="#516578" stroke-width="1.8" marker-end="url(#arrow)">
+        <path d="M-185 0H198"/><path d="M0 178V-190"/>
+      </g>
+      <text x="204" y="8" font-size="23" font-family="Georgia, serif" font-style="italic">v<tspan baseline-shift="sub" font-size="15">r</tspan></text>
+      <text x="9" y="-184" font-size="23" font-family="Georgia, serif" font-style="italic">v<tspan baseline-shift="sub" font-size="15">z</tspan></text>
+      <text x="-20" y="22" font-size="16">0</text>
+    </g>
+    <path d="M369 232L470 174H507" fill="none" stroke="#c77b21" stroke-width="1.7"/>
+    <g transform="translate(520 115)">
+      <rect width="442" height="82" rx="8" fill="#fff3dc" stroke="#dfbd82"/>
+      <text x="20" y="32" font-size="19" font-weight="bold">一个扇环 → 一个离散速度</text>
+      <text x="20" y="60" font-size="18">点表示取值位置，橙色面积表示它的权重。</text>
+      <rect y="105" width="442" height="90" rx="8" fill="#e9f3f4"/>
+      <text x="20" y="137" font-size="19" font-weight="bold">角度确定方向，速率确定模长</text>
+      <text x="20" y="167" font-size="18">同一圆周上的离散速度具有相同速率。</text>
+      <rect y="218" width="442" height="90" rx="8" fill="#eaf0f7"/>
+      <text x="20" y="250" font-size="19" font-weight="bold">权重取二维速度面积</text>
+      <text x="20" y="280" font-size="18">外侧扇环面积更大，对应的速度权重也更大。</text>
+    </g>
+    <text x="40" y="484" font-size="18" fill="#516578">离散速度上的分布值不是该速度网格单元的粒子数；密度由“分布值 × 权重”求和得到。</text>
+  </g>
+</svg>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SN 扫描与反射迭代</title><script defer src="../katex.min.js"></script><link rel="stylesheet" href="sn_walkthrough.css"></head>
+<body>
+<h1>一轮反射迭代中，分布是怎样算出来的？</h1>
+<p>4 × 6 个空间单元，8 个角方向、1 个速率。下端中部入口，两侧和其余下端反射，上端开放，域内有损失。</p>
+<p class="muted">这是计算依赖示意，不计算密度。颜色表示求解状态，不是粒子浓度；播放速度不代表计算耗时。下端入口示意为两个完整单元面，部分面入口的积分见正文。</p>
+<div class="controls">
+<label>执行方式 <select id="mode"><option value="hybrid">2 × 2 空间分区 + 每区 2 线程</option><option value="single">单域 + 2 线程</option></select></label>
+<label>速度方向 <select id="quadrant"></select></label>
+</div>
+<div class="controls">
+<button id="reset">回到第一轮</button><button id="prev">上一步</button><button id="play" class="primary">播放</button><button id="next">下一步</button>
+<label>播放速度 <select id="pace"><option value="700">慢</option><option value="350" selected>正常</option><option value="120">快</option></select></label><span id="iteration" class="iteration"></span>
+</div>
+<div class="range"><label for="timeline">本轮进度</label><input id="timeline" type="range" min="0" value="0"><output id="progress"></output></div>
+<div class="layout">
+<section class="panel">
+<svg id="domain" viewBox="0 0 470 470" role="img" aria-label="四乘六空间网格、迎风依赖和进程分界"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#155b8f"/></marker><marker id="wallarrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#8c3970"/></marker></defs><g id="drawing"></g></svg>
+<div class="legend"><span class="key" style="--c:#fff">待求解</span><span class="key" style="--c:#dcebf6">✓ 已求解</span><span class="key" style="--c:#f3d491">● 当前单元</span><span class="old">紫色箭头：上一轮反射入流</span></div>
+<p class="muted">r 向右，z 向上；单元标注为 (i,k)。<span data-tex="P_{p_r,p_z}"></span> 表示径向、轴向分区编号，均从 0 开始；不是空间坐标或 MPI rank 编号。</p>
+</section>
+<section class="panel">
+<div id="stage" class="stage" aria-live="polite"></div>
+<div id="explanation"></div><div id="workers" class="workers"></div>
+<p id="routine" class="code"></p>
+<div class="status"><span class="old">壁面读取已完成轮次：<span data-tex="\boldsymbol c_{K,R_f(m)}^{(\ell)}"></span></span><br><span class="new">内部迎风面读取本轮上游：<span data-tex="\boldsymbol c_{K_{\mathrm{up}},m}^{(\ell+1)}"></span></span><br>入口 <span data-tex="h_m"></span> 在各轮保持给定值。</div>
+<p class="small">两个线程各自处理一个速度，其方程互不写入对方数组。这里只同步播放同符号方向，便于看清；实际线程可在不同时间完成。</p>
+<button id="repeat" hidden>用本轮结果开始下一轮</button>
+<button id="finish" hidden>若已收敛：查看重构步骤</button>
+</section>
+</div>
+<section class="panel" id="convergence" hidden>
+<h2>怎样检查这一轮是否收敛？</h2>
+<p>沿用正文的记号：<span data-tex="K"></span> 遍历全部空间单元，<span data-tex="m"></span> 遍历全部离散速度，<span data-tex="j=0,1,2"></span> 遍历每组的三个系数。先取新旧系数的最大绝对值作为共同缩放量：</p>
+<div class="formula" data-tex="S=\max_{K,m,\;j=0,1,2}\left\{|c_{j,K,m}^{(\ell)}|,\ |c_{j,K,m}^{(\ell+1)}|\right\}"></div>
+<p>若 <span data-tex="S&gt;0"></span>，分别计算变化量 <span data-tex="D"></span> 和两轮系数绝对值之和 <span data-tex="B_{\mathrm{old}},B_{\mathrm{new}}"></span>：</p>
+<div class="formula" data-tex="\begin{aligned}D&amp;=\sum_{K,m}\sum_{j=0}^{2}\left|\frac{c_{j,K,m}^{(\ell+1)}}S-\frac{c_{j,K,m}^{(\ell)}}S\right|,\\ B_{\mathrm{old}}&amp;=\sum_{K,m}\sum_{j=0}^{2}\left|\frac{c_{j,K,m}^{(\ell)}}S\right|,\qquad B_{\mathrm{new}}=\sum_{K,m}\sum_{j=0}^{2}\left|\frac{c_{j,K,m}^{(\ell+1)}}S\right|.\end{aligned}"></div>
+<div class="formula" data-tex="E_{\ell+1}=\frac{D}{\max(B_{\mathrm{old}},B_{\mathrm{new}})}"></div>
+<p class="small">共同缩放在比值中抵消，并可避免直接对大数求和。若 <span data-tex="S=0"></span>，两轮均为零，定义 <span data-tex="E_{\ell+1}=0"></span>。至少完成两轮且 <span data-tex="E_{\ell+1}\leq\text{tolerance}"></span> 才满足停止条件；<span data-tex="\text{tolerance}"></span> 是调用者给定的相对变化容差。此判据衡量新旧分布的变化，不表示离散误差或粒子收支误差。</p>
+</section>
+<section class="panel" id="equations">
+<h2>当前单元的方程怎样组装？</h2>
+<p class="small">固定一个单元 <span data-tex="K"></span> 和离散速度 <span data-tex="m"></span>，下列局部积分省略这两个下标。矩阵用 <span data-tex="\mathsf A"></span>，向量用 <span data-tex="\boldsymbol c,\boldsymbol b,\boldsymbol\phi"></span>，单个元素用 <span data-tex="A_{ab},b_a,\phi_a"></span>。</p>
+<div class="formula" data-tex="\boldsymbol\phi=\begin{pmatrix}1\\\xi\\\zeta\end{pmatrix},\qquad \boldsymbol c=\begin{pmatrix}c_0\\c_1\\c_2\end{pmatrix},\qquad \psi_m=\boldsymbol\phi^{\mathsf T}\boldsymbol c=c_0+c_1\xi+c_2\zeta"></div>
+<p class="small">与正文和 Fortran 矩阵一致，行列索引 <span data-tex="a,b=1,2,3"></span>；三个系数的下标为 <span data-tex="0,1,2"></span>，第 <span data-tex="b"></span> 列对应 <span data-tex="c_{b-1}"></span>。上标 <span data-tex="(\ell)"></span> 表示已完成的轮次，<span data-tex="(\ell+1)"></span> 表示当前正在求解的一轮，不是乘方。</p>
+<p class="small"><span data-tex="\boldsymbol\Omega_m=(\mu_m,\eta_m)^{\mathsf T}"></span> 是单位运动方向，<span data-tex="\beta_{f,m}=\boldsymbol\Omega_m\cdot\boldsymbol n_f"></span> 是它与面外法向的点积；<span data-tex="\sigma_{K,m}=\nu_K/v_m"></span> 是路程损失系数。<span data-tex="v_m"></span> 是速率，<span data-tex="\nu_K"></span> 是损失频率。</p>
+<p class="small">局部坐标为 <span data-tex="\xi=(r-r_c)/h_r"></span>、<span data-tex="\zeta=(z-z_c)/h_z"></span>；<span data-tex="h_r,h_z"></span> 分别是径向、轴向单元半宽。</p>
+<div class="steps" id="terms"><button data-term="incoming" aria-pressed="true">1 入流右端</button><button data-term="outgoing" aria-pressed="false">2 出流矩阵</button><button data-term="volume" aria-pressed="false">3 体输运与损失</button><button data-term="solve" aria-pressed="false">4 求解与保正</button></div>
+<div id="assembly" class="term"></div>
+<details><summary>反射入流为什么要迭代？</summary>
+<p>某个速度到达壁面后，反射会给另一个速度提供入流。若直接使用本轮尚未求出的反射方向，就形成循环依赖。因此整轮固定已完成轮次的壁面出射分布，内部单元仍使用本轮上游结果。</p>
+<p><span data-tex="W"></span> 是当前单元面上的反射区域，<span data-tex="A_W=\int_W\mathrm dA"></span> 是其物理面积，<span data-tex="\boldsymbol x\in W"></span> 是壁面上的位置。<span data-tex="d"></span> 是漫反射比例，<span data-tex="R_f(m)"></span> 是镜面对应方向；<span data-tex="g_{\mathrm w,m}"></span> 是壁面速度分布的形状，<span data-tex="w_m"></span> 是速度积分权重。</p>
+<div class="formula" data-tex="\begin{aligned}\psi_{W,m}^{\mathrm{in},(\ell+1)}(\boldsymbol x)&amp;=(1-d)\,\psi_{W,R_f(m)}^{\mathrm{out},(\ell)}(\boldsymbol x)\\&amp;\quad+d\,C_W^{(\ell)}g_{\mathrm w,m},\qquad \beta_{f,m}&lt;0.\end{aligned}"></div>
+<p>先对旧出射分布积分，得到到达该壁面区域的粒子率：</p>
+<div class="formula" data-tex="Q_W^{\mathrm{out},(\ell)}=\sum_{m:\,\beta_{f,m}&gt;0}w_mv_m\beta_{f,m}\int_W\psi_{W,m}^{\mathrm{out},(\ell)}(\boldsymbol x)\,\mathrm dA"></div>
+<p>再由入射与出射粒子率相等，确定各壁面区域的漫反射系数：</p>
+<div class="formula" data-tex="C_W^{(\ell)}=\frac{Q_W^{\mathrm{out},(\ell)}}{A_W\displaystyle\sum_{m:\,\beta_{f,m}&lt;0}w_mv_m|\beta_{f,m}|g_{\mathrm w,m}}"></div>
+<p>镜面项保留壁面位置 <span data-tex="\boldsymbol x"></span> 处的分布变化；漫反射系数 <span data-tex="C_W^{(\ell)}"></span> 在该区域内统一取值，按该区域的总粒子率守恒确定。</p>
+</details>
+<p class="muted">MPI 示意选择一种合法的分区执行顺序。实际代码没有图中的全局“波前屏障”，通信与各进程进度由依赖关系决定；这里不表示性能或加速比。</p>
+</section>
+<noscript>需要启用 JavaScript 才能播放。静态推导和源码过程说明见父页面及 Upwind Sweep、Reflection Iteration、Distributed Sweep and Flux 页面。</noscript>
+<script type="module" src="sn_walkthrough.mjs"></script></body></html>

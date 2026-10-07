@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" role="img" aria-labelledby="title desc">
+<title id="title">MPI 空间分区与各分区内的 OpenMP 并行</title>
+<desc id="desc">图示正径向、正轴向速度的求解依赖：区域甲先算，乙和丙收到甲的系数后可同时算，丁收到乙和丙后再算。每个区域内，线程分别计算不同离散速度。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#276b91"/></marker></defs>
+<rect width="1000" height="640" rx="12" fill="#f8fafc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#203444">
+<text x="40" y="42" font-size="24" font-weight="bold">空间分区示例：当前计算向右、向上运动的粒子</text>
+<text x="40" y="72" font-size="17">每个进程保存本区域的空间单元，以及全部离散速度的分布。</text>
+<g stroke="#adc2d1" stroke-width="2" fill="white">
+<rect x="70" y="115" width="235" height="180" rx="9"/>
+<rect x="385" y="115" width="235" height="180" rx="9"/>
+<rect x="70" y="355" width="235" height="180" rx="9"/>
+<rect x="385" y="355" width="235" height="180" rx="9"/>
+</g>
+<g font-size="20" font-weight="bold">
+<text x="88" y="147">丙：分区坐标 (0,1)</text><text x="403" y="147">丁：分区坐标 (1,1)</text>
+<text x="88" y="387">甲：分区坐标 (0,0)</text><text x="403" y="387">乙：分区坐标 (1,0)</text>
+</g>
+<g font-size="16">
+<text x="88" y="172">收到甲的数据后计算</text><text x="403" y="172">收到乙、丙的数据后计算</text>
+<text x="88" y="412">最先计算</text><text x="403" y="412">收到甲的数据后计算</text>
+</g>
+<g fill="#e1eff5">
+<rect x="88" y="188" width="198" height="30" rx="4"/><rect x="88" y="226" width="198" height="30" rx="4"/>
+<rect x="403" y="188" width="198" height="30" rx="4"/><rect x="403" y="226" width="198" height="30" rx="4"/>
+<rect x="88" y="428" width="198" height="30" rx="4"/><rect x="88" y="466" width="198" height="30" rx="4"/>
+<rect x="403" y="428" width="198" height="30" rx="4"/><rect x="403" y="466" width="198" height="30" rx="4"/>
+</g>
+<g font-size="15">
+<text x="98" y="209">线程 1：部分速度</text><text x="98" y="247">线程 2：另一部分速度</text>
+<text x="413" y="209">线程 1：部分速度</text><text x="413" y="247">线程 2：另一部分速度</text>
+<text x="98" y="449">线程 1：部分速度</text><text x="98" y="487">线程 2：另一部分速度</text>
+<text x="413" y="449">线程 1：部分速度</text><text x="413" y="487">线程 2：另一部分速度</text>
+</g>
+<g stroke="#276b91" stroke-width="3" marker-end="url(#arrow)">
+<path d="M310 202H378"/><path d="M310 447H378"/>
+<path d="M185 350V302"/><path d="M500 350V302"/>
+</g>
+<g fill="#276b91" font-size="14">
+<text x="322" y="190">c₀,c₁,c₂</text><text x="322" y="435">c₀,c₁,c₂</text>
+<text x="200" y="328">c₀,c₁,c₂</text><text x="515" y="328">c₀,c₁,c₂</text>
+</g>
+<path d="M43 540V110" stroke="#276b91" stroke-width="2" marker-end="url(#arrow)" fill="none"/><path d="M43 558H620" stroke="#276b91" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+<text x="23" y="125" font-size="18">z</text><text x="628" y="566" font-size="18">r</text>
+<rect x="666" y="115" width="300" height="420" rx="9" fill="#edf3ed" stroke="#bfd1be"/>
+<text x="688" y="151" font-size="20" font-weight="bold">每个进程的执行步骤</text>
+<g font-size="17">
+<text x="688" y="197">1. 接收上游相邻单元的系数</text><text x="688" y="224" fill="#57705b">由 MPI 主线程通信</text>
+<text x="688" y="277">2. 按迎风顺序求解本地单元</text><text x="688" y="304" fill="#57705b">OpenMP 分配不同速度任务</text>
+<text x="688" y="357">3. 向下游发送边缘单元系数</text><text x="688" y="384" fill="#57705b">由 MPI 主线程通信</text>
+<text x="688" y="437">4. 继续下一组速度方向</text><text x="688" y="482" fill="#57705b">各进程不保存全域分布副本</text>
+</g>
+<text x="70" y="608" font-size="16">区域之间为 REMOTE 进程交界面；这些划分线不是物理壁面，也不是入口或出口。</text>
+</g></svg>

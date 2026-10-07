@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="620" viewBox="0 0 1050 620" role="img" aria-labelledby="title desc">
+<title id="title">连续性方程的物理时间循环</title><desc id="desc">参考场仅在初始化阶段确定面系数，每步准备源损和入流、选择时间步、以旧密度计算通量、半隐式更新密度、检查离散收支后推进物理时钟。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
+<rect width="1050" height="620" rx="12" fill="#f7f9fc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+<text x="32" y="40" font-size="24" font-weight="bold">初始化一次闭合，循环推进当前密度</text>
+<rect x="238" y="68" width="660" height="65" rx="8" fill="#e9f3f4" stroke="#afc9c7"/>
+<text x="568" y="96" text-anchor="middle" font-size="20">参考场 → 面输运系数</text><text x="568" y="120" text-anchor="middle" font-size="16">另行给定初始密度与物理起始时刻</text>
+<g fill="white" stroke="#b7c9d6"><rect x="238" y="160" width="660" height="64" rx="8"/><rect x="238" y="252" width="660" height="64" rx="8"/><rect x="238" y="344" width="660" height="64" rx="8"/><rect x="238" y="436" width="660" height="76" rx="8"/></g>
+<g font-size="20" text-anchor="middle">
+<text x="568" y="188">① 准备本步体源、损失频率和规定入流</text>
+<text x="568" y="213" font-size="16">计算稳定上限，再结合物理精度选择时间步</text>
+<text x="568" y="280">② 用旧密度计算当前面通量</text>
+<text x="568" y="305" font-size="16">内部面取上游值；开放面 = 规定入流 + 当前出流</text>
+<text x="568" y="372">③ 累加各面收支，得到新密度</text>
+<text x="568" y="397" font-size="16">输运与产生显式；线性损失使用新密度</text>
+<text x="568" y="464">④ 检查新密度和本步粒子总量变化</text>
+<text x="568" y="492" font-size="16">旧密度出流 + 新密度损失；通过检查后才推进时钟</text>
+</g>
+<g stroke="#267d8d" stroke-width="2" fill="none" marker-end="url(#arrow)">
+<path d="M568 133V155"/><path d="M568 224V247"/><path d="M568 316V339"/><path d="M568 408V431"/>
+<path d="M238 476H182V191H232"/><path d="M568 512V550"/>
+</g>
+<text x="27" y="291" font-size="18">未到结束时刻</text><text x="27" y="324" font-size="18">新密度作为</text><text x="27" y="351" font-size="18">下一步旧密度</text>
+<rect x="375" y="554" width="390" height="44" rx="8" fill="#fff1dc" stroke="#d7b989"/><text x="570" y="583" text-anchor="middle" font-size="19">到达所需物理时刻，结束瞬态计算</text>
+</g></svg>

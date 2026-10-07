@@ -16,6 +16,7 @@ Tests
    009_collision/index
    010_diagnostics/index
    011_K04_breathing_waveform/index
+   012_fluid/index
    kunpeng_compare/index
 
 .. raw:: html
@@ -84,6 +85,10 @@ Tests
         - 呼吸波形提取的本地测试、人工示例、画图和清理。
         - :doc:`K04 </rst_files/K_Diagnostics/K04_breathing_waveform>`
         - :doc:`011_K04 测试说明 <011_K04_breathing_waveform/index>`
+      * - ``012_fluid``
+        - J01 自由分子历史、J02 SN P1-DG 和 J03 面通量连续性方程测试。
+        - :doc:`J_Fluid </rst_files/J_Fluid>`
+        - :doc:`012_fluid 测试总览 <012_fluid/index>`
       * - ``kunpeng_compare``
         - 鲲鹏相关的平台/编译器性能对比测试。
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -92,7 +97,9 @@ Tests
    .. rubric:: 覆盖状态说明
 
    ``G_Collision`` 的 G01 测试覆盖截面表加载器边界；G02 测试覆盖算法、统计和零维碰撞盒，
-   使用合成数据。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；
+   使用合成数据。``tests/012_fluid`` 覆盖 J01 单步/自由分子历史、
+   J02 求积、离散算子、反射边界及并行一致性，以及 J03 瞬态推进和稳态求解。
+   应用测试页记录 FM B0、SN B0、SN ION 前处理与各自的 J03 结果。
    ``K_Diagnostics`` 的 K01–K03 由 ``tests/010_diagnostics``、K04 由 ``tests/011_K04_breathing_waveform`` 覆盖；
    ``H_MPI_Exchange`` 已由 ``tests/008_mpi_exchange`` 覆盖。
 
@@ -158,6 +165,10 @@ Tests
         - Local waveform-extraction tests, artificial examples, plotting and cleanup.
         - :doc:`K04 </rst_files/K_Diagnostics/K04_breathing_waveform>`
         - :doc:`011_K04 test guide <011_K04_breathing_waveform/index>`
+      * - ``012_fluid``
+        - J01 free-molecular histories, J02 SN P1-DG, and J03 face-flux continuity tests.
+        - :doc:`J_Fluid </rst_files/J_Fluid>`
+        - :doc:`012_fluid test overview <012_fluid/index>`
       * - ``kunpeng_compare``
         - Kunpeng-related platform and compiler performance comparisons.
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -167,6 +178,9 @@ Tests
 
    ``G_Collision`` has G01 loader-boundary tests and G02 algorithm, statistical
    and zero-dimensional collision-box tests using synthetic data.
-   ``J_Fluid`` has no standalone top-level regression directory.
+   ``tests/012_fluid`` covers the J01 legacy/FM paths, J02 quadrature/DG/reflection
+   and parallel consistency, plus J03 transient and steady solvers.
+   The application page reports FM B0, SN B0 and SN ION preprocessing runs
+   and their respective J03 solutions.
    K01–K03 are covered by ``tests/010_diagnostics``; K04 is covered by ``tests/011_K04_breathing_waveform``.
    ``H_MPI_Exchange`` is covered by ``tests/008_mpi_exchange``.
