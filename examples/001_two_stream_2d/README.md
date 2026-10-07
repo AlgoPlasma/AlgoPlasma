@@ -92,12 +92,14 @@ simulation output, run `python3 plot.py` from this example directory.
 
 ## Reproducibility
 
+This example accompanies the manuscript describing AlgoPlasma `v1.0.1`.
+
 The reference run was checked on 4 October 2026 using the `develop`
 working tree based on commit
 `105fe3cc5740a852ccb96b74c339a152272b058a`, with the default HYPRE path
-in `run.sh` adjusted to `/opt/hypre-3.1.0`. This is a pre-release
-verification record, not a published `v1.1.0` result. The provenance and
-results must be checked against the final release before publication.
+in `run.sh` adjusted to `/opt/hypre-3.1.0`. The source commit and
+environment recorded here identify the provenance of the reference
+results below.
 
 ### Reference Environment
 
@@ -176,8 +178,7 @@ OMP_NUM_THREADS=8 OMP_PROC_BIND=close OMP_PLACES=cores \
 This reruns the simulation and overwrites its existing diagnostic output.
 The log, `output/resources.log`, records elapsed wall-clock time and maximum
 resident set size (reported as `kbytes`, in KiB on Linux). These measurements
-are observations from this machine, not performance guarantees; they should
-be checked again against the final release.
+are observations from this machine, not performance guarantees.
 
 ## Cleanup
 

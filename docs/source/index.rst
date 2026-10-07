@@ -32,6 +32,7 @@ AlgoPlasma
     :maxdepth: 1
     :hidden:
 
+    ./installation
     ./developer_onboarding
     ./glossary
     ./maintenance_checklist

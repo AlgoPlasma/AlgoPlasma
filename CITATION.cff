@@ -4,9 +4,7 @@ message: >-
   the metadata below and specify the release or commit used.
 type: software
 title: "AlgoPlasma: Open Algorithms for Plasma Modeling"
-version: "v1.1.0"
-date-released: "YYYY-MM-DD"
-doi: "10.5281/zenodo.XXXXXXX"
+version: "v1.0.1"
 authors:
   - family-names: Zhao
     given-names: Yinjian
@@ -50,7 +48,7 @@ contact:
   - name: AlgoPlasma
     email: contact@algoplasma.com
 repository-code: "https://github.com/AlgoPlasma/AlgoPlasma"
-url: "https://algoplasma.readthedocs.io/en/v1.1.0/index.html"
+url: "https://algoplasma.readthedocs.io/"
 license: Apache-2.0
 abstract: >-
   AlgoPlasma, formerly the Plasma Modeling Subprogram Library (PMSL),
