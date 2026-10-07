@@ -245,7 +245,6 @@ def phase_space_figure(target_times=(0.0, 17.5, 25.0)):
     )
     save_figure(fig, "fig1_phase_space_evolution.png")
 
-
 def field_growth_energy_figure():
     steps, times, rms_field, mode_amplitude = field_diagnostics()
     snapshot_step = int(steps[np.argmin(abs(steps * DT - 22.5))])
@@ -274,11 +273,11 @@ def field_growth_energy_figure():
     total_error_percent = 100.0 * (energy[:, 3] - initial_total) / initial_total
     maximum_error_percent = float(np.max(np.abs(total_error_percent)))
 
-    fig = plt.figure(figsize=(7.35, 5.25))
+    fig = plt.figure(figsize=(7.35, 5.75))
     outer = fig.add_gridspec(
-        2, 2, width_ratios=(1.0, 1.25), height_ratios=(1.08, 0.78),
+        2, 2, width_ratios=(1.0, 1.25), height_ratios=(1.08, 0.95),
         left=0.092, right=0.908, bottom=0.095, top=0.955,
-        wspace=0.40, hspace=0.14,
+        wspace=0.40, hspace=0.05,
     )
     field_grid = outer[0, 0].subgridspec(
         1, 2, width_ratios=(1.0, 0.050), wspace=0.065
@@ -324,8 +323,8 @@ def field_growth_energy_figure():
     )
     growth_axis.annotate(
         "Field snapshot", xy=(snapshot_time, mode_amplitude[snapshot_index]),
-        xytext=(7, -10), textcoords="offset points", ha="left", va="top",
-        color="0.25", fontsize=10.0,
+        xytext=(-20, -18), textcoords="offset points", ha="left", va="top",
+        color="0.25", fontsize=9.0,
         # bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.72, "pad": 0.2},
     )
     growth_axis.text(
@@ -337,14 +336,24 @@ def field_growth_energy_figure():
         fontsize=10.0
     )
     growth_axis.set_xlabel(r"$\omega_{pe}t$")
-    growth_axis.set_ylabel(r"$2|\widehat{E}_{\parallel}(2,1)|$", labelpad=0)
+    growth_axis.set_ylabel(
+        r"Mode amplitude, $2|\widehat{E}_{\parallel}(2,1)|$",
+        labelpad=6,
+    )
+    growth_axis.yaxis.set_label_position("right")
+    growth_axis.yaxis.tick_right()
+    growth_axis.tick_params(
+        axis="y", which="both",
+        left=True, right=True,
+        labelleft=False, labelright=True,
+    )
     growth_axis.set_xlim(times.min(), times.max())
     growth_axis.set_xticks(np.arange(0.0, 40.1, 10.0))
     growth_axis.set_ylim(5.0e-4, growth_axis.get_ylim()[1])
     growth_axis.set_yticks([1.0e-3, 1.0e-2, 1.0e-1])
-    growth_axis.set_title("(b) Electric-field growth", loc="left", pad=4)
+    growth_axis.set_title("(b) Electric field growth", loc="left", pad=4)
     growth_axis.grid(which="major", color="0.84", linewidth=0.5)
-    growth_axis.grid(which="minor", axis="y", color="0.91", linewidth=0.35)
+    growth_axis.grid(which="minor", axis="y", color="0.975", linewidth=0.35)
     growth_axis.legend(
         frameon=False, loc="lower right", handlelength=2.0,
         labelspacing=0.35, borderaxespad=0.45,
@@ -366,7 +375,7 @@ def field_growth_energy_figure():
     energy_axis.axhline(0.0, color="0.35", linewidth=0.7)
     energy_axis.set_xlabel(r"$\omega_{pe}t$")
     energy_axis.set_ylabel(r"Energy change, $\Delta W_{E,K}/W_0$")
-    error_axis.set_ylabel(r"Total-energy error, $\Delta W/W_0$ (\%)")
+    error_axis.set_ylabel(r"Total energy error, $\Delta W/W_0$ (\%)")
     error_color = "#2f6f44"
     energy_axis.spines["right"].set_visible(False)
     energy_axis.tick_params(axis="y", which="both", right=False)
@@ -378,30 +387,32 @@ def field_growth_energy_figure():
         labelleft=False, labelright=True, colors=error_color,
     )
     error_axis.yaxis.label.set_color(error_color)
-    energy_limit = 1.08 * max(np.max(abs(field_change)), np.max(abs(kinetic_change)))
-    energy_axis.set_ylim(-energy_limit, energy_limit)
+    energy_axis.set_ylim(-0.04, 0.04)
+    energy_axis.set_yticks([-0.04, -0.02, 0.0, 0.02, 0.04])
     error_axis.set_ylim(-0.04, 0.04)
     error_axis.set_yticks([-0.04, -0.02, 0.0, 0.02, 0.04])
     energy_axis.set_xlim(energy_time.min(), energy_time.max())
     energy_axis.set_xticks(np.arange(0.0, 40.1, 5.0))
     energy_axis.tick_params(axis="x", which="major", pad=6)
-    energy_axis.set_title("(c) Energy exchange and total-energy balance", loc="left", pad=4)
+    energy_axis.set_title("(c) Energy exchange and total energy balance", loc="left", pad=4)
     energy_axis.grid(which="major", color="0.88", linewidth=0.5)
     energy_axis.minorticks_on()
     error_axis.minorticks_on()
     left_legend = energy_axis.legend(
         handles=[field_line, particle_line], frameon=False, loc="upper left",
+        bbox_to_anchor=(0.02, 0.98),
         ncol=1, labelspacing=0.35, handlelength=2.0, borderaxespad=0.25,
     )
     energy_axis.add_artist(left_legend)
     right_legend = energy_axis.legend(
         handles=[total_line], frameon=False, loc="upper left",
-        bbox_to_anchor=(0.745, 1.0), handlelength=2.0,
+        bbox_to_anchor=(0.745, 0.98), handlelength=2.0,
         labelspacing=0.35, borderaxespad=0.25,
+        labelcolor=error_color,
     )
 
     # Render the legends before placing the maximum-error annotation.
-    # Its left edge follows the start of the Total-error legend line, and
+    # Its left edge follows the start of the Total error legend line, and
     # its vertical center follows the Particles entry in the left legend.
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
@@ -423,15 +434,32 @@ def field_growth_energy_figure():
     )
 
     fig.canvas.draw()
+    
     field_position = field_axis.get_position()
     colorbar_position = colorbar_axis.get_position()
     growth_position = growth_axis.get_position()
-    growth_axis.set_position(
-        [growth_position.x0, field_position.y0, growth_position.width, field_position.height]
-    )
-    colorbar_axis.set_position(
-        [colorbar_position.x0, field_position.y0, colorbar_position.width, field_position.height]
-    )
+    energy_position = energy_axis.get_position()
+    
+    # Expand panel (b) to the left; keep its right edge aligned with (c).
+    extra_width = 0.06
+    growth_left = growth_position.x0 - extra_width
+    growth_right = energy_position.x1
+    
+    growth_axis.set_position([
+        growth_left,
+        field_position.y0,
+        growth_right - growth_left,
+        field_position.height,
+    ])
+    
+    # Keep the colorbar aligned with panel (a).
+    colorbar_axis.set_position([
+        colorbar_position.x0,
+        field_position.y0,
+        colorbar_position.width,
+        field_position.height,
+    ])
+    
     save_figure(fig, "fig2_field_growth_energy.png")
 
 

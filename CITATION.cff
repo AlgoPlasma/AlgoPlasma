@@ -1,0 +1,74 @@
+cff-version: 1.2.0
+message: >-
+  If you use AlgoPlasma in your research, please cite this software using
+  the metadata below and specify the release or commit used.
+type: software
+title: "AlgoPlasma: Open Algorithms for Plasma Modeling"
+version: "v1.0.1"
+authors:
+  - family-names: Zhao
+    given-names: Yinjian
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+    email: zhaoyinjian@hit.edu.cn
+    website: "https://homepage.hit.edu.cn/zhaoyinjian"
+  - family-names: Zhao
+    given-names: Zhongping
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Liu
+    given-names: Zhe
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Wang
+    given-names: Baisheng
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Peng
+    given-names: Zilong
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Luo
+    given-names: Xin
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Xie
+    given-names: Lihuan
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Chen
+    given-names: Xi
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Zhou
+    given-names: Zhijun
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Zhong
+    given-names: Kunpeng
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Chen
+    given-names: Yingjie
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+  - family-names: Hu
+    given-names: Changzheng
+    affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+contact:
+  - name: AlgoPlasma
+    email: contact@algoplasma.com
+repository-code: "https://github.com/AlgoPlasma/AlgoPlasma"
+url: "https://algoplasma.readthedocs.io/"
+license: Apache-2.0
+abstract: >-
+  AlgoPlasma, formerly the Plasma Modeling Subprogram Library (PMSL),
+  is an open-source collection of reusable numerical algorithms for
+  plasma modeling. Its source-level components cover particle
+  initialization and advancement, particle-grid coupling, Poisson and
+  Maxwell solvers, collision models, selected continuity updates,
+  parallel data exchange, and input/output. Users select and compile
+  components within application-specific programs, retaining control
+  over data structures, physical coupling, boundary conditions, and
+  execution order. Documentation links numerical formulations to source
+  interfaces and usage, while available verification and validation
+  cases support independent assessment. MPI routines provide
+  distributed-memory communication, and selected computational kernels
+  use OpenMP for shared-memory parallelism. The collection supports
+  plasma-modeling research, numerical verification, and education.
+keywords:
+  - plasma modeling
+  - numerical algorithms
+  - particle-in-cell
+  - parallel computing
+  - verification and validation
+  - scientific software

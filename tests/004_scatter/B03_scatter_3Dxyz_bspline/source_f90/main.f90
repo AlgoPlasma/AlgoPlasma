@@ -1,4 +1,4 @@
-#include "../../../../B_Scatter/B01_Scatter_3Dxyz/mod_B01_Scatter_3Dxyz.f90"
+#include "../../../../B_Scatter/B01_scatter_3Dxyz/mod_B01_scatter_3Dxyz.f90"
 #include "../../../../B_Scatter/B03_scatter_3Dxyz_bspline/mod_B03_scatter_3Dxyz_bspline.f90"
 
 program main
