@@ -4,8 +4,6 @@
 
 ``contributors.yml`` is the single source of truth.  This script renders:
 
-* the ``Contributors`` section between the markers in ``README.md``,
-  ``README.zh-CN.md`` and ``README.en.md``;
 * the Sphinx / Read the Docs page ``docs/source/community/contributors.md``;
 * surname-first initial avatars for members using ``default_avatar: initials``.
 
@@ -20,8 +18,9 @@ Usage::
     python3 tools/generate_contributors.py --check   # exit 1 if out of date
 
 Only the text between ``<!-- CONTRIBUTORS:START -->`` and
-``<!-- CONTRIBUTORS:END -->`` is touched, so hand-written README and page
-content is preserved.  The output is deterministic: running the script twice
+``<!-- CONTRIBUTORS:END -->`` in the documentation page is touched, so
+hand-written page content is preserved. READMEs are not updated.
+The output is deterministic: running the script twice
 produces no diff, and the order of ``contributors.yml`` is never changed.
 
 The script uses the standard library only.  A small built-in parser handles
@@ -44,12 +43,6 @@ DATA_FILE = ROOT / "contributors.yml"
 START = "<!-- CONTRIBUTORS:START -->"
 END = "<!-- CONTRIBUTORS:END -->"
 
-# --- README targets: (repo-relative path, language) --------------------------
-README_TARGETS = (
-    ("README.md", "zh"),
-    ("README.zh-CN.md", "zh"),
-    ("README.en.md", "en"),
-)
 # --- Read the Docs page ------------------------------------------------------
 RTD_TARGET = "docs/source/community/contributors.md"
 RTD_TARGET_DIR = "docs/source/community"
@@ -966,15 +959,6 @@ def replace_section(text: str, body: str, path: Path) -> str:
 def desired_files(contributors) -> dict:
     """Map every generated text file to its expected full content."""
     files = {}
-    for name, lang in README_TARGETS:
-        path = ROOT / name
-        if not path.is_file():
-            continue
-        files[path] = replace_section(
-            path.read_text(encoding="utf-8"),
-            render_readme_section(contributors, lang, "."),
-            path,
-        )
     page = ROOT / RTD_TARGET
     if not page.is_file():
         sys.exit(f"error: {RTD_TARGET} not found")
