@@ -48,6 +48,7 @@
             hit_z = abs(tz-t_hit) <= time_tolerance
             ! Snap every counted hit to its face before the gas-side offset.
             ! Otherwise a counted crossing can still locate in the old cell.
+            ! Each offset below is at least one representable step toward its target side.
             if (hit_r) r = r_edge(i+merge(1,0,ur > 0.0))
             if (hit_z) z = z_edge(k+merge(1,0,uz > 0.0))
             uz_before = uz
@@ -61,14 +62,16 @@
                 select case (face_type(face, i, k))
                 case (J01_FACE_INTERIOR)
                     tally%count_r(crossing, k) = tally%count_r(crossing, k)+real(direction)
-                    r = r+direction*eps_r
+                    r = r+direction*max(eps_r, &
+                        abs(nearest(r, real(direction))-r))
                     i = i+direction
                 case (J01_FACE_OPEN)
                     tally%boundary_count(face, i, k) = tally%boundary_count(face, i, k)+real(direction)
                     alive = .false.
                 case default
                     call sub_J01_reflect_velocity(ur, uz, face, diffuse_fraction, sigma_wall)
-                    r = r-direction*eps_r
+                    r = r-direction*max(eps_r, &
+                        abs(nearest(r, -real(direction))-r))
                 end select
                 if (.not. alive) exit
             end if
@@ -79,7 +82,8 @@
             if (hit_z .and. hit_r) then
                 if ((uz_before > 0.0 .and. uz <= 0.0) .or. &
                     (uz_before < 0.0 .and. uz >= 0.0)) then
-                    z = z-sign(eps_z, uz_before)
+                    z = z-sign(max(eps_z, &
+                        abs(nearest(z, -sign(1.0, uz_before))-z)), uz_before)
                     hit_z = .false.
                 end if
             end if
@@ -90,13 +94,15 @@
                 select case (face_type(face, i, k))
                 case (J01_FACE_INTERIOR)
                     tally%count_z(i, crossing) = tally%count_z(i, crossing)+real(direction)
-                    z = z+direction*eps_z
+                    z = z+direction*max(eps_z, &
+                        abs(nearest(z, real(direction))-z))
                 case (J01_FACE_OPEN)
                     tally%boundary_count(face, i, k) = tally%boundary_count(face, i, k)+real(direction)
                     alive = .false.
                 case default
                     call sub_J01_reflect_velocity(ur, uz, face, diffuse_fraction, sigma_wall)
-                    z = z-direction*eps_z
+                    z = z-direction*max(eps_z, &
+                        abs(nearest(z, -real(direction))-z))
                 end select
                 if (.not. alive) exit
             end if
