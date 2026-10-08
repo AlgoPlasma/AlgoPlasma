@@ -10,6 +10,7 @@
 | --- | --- |
 | `C01_gather_3Dxyz` | 三维直角坐标电磁场的三线性 gather，以及 gather 与 push 融合的粒子循环内核。 |
 | `C02_gather_3Dxyz_bspline` | 三维直角坐标电磁场的直接 B-spline gather。 |
+| `C03_gather_3Draz_nonuniform` | 非均匀三维柱坐标静电交错 E / 节点 B 的单粒子 gather，使用物理坐标。 |
 
 ## 使用说明
 

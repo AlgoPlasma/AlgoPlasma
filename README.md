@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.en.md) | [Online documentation](https://algoplasma.readthedocs.io/en/latest/index.html)
 
 AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma modeling into an open, reusable, tested, and explainable algorithm library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, AlgoPlasma aims to build a shared algorithmic foundation so that others can build upon it instead of starting from scratch.
 
@@ -18,6 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI data exchange
 ├── I_Initializer     # Initialization
 ├── J_Fluid           # Fluid algorithms
+├── K_Diagnostics     # Probe diagnostics and signal inversion
 ├── docs              # Sphinx + Doxygen documentation
 └── tests             # Algorithm tests and validation cases
 ```
@@ -86,6 +87,8 @@ After changing an algorithm, start with the most local tests for that algorithm,
 
 ## Documentation
 
+Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/latest/index.html) online on Read the Docs.
+
 The documentation is built with Sphinx, Doxygen, and Breathe:
 
 - Doxygen comments in source files are used to generate API documentation.
@@ -120,7 +123,11 @@ Please keep algorithm units independent, interfaces clear, and dependencies expl
 
 ## License
 
-AlgoPlasma is licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for copyright and attribution information.
+Original AlgoPlasma material is distributed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for copyright and attribution information. Third-party dependencies and any redistributed third-party code or data remain subject to their respective licenses.
+
+Per-file license headers are not yet uniform across the source tree. Original project files without individual headers are covered by the repository-level `LICENSE` and `NOTICE`.
+
+`D_Poisson/D01_hypre_3Dxyz/fun_D01_hypre_3Dxyz_bc.c` contains material adapted from the HYPRE Struct-interface examples. Its header retains the upstream copyright attribution, identifies the AlgoPlasma modifications, and specifies the Apache-2.0 option of the upstream dual license. The relevant upstream notice is retained in `NOTICE`.
 
 ## Initiator / Contact
 

@@ -1,0 +1,343 @@
+012_fluid numerical verification — 2026-10-06
+==============================================
+Repository: /home/cyj/algoplasma
+Revision: working tree based on 69bdc86 (includes uncommitted changes; not HEAD alone)
+Environment: WSL Ubuntu; GNU Fortran 13.3.0; Open MPI
+Ordinary tests: real8, bounds checking and floating-point traps.
+OpenMP/MPI: real4 and real8, same-precision comparisons only.
+
+Fingerprint: SHA256 of sorted sha256sum records for all *.f90 and *.sh
+under J_Fluid and tests/012_fluid, excluding */build/*:
+708769c187291740ad2a0abf925ce45ab14545b4d45dad5ec82ba7942ece231e
+
+This fingerprint identifies the verification snapshot before PR cleanup.
+That cleanup removed a non-numerical submission helper included in the hash;
+the solver sources and numerical build/run scripts were unchanged.
+
+Commands (repository root):
+bash tests/012_fluid/J01_free_molecular/run.sh
+bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run.sh
+bash tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/run.sh
+bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run_parallel.sh
+MPIEXEC_FLAGS=--oversubscribe bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run_mpi.sh
+
+20 ordinary programs, 18 same-precision OpenMP record comparisons, 16 auxiliary
+serial/threaded runs and 76 MPI/hybrid launches completed successfully.
+The 18 OpenMP records were byte-identical to the corresponding serial record.
+The application helper unittest suite also passed all 9 tests without skips,
+after building application_reference/make.sh. Application evidence, including
+FM B0 rerun after the corner fix, is recorded separately.
+
+Only numerical records and return states are copied below; routine PASS chatter
+is omitted. Full logs are in the local build directories named by FILE.
+VALUE scalars retain actual/reference/error/limit, or explicitly named diagnostics.
+METRIC arrays use the norm stated in the label. MPI maxima are reduced over all
+ranks within each run, then maximized over the launches for each real precision.
+Zero is an observed floating-point result, not an inference from test success.
+Fixtures use normalized quantities unless the accompanying page gives units.
+Application images and diagnostics are documented separately in the application record.
+
+FILE: tests/012_fluid/J01_free_molecular/build/test_J01_continuity_freeflow.log
+METRIC: zero velocity: n max/limit:    0.000000000000000E+00   1.000000000000000E-12
+METRIC: zero velocity: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: source sign: n max/limit:    0.000000000000000E+00   1.000000000000000E-12
+METRIC: source sign: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: single step: n max/limit:    0.000000000000000E+00   1.000000000000000E-12
+METRIC: single step: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: unit shift: n max/limit:    0.000000000000000E+00   1.000000000000000E-12
+METRIC: unit shift: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: unit shift: n max/limit:    0.000000000000000E+00   1.000000000000000E-12
+METRIC: unit shift: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: unit shift: n max/limit:    1.776356839400250E-15   1.000000000000000E-12
+METRIC: unit shift: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: unit shift: n max/limit:    1.776356839400250E-15   1.000000000000000E-12
+METRIC: unit shift: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: unit shift: n max/limit:    1.776356839400250E-15   1.000000000000000E-12
+METRIC: unit shift: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+METRIC: unit shift: n max/limit:    1.776356839400250E-15   1.000000000000000E-12
+METRIC: unit shift: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+VALUE: periodic mass actual/reference/error/limit:    2.462099453119133E+02   2.462099453119135E+02   1.705302565824240E-13   2.462099453119135E-10
+METRIC: periodic mass: n0 max/limit:    0.000000000000000E+00   0.000000000000000E+00
+n_failed      = 0
+RESULT: PASS
+FILE: tests/012_fluid/J01_free_molecular/build/test_J01_corner_crossings.log
+VALUE: corner signs; radial/axial/balance/residence errors:  -1 -1   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+VALUE: corner signs; radial/axial/balance/residence errors:  -1  1   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+VALUE: corner signs; radial/axial/balance/residence errors:   1 -1   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+VALUE: corner signs; radial/axial/balance/residence errors:   1  1   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+VALUE: step face type/escaped/truncated/r count/z count/uz:   1  T  F   1.000000000000000E+00   0.000000000000000E+00   1.000000000000000E+00
+VALUE: step face type/escaped/truncated/r count/z count/uz:   2  F  T   1.000000000000000E+00   0.000000000000000E+00  -1.000000000000000E+00
+VALUE: near corner axial count/expected/balance error/residence:    1.000000000000000E+00   1.000000000000000E+00   0.000000000000000E+00   1.499999999000000E-06
+VALUE: near corner cases/count-balance error/max relative residence error:  16   0.000000000000000E+00   6.666669618933954E-10
+ RESULT: PASS
+FILE: tests/012_fluid/J01_free_molecular/build/test_J01_faceflux_2Drz_units.log
+VALUE: positive velocity selects left upwind density actual/reference/error/limit:    2.000000000000000E+00   2.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: negative velocity selects right upwind density actual/reference/error/limit:   -5.000000000000000E+00  -5.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: unequal-velocity Lax-Friedrichs formula actual/reference/error/limit:    4.000000000000000E+00   4.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: r-lo outgoing sign actual/reference/error/limit:   -6.000000000000000E+00  -6.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: r-hi rejects incoming velocity actual/reference/error/limit:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: z-lo rejects incoming velocity actual/reference/error/limit:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: z-hi outgoing sign actual/reference/error/limit:    1.200000000000000E+01   1.200000000000000E+01   0.000000000000000E+00   1.000000000000000E-13
+VALUE: area-volume source-loss single-step formula actual/reference/error/limit:    3.666666666666667E+00   3.666666666666667E+00   0.000000000000000E+00   1.000000000000000E-13
+STATUS: FM ierr/completed/truncated:        0     200       0
+VALUE: FM density/axial velocity/history rate:    2.999999997000375E+00   1.999999999999757E+00   4.500000000000000E-02
+VALUE: FM inlet/outlet particle-rate conservation actual/reference/error/limit:    9.000000000000000E+00   9.000000000000000E+00   0.000000000000000E+00   9.000000000000000E-12
+STATUS: negative density actual/expected:      102     102
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J01_free_molecular/build/test_J01_fm_units.log
+VALUE: first annular overlap area actual/reference/error/limit:    1.750000000000000E+00   1.750000000000000E+00   0.000000000000000E+00   1.750000000000000E-11
+VALUE: second annular overlap area actual/reference/error/limit:    2.250000000000000E+00   2.250000000000000E+00   0.000000000000000E+00   2.250000000000000E-11
+VALUE: history particle-rate normalization actual/reference/error/limit:    3.191538243211461E-01   3.191538243211462E-01   5.551115123125783E-17   9.999999999999999E-12
+VALUE: seed repeatability max difference:    0.000000000000000E+00
+STATUS: empty inlet actual/expected:      105     105
+VALUE: specular radial normal actual/reference/error/limit:   -2.000000000000000E+00  -2.000000000000000E+00   0.000000000000000E+00   2.000000000000000E-11
+VALUE: specular axial tangent actual/reference/error/limit:    3.000000000000000E+00   3.000000000000000E+00   0.000000000000000E+00   3.000000000000000E-11
+VALUE: specular radial normal actual/reference/error/limit:   -2.000000000000000E+00  -2.000000000000000E+00   0.000000000000000E+00   2.000000000000000E-11
+VALUE: specular axial tangent actual/reference/error/limit:    3.000000000000000E+00   3.000000000000000E+00   0.000000000000000E+00   3.000000000000000E-11
+VALUE: specular radial tangent actual/reference/error/limit:    2.000000000000000E+00   2.000000000000000E+00   0.000000000000000E+00   2.000000000000000E-11
+VALUE: specular axial normal actual/reference/error/limit:   -3.000000000000000E+00  -3.000000000000000E+00   0.000000000000000E+00   3.000000000000000E-11
+VALUE: specular radial tangent actual/reference/error/limit:    2.000000000000000E+00   2.000000000000000E+00   0.000000000000000E+00   2.000000000000000E-11
+VALUE: specular axial normal actual/reference/error/limit:   -3.000000000000000E+00  -3.000000000000000E+00   0.000000000000000E+00   3.000000000000000E-11
+VALUE: first cell residence actual/reference/error/limit:    3.750000000000000E-01   3.750000000000000E-01   0.000000000000000E+00   9.999999999999999E-12
+VALUE: second cell residence including face offset actual/reference/error/limit:    4.999999995000000E-01   4.999999995000000E-01   5.551115123125783E-17   9.999999999999999E-12
+VALUE: positive internal crossing actual/reference/error/limit:    1.000000000000000E+00   1.000000000000000E+00   0.000000000000000E+00   9.999999999999999E-12
+VALUE: positive boundary exit actual/reference/error/limit:    1.000000000000000E+00   1.000000000000000E+00   0.000000000000000E+00   9.999999999999999E-12
+VALUE: negative internal crossing actual/reference/error/limit:   -1.000000000000000E+00  -1.000000000000000E+00   0.000000000000000E+00   9.999999999999999E-12
+VALUE: negative boundary exit actual/reference/error/limit:   -1.000000000000000E+00  -1.000000000000000E+00   0.000000000000000E+00   9.999999999999999E-12
+VALUE: density equals rate times residence divided by volume actual/reference/error/limit:    4.000000000000000E+00   4.000000000000000E+00   0.000000000000000E+00   4.000000000000000E-11
+VALUE: radial residence-weighted mean actual/reference/error/limit:    3.000000000000000E+00   3.000000000000000E+00   0.000000000000000E+00   3.000000000000000E-11
+VALUE: axial residence-weighted mean actual/reference/error/limit:   -2.000000000000000E+00  -2.000000000000000E+00   0.000000000000000E+00   2.000000000000000E-11
+VALUE: radial count normalized by radial area actual/reference/error/limit:   -3.000000000000000E+00  -3.000000000000000E+00   0.000000000000000E+00   3.000000000000000E-11
+VALUE: axial count normalized by annular area actual/reference/error/limit:    6.000000000000000E+00   6.000000000000000E+00   0.000000000000000E+00   6.000000000000000E-11
+VALUE: low-face boundary flux keeps coordinate sign actual/reference/error/limit:   -3.000000000000000E+00  -3.000000000000000E+00   0.000000000000000E+00   3.000000000000000E-11
+VALUE: unvisited cell stays zero actual/reference/error/limit:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   9.999999999999999E-12
+STATUS: event limit ierr/expected/completed/truncated:      106     106       0      20
+STATUS: domain edge ierr/expected/completed:      105     105       0
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J01_free_molecular/build/test_J01_sampling_distribution.log
+VALUE: uniform annular area actual/reference/error/limit:    5.054626464843750E-01   5.000000000000000E-01   5.462646484375000E-03   1.933495104806966E-02
+VALUE: Gaussian tangential velocity actual/reference/error/limit:    6.826171875000000E-01   6.826894921370859E-01   7.230463708585155E-05   1.799811028938909E-02
+VALUE: zero-drift injection rate actual/reference/error/limit:    3.191538243211462E+01   3.191538243211462E+01   0.000000000000000E+00   1.000000000000000E-12
+VALUE: truncated Gaussian axial velocity actual/reference/error/limit:    6.787719726562500E-01   6.826894921370859E-01   3.917519480835852E-03   1.799811028938909E-02
+VALUE: uniform annular area actual/reference/error/limit:    5.038146972656250E-01   5.000000000000000E-01   3.814697265625000E-03   1.933495104806966E-02
+VALUE: Gaussian tangential velocity actual/reference/error/limit:    6.820678710937500E-01   6.826894921370859E-01   6.216210433358516E-04   1.799811028938909E-02
+VALUE: truncated Gaussian axial velocity actual/reference/error/limit:    4.028015136718750E-01   4.057132913274699E-01   2.911777655594860E-03   1.898806453009149E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.966979980468750E-01   3.934693402873666E-01   3.228657759508424E-03   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.843566894531250E-01   6.826894921370859E-01   1.667197316039148E-03   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.931884765625000E-01   3.934693402873666E-01   2.808637248665757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.822204589843750E-01   6.826894921370859E-01   4.690331527108516E-04   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.928833007812500E-01   3.934693402873666E-01   5.860395061165757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.797180175781250E-01   6.826894921370859E-01   2.971474558960852E-03   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.933105468750000E-01   3.934693402873666E-01   1.587934123665757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.828918457031250E-01   6.826894921370859E-01   2.023535660391484E-04   1.799811028938909E-02
+VALUE: uniform annular area actual/reference/error/limit:    4.969482421875000E-01   5.000000000000000E-01   3.051757812500000E-03   1.933495104806966E-02
+VALUE: Gaussian tangential velocity actual/reference/error/limit:    6.849670410156250E-01   6.826894921370859E-01   2.277548878539148E-03   1.799811028938909E-02
+VALUE: zero-drift injection rate actual/reference/error/limit:    3.191538243211462E+01   3.191538243211462E+01   0.000000000000000E+00   1.000000000000000E-12
+VALUE: truncated Gaussian axial velocity actual/reference/error/limit:    6.831054687500000E-01   6.826894921370859E-01   4.159766129141484E-04   1.799811028938909E-02
+VALUE: uniform annular area actual/reference/error/limit:    5.003051757812500E-01   5.000000000000000E-01   3.051757812500000E-04   1.933495104806966E-02
+VALUE: Gaussian tangential velocity actual/reference/error/limit:    6.839904785156250E-01   6.826894921370859E-01   1.300986378539148E-03   1.799811028938909E-02
+VALUE: truncated Gaussian axial velocity actual/reference/error/limit:    4.040832519531250E-01   4.057132913274699E-01   1.630039374344860E-03   1.898806453009149E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.931884765625000E-01   3.934693402873666E-01   2.808637248665757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.822204589843750E-01   6.826894921370859E-01   4.690331527108516E-04   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.928833007812500E-01   3.934693402873666E-01   5.860395061165757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.797180175781250E-01   6.826894921370859E-01   2.971474558960852E-03   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.933105468750000E-01   3.934693402873666E-01   1.587934123665757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.828918457031250E-01   6.826894921370859E-01   2.023535660391484E-04   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.938598632812500E-01   3.934693402873666E-01   3.905229938834243E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.835937500000000E-01   6.826894921370859E-01   9.042578629141484E-04   1.799811028938909E-02
+VALUE: uniform annular area actual/reference/error/limit:    4.949951171875000E-01   5.000000000000000E-01   5.004882812500000E-03   1.933495104806966E-02
+VALUE: Gaussian tangential velocity actual/reference/error/limit:    6.862792968750000E-01   6.826894921370859E-01   3.589804737914148E-03   1.799811028938909E-02
+VALUE: zero-drift injection rate actual/reference/error/limit:    3.191538243211462E+01   3.191538243211462E+01   0.000000000000000E+00   1.000000000000000E-12
+VALUE: truncated Gaussian axial velocity actual/reference/error/limit:    6.781616210937500E-01   6.826894921370859E-01   4.527871043335852E-03   1.799811028938909E-02
+VALUE: uniform annular area actual/reference/error/limit:    5.001831054687500E-01   5.000000000000000E-01   1.831054687500000E-04   1.933495104806966E-02
+VALUE: Gaussian tangential velocity actual/reference/error/limit:    6.834716796875000E-01   6.826894921370859E-01   7.821875504141484E-04   1.799811028938909E-02
+VALUE: truncated Gaussian axial velocity actual/reference/error/limit:    4.029235839843750E-01   4.057132913274699E-01   2.789707343094860E-03   1.898806453009149E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.928833007812500E-01   3.934693402873666E-01   5.860395061165757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.797180175781250E-01   6.826894921370859E-01   2.971474558960852E-03   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.933105468750000E-01   3.934693402873666E-01   1.587934123665757E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.828918457031250E-01   6.826894921370859E-01   2.023535660391484E-04   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.938598632812500E-01   3.934693402873666E-01   3.905229938834243E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.835937500000000E-01   6.826894921370859E-01   9.042578629141484E-04   1.799811028938909E-02
+VALUE: Rayleigh wall-normal velocity actual/reference/error/limit:    3.943786621093750E-01   3.934693402873666E-01   9.093218220084243E-04   1.889099793860571E-02
+VALUE: Gaussian wall-tangential velocity actual/reference/error/limit:    6.810913085937500E-01   6.826894921370859E-01   1.598183543335852E-03   1.799811028938909E-02
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_dg_faces.log
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_neutral_sn_transport_2Drz.log
+STATUS: phase quadrature construction actual/expected:        0       0
+VALUE: quadrature weight sum actual/reference/error/limit:    5.026548245743668E+01   5.026548245743669E+01   1.421085471520200E-14   1.000000000000000E-12
+VALUE: quadrature mu moment actual/reference/error/limit:   -4.440892098500626E-15   0.000000000000000E+00   4.440892098500626E-15   1.000000000000000E-13
+VALUE: quadrature eta moment actual/reference/error/limit:   -1.332267629550188E-15   0.000000000000000E+00   1.332267629550188E-15   1.000000000000000E-13
+VALUE: quadrature alias max difference actual/reference/error/limit:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+STATUS: mesh validation actual/expected:        0       0
+STATUS: cylindrical geometry construction actual/expected:        0       0
+VALUE: annular volume actual/reference/error/limit:    1.884955592153876E+01   1.884955592153876E+01   0.000000000000000E+00   1.000000000000000E-12
+VALUE: radial low area actual/reference/error/limit:    1.256637061435917E+01   1.256637061435917E+01   0.000000000000000E+00   1.000000000000000E-12
+VALUE: radial high area actual/reference/error/limit:    2.513274122871834E+01   2.513274122871834E+01   0.000000000000000E+00   1.000000000000000E-12
+VALUE: radial mean correction actual/reference/error/limit:    1.111111111111111E-01   1.111111111111111E-01   0.000000000000000E+00   1.000000000000000E-14
+VALUE: streaming matrix max error actual/reference/error/limit:    6.938893903907228E-18   0.000000000000000E+00   6.938893903907228E-18   1.000000000000000E-14
+STATUS: prescribed inflow normalization call actual/expected:        0       0
+VALUE: constant-shape inlet flux actual/reference/error/limit:    6.999999999999999E+00   7.000000000000000E+00   8.881784197001252E-16   1.000000000000000E-12
+STATUS: source-test quadrature construction actual/expected:        0       0
+STATUS: two-dimensional Maxwell shape construction actual/expected:        0       0
+VALUE: Maxwell shape at first velocity actual/reference/error/limit:    1.545263558359283E-06   1.545263558359283E-06   0.000000000000000E+00   1.545263558359283E-19
+VALUE: Maxwell isotropy max difference actual/reference/error/limit:    4.235164736271502E-22   0.000000000000000E+00   4.235164736271502E-22   1.545263558359283E-19
+STATUS: drifted Maxwell shape construction actual/expected:        0       0
+STATUS: drifted reservoir normalization call actual/expected:        0       0
+VALUE: drifted inlet flux actual/reference/error/limit:    1.200000000000000E+01   1.200000000000000E+01   1.776356839400250E-15   1.000000000000000E-12
+VALUE: drift shapes directions 1/4/8/5:    2.280114344984862E-06   2.477764094117547E-07   2.280114344984862E-06   2.477764094117547E-07
+STATUS: MC crossing-sampled shape conversion actual/expected:        0       0
+STATUS: MC crossing-sampled shape normalization actual/expected:        0       0
+VALUE: crossing-bin flux max error actual/reference/error/limit:    8.881784197001252E-16   0.000000000000000E+00   8.881784197001252E-16   1.000000000000000E-12
+STATUS: invalid temperature returns a specific error actual/expected:      401     401
+STATUS: sweep local-solve failure returns a specific error actual/expected:      609     609
+STATUS: failed direction/i/k:        1       1       1
+STATUS: cell-moment reconstruction call actual/expected:        0       0
+VALUE: reconstructed density actual/reference/error/limit:    3.665191429188092E+00   3.665191429188092E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: reconstructed radial velocity actual/reference/error/limit:    9.238795325112866E-01   9.238795325112867E-01   1.110223024625157E-16   1.000000000000000E-13
+VALUE: reconstructed axial velocity actual/reference/error/limit:    3.826834323650898E-01   3.826834323650898E-01   0.000000000000000E+00   1.000000000000000E-13
+STATUS: face-flux reconstruction call actual/expected:        0       0
+VALUE: radial face flux actual/reference/error/limit:    7.256132880348577E+00   7.256132880348577E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: axial face flux actual/reference/error/limit:    3.807078955934194E+00   3.807078955934194E+00   0.000000000000000E+00   1.000000000000000E-13
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_parallel.log
+VALUE: threaded open incoming/outgoing/relative balance/min corner:    6.262383821863951E+01   6.262383821863953E+01   3.403860682952897E-16   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  0.0    90   9.302977004368171E-11   4.012118873305971E-10   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  0.5    56   7.067248813022125E-11   8.298047331727419E-11   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  1.0    52   8.775980540566471E-11   1.321169708133011E-10   0.000000000000000E+00
+STATUS: threaded ierr/direction/i/k:      608       3       0       0
+STATUS: threaded ierr/direction/i/k:      502       1       1       1
+ RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_positivity.log
+VALUE: positivity recovered coefficients/balance error:    1.500000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+VALUE: sharp inlet scenario/min corner/max relative balance:   1   0.000000000000000E+00   5.802305146913052E-16
+VALUE: sharp inlet scenario/min corner/max relative balance:   2   0.000000000000000E+00   3.868203431275367E-16
+ RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_reflection_partial_inlet.log
+METRIC: partial inlet uses cylindrical area fractions error/limit:    0.000000000000000E+00   1.000000000000000E-14
+METRIC: partial inlet reports local xi intervals error/limit:    0.000000000000000E+00   1.000000000000000E-14
+METRIC: specular map reverses only the normal velocity in each speed group error/limit:    7.216449660063518E-16   2.000000000000000E-15
+METRIC: full z-face interval equals the established full-face operator error/limit:    0.000000000000000E+00   1.000000000000000E-14
+METRIC: partial interval cylindrical moments are analytic error/limit:    0.000000000000000E+00   1.000000000000000E-14
+VALUE: diffuse wall outgoing/returning flux:    8.628511538743309E+01   8.628511538743308E+01
+METRIC: diffuse reflection conserves discrete wall number flux error/limit:    1.421085471520200E-14   2.000000000000000E-13
+METRIC: one sweep mixes specular and diffuse boundary operators linearly error/limit:    1.332267629550188E-15   3.000000000000000E-13
+VALUE: partial reflection iterations/change:    102   9.392288132347650E-15
+VALUE: partial reflection incoming/outgoing/loss/min corner:    1.934288938266637E+02   9.022111748850800E+01   1.032077763381511E+02   1.317485452238014E-02
+METRIC: partial open inlet plus reflecting complement satisfies global balance error/limit:    4.646949491871055E-12   2.000000000000000E-10
+METRIC: partial inlet reconstruction applies its cylindrical area fraction error/limit:    0.000000000000000E+00   2.000000000000000E-13
+METRIC: compact z-low inlet gives the same sweep as the full boundary array error/limit:    0.000000000000000E+00   2.000000000000000E-13
+METRIC: compact z-low inlet gives the same reconstructed flux error/limit:    0.000000000000000E+00   2.000000000000000E-13
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_review_regressions.log
+VALUE: amplitude/iterations/change/scaled field error/relative balance:    1.000E+00    73   7.475977770979463E-11   0.000000000000000E+00   1.924614618154547E-10
+VALUE: amplitude/iterations/change/scaled field error/relative balance:    1.000E-20    73   7.475976716770297E-11   3.659463457288440E-16   1.924609736138300E-10
+VALUE: amplitude/iterations/change/scaled field error/relative balance:    1.000E+20    73   7.475967844240674E-11   2.744597592966330E-16   1.924610645129393E-10
+STATUS: unresolved Maxwell actual/expected:      617     617
+ RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_transport_entry.log
+VALUE: zero solve max density/outflow:    0.000000000000000E+00   0.000000000000000E+00
+VALUE: transport iterations/change/relative balance:    137   8.763422502886148E-11   4.924027908689795E-10
+VALUE: transport vs assembled max psi/density/inflow/outflow differences:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+VALUE: compact reflecting density difference:    0.000000000000000E+00
+STATUS: iteration limit ierr/expected/converged/density allocated:      615     615  F  F
+VALUE: multi-cell compact max density/radial flux/axial flux differences:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_transport_units.log
+VALUE: axis radial-face area is zero actual/reference/error/limit:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-14
+VALUE: axis annular-cell volume actual/reference/error/limit:    6.283185307179586E+00   6.283185307179586E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: axis radial mean correction actual/reference/error/limit:    3.333333333333333E-01   3.333333333333333E-01   0.000000000000000E+00   1.000000000000000E-14
+VALUE: cylindrical P1 absorption mass matrix actual/reference/error/limit:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-14
+VALUE: low-speed sigma_t=nu/v actual/reference/error/limit:    6.000000000000000E+00   6.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: high-speed sigma_t=nu/v actual/reference/error/limit:    2.000000000000000E+00   2.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+STATUS: negative frequency actual/expected:      323     323
+VALUE: continuous PDF and weighted probabilities describe the same inflow actual/reference/error/limit:    4.440892098500626E-16   0.000000000000000E+00   4.440892098500626E-16   1.000000000000000E-13
+VALUE: rlo/rhi/zlo/zhi incoming flux:    1.231406583572437E+01  -1.231406583572437E+01   1.231406583572437E+01  -1.231406583572437E+01
+VALUE: rlo/rhi/zlo/zhi outgoing flux:   -8.209377223816249E+00   8.209377223816247E+00  -8.209377223816247E+00   8.209377223816247E+00
+STATUS: negative sigma actual/expected:      610     610
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/test_J02_unified_sweep.log
+VALUE: open sweep incoming/outgoing/relative balance/compact difference:    1.641875444763250E+02   1.641875444763249E+02   1.731051494865512E-16   0.000000000000000E+00
+STATUS: missing wall state actual/expected:      613     613
+STATUS: invalid topology ierr/expected/direction/i/k:      612     612       0       1       1
+ RESULT: PASS
+FILE: tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/build/test_J01_J03_channel.log
+VALUE: two-history densities/flux/outlet/coefficient/density max error:    2.666666666666667E+00   2.666666666664000E+00   4.000000000000000E+00   4.000000000000000E+00   1.500000000000000E+00   2.666755705149626E-12
+VALUE: filling steps/densities/exact densities:    200   2.075007197821350E+00   1.180811527021875E+00   2.071652906270854E+00   1.179132265677135E+00
+VALUE: filling steps/densities/exact densities:    400   2.073328215045301E+00   1.179970445978743E+00   2.071652906270854E+00   1.179132265677135E+00
+VALUE: FM-to-J03 coarse error/fine error/ratio:    3.354291550496491E-03   1.675308774446993E-03   2.002193029523001E+00
+VALUE: sampled completed/truncated/inlet/reference/flux error/step error/balance:     4096       0   8.000267668928938E+00   8.000267668928938E+00   0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/build/test_J02_J03_analytic.log
+VALUE: analytic grid/incoming/outgoing/loss/scaled balance/scaled cell residual:   4   3.064720770039148E+01   2.097291268953435E+01   9.674295010857128E+00   1.159229158340294E-16   1.530255629540097E-15
+VALUE: filled grid/timestep/scaled balance/inlet difference:   4   3.405738898447571E-02   8.114604108382062E-16   0.000000000000000E+00
+VALUE: analytic grid/incoming/outgoing/loss/scaled balance/scaled cell residual:   8   3.064720770039148E+01   2.095093646168259E+01   9.696271238708887E+00   0.000000000000000E+00   5.591893382191838E-15
+VALUE: filled grid/timestep/scaled balance/inlet difference:   8   1.688326126227304E-02   2.550304148348648E-15   0.000000000000000E+00
+VALUE: analytic grid/incoming/outgoing/loss/scaled balance/scaled cell residual:  16   3.064720770039148E+01   2.094478541837066E+01   9.702422282020832E+00   4.636916633361177E-16   2.208995482259440E-14
+VALUE: filled grid/timestep/scaled balance/inlet difference:  16   8.406363940106439E-03   4.636916633361179E-16   0.000000000000000E+00
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/build/test_J03_continuity_units.log
+VALUE: positive reference flux divides by left density actual/reference/error/limit:    3.000000000000000E+00   3.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: negative reference flux divides by right density actual/reference/error/limit:   -1.500000000000000E+00  -1.500000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: CFL includes area/volume outflow and loss rate actual/reference/error/limit:    4.000000000000000E-01   4.000000000000000E-01   0.000000000000000E+00   1.000000000000000E-13
+VALUE: semi-implicit source-loss step formula actual/reference/error/limit:    3.333333333333333E+00   3.333333333333333E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: local residual divergence plus loss minus source actual/reference/error/limit:   -1.000000000000000E+00  -1.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+VALUE: volume-integrated global balance actual/reference/error/limit:   -6.000000000000000E+00  -6.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+STATUS: invalid face actual/expected:      104     104
+STATUS: step limit ierr/expected/iterations/converged:      106     106       1  F
+VALUE: clipped density:    0.000000000000000E+00
+STATUS: negative density actual/expected:      103     103
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/build/test_J03_equilibrium.log
+VALUE: J03 preserves balanced reference density actual/reference/error/limit:    2.000000000000000E+00   2.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-12
+VALUE: J03 balanced-boundary residual actual/reference/error/limit:    0.000000000000000E+00   0.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-12
+VALUE: J03 source-loss equilibrium S/nu actual/reference/error/limit:    2.000000000000000E+00   2.000000000000000E+00   0.000000000000000E+00   2.000000000000000E-11
+VALUE: J03 closed-domain finite-volume conservation actual/reference/error/limit:    3.000000000000000E+00   3.000000000000000E+00   0.000000000000000E+00   1.000000000000000E-13
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/build/test_J03_transient.log
+VALUE: tiny-dt iterations/change/scaled residual:      3   1.000088900584341E-12   9.999999999969997E-01
+VALUE: steady iterations/change/scaled residual:     35   3.333333333333333E-01   6.867614881773254E-07
+VALUE: decay coarse/fine/exact/errors/ratio:    1.420456823002777E-01   1.387045694679371E-01   1.353352832366127E-01   6.710399063664968E-03   3.369286231324403E-03   1.991638169912099E+00
+VALUE: source-loss actual/reference/error:    1.430647715266039E+00   1.432332358381694E+00   1.684643115654527E-03
+VALUE: piecewise loss actual/discrete ref/discrete error/ODE ref/ODE error:    1.395322216460313E-01   1.395322216460314E-01   8.326672684688674E-17   1.353352832366127E-01   4.196938409418621E-03
+VALUE: two-cell density/exact/total/initial total:    3.660323412732296E-01   3.678794411714423E-01   1.999999999999999E+00   2.000000000000000E+00
+VALUE: open incoming/outgoing/source/loss/scaled balance:    3.000000000000000E+00   2.000000000000000E+00   1.000000000000000E+00   1.999999999999999E+00   2.220446049250313E-16
+VALUE: mixed-time storage/net input/new loss/defect:   -7.636089208211860E+00   4.400000000000000E+00   1.203608920821184E+01  -1.953992523340276E-14
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/build/test_application_case.log
+VALUE: active count/interface mask (64,72)/(65,72)/(1,73):    56320  F  T  T
+VALUE: ION peak/error:    1.000000000000000E+05   0.000000000000000E+00
+VALUE: B0 has no volume loss:    0.000000000000000E+00
+VALUE: inactive cell has no loss:    0.000000000000000E+00
+VALUE: outside window has no loss:    0.000000000000000E+00
+n_failed = 0
+RESULT: PASS
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/parallel/r4/serial.log
+VALUE: threaded open incoming/outgoing/relative balance/min corner:    6.262384796142578E+01   6.262384033203125E+01   1.218289042981269E-07   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  0.0    51   7.425093713209208E-07   1.035792593029328E-06   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  0.5    34   7.062840836624673E-07   9.124839266405615E-07   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  1.0    31   8.573881018492102E-07   1.529027144897555E-06   0.000000000000000E+00
+STATUS: threaded ierr/direction/i/k:      608       3       0       0
+STATUS: threaded ierr/direction/i/k:      502       1       1       1
+MPI real4: maxima across all layouts, ranks, threads, cases and repetitions
+sweep max=0.000000000000000e+0; psi/density/velocity/internal/open/remote maxima: 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0; balance max=5.778200034001202e-7 limit=1.192092895507812e-3
+FILE: tests/012_fluid/J02_neutral_sn_transport_2Drz/build/parallel/r8/serial.log
+VALUE: threaded open incoming/outgoing/relative balance/min corner:    6.262383821863951E+01   6.262383821863953E+01   3.403860682952897E-16   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  0.0    90   9.302976231390077E-11   4.012117954585139E-10   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  0.5    56   7.067249316908827E-11   8.298042738123258E-11   0.000000000000000E+00
+VALUE: threaded d/iterations/change/balance/compact difference:  1.0    52   8.775980540566471E-11   1.321169708133011E-10   0.000000000000000E+00
+STATUS: threaded ierr/direction/i/k:      608       3       0       0
+STATUS: threaded ierr/direction/i/k:      502       1       1       1
+MPI real8: maxima across all layouts, ranks, threads, cases and repetitions
+sweep max=0.000000000000000e+0; psi/density/velocity/internal/open/remote maxima: 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0 0.000000000000000e+0; balance max=6.831055098524745e-11 limit=1.000000000000000e-8

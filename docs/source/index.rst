@@ -32,9 +32,18 @@ AlgoPlasma
     :maxdepth: 1
     :hidden:
 
+    ./installation
     ./developer_onboarding
     ./glossary
+    ./knowledge/index
     ./maintenance_checklist
+
+.. toctree::
+    :caption: Community
+    :maxdepth: 1
+    :hidden:
+
+    ./community/contributors
 
 .. image:: images/algoplasma-logo-transparent.png
    :class: ap-home-preload
@@ -69,7 +78,7 @@ AlgoPlasma
        </div>
        <p class="ap-home-caption">
         配图来自基于 AlgoPlasma 搭建的 AP-PIC-HET-3D 程序。<br>
-         <a href="https://arxiv.org/abs/2603.14849v1" target="_blank" rel="noopener noreferrer">arXiv: 2603.14849v1</a>, 16 Mar 2026.
+         <a href="https://doi.org/10.1103/p8v6-66mq" target="_blank" rel="noopener noreferrer">Physical Review E 114, 035211 (2026)</a>.
        </p>
      </section>
 
@@ -89,6 +98,7 @@ AlgoPlasma
          <a class="ap-module-card" style="--accent:#178f66" href="rst_files/H_MPI_Exchange.html"><strong>H_MPI_Exchange</strong><span>MPI 数据交换</span></a>
          <a class="ap-module-card" style="--accent:#b7791f" href="rst_files/I_Initializer.html"><strong>I_Initializer</strong><span>初始化</span></a>
          <a class="ap-module-card" style="--accent:#4a78a6" href="rst_files/J_Fluid.html"><strong>J_Fluid</strong><span>流体算法</span></a>
+         <a class="ap-module-card" style="--accent:#6b46a6" href="rst_files/K_Diagnostics.html"><strong>K_Diagnostics</strong><span>探针诊断与信号反演</span></a>
        </div>
      </section>
 
@@ -143,7 +153,7 @@ AlgoPlasma
        </div>
        <p class="ap-home-caption">
         Image rendered from an AP-PIC-HET-3D program built on AlgoPlasma.<br>
-         <a href="https://arxiv.org/abs/2603.14849v1" target="_blank" rel="noopener noreferrer">arXiv: 2603.14849v1</a>, 16 Mar 2026.
+         <a href="https://doi.org/10.1103/p8v6-66mq" target="_blank" rel="noopener noreferrer">Physical Review E 114, 035211 (2026)</a>.
        </p>
      </section>
 
@@ -163,6 +173,7 @@ AlgoPlasma
          <a class="ap-module-card" style="--accent:#178f66" href="rst_files/H_MPI_Exchange.html"><strong>H_MPI_Exchange</strong><span>MPI data exchange</span></a>
          <a class="ap-module-card" style="--accent:#b7791f" href="rst_files/I_Initializer.html"><strong>I_Initializer</strong><span>Initialization</span></a>
          <a class="ap-module-card" style="--accent:#4a78a6" href="rst_files/J_Fluid.html"><strong>J_Fluid</strong><span>Fluid algorithms</span></a>
+         <a class="ap-module-card" style="--accent:#6b46a6" href="rst_files/K_Diagnostics.html"><strong>K_Diagnostics</strong><span>Probe diagnostics and signal inversion</span></a>
        </div>
      </section>
 

@@ -1,6 +1,45 @@
+/* Wrap long interface names without changing the shared documentation theme. */
+.ap-fluid-doc table.docutils {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.ap-fluid-doc table.docutils th,
+.ap-fluid-doc table.docutils td {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.ap-fluid-doc table.docutils code {
+    white-space: normal;
+}
+
 /* Keep RTD pages readable on wide monitors. */
 .wy-nav-content {
     max-width: 1200px;
+}
+
+/* Let the foundations tutorial's explanatory tables wrap in both languages. */
+.ap-diagnostics-foundations table.docutils {
+    width: 100%;
+}
+
+.ap-diagnostics-foundations table.docutils th,
+.ap-diagnostics-foundations table.docutils td {
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+/* Distinguish optional knowledge notes from the main tutorial. */
+.rst-content .admonition.ap-knowledge-box {
+    border: 1px solid #c9dce8;
+    border-left: 4px solid #2980b9;
+    background: #f7fbfd;
+}
+
+.rst-content .ap-knowledge-box .admonition-title {
+    background: #e7f2fa;
+    color: #245776;
 }
 
 .ap-language-switch {
@@ -36,6 +75,10 @@
 .ap-lang-button.is-active {
     background: #2980b9;
     color: #fff;
+}
+
+.ap-lang-zh {
+    display: block;
 }
 
 .ap-lang-zh {

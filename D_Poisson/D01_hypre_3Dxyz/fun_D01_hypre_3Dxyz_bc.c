@@ -1,3 +1,16 @@
+/*
+ * Contains material adapted from the HYPRE Struct-interface examples,
+ * including ex1.c.
+ * Copyright (c) 1998 Lawrence Livermore National Security, LLC and other
+ * HYPRE Project Developers.
+ *
+ * Modified for AlgoPlasma: three-dimensional seven-point stencil,
+ * boundary-condition handling, and a Fortran-callable interface.
+ * The adapted HYPRE portions are used under the Apache-2.0 option of
+ * their upstream Apache-2.0 OR MIT license.
+ * SPDX-License-Identifier: Apache-2.0
+ * See the repository-level LICENSE and NOTICE for license and attribution.
+ */
 /**
  * @file fun_D01_hypre_3Dxyz_bc.c
  * @brief 

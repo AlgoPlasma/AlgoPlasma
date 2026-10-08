@@ -6,6 +6,7 @@ C_Gather
 
    C_Gather/C01_gather_3Dxyz
    C_Gather/C02_gather_3Dxyz_bspline
+   C_Gather/C03_gather_3Draz_nonuniform
 
 .. raw:: html
 
@@ -38,16 +39,21 @@ C_Gather
         - ``sub_C02_gather_3Dxyz_bspline``
         - 按运行时 ``order`` 生成 centered B-spline 张量积权重，并直接插值 ``Ex/Ey/Ez/Bx/By/Bz``。
 
+      * - C03
+        - :doc:`输入非均匀柱坐标交错场，输出粒子位置处的 E/B <C_Gather/C03_gather_3Draz_nonuniform>`
+        - ``sub_C03_gather_3Draz_nonuniform`` / ``sub_C03_gather_3Draz_nonuniform_point``
+        - 按物理面坐标生成 face / center 模板，将静电交错 E 与节点 B 插值到粒子位置。
+
    .. rubric:: 数值约定
 
-   粒子坐标默认使用网格指标单位。C01 假定电磁场存储在 cell-centered 网格上，并使用
+   C01/C02 粒子坐标使用网格指标单位。C01 假定电磁场存储在 cell-centered 网格上，并使用
    ``par(1:3,p)+0.5`` 映射到插值坐标。``C02_gather_3Dxyz_bspline`` 直接对六个
    电磁场分量执行 B-spline gather，阶数由运行时参数 ``order`` 指定。
 
    .. rubric:: 测试状态
 
    ``tests/007_gather`` 提供独立测试，覆盖 C01 的三线性 gather / fused gather-push，
-   以及 C02 的直接 B-spline gather。见
+   以及 C02 的直接 B-spline gather。C03 的独立测试覆盖非均匀交错场插值、边界、周期和错误输入。见
    :doc:`007_gather 测试总览 </tests/007_gather/index>`。
 
 .. container:: ap-lang ap-lang-en
@@ -77,9 +83,14 @@ C_Gather
         - ``sub_C02_gather_3Dxyz_bspline``
         - Build centered B-spline tensor-product weights from runtime ``order`` and directly interpolate ``Ex/Ey/Ez/Bx/By/Bz``.
 
+      * - C03
+        - :doc:`Input nonuniform cylindrical staggered fields and output particle-position E/B <C_Gather/C03_gather_3Draz_nonuniform>`
+        - ``sub_C03_gather_3Draz_nonuniform`` / ``sub_C03_gather_3Draz_nonuniform_point``
+        - Build face / center stencils from physical coordinates and gather staggered electrostatic E and nodal B.
+
    .. rubric:: Numerical Conventions
 
-   The routines use particle coordinates in grid-index units. C01 assumes
+   C01/C02 use particle coordinates in grid-index units. C01 assumes
    electromagnetic fields on a cell-centered grid and maps positions with
    ``par(1:3,p)+0.5`` before interpolation. ``C02_gather_3Dxyz_bspline``
    directly gathers six electromagnetic-field components with a runtime
@@ -88,5 +99,5 @@ C_Gather
    .. rubric:: Test Status
 
    ``tests/007_gather`` provides standalone tests for C01 trilinear gather /
-   fused gather-push and C02 direct B-spline gather. See the
+   fused gather-push, C02 direct B-spline gather, and C03 nonuniform staggered-field gather, boundaries, periodicity, and invalid inputs. See the
    :doc:`007_gather test overview </tests/007_gather/index>`.
