@@ -99,7 +99,9 @@
         ! Track one particle to escape, accumulate its residence/crossings, then
         ! start an independent history. There is no global physical-time loop.
         do p = 1, n_histories
-            call sub_J01_sample_fm_inlet(inlet, z_edge(1)+eps_z, inlet_drift_z, r, z, ur, uz)
+            call sub_J01_sample_fm_inlet(inlet, &
+                z_edge(1)+max(eps_z, abs(nearest(z_edge(1), 1.0)-z_edge(1))), &
+                inlet_drift_z, r, z, ur, uz)
             call sub_J01_trace_fm_history(r_edge, z_edge, active, face_type, diffuse_fraction, &
                 sigma_wall, max_events, eps_r, eps_z, r, z, ur, uz, tally, escaped, truncated)
             if (escaped) n_completed = n_completed+1
