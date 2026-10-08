@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="480" viewBox="0 0 1000 480" role="img" aria-labelledby="title desc">
+  <title id="title">一个轴向低端面内的入口与壁面分区</title>
+  <desc id="desc">局部径向坐标从负一到正一，入口占中间一个区间，两侧为壁面。三段分别积分，共用完整单元面的出射矩阵。图示为一般部分面，不限定实际入口一定落在单元中部。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#267d8d"/></marker></defs>
+  <rect width="1000" height="480" rx="12" fill="#f7f9fc"/>
+  <g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+    <text x="30" y="38" font-size="23" font-weight="bold">一个面可以同时包含入口和反射壁</text>
+    <text x="30" y="69" font-size="17" fill="#516578">图示一个单元的下端面；实际交集也可能贴在任一侧，或覆盖整个面。</text>
+    <rect x="90" y="100" width="820" height="108" fill="#eaf2f5"/>
+    <text x="420" y="138" font-size="20">有效单元内部</text>
+    <text x="420" y="168" font-size="18">轴向正方向向上</text>
+    <path d="M90 210H320M680 210H910" stroke="#647583" stroke-width="9"/>
+    <path d="M320 210H680" stroke="#cf852e" stroke-width="9"/>
+    <g fill="none" stroke="#267d8d" stroke-width="2.2" marker-end="url(#arrow)">
+      <path d="M390 255V180"/><path d="M500 255V180"/><path d="M610 255V180"/>
+      <path d="M180 155L200 204L220 157"/><path d="M780 155L800 204L820 157"/>
+    </g>
+    <g stroke="#8b9caa" stroke-dasharray="4 4">
+      <path d="M90 218V280"/><path d="M320 218V280"/><path d="M680 218V280"/><path d="M910 218V280"/>
+    </g>
+    <g font-family="Georgia, serif" font-size="23" text-anchor="middle">
+      <text x="90" y="307">−1</text>
+      <text x="320" y="307" font-style="italic">ξ<tspan baseline-shift="sub" font-size="15">L</tspan></text>
+      <text x="680" y="307" font-style="italic">ξ<tspan baseline-shift="sub" font-size="15">H</tspan></text>
+      <text x="910" y="307">+1</text>
+    </g>
+    <g text-anchor="middle" font-size="18">
+      <text x="200" y="252">壁面补集</text><text x="500" y="277" fill="#a96017">规定入口入射</text><text x="800" y="252">壁面补集</text>
+    </g>
+    <path d="M90 322V337H910V322" fill="none" stroke="#516578" stroke-width="1.5"/>
+    <text x="500" y="364" text-anchor="middle" font-size="18">出射面项：始终覆盖完整单元面</text>
+    <rect x="38" y="389" width="924" height="65" rx="8" fill="#eaf0f7"/>
+    <text x="60" y="416" font-size="18">入射右端 = 入口区间积分 + 左侧壁面积分 + 右侧壁面积分</text>
+    <text x="60" y="441" font-size="17" fill="#516578">开口比例用于算面积；含检验函数的积分还需要区间端点，不能只乘一个比例。</text>
+  </g>
+</svg>

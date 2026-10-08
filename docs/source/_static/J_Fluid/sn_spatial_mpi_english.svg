@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" role="img" aria-labelledby="title desc">
+<title id="title">Spatial MPI pipeline with OpenMP inside each block</title>
+<desc id="desc">Positive radial and axial velocity nodes travel from block A to B and C, then to D. Three DG coefficients are exchanged. Threads inside each process sweep different velocity nodes.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#276b91"/></marker></defs>
+<rect width="1000" height="640" rx="12" fill="#f8fafc"/>
+<g font-family="Arial, sans-serif" fill="#203444">
+<text x="40" y="42" font-size="24" font-weight="bold">Spatial blocks: positive r, positive z directions</text>
+<text x="40" y="72" font-size="17">Each block owns local cells and ALL velocity nodes.</text>
+<g stroke="#adc2d1" stroke-width="2" fill="white">
+<rect x="70" y="115" width="235" height="180" rx="9"/>
+<rect x="385" y="115" width="235" height="180" rx="9"/>
+<rect x="70" y="355" width="235" height="180" rx="9"/>
+<rect x="385" y="355" width="235" height="180" rx="9"/>
+</g>
+<g font-size="20" font-weight="bold">
+<text x="88" y="147">C · block (0,1)</text><text x="403" y="147">D · block (1,1)</text>
+<text x="88" y="387">A · block (0,0)</text><text x="403" y="387">B · block (1,0)</text>
+</g>
+<g font-size="16">
+<text x="88" y="172">ready after A</text><text x="403" y="172">ready after B and C</text>
+<text x="88" y="412">ready first</text><text x="403" y="412">ready after A</text>
+</g>
+<g fill="#e1eff5">
+<rect x="88" y="188" width="198" height="30" rx="4"/><rect x="88" y="226" width="198" height="30" rx="4"/>
+<rect x="403" y="188" width="198" height="30" rx="4"/><rect x="403" y="226" width="198" height="30" rx="4"/>
+<rect x="88" y="428" width="198" height="30" rx="4"/><rect x="88" y="466" width="198" height="30" rx="4"/>
+<rect x="403" y="428" width="198" height="30" rx="4"/><rect x="403" y="466" width="198" height="30" rx="4"/>
+</g>
+<g font-size="15">
+<text x="98" y="209">thread 1: velocity nodes</text><text x="98" y="247">thread 2: velocity nodes</text>
+<text x="413" y="209">thread 1: velocity nodes</text><text x="413" y="247">thread 2: velocity nodes</text>
+<text x="98" y="449">thread 1: velocity nodes</text><text x="98" y="487">thread 2: velocity nodes</text>
+<text x="413" y="449">thread 1: velocity nodes</text><text x="413" y="487">thread 2: velocity nodes</text>
+</g>
+<g stroke="#276b91" stroke-width="3" marker-end="url(#arrow)">
+<path d="M310 202H378"/><path d="M310 447H378"/>
+<path d="M185 350V302"/><path d="M500 350V302"/>
+</g>
+<g fill="#276b91" font-size="14">
+<text x="322" y="190">c₀,c₁,c₂</text><text x="322" y="435">c₀,c₁,c₂</text>
+<text x="200" y="328">c₀,c₁,c₂</text><text x="515" y="328">c₀,c₁,c₂</text>
+</g>
+<path d="M43 540V110" stroke="#276b91" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+<path d="M43 558H620" stroke="#276b91" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+<text x="23" y="125" font-size="18">z</text><text x="628" y="566" font-size="18">r</text>
+<rect x="666" y="115" width="300" height="420" rx="9" fill="#edf3ed" stroke="#bfd1be"/>
+<text x="688" y="151" font-size="20" font-weight="bold">Inside each process</text>
+<g font-size="17">
+<text x="688" y="197">1. Receive upstream planes</text><text x="688" y="224" fill="#57705b">MPI main thread</text>
+<text x="688" y="277">2. Sweep local cells</text><text x="688" y="304" fill="#57705b">OpenMP velocity tasks</text>
+<text x="688" y="357">3. Send downstream planes</text><text x="688" y="384" fill="#57705b">MPI main thread</text>
+<text x="688" y="437">4. Continue next quadrant</text><text x="688" y="482" fill="#57705b">No global field replication</text>
+</g>
+<text x="70" y="608" font-size="16">Edges between blocks are REMOTE interfaces, not physical walls or open boundaries.</text>
+</g></svg>

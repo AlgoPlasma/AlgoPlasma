@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="530" viewBox="0 0 1000 530" role="img" aria-labelledby="title desc">
+<title id="title">中性输运的模型、前处理和连续性推进</title>
+<desc id="desc">几何、入口、壁面出口与体损失共同定义物理问题；任选FM或SN生成参考密度和面通量，J03建立闭合并推进当前密度。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#38677b"/></marker></defs>
+<rect width="1000" height="530" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" text-anchor="middle" fill="#163749">
+<text x="500" y="30" font-size="23">先定义计算问题，再选择前处理方法</text>
+<g fill="#edf4f8" stroke="#849fb1" stroke-width="1.5">
+<rect x="25" y="52" width="210" height="85" rx="8"/><rect x="270" y="52" width="210" height="85" rx="8"/>
+<rect x="515" y="52" width="210" height="85" rx="8"/><rect x="760" y="52" width="215" height="85" rx="8"/>
+</g>
+<g font-size="21">
+<text x="130" y="86">几何与有效区域</text><text x="375" y="86">入口模型</text>
+<text x="620" y="86">壁面与开放出口</text><text x="867" y="86">体损失（若支持）</text>
+</g>
+<g font-size="17">
+<text x="130" y="115">单元体积、面面积</text><text x="375" y="115">分布、位置、供应率</text>
+<text x="620" y="115">反射关系、外部入射</text><text x="867" y="115">指定适用的损失模型</text>
+</g>
+<g fill="none" stroke="#38677b" stroke-width="2">
+<path d="M130 137V166H867V137M375 137V166M620 137V166M300 166V206" marker-end="url(#arrow)"/>
+<path d="M700 166V206" marker-end="url(#arrow)"/>
+</g>
+<rect x="100" y="210" width="390" height="94" rx="8" fill="#e7f5f1" stroke="#4c9380"/>
+<rect x="510" y="210" width="390" height="94" rx="8" fill="#e7f5f1" stroke="#4c9380"/>
+<text x="295" y="241" font-size="22">J01：粒子历史统计</text><text x="705" y="241" font-size="22">J02：离散纵标求解</text>
+<text x="295" y="270" font-size="18">采样 → 飞行/反射 → 驻留与穿面统计</text>
+<text x="705" y="270" font-size="18">离散速度 → 单元方程 → 分布积分</text>
+<text x="500" y="194" font-size="17">两条路线二选一；当前模型范围并不完全相同</text>
+<g fill="none" stroke="#38677b" stroke-width="2">
+<path d="M295 304V330H500V351" marker-end="url(#arrow)"/><path d="M705 304V330H500"/>
+</g>
+<rect x="180" y="355" width="640" height="58" rx="8" fill="#edf4f8" stroke="#849fb1"/>
+<text x="500" y="379" font-size="20">参考密度、内部面通量、分开的边界入射与出射</text>
+<text x="500" y="401" font-size="16">应用连接数组；J03 不读取粒子历史或速度分布</text>
+<path d="M500 414V443" fill="none" stroke="#38677b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="180" y="447" width="640" height="65" rx="8" fill="#fff4e7" stroke="#b99562"/>
+<text x="500" y="474" font-size="21">J03：建立面系数 → 当前通量 → 密度单步</text>
+<text x="500" y="500" font-size="17">物理时间、当前入口与体源损由应用循环提供</text>
+</g></svg>

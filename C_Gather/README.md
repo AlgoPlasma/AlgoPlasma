@@ -12,6 +12,7 @@ function weights at particle positions.
 | --- | --- |
 | `C01_gather_3Dxyz` | Trilinear gather of 3D Cartesian electric and magnetic fields, plus a fused gather-and-push kernel. |
 | `C02_gather_3Dxyz_bspline` | Direct B-spline gather of 3D Cartesian electric and magnetic fields. |
+| `C03_gather_3Draz_nonuniform` | Single-particle gather of nonuniform cylindrical staggered electrostatic E and nodal B, using physical coordinates. |
 
 ## Usage Notes
 

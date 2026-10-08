@@ -14,6 +14,9 @@ Tests
    007_gather/index
    008_mpi_exchange/index
    009_collision/index
+   010_diagnostics/index
+   011_K04_breathing_waveform/index
+   012_fluid/index
    kunpeng_compare/index
 
 .. raw:: html
@@ -63,7 +66,7 @@ Tests
         - :doc:`I_Initializer </rst_files/I_Initializer>`
         - :doc:`006_initializer 测试总览 <006_initializer/index>`
       * - ``007_gather``
-        - C_Gather 三线性 gather 和 B-spline 权重测试。
+        - C01 三线性、C02 B-spline，以及 :doc:`C03 非均匀柱坐标 gather <007_gather/C03_gather_3Draz_nonuniform>` 测试。
         - :doc:`C_Gather </rst_files/C_Gather>`
         - :doc:`007_gather 测试总览 <007_gather/index>`
       * - ``008_mpi_exchange``
@@ -71,9 +74,21 @@ Tests
         - :doc:`H_MPI_Exchange </rst_files/H_MPI_Exchange>`
         - :doc:`008_mpi_exchange 测试总览 <008_mpi_exchange/index>`
       * - ``009_collision``
-        - G_Collision 截面表加载器的数组边界回归测试。
+        - G01 截面表加载器回归，以及 G02 碰撞网络和零维碰撞盒验证。
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision 测试总览 <009_collision/index>`
+      * - ``010_diagnostics``
+        - K_Diagnostics 基础数值测试与合成宽带链路测试。
+        - :doc:`K_Diagnostics </rst_files/K_Diagnostics>`
+        - :doc:`010_diagnostics 测试总览 <010_diagnostics/index>`
+      * - ``011_K04_breathing_waveform``
+        - 呼吸波形提取的本地测试、人工示例、画图和清理。
+        - :doc:`K04 </rst_files/K_Diagnostics/K04_breathing_waveform>`
+        - :doc:`011_K04 测试说明 <011_K04_breathing_waveform/index>`
+      * - ``012_fluid``
+        - J01 自由分子历史、J02 SN P1-DG 和 J03 面通量连续性方程测试。
+        - :doc:`J_Fluid </rst_files/J_Fluid>`
+        - :doc:`012_fluid 测试总览 <012_fluid/index>`
       * - ``kunpeng_compare``
         - 鲲鹏相关的平台/编译器性能对比测试。
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -81,8 +96,11 @@ Tests
 
    .. rubric:: 覆盖状态说明
 
-   ``G_Collision`` 当前由 ``tests/009_collision`` 覆盖截面表加载器的数组边界行为，
-   尚不包含完整 MCC 物理验证。``J_Fluid`` 尚无独立的顶层 ``tests/`` 回归目录；
+   ``G_Collision`` 的 G01 测试覆盖截面表加载器边界；G02 测试覆盖算法、统计和零维碰撞盒，
+   使用合成数据。``tests/012_fluid`` 覆盖 J01 单步/自由分子历史、
+   J02 求积、离散算子、反射边界及并行一致性，以及 J03 瞬态推进和稳态求解。
+   应用测试页记录 FM B0、SN B0、SN ION 前处理与各自的 J03 结果。
+   ``K_Diagnostics`` 的 K01–K03 由 ``tests/010_diagnostics``、K04 由 ``tests/011_K04_breathing_waveform`` 覆盖；
    ``H_MPI_Exchange`` 已由 ``tests/008_mpi_exchange`` 覆盖。
 
 .. container:: ap-lang ap-lang-en
@@ -128,7 +146,7 @@ Tests
         - :doc:`I_Initializer </rst_files/I_Initializer>`
         - :doc:`006_initializer test overview <006_initializer/index>`
       * - ``007_gather``
-        - C_Gather trilinear gather and B-spline weight tests.
+        - C01 trilinear, C02 B-spline, and :doc:`C03 nonuniform cylindrical gather <007_gather/C03_gather_3Draz_nonuniform>` tests.
         - :doc:`C_Gather </rst_files/C_Gather>`
         - :doc:`007_gather test overview <007_gather/index>`
       * - ``008_mpi_exchange``
@@ -136,9 +154,21 @@ Tests
         - :doc:`H_MPI_Exchange </rst_files/H_MPI_Exchange>`
         - :doc:`008_mpi_exchange test overview <008_mpi_exchange/index>`
       * - ``009_collision``
-        - Array-bound regression tests for the G_Collision cross-section loader.
+        - G01 cross-section loader regressions plus G02 collision-network and zero-dimensional collision-box validation.
         - :doc:`G_Collision </rst_files/G_Collision>`
         - :doc:`009_collision test overview <009_collision/index>`
+      * - ``010_diagnostics``
+        - basic_numerical tests and a synthetic broadband chain test for K_Diagnostics.
+        - :doc:`K_Diagnostics </rst_files/K_Diagnostics>`
+        - :doc:`010_diagnostics test overview <010_diagnostics/index>`
+      * - ``011_K04_breathing_waveform``
+        - Local waveform-extraction tests, artificial examples, plotting and cleanup.
+        - :doc:`K04 </rst_files/K_Diagnostics/K04_breathing_waveform>`
+        - :doc:`011_K04 test guide <011_K04_breathing_waveform/index>`
+      * - ``012_fluid``
+        - J01 free-molecular histories, J02 SN P1-DG, and J03 face-flux continuity tests.
+        - :doc:`J_Fluid </rst_files/J_Fluid>`
+        - :doc:`012_fluid test overview <012_fluid/index>`
       * - ``kunpeng_compare``
         - Kunpeng-related platform and compiler performance comparisons.
         - :doc:`A_Pusher </rst_files/A_Pusher>`
@@ -146,7 +176,11 @@ Tests
 
    .. rubric:: Coverage Notes
 
-   ``G_Collision`` currently has array-bound coverage for its cross-section
-   loader under ``tests/009_collision``; this is not a complete MCC physics
-   validation. ``J_Fluid`` has no standalone top-level regression directory.
+   ``G_Collision`` has G01 loader-boundary tests and G02 algorithm, statistical
+   and zero-dimensional collision-box tests using synthetic data.
+   ``tests/012_fluid`` covers the J01 legacy/FM paths, J02 quadrature/DG/reflection
+   and parallel consistency, plus J03 transient and steady solvers.
+   The application page reports FM B0, SN B0 and SN ION preprocessing runs
+   and their respective J03 solutions.
+   K01–K03 are covered by ``tests/010_diagnostics``; K04 is covered by ``tests/011_K04_breathing_waveform``.
    ``H_MPI_Exchange`` is covered by ``tests/008_mpi_exchange``.

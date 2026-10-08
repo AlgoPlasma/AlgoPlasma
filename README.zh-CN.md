@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[中文](README.zh-CN.md) | [English](README.en.md) | [在线文档](https://algoplasma.readthedocs.io/en/latest/index.html)
 
 AlgoPlasma 曾用名为 PMSL，致力于把等离子体建模中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的算法库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。AlgoPlasma 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
 
@@ -18,6 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI 数据交换
 ├── I_Initializer     # 初始化
 ├── J_Fluid           # 流体算法
+├── K_Diagnostics     # 探针诊断与信号反演
 ├── docs              # Sphinx + Doxygen 文档
 └── tests             # 算法测试与验证案例
 ```
@@ -86,6 +87,8 @@ bash run.sh
 
 ## 文档
 
+在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/latest/index.html)。
+
 项目文档基于 Sphinx、Doxygen 和 Breathe 构建：
 
 - 源码中的 Doxygen 注释用于生成 API 文档。
@@ -120,7 +123,11 @@ make html
 
 ## 许可证
 
-AlgoPlasma 采用 [Apache License 2.0](LICENSE) 开源许可证。版权和归属信息见 [NOTICE](NOTICE)。
+AlgoPlasma 的原创内容采用 [Apache License 2.0](LICENSE) 开源许可证。版权和归属信息见 [NOTICE](NOTICE)。第三方依赖，以及仓库中再分发的第三方代码或数据，仍受各自许可证约束。
+
+源码文件尚未统一配置逐文件许可头；未单独标注的项目原创文件适用仓库顶层的 `LICENSE` 和 `NOTICE`。
+
+`D_Poisson/D01_hypre_3Dxyz/fun_D01_hypre_3Dxyz_bc.c` 包含改编自 HYPRE Struct 接口示例的内容，文件头保留了上游版权归属、标明了 AlgoPlasma 的改动，并采用上游双重许可中的 Apache-2.0 选项。相关上游声明保留在 `NOTICE` 中。
 
 ## 发起人/联系人
 

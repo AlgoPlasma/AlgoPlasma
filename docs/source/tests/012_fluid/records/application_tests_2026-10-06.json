@@ -1,0 +1,314 @@
+{
+  "FM_B0": {
+    "active_cells": 56320,
+    "pre_density_min": 2201352598065317,
+    "pre_density_max": 12757259111947655000,
+    "post_density_min": 2207300245502693.5,
+    "post_density_max": 12722165848195623000,
+    "inflow_rate": 1559283996656218600,
+    "outflow_rate": 1559283879969042000,
+    "removal_rate": 0,
+    "scaled_residual": 9.997872483405126e-9,
+    "relative_balance": 7.483381921075822e-8,
+    "density_relative_l2_change": 0.00364051192606969,
+    "recomputed_vs_summary_relative_errors": {
+      "inflow_rate": 4.925337537273035e-16,
+      "outflow_rate": 1.6417793019516285e-16,
+      "removal_rate": 0,
+      "scaled_residual": 1.9575181883129305e-9,
+      "relative_balance": 8.775599674398489e-9
+    },
+    "j03_steps": 10675,
+    "final_relative_change": 4.975853051626074e-11,
+    "preprocessing": {
+      "model": "steady_free_molecular_history_mc",
+      "histories": "2400000",
+      "completed": "2400000",
+      "truncated": "0",
+      "history_particle_rate_s_inv": "  3.4467743854433823E+10"
+    },
+    "file_sha256": {
+      "j01/active_mask_rz_f64.bin": "14eb838c8743fa1a39bc5ef1de39c29faea3f8a225846e60140a3718fcc3aa6d",
+      "j01/boundary_inflow_flux_f64.bin": "4afd9158e2407637db57b4442803833da195fa5e45880ef7868917962ca9c180",
+      "j01/boundary_outflow_flux_f64.bin": "10e051739b67da0b757f8474f2e10ab4d22ca28c2c3f93d2847895161d8eb820",
+      "j01/j01_fm_summary.txt": "27f4f05f297cedb50360fab8d5564d20c484f64ac4f4cac33617504d699a3ed0",
+      "j01/na_j01_rz_f64.bin": "e59096e2361d42e404460fa4644e1b624f8aae22ee7a1bcfef340aabb387d9a9",
+      "j01/rhi_open_flux_f64.bin": "f79880268259f7b302946faf551e6bfbf13affdbb8d20476ce58c5790f353a79",
+      "j01/rlo_open_flux_f64.bin": "6a91f86bdcfa986f0f02a65c0e05f7fa7247d876b96e762e924b27c673f8b66f",
+      "j01/run.log": "9686a74d2621e9336607f8f95bdb1229a052d3f928c4ec5d6f24b92899dbaecd",
+      "j01/ur_face_flux_f64.bin": "6f90be1d0d62fa6300d2c710c60a5a0d949808ca8bb1b9377c6caeda6d60a387",
+      "j01/ur_j01_rz_f64.bin": "a2a2a1a84da5690277ec1bc95a7833445ab54c1fa10f09fddf3dcffb85864f55",
+      "j01/uz_face_flux_f64.bin": "99e5bd674ff645f3b257c8530467f675b5626e1d42fcb7c21bf74a6d29e56dca",
+      "j01/uz_j01_rz_f64.bin": "b6cc93bc0c9219721571154fdc81e3dbf26fbc8085fc7302952013239d8be999",
+      "j01/zhi_open_flux_f64.bin": "5353ffe36be1ec7ef48100210508e4609fdb045afcbc30ee8bcfb4a5c9f5beb1",
+      "j01/zlo_open_flux_f64.bin": "3d75908095a00f13b2081c4db3891152df80693716bfb39a46353acddfa3fd9b",
+      "j01_chain_density.png": "99e0736878fe5dd43cedf95fe0b633e9742269e0493f51392746b51b3e1d7baf",
+      "j03/j03_run_summary.txt": "bed7eedaa9fd78a47fdedbcf76dc195a9d03954e1b523150ff005be980e533bd",
+      "j03/na_cont_rz_f64.bin": "3c16da96cab1525a56048313709ed12066671f21836d175a22a3763a63351e0b",
+      "j03/run.log": "c0f43b35ba420c018f5569a565559d433f024482da476ed32c6798ab3f3ee19a",
+      "summary.txt": "82124219a1860745e6a398da516cdca41f15d42c67739246a6f34bfb5f78b418"
+    },
+    "source_iteration_history": [],
+    "provenance": {
+      "run_directory": "fluid-fix-20261006-233223/FM_B0",
+      "source_manifest": "fluid-fix-20261006-233223/source_and_scripts.sha256",
+      "source_manifest_sha256": "87e9a292a6a7554724843922cad8f2eb4ac4e872486e5a4a8973cc253762aadc",
+      "note": "Source and shell manifest saved before this rerun; includes the J01 near-corner correction. The manifest predates non-numerical submission-helper edits and removal; these do not change the numerical build."
+    }
+  },
+  "SN_B0": {
+    "active_cells": 56320,
+    "pre_density_min": 3948054466002944,
+    "pre_density_max": 12628551851495653000,
+    "post_density_min": 3947978666105034.5,
+    "post_density_max": 12628541038394624000,
+    "inflow_rate": 1559274508603678000,
+    "outflow_rate": 1559274856659313000,
+    "removal_rate": 0,
+    "relative_balance": 2.2321634537845108e-7,
+    "scaled_residual": 4.284378774212629e-9,
+    "density_relative_l2_change": 0.0000030251761028318386,
+    "recomputed_vs_summary_relative_errors": {
+      "inflow_rate": 0,
+      "outflow_rate": 8.20894401351633e-16,
+      "removal_rate": 0,
+      "scaled_residual": 0,
+      "relative_balance": 3.677572194788427e-9
+    },
+    "j03_steps": 3647,
+    "final_relative_change": 9.99583098368069e-11,
+    "preprocessing": {
+      "case": "B0",
+      "source_iterations": "20",
+      "source_converged": "1",
+      "source_final_rel_change": "  7.1382100941264071E-07"
+    },
+    "file_sha256": {
+      "j02/active_mask_rz_f64.bin": "14eb838c8743fa1a39bc5ef1de39c29faea3f8a225846e60140a3718fcc3aa6d",
+      "j02/boundary_inflow_flux_f64.bin": "6d33148311f7e80695a5723d9c9d945b6192195c4af4337e9fac45ad038dca2a",
+      "j02/boundary_outflow_flux_f64.bin": "e0347fb59499622622e8736aaa953fbe8a778712aa42fe281587149168c6bfba",
+      "j02/j02_run_summary.txt": "3a616f88b7011d8efda4b2f1195306b3fe4596fb394e1882e4533144e4b033af",
+      "j02/na_sn_rz_f64.bin": "7749fe04969580ac790188c6b13e22f07023cee6313e19121d8d4ea895302b17",
+      "j02/rhi_open_flux_f64.bin": "65296f94e1c660e818e2d959862250e8c2d6f193532cc236637bb01ba6079d55",
+      "j02/rlo_open_flux_f64.bin": "e5f78d68d3491607dfc05d35109abadb81b9e4a97b4629c92c85d9f9973b16c7",
+      "j02/run.log": "843cfad1d1c7cda751dee21d95d573c66a2d3c668fc6bb9e78a279b451881096",
+      "j02/ur_face_flux_f64.bin": "e2d83d9d6375176e7aeee97c4f7f94c6e67fbedad4528cf8a9c8c03d48f961eb",
+      "j02/ur_sn_rz_f64.bin": "f1e72a8e76eabc513775618c9d90657c6f918eefe18b6df0fd052615e3ab49c3",
+      "j02/uz_face_flux_f64.bin": "f2940f296542356ecaeb1284000184ba255b65491d286d929f11df815e84bb44",
+      "j02/uz_sn_rz_f64.bin": "7d95fb6e1f8ad7c3a8ad7d0dcb3ce9ed8f85577ef586dd7d36844827fa3bac37",
+      "j02/zhi_open_flux_f64.bin": "6dca672769764939f76290168ca37dec0b1fd5238d4fd0a87c6b6f565ef58c58",
+      "j02/zlo_open_flux_f64.bin": "437635581cbf6d5266add42d1be911eeaad5793d3b7eac5b5c9b6718b28779f7",
+      "j02_chain_density.png": "71da5a05c06e788d4e80ac87d4700712e6b649b64a83943207997a05987cd1af",
+      "j03/j03_run_summary.txt": "b8e18d89864aece8e2a20d2c4cab374b8644639f460ee3b3d57861d4a1ca8e0e",
+      "j03/na_cont_rz_f64.bin": "ee57f5a88f2aa1acb7ae040c022f16a7982f5fc2dc44d3becdf89c86d181008e",
+      "j03/run.log": "23aa6dab140604ac9362ebb8c993ff63b75e2b0a4fc5c8a30852cb84aa0c7d3b",
+      "summary.txt": "132d0743988b291f7fce782a49e59814267f9f911e79109993b48a89e08e5470"
+    },
+    "source_iteration_history": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        0.3247
+      ],
+      [
+        3,
+        0.089886
+      ],
+      [
+        4,
+        0.039347
+      ],
+      [
+        5,
+        0.019226
+      ],
+      [
+        6,
+        0.0094182
+      ],
+      [
+        7,
+        0.0046687
+      ],
+      [
+        8,
+        0.0023296
+      ],
+      [
+        9,
+        0.0011634
+      ],
+      [
+        10,
+        0.00057987
+      ],
+      [
+        11,
+        0.00028787
+      ],
+      [
+        12,
+        0.00014393
+      ],
+      [
+        13,
+        0.00007038
+      ],
+      [
+        14,
+        0.00003591
+      ],
+      [
+        15,
+        0.000016481
+      ],
+      [
+        16,
+        0.0000080105
+      ],
+      [
+        17,
+        0.0000040268
+      ],
+      [
+        18,
+        0.0000021374
+      ],
+      [
+        19,
+        0.0000012153
+      ],
+      [
+        20,
+        7.1382e-7
+      ]
+    ],
+    "provenance": {
+      "run_directory": "fluid-20261006-192111/SN_B0",
+      "note": "Completed before the J01-only correction and test-directory rename. J02/J03 numerical sources were not changed by this correction. No build-time source manifest was recorded."
+    }
+  },
+  "SN_ION": {
+    "active_cells": 56320,
+    "pre_density_min": 125479919026176,
+    "pre_density_max": 12031565416124908000,
+    "post_density_min": 125477704982244.3,
+    "post_density_max": 12031529865769130000,
+    "inflow_rate": 1559274508603678000,
+    "outflow_rate": 590267261189650700,
+    "removal_rate": 969007175369736400,
+    "relative_balance": 4.6203725141710475e-8,
+    "scaled_residual": 9.995252301125552e-9,
+    "density_relative_l2_change": 0.000003449759152867499,
+    "recomputed_vs_summary_relative_errors": {
+      "inflow_rate": 0,
+      "outflow_rate": 2.1685092231275567e-16,
+      "removal_rate": 9.246577556643173e-16,
+      "scaled_residual": 2.8910628777187833e-9,
+      "relative_balance": 1.0660109042782282e-8
+    },
+    "j03_steps": 6223,
+    "final_relative_change": 2.8192992395311828e-11,
+    "preprocessing": {
+      "case": "ION",
+      "source_iterations": "15",
+      "source_converged": "1",
+      "source_final_rel_change": "  8.3927881178169628E-07"
+    },
+    "file_sha256": {
+      "j02/active_mask_rz_f64.bin": "14eb838c8743fa1a39bc5ef1de39c29faea3f8a225846e60140a3718fcc3aa6d",
+      "j02/boundary_inflow_flux_f64.bin": "6d33148311f7e80695a5723d9c9d945b6192195c4af4337e9fac45ad038dca2a",
+      "j02/boundary_outflow_flux_f64.bin": "1ef8fd6693f324d9e18d0eff2ac29d49d8888b1cf584083645101d368f5d90b5",
+      "j02/j02_run_summary.txt": "c96d4a5f1d39e6556f13f8dd82504ba3f026b3757f20ca4bf23efa69cf624654",
+      "j02/na_sn_rz_f64.bin": "8bd520d6b4cf1c21bb7d8903670cc50954650cb93c11f198edf789f10014ebbb",
+      "j02/rhi_open_flux_f64.bin": "7a1793a1e4809224dad41de6bb7490e4a4c2f7bcfa639ef140d165da48eaee14",
+      "j02/rlo_open_flux_f64.bin": "920d4a8eb413d15355156df0870373bc0a22d19369d28d28fa3c14d2468b6a23",
+      "j02/run.log": "e737a8fbcc81ff1f62de3795fdd1b0c3a4b5c62550ca4877cbb40fb9e4148490",
+      "j02/ur_face_flux_f64.bin": "749e3a149dd6f4e0371168f83006ca1818f1b677352dc617f0b473253b1c4fca",
+      "j02/ur_sn_rz_f64.bin": "70182de36b8b683584169f7e42c5cf667b755d6927a72ae9642fd370bee271fd",
+      "j02/uz_face_flux_f64.bin": "de889522338cde18921af95f4ab763326422d59b350da881622169ff1f9a6841",
+      "j02/uz_sn_rz_f64.bin": "113f31a1d254f283141388919b1ad626efd89c61ad1e402c8b3e672ead24d5b0",
+      "j02/zhi_open_flux_f64.bin": "04250d00dbb077df49d162f087ed0111e9974fc84740ef2a76ac1fdef8fcc8cd",
+      "j02/zlo_open_flux_f64.bin": "18df8f516270992b2cc2206d6d0e85d566cd769319d64239ad426140de9212c8",
+      "j02_chain_density.png": "4d49cb49a166f52d4de5d7527453a8159ce4e9bd8f29b48bed8966212f1fee7f",
+      "j03/j03_run_summary.txt": "af7c85e3131ac6b076d8c8a8a7b62dadb7cc0d179f92a68d10ce05e0897401c7",
+      "j03/na_cont_rz_f64.bin": "06cac65b55bebd2e2a28041d618db87067246de04d6fae41a8a97ed152786bf6",
+      "j03/run.log": "e68b6ea5564477dfcf2d5922a97c6f40e116300834d2337ab8b86afd3e3bea49",
+      "summary.txt": "b5144e495ba97dfe8a5d32d8f1aa5411dc87ee2e4e47ef7cf290df3445cfb3b9"
+    },
+    "source_iteration_history": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        0.29848
+      ],
+      [
+        3,
+        0.054566
+      ],
+      [
+        4,
+        0.020342
+      ],
+      [
+        5,
+        0.0079461
+      ],
+      [
+        6,
+        0.0032602
+      ],
+      [
+        7,
+        0.0012536
+      ],
+      [
+        8,
+        0.00048562
+      ],
+      [
+        9,
+        0.00020229
+      ],
+      [
+        10,
+        0.000074358
+      ],
+      [
+        11,
+        0.00003143
+      ],
+      [
+        12,
+        0.000010737
+      ],
+      [
+        13,
+        0.0000041027
+      ],
+      [
+        14,
+        0.0000016817
+      ],
+      [
+        15,
+        8.3928e-7
+      ]
+    ],
+    "provenance": {
+      "run_directory": "fluid-20261006-192111/SN_ION",
+      "note": "Completed before the J01-only correction and test-directory rename. J02/J03 numerical sources were not changed by this correction. No build-time source manifest was recorded."
+    }
+  },
+  "_verification": {
+    "date": "2026-10-06",
+    "method": "Read saved float64 fields; verify exact active mask, finite fields and nonnegative densities; reconstruct fixed J03 face coefficients using floor fraction 1e-6; independently sum cylindrical face rates, prescribed loss and local residual. Compare to saved summaries. This checks output consistency, not independent physical-model accuracy.",
+    "provenance_limit": "Each case records its own run directory. FM B0 was rerun after the J01 correction with a runtime source manifest. SN B0/ION retain the completed earlier runs; their build identity cannot be proven retrospectively. The earlier shared working-tree fingerprint is not used as evidence for the repaired FM run."
+  }
+}

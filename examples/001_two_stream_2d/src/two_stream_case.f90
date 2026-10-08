@@ -17,7 +17,8 @@ module two_stream_case
     integer :: rank_map(3,0:0), inverse_map(0:2,0:2,0:2)
     integer :: split(3) = [1,1,1]
     real :: domain_length(3) = [lx,ly,0.0]
-    real, allocatable :: particles(:,:), density(:,:,:), potential(:,:,:)
+    real, allocatable :: particles(:,:), particle_positions(:,:)
+    real, allocatable :: density(:,:,:), potential(:,:,:)
     real, allocatable :: ex(:,:,:), ey(:,:,:), ez(:,:,:)
     real, allocatable :: bx(:,:,:), by(:,:,:), bz(:,:,:)
     real, allocatable :: phi_vector(:), rhs(:), matrix_values(:)
@@ -36,7 +37,7 @@ contains
         call mpi_comm_size(mpi_comm_world,nproc,ierr)
         if (nproc /= 1) error stop 'This compact example uses one MPI rank.'
 
-        allocate(particles(6,np))
+        allocate(particles(6,np),particle_positions(3,np))
         allocate(density(0:nx+1,0:ny+1,0:2),potential(0:nx+1,0:ny+1,0:2))
         allocate(ex(0:nx+1,0:ny+1,0:2),ey(0:nx+1,0:ny+1,0:2),ez(0:nx+1,0:ny+1,0:2))
         allocate(bx(0:nx+1,0:ny+1,0:2),by(0:nx+1,0:ny+1,0:2),bz(0:nx+1,0:ny+1,0:2))
@@ -76,13 +77,16 @@ contains
     end subroutine initialize_case
 
     subroutine update_electric_field
-        integer :: i, j, m
+        integer :: i, j, m, p
         real :: mean_rhs
 
-        particles(1:3,:) = particles(1:3,:) + 0.5
+        !$omp parallel do schedule(static)
+        do p=1,np
+            particle_positions(:,p) = particles(1:3,p) + 0.5
+        end do
+        !$omp end parallel do
         density = 0.0
-        call sub_B01_scatter_3Dxyz(il,iu,density,np,particles(1:3,:),particle_weight)
-        particles(1:3,:) = particles(1:3,:) - 0.5
+        call sub_B01_scatter_3Dxyz(il,iu,density,np,particle_positions,particle_weight)
 
         density(nx,:,:) = density(nx,:,:) + density(0,:,:)
         density(1,:,:)  = density(1,:,:)  + density(nx+1,:,:)
@@ -123,25 +127,37 @@ contains
         real, intent(in) :: push_factor
         integer :: p
         real :: e_particle(3), b_particle(3), velocity(3)
+        !$omp parallel do private(e_particle,b_particle,velocity) schedule(static)
         do p=1,np
             call sub_C01_gather_3Dxyz(p,np,particles,il,iu,ex,ey,ez,bx,by,bz,e_particle,b_particle)
             velocity = particles(4:6,p)
             call sub_A01_Boris_3Dxyz(velocity,e_particle,b_particle,push_factor)
             particles(4:6,p) = velocity
         end do
+        !$omp end parallel do
     end subroutine push_velocities
 
     subroutine move_particles(step)
         real, intent(in) :: step
-        particles(1,:) = modulo(particles(1,:)+particles(4,:)*step,real(nx))
-        particles(2,:) = modulo(particles(2,:)+particles(5,:)*step,real(ny))
-        particles(3,:) = 0.5
+        integer :: p
+        !$omp parallel do schedule(static)
+        do p=1,np
+            particles(1,p) = modulo(particles(1,p)+particles(4,p)*step,real(nx))
+            particles(2,p) = modulo(particles(2,p)+particles(5,p)*step,real(ny))
+            particles(3,p) = 0.5
+        end do
+        !$omp end parallel do
     end subroutine move_particles
 
     subroutine write_fields(step)
         integer, intent(in) :: step
-        call sub_F04_field_output_3d_bin('Ex',step,il,iu,ex(1:nx,1:ny,1:1))
-        call sub_F04_field_output_3d_bin('Ey',step,il,iu,ey(1:nx,1:ny,1:1))
+        real :: output_field(nx,ny,1)
+
+        output_field(:,:,1) = ex(1:nx,1:ny,1)
+        call sub_F04_field_output_3d_bin('Ex',step,il,iu,output_field)
+
+        output_field(:,:,1) = ey(1:nx,1:ny,1)
+        call sub_F04_field_output_3d_bin('Ey',step,il,iu,output_field)
     end subroutine write_fields
 
     subroutine write_particles(step)
@@ -162,4 +178,3 @@ contains
         field(:,:,0)=field(:,:,1); field(:,:,2)=field(:,:,1)
     end subroutine fill_field_ghosts
 end module two_stream_case
-

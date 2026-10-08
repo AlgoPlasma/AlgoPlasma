@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(algoplasma_two_stream LANGUAGES C Fortran)
 
 find_package(MPI REQUIRED COMPONENTS Fortran)
+find_package(OpenMP REQUIRED COMPONENTS Fortran)
 
 # User configuration: set this to the local HYPRE installation prefix.
 set(HYPRE_ROOT "" CACHE PATH "HYPRE installation prefix")
@@ -58,7 +59,7 @@ target_include_directories(algoplasma_two_stream_modules PUBLIC
 target_compile_options(algoplasma_two_stream_modules PRIVATE
     $<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-cpp;-DUSE_HDF5=0;-O3;-fdefault-real-8>)
 target_link_libraries(algoplasma_two_stream_modules PUBLIC
-    MPI::MPI_Fortran HYPRE::HYPRE)
+    MPI::MPI_Fortran OpenMP::OpenMP_Fortran HYPRE::HYPRE)
 
 add_executable(two_stream_2d
     src/case_parameters.f90
@@ -67,4 +68,3 @@ add_executable(two_stream_2d
 target_compile_options(two_stream_2d PRIVATE
     $<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-cpp;-DUSE_HDF5=0;-O3;-fdefault-real-8>)
 target_link_libraries(two_stream_2d PRIVATE algoplasma_two_stream_modules)
-

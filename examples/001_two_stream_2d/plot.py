@@ -40,28 +40,27 @@ mpl.rcParams.update(
         "font.family": "serif",
         "font.serif": ["DejaVu Serif"],
         "mathtext.fontset": "stix",
-        "font.size": 9.0,
-        "axes.labelsize": 9.5,
-        "axes.titlesize": 9.5,
-        "xtick.labelsize": 8.5,
-        "ytick.labelsize": 8.5,
-        "legend.fontsize": 8.2,
-        "axes.linewidth": 0.8,
+        "font.size": 10.0,
+        "axes.labelsize": 11.5,
+        "axes.titlesize": 11.5,
+        "xtick.labelsize": 10.0,
+        "ytick.labelsize": 10.0,
+        "legend.fontsize": 10.0,
+        "axes.linewidth": 1.0,
         "xtick.direction": "in",
         "ytick.direction": "in",
         "xtick.top": True,
         "ytick.right": True,
-        "xtick.major.width": 0.8,
-        "ytick.major.width": 0.8,
-        "xtick.minor.width": 0.6,
-        "ytick.minor.width": 0.6,
+        "xtick.major.width": 1.0,
+        "ytick.major.width": 1.0,
+        "xtick.minor.width": 0.8,
+        "ytick.minor.width": 0.8,
         "savefig.facecolor": "white",
         "figure.facecolor": "white",
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
     }
 )
-
 
 def indexed_files(label):
     files = {}
@@ -216,19 +215,35 @@ def phase_space_figure(target_times=(0.0, 17.5, 25.0)):
         )
         axis.set_xlim(0.0, 1.0)
         axis.set_ylim(-6.0, 6.0)
+        axis.set_xticks(np.linspace(0.0, 1.0, 6))
+        axis.xaxis.set_major_formatter(mpl.ticker.FormatStrFormatter("%.1f"))
         axis.set_xlabel(r"Wave phase, $\theta/2\pi$")
+        axis.tick_params(axis="x", which="major", pad=6)
         axis.set_title(
             rf"({chr(97 + panel)}) $\omega_{{pe}}t={step * DT:g}$", loc="left", pad=4
         )
         axis.minorticks_on()
         if panel:
             axis.tick_params(axis="y", which="both", labelleft=False)
-    axes[0].set_ylabel(r"$v_{\parallel}/v_{te}$")
-    colorbar = fig.colorbar(image, cax=colorbar_axis)
-    colorbar.ax.set_title(r"$f/f_{\max}$", pad=6)
-    colorbar.ax.tick_params(direction="in")
-    save_figure(fig, "fig1_phase_space_evolution.png")
 
+    axes[0].set_ylabel(r"$v_{\parallel}/v_{te}$")
+    axes[0].tick_params(axis="y", which="major", pad=4)
+    colorbar = fig.colorbar(image, cax=colorbar_axis)
+    colorbar.ax.set_title(r"$f/f_{\max}$", pad=10)
+    colorbar.ax.tick_params(direction="in")
+
+    fig.canvas.draw()
+    panel_position = axes[2].get_position()
+    colorbar_position = colorbar_axis.get_position()
+    colorbar_axis.set_position(
+        [
+            panel_position.x1 + 0.018,
+            panel_position.y0,
+            colorbar_position.width,
+            panel_position.height,
+        ]
+    )
+    save_figure(fig, "fig1_phase_space_evolution.png")
 
 def field_growth_energy_figure():
     steps, times, rms_field, mode_amplitude = field_diagnostics()
@@ -258,13 +273,15 @@ def field_growth_energy_figure():
     total_error_percent = 100.0 * (energy[:, 3] - initial_total) / initial_total
     maximum_error_percent = float(np.max(np.abs(total_error_percent)))
 
-    fig = plt.figure(figsize=(7.35, 5.70))
+    fig = plt.figure(figsize=(7.35, 5.75))
     outer = fig.add_gridspec(
-        2, 2, width_ratios=(1.0, 1.24), height_ratios=(0.84, 0.94),
-        left=0.090, right=0.910, bottom=0.085, top=0.960,
-        wspace=0.33, hspace=0.26,
+        2, 2, width_ratios=(1.0, 1.25), height_ratios=(1.08, 0.95),
+        left=0.092, right=0.908, bottom=0.095, top=0.955,
+        wspace=0.40, hspace=0.05,
     )
-    field_grid = outer[0, 0].subgridspec(1, 2, width_ratios=(1.0, 0.055), wspace=0.10)
+    field_grid = outer[0, 0].subgridspec(
+        1, 2, width_ratios=(1.0, 0.050), wspace=0.065
+    )
     field_axis = fig.add_subplot(field_grid[0, 0])
     colorbar_axis = fig.add_subplot(field_grid[0, 1])
     growth_axis = fig.add_subplot(outer[0, 1])
@@ -287,26 +304,28 @@ def field_growth_energy_figure():
     colorbar.ax.tick_params(direction="in")
 
     growth_axis.semilogy(
-        times, mode_amplitude, color="#1f5a99", linewidth=1.25,
+        times, mode_amplitude, color="#1f5a99", linewidth=1.50,
         label=rf"PIC $(m_x,m_y)=({MODE_X},{MODE_Y})$",
     )
     growth_axis.semilogy(
         fit_times, fit_values, color="#c43c39", linestyle="--",
-        linewidth=1.35, label="PIC fit",
+        linewidth=1.50, label="PIC fit",
     )
     growth_axis.semilogy(
         fit_times, theory_values, color="#2f6f44", linestyle=":",
-        linewidth=1.25, label="Kinetic theory",
+        linewidth=1.50, label="Kinetic theory",
     )
     growth_axis.axvspan(FIT_LOWER, FIT_UPPER, color="0.5", alpha=0.11, linewidth=0)
-    growth_axis.axvline(snapshot_time, color="0.35", linestyle=":", linewidth=0.9)
+    growth_axis.axvline(snapshot_time, color="0.35", linestyle=":", linewidth=1.0)
     growth_axis.plot(
-        snapshot_time, mode_amplitude[snapshot_index], marker="o", markersize=3.8,
+        snapshot_time, mode_amplitude[snapshot_index], marker="o", markersize=4.5,
         color="0.25", linestyle="none",
     )
     growth_axis.annotate(
         "Field snapshot", xy=(snapshot_time, mode_amplitude[snapshot_index]),
-        xytext=(6, -10), textcoords="offset points", ha="left", va="top", color="0.25",
+        xytext=(-20, -18), textcoords="offset points", ha="left", va="top",
+        color="0.25", fontsize=9.0,
+        # bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.72, "pad": 0.2},
     )
     growth_axis.text(
         0.055, 0.91,
@@ -314,71 +333,133 @@ def field_growth_energy_figure():
         + rf"$\gamma_{{\rm th}}={gamma_theory:.3f}\,\omega_{{pe}}$" + "\n"
         + rf"$R^2={r_squared:.4f}$",
         transform=growth_axis.transAxes, ha="left", va="top",
+        fontsize=10.0
     )
     growth_axis.set_xlabel(r"$\omega_{pe}t$")
-    growth_axis.set_ylabel(r"$2|\widehat{E}_{\parallel}(2,1)|$", labelpad=2)
+    growth_axis.set_ylabel(
+        r"Mode amplitude, $2|\widehat{E}_{\parallel}(2,1)|$",
+        labelpad=6,
+    )
+    growth_axis.yaxis.set_label_position("right")
+    growth_axis.yaxis.tick_right()
+    growth_axis.tick_params(
+        axis="y", which="both",
+        left=True, right=True,
+        labelleft=False, labelright=True,
+    )
     growth_axis.set_xlim(times.min(), times.max())
     growth_axis.set_xticks(np.arange(0.0, 40.1, 10.0))
-    growth_axis.set_title("(b) Electric-field growth", loc="left", pad=4)
-    growth_axis.grid(which="major", color="0.82", linewidth=0.5)
-    growth_axis.grid(which="minor", axis="y", color="0.90", linewidth=0.35)
-    growth_axis.legend(frameon=False, loc="lower right")
+    growth_axis.set_ylim(5.0e-4, growth_axis.get_ylim()[1])
+    growth_axis.set_yticks([1.0e-3, 1.0e-2, 1.0e-1])
+    growth_axis.set_title("(b) Electric field growth", loc="left", pad=4)
+    growth_axis.grid(which="major", color="0.84", linewidth=0.5)
+    growth_axis.grid(which="minor", axis="y", color="0.975", linewidth=0.35)
+    growth_axis.legend(
+        frameon=False, loc="lower right", handlelength=2.0,
+        labelspacing=0.35, borderaxespad=0.45,
+    )
     growth_axis.minorticks_on()
 
     field_line = energy_axis.plot(
         energy_time, field_change, color="#c43c39", marker="o",
-        markersize=2.5, linewidth=1.25, label="Field",
+        markersize=3.2, linewidth=1.50, label="Field",
     )[0]
     particle_line = energy_axis.plot(
         energy_time, kinetic_change, color="#1f5a99", marker="s",
-        markersize=2.3, linewidth=1.25, label="Particles",
+        markersize=3.2, linewidth=1.50, label="Particles",
     )[0]
     total_line = error_axis.plot(
         energy_time, total_error_percent, color="#2f6f44", linestyle="--",
-        marker="o", markersize=2.6, linewidth=1.25, label="Total error",
+        marker="o", markersize=3.2, linewidth=1.50, label="Total error",
     )[0]
     energy_axis.axhline(0.0, color="0.35", linewidth=0.7)
     energy_axis.set_xlabel(r"$\omega_{pe}t$")
-    energy_axis.set_ylabel(r"Energy change, $\Delta W_E/W_0,\; \Delta W_K/W_0$")
-    error_axis.set_ylabel(r"Total-energy error, $\Delta W/W_0$ (\%)")
-    error_axis.tick_params(axis="y", colors="#2f6f44")
-    error_axis.yaxis.label.set_color("#2f6f44")
-    energy_limit = 1.08 * max(np.max(abs(field_change)), np.max(abs(kinetic_change)))
-    energy_axis.set_ylim(-energy_limit, energy_limit)
-    error_axis.set_ylim(-0.03, 0.03)
-    error_axis.set_yticks([-0.03, -0.015, 0.0, 0.015, 0.03])
+    energy_axis.set_ylabel(r"Energy change, $\Delta W_{E,K}/W_0$")
+    error_axis.set_ylabel(r"Total energy error, $\Delta W/W_0$ (\%)")
+    error_color = "#2f6f44"
+    energy_axis.spines["right"].set_visible(False)
+    energy_axis.tick_params(axis="y", which="both", right=False)
+    error_axis.spines["left"].set_visible(False)
+    error_axis.spines["right"].set_color(error_color)
+    error_axis.spines["right"].set_linewidth(1.0)
+    error_axis.tick_params(
+        axis="y", which="both", left=False, right=True,
+        labelleft=False, labelright=True, colors=error_color,
+    )
+    error_axis.yaxis.label.set_color(error_color)
+    energy_axis.set_ylim(-0.04, 0.04)
+    energy_axis.set_yticks([-0.04, -0.02, 0.0, 0.02, 0.04])
+    error_axis.set_ylim(-0.04, 0.04)
+    error_axis.set_yticks([-0.04, -0.02, 0.0, 0.02, 0.04])
     energy_axis.set_xlim(energy_time.min(), energy_time.max())
-    energy_axis.set_title("(c) Energy exchange and total-energy balance", loc="left", pad=4)
-    energy_axis.grid(which="major", color="0.85", linewidth=0.5)
+    energy_axis.set_xticks(np.arange(0.0, 40.1, 5.0))
+    energy_axis.tick_params(axis="x", which="major", pad=6)
+    energy_axis.set_title("(c) Energy exchange and total energy balance", loc="left", pad=4)
+    energy_axis.grid(which="major", color="0.88", linewidth=0.5)
     energy_axis.minorticks_on()
     error_axis.minorticks_on()
     left_legend = energy_axis.legend(
         handles=[field_line, particle_line], frameon=False, loc="upper left",
+        bbox_to_anchor=(0.02, 0.98),
         ncol=1, labelspacing=0.35, handlelength=2.0, borderaxespad=0.25,
     )
     energy_axis.add_artist(left_legend)
     right_legend = energy_axis.legend(
         handles=[total_line], frameon=False, loc="upper left",
-        bbox_to_anchor=(0.745, 1.0), handlelength=2.0, borderaxespad=0.25,
+        bbox_to_anchor=(0.745, 0.98), handlelength=2.0,
+        labelspacing=0.35, borderaxespad=0.25,
+        labelcolor=error_color,
+    )
+
+    # Render the legends before placing the maximum-error annotation.
+    # Its left edge follows the start of the Total error legend line, and
+    # its vertical center follows the Particles entry in the left legend.
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    total_handle_box = right_legend.get_lines()[0].get_window_extent(renderer)
+    particle_text_box = left_legend.get_texts()[1].get_window_extent(renderer)
+    maximum_error_position = energy_axis.transAxes.inverted().transform(
+        (
+            total_handle_box.x0,
+            0.5 * (particle_text_box.y0 + particle_text_box.y1),
+        )
     )
     energy_axis.text(
-        0.758, 0.875, rf"$\max |\Delta W/W_0|={maximum_error_percent:.4f}\%$",
-        transform=energy_axis.transAxes, ha="left", va="center", color="#2f6f44",
-        fontsize=1.08 * right_legend.get_texts()[0].get_fontsize(),
+        maximum_error_position[0], maximum_error_position[1],
+        rf"$\max |\Delta W/W_0|={maximum_error_percent:.4f}\%$",
+        transform=energy_axis.transAxes, ha="left", va="center",
+        color=error_color, fontsize=10.0,
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.86, "pad": 0.3},
         zorder=6,
     )
 
     fig.canvas.draw()
+    
     field_position = field_axis.get_position()
     colorbar_position = colorbar_axis.get_position()
     growth_position = growth_axis.get_position()
-    growth_axis.set_position(
-        [growth_position.x0, field_position.y0, growth_position.width, field_position.height]
-    )
-    colorbar_axis.set_position(
-        [colorbar_position.x0, field_position.y0, colorbar_position.width, field_position.height]
-    )
+    energy_position = energy_axis.get_position()
+    
+    # Expand panel (b) to the left; keep its right edge aligned with (c).
+    extra_width = 0.06
+    growth_left = growth_position.x0 - extra_width
+    growth_right = energy_position.x1
+    
+    growth_axis.set_position([
+        growth_left,
+        field_position.y0,
+        growth_right - growth_left,
+        field_position.height,
+    ])
+    
+    # Keep the colorbar aligned with panel (a).
+    colorbar_axis.set_position([
+        colorbar_position.x0,
+        field_position.y0,
+        colorbar_position.width,
+        field_position.height,
+    ])
+    
     save_figure(fig, "fig2_field_growth_energy.png")
 
 
