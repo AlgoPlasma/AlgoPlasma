@@ -1,6 +1,6 @@
 # 二维静电双流不稳定性
 
-[中文](README.zh-CN.md) | [English](README.md)
+[中文](README.zh-CN.md) | [English](README.en.md)
 
 这是一个紧凑的 2D3V 粒子网格（particle-in-cell, PIC）算例，用于演示如何将
 AlgoPlasma 组件组装成面向具体应用的时间推进程序。算例使用 `I01` 加载粒子，使用
