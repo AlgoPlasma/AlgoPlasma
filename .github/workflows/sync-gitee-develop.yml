@@ -9,7 +9,7 @@ on:
         required: true
         default: true
   schedule:
-    - cron: '7,37 * * * *'
+    - cron: '13,43 * * * *'
 
 permissions:
   contents: write
