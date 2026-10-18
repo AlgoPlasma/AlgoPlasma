@@ -1,0 +1,42 @@
+name: Sync Gitee develop
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Preview only, without pushing to develop
+        type: boolean
+        required: true
+        default: true
+  schedule:
+    - cron: '7,37 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-gitee-develop
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: >-
+      github.repository == 'AlgoPlasma/AlgoPlasma' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+       vars.ENABLE_GITEE_SYNC == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Read the controller from this main commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          path: control
+          persist-credentials: false
+
+      - name: Synchronize develop
+        run: python3 control/.github/scripts/sync_gitee_develop.py
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
