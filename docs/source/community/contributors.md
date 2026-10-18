@@ -191,10 +191,11 @@
     </td>
     <td width="33.333%" valign="top">
       <div class="ap-member-profile">
-        <span class="ap-member-avatar"><img src="../_static/contributors/huchangzheng.jpg" width="72" height="72" alt="胡长征"></span>
+        <span class="ap-member-avatar"><a href="https://github.com/darlingdefender"><img src="../_static/contributors/huchangzheng.jpg" width="72" height="72" alt="胡长征"></a></span>
         <div class="ap-member-identity">
-          <strong>胡长征</strong><br>
+          <strong><a href="https://github.com/darlingdefender">胡长征</a></strong><br>
           <span class="ap-member-status">硕士在读</span>
+          <br><small class="ap-member-links"><a href="https://github.com/darlingdefender">GitHub</a> <a href="https://gitee.com/hu-changzheng1">Gitee</a></small>
         </div>
       </div>
       <div class="ap-member-details">
@@ -386,10 +387,11 @@
     </td>
     <td width="33.333%" valign="top">
       <div class="ap-member-profile">
-        <span class="ap-member-avatar"><img src="../_static/contributors/huchangzheng.jpg" width="72" height="72" alt="Changzheng Hu"></span>
+        <span class="ap-member-avatar"><a href="https://github.com/darlingdefender"><img src="../_static/contributors/huchangzheng.jpg" width="72" height="72" alt="Changzheng Hu"></a></span>
         <div class="ap-member-identity">
-          <strong>Changzheng Hu</strong><br>
+          <strong><a href="https://github.com/darlingdefender">Changzheng Hu</a></strong><br>
           <span class="ap-member-status">Master&#x27;s Student</span>
+          <br><small class="ap-member-links"><a href="https://github.com/darlingdefender">GitHub</a> <a href="https://gitee.com/hu-changzheng1">Gitee</a></small>
         </div>
       </div>
       <div class="ap-member-details">

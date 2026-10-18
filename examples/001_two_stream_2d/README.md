@@ -1,6 +1,6 @@
 # Two-dimensional Electrostatic Two-stream Instability
 
-[Chinese](README.zh-CN.md) | [English](README.md)
+[Chinese](README.zh-CN.md) | [English](README.en.md)
 
 This compact 2D3V particle-in-cell (PIC) example demonstrates how
 AlgoPlasma components can be assembled into an application-specific
