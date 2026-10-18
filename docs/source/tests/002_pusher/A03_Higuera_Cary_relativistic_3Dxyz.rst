@@ -60,30 +60,32 @@ A03_Higuera_Cary_relativistic_3Dxyz Test
 
    .. rubric:: 参考图
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_traj_xy.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``case01_gyro`` 的 ``x-y`` 轨道，使用相对论修正回旋频率作为解析参考。
+      * - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_traj_xy.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_v2_t.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_v2_t.png
-      :align: center
-      :width: 78%
+   ``case01_gyro`` 的 ``x-y`` 轨道，使用相对论修正回旋频率作为解析参考。
 
-      ``case01_gyro`` 的 ``v^2`` 随时间变化，用于观察磁场旋转步的速度模保持情况。
+   ``case01_gyro`` 的 ``v^2`` 随时间变化，用于观察磁场旋转步的速度模保持情况。
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_x_t.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``case02_exb_drift`` 的 :math:`x(t)`。HC 将 :math:`x` 控制在 :math:`\sim 10^{-5}` m
-      量级，Boris 在相同条件下积累约 2321 m 的系统性漂移。
+      * - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_x_t.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_traj_xy.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_traj_xy.png
-      :align: center
-      :width: 78%
+   ``case02_exb_drift`` 的 :math:`x(t)`。HC 将 :math:`x` 控制在 :math:`\sim 10^{-5}` m
+   量级，Boris 在相同条件下积累约 2321 m 的系统性漂移。
 
-      ``case02_exb_drift`` 的 ``x-y`` 轨道，数值解（实线）与解析漂移轨迹（虚线）几乎重合。
+   ``case02_exb_drift`` 的 ``x-y`` 轨道，数值解（实线）与解析漂移轨迹（虚线）几乎重合。
 
    .. rubric:: 参考文献
 
@@ -150,31 +152,33 @@ A03_Higuera_Cary_relativistic_3Dxyz Test
 
    .. rubric:: Reference Figures
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_traj_xy.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``case01_gyro`` trajectory in the ``x-y`` plane using the relativistic gyro reference.
+      * - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_traj_xy.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_v2_t.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case01_gyro_v2_t.png
-      :align: center
-      :width: 78%
+   ``case01_gyro`` trajectory in the ``x-y`` plane using the relativistic gyro reference.
 
-      ``case01_gyro`` time history of ``v^2``.
+   ``case01_gyro`` time history of ``v^2``.
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_x_t.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``case02_exb_drift`` time history of :math:`x(t)`. HC keeps :math:`x` at the
-      :math:`\sim 10^{-5}` m level; Boris accumulates a systematic drift of ~2321 m.
+      * - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_x_t.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_traj_xy.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz/case02_exb_drift_traj_xy.png
-      :align: center
-      :width: 78%
+   ``case02_exb_drift`` time history of :math:`x(t)`. HC keeps :math:`x` at the
+   :math:`\sim 10^{-5}` m level; Boris accumulates a systematic drift of ~2321 m.
 
-      ``case02_exb_drift`` trajectory in the ``x-y`` plane. The numeric solution (solid)
-      closely follows the analytic drift path (dashed).
+   ``case02_exb_drift`` trajectory in the ``x-y`` plane. The numeric solution (solid)
+   closely follows the analytic drift path (dashed).
 
    .. rubric:: References
 

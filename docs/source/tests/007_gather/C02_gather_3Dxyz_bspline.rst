@@ -119,23 +119,24 @@ C02_gather_3Dxyz_bspline Test
 
    .. rubric:: 参考图
 
-   .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_shape_curves.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   .. list-table::
+      :class: ap-triptych ap-gather-equal-frame
+      :widths: 50 50
 
-      ``c02_bspline_gather_shape_curves.png``：不同 ``order`` 的中心化
-      B-spline 形函数曲线。横轴为粒子到网格点的距离 :math:`r`，纵轴为权重
-      :math:`S_{order}(r)`。这张图展示的是 gather 使用的局部权重形状，
-      便于直接查看不同阶数的支撑范围和平滑程度。
+      * - .. image:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_shape_curves.png
+             :width: 100%
+        - .. image:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_ref_vs_value.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_ref_vs_value.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   ``c02_bspline_gather_shape_curves.png``：不同 ``order`` 的中心化
+   B-spline 形函数曲线。横轴为粒子到网格点的距离 :math:`r`，纵轴为权重
+   :math:`S_{order}(r)`。这张图展示的是 gather 使用的局部权重形状，
+   便于直接查看不同阶数的支撑范围和平滑程度。
 
-      ``c02_bspline_gather_ref_vs_value.png``：横轴为参考值，纵轴为
-      ``sub_C02_gather_3Dxyz_bspline`` 的 gather 输出。虚线为
-      ``value=reference``。三类子测试都落在对角线附近，说明 direct gather
-      路径在这些基准场上与参考值一致。
+   ``c02_bspline_gather_ref_vs_value.png``：横轴为参考值，纵轴为
+   ``sub_C02_gather_3Dxyz_bspline`` 的 gather 输出。虚线为
+   ``value=reference``。三类子测试都落在对角线附近，说明 direct gather
+   路径在这些基准场上与参考值一致。
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_errors.png
       :align: center
@@ -265,25 +266,26 @@ C02_gather_3Dxyz_bspline Test
 
    .. rubric:: Reference Figures
 
-   .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_shape_curves.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   .. list-table::
+      :class: ap-triptych ap-gather-equal-frame
+      :widths: 50 50
 
-      ``c02_bspline_gather_shape_curves.png``: centered B-spline shape
-      functions for different ``order`` values. The x-axis is the
-      particle-grid distance :math:`r`; the y-axis is the weight
-      :math:`S_{order}(r)`. This figure shows the local weight shapes used by
-      gather, making the support width and smoothness of each order visible.
+      * - .. image:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_shape_curves.png
+             :width: 100%
+        - .. image:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_ref_vs_value.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_ref_vs_value.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   ``c02_bspline_gather_shape_curves.png``: centered B-spline shape
+   functions for different ``order`` values. The x-axis is the
+   particle-grid distance :math:`r`; the y-axis is the weight
+   :math:`S_{order}(r)`. This figure shows the local weight shapes used by
+   gather, making the support width and smoothness of each order visible.
 
-      ``c02_bspline_gather_ref_vs_value.png``: reference values on the x-axis
-      and gathered values from ``sub_C02_gather_3Dxyz_bspline`` on the y-axis.
-      The dashed line is ``value=reference``. All three subtests lie close to
-      the diagonal, showing that the direct gather path agrees with the
-      references for these benchmark fields.
+   ``c02_bspline_gather_ref_vs_value.png``: reference values on the x-axis
+   and gathered values from ``sub_C02_gather_3Dxyz_bspline`` on the y-axis.
+   The dashed line is ``value=reference``. All three subtests lie close to
+   the diagonal, showing that the direct gather path agrees with the
+   references for these benchmark fields.
 
    .. figure:: ../../images/tests/007_gather/C02_gather_3Dxyz_bspline/c02_bspline_gather_errors.png
       :align: center

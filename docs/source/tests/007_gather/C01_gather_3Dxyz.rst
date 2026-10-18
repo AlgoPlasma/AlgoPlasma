@@ -103,28 +103,27 @@ C01_gather_3Dxyz Test
 
    .. rubric:: 参考图
 
-   .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_ref_vs_num.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   .. list-table::
+      :class: ap-triptych ap-gather-equal-frame
+      :widths: 1 1 1
 
-      ``exact`` case 的场值对比。横轴为粒子位置处的解析场分量值，纵轴为
-      C01 gather 得到的同一分量值。每个点代表一个粒子的一个
-      ``Ex/Ey/Ez/Bx/By/Bz`` 分量；点越贴近虚线，说明 gather 越接近解析值。
+      * - .. image:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_ref_vs_num.png
+             :width: 100%
+        - .. image:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_convergence.png
+             :width: 100%
+        - .. image:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_push_displacement.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_convergence.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   ``exact`` case 的场值对比。横轴为粒子位置处的解析场分量值，纵轴为
+   C01 gather 得到的同一分量值。每个点代表一个粒子的一个
+   ``Ex/Ey/Ez/Bx/By/Bz`` 分量；点越贴近虚线，说明 gather 越接近解析值。
 
-      ``convergence`` case 的误差随网格间距变化。横轴为 ``h=1/N``，纵轴为
-      gather 场分量相对解析值的误差。``L2`` 汇总所有粒子和六个场分量，
-      ``Linf`` 是最大单分量误差。
+   ``convergence`` case 的误差随网格间距变化。横轴为 ``h=1/N``，纵轴为
+   gather 场分量相对解析值的误差。``L2`` 汇总所有粒子和六个场分量，
+   ``Linf`` 是最大单分量误差。
 
-   .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_push_displacement.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
-
-      ``push`` case 的粒子单步位移。每条线段从推进前 ``(x0,y0)`` 指向推进后
-      ``(x1,y1)``，用于观察 fused gather-push 的位移方向和量级。
+   ``push`` case 的粒子单步位移。每条线段从推进前 ``(x0,y0)`` 指向推进后
+   ``(x1,y1)``，用于观察 fused gather-push 的位移方向和量级。
 
    .. rubric:: 参考运行结果
 
@@ -232,28 +231,27 @@ C01_gather_3Dxyz Test
 
    .. rubric:: Reference Figures
 
-   .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_ref_vs_num.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   .. list-table::
+      :class: ap-triptych ap-gather-equal-frame
+      :widths: 1 1 1
 
-      ``exact`` field comparison. x-axis: analytic field component at the
-      particle. y-axis: the same component gathered by C01. Each point is one
-      particle-component pair from ``Ex/Ey/Ez/Bx/By/Bz``.
+      * - .. image:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_ref_vs_num.png
+             :width: 100%
+        - .. image:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_convergence.png
+             :width: 100%
+        - .. image:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_push_displacement.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_convergence.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   ``exact`` field comparison. x-axis: analytic field component at the
+   particle. y-axis: the same component gathered by C01. Each point is one
+   particle-component pair from ``Ex/Ey/Ez/Bx/By/Bz``.
 
-      ``convergence`` error versus grid spacing. x-axis: ``h=1/N``. y-axis:
-      error of gathered field components against the analytic field. ``L2``
-      uses all particles/components; ``Linf`` is the largest single component error.
+   ``convergence`` error versus grid spacing. x-axis: ``h=1/N``. y-axis:
+   error of gathered field components against the analytic field. ``L2``
+   uses all particles/components; ``Linf`` is the largest single component error.
 
-   .. figure:: ../../images/tests/007_gather/C01_gather_3Dxyz/c01_push_displacement.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
-
-      ``push`` one-step displacement. Each segment goes from ``(x0,y0)``
-      before the step to ``(x1,y1)`` after the step.
+   ``push`` one-step displacement. Each segment goes from ``(x0,y0)``
+   before the step to ``(x1,y1)`` after the step.
 
    .. rubric:: Reference Result
 

@@ -43,7 +43,13 @@ compile.hpp：模型编译接口与运行时数据
 
    The names above are an interface index; consult the source declarations for exact parameters.
 
-.. rubric:: 源码 / Source
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 源码
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Source
 
 :download:`compile.hpp <../../../../../G_Collision/G02_MCC_network/compile.hpp>`
 
@@ -52,7 +58,13 @@ compile.hpp：模型编译接口与运行时数据
    :linenos:
 
 
-.. rubric:: 文件归属 / File location
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 文件归属
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: File location
 
 ``G_Collision/G02_MCC_network/compile.hpp``
 

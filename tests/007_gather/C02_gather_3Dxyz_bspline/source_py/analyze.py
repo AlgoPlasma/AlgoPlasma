@@ -127,11 +127,12 @@ def maybe_make_figures(rows: list[dict[str, str]], summary: dict[str, object]) -
         ys = [centered_bspline_shape(order, x) for x in xs]
         ax.plot(xs, ys, linewidth=2.0, color=color, label=f"order={order}")
 
-    ax.set_xlabel("Particle-grid distance r")
-    ax.set_ylabel("Shape weight S_order(r)")
-    ax.set_title("Centered B-spline shape functions used by C02 gather")
+    ax.set_xlabel("Particle-grid distance r", fontsize=16)
+    ax.set_ylabel("Shape weight S_order(r)", fontsize=16)
+    ax.set_title("Centered B-spline shape functions used by C02 gather", fontsize=17)
+    ax.tick_params(labelsize=14)
     ax.grid(True, alpha=0.22)
-    ax.legend(loc="upper right", ncol=1, frameon=False)
+    ax.legend(loc="upper right", ncol=1, frameon=False, fontsize=14)
     fig.tight_layout()
     fig.savefig(
         FIG / "c02_bspline_gather_shape_curves.png", dpi=180, bbox_inches="tight"
@@ -151,11 +152,12 @@ def maybe_make_figures(rows: list[dict[str, str]], summary: dict[str, object]) -
     hi = max(all_values)
     pad = 0.04 * (hi - lo + 1.0e-30)
     plt.plot([lo - pad, hi + pad], [lo - pad, hi + pad], "k--", linewidth=1.0)
-    plt.xlabel("Reference field value")
-    plt.ylabel("C02 gathered field value")
-    plt.title("C02 B-spline gather: reference vs gathered values")
+    plt.xlabel("Reference field value", fontsize=16)
+    plt.ylabel("C02 gathered field value", fontsize=16)
+    plt.title("C02 B-spline gather: reference vs gathered values", fontsize=18)
+    plt.tick_params(labelsize=14)
     plt.grid(True, alpha=0.25)
-    plt.legend(frameon=False)
+    plt.legend(frameon=False, fontsize=14)
     plt.tight_layout()
     plt.savefig(FIG / "c02_bspline_gather_ref_vs_value.png", dpi=180)
     plt.close()

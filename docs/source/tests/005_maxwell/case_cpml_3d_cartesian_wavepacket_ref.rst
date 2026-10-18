@@ -105,26 +105,27 @@ case_cpml_3d_cartesian_wavepacket_ref
    ``npml=24`` 可降到约 ``-71`` 到 ``-77 dB``。因此页面首先展示 probe error 曲线：
    六个方向的曲线应成对接近，且 ``npml=24`` 的整体误差明显低于 ``npml=12``。
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml12_probe_error_db.png
-      :align: center
-      :width: 70%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``npml=12`` 的 probe error 曲线，``late_gate=260``。六个出射方向的 late reflection error
-      约为 ``-43`` 到 ``-45 dB``。
+      * - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml12_probe_error_db.png
+             :width: 100%
+        - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml24_probe_error_db.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml24_probe_error_db.png
-      :align: center
-      :width: 70%
+   ``npml=12`` 的 probe error 曲线，``late_gate=260``。六个出射方向的 late reflection error
+   约为 ``-43`` 到 ``-45 dB``。
 
-      ``npml=24`` 的 probe error 曲线，``late_gate=260``。相对于 ``npml=12``，更厚 CPML
-      使曲线整体降低，late reflection error 降至约 ``-71`` 到 ``-77 dB``。
+   ``npml=24`` 的 probe error 曲线，``late_gate=260``。相对于 ``npml=12``，更厚 CPML
+   使曲线整体降低，late reflection error 降至约 ``-71`` 到 ``-77 dB``。
 
    下面的 probe 对比图用于说明 compact CPML 与 large reference 在主波包阶段几乎重合。
    注意它是线性尺度，晚期小反射不明显；吸收强弱仍应看上面的 dB 误差曲线。
 
    .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml12_probe_compare.png
       :align: center
-      :width: 66%
+      :width: 100%
 
       ``npml=12`` 的 compact CPML 与 large reference probe 对比。蓝色虚线为 compact CPML，
       橙色半透明粗实线为 large reference；主波包阶段两条曲线基本重合。
@@ -254,19 +255,20 @@ case_cpml_3d_cartesian_wavepacket_ref
    error curves should be nearly paired across the six directions, and the
    ``npml=24`` curves should sit well below the ``npml=12`` curves overall.
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml12_probe_error_db.png
-      :align: center
-      :width: 70%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      Probe error for ``npml=12`` with ``late_gate=260``. The six outgoing
-      directions give late reflection error around ``-43`` to ``-45 dB``.
+      * - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml12_probe_error_db.png
+             :width: 100%
+        - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml24_probe_error_db.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml24_probe_error_db.png
-      :align: center
-      :width: 70%
+   Probe error for ``npml=12`` with ``late_gate=260``. The six outgoing
+   directions give late reflection error around ``-43`` to ``-45 dB``.
 
-      Probe error for ``npml=24`` with ``late_gate=260``. The thicker CPML lowers
-      the curves overall, with late reflection error around ``-71`` to ``-77 dB``.
+   Probe error for ``npml=24`` with ``late_gate=260``. The thicker CPML lowers
+   the curves overall, with late reflection error around ``-71`` to ``-77 dB``.
 
    The next probe-comparison figure shows that compact CPML and the large
    reference nearly overlap during the main packet. Because this is a linear
@@ -275,7 +277,7 @@ case_cpml_3d_cartesian_wavepacket_ref
 
    .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cartesian_npml12_probe_compare.png
       :align: center
-      :width: 66%
+      :width: 100%
 
       Compact CPML versus large reference probes for ``npml=12``. The blue
       dashed line is compact CPML, and the thicker translucent orange line is

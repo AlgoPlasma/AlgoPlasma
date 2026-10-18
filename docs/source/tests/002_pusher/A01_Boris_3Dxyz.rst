@@ -60,35 +60,35 @@ A01_Boris_3Dxyz Test
 
    .. rubric:: 参考图
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_traj_xy.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``case01_gyro`` 的 ``x-y`` 轨道，数值轨道应跟随解析回旋轨道。
+      * - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_traj_xy.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_v2_t.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_v2_t.png
-      :align: center
-      :width: 78%
+   ``case01_gyro`` 的 ``x-y`` 轨道，数值轨道应跟随解析回旋轨道。
 
-      ``case01_gyro`` 的 ``v^2`` 随时间变化，用于观察磁场旋转步的速度模保持情况。
+   ``case01_gyro`` 的 ``v^2`` 随时间变化，用于观察磁场旋转步的速度模保持情况。
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case02_Eonly_x_t.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 34 33 33
 
-      ``case02_Eonly`` 的 ``x(t)``，用于对照只有电场时的匀加速解析解。
+      * - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case02_Eonly_x_t.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case03_ExB_traj_xy.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case04_drift_traj_xy.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case03_ExB_traj_xy.png
-      :align: center
-      :width: 78%
+   ``case02_Eonly`` 的 ``x(t)``，用于对照只有电场时的匀加速解析解。
 
-      ``case03_ExB`` 的 ``x-y`` 轨道，展示回旋运动与 :math:`E \times B` drift。
+   ``case03_ExB`` 的 ``x-y`` 轨道，展示回旋运动与 :math:`E \times B` drift。
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case04_drift_traj_xy.png
-      :align: center
-      :width: 78%
-
-      ``case04_ExB_drift`` 的 ``x-y`` 轨道，展示无回旋分量的纯 drift 运动。
+   ``case04_ExB_drift`` 的 ``x-y`` 轨道，展示无回旋分量的纯 drift 运动。
 
    .. rubric:: 参考文献
 
@@ -156,35 +156,35 @@ A01_Boris_3Dxyz Test
 
    .. rubric:: Reference Figures
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_traj_xy.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``case01_gyro`` trajectory in the ``x-y`` plane.
+      * - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_traj_xy.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_v2_t.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case01_gyro_v2_t.png
-      :align: center
-      :width: 78%
+   ``case01_gyro`` trajectory in the ``x-y`` plane.
 
-      ``case01_gyro`` time history of ``v^2``.
+   ``case01_gyro`` time history of ``v^2``.
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case02_Eonly_x_t.png
-      :align: center
-      :width: 78%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 34 33 33
 
-      ``case02_Eonly`` comparison of ``x(t)`` with the electric-only analytic solution.
+      * - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case02_Eonly_x_t.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case03_ExB_traj_xy.png
+             :width: 100%
+        - .. image:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case04_drift_traj_xy.png
+             :width: 100%
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case03_ExB_traj_xy.png
-      :align: center
-      :width: 78%
+   ``case02_Eonly`` comparison of ``x(t)`` with the electric-only analytic solution.
 
-      ``case03_ExB`` trajectory showing gyro motion with :math:`E \times B` drift.
+   ``case03_ExB`` trajectory showing gyro motion with :math:`E \times B` drift.
 
-   .. figure:: ../../images/tests/002_pusher/A01_Boris_3Dxyz/case04_drift_traj_xy.png
-      :align: center
-      :width: 78%
-
-      ``case04_ExB_drift`` trajectory for pure drift motion without a gyro component.
+   ``case04_ExB_drift`` trajectory for pure drift motion without a gyro component.
 
    .. rubric:: References
 

@@ -103,7 +103,33 @@
     "en": "CSV model format and preparation"
   }
 };
-  var sidebarNames = {"references": {"zh": "方法与文献", "en": "References"}, "group_foundation": "Basics", "mcc": "mcc.hpp", "common": "common.hpp", "rng": "rng.hpp", "group_model_data": "Model", "csv": "csv.hpp", "fun_G02_mcc_csv": "fun_G02_mcc_csv.cpp", "table": "table.hpp", "fun_G02_mcc_table": "fun_G02_mcc_table.cpp", "model": "model.hpp", "fun_G02_mcc_model": "fun_G02_mcc_model.cpp", "compile": "compile.hpp", "fun_G02_mcc_compile": "fun_G02_mcc_compile.cpp", "group_collision": "Collision", "engine": "engine.hpp", "fun_G02_mcc_engine": "fun_G02_mcc_engine.cpp", "kinematics": "kinematics.hpp", "fun_G02_mcc_kinematics": "fun_G02_mcc_kinematics.cpp", "batch": "batch.hpp", "fun_G02_mcc_batch": "fun_G02_mcc_batch.cpp", "group_mpi_interface": "MPI", "mpi": "mpi.hpp", "fun_G02_mcc_mpi": "fun_G02_mcc_mpi.cpp", "csv_format": "CSV format"};
+  var sidebarNames = {
+    "references": "References",
+    "group_foundation": "Basics",
+    "mcc": "mcc.hpp",
+    "common": "common.hpp",
+    "rng": "rng.hpp",
+    "group_model_data": "Model",
+    "csv": "csv.hpp",
+    "fun_G02_mcc_csv": "fun_G02_mcc_csv.cpp",
+    "table": "table.hpp",
+    "fun_G02_mcc_table": "fun_G02_mcc_table.cpp",
+    "model": "model.hpp",
+    "fun_G02_mcc_model": "fun_G02_mcc_model.cpp",
+    "compile": "compile.hpp",
+    "fun_G02_mcc_compile": "fun_G02_mcc_compile.cpp",
+    "group_collision": "Collision",
+    "engine": "engine.hpp",
+    "fun_G02_mcc_engine": "fun_G02_mcc_engine.cpp",
+    "kinematics": "kinematics.hpp",
+    "fun_G02_mcc_kinematics": "fun_G02_mcc_kinematics.cpp",
+    "batch": "batch.hpp",
+    "fun_G02_mcc_batch": "fun_G02_mcc_batch.cpp",
+    "group_mpi_interface": "MPI",
+    "mpi": "mpi.hpp",
+    "fun_G02_mcc_mpi": "fun_G02_mcc_mpi.cpp",
+    "csv_format": "CSV format"
+  };
   function pageKey(url) {
     var path = new URL(url, window.location.href).pathname;
     var match = path.match(/\/G02_MCC_network\/([^/]+)\.html$/);
@@ -121,8 +147,7 @@
       var key = pageKey(link.href);
       if (!key) return;
       if (link.closest(".wy-menu-vertical")) {
-        var label = sidebarNames[key];
-        replaceLabel(link, typeof label === "string" ? label : label[lang]);
+        replaceLabel(link, sidebarNames[key]);
         return;
       }
       var text = link.textContent.trim();
