@@ -1,6 +1,6 @@
-=========================
-Diagnostics Testing Guide
-=========================
+===============================
+Probe Diagnostics Testing Guide
+===============================
 
 .. raw:: html
 
@@ -13,7 +13,8 @@ Diagnostics Testing Guide
 
    .. rubric:: 1. 范围
 
-   本页介绍两类互补测试：
+   本页属于 :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` 专题，介绍验证 K01–K03
+   探针波动分析链的两类互补测试：
 
    - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`：按频谱功率与相位、相位统计、
      Beall 权重与谱峰展示三组验证。参考值、实测值、误差、判据和状态
@@ -58,7 +59,8 @@ Diagnostics Testing Guide
 
    .. rubric:: 1. Scope
 
-   Two complementary cases exercise the diagnostics:
+   This page belongs to :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` and describes
+   two complementary cases that verify the K01–K03 probe wave analysis chain:
 
    - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`:
      three verification groups for spectral power and phase, phase statistics, and Beall weights and peaks.

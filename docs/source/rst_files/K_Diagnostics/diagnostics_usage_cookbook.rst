@@ -1,6 +1,6 @@
-==========================
-Diagnostics Usage Cookbook
-==========================
+================================
+Probe Diagnostics Usage Cookbook
+================================
 
 .. raw:: html
 
@@ -13,8 +13,9 @@ Diagnostics Usage Cookbook
 
    .. rubric:: 这页解决什么问题
 
-   本页面向已经理解混叠、想把 ``K_Diagnostics`` 接进自己分析流程的读者。它说明该按什么顺序调用
-   哪些 routine、怎样准备输入数据，以及如何选择分段、窗口和网格参数。
+   本页属于 :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` 专题，面向已经理解混叠、
+   想在自己的分析流程中使用 K01–K03 探针波动分析链的读者。它说明该按什么顺序调用哪些 routine、
+   怎样准备输入数据，以及如何选择分段、窗口和网格参数。
 
    .. rubric:: 先选哪个单元
 
@@ -44,7 +45,7 @@ Diagnostics Usage Cookbook
    - **探针顺序**。间距定义为 :math:`\boldsymbol{\chi}=\mathbf{r}_2-\mathbf{r}_1`，传给
      ``fun_K01_cross_phase`` 的第二个参数必须是位于 :math:`+\boldsymbol{\chi}` 的那一路。
      搞反会让所有结果镜像而不报错。
-   - **单位自洽**。间距用米、波数用 rad/m、频率用 Hz。模块不做任何单位换算。
+   - **单位自洽**。间距用米、波数用 rad/m、频率用 Hz。三个单元不做任何单位换算。
    - **加窗**。可向 segment_ffts 传 window='hann'，并向 power_spectrum 传相同参数。
    - **搜索范围**。``k_range`` 必须包含真实波矢。边界峰需要核查范围。
 
@@ -89,9 +90,10 @@ Diagnostics Usage Cookbook
 
    .. rubric:: What This Page Is For
 
-   This page is for a reader who already understands aliasing and wants to wire
-   ``K_Diagnostics`` into their own analysis. It states the order in which to call the routines,
-   how to prepare input data, and how to choose segment, window and grid parameters.
+   This page belongs to :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` and is for
+   readers who understand aliasing and want to use the K01–K03 probe wave analysis chain in
+   their own analysis. It explains the calling order, input preparation, and choice of segment,
+   window and grid parameters.
 
    .. rubric:: Choose the Unit First
 
@@ -122,8 +124,8 @@ Diagnostics Usage Cookbook
    - **Probe order.** The separation is :math:`\boldsymbol{\chi}=\mathbf{r}_2-\mathbf{r}_1`,
      so the second argument of ``fun_K01_cross_phase`` must be the probe at
      :math:`+\boldsymbol{\chi}`. Reversing it mirrors every result without raising an error.
-   - **Consistent units.** Separations in metres, wavenumbers in rad/m, frequencies in Hz. The
-     module converts nothing.
+   - **Consistent units.** Separations in metres, wavenumbers in rad/m, frequencies in Hz. None
+     of the three units performs unit conversion.
    - **Windowing.** Use window='hann' for non-bin-aligned data, with matching power_spectrum normalization.
    - **Search range.** ``k_range`` must contain the true wavevector; a boundary peak warrants
      expanding the range and comparing estimates.

@@ -4,10 +4,7 @@ K_Diagnostics
 .. toctree::
     :maxdepth: 1
 
-    K_Diagnostics/diagnostics_foundations
-    K_Diagnostics/diagnostics_learning_path
-    K_Diagnostics/diagnostics_usage_cookbook
-    K_Diagnostics/diagnostics_testing_guide
+    K_Diagnostics/probe_wave_diagnostics
     K_Diagnostics/K01_signal_spectra
     K_Diagnostics/K02_beall
     K_Diagnostics/K03_mle_k2d
@@ -24,73 +21,52 @@ K_Diagnostics
 
    .. rubric:: 概览
 
-   ``K_Diagnostics`` 收纳探针诊断算法。与 ``A``--``J`` 各模块处理粒子和网格不同，本模块的输入是
-   探针时间序列，输出是波数、频率等谱量。它既用于实验数据分析，也可直接作用于 PIC 模拟输出的
-   探针信号。
+   ``K_Diagnostics`` 收纳从实验测量和数值模拟数据中提取物理诊断量的计算方法。
+   目前提供信号频谱与相位统计、探针对波数–频率分析、多构型波矢反演，以及呼吸周期重复波形提取。
+   各算法的输入要求、适用条件和输出含义由对应页面说明。
 
-   本模块以 Python 实现，是仓库中第一个非 Fortran 的算法模块。文件组织仍遵循一个 routine 一个
+   当前算法以 Python 实现。文件组织仍遵循一个 routine 一个
    文件、``mod_`` 只做汇总的约定：``mod_`` 用 ``from ... import`` 汇总，对应 Fortran 侧的
    ``#include``。各单元的计算函数均不做文件读写；由调用方（如示例或测试主程序）提供数据并调用计算函数。
 
-   .. list-table:: 算法选择
+   .. list-table:: 按诊断问题选择算法
       :header-rows: 1
       :widths: 8 30 26 36
 
       * - ID
-        - 算法
+        - 想了解什么
         - 输入
         - 输出
-      * - K01
-        - :doc:`分段谱与互相位 <K_Diagnostics/K01_signal_spectra>`
-        - 两路探针原始波形
+      * - :doc:`K01 <K_Diagnostics/K01_signal_spectra>`
+        - 信号有哪些频率成分，两路信号的相干和相位关系如何
+        - 单路或两路等间隔采样的实数时序；两路分析要求采样对齐
         - 分段谱、功率谱、相干度、互相位及其均值与方差
-      * - K02
-        - :doc:`混叠代数与 Beall 谱 <K_Diagnostics/K02_beall>`
+      * - :doc:`K02 <K_Diagnostics/K02_beall>`
+        - 一对探针能得到怎样的投影波数与频谱
         - 互相位、两路自功率平均、频率和间距；折叠阶计算另需已知投影波数
         - 折叠波数、``S(k, f)``；仅对已知投影波数计算折叠阶，不从单对相位恢复它
-      * - K03
-        - :doc:`二维联合最大似然反演 <K_Diagnostics/K03_mle_k2d>`
-        - 多构型的相位均值与方差
+      * - :doc:`K03 <K_Diagnostics/K03_mle_k2d>`
+        - 多种探针构型能否共同约束二维波矢
+        - 多构型的基线向量、相位均值与方差，以及搜索范围
         - 每频点的二维波矢 ``(K_x, K_y)``
 
-      * - K04
-        - :doc:`呼吸波形分离：从探针数据到 C <K_Diagnostics/K04_breathing_waveform>`
+      * - :doc:`K04 <K_Diagnostics/K04_breathing_waveform>`
+        - 多条重复记录中，随呼吸周期重复的波形是什么
         - 同一空间点、相同条件下的多条电压记录
         - 相位重复波形 C 与残差 R
 
-   K04 从人工数据逐步讲到呼吸波形 C。计算函数位于 ``K_Diagnostics/K04_breathing_waveform/``，
-   人工示例、测试和画图脚本位于 ``tests/011_K04_breathing_waveform/``；
-   运行步骤见 :doc:`K04 测试与复现说明 </tests/011_K04_breathing_waveform/index>`。
+   .. rubric:: 学习入口
 
-   .. rubric:: 本模块解决的问题
+   :doc:`探针波动诊断专题 <K_Diagnostics/probe_wave_diagnostics>` 按 K01 → K02 → K03 安排阅读顺序，
+   介绍从探针时序到频率、投影波数和二维波矢的分析流程。基础讲解、学习路径、使用示例和测试指南均归入该专题。
+   K01 的频谱工具也可单独使用；Beall 权重和相位统计的具体约定见 :doc:`K01 函数说明 <K_Diagnostics/K01_signal_spectra>`。
 
-   一对探针只能测到波矢在其间距方向上的投影，而且只能测到模 :math:`2\pi` 的相位。当
-   :math:`|\mathbf{K}\cdot\boldsymbol{\chi}|>\pi` 时，真实投影波数超出单对探针的主值区间，
-   报出的是**折叠波数**：一条笔直的色散支在 ``S(k, f)`` 图上可呈锯齿。
-   K02 给出折叠波数与真实投影波数之间的关系，并用 Beall 谱展示频率与折叠波数的分布。
-   K03 将多个构型的相位测量组合起来：每条基线约束沿该方向的波矢投影，
-   多个方向共同提供二维信息。基线的长度和方向决定相位条纹的交汇方式。
-
-   K03 在二维波数范围内遍历均匀网格，以联合对数似然最大处的波矢作为估计结果。
-   :doc:`诊断基础 <K_Diagnostics/diagnostics_foundations>` 第 7 节介绍条纹交汇与几何条件。
-
-   .. rubric:: 统一符号约定
-
-   间距向量为 :math:`\boldsymbol{\chi} = \mathbf{r}_2 - \mathbf{r}_1`，互谱为
-   :math:`C = X_1 X_2^{*}`。配合 ``numpy.fft.rfft`` 的 :math:`\exp(-i\omega t)` 正变换，平面波
-   :math:`\exp[i(\mathbf{K}\cdot\mathbf{r}-\omega t)]` 给出
-
-   .. math::
-
-      \theta = \arg C = \mathbf{K}\cdot\boldsymbol{\chi}.
-
-   K03 的前向模型就是该式，K02 由相位还原波数用
-   :math:`k_\parallel = \mathrm{wrap}(\theta)/|\boldsymbol{\chi}|`\ ，全模块没有任何符号翻转。
-   交换探针顺序会让 :math:`\theta` 反号并镜像所有反演结果。
+   :doc:`K04 呼吸波形提取 <K_Diagnostics/K04_breathing_waveform>` 是独立的学习入口，
+   从人工数据逐步说明怎样从同一空间点、相同条件下的重复记录得到相位重复波形 C 与残差 R。
 
    .. rubric:: 相关测试
 
-   :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`：一份合成宽带信号同时驱动三个单元，
+   :doc:`tests/010_diagnostics </tests/010_diagnostics/index>` 覆盖 K01–K03：一份合成宽带信号同时驱动这三个单元，
    参考真值取自生成器，验收比较谱指数、折叠波数及恢复波矢的误差。
    :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>` 按三组比较参考值、实测值、误差和验收判据，
    覆盖频谱功率与相位、相位统计、Beall 权重与谱峰。
@@ -101,83 +77,59 @@ K_Diagnostics
 
    .. rubric:: Overview
 
-   ``K_Diagnostics`` collects probe diagnostic algorithms. Unlike modules ``A``--``J``, which act
-   on particles and grids, this module takes probe time series as input and returns spectral
-   quantities. It serves experimental data analysis and applies equally to probe signals
-   extracted from a PIC simulation.
+   ``K_Diagnostics`` collects computational methods that extract physical diagnostic quantities
+   from experimental measurements and numerical simulation data. Current capabilities include
+   signal spectra and phase statistics, probe-pair wavenumber–frequency analysis, wavevector
+   inversion across configurations, and breathing-cycle waveform extraction. Each algorithm
+   page specifies its input requirements, assumptions and output meanings.
 
-   The module is written in Python, the first non-Fortran algorithm module in the repository.
-   Its file organisation still follows the convention of one routine per file with a ``mod_``
+   The current algorithms are written in Python. File organisation follows the convention of one routine per file with a ``mod_``
    wrapper that only aggregates: here the wrapper re-exports through ``from ... import``, the
    counterpart of the Fortran ``#include``. Numerical routines perform no file I/O;
    callers, such as example or test drivers, supply data and invoke the routines.
 
-   .. list-table:: Algorithm Selection
+   .. list-table:: Choose an Algorithm by Diagnostic Question
       :header-rows: 1
       :widths: 8 30 26 36
 
       * - ID
-        - Algorithm
+        - Question
         - Input
         - Output
-      * - K01
-        - :doc:`Segmented spectra and cross phase <K_Diagnostics/K01_signal_spectra>`
-        - Two raw probe records
+      * - :doc:`K01 <K_Diagnostics/K01_signal_spectra>`
+        - Which frequencies are present, and how coherent are two signals and what is their phase relation?
+        - One or two uniformly sampled real time series; paired analysis requires aligned samples
         - Segment spectra, power spectra, coherence, cross phase with its mean and variance
-      * - K02
-        - :doc:`Aliasing algebra and the Beall spectrum <K_Diagnostics/K02_beall>`
+      * - :doc:`K02 <K_Diagnostics/K02_beall>`
+        - What projected wavenumbers and spectrum can one probe pair measure?
         - Cross phase, mean pair auto-power, frequency and separation; fold-order calculation additionally needs a known projected wavenumber
         - Folded wavenumber and ``S(k, f)``; fold order only from a known projected wavenumber, not recovered from one pair's phase
-      * - K03
-        - :doc:`Joint 2-D maximum-likelihood inversion <K_Diagnostics/K03_mle_k2d>`
-        - Phase means and variances of many configurations
+      * - :doc:`K03 <K_Diagnostics/K03_mle_k2d>`
+        - Can several probe configurations jointly constrain a two-dimensional wavevector?
+        - Baseline vectors, phase means and variances for several configurations, and a search range
         - Two-dimensional wavevector ``(K_x, K_y)`` per frequency
 
-      * - K04
-        - :doc:`Breathing waveform extraction: from samples to C <K_Diagnostics/K04_breathing_waveform>`
+      * - :doc:`K04 <K_Diagnostics/K04_breathing_waveform>`
+        - Which waveform repeats with the breathing cycle across repeated records?
         - Repeated voltage records at one spatial point under the same conditions
         - Phase-repeatable waveform C and residual R
 
-   K04 explains waveform extraction using artificial data. Numerical routines live in
-   ``K_Diagnostics/K04_breathing_waveform/``; examples, tests and plots live in
-   ``tests/011_K04_breathing_waveform/``. See the
-   :doc:`K04 test and reproduction guide </tests/011_K04_breathing_waveform/index>`.
+   .. rubric:: Learning Routes
 
-   .. rubric:: The Problem This Module Solves
+   The :doc:`probe wave diagnostics topic <K_Diagnostics/probe_wave_diagnostics>` uses the reading order K01 → K02 → K03,
+   from probe time series to frequencies, projected wavenumbers and two-dimensional wavevectors.
+   It contains the foundations, learning path, usage cookbook and testing guide.
+   K01 spectral tools can also be used independently; see the :doc:`K01 reference <K_Diagnostics/K01_signal_spectra>`
+   for the specific Beall weighting and phase-statistics conventions.
 
-   A single probe pair measures only the projection of the wavevector onto its separation, and
-   only modulo :math:`2\pi` of phase. When :math:`|\mathbf{K}\cdot\boldsymbol{\chi}|>\pi`,
-   the true projected wavenumber lies outside the pair's principal interval and the reported
-   value is a **folded wavenumber**: a straight dispersion branch can become a sawtooth on
-   the ``S(k, f)`` map. K02 describes this geometry; K03 combines configurations to recover
-   the wavevector using phase measurements from several configurations. Each baseline constrains
-   the wavevector projection along its direction; multiple directions provide two-dimensional
-   information. Baseline lengths and directions determine the phase-fringe intersections.
-
-   K03 evaluates a uniform two-dimensional wavenumber grid and reports its maximum joint
-   log-likelihood point. Section 7 of :doc:`the foundations <K_Diagnostics/diagnostics_foundations>`
-   introduces fringe intersections and geometry conditions.
-
-   .. rubric:: Shared Sign Convention
-
-   The separation is :math:`\boldsymbol{\chi} = \mathbf{r}_2 - \mathbf{r}_1` and the cross
-   spectrum is :math:`C = X_1 X_2^{*}`. With the :math:`\exp(-i\omega t)` forward transform of
-   ``numpy.fft.rfft``, a plane wave
-   :math:`\exp[i(\mathbf{K}\cdot\mathbf{r}-\omega t)]` gives
-
-   .. math::
-
-      \theta = \arg C = \mathbf{K}\cdot\boldsymbol{\chi}.
-
-   K03's forward model is that same expression and K02 recovers the wavenumber as
-   :math:`k_\parallel = \mathrm{wrap}(\theta)/|\boldsymbol{\chi}|`, so no sign flip appears
-   anywhere in the module. Reversing the probe order negates :math:`\theta` and mirrors every
-   recovered result.
+   :doc:`K04 breathing waveform extraction <K_Diagnostics/K04_breathing_waveform>` provides a separate learning route.
+   Artificial data illustrate how repeated records at one spatial point under the same conditions
+   yield a phase-repeatable waveform C and a residual R.
 
    .. rubric:: Related Tests
 
-   :doc:`tests/010_diagnostics </tests/010_diagnostics/index>`: one synthetic broadband dataset
-   drives all three units. Reference values come from the generator; acceptance uses explicit
+   :doc:`tests/010_diagnostics </tests/010_diagnostics/index>` covers K01–K03: one synthetic broadband dataset
+   drives these three units. Reference values come from the generator; acceptance uses explicit
    numerical tolerances for spectral slope, folded wavenumbers and recovered wavevectors.
    :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>` compare references, measured values,
    errors and acceptance rules in three groups: spectral power and phase, phase statistics,

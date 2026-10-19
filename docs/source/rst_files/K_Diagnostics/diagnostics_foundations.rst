@@ -16,9 +16,10 @@ Probe Diagnostics Foundations
    FFT 和谱泄漏的独立解释收录在全库的
    :doc:`知识点目录 </knowledge/index>`，可从本页的边框内进入，读完再返回当前章节。
 
-   本页从正弦函数开始，不要求你已经学过 FFT、复数谱或最大似然。目标是让你能解释
-   ``K_Diagnostics`` 为什么这样计算、每一步得到什么，再去读
-   :doc:`Diagnostics Learning Path <diagnostics_learning_path>` 和函数页。
+   本页属于 :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` 专题，讲解 K01–K03
+   探针波动分析链。从正弦函数开始，不要求你已经学过 FFT、复数谱或最大似然。目标是让你能解释
+   这条分析链为什么这样计算、每一步得到什么，再去读
+   :doc:`Probe Diagnostics Learning Path <diagnostics_learning_path>` 和函数页。
    可以按顺序阅读，也可以回到需要补充的部分：
 
    :ref:`1. 诊断目的 <foundations-zh-purpose>` ·
@@ -49,7 +50,7 @@ Probe Diagnostics Foundations
 
       * - 想知道什么
         - 从信号提取什么
-        - 本模块的对应输出
+        - K01–K03 的对应输出
       * - 哪些振荡最明显？
         - 各频率的波动强度
         - K01 功率谱
@@ -588,9 +589,9 @@ Probe Diagnostics Foundations
         - 为什么得到的是投影波数，折叠丢失什么信息，Beall 谱怎样累积。
       * - :doc:`K03_mle_k2d <K03_mle_k2d>`
         - 点乘预测、角度残差、方差权重和二维网格搜索怎样连接起来。
-      * - :doc:`Learning Path <diagnostics_learning_path>`
+      * - :doc:`Probe Diagnostics Learning Path <diagnostics_learning_path>`
         - 按推荐顺序进入具体函数，遇到术语时回到本页相应部分。
-      * - :doc:`Usage Cookbook <diagnostics_usage_cookbook>`
+      * - :doc:`Probe Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
         - 怎样导入和组合现有函数，准备符合形状和单位约定的输入。
       * - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`
         - 核对三组测试的参考值、实测值、误差与验收判据；每节可返回对应原理。
@@ -608,10 +609,12 @@ Probe Diagnostics Foundations
    FFT and leakage have reusable pages in the :doc:`knowledge index </knowledge/index>`.
    Follow the boxed links and return to the same section afterwards.
 
-   This page starts with a cosine wave. No prior knowledge of FFTs, complex spectra, or maximum
-   likelihood is assumed. The aim is to explain why ``K_Diagnostics`` performs each calculation
-   and what it produces before you enter the :doc:`Diagnostics Learning Path <diagnostics_learning_path>`
-   and individual routine pages. Read in order or return to a particular topic:
+   This page belongs to :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` and explains
+   the K01–K03 probe wave analysis chain. It starts with a cosine wave and assumes no prior
+   knowledge of FFTs, complex spectra, or maximum likelihood. The aim is to explain each
+   calculation and its output before you enter the
+   :doc:`Probe Diagnostics Learning Path <diagnostics_learning_path>` and individual routine
+   pages. Read in order or return to a particular topic:
 
    :ref:`1. Purpose <foundations-en-purpose>` ·
    :ref:`2. Wave basics <foundations-en-wave>` ·
@@ -645,7 +648,7 @@ Probe Diagnostics Foundations
 
       * - Question
         - Information extracted
-        - Module output
+        - K01–K03 output
       * - Which oscillations are strongest?
         - Fluctuation strength at each frequency
         - K01 power spectrum
@@ -1235,9 +1238,9 @@ Probe Diagnostics Foundations
         - Projected wavenumber, information lost in folding, and Beall accumulation.
       * - :doc:`K03_mle_k2d <K03_mle_k2d>`
         - Connecting dot-product predictions, angular residuals, variance weights, and grid search.
-      * - :doc:`Learning Path <diagnostics_learning_path>`
+      * - :doc:`Probe Diagnostics Learning Path <diagnostics_learning_path>`
         - Follow the routine reading order and return here when a concept needs refreshing.
-      * - :doc:`Usage Cookbook <diagnostics_usage_cookbook>`
+      * - :doc:`Probe Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
         - Import and combine routines, preparing arrays with the correct shapes and units.
       * - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`
         - Compare references, measurements, errors and acceptance rules in three test groups; each links back to the theory.
