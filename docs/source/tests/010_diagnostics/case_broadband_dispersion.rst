@@ -83,29 +83,58 @@ case_broadband_dispersion Test
 
    .. rubric:: 同次运行的图
 
+   .. rubric:: K01：原始波形
+
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/raw_waveform.png
       :align: center
-      :width: 92%
+      :width: 100%
+      :figclass: ap-diagnostics-broadband-figure
 
-      原始波形：左图对照加噪前后的探针记录，右图比较两路无噪信号。
+   左图叠加探针 1 的含噪记录与无噪信号，右图比较两路无噪信号。
+   此处展示 3.0 mm、0° 的参考探针对，生成记录的宽带信噪比为 10。
+   这张图帮助辨认输入；K01 是否通过仍由上方的谱与相干度验收值决定。
 
-   .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/power_spectrum.png
-      :align: center
-      :width: 92%
+   .. container:: ap-diagnostics-broadband-triptych
 
-      功率谱：同时标出噪声底和 10 倍底噪评价线；交点采用后者。谱指数与验收数值见上表。
+      .. container:: ap-diagnostics-broadband-panel
 
-   .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/beall_skf.png
-      :align: center
-      :width: 92%
+         .. rubric:: K01：功率谱
 
-      Beall 折叠谱：亮脊与理论折叠支比较。折叠数量按生成模态实际覆盖的阶数计数；不把首次 Nyquist 边界当作完整周期。
+         .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/power_spectrum.png
+            :align: center
+            :width: 100%
+            :figclass: ap-diagnostics-broadband-figure
 
-   .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/mle_dispersion.png
-      :align: center
-      :width: 92%
+      .. container:: ap-diagnostics-broadband-panel
 
-      联合反演的色散关系：拟合直线用于检查声速，逐频点矢量误差与搜索标记另由 CSV 和验收表核对。
+         .. rubric:: K02：Beall 折叠谱
+
+         .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/beall_skf.png
+            :align: center
+            :width: 100%
+            :figclass: ap-diagnostics-broadband-figure
+
+      .. container:: ap-diagnostics-broadband-panel
+
+         .. rubric:: K03：联合反演色散关系
+
+         .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/mle_dispersion.png
+            :align: center
+            :width: 100%
+            :figclass: ap-diagnostics-broadband-figure
+
+   **K01 功率谱：** 图中黑色虚线对应生成器的 :math:`P(f)\propto f^{-2}`，本次拟合斜率约为 −2.0021；
+   灰色虚线是 10 倍噪声底的评价线，红色点线是噪声底。交点按灰线定义；
+   谱指数、交点和相干度是否满足要求，以验收表的数值为准。
+
+   **K02 Beall 折叠谱：** 本例使用 20 mm、30° 的探针对和 512 段样本；Nyquist 波数约为 157 rad/m，
+   生成模态实际覆盖 10 个折叠阶。图中比较谱的亮脊、青色理论折叠支和绿色 K02 预测点。
+   单探针对只能核对折叠后的峰位，不能恢复折叠阶；首次 Nyquist 边界也不是完整折叠周期。
+   通过与否由上表的圆周峰位残差判定。
+
+   **K03 联合反演色散关系：** 35 个构型联合反演的波数模长与理论关系 :math:`f=c_s|k|/(2\pi)` 对照，
+   其中生成器声速约为 3825 m/s。直线贴合只显示总体趋势；声速误差、
+   逐频点矢量误差和搜索标记仍需核对验收表与 CSV。
 
 .. container:: ap-lang ap-lang-en
 
@@ -195,26 +224,61 @@ case_broadband_dispersion Test
 
    .. rubric:: Figures from the same run
 
+   .. rubric:: K01: Raw Waveforms
+
    .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/raw_waveform.png
       :align: center
-      :width: 92%
+      :width: 100%
+      :figclass: ap-diagnostics-broadband-figure
 
-      Raw records: noisy versus clean at left, and the two clean probes at right.
+   The left panel overlays noisy and clean probe-1 records, while the right
+   panel compares the two clean probes. This is the 3.0 mm, 0° reference pair;
+   the generated records have a broadband signal-to-noise ratio of 10.
+   K01 acceptance comes from the spectral and coherence values in the table above.
 
-   .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/power_spectrum.png
-      :align: center
-      :width: 92%
+   .. container:: ap-diagnostics-broadband-triptych
 
-      Power spectra show both the noise floor and the ten-times-floor assessment line. The crossing uses the latter; see the table for fit and acceptance values.
+      .. container:: ap-diagnostics-broadband-panel
 
-   .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/beall_skf.png
-      :align: center
-      :width: 92%
+         .. rubric:: K01: Power Spectra
 
-      Beall map versus the folded branch. Fold count means occupied orders among generated modes; the first Nyquist crossing is not a full fold period.
+         .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/power_spectrum.png
+            :align: center
+            :width: 100%
+            :figclass: ap-diagnostics-broadband-figure
 
-   .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/mle_dispersion.png
-      :align: center
-      :width: 92%
+      .. container:: ap-diagnostics-broadband-panel
 
-      Jointly recovered dispersion: the fitted slope checks sound speed; the table and CSV additionally assess individual vectors and search flags.
+         .. rubric:: K02: Beall Folded Spectrum
+
+         .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/beall_skf.png
+            :align: center
+            :width: 100%
+            :figclass: ap-diagnostics-broadband-figure
+
+      .. container:: ap-diagnostics-broadband-panel
+
+         .. rubric:: K03: Jointly Recovered Dispersion
+
+         .. figure:: ../../images/tests/010_diagnostics/case_broadband_dispersion/mle_dispersion.png
+            :align: center
+            :width: 100%
+            :figclass: ap-diagnostics-broadband-figure
+
+   **K01 Power Spectra:** The black dashed line is the generator reference
+   :math:`P(f)\propto f^{-2}`; the fitted slope is about −2.0021. The gray dashed
+   line marks ten times the noise floor, and the red dotted line marks the floor.
+   The crossing uses the gray line. Use the table values to assess the exponent,
+   crossing, and coherence.
+
+   **K02 Beall Folded Spectrum:** This 20 mm pair at 30° uses 512 segments.
+   Its Nyquist wavenumber is about 157 rad/m, and the generated modes occupy
+   10 fold orders. The figure compares bright spectral ridges with the cyan
+   folded-theory branch and green K02 prediction markers. A single pair checks
+   folded peak positions, not fold order; the first Nyquist crossing is not a
+   full fold period. The circular peak residual in the table determines acceptance.
+
+   **K03 Jointly Recovered Dispersion:** The 35 configurations jointly recover
+   wavenumber magnitudes compared with :math:`f=c_s|k|/(2\pi)` for the generator
+   sound speed of about 3825 m/s. Visual agreement is only an overview; the
+   table and CSV assess sound-speed error, per-mode vector errors, and search flags.

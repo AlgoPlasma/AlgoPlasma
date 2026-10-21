@@ -38,12 +38,24 @@ fun_G02_mcc_table.cpp：执行插值与计算区间上界
 
    The names above are an interface index; consult the source declarations for exact parameters.
 
-.. rubric:: 源码 / Source
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 源码
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Source
 
 :download:`fun_G02_mcc_table.cpp <../../../../../G_Collision/G02_MCC_network/fun_G02_mcc_table.cpp>`
 
 
-.. rubric:: 文件归属 / File location
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 文件归属
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: File location
 
 ``G_Collision/G02_MCC_network/fun_G02_mcc_table.cpp``
 

@@ -111,14 +111,14 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-wide ap-kunpeng-e-chart-frame
       :target: ../../_images/time_vs_threads1.png
 
       全部线程档位的平均单步耗时。纵轴越低越快；可用来找每条曲线的最低点和高线程回退。
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_selected_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-wide ap-kunpeng-e-chart-frame
       :target: ../../_images/time_vs_selected_threads.png
 
       只保留 ``1, 2, 4, 8, 16, 32, 64, 128, 256`` 线程档位的平均单步耗时，
@@ -127,7 +127,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/relative_time_vs_amd.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-wide ap-kunpeng-e-chart-frame
       :target: ../../_images/relative_time_vs_amd.png
 
       同线程下相对 AMD 原版的耗时百分比。``100%`` 是 AMD 原版；低于
@@ -381,7 +381,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-wide ap-kunpeng-e-chart-frame
       :target: ../../_images/time_vs_threads1.png
 
       Average single-step time for all thread counts. Lower is better; use this
@@ -389,7 +389,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/time_vs_selected_threads.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-wide ap-kunpeng-e-chart-frame
       :target: ../../_images/time_vs_selected_threads.png
 
       Average single-step time for the selected power-of-two-style thread
@@ -398,7 +398,7 @@ E_Maxwell E03 FDTD 3D Cartesian Comparison
 
    .. figure:: ../../images/tests/kunpeng_compare/E_Maxwell_E03_fdtd_3d_cartesian/relative_time_vs_amd.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+      :figclass: ap-figure-equal-height ap-figure-wide ap-kunpeng-e-chart-frame
       :target: ../../_images/relative_time_vs_amd.png
 
       Time relative to AMD original at the same thread count.

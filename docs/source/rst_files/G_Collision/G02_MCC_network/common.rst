@@ -38,7 +38,13 @@ common.hpp：基础类型、向量与物理常数
 
    The names above are an interface index; consult the source declarations for exact parameters.
 
-.. rubric:: 源码 / Source
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 源码
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Source
 
 :download:`common.hpp <../../../../../G_Collision/G02_MCC_network/common.hpp>`
 
@@ -47,7 +53,13 @@ common.hpp：基础类型、向量与物理常数
    :linenos:
 
 
-.. rubric:: 文件归属 / File location
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 文件归属
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: File location
 
 ``G_Collision/G02_MCC_network/common.hpp``
 

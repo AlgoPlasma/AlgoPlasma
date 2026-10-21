@@ -30,7 +30,7 @@ def save_traj_xy(x, y, xa, ya, title, outpath):
     plt.plot(xa, ya, "--", label="analytic")
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title(title)
+    plt.title(title, wrap=True)
     plt.axis("equal")
     plt.grid(True)
     plt.legend()
@@ -101,7 +101,7 @@ def plot_case_Eonly(fname: str, kind: str, out_dir: str):
         plt.plot(t, xa, "--", label="x_ana")
         plt.xlabel("t")
         plt.ylabel("x")
-        plt.title(title)
+        plt.title(title, wrap=True)
         plt.grid(True)
         plt.legend()
         plt.tight_layout()
@@ -148,9 +148,11 @@ def main():
     ensure_dir(out_dir)
 
     plot_case_gyro("./build/case01_gyro.dat",       kind="traj", out_dir=out_dir)
-    plot_case_Eonly("./build/case02_Eonly.dat",     kind="xt",   out_dir=out_dir)
-    plot_case_ExB("./build/case03_ExB.dat",         kind="traj", out_dir=out_dir)
-    plot_case_drift("./build/case04_ExB_drift.dat", kind="traj", out_dir=out_dir)
+    # Compensate for the smaller display width of the three-column row.
+    with plt.rc_context({"font.size": 15}):
+        plot_case_Eonly("./build/case02_Eonly.dat",     kind="xt",   out_dir=out_dir)
+        plot_case_ExB("./build/case03_ExB.dat",         kind="traj", out_dir=out_dir)
+        plot_case_drift("./build/case04_ExB_drift.dat", kind="traj", out_dir=out_dir)
 
     print(f"Done. Figures saved to ./{out_dir}/")
 

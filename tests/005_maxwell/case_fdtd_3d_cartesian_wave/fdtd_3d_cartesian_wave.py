@@ -197,7 +197,11 @@ def run_fdtd_3d_cartesian():
     ax.set_xlabel("x (m)")
     ax.set_ylabel("y (m)")
     ax.set_zlabel("z (m)")
-    ax.set_title("3D Cartesian FDTD Ez RMS Cutaway Slices")
+    ax.set_title(
+        "3D Cartesian FDTD Ez RMS Cutaway Slices",
+        fontsize=22,
+        fontfamily="Liberation Sans Narrow",
+    )
     ax.set_xlim(x[0], x[-1])
     ax.set_ylim(y[0], y[-1])
     ax.set_zlim(z[0], z[-1])

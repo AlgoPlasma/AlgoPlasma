@@ -179,11 +179,21 @@
 
    The schema tables above define columns, allowed values and defaults. The :doc:`tutorial <../G02_MCC_network>` explains physical meaning and energy signs.
 
-.. container:: g02-backlink
+.. container:: ap-lang ap-lang-zh g02-backlink
 
-   :doc:`返回 G02 教程 / Back to G02 <../G02_MCC_network>`
+   :doc:`返回 G02 教程 <../G02_MCC_network>`
 
-.. rubric:: 文件归属 / File location
+.. container:: ap-lang ap-lang-en g02-backlink
+
+   :doc:`Back to G02 <../G02_MCC_network>`
+
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 文件归属
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: File location
 
 ``G_Collision/G02_MCC_network/fun_G02_mcc_model.cpp``
 

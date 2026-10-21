@@ -42,7 +42,13 @@ rng.hpp：可复现的随机数
 
    The names above are an interface index; consult the source declarations for exact parameters.
 
-.. rubric:: 源码 / Source
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 源码
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Source
 
 :download:`rng.hpp <../../../../../G_Collision/G02_MCC_network/rng.hpp>`
 
@@ -51,7 +57,13 @@ rng.hpp：可复现的随机数
    :linenos:
 
 
-.. rubric:: 文件归属 / File location
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 文件归属
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: File location
 
 ``G_Collision/G02_MCC_network/rng.hpp``
 

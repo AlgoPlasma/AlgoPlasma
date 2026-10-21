@@ -1,11 +1,12 @@
 # 010_diagnostics
 
-Diagnostic and signal-inversion tests for `K_Diagnostics`.
+Basic numerical and broadband-chain tests for K01–K03 in `K_Diagnostics`.
 
-Unlike the other test categories, the algorithms under test take probe time
-series rather than particles or fields, and the `K_Diagnostics` units are
-subroutines only: they perform no file I/O and run no computation of their own.
-Test drivers provide inputs and call the numerical routines.
+These cases cover the [probe wave diagnostics topic](../../docs/source/rst_files/K_Diagnostics/probe_wave_diagnostics.rst).
+Basic checks supply numerical inputs directly; the broadband case starts from
+synthetic probe time series and tests spectra, phase statistics and wavevector
+inversion. The numerical routines perform no file I/O; test drivers provide
+inputs and orchestrate the computation.
 
 - `case_basic_checks` — **basic_numerical tests / 基础数值测试**:
   three verification groups with references, measurements, errors, acceptance rules

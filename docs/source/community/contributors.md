@@ -1,4 +1,4 @@
-# Contributors / 贡献者
+# Contributors
 
 <!-- This page is generated from `contributors.yml` at the repository root.
      Edit that file and run `python3 tools/generate_contributors.py` instead of
