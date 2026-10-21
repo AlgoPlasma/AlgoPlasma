@@ -121,18 +121,34 @@
    The engine maps identity_exchange by product species, not CSV row order.
    See the :doc:`existing module guide <../G02_MCC_network>` for G02 algorithm C02–C08 constraints.
 
-.. rubric:: Source signatures / 源码声明
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 源码声明
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Source signatures
 
 .. literalinclude:: ../../../../../G_Collision/G02_MCC_network/kinematics.hpp
    :language: cpp
    :start-at: struct FinalState
    :end-before: } // namespace mcc
 
-.. container:: g02-backlink
+.. container:: ap-lang ap-lang-zh g02-backlink
 
-   :doc:`返回 G02 教程 / Back to G02 <../G02_MCC_network>`
+   :doc:`返回 G02 教程 <../G02_MCC_network>`
 
-.. rubric:: 文件归属 / File location
+.. container:: ap-lang ap-lang-en g02-backlink
+
+   :doc:`Back to G02 <../G02_MCC_network>`
+
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 文件归属
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: File location
 
 ``G_Collision/G02_MCC_network/fun_G02_mcc_kinematics.cpp``
 

@@ -52,4 +52,10 @@ Basics
    common.hpp <common>
    rng.hpp <rng>
 
-:doc:`返回 G02 / Back to G02 <../G02_MCC_network>`
+.. container:: ap-lang ap-lang-zh
+
+   :doc:`返回 G02 <../G02_MCC_network>`
+
+.. container:: ap-lang ap-lang-en
+
+   :doc:`Back to G02 <../G02_MCC_network>`

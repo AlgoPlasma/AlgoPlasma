@@ -418,6 +418,51 @@ html[data-ap-lang="en"] .ap-lang-en {
     text-align: left;
 }
 
+/* Keep 010 broadband image frames aligned while placing explanations outside them. */
+.ap-diagnostics-broadband-figure {
+    box-sizing: border-box;
+    width: min(100%, 930px);
+    margin: 0.55rem auto 0.7rem;
+}
+
+.ap-diagnostics-broadband-figure img {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    border: 1px solid #d8e2ea;
+    background: #fff;
+}
+
+.ap-diagnostics-broadband-triptych {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 1rem 0 1.6rem;
+}
+
+.ap-diagnostics-broadband-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ap-diagnostics-broadband-triptych .ap-diagnostics-broadband-figure {
+    width: 100%;
+    margin: 0.55rem 0 0.7rem;
+}
+
+.ap-diagnostics-broadband-triptych img {
+    aspect-ratio: 4 / 3;
+    object-fit: contain;
+}
+
+@media screen and (max-width: 1200px) {
+    .ap-diagnostics-broadband-triptych {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .ap-figure-panorama {
         left: auto;
@@ -439,6 +484,39 @@ html[data-ap-lang="en"] .ap-lang-en {
 .ap-triptych img {
     max-width: 100%;
     height: auto;
+}
+
+/* Keep the paired 007 gather images in matching frames without distorting them. */
+.ap-triptych.ap-gather-equal-frame img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: contain;
+    box-sizing: border-box;
+    border: 1px solid #dfe4e8;
+    background: #fff;
+}
+
+/* Equal image boxes preserve the proportions of retained Maxwell field plots. */
+.ap-triptych.ap-maxwell-field-pair img {
+    aspect-ratio: 6 / 5;
+    object-fit: contain;
+}
+
+/* Keep Kunpeng comparison frames aligned at their intended reading size. */
+.ap-kunpeng-chart-row img,
+.ap-kunpeng-e-chart-frame img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 7 / 5;
+    object-fit: contain;
+    box-sizing: border-box;
+    border: 1px solid #d8e2ea;
+    background: #fff;
+}
+
+.ap-kunpeng-e-chart-frame img {
+    aspect-ratio: 5 / 3;
 }
 
 .ap-module-card {

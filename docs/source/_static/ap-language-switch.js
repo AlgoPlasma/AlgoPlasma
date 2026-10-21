@@ -104,12 +104,8 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    var hasLanguageBlocks = document.querySelector(".ap-lang");
     var buttons = document.querySelectorAll("[data-ap-set-lang]");
-    if (!hasLanguageBlocks && buttons.length === 0) {
-      return;
-    }
-
+    // Shared navigation also needs the stored language on single-language pages.
     var initialLanguage = readStoredLanguage() || "en";
     setLanguage(initialLanguage);
 

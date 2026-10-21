@@ -126,12 +126,12 @@ def maybe_make_figures(rows: list[dict[str, float | int | str]]) -> None:
 
     plt.rcParams.update(
         {
-            "font.size": 11,
-            "axes.titlesize": 12,
-            "axes.labelsize": 11,
-            "xtick.labelsize": 10,
-            "ytick.labelsize": 10,
-            "legend.fontsize": 10,
+            "font.size": 14,
+            "axes.titlesize": 18,
+            "axes.labelsize": 14,
+            "xtick.labelsize": 15,
+            "ytick.labelsize": 15,
+            "legend.fontsize": 15,
         }
     )
 
@@ -143,7 +143,7 @@ def maybe_make_figures(rows: list[dict[str, float | int | str]]) -> None:
         subset = sorted(subset, key=lambda x: int(x["threads"]))
         return [int(r["threads"]) for r in subset], [float(r[key]) for r in subset]
 
-    plt.figure(figsize=(7.0, 4.8))
+    plt.figure(figsize=(5.6, 4.0))
     for platform in DATASETS:
         x, y = series(platform, "compute_wall_time_s")
         plt.plot(x, y, styles[platform], label=platform)
@@ -157,7 +157,7 @@ def maybe_make_figures(rows: list[dict[str, float | int | str]]) -> None:
     plt.savefig(FIG / "wall_time_vs_threads.png", dpi=180)
     plt.close()
 
-    plt.figure(figsize=(7.0, 4.8))
+    plt.figure(figsize=(5.6, 4.0))
     for platform in DATASETS:
         x, y = series(platform, "throughput_gpushes_s")
         plt.plot(x, y, styles[platform], label=platform)
@@ -171,7 +171,7 @@ def maybe_make_figures(rows: list[dict[str, float | int | str]]) -> None:
     plt.savefig(FIG / "throughput_vs_threads.png", dpi=180)
     plt.close()
 
-    plt.figure(figsize=(7.0, 4.8))
+    plt.figure(figsize=(5.6, 4.0))
     for platform in DATASETS:
         x, y = series(platform, "speedup_vs_8")
         plt.plot(x, y, styles[platform], label=platform)

@@ -100,9 +100,9 @@ def stencil_1d(order: int, xp: float) -> tuple[list[int], list[float]]:
     return idx, weight
 
 
-def save_figure(fig, name: str) -> None:
+def save_figure(fig, name: str, *, crop: bool = True) -> None:
     FIG.mkdir(parents=True, exist_ok=True)
-    fig.savefig(FIG / name, dpi=180, bbox_inches="tight")
+    fig.savefig(FIG / name, dpi=180, bbox_inches="tight" if crop else None)
 
 
 def maybe_make_figures(rows: list[dict[str, str]], summary: dict[str, object]) -> None:
@@ -126,24 +126,36 @@ def maybe_make_figures(rows: list[dict[str, str]], summary: dict[str, object]) -
         }
     )
 
-    curve_colors = ["#7EA6C8", "#F2B880", "#8BCB88", "#E89AA0", "#C5A3D8"]
-    fig, ax = plt.subplots(figsize=(7.2, 4.8))
-    for order, color in zip(range(5), curve_colors):
-        half_width = 0.5 * float(order + 1)
-        x0 = -half_width - 0.35
-        x1 = half_width + 0.35
-        xs = [x0 + (x1 - x0) * i / 500.0 for i in range(501)]
-        ys = [centered_bspline_shape(order, x) for x in xs]
-        ax.plot(xs, ys, linewidth=2.0, color=color, label=f"order={order}")
+    # Larger text keeps the two side-by-side plots readable in the documentation.
+    paired_plot_style = {
+        "font.size": 14,
+        "axes.titlesize": 15,
+        "axes.labelsize": 14,
+        "legend.fontsize": 12,
+        "xtick.labelsize": 12,
+        "ytick.labelsize": 12,
+    }
 
-    ax.set_xlabel("Particle-grid distance r")
-    ax.set_ylabel("Shape weight S_order(r)")
-    ax.set_title("Centered B-spline shape functions used by B03 scatter")
-    ax.grid(True, alpha=0.22)
-    ax.legend(loc="upper right", ncol=1, frameon=False)
-    fig.tight_layout()
-    save_figure(fig, "b03_bspline_scatter_shape_curves.png")
-    plt.close(fig)
+    with plt.rc_context(paired_plot_style):
+        curve_colors = ["#7EA6C8", "#F2B880", "#8BCB88", "#E89AA0", "#C5A3D8"]
+        fig, ax = plt.subplots(figsize=(7.2, 5.0))
+        for order, color in zip(range(5), curve_colors):
+            half_width = 0.5 * float(order + 1)
+            x0 = -half_width - 0.35
+            x1 = half_width + 0.35
+            xs = [x0 + (x1 - x0) * i / 500.0 for i in range(501)]
+            ys = [centered_bspline_shape(order, x) for x in xs]
+            ax.plot(xs, ys, linewidth=2.0, color=color, label=f"order={order}")
+
+        ax.set_xlabel("Particle-grid distance r")
+        ax.set_ylabel("Shape weight S_order(r)")
+        ax.set_title("Centered B-spline shape functions used by B03 scatter", wrap=False)
+        ax.grid(True, alpha=0.22)
+        ax.legend(loc="upper right", ncol=1, frameon=False)
+        # Fixed margins align the frames of the two side-by-side plots.
+        fig.subplots_adjust(left=0.16, right=0.97, bottom=0.16, top=0.84)
+        save_figure(fig, "b03_bspline_scatter_shape_curves.png", crop=False)
+        plt.close(fig)
 
     particle = (5.35, 5.65, 5.20)
     fig, axes = plt.subplots(2, 2, figsize=(7.4, 6.0), constrained_layout=True)
@@ -168,35 +180,37 @@ def maybe_make_figures(rows: list[dict[str, str]], summary: dict[str, object]) -
     save_figure(fig, "b03_bspline_scatter_single_particle_footprint.png")
     plt.close(fig)
 
-    invariant_rows = [row for row in rows if row["metric"] != "max_abs_grid"]
-    scatter_colors = {
-        "number_conservation": "#79A7D3",
-        "component_conservation": "#B99AD6",
-        "number_first_moment": "#76B77D",
-        "component_first_moment": "#E39A9F",
-    }
-    fig, ax = plt.subplots(figsize=(6.8, 5.0))
-    for case, color in scatter_colors.items():
-        xs = [float(row["reference"]) for row in invariant_rows if row["case"] == case]
-        ys = [float(row["value"]) for row in invariant_rows if row["case"] == case]
-        if xs:
-            ax.scatter(xs, ys, s=28, alpha=0.78, label=case, color=color)
+    with plt.rc_context(paired_plot_style):
+        invariant_rows = [row for row in rows if row["metric"] != "max_abs_grid"]
+        scatter_colors = {
+            "number_conservation": "#79A7D3",
+            "component_conservation": "#B99AD6",
+            "number_first_moment": "#76B77D",
+            "component_first_moment": "#E39A9F",
+        }
+        fig, ax = plt.subplots(figsize=(7.2, 5.0))
+        for case, color in scatter_colors.items():
+            xs = [float(row["reference"]) for row in invariant_rows if row["case"] == case]
+            ys = [float(row["value"]) for row in invariant_rows if row["case"] == case]
+            if xs:
+                ax.scatter(xs, ys, s=28, alpha=0.78, label=case, color=color)
 
-    all_values = [float(row["reference"]) for row in invariant_rows] + [
-        float(row["value"]) for row in invariant_rows
-    ]
-    lo = min(all_values)
-    hi = max(all_values)
-    pad = 0.04 * (hi - lo + 1.0e-30)
-    ax.plot([lo - pad, hi + pad], [lo - pad, hi + pad], "--", color="#555555")
-    ax.set_xlabel("Reference invariant")
-    ax.set_ylabel("Measured invariant from den")
-    ax.set_title("B03 scatter: conservation and first-moment checks")
-    ax.grid(True, alpha=0.25)
-    ax.legend(frameon=False, loc="best")
-    fig.tight_layout()
-    save_figure(fig, "b03_bspline_scatter_ref_vs_value.png")
-    plt.close(fig)
+        all_values = [float(row["reference"]) for row in invariant_rows] + [
+            float(row["value"]) for row in invariant_rows
+        ]
+        lo = min(all_values)
+        hi = max(all_values)
+        pad = 0.04 * (hi - lo + 1.0e-30)
+        ax.plot([lo - pad, hi + pad], [lo - pad, hi + pad], "--", color="#555555")
+        ax.set_xlabel("Reference invariant")
+        ax.set_ylabel("Measured invariant from den")
+        ax.set_title("B03 scatter: conservation and first-moment checks", wrap=False)
+        ax.grid(True, alpha=0.25)
+        ax.legend(frameon=False, loc="best")
+        # Fixed margins align the frames of the two side-by-side plots.
+        fig.subplots_adjust(left=0.16, right=0.97, bottom=0.16, top=0.84)
+        save_figure(fig, "b03_bspline_scatter_ref_vs_value.png", crop=False)
+        plt.close(fig)
 
     case_orders = summary["case_orders"]
     palette = {

@@ -64,17 +64,25 @@ def plot_probes():
     fig.savefig("probe_compare.png", dpi=160)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(8.0, 4.8), constrained_layout=True)
-    for case in CASES:
-        data = read_probe(f"{case}_probe.dat")
-        ax.plot(data[:, 0], data[:, 3], lw=1.0, label=case)
-    ax.set_ylim(-180.0, 20.0)
-    ax.set_xlabel("step")
-    ax.set_ylabel("Error_dB")
-    ax.grid(True, alpha=0.25)
-    ax.legend(ncol=2)
-    fig.savefig("probe_error_db.png", dpi=160)
-    plt.close(fig)
+    # Compensate for the smaller display width of paired error plots.
+    with plt.rc_context({
+        "font.size": 15,
+        "axes.labelsize": 15,
+        "xtick.labelsize": 13,
+        "ytick.labelsize": 13,
+        "legend.fontsize": 12,
+    }):
+        fig, ax = plt.subplots(figsize=(8.0, 4.8), constrained_layout=True)
+        for case in CASES:
+            data = read_probe(f"{case}_probe.dat")
+            ax.plot(data[:, 0], data[:, 3], lw=1.0, label=case)
+        ax.set_ylim(-180.0, 20.0)
+        ax.set_xlabel("step")
+        ax.set_ylabel("Error_dB")
+        ax.grid(True, alpha=0.25)
+        ax.legend(ncol=2)
+        fig.savefig("probe_error_db.png", dpi=160)
+        plt.close(fig)
 
 
 def plot_slices():
@@ -94,7 +102,7 @@ def plot_slices():
             ax.set_ylabel("index 2")
         for ax in axes.ravel()[len(fields):]:
             ax.set_visible(False)
-        fig.colorbar(im, ax=axes.ravel().tolist(), label="E")
+        fig.colorbar(im, ax=axes.ravel().tolist(), label="E", pad=0.12)
         fig.savefig(f"field_slices_{case}.png", dpi=160)
         plt.close(fig)
 

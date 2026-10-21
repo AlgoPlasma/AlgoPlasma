@@ -18,7 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI 数据交换
 ├── I_Initializer     # 初始化
 ├── J_Fluid           # 流体算法
-├── K_Diagnostics     # 探针诊断与信号反演
+├── K_Diagnostics     # 等离子体诊断算法
 ├── docs              # Sphinx + Doxygen 文档
 └── tests             # 算法测试与验证案例
 ```

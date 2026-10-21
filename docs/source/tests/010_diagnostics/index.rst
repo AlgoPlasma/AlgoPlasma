@@ -17,9 +17,10 @@
 
 .. container:: ap-lang ap-lang-zh
 
-   本节整理 ``tests/010_diagnostics`` 中的 :doc:`K_Diagnostics </rst_files/K_Diagnostics>` 测试。
-   与其他测试分类不同，这里被测算法的输入是探针时间序列而不是粒子或场；``K_Diagnostics``
-   的计算函数不做文件读写；示例与测试的主程序负责调度计算。
+   本节整理 :doc:`K_Diagnostics </rst_files/K_Diagnostics>` 中 K01–K03 的基础数值与宽带链路测试，
+   对应 :doc:`探针波动诊断专题 </rst_files/K_Diagnostics/probe_wave_diagnostics>`。
+   基础测试直接构造数值输入，宽带测试从合成探针时序出发，检查频谱、相位统计和波矢反演。
+   计算函数不做文件读写；示例与测试的主程序提供数据并调度计算。
 
    .. list-table:: 当前测试页面
       :header-rows: 1
@@ -45,11 +46,13 @@
 
 .. container:: ap-lang ap-lang-en
 
-   This section collects the :doc:`K_Diagnostics </rst_files/K_Diagnostics>` tests under
-   ``tests/010_diagnostics``. Unlike the other test categories, the algorithms under test take
-   probe time series rather than particles or fields, and the ``K_Diagnostics`` units are
-   numerical routines only: they perform no file I/O; examples and test drivers orchestrate
-   the computation.
+   This section collects the basic numerical and broadband-chain tests for K01–K03 in
+   :doc:`K_Diagnostics </rst_files/K_Diagnostics>`, supporting the
+   :doc:`probe wave diagnostics topic </rst_files/K_Diagnostics/probe_wave_diagnostics>`.
+   Basic checks supply numerical inputs directly; the broadband case starts from synthetic
+   probe time series and tests spectra, phase statistics and wavevector inversion.
+   Numerical routines perform no file I/O; examples and test drivers provide data and
+   orchestrate the computation.
 
    .. list-table:: Available test pages
       :header-rows: 1

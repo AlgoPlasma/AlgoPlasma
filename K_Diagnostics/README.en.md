@@ -2,18 +2,26 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-`K_Diagnostics` collects probe diagnostic algorithms.  Unlike modules `A`–`J`,
-which act on particles and grids, this module takes probe time series as input
-and returns spectral quantities.  It serves experimental data analysis and
-applies equally to probe signals extracted from a PIC simulation.
+`K_Diagnostics` collects computational methods for extracting physical diagnostic
+quantities from experimental or numerical data. It provides reusable routines for
+specific diagnostic tasks. Current capabilities cover spectra and phase analysis,
+probe-pair wavenumber diagnostics, wavevector inference from multiple configurations,
+and extraction of breathing-cycle waveforms from repeated records at one spatial point.
 
-The three units are three stages of one diagnostic chain:
+## Current Capabilities
 
 | ID | Directory | Input | Output |
 | --- | --- | --- | --- |
-| K01 | [`K01_signal_spectra`](K01_signal_spectra/) | Two raw probe records | Segment spectra, power spectra, coherence, cross phase with its mean and variance |
-| K02 | [`K02_beall`](K02_beall/) | Cross phase of one pair | Aliasing algebra and the Beall dispersion spectrum `S(k, f)` |
-| K03 | [`K03_mle_k2d`](K03_mle_k2d/) | Phase means and variances of many configurations | Two-dimensional wavevector `(K_x, K_y)` per frequency |
+| K01 | [`K01_signal_spectra`](K01_signal_spectra/) | One or two time series, or their segment spectra | Segment spectra, power spectra, coherence, cross phase, mode-referenced phase statistics and mean pair auto-power |
+| K02 | [`K02_beall`](K02_beall/) | Pair cross phase, mean auto-power, frequency and separation; fold-order calculation also needs a known projected wavenumber | Folded wavenumber, Beall spectrum `S(k, f)` and aliasing relations |
+| K03 | [`K03_mle_k2d`](K03_mle_k2d/) | Separation vectors, phase statistics and a search grid for multiple configurations | Joint log likelihood and a two-dimensional wavevector estimate `(K_x, K_y)` per frequency |
+| K04 | [`K04_breathing_waveform`](K04_breathing_waveform/) | Repeated voltage records at one spatial point, with the same sampling rate and comparable conditions | Phase-repeatable waveform `C` and residual `R = X - C` for a held-out record |
+
+K01's FFT, power spectrum, coherence and cross phase can process time series from
+different sources. `pair_power` supplies the weight used by the Beall workflow;
+`phase_mode_statistics` uses the mode-bin centre and variance definition adopted
+by this probe-inference workflow. Each routine's input and statistical conventions
+still apply.
 
 [K04_breathing_waveform](K04_breathing_waveform/) contains the breathing-waveform extraction routines.
 The [learning page](../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst) explains the method;
@@ -22,24 +30,32 @@ Artificial examples, local tests, plotting and cleanup live in
 [`tests/011_K04_breathing_waveform`](../tests/011_K04_breathing_waveform/README.en.md), with running instructions.
 K04 learns a phase-repeatable waveform from repeated single-point records and supplies residuals for later spectral analysis.
 
-## The Problem This Module Solves
+## Probe Wave Diagnostics: K01–K03
+
+The [probe wave diagnostics topic](../docs/source/rst_files/K_Diagnostics/probe_wave_diagnostics.rst)
+gives the K01 → K02 → K03 reading order. The problem and sign conventions
+below apply to this probe diagnostic chain.
 
 Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
-## Shared Convention
+### Sign Convention for the Probe Diagnostic Chain
 
 - Separation `chi = r_2 - r_1`, cross spectrum `C = X_1 conj(X_2)`.
 - With the `exp(-i omega t)` forward transform of `numpy.fft.rfft`, a plane wave
   gives `theta = arg C = K . chi`, wrapped into `(-pi, pi]`.
 - K03's forward model is that same `K . chi`, and K02 recovers the wavenumber as
-  `k_par = wrap(theta)/|chi|` — **no sign flip anywhere in the module**.
+  `k_par = wrap(theta)/|chi|`; the chain uses the same phase sign throughout.
 
-Swapping the probe order negates `theta` and mirrors every recovered result.
+When swapping the probe order, reverse the baseline vector as well. Reversing only
+the cross phase while keeping the geometry unchanged mirrors the inferred wavevector.
 
 ## Usage
 
-Python, source-level modules, no installation.  Add the repository root to
-`sys.path` and import as namespace packages:
+Python, source-level modules, no installation. Add the repository root to
+`sys.path` and import as namespace packages.
+
+The example below shows probe-based wavevector inference. The caller supplies
+the input data and analysis parameters:
 
 ```python
 import sys
@@ -72,14 +88,15 @@ while examples and tests orchestrate the calculations. Plotting also needs Matpl
 
 - [basic_numerical tests](../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
 - [broadband_dispersion](../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
+- [K04 tests and artificial examples](../tests/011_K04_breathing_waveform/README.en.md): checks breathing-cycle waveform extraction and provides running and figure-reproduction instructions.
 
 The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
 
 
 ## Provenance
 
-- K01 implements the underlying segmented-FFT, cross-spectrum, power-spectrum,
-  coherence and circular-statistics operations.
+- K01 implements segmented FFTs, cross spectra, power spectra, coherence and the
+  mode-referenced phase statistics used by the current probe-inference workflow.
 - K02 follows the fixed-probe-pair wavenumber–frequency spectrum method of Beall
   et al.
 - K03 follows the multi-configuration Bayesian spatial anti-aliasing method of
