@@ -9,6 +9,7 @@ K_Diagnostics
     K_Diagnostics/K02_beall
     K_Diagnostics/K03_mle_k2d
     K_Diagnostics/K04_breathing_waveform
+    K_Diagnostics/K05_bispectral_transfer
 
 .. raw:: html
 
@@ -63,6 +64,10 @@ K_Diagnostics
 
    :doc:`K04 呼吸波形提取 <K_Diagnostics/K04_breathing_waveform>` 是独立的学习入口，
    从人工数据逐步说明怎样从同一空间点、相同条件下的重复记录得到相位重复波形 C 与残差 R。
+
+   :doc:`K05 波增长与耦合 <K_Diagnostics/K05_bispectral_transfer>` 是正在建立的独立学习入口：
+   第一课从简单波形推导 Brown 与 Jorns (2023) 公式 (1)，提供折叠推导和互动波包图。
+   目前仅有教学页面；双谱反演与探针数据分析脚本尚未实现。
 
    .. rubric:: 相关测试
 
@@ -125,6 +130,11 @@ K_Diagnostics
    :doc:`K04 breathing waveform extraction <K_Diagnostics/K04_breathing_waveform>` provides a separate learning route.
    Artificial data illustrate how repeated records at one spatial point under the same conditions
    yield a phase-repeatable waveform C and a residual R.
+
+   :doc:`K05 wave growth and coupling <K_Diagnostics/K05_bispectral_transfer>` is a new learning route:
+   the first lesson builds Brown & Jorns (2023) Eq. (1) from a simple wave,
+   with optional derivations and an interactive wave packet. It currently provides
+   documentation only; bispectral inversion and probe-data analysis scripts are not yet implemented.
 
    .. rubric:: Related Tests
 

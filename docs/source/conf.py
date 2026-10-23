@@ -9,6 +9,7 @@
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 project = 'AlgoPlasma'
@@ -19,6 +20,7 @@ author = 'AlgoPlasma'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 HERE = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(HERE, "_ext"))
 
 
 DOXYGEN_FILE_REF_RE = re.compile(
@@ -59,6 +61,7 @@ nitpick_ignore_regex = [
 ]
 
 extensions = [
+    "k05_equations",
     "sphinx_rtd_theme",
     "breathe",
     "myst_parser",

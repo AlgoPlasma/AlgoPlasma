@@ -118,3 +118,10 @@ The broadband page publishes figures, numerical tables, per-mode CSV and source 
 - J. M. Beall, Y. C. Kim, and E. J. Powers, "Estimation of wavenumber and
   frequency spectra using fixed probe pairs," J. Appl. Phys. **53**(6),
   3933–3940 (1982).
+
+## In Development: K05
+
+[K05_bispectral_transfer](K05_bispectral_transfer/README.en.md) starts with a short,
+interactive derivation of Brown & Jorns (2023) Eq. (1). Optional derivations
+fold away; a wave packet illustrates envelope motion and growth. Probe-data
+bispectral inversion and figure-generation scripts are planned, not implemented.

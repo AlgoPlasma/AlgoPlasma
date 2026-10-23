@@ -1,0 +1,89 @@
+/* Scoped to the K05 teaching page. */
+.k05-lesson .rubric { margin-top: 1.8rem; }
+.k05-lesson .k05-added { color: #145da0; }
+.k05-lesson .k05-revised { color: #922b72; }
+.k05-lesson .k05-added a, .k05-lesson .k05-revised a { color: inherit; text-decoration: underline; }
+.k05-lesson .k05-revision-key { font-size: .86rem; padding: .6rem .8rem; background: #f2f5f8; }
+.k05-lesson .k05-figure-revised { border-left: 3px solid #922b72; }
+/* Keep the number and its permalink in a fixed column, outside math scrolling. */
+.k05-lesson div.math {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: .6rem;
+  overflow: visible;
+  padding: .5rem 0;
+}
+.k05-lesson div.math > span:last-child { grid-column: 1; grid-row: 1; min-width: 0; }
+.k05-lesson div.math .eqno {
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
+  height: auto;
+  padding: 0;
+  white-space: nowrap;
+}
+.k05-lesson div.math .eqno::before { display: none; }
+.k05-lesson div.math .eqno .headerlink,
+.k05-lesson div.math .eqno:hover .headerlink {
+  display: inline-block;
+  visibility: visible;
+  width: 1.2em;
+  padding: 0;
+  margin: 0 0 0 .35em;
+}
+.k05-lesson div.math .eqno .headerlink { opacity: 0; }
+.k05-lesson div.math .eqno:hover .headerlink,
+.k05-lesson div.math .eqno .headerlink:focus { opacity: 1; }
+.k05-lesson .katex-display > .katex > .katex-html { box-sizing: border-box; }
+.k05-lesson .k05-note {
+  margin: 1.1rem 0 1.6rem;
+  padding: .8rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-left: 3px solid #28658b;
+  border-radius: .3rem;
+  background: #f8fafc;
+}
+.k05-note summary { cursor: pointer; font-weight: 600; color: #174a6a; }
+.k05-note[open] summary { margin-bottom: 1rem; }
+.k05-note > :last-child { margin-bottom: 0; }
+.k05-wave {
+  padding: 1rem;
+  margin: 1rem 0 .7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: .5rem;
+  background: #fff;
+  color: #243746;
+}
+.k05-wave svg, .k05-wave img { display: block; width: 100%; height: auto; }
+.k05-wave .k05-wave-title { margin: 0 0 .3rem; font-weight: 600; }
+.k05-wave .k05-wave-legend { font-size: .86rem; margin: .4rem 0 .8rem; }
+.k05-wave-legend span { display: inline-block; margin-right: 1rem; }
+.k05-wave-legend .k05-blue { color: #216b96; }
+.k05-wave-legend .k05-orange { color: #a34508; }
+.k05-wave-legend .k05-green { color: #237344; }
+.k05-envelope-labels text { paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+.k05-wave-controls { display: flex; gap: .8rem; align-items: end; flex-wrap: wrap; }
+.k05-wave-controls label { display: flex; flex-direction: column; gap: .35rem; font-size: .9rem; }
+.k05-wave-controls .k05-time-label { flex: 1 1 12rem; }
+.k05-wave-controls input[type="range"] { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-wave-controls select, .k05-wave-controls button {
+  min-height: 2.3rem; padding: .4rem .65rem;
+  border: 1px solid #889cae; border-radius: .25rem;
+  background: #fff; color: #243746; font: inherit;
+}
+.k05-wave-controls button { cursor: pointer; background: #edf4f8; }
+.k05-wave-controls button:hover { background: #dcebf4; }
+.k05-wave :focus-visible, .k05-note summary:focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-wave .k05-wave-readout { font-size: .85rem; margin: .7rem 0 0; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) {
+  .k05-wave { padding: .6rem; }
+  .k05-wave-controls .k05-time-label { flex-basis: 100%; }
+  .k05-lesson .k05-note { padding: .7rem; }
+}
+
+/* Current revision: newly assigned numbers; existing equation text stays neutral. */
+.k05-lesson .k05-new-number .eqno { color: #922b72; }
+.k05-lesson .k05-note summary.k05-revised { color: #922b72; }
+.k05-lesson .k05-note.k05-added > summary { color: #145da0; }
+.k05-lesson .k05-note.k05-revised > summary { color: #922b72; }

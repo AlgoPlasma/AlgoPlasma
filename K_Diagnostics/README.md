@@ -89,3 +89,9 @@ result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, gri
 - M. F. Liu and B. A. Jorns, "Anti-aliasing technique for inferring dispersion of short-wavelength instabilities in electric propulsion devices," AIAA SciTech Forum, Paper AIAA-2025-1293 (2025), [doi:10.2514/6.2025-1293](https://doi.org/10.2514/6.2025-1293)。
 - M. F. Liu and B. A. Jorns, "Experimental validation of a spatial anti-aliasing plasma wave analysis technique on ion acoustic turbulence in a hollow cathode plume," 39th International Electric Propulsion Conference, Paper IEPC-2025-357 (2025)。
 - J. M. Beall, Y. C. Kim, and E. J. Powers, "Estimation of wavenumber and frequency spectra using fixed probe pairs," J. Appl. Phys. **53**(6), 3933–3940 (1982).
+
+## 建设中：K05
+
+[K05_bispectral_transfer](K05_bispectral_transfer/README.zh-CN.md) 从 Brown 与 Jorns (2023)
+公式 (1) 的短篇推导开始，带折叠补充和互动波包图。英文视图保持纯英文，中文视图附英文术语。
+探针数据双谱反演与出图脚本属于后续计划，尚未实现。

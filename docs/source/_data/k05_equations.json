@@ -1,0 +1,23 @@
+{
+  "real-wave": 1,
+  "gaussian-height": 2,
+  "complex-wave": 3,
+  "linear-envelope": 4,
+  "chain-rule": 5,
+  "mode-derivative": 6,
+  "quadratic-envelope": 7,
+  "phase-product": 8,
+  "matched-pairs": 9,
+  "ordered-pair-sum": 10,
+  "example-inputs": 11,
+  "example-forcing": 12,
+  "example-solution": 13,
+  "product-rule": 14,
+  "full-wave-equation": 15,
+  "dielectric-expansion": 16,
+  "response-coefficients": 17,
+  "phase-derivatives": 18,
+  "matched-phase-product": 19,
+  "full-wave-equation-1d": 20,
+  "envelope-substitution": 21
+}
