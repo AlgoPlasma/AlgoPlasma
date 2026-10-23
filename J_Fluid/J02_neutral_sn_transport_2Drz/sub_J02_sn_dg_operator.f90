@@ -90,12 +90,6 @@
         real, intent(in) :: rc, hr, xi_lo, xi_hi
         real, intent(out) :: m0, m1, m2
         real :: d1, d2, d3, d4
-        if (xi_hi <= xi_lo) then
-            m0 = 0.0
-            m1 = 0.0
-            m2 = 0.0
-            return
-        end if
         ! M_j = hr * integral[(rc + hr*xi) * xi**j dxi], j=0,1,2.
         ! Exact interval moments let inlet and remaining wall share one face
         ! without multiplying a full-face contribution by an approximate fraction.
@@ -162,7 +156,6 @@
         real, intent(inout) :: a(3, 3)
         real, intent(in) :: sigma, rc, hr, hz
         ! sigma * integral r*phi_a*phi_b dr dz; radial weighting couples 1 and xi.
-        if (sigma <= 0.0) return
         a(1, 1) = a(1, 1)+sigma*4*rc*hr*hz
         a(1, 2) = a(1, 2)+sigma*(4.0/3.0)*hr*hr*hz
         a(2, 1) = a(2, 1)+sigma*(4.0/3.0)*hr*hr*hz
@@ -181,8 +174,7 @@
 
         ierr = SN_SUCCESS
         if (present(corrected)) corrected = .false.
-        if (.not. all(ieee_is_finite(a)) .or. .not. all(ieee_is_finite(rhs)) .or. &
-            .not. all(ieee_is_finite(coeff))) then
+        if (.not. all(ieee_is_finite(coeff))) then
             ierr = SN_ERR_LOCAL_POSITIVITY
             return
         end if

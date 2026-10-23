@@ -8,7 +8,6 @@ J_Fluid
    J01 Free Molecular <J_Fluid/J01_free_molecular>
    J02 Discrete Ordinates <J_Fluid/J02_neutral_sn_transport_2Drz>
    J03 Continuity <J_Fluid/J03_neutral_continuity_faceflux_2Drz>
-   Legacy Utilities <J_Fluid/J01_free_molecular/continuity>
 
 .. raw:: html
 
@@ -52,14 +51,10 @@ J_Fluid
       * - J03 Continuity
         - 参考场闭合、当前通量、瞬态单步、收支与稳态辅助求解
         - 从给定初态推进密度，并组织完整调用
-      * - Legacy Utilities
-        - 已有三维归一化更新、二维给定速度通量工具
-        - 使用保留接口，不需要先学习粒子前处理
 
    第一次阅读可完整阅读所需的一个前处理模块，再阅读 J03。
    网格、数组位置和通量约定在使用它们的模块中说明。
    若已有满足接口约定的参考密度与通量，可以直接进入 J03。
-   三维保留接口单独放在最后，不穿插在二维中性输运的阅读顺序中。
 
    .. rubric:: 模型范围与源码组织
 
@@ -92,7 +87,6 @@ J_Fluid
    - J01: inlet sampling, wall reflection, particle histories, residence and crossing estimators.
    - J02: velocity quadrature, boundary distributions, DG equations, sweeps, iteration and reconstruction.
    - J03: reference-field closure, current fluxes, physical-time steps, balance diagnostics and an optional steady solver.
-   - Legacy Utilities: separate Cartesian and prescribed-velocity interfaces retained in the J01 directory.
 
    The current kinetic preprocessors retain only r,z and two velocity components.
    Cylindrical measures do not provide full axisymmetric three-velocity dynamics.

@@ -1,14 +1,12 @@
 # J01_free_molecular tests
 
-Five standalone programs test the production modules without archived external solutions.
+Three standalone programs test the free-molecular module without archived external solutions.
 
 | Test source | Implementation | Checks |
 | --- | --- | --- |
-| `test_J01_continuity_freeflow.f90` | 3D continuity | Update formula, subtractive source, guards, six shifts and periodic conservation |
-| `test_J01_faceflux_2Drz_units.f90` | 2D flux utilities and FM driver | Flux signs, area/volume update, single-cell rate balance and invalid density |
+| `test_J01_fm_units.f90` | Sampling, reflection, tracking, statistics and driver | Partial inlet, sampling range, lookup, normalization, single-cell rate balance, truncation and invalid topology |
 | `test_J01_corner_crossings.f90` | Trajectory tracking | Exact and near corners, both arrival orders, all four velocity signs, stepped boundaries, crossing counts and residence |
 | `test_J01_sampling_distribution.f90` | Inlet and wall sampling | Annular-area, truncated-normal inlet and four-face diffuse-reflection probabilities with three seeds |
-| `test_J01_fm_units.f90` | Sampling, reflection, tracking, statistics and driver | Partial inlet, sampling range, lookup, normalization, truncation and invalid topology |
 
 ```bash
 bash tests/012_fluid/J01_free_molecular/run.sh

@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-This group provides neutral reference fields, density evolution, and retained continuity utilities. It can supply neutral density to Particle-in-Cell (PIC) applications; charged-particle pushing, electromagnetic fields and reaction-rate calculations belong to other modules.
+This group provides neutral reference fields and density evolution. It can supply neutral density to Particle-in-Cell (PIC) applications; charged-particle pushing, electromagnetic fields and reaction-rate calculations belong to other modules.
 
 ## Directories
 
@@ -14,8 +14,6 @@ This group provides neutral reference fields, density evolution, and retained co
 
 J01 and J02 are alternative reference-field methods, not successive steps. J03 consumes geometry and field arrays without depending on preprocessor internals.
 
-The normalized Cartesian continuity routine and prescribed-velocity cylindrical tools remain in a separate module inside the J01 directory.
-
 ## Scope and compilation
 
 The neutral preprocessors retain r,z and two velocity components, without azimuthal velocity dynamics. Cylindrical measures do not imply full three-velocity axisymmetric kinetics; each method documents its own equations and approximations. J03 evolves scalar density and does not rerun reference-field calculations.
@@ -24,6 +22,6 @@ Compile the required `mod_*.f90` with preprocessing enabled, not the included `s
 
 ## Reading order
 
-The Sphinx [J_Fluid](../docs/source/rst_files/J_Fluid.rst) section contains independent J01 and J02 routes with their local data conventions, J03 with its complete calling sequence, and Legacy Utilities.
+The Sphinx [J_Fluid](../docs/source/rst_files/J_Fluid.rst) section contains independent J01 and J02 routes with their local data conventions, followed by J03 with its complete calling sequence.
 
 Commands and assertions belong to [tests/012_fluid](../tests/012_fluid/README.md), separate from algorithm derivations.

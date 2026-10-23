@@ -113,3 +113,40 @@ Build files and logs remain visible under `build/`. When no longer needed, run:
 ```bash
 bash tests/012_fluid/J02_neutral_sn_transport_2Drz/clean.sh
 ```
+
+## Nonuniform speed groups
+
+`test_J02_nonuniform_quadrature.f90` covers explicit edges, invalid inputs, velocity
+measure, compatibility with uniform groups, reflection pairing, and transport balance
+with partial inlet and three wall models. It supports default real and real8 builds.
+The MPI fixture accepts `nonuniform` as its fourth argument to use four nonuniform groups.
+The cold/fast accuracy study and its limitations are described in
+[nonuniform_speed/README.md](nonuniform_speed/README.md).
+
+## Relative speed and coordinate conversion
+
+`source_f90/test_J02_relative_speed.f90` checks exact geometric cases, physical
+cylindrical-to-Cartesian rotation, common-frame invariance, different-frame
+conversion, zero diagonals, symmetry and repeatability. It compares all 1,920
+pairs from unequal nonuniform node sets against an independent cosine-law
+reference, checks representable large/small norms, and validates failure cleanup.
+The generic vector helpers support three components; J02 node reconstruction
+sets the azimuthal component to zero and retains the reduced 2D2V model.
+
+The test is discovered by the ordinary build. For isolated real4/real8 serial
+and four-worker OpenMP runs without removing any existing build directory:
+
+```bash
+python3 tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/run_test.py
+```
+
+The runner verifies actual worker counts and identical pair CSVs between serial
+and OpenMP within each precision. It overwrites its named outputs only.
+See [the test definitions and error measures](relative_speed/README.md).
+
+## CEX coefficient smoke test
+
+`test_J02_cex_coefficients.f90` uses three double-precision checks for analytic
+synthetic kernels, ion density normalization, and the collision frequency/sigma_t.
+Run only these with `bash tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/run.sh`.
+See [usage](cex_coefficients/README.md). No physical CEX data is bundled.

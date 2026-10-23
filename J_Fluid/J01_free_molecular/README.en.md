@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-Two Fortran modules in this directory separate particle preprocessing from retained continuity utilities.
+The Fortran module `mod_J01_neutral_free_molecular_2Drz` provides free-molecular particle preprocessing.
 
 ## Particle preprocessing
 
@@ -20,17 +20,8 @@ The current model uses straight r-z trajectories without azimuthal motion, volum
 
 The radial injection interval does not turn the remainder of an OPEN face into a wall. Applications supply prescribed inflow using the same particle rate and area. Histories stopped by the tracking limit produce incomplete statistics.
 
-## Retained utilities
-
-`mod_J01_continuity_freeflow` includes:
-
-- `sub_J01_continuity_freeflow.f90`: original normalized Cartesian density update; `s` is a per-step decrement.
-- `sub_J01_continuity_freeflow_2Drz.f90`: prescribed-velocity cylindrical flux construction and prescribed-flux density stepping.
-
-These utilities do not sample or track particles. Their public interfaces and Cartesian indexing remain unchanged.
-
 ## Build and documentation
 
-Compile only the required module files, with preprocessing and this directory on the include path. Do not compile include files separately. Keep real precision consistent, and use explicit `only` imports when both modules are needed because some constant names overlap.
+Compile `mod_J01_neutral_free_molecular_2Drz.f90` with preprocessing enabled and this directory on the include path. The module includes the five implementation files listed above, so compile only the module file. Keep real precision consistent between the module and callers.
 
-The Sphinx [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) route covers data, injection, reflection, tracking, estimators and the complete calculation. Retained interfaces are under Legacy Utilities; see [J01 tests](../../tests/012_fluid/J01_free_molecular/README.md) for test commands.
+The Sphinx [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) route covers data, injection, reflection, tracking, estimators and the complete calculation. See [J01 tests](../../tests/012_fluid/J01_free_molecular/README.md) for test commands.

@@ -10,7 +10,7 @@ Velocity Quadrature
 当前实现将二维速度平面写成极坐标，再使用角度与速率的乘积规则：
 
 - 角度方向使用全圆等角复合中点法，每个角区间取一个中点。
-- 速率方向划分为等宽区间，在区间中点取分布值，权重则对区间内的
+- 速率方向使用等宽或调用者给定的非均匀区间，在区间中点取分布值，权重则对区间内的
   :math:`v\,\mathrm dv` 精确积分。
 - 速率上限由调用者给定，积分域由无限速度平面截断为有限圆盘。
 
@@ -86,7 +86,7 @@ Velocity Quadrature
 
 .. rubric:: 4. 速率区间的节点与权重
 
-将 :math:`[0,v_{\max}]` 分成 :math:`N_v` 个等宽区间：
+原等宽接口将 :math:`[0,v_{\max}]` 分成 :math:`N_v` 个区间：
 
 .. math::
 
@@ -95,6 +95,13 @@ Velocity Quadrature
    v_{g+1/2}=g\Delta v,\qquad
    v_g=\left(g-\frac12\right)\Delta v.
 
+非均匀接口接收边界 :math:`0=e_0<e_1<\cdots<e_{N_v}`，使用
+
+.. math::
+
+   v_g=(e_{g-1}+e_g)/2,\qquad \Delta v_g=e_g-e_{g-1}.
+
+下面的面积公式对两种接口均成立；非均匀时将 :math:`\Delta v` 替换成 :math:`\Delta v_g`。
 只对分布值作中点近似，速度面积权重保留精确积分：
 
 .. math::
@@ -175,16 +182,33 @@ Velocity Quadrature
   其中 ``weight`` 此时才是 :math:`w_m`。
 - 输出 ``ierr``：传播角度或速率构造错误。成功后，该对象可直接用于后续各过程。
 
+``sub_J02_build_speed_groups_from_edges(speed_edge, speed, weight, ierr)``
+返回非均匀速率节点与径向权重。边界至少两个，须有限、严格递增且首项为零；
+不满足时返回 ``SN_ERR_SPEED_EDGES``，不能表示正节点/权重时返回 ``SN_ERR_SPEED_RANGE``。
+失败时输出数组不保留上次结果。
+
+``sub_J02_build_phase_quadrature_from_edges(n_angles, speed_edge, angular_scheme, quadrature, ierr)``
+由边界推断组数及上限，输出与原接口相同的完整求积对象。每组仍使用相同的全部角度节点。
+
+.. code-block:: fortran
+
+   call sub_J02_build_phase_quadrature_from_edges(128, speed_edge, 'midpoint', quad, ierr)
+
 .. rubric:: 7. 精度选择与更换求积方法
 
 角度数量控制方向分辨率，速率区间数控制有限速度区间内的分辨率，
 速率上限控制被截去的尾部范围。增加速率区间数并不能补回上限之外的分布；
 有漂移入口时，应同时考虑热速度尺度和漂移速度，检查有效分布是否落在截断圆盘内。
 
-若将来增加非均匀速率划分或其他求积规则，应说明权重对应的积分变量及面积元，并保证节点速率、权重为正，
+当前非均匀速率接口保持了积分变量和面积元；若进一步增加其他求积规则，也应保证节点速率、权重为正，
 方向为单位向量。当前镜面方向查找依赖每个速率组内连续排列的等数量角节点；
 扫描还要求两个方向余弦都非零。修改规则时必须一并核查这些条件，
 不能只替换权重而假定反射映射仍然正确。
 
 后续入口页在这些节点上取分布值，入口归一化页用同一组 :math:`w_m`
 将分布归一化到给定入口通量；求解与重构继续使用这组离散速度。
+
+冷/快 Maxwell 分布以及混合分布的可重复对比位于
+``tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed``。
+原始矩不先归一化，避免把欠分辨误差隐藏在归一化系数中；
+输运比较固定空间和角度分辨率，并另行报告角度、截断及参考解细化变化。

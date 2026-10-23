@@ -68,7 +68,6 @@
                 end do
             end do
         end do
-        call sub_J02_sync_status(partition,ierr)
         if (ierr/=SN_SUCCESS) return
         call MPI_Cart_shift(communicator,0,1,partition%neighbor(SN_R_LO),partition%neighbor(SN_R_HI),ec)
         call MPI_Cart_shift(communicator,1,1,partition%neighbor(SN_Z_LO),partition%neighbor(SN_Z_HI),ec)
@@ -102,7 +101,7 @@
             if (states(1,q)==SN_SUCCESS) cycle
             key=states(2:4,q)
             if (present(quadrature)) then
-                if (key(1)>0 .and. key(1)<=quadrature%n_dir) then
+                if (key(1)>0) then
                     if (quadrature%mu(key(1))<0.0 .and. key(2)>0) key(2)=partition%global_shape(1)+1-key(2)
                     if (quadrature%eta(key(1))<0.0 .and. key(3)>0) key(3)=partition%global_shape(2)+1-key(3)
                 end if
@@ -275,9 +274,6 @@
                     k=mesh%nz
                     actual=boundary%face_z_hi(i,k)
                     if (.not.validate) boundary%face_z_hi(i,k)=expected
-                case default
-                    ierr=SN_ERR_MPI_LAYOUT
-                    return
                 end select
                 if (validate) then
                     if (actual/=expected) ierr=SN_ERR_MPI_LAYOUT

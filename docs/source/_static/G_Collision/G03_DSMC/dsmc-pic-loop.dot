@@ -1,0 +1,58 @@
+digraph DSMCPIC {
+  graph [rankdir=TB, newrank=true, splines=ortho, bgcolor="transparent", pad=0.2, nodesep=0.50, ranksep=0.55,
+         fontname="Droid Sans Fallback", fontsize=16];
+  node [shape=box, style="filled", fontname="Droid Sans Fallback", fontsize=17,
+        margin="0.18,0.12", color="#64748b", fillcolor="#f3f5f8", fontcolor="#233447", penwidth=1.3];
+  edge [fontname="Droid Sans Fallback", fontsize=14, fontcolor="#52616e", color="#64748b", arrowsize=0.75];
+
+  init [group="main", label="① 初始化\n粒子、模型、网格、边界、W、Δt；t = 0"];
+  check [group="main", shape=diamond, style=filled, label="继续模拟？", margin=0.12];
+  end [shape=oval, label="输出结果 · 结束", fillcolor="#fff7ed", color="#c28a44"];
+  fieldcheck [group="main", shape=diamond, style=filled, label="耦合 PIC 场？", margin=0.12];
+  move [group="main", label="② 推进粒子并处理边界\n中性：自由飞行；带电：结合场推进\n反射 / 吸收 / 注入 / 出流"];
+  group [group="main", label="③ 更新碰撞单元归属\n新位置 → 成员表、真实体积、共同速度基底"];
+  sample [group="main", label="⑤ 采样与诊断\n密度、流速、温度；动量与能量收支"];
+  advance [group="main", label="⑥ 推进物理时间\nt ← t + Δt"];
+
+  subgraph cluster_pic {
+    label="PIC · 调用程序的可选模块"; labelloc=t;
+    color="#5482b8"; fontcolor="#2d5b94"; style="dashed"; penwidth=1.4;
+    pic [label="电荷 / 电流沉积\n↓\n求解电磁场\n↓\n把场插值到粒子", color="#5482b8", fillcolor="#edf4ff", fontcolor="#2d5b94"];
+  }
+  subgraph cluster_dsmc {
+    label="④ DSMC 局部碰撞 · G03 中性弹性"; labelloc=t;
+    color="#258574"; fontcolor="#176655"; style="filled"; fillcolor="#f6fbf9"; penwidth=1.6;
+    cell [group="main", shape=diamond, style=filled, label="还有待处理单元？", margin=0.12,
+          color="#258574", fillcolor="#e4f3ec", fontcolor="#176655"];
+    collide [group="main", label="取下一单元，建立有效碰撞核上界\nNTC 候选数 / 连续候选时钟\n反复选对与判定；接受才更新双方速度",
+             color="#258574", fillcolor="#e4f3ec", fontcolor="#176655"];
+    cell -> collide [xlabel="是", color="#258574", fontcolor="#176655"];
+    collide -> cell [xlabel="本单元完成", color="#258574", fontcolor="#176655", constraint=false];
+  }
+
+  join [shape=point, width=0.055, height=0.055, label="", group="main", color="#64748b"];
+  return_top [shape=point, width=0, height=0, style=invis, label="", group="return"];
+  return_mid [shape=point, width=0, height=0, style=invis, label="", group="return"];
+  return_bottom [shape=point, width=0, height=0, style=invis, label="", group="return"];
+  {rank=same; check; end;}
+  {rank=same; join; return_top;}
+  {rank=same; advance; return_bottom;}
+  {rank=same; move; pic; return_mid;}
+  pic -> return_mid [style=invis, weight=10];
+  init -> join [arrowhead=none];
+  join -> check;
+  check -> end [xlabel="否"];
+  check -> fieldcheck [xlabel="是：进入一个物理时间步"];
+  fieldcheck -> pic [xlabel="是", style=dashed, color="#5482b8", fontcolor="#2d5b94"];
+  fieldcheck -> move [xlabel="否：纯中性 DSMC"];
+  pic -> move [style=dashed, color="#5482b8", constraint=false];
+  move -> group;
+  group -> cell;
+  cell -> sample [xlabel="否：全部单元完成", color="#258574", fontcolor="#176655"];
+  collide -> sample [style=invis, weight=20];
+  sample -> advance;
+  advance -> return_bottom [arrowhead=none, constraint=false];
+  return_bottom -> return_mid [arrowhead=none, constraint=false];
+  return_mid -> return_top [xlabel="下一步", arrowhead=none, constraint=false];
+  return_top -> join [constraint=false];
+}

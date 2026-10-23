@@ -2,8 +2,7 @@
 
 The neutral application tests exercise reduced r-z, two-velocity-component
 transport, not full axisymmetric 2D3V kinetics. J03 evolves scalar density with
-a face-flux closure. The retained 3D Cartesian continuity tests are separate;
-their passing does not establish a 3V neutral model.
+a face-flux closure.
 
 ## Fast checks
 
@@ -25,7 +24,7 @@ and continuity densities must be finite and nonnegative in active cells.
 
 ## Test order and analytical references
 
-The three ordinary runners execute 20 small programs: five J01, nine J02 and
+The three ordinary runners execute 21 small programs: three J01, twelve J02 and
 six J03 programs. Run local tests first. The J03 runner finishes with two actual
 preprocessing-to-continuity tests:
 

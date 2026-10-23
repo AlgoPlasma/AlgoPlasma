@@ -1,5 +1,5 @@
-012_fluid
-==========================================================================================
+012_fluid Tests
+===============
 
 .. toctree::
    :maxdepth: 2
@@ -34,7 +34,7 @@
       * - J01
         - 入口概率、反射速度、轨迹驻留时间、穿面计数、统计归一化
         - 完整主入口执行采样、跟踪和统计；核对注入与逃逸粒子率
-        - 保留的三维更新及二维给定速度通量单独列页
+        - J01→J03 串联与完整应用见 J03 分组
       * - J02
         - 网格几何、速度求积、边界分布、DG 积分、场重构
         - 迎风扫描、反射迭代、局部保正、完整求解入口
@@ -85,10 +85,10 @@
         - 实际执行
         - 输出
       * - J01 / run.sh
-        - 5 个程序：保留更新、二维通量、粒子局部过程、角点轨迹、采样概率
+        - 3 个程序：粒子局部过程与完整入口、角点轨迹、采样概率
         - 公式误差、统计概率、完成与截断状态
       * - J02 / run.sh
-        - 9 个非 MPI 程序：局部算子、边界、扫描、迭代、保正及完整入口
+        - 12 个非 MPI 程序：局部算子、速度网格、反应系数、边界、扫描、迭代、保正及完整入口
         - 公式与守恒断言、求解状态；并行测试程序在此以串行构建运行
       * - J03 / run.sh
         - 4 个局部/时间/配置程序，再运行 2 个串联程序
@@ -106,10 +106,11 @@
    完整数值保存在下方下载记录中。
    未另注单位的小数组算例使用归一化测试数值。
 
-   本轮记录日期为 2026-10-06，环境为 WSL Ubuntu、GNU Fortran 13.3.0。
+   下方历史记录日期为 2026-10-06，环境为 WSL Ubuntu、GNU Fortran 13.3.0。
    普通测试使用八字节实数并启用数组越界与浮点异常检查。
-   J01、J02、J03 的 5、9、6 个程序均成功退出；另执行 18 次 OpenMP 一致性检查、
+   记录中当时 J01、J02、J03 的 5、9、6 个程序均成功退出；另执行 18 次 OpenMP 一致性检查、
    16 次串行/线程辅助运行和 76 次 MPI/混合并行启动。应用验收工具的 9 项测试无跳过。
+   当前普通程序清单为上表的 3、12、6 个；历史记录保留原始运行范围。
 
    :download:`数值记录与运行条件 <records/small_tests_2026-10-06.txt>`
    保存了测试程序实际输出的数值、错误状态和源码指纹；完整本地日志仍在各测试的 build 目录。
@@ -138,7 +139,6 @@
    preprocessing-to-continuity connections and full applications.
 
    * J01: sampling, reflection, trajectories and tally normalization → complete FM driver.
-     The retained 3D update and 2D prescribed-velocity utilities have a separate page.
    * J02: geometry, quadrature, boundary distributions, DG integrals and reconstruction
      → sweeps, reflection iteration, positivity and complete transport → parallel consistency.
    * J03: closure, timestep, single step and balance → analytical time evolution and equilibria
@@ -158,7 +158,7 @@
       bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run.sh
       bash tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/run.sh
 
-   These runners compile and execute 5, 9 and 6 programs respectively, using GNU
+   These runners compile and execute 3, 12 and 6 programs respectively, using GNU
    Fortran with promoted eight-byte real values and bounds checking.
    Logs are stored in each directory's ``build/*.log``.
    J02 OpenMP and MPI consistency runners and full application runs are separate.
@@ -166,9 +166,10 @@
    .. rubric:: Recorded verification
 
    Results dated 2026-10-06 were obtained in WSL with GNU Fortran 13.3.0.
-   All 5/9/6 ordinary programs, 18 OpenMP consistency runs, 16 auxiliary
-   serial/threaded runs, 76 MPI/hybrid launches and nine helper unittests passed.
+   The historical suite comprised 5/9/6 ordinary programs, 18 OpenMP consistency runs,
+   16 auxiliary serial/threaded runs, 76 MPI/hybrid launches and nine helper unittests. All passed.
    Ordinary tests use real8 with bounds and floating-point checks.
+   The current ordinary suite has 3/12/6 programs as listed above; the archived record retains its original scope.
 
    Each test's explanation is followed by measured values, independent references,
    errors and acceptance limits. Array records name their norm; probability records
