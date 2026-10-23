@@ -60,29 +60,6 @@
   overflow-wrap: anywhere;
 }
 
-/* Secondary implementation detail stays available without breaking the main flow. */
-.ap-g03 details.g03-details {
-  margin: 1rem 0 1.5rem;
-  padding: 0.8rem 1rem;
-  border: 1px solid #dbe5e3;
-  border-left: 3px solid #527b78;
-  border-radius: 4px;
-}
-
-.ap-g03 details.g03-details > summary {
-  cursor: pointer;
-  color: #345e5a;
-  font-weight: 600;
-}
-
-.ap-g03 details.g03-details[open] > summary {
-  margin-bottom: 1rem;
-}
-
-.ap-g03 details.g03-details > :last-child {
-  margin-bottom: 0;
-}
-
 @media print {
   .ap-g03 .g03-diagram figure { min-width: 0; }
 }
