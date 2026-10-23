@@ -1,33 +1,71 @@
 .. _g03-extensions:
 
-交互演示读图指南
+Reading the Interactive Demonstration
 ------------------------------------------------------------------------
 
-先确定入射条件，再逐幅解释坐标与统计量，最后观察碰撞模型参数的影响。
+.. container:: ap-lang ap-lang-zh
+
+   先确定入射条件，再逐幅解释坐标与统计量，最后观察碰撞模型参数的影响。
+
+.. container:: ap-lang ap-lang-en
+
+   First establish the incoming conditions, then read the coordinates and statistics in each plot, and finally compare the effects of model parameters.
 
 .. _g03-demo-interpretation:
 
-.. rubric:: 模型比较：固定相对能量是什么意思
+.. rubric:: Model Comparison: Fixed Relative Energy
 
-以 A–A 或 A⁺–A 弹性碰撞为例，先确定入射条件，再比较模型。
-本面板每次生成 2000 个独立碰撞末态，入射库保持给定状态。
-粒子群随时间步演化的过程由“DSMC 核心过程”面板展示。
+.. container:: ap-lang ap-lang-zh
 
-.. list-table:: 两种入射实验
-   :header-rows: 1
-   :widths: 24 38 38
+   以 A–A 或 A⁺–A 弹性碰撞为例，先确定入射条件，再比较模型。
+   本面板每次生成 2000 个独立碰撞末态，入射库保持给定状态。
+   粒子群随时间步演化的过程由“DSMC 核心过程”面板展示。
 
-   * - 选择
-     - 固定什么
-     - 观察什么
-   * - 相同初态（固定相对能量）
-     - 粒子种类、目标静止、入射方向 +x、相对能量；每次恢复同一对初始速度。
-     - 已发生一次碰撞时，可能的方向与单粒子末态分布。
-   * - 一群不同速率的粒子
-     - 目标静止、入射方向 +x，相对速率在固定区间均匀分布的入射库。
-     - 哪些速率更常参与碰撞，以及对应末态。事件按碰撞核加权抽取。
+.. container:: ap-lang ap-lang-en
 
-两分子的相对能量定义为
+   For A–A or A⁺–A elastic collisions, establish the incoming conditions before comparing models.
+   This panel generates 2000 independent post-collision states while keeping the incoming population fixed.
+   The separate DSMC process panel (「DSMC 核心过程」) shows a particle population evolving through timesteps.
+
+.. container:: ap-lang ap-lang-zh
+
+   .. list-table:: 两种入射实验
+      :header-rows: 1
+      :widths: 24 38 38
+
+      * - 选择
+        - 固定什么
+        - 观察什么
+      * - 相同初态（固定相对能量）
+        - 粒子种类、目标静止、入射方向 +x、相对能量；每次恢复同一对初始速度。
+        - 已发生一次碰撞时，可能的方向与单粒子末态分布。
+      * - 一群不同速率的粒子
+        - 目标静止、入射方向 +x，相对速率在固定区间均匀分布的入射库。
+        - 哪些速率更常参与碰撞，以及对应末态。事件按碰撞核加权抽取。
+
+.. container:: ap-lang ap-lang-en
+
+   .. list-table:: Two incoming experiments
+      :header-rows: 1
+      :widths: 24 38 38
+
+      * - Selection
+        - Fixed conditions
+        - Observable
+      * - Same initial state / fixed relative energy (「相同初态」)
+        - Species, stationary target, +x incident direction and relative energy; restore the same initial pair for each sample
+        - Conditional scattering directions and individual-particle final states after one collision
+      * - Population with different speeds (「一群不同速率的粒子」)
+        - Stationary targets and +x projectiles, with a uniformly distributed incoming relative speed over a fixed interval
+        - Which speeds collide more often and their final states; events are sampled with kernel weighting
+
+.. container:: ap-lang ap-lang-zh
+
+   两分子的相对能量定义为
+
+.. container:: ap-lang ap-lang-en
+
+   The pair's relative translational energy is defined by
 
 .. math::
    :label: g03-eq-demo-initial
@@ -38,35 +76,98 @@
    \mathbf v_1=g_0\mathbf e_x,\quad
    g_0=\sqrt{\frac{2E_{\mathrm{rel}}}{\mu_r}}.
 
-:math:`\mathbf e_x` 是 x 方向单位向量。相对能量是扣除整对粒子质心平移后的动能，
-选定种类后，相对能量确定 :math:`g_0`；目标静止和入射方向确定这对粒子的质心速度。
+.. container:: ap-lang ap-lang-zh
 
-**等质量例子：** :math:`m_1=m_2=m` 时，:math:`\mu_r=m/2`，入射粒子的初始动能
-:math:`m g_0^2/2=2E_{\mathrm{rel}}`。
-把相对能量设为 2 eV，得到的是动能 4 eV 的入射原子和静止目标原子。
-温度需要对粒子群求平均，这里只指定一对粒子的确定初态。
+   :math:`\mathbf e_x` 是 x 方向单位向量。相对能量是扣除整对粒子质心平移后的动能，
+   选定种类后，相对能量确定 :math:`g_0`；目标静止和入射方向确定这对粒子的质心速度。
 
-演示使用速度单位 :math:`v_0=\sqrt{(1\,\mathrm{eV})/m_e}`，其中 :math:`m_e` 是电子质量；
-质量以 :math:`m_e` 为单位、动能以 eV 为单位。因此图中的 :math:`g/v_0` 是无量纲量。
-使用 SI 公式时先把 eV 换成 J，:math:`1\,\mathrm{eV}=1.602176634\times10^{-19}\,\mathrm J`。
+.. container:: ap-lang ap-lang-en
 
-.. rubric:: 四幅图分别回答什么
+   :math:`\mathbf e_x` is the unit vector along x.
+   Relative energy removes the kinetic energy of the pair's center-of-mass translation.
+   For specified species, relative energy determines :math:`g_0`; the stationary target and incident direction then determine the center-of-mass velocity.
 
-**① 左侧曲线：换一个入射速率，碰撞核怎样变化？**
+.. container:: ap-lang ap-lang-zh
 
-固定能量模式下，横轴是相对速率 :math:`g/v_0`，重粒子曲线的纵轴是
-:math:`K(g)/K(v_0)`，表示模型在不同入射速率下的碰撞核。
-面板将这个比值记作 :math:`q(g)/q(v_0)`；这里的小写 q 表示碰撞核，
-物理基础部分用粗体 :math:`\mathbf q` 表示热流。
+   **等质量例子：** :math:`m_1=m_2=m` 时，:math:`\mu_r=m/2`，入射粒子的初始动能
+   :math:`m g_0^2/2=2E_{\mathrm{rel}}`。
+   把相对能量设为 2 eV，得到的是动能 4 eV 的入射原子和静止目标原子。
+   温度需要对粒子群求平均，这里只指定一对粒子的确定初态。
 
-**橙点标记当前选定的入射条件。** 输入的相对能量和粒子质量通过
-:math:`g_0=\sqrt{2E_{\mathrm{rel}}/\mu_r}` 确定横坐标 :math:`g_0/v_0`；
-将这个速率代入碰撞模型，得到纵坐标 :math:`K(g_0)/K(v_0)`。
-两条橙色虚线把点投影到坐标轴，图内同时列出这两个坐标值。
-右侧 2000 次独立碰撞都使用这一个 :math:`g_0`，只抽取碰后状态。
-改变相对能量会改变 :math:`g_0`，橙点随之沿曲线移动。
+.. container:: ap-lang ap-lang-en
 
-HS 的截面恒定，碰撞核正比于速率。VHS/VSS 使用
+   **Equal masses:** for :math:`m_1=m_2=m`, :math:`\mu_r=m/2` and the incident particle's kinetic energy is
+   :math:`mg_0^2/2=2E_{\mathrm{rel}}`.
+   Selecting 2 eV of relative energy therefore produces a 4 eV incident atom and a stationary target.
+   This specifies the deterministic initial state of one pair; temperature requires a population average.
+
+.. container:: ap-lang ap-lang-zh
+
+   演示使用速度单位 :math:`v_0=\sqrt{(1\,\mathrm{eV})/m_e}`，其中 :math:`m_e` 是电子质量；
+   质量以 :math:`m_e` 为单位、动能以 eV 为单位。因此图中的 :math:`g/v_0` 是无量纲量。
+   使用 SI 公式时先把 eV 换成 J，:math:`1\,\mathrm{eV}=1.602176634\times10^{-19}\,\mathrm J`。
+
+.. container:: ap-lang ap-lang-en
+
+   The teaching demo uses the speed unit :math:`v_0=\sqrt{(1\,\mathrm{eV})/m_e}`, where :math:`m_e` is the electron mass.
+   Mass is measured in :math:`m_e` and kinetic energy in eV, so :math:`g/v_0` is dimensionless.
+   For SI formulas convert energy to joules using :math:`1\,\mathrm{eV}=1.602176634\times10^{-19}\,\mathrm J`.
+
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 四幅图分别回答什么
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Reading the four plots
+
+.. container:: ap-lang ap-lang-zh
+
+   **① 左侧曲线：换一个入射速率，碰撞核怎样变化？**
+
+.. container:: ap-lang ap-lang-en
+
+   **1. Left curve: how does the kernel depend on incident speed?**
+
+.. container:: ap-lang ap-lang-zh
+
+   固定能量模式下，横轴是相对速率 :math:`g/v_0`，重粒子曲线的纵轴是
+   :math:`K(g)/K(v_0)`，表示模型在不同入射速率下的碰撞核。
+   面板将这个比值记作 :math:`q(g)/q(v_0)`；这里的小写 q 表示碰撞核，
+   物理基础部分用粗体 :math:`\mathbf q` 表示热流。
+
+.. container:: ap-lang ap-lang-en
+
+   In fixed-energy mode, the horizontal coordinate is relative speed :math:`g/v_0`.
+   For heavy particles, the vertical coordinate :math:`K(g)/K(v_0)` compares the kernel across incoming speeds.
+   The panel labels this ratio :math:`q(g)/q(v_0)`; its lowercase q denotes the collision kernel,
+   whereas the physical-foundations section uses bold :math:`\mathbf q` for heat flux.
+
+.. container:: ap-lang ap-lang-zh
+
+   **橙点标记当前选定的入射条件。** 输入的相对能量和粒子质量通过
+   :math:`g_0=\sqrt{2E_{\mathrm{rel}}/\mu_r}` 确定横坐标 :math:`g_0/v_0`；
+   将这个速率代入碰撞模型，得到纵坐标 :math:`K(g_0)/K(v_0)`。
+   两条橙色虚线把点投影到坐标轴，图内同时列出这两个坐标值。
+   右侧 2000 次独立碰撞都使用这一个 :math:`g_0`，只抽取碰后状态。
+   改变相对能量会改变 :math:`g_0`，橙点随之沿曲线移动。
+
+.. container:: ap-lang ap-lang-en
+
+   **The orange point marks the currently selected incoming state.**
+   Relative energy and the masses give its horizontal coordinate :math:`g_0/v_0` through
+   :math:`g_0=\sqrt{2E_{\mathrm{rel}}/\mu_r}`; evaluating the model gives the vertical coordinate :math:`K(g_0)/K(v_0)`.
+   Orange dashed lines project the point onto both axes, and its numerical coordinates are displayed.
+   All 2000 independent collisions on the right use this same :math:`g_0` and sample only final states.
+   Changing relative energy moves the point along the curve.
+
+.. container:: ap-lang ap-lang-zh
+
+   HS 的截面恒定，碰撞核正比于速率。VHS/VSS 使用
+
+.. container:: ap-lang ap-lang-en
+
+   The HS cross section is constant, so its kernel is proportional to speed. VHS/VSS use
 
 .. math::
    :label: g03-eq-demo-viscosity
@@ -74,24 +175,64 @@ HS 的截面恒定，碰撞核正比于速率。VHS/VSS 使用
    \mu(T)\propto T^\omega,\qquad
    \frac{K(g)}{K(v_0)}=\left(\frac{g}{v_0}\right)^{2-2\omega}.
 
-这里 :math:`\mu` 是动力黏度；演示面板将它记作 :math:`\eta`。
-参考值 :math:`K(v_0)` 在这个教学比较中保持不变。
-:math:`\omega=0.5` 时，速率相差 16 倍的两对粒子，碰撞核相差 16 倍；:math:`\omega=1` 时核与速率无关。
-在固定相对速率的目标群中，碰撞核乘目标数密度给出单粒子频率。
+.. container:: ap-lang ap-lang-zh
 
-**② 方向点云：已发生一次碰撞后，相对速度朝哪里？**
+   这里 :math:`\mu` 是动力黏度；演示面板将它记作 :math:`\eta`。
+   参考值 :math:`K(v_0)` 在这个教学比较中保持不变。
+   :math:`\omega=0.5` 时，速率相差 16 倍的两对粒子，碰撞核相差 16 倍；:math:`\omega=1` 时核与速率无关。
+   在固定相对速率的目标群中，碰撞核乘目标数密度给出单粒子频率。
 
-每个点代表一个三维单位向量 :math:`\widehat{\mathbf g}'=\mathbf g'/|\mathbf g'|` 的 x–y 投影。
-圆心是投影坐标原点；相对方向的长度统一归一化为 1，点云表示各次散射后的方向。
-右半圆为前向、左半圆为后向；圆心附近表示方向主要沿 z 轴，即屏幕内外。
-球面各向同性方向投影到平面后会在圆周附近更密。因此应结合角度直方图判断散射是否各向同性。
+.. container:: ap-lang ap-lang-en
 
-**③ 偏转角直方图：哪些角度更常出现？**
+   Here :math:`\mu` is dynamic viscosity, labeled :math:`\eta` in the demo.
+   The reference kernel :math:`K(v_0)` remains fixed in this teaching comparison.
+   For :math:`\omega=0.5`, a speed ratio of 16 gives a kernel ratio of 16; for :math:`\omega=1`, the kernel is independent of speed.
+   Multiplying the kernel by target number density gives the single-particle frequency for targets at a specified relative speed.
 
-令 :math:`\mu_\chi=\cos\chi`，其中 :math:`\chi` 是相对速度的偏转角，
-:math:`\mu_\chi` 与约化质量 :math:`\mu_r` 是不同的量。
-横轴 +1 表示保持原方向，0 表示偏转 90°，−1 表示反向。
-三种重粒子模型的概率密度为
+.. container:: ap-lang ap-lang-zh
+
+   **② 方向点云：已发生一次碰撞后，相对速度朝哪里？**
+
+.. container:: ap-lang ap-lang-en
+
+   **2. Direction cloud: where does relative velocity point after collision?**
+
+.. container:: ap-lang ap-lang-zh
+
+   每个点代表一个三维单位向量 :math:`\widehat{\mathbf g}'=\mathbf g'/|\mathbf g'|` 的 x–y 投影。
+   圆心是投影坐标原点；相对方向的长度统一归一化为 1，点云表示各次散射后的方向。
+   右半圆为前向、左半圆为后向；圆心附近表示方向主要沿 z 轴，即屏幕内外。
+   球面各向同性方向投影到平面后会在圆周附近更密。因此应结合角度直方图判断散射是否各向同性。
+
+.. container:: ap-lang ap-lang-en
+
+   Each dot is the x–y projection of a three-dimensional unit vector :math:`\widehat{\mathbf g}'=\mathbf g'/|\mathbf g'|`.
+   The circle's center is the origin of the projection coordinates; every relative direction is normalized to unit length.
+   The right half represents forward scattering, the left half backward scattering, and points near the center mainly point along z, into or out of the screen.
+   An isotropic spherical distribution projects more densely near the circle's rim.
+   Use the angular histogram as well when assessing isotropy.
+
+.. container:: ap-lang ap-lang-zh
+
+   **③ 偏转角直方图：哪些角度更常出现？**
+
+.. container:: ap-lang ap-lang-en
+
+   **3. Deflection-angle histogram: which angles occur most often?**
+
+.. container:: ap-lang ap-lang-zh
+
+   令 :math:`\mu_\chi=\cos\chi`，其中 :math:`\chi` 是相对速度的偏转角，
+   :math:`\mu_\chi` 与约化质量 :math:`\mu_r` 是不同的量。
+   横轴 +1 表示保持原方向，0 表示偏转 90°，−1 表示反向。
+   三种重粒子模型的概率密度为
+
+.. container:: ap-lang ap-lang-en
+
+   Let :math:`\mu_\chi=\cos\chi`, where :math:`\chi` is the relative-velocity deflection angle.
+   The angular coordinate :math:`\mu_\chi` differs from reduced mass :math:`\mu_r`.
+   The horizontal values +1, 0 and −1 represent zero deflection, a 90° deflection and reversal.
+   The three heavy-particle models have densities
 
 .. math::
    :label: g03-eq-demo-angle
@@ -101,14 +242,37 @@ HS 的截面恒定，碰撞核正比于速率。VHS/VSS 使用
       \frac{\alpha}{2}\left(\frac{1+\mu_\chi}{2}\right)^{\alpha-1},
    \qquad -1\le\mu_\chi\le1.
 
-绿色柱显示落入每个区间的样本数除以 2000；橙线为把上式在该区间积分得到的理论概率。
-所有统计区间的概率之和为 1。HS/VHS 应得到近似等高的柱，VSS 的 :math:`\alpha>1` 使样本偏向 +1。
-例如 :math:`\alpha=3` 时，理论平均值 :math:`\langle\cos\chi\rangle=(\alpha-1)/(\alpha+1)=1/2`。
+.. container:: ap-lang ap-lang-zh
 
-**④ 单粒子速率直方图：入射粒子把多少动能交给目标？**
+   绿色柱显示落入每个区间的样本数除以 2000；橙线为把上式在该区间积分得到的理论概率。
+   所有统计区间的概率之和为 1。HS/VHS 应得到近似等高的柱，VSS 的 :math:`\alpha>1` 使样本偏向 +1。
+   例如 :math:`\alpha=3` 时，理论平均值 :math:`\langle\cos\chi\rangle=(\alpha-1)/(\alpha+1)=1/2`。
 
-弹性碰撞保持 :math:`|\mathbf g'|=g_0`，两粒子的单独动能可以变化。
-目标初始静止时，从二体运动学得到入射粒子的碰后速率：
+.. container:: ap-lang ap-lang-en
+
+   Green bars give the number of samples in each interval divided by 2000.
+   The orange line gives the theoretical probability obtained by integrating the density over that interval.
+   The interval probabilities sum to one.
+   HS/VHS yield approximately equal-height bars; VSS with :math:`\alpha>1` favors +1.
+   For example, :math:`\alpha=3` gives :math:`\langle\cos\chi\rangle=(\alpha-1)/(\alpha+1)=1/2`.
+
+.. container:: ap-lang ap-lang-zh
+
+   **④ 单粒子速率直方图：入射粒子把多少动能交给目标？**
+
+.. container:: ap-lang ap-lang-en
+
+   **4. Individual-speed histogram: how much kinetic energy does the projectile transfer?**
+
+.. container:: ap-lang ap-lang-zh
+
+   弹性碰撞保持 :math:`|\mathbf g'|=g_0`，两粒子的单独动能可以变化。
+   目标初始静止时，从二体运动学得到入射粒子的碰后速率：
+
+.. container:: ap-lang ap-lang-en
+
+   Elastic scattering preserves :math:`|\mathbf g'|=g_0`, while the individual particles' energies may change.
+   For an initially stationary target, two-body kinematics gives the projectile's final speed:
 
 .. math::
    :label: g03-eq-demo-projectile-speed
@@ -117,18 +281,49 @@ HS 的截面恒定，碰撞核正比于速率。VHS/VSS 使用
       \frac{m_1^2+m_2^2+2m_1m_2\cos\chi}{(m_1+m_2)^2},\qquad
    m_1=m_2:\quad |\mathbf v_1'|=g_0\sqrt{\frac{1+\cos\chi}{2}}.
 
-对 A–A，偏转 0° 时入射原子保持原速；90° 时两个原子平分初始动能；180° 时入射原子停下，
-目标获得全部初始动能。VSS 越偏向前向散射，入射原子越容易保留原速。
-这幅图统计实验室坐标中的单粒子速率，前三幅图使用相对运动量。
+.. container:: ap-lang ap-lang-zh
 
-.. rubric:: 黏度指数与角参数分别改变哪些图
+   对 A–A，偏转 0° 时入射原子保持原速；90° 时两个原子平分初始动能；180° 时入射原子停下，
+   目标获得全部初始动能。VSS 越偏向前向散射，入射原子越容易保留原速。
+   这幅图统计实验室坐标中的单粒子速率，前三幅图使用相对运动量。
 
-在“相同初态（固定相对能量）”模式中，以“碰撞已发生”为条件直接抽取 2000 次末态。
-在所用模型中，:math:`\omega` 控制碰撞核，:math:`\alpha` 控制条件散射方向。
-因此只改 :math:`\omega` 会改变左侧曲线及该初态的核值，右侧末态的概率分布保持不变；事件数始终为 2000。
+.. container:: ap-lang ap-lang-en
 
-要看速率权重对事件组成的影响，改选“一群不同速率的粒子”。此时左图改为直方图，
-入射库的速率概率密度为 :math:`f_{\mathrm{in}}(g)`，事件分布为
+   For A–A, 0° deflection leaves the incident atom at its initial speed, 90° shares the original kinetic energy equally,
+   and 180° stops the incident atom while transferring all its initial kinetic energy to the target.
+   A stronger forward VSS bias makes retention of the projectile's initial speed more likely.
+   This plot uses individual laboratory-frame speeds; the first three use relative-motion quantities.
+
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 黏度指数与角参数分别改变哪些图
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Effects of the viscosity exponent and angular parameter
+
+.. container:: ap-lang ap-lang-zh
+
+   在“相同初态（固定相对能量）”模式中，以“碰撞已发生”为条件直接抽取 2000 次末态。
+   在所用模型中，:math:`\omega` 控制碰撞核，:math:`\alpha` 控制条件散射方向。
+   因此只改 :math:`\omega` 会改变左侧曲线及该初态的核值，右侧末态的概率分布保持不变；事件数始终为 2000。
+
+.. container:: ap-lang ap-lang-en
+
+   In the fixed-energy, same-initial-state mode (「相同初态」), 2000 final states are drawn conditional on a collision having occurred.
+   For these models, :math:`\omega` controls the kernel and :math:`\alpha` controls the conditional direction.
+   Changing only :math:`\omega` changes the left curve and the kernel at the selected state; the final-state distributions on the right are unchanged,
+   and the event count remains 2000.
+
+.. container:: ap-lang ap-lang-zh
+
+   要看速率权重对事件组成的影响，改选“一群不同速率的粒子”。此时左图改为直方图，
+   入射库的速率概率密度为 :math:`f_{\mathrm{in}}(g)`，事件分布为
+
+.. container:: ap-lang ap-lang-en
+
+   To see how speed weighting changes event composition, choose the different-speed population (「一群不同速率的粒子」).
+   The left plot becomes a histogram. With incoming speed density :math:`f_{\mathrm{in}}(g)`, the event-speed density is
 
 .. _equation-g03-eq-overview-event-speeds:
 
@@ -139,21 +334,49 @@ HS 的截面恒定，碰撞核正比于速率。VHS/VSS 使用
       \frac{f_{\mathrm{in}}(g)K(g)}
            {\int f_{\mathrm{in}}(s)K(s)\,\mathrm ds}.
 
-这里 :math:`s` 是积分变量；:math:`f_{\mathrm{in}}` 在 :math:`[0.25,4]v_0` 上均匀，
-这个均匀入射库用于观察速率权重。蓝虚线表示入射总体的各速率区间的概率，绿色表示加权后的碰撞事件。
-保持 :math:`\alpha` 时，改变 :math:`\omega` 影响事件的入射速率分布和单粒子碰后速率分布，方向分布保持不变。
+.. container:: ap-lang ap-lang-zh
 
-物理模型依据见 :ref:`Bird <g03-ref-bird1994>` 与 :ref:`Koura–Matsumoto <g03-ref-vss>`。
-演示固定参考核，以便分别观察参数影响。C++ 中若给定参考黏度，调用方先用
-``reference_diameter`` 求参考直径，再直接构造 ``DsmcModel``；其物性采用 SI 单位。
-e–A、e–e、e–A⁺ 和 A⁺–A⁺ 使用另外的教学核；A–A 与 A⁺–A 配对启用 HS/VHS/VSS 控件。
+   这里 :math:`s` 是积分变量；:math:`f_{\mathrm{in}}` 在 :math:`[0.25,4]v_0` 上均匀，
+   这个均匀入射库用于观察速率权重。蓝虚线表示入射总体的各速率区间的概率，绿色表示加权后的碰撞事件。
+   保持 :math:`\alpha` 时，改变 :math:`\omega` 影响事件的入射速率分布和单粒子碰后速率分布，方向分布保持不变。
+
+.. container:: ap-lang ap-lang-en
+
+   Here :math:`s` is the integration variable; :math:`f_{\mathrm{in}}` is uniform on :math:`[0.25,4]v_0` to isolate kernel weighting.
+   The blue dashed line shows probabilities of incoming speeds in each interval, and green shows the collision-weighted events.
+   At fixed :math:`\alpha`, changing :math:`\omega` changes incoming event speeds and individual final speeds while retaining the same direction distribution.
+
+.. container:: ap-lang ap-lang-zh
+
+   物理模型依据见 :ref:`Bird <g03-ref-bird1994>` 与 :ref:`Koura–Matsumoto <g03-ref-vss>`。
+   演示固定参考核，以便分别观察参数影响。C++ 中若给定参考黏度，调用方先用
+   ``reference_diameter`` 求参考直径，再直接构造 ``DsmcModel``；其物性采用 SI 单位。
+   e–A、e–e、e–A⁺ 和 A⁺–A⁺ 使用另外的教学核；A–A 与 A⁺–A 配对启用 HS/VHS/VSS 控件。
+
+.. container:: ap-lang ap-lang-en
+
+   The physical models are described by :ref:`Bird <g03-ref-bird1994>` and :ref:`Koura–Matsumoto <g03-ref-vss>`.
+   The demo fixes the reference kernel to separate parameter effects.
+   For C++ calculations at a specified reference viscosity, first obtain the reference diameter with ``reference_diameter``,
+   then construct ``DsmcModel`` using SI properties.
+   The e–A, e–e, e–A⁺ and A⁺–A⁺ pairs use other teaching kernels; A–A and A⁺–A enable the HS/VHS/VSS controls.
 
 .. _g03-variable-population:
 
-.. rubric:: 演示时钟与主库范围
+.. rubric:: Demo Clock and Scope of the C++ Library
 
-演示中电离会改变单元粒子数，候选率随成员更新，使用连续候选时钟。
-当前 C++ 是单组分、等权重、固定成员的弹性碰撞内核，既可采用随机舍入 NTC，也可采用连续时钟；
-等待时间与接受拒绝的推导见 Theory & Algorithm 中的“连续时间候选时钟”。
-演示由独立的 JavaScript 程序实现，用教学参数展示流程；实际气体的定量计算需要经标定的物性与收敛检验。
-多物种、非等权重、内能交换和反应还需要相应的状态表示、配对率与守恒收支。
+.. container:: ap-lang ap-lang-zh
+
+   演示中电离会改变单元粒子数，候选率随成员更新，使用连续候选时钟。
+   当前 C++ 是单组分、等权重、固定成员的弹性碰撞内核，既可采用随机舍入 NTC，也可采用连续时钟；
+   等待时间与接受拒绝的推导见 Theory & Algorithm 中的“连续时间候选时钟”。
+   演示由独立的 JavaScript 程序实现，用教学参数展示流程；实际气体的定量计算需要经标定的物性与收敛检验。
+   多物种、非等权重、内能交换和反应还需要相应的状态表示、配对率与守恒收支。
+
+.. container:: ap-lang ap-lang-en
+
+   Ionization changes the demo's cell population, so it updates the candidate rate with membership and uses a continuous candidate clock.
+   The current C++ kernel handles single-species, equal-weight elastic collisions with fixed members and offers randomly rounded NTC and the continuous clock.
+   Theory & Algorithm derives waiting times and acceptance/rejection in its continuous-clock section.
+   The independent JavaScript demo illustrates the sequence using teaching parameters; quantitative gas calculations require calibrated properties and convergence checks.
+   Multiple species, unequal weights, internal-energy exchange and reactions require corresponding state representations, pair rates and conservation balances.
