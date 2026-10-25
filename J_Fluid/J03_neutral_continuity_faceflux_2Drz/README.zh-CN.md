@@ -39,4 +39,4 @@ J03 从参考密度和有符号面通量建立固定的面输运系数，随后�
 
 编译模块文件并启用预处理，将本目录加入 include 路径；不要单独编译实现文件。调用方与模块须采用相同实数精度。
 
-Sphinx 的 [J03](../../docs/source/rst_files/J_Fluid/J03_neutral_continuity_faceflux_2Drz.rst) 给出闭合推导、各过程输入输出、完整调用流程和错误说明。运行命令与断言见 [J03 tests](../../tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/README.md)。
+Sphinx 的 [J03](../../docs/source/rst_files/J_Fluid/J03_neutral_continuity_faceflux_2Drz.rst) 给出闭合推导、各过程输入输出、完整调用流程和错误说明。运行命令与断言见 [J03 tests](../../tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)。

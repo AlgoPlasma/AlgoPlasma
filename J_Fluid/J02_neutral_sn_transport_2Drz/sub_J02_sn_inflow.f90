@@ -18,10 +18,6 @@
         integer :: m
 
         ierr = SN_SUCCESS
-        if (.not. fun_J02_quadrature_is_valid(quadrature)) then
-            ierr = SN_ERR_QUADRATURE_LAYOUT
-            return
-        end if
         if (temperature <= 0.0) then
             ierr = SN_ERR_SOURCE_TEMPERATURE
             return
@@ -54,23 +50,8 @@
         real :: ndot, incoming_probability
         integer :: m
 
-        ierr = SN_SUCCESS
-        if (.not. fun_J02_quadrature_is_valid(quadrature)) then
-            ierr = SN_ERR_QUADRATURE_LAYOUT
-            return
-        end if
-        if (size(crossing_bin_probability) /= quadrature%n_dir) then
-            ierr = SN_ERR_SOURCE_INPUT_SHAPE
-            return
-        end if
-        if (.not. fun_J02_normal_is_unit(normal_r, normal_z)) then
-            ierr = SN_ERR_SOURCE_NORMAL
-            return
-        end if
-        if (any(crossing_bin_probability < 0.0)) then
-            ierr = SN_ERR_SOURCE_NEGATIVE_DATA
-            return
-        end if
+        ierr = fun_J02_validate_inflow_input(quadrature, normal_r, normal_z, crossing_bin_probability)
+        if (ierr /= SN_SUCCESS) return
 
         allocate(inflow_shape(quadrature%n_dir))
         inflow_shape = 0.0
@@ -79,10 +60,8 @@
             ndot = quadrature%mu(m)*normal_r+quadrature%eta(m)*normal_z
             if (ndot < 0.0) then
                 incoming_probability = incoming_probability+crossing_bin_probability(m)
-                if (crossing_bin_probability(m) > 0.0) then
-                    inflow_shape(m) = crossing_bin_probability(m)/(quadrature%weight(m)* &
-                        quadrature%speed(m)*(-ndot))
-                end if
+                inflow_shape(m) = crossing_bin_probability(m)/(quadrature%weight(m)* &
+                    quadrature%speed(m)*(-ndot))
             else if (crossing_bin_probability(m) > 0.0) then
                 ierr = SN_ERR_SOURCE_OUTGOING_DATA
                 deallocate(inflow_shape)
@@ -104,23 +83,9 @@
         real :: ndot
         integer :: m
 
-        ierr = SN_SUCCESS
-        if (.not. fun_J02_quadrature_is_valid(quadrature)) then
-            ierr = SN_ERR_QUADRATURE_LAYOUT
-            return
-        end if
-        if (size(crossing_pdf) /= quadrature%n_dir) then
-            ierr = SN_ERR_SOURCE_INPUT_SHAPE
-            return
-        end if
-        if (.not. fun_J02_normal_is_unit(normal_r, normal_z)) then
-            ierr = SN_ERR_SOURCE_NORMAL
-            return
-        end if
-        if (any(crossing_pdf < 0.0)) then
-            ierr = SN_ERR_SOURCE_NEGATIVE_DATA
-            return
-        end if
+        ierr = fun_J02_validate_inflow_input(quadrature, normal_r, normal_z, crossing_pdf)
+        if (ierr /= SN_SUCCESS) return
+
         allocate(inflow_shape(quadrature%n_dir))
         inflow_shape = 0.0
         do m = 1, quadrature%n_dir

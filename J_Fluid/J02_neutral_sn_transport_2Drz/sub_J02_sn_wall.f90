@@ -9,10 +9,6 @@
         real, parameter :: boltzmann_constant = 1.380649e-23
         real :: sigma_squared
         ierr = SN_SUCCESS
-        if (.not. fun_J02_quadrature_is_valid(quadrature)) then
-            ierr = SN_ERR_QUADRATURE_LAYOUT
-            return
-        end if
         if (temperature <= 0.0) then
             ierr = SN_ERR_SOURCE_TEMPERATURE
             return
@@ -64,15 +60,6 @@
         logical :: partial
         ierr = SN_SUCCESS
         partial = present(zlo_source_xi_lo) .and. present(zlo_source_xi_hi)
-        if (.not. fun_J02_geometry_is_valid(mesh, geometry)) then
-            ierr = SN_ERR_SWEEP_GEOMETRY_SHAPE
-            return
-        end if
-        if (.not. fun_J02_reflection_inputs_valid(mesh, quadrature, boundary, wall_shape, &
-            psi_old, zlo_source_xi_lo, zlo_source_xi_hi)) then
-            ierr = SN_ERR_REFLECTION_INPUT
-            return
-        end if
         allocate(diffuse_constant(SN_N_FACES, mesh%nr, mesh%nz))
         diffuse_constant = 0.0
         do k = 1, mesh%nz
@@ -80,13 +67,13 @@
                 if (.not. mesh%active(i, k)) cycle
                 do f = SN_R_LO, SN_Z_HI
                     if (fun_J02_face_type(boundary, f, i, k) == SN_FACE_WALL) then
-                        call fun_face_normal(f, nr, nz)
+                        call sub_J02_face_normal(f, nr, nz)
                         numerator = 0.0
                         denominator = 0.0
                         do m = 1, quadrature%n_dir
                             ndot = quadrature%mu(m)*nr+quadrature%eta(m)*nz
                             if (ndot > 0.0) then
-                                trace = fun_face_trace(psi_old(:, i, k, m), f, geometry%xi_bar(i))
+                                trace = fun_J02_face_trace(psi_old(:, i, k, m), f, geometry%xi_bar(i))
                                 numerator = numerator+quadrature%weight(m)*quadrature%speed(m)* &
                                     ndot*trace
                             else if (ndot < 0.0) then
@@ -140,7 +127,7 @@
         end do
     end subroutine sub_J02_compute_diffuse_wall_constants
 
-    subroutine fun_face_normal(face_id, normal_r, normal_z)
+    subroutine sub_J02_face_normal(face_id, normal_r, normal_z)
         integer, intent(in) :: face_id
         real, intent(out) :: normal_r, normal_z
         normal_r = 0.0
@@ -155,19 +142,19 @@
           case (SN_Z_HI)
             normal_z = 1.0
         end select
-    end subroutine fun_face_normal
+    end subroutine sub_J02_face_normal
 
-    real function fun_face_trace(coeff, face_id, xi_bar)
+    real function fun_J02_face_trace(coeff, face_id, xi_bar)
         real, intent(in) :: coeff(3), xi_bar
         integer, intent(in) :: face_id
         select case (face_id)
           case (SN_R_LO)
-            fun_face_trace = coeff(1)-coeff(2)
+            fun_J02_face_trace = coeff(1)-coeff(2)
           case (SN_R_HI)
-            fun_face_trace = coeff(1)+coeff(2)
+            fun_J02_face_trace = coeff(1)+coeff(2)
           case (SN_Z_LO)
-            fun_face_trace = coeff(1)+xi_bar*coeff(2)-coeff(3)
+            fun_J02_face_trace = coeff(1)+xi_bar*coeff(2)-coeff(3)
           case default
-            fun_face_trace = coeff(1)+xi_bar*coeff(2)+coeff(3)
+            fun_J02_face_trace = coeff(1)+xi_bar*coeff(2)+coeff(3)
         end select
-    end function fun_face_trace
+    end function fun_J02_face_trace

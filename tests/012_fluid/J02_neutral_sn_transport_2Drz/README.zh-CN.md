@@ -1,5 +1,11 @@
 # J02 中性粒子 SN 输运测试
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+对应实现见[模块说明](../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.zh-CN.md)。下列命令均从仓库根目录运行。
+
+需要 Bash 和 GNU Fortran（`gfortran`）；普通测试采用八字节实数并启用数组越界检查。
+
 本目录验证离散纵标（SN）中性粒子输运模块。测试分为逐过程检查、模块内组装和并行一致性三层。
 
 ## 局部过程与组装
@@ -22,7 +28,7 @@
 bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run.sh
 ```
 
-该脚本运行 9 个程序，默认采用串行、八字节实数编译。
+该脚本运行 12 个程序，默认采用串行、八字节实数编译。
 可用 `OPENMP=1 OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE` 启用线程。
 `test_J02_transport_units.f90` 检查轴线几何、网格连接、损失矩阵、频率换算、
 同一入口的概率密度与离散概率表示，以及四个面的通量符号。
@@ -47,8 +53,9 @@ bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run_parallel.sh
 记录包括分布系数、密度、两个速度分量、全部内部与边界面通量、收敛及错误状态。
 只在相同精度之间比较，不要求四字节与八字节结果相同。
 
-其余 8 个非 MPI 测试程序也分别在串行和 OpenMP 八字节版本中运行，
-保留数组越界检查和浮点异常捕获。2026-10-06 的 18 组记录对照和 16 次辅助运行全部通过。
+另外 11 个非 MPI 数值测试程序也分别在串行和 OpenMP 八字节版本中运行，共 22 次辅助运行，
+保留数组越界检查和浮点异常捕获。
+2026-10-06 的历史记录包含 18 组记录对照和当时的 16 次辅助运行，均已通过；当前程序清单以脚本为准。
 结果保存在 `build/parallel`。这些测试验证当前算例的一致性，不用于衡量加速比。
 
 ## 空间 MPI 与混合并行一致性
@@ -92,3 +99,36 @@ SN B0 和 ION 完整应用已于 2026-10-06 使用 4 个 OpenMP 线程运行，
 ```bash
 bash tests/012_fluid/J02_neutral_sn_transport_2Drz/clean.sh
 ```
+
+## 非均匀速率分组
+
+`test_J02_nonuniform_quadrature.f90` 检查显式边界、错误返回、速度面积权重、
+原等宽接口兼容性、镜面速度组配对，以及部分入口和三种反射比例下的粒子收支。
+此程序支持默认实数精度及 `-fdefault-real-8`。
+MPI 测试程序的第四个参数可设为 `nonuniform`，启用四个非均匀速率组。
+跨冷/快速度尺度的误差对比与局限见 [nonuniform_speed/README.zh-CN.md](nonuniform_speed/README.zh-CN.md)。
+
+## 相对速率与坐标转换
+
+`source_f90/test_J02_relative_speed.f90` 检查手算几何关系、柱坐标物理速度转换、
+共同旋转不变性、不同局部基底、零对角、交换对称性及重复计算一致性。
+使用不同的两套非均匀速度网格，对全部 1920 个节点对与独立余弦定理参考值比较，
+并检查大/小可表示范数。速度节点构造使用已初始化求积对象；通用工具支持三个速度分量，
+J02 节点重构的周向分量仍为零，保持当前 2D2V 模型。
+
+普通构建会自动加入此测试。以下独立入口运行单/双精度及串行/4 线程组合，
+不会删除已有构建目录，只覆盖自身命名的输出文件：
+
+```bash
+python3 tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/run_test.py
+```
+
+脚本检查实际线程数，并逐字比较同一精度的串行/OpenMP 节点对 CSV。
+具体测试定义与误差见[说明](relative_speed/README.zh-CN.md)。
+
+## CEX 系数最小测试
+
+`test_J02_cex_coefficients.f90` 只保留三项双精度检查：合成截面与碰撞核、
+离子密度归一化、碰撞频率与损失系数。
+可单独运行 `bash tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/run.sh`。
+见[简短说明](cex_coefficients/README.zh-CN.md)。测试不使用真实 CEX 数据。

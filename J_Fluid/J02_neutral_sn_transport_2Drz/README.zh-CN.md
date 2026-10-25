@@ -14,7 +14,7 @@
 因此当 `mu` 非零时，逐方向常数 `psi` 不是径向自由流不变量。
 测试应遵循这一约化方程，不能直接套用笛卡尔自由流不变性的假设。
 
-当前阶段包括柱坐标几何、角度节点、等宽速率区间、入口外侧气体模型与入射粒子模型、入口
+当前阶段包括柱坐标几何、角度节点、等宽或显式非均匀速率区间、入口外侧气体模型与入射粒子模型、入口
 通量归一化、局部 P1-DG 算子、开放边界方向扫描、镜面/漫反射迭代、z-low
 部分面入口积分，以及单元矩和内部面通量重构。
 `gauss-chebyshev` 被明确保留为全圆 `midpoint` 节点集合及排列的别名，并不是另一套
@@ -39,7 +39,8 @@
 各文件分别负责入口分布、通量归一化、边界、壁面反射、体损失和输运求解：
 
 - `sub_J02_sn_inflow.f90`：入口外侧气体的 Maxwell 速度分布与入射粒子的速度分布转换。
-- `sub_J02_sn_source.f90`：入口目标通量归一化与公共输入检查。
+- `sub_J02_sn_source.f90`：入口目标通量归一化。
+- `sub_J02_sn_validation.f90`：入口分布共用的输入检查。
 - `sub_J02_sn_boundary.f90`：部分入口的面积比例与局部区间。
 - `sub_J02_sn_wall.f90`：由壁温确定的速度分布、镜面方向映射与漫反射通量归一化。
 - `sub_J02_sn_loss.f90`：由损失频率计算单位路程损失系数。
@@ -61,6 +62,10 @@
 - `sub_J02_build_geometry`：计算柱坐标体积、面面积和 P1 径向平均修正。
 - `sub_J02_build_phase_quadrature`：将角度与速率组合为一组离散速度，并计算对应权重；角度数至少为
   8 且须被 4 整除，避免方向恰好落在坐标轴上。
+- `sub_J02_build_phase_quadrature_from_edges`：由 `speed_edge(:)` 构造非均匀速率求积。
+  边界单位为 m/s，须有限、从零开始且严格递增；组数和上限由数组确定。
+  节点仍为算术中点，径向权重对 `v dv` 精确积分，角度与组内排列不变。
+- `sub_J02_build_speed_groups_from_edges`：仅返回速率节点与径向积分权重。
 - `sub_J02_build_drifted_maxwellian_inflow_shape`：按输入的温度 `K`、粒子质量
   `kg` 和漂移速度 `(u_r,u_z) [m/s]` 生成漂移 Maxwell 速度分布。
 - `sub_J02_normalize_inflow_flux`：把非负 `inflow_shape` 归一化到指定粒子数通量。
@@ -72,6 +77,7 @@
   Maxwell 速度分布。
 - `sub_J02_solve_source_iteration`：迭代反射边界直到达到给定相对误差，并返回迭代
   次数、最终变化量和失败位置。
+  启用漫反射时须提供壁面速度分布 `wall_shape`。
 - `sub_J02_reconstruct_cell_moments`：重构密度和平均速度。
 - `sub_J02_reconstruct_internal_face_fluxes`：重构带符号的内部面粒子数通量密度。
 - `sub_J02_reconstruct_open_boundary_fluxes`：把给定入射分布函数与单元内分布在面上的值
@@ -173,5 +179,57 @@ B0/ION 应用程序与 J03 当前仍是单域接口；分区结果交给现有 J
 `mod_J02_neutral_sn_transport_2Drz.f90` 模块保存共享类型，并通过预处理
 `include` 纳入按职责拆分、可独立阅读的 `sub_J02_sn_*.f90` 实现文件。
 
+可按以下顺序阅读，名称均省略文件前缀 `sub_J02_` 和后缀 `.f90`：
+
+- 碰撞系数：`sn_quadrature` → `sn_relative_speed` → `sn_reaction_kernel` → `sn_cex`。
+- 空间输运：`sn_transport` → `sn_reflection` → `sn_sweep` → `sn_reconstruction`。
+
 与仓库现有 Fortran 算法保持一致，源码使用默认 `real`；配套测试通过
 `-fdefault-real-8` 按双精度进行数值验证；并行一致性测试还覆盖编译器默认实数精度。
+
+## 非均匀速率分组对比
+
+原等宽接口继续可用；显式边界接口不预设自适应策略，也不引入 CEX。
+应用根据冷、快分布选择边界，并分别检查密度、通量和能量矩。
+`tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/run_comparison.py`
+在相同上限和组数下比较等宽、二次幂边界和分段等宽三种方案，输出解析矩误差、
+固定空间/角度下的输运误差、角度/截断检查、CSV、图和报告。
+运行说明与限制见[对比测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.zh-CN.md)。
+
+## 输入约定
+
+网格、几何、速度求积、面类型和截面表必须先成功初始化，再传给后续过程。
+保持对象尺寸、节点顺序和内部邻接关系一致；改变网格后重新构建派生对象。
+场数组按接口规定的形状传入，重构使用完成扫描后的场或等价的自定义场。
+下游不再重复验证对象结构，也不逐次包装乘、除、求和；物理输入与中间结果须有限且可表示。
+归一化为零、截面能量越界、局部求解失败、不收敛和 MPI 一致性问题仍返回错误。
+
+## 碰撞组装前的速度运动学
+
+`sub_J02_sn_relative_speed.f90` 提供三个小接口：
+
+- `sub_J02_build_velocity_vectors(quadrature, velocity, ierr)`：返回
+  `velocity(3,n_dir)`，按 `(v_r,v_phi,v_z)` 排列，单位 m/s。
+  当前 J02 使用 `(speed*mu,0,speed*eta)`，保持原节点编号。
+  输入求积对象须已成功初始化；保留 `ierr` 参数以兼容现有调用。
+- `fun_J02_velocity_cyl_to_cart(velocity_cyl, azimuth)`：将柱坐标物理速度分量
+  转为笛卡尔分量。`azimuth` 是空间位置方位角，单位弧度，与 SN 速度方向角不同；
+  `v_phi` 是周向线速度，不是角速度。
+- `fun_J02_relative_speed(velocity_a, velocity_b)`：求两个速度之差的模，
+  使用缩放避免直接平方引起的溢出或下溢。输入必须使用同一正交基底；
+  不同局部方位角下的分量应先转换到共同基底。
+
+两个纯函数要求输入有限、结果可表示，相对速率函数还要求分量差可表示；
+它们不返回错误码。同一局部基底内直接相减，与共同转为笛卡尔后相减，
+在浮点舍入误差内一致。三分量容器不代表 J02 增加了周向动力学。
+
+给定速度节点后，每个节点对的相对速率固定，与节点上的分布数值无关；
+只要节点及共同基底保持不变，就可以复用。截面求值和离子分布加权由下节的反应核与 CEX 系数过程完成。
+见[运动学测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.zh-CN.md)。
+
+## 固定离子背景的 CEX 系数
+
+`sub_J02_sn_relative_speed.f90` 保存纯函数 `fun_J02_relative_speed` 及其速度重构/坐标转换辅助过程。
+`sub_J02_sn_reaction_kernel.f90` 保存反应通用的截面表、能量换算和节点对碰撞核 `sigma*g`。
+`sub_J02_sn_cex.f90` 负责离子 Maxwell 背景和 CEX 频率求和，调用通用反应核。
+CEX 系数尚未接入碰撞增益项和空间输运迭代。见[调用与三项检查](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.zh-CN.md)。

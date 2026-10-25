@@ -17,7 +17,10 @@ program test_J02_mpi
     real :: r(6)=[0.0,0.1,0.3,0.7,1.0,1.5], z(4)=[0.0,0.2,0.6,1.1], tol, error
     integer :: comm, dims(2), coords(2), provided, mpierr, rank, ierr, a, b, c, d, m, mode
     integer :: fd, fi, fk, ec_ref, fd_ref, fi_ref, fk_ref, reverse_comm, n_ranks
+    logical :: nonuniform
     character(len=16) :: arg
+    call get_command_argument(4,arg)
+    nonuniform=trim(arg)=='nonuniform'
     call MPI_Init_thread(MPI_THREAD_FUNNELED,provided,mpierr)
     call MPI_Comm_rank(MPI_COMM_WORLD,rank,mpierr)
     call get_command_argument(1,arg)
@@ -60,7 +63,7 @@ program test_J02_mpi
     call require_success('local geometry')
     call sub_J02_initialize_boundary_types(mesh,boundary,ierr,partition=part)
     call require_success('partition faces')
-    call sub_J02_build_phase_quadrature(16,2,'midpoint',3.0,quad,ierr)
+    call build_quadrature()
     call require_success('quadrature')
     call sub_J02_initialize_mesh(r,z,spread(spread(.true.,1,5),2,3),global_mesh,ierr)
     call require_success('reference mesh')
@@ -208,7 +211,7 @@ program test_J02_mpi
         if (part%rank==0) quad%weight(1)=2.0*quad%weight(1)
         call sub_J02_sweep(mesh,geo,quad,sigma,boundary,psi,ierr,boundary_inflow=inlet,partition=part)
         call expect_error(SN_ERR_MPI_INPUT,'one-rank mismatched quadrature')
-        call sub_J02_build_phase_quadrature(16,2,'midpoint',3.0,quad,ierr)
+        call build_quadrature()
         call require_success('restore matching quadrature')
         if (part%rank==0) then
             where(boundary%face_r_lo==SN_FACE_REMOTE) boundary%face_r_lo=SN_FACE_OPEN
@@ -234,7 +237,7 @@ program test_J02_mpi
         failed_direction=fd,failed_i=fi,failed_k=fk)
     call expect_error(SN_ERR_SWEEP_AXIS_DIRECTION,'multiple failing directions')
     if (fd/=3 .or. fi/=0 .or. fk/=0) call fail('wrong global failing direction')
-    call sub_J02_build_phase_quadrature(16,2,'midpoint',3.0,quad,ierr)
+    call build_quadrature()
     call require_success('restore quadrature')
     full_inlet=-1.0
     inlet=full_inlet(:,a:b,c:d,:)
@@ -251,7 +254,7 @@ program test_J02_mpi
     call sub_J02_sweep(mesh,geo,quad,sigma,boundary,psi,ierr,boundary_inflow=inlet,partition=part)
     call expect_error(SN_ERR_QUADRATURE_LAYOUT,'nonfinite quadrature')
     if (rank==0) print *, 'PASS: collective input/iteration/local errors and global failure indices'
-    call sub_J02_build_phase_quadrature(16,2,'midpoint',3.0,quad,ierr)
+    call build_quadrature()
     call require_success('recover after collective error')
     ! A rank may own grid cells but no active cells; it must still participate.
     if (part%n_ranks>1) then
@@ -315,6 +318,13 @@ program test_J02_mpi
     call MPI_Comm_free(reverse_comm,mpierr)
     call MPI_Finalize(mpierr)
 contains
+    subroutine build_quadrature()
+        if (nonuniform) then
+            call sub_J02_build_phase_quadrature_from_edges(16,[0.0,0.2,0.6,1.5,3.0],'midpoint',quad,ierr)
+        else
+            call sub_J02_build_phase_quadrature(16,2,'midpoint',3.0,quad,ierr)
+        end if
+    end subroutine build_quadrature
 
     subroutine compare_results()
         integer :: i,k

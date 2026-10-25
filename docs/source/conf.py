@@ -10,6 +10,7 @@ import os
 import re
 import subprocess
 from pathlib import Path
+from docutils import nodes
 
 project = 'AlgoPlasma'
 copyright = '2026, Harbin Institute of Technology and AlgoPlasma contributors'
@@ -163,11 +164,132 @@ def mark_reference_links_in_html(app, exception):
             html_file.write_text(updated, encoding="utf-8")
 
 
+def keep_g03_navigation_shallow(app, pagename, templatename, context, doctree):
+    """Keep G03 chapters and selected theory sections at their actual depth."""
+    from sphinx import addnodes
+    from sphinx.environment.adapters.toctree import TocTree
+
+    root = "rst_files/G_Collision/G03_DSMC"
+    chapters = (
+        (f"{root}/fundamentals", "Theory & Algorithm"),
+        (f"{root}/implementation", "Source Guide"),
+    )
+    theory_sections = (
+        ("g03-physical-foundations", "Physical Foundations"),
+        ("g03-rate", "Collision Kernels"),
+        ("g03-scattering", "Elastic Scattering"),
+        ("g03-calibration", "Transport Calibration"),
+        ("g03-collision-schedules", "NTC & Continuous Clock"),
+        ("g03-cells", "Cylindrical Cells"),
+        ("g03-random", "Random Sampling"),
+    )
+
+    def add_theory_sections(item, chapter, chapter_uri, depth):
+        if chapter != f"{root}/fundamentals":
+            return
+        sections = nodes.bullet_list()
+        for anchor, title in theory_sections:
+            paragraph = addnodes.compact_paragraph()
+            paragraph += nodes.reference(
+                "", title, internal=True, refuri=f"{chapter_uri}#{anchor}"
+            )
+            sections += nodes.list_item("", paragraph,
+                                        classes=[f"toctree-l{depth + 1}"])
+        item += sections
+
+    def list_item_for(reference):
+        item = reference.parent
+        while item is not None and not isinstance(item, nodes.list_item):
+            item = item.parent
+        return item
+
+    def render_navigation(**kwargs):
+        if kwargs.get("maxdepth") == "":
+            kwargs.pop("maxdepth")
+        kwargs.setdefault("collapse", True)
+        kwargs.setdefault("includehidden", False)
+        # The adapter supplies builder tags only on Sphinx versions that need them.
+        tree = TocTree(app.env).get_toctree_for(pagename, app.builder, **kwargs)
+        if tree is None:
+            return ""
+
+        root_uri = app.builder.get_relative_uri(pagename, root)
+        for reference in list(tree.findall(nodes.reference)):
+            if reference.get("refuri") != root_uri or reference.get("anchorname"):
+                continue
+            root_item = list_item_for(reference)
+            if root_item is None:
+                continue
+
+            # Sphinx has already marked the active page's ancestors. Keeping
+            # those items preserves the hub highlight even on a detail page.
+            depth = next((int(value[len("toctree-l"):]) + 1
+                          for value in root_item.get("classes", [])
+                          if re.fullmatch(r"toctree-l\d+", value)), 3)
+            entries = []
+            for chapter, title in chapters:
+                chapter_uri = app.builder.get_relative_uri(pagename, chapter)
+                for child_ref in list(root_item.findall(nodes.reference)):
+                    if (child_ref.get("refuri") == chapter_uri
+                            and not child_ref.get("anchorname")):
+                        item = list_item_for(child_ref)
+                        if item is not None:
+                            child_ref[:] = [nodes.Text(title)]
+                            item[:] = [child_ref.parent]
+                            # Flattened entries must carry their displayed depth.
+                            # RTD uses these classes for both active and sibling
+                            # indentation; retaining the old depth shifts a link
+                            # sideways as soon as it becomes the current page.
+                            item["classes"] = [
+                                value for value in item.get("classes", [])
+                                if not re.fullmatch(r"toctree-l\d+", value)
+                            ] + [f"toctree-l{depth}"]
+                            add_theory_sections(item, chapter, chapter_uri, depth)
+                            entries.append(item)
+                        break
+                else:
+                    # Restore a chapter entry omitted by the current toctree
+                    # depth while browsing that chapter's G03 section.
+                    if not pagename.startswith(root + "/"):
+                        continue
+                    paragraph = addnodes.compact_paragraph()
+                    paragraph += nodes.reference("", title, internal=True, refuri=chapter_uri)
+                    item = nodes.list_item("", paragraph,
+                                           classes=[f"toctree-l{depth}"])
+                    add_theory_sections(item, chapter, chapter_uri, depth)
+                    entries.append(item)
+            root_item[:] = [reference.parent]
+            if entries:
+                root_item += nodes.bullet_list("", *entries)
+
+        return app.builder.render_partial(tree)["fragment"]
+
+    # Keep one selected section tier in the global navigation. Each chapter
+    # retains its full local contents in the page body.
+    context["toctree"] = render_navigation
+
+
+def track_g03_test_plot_inputs(app, docname, source):
+    """Rebuild measured plots when the test data or renderer changes."""
+    if docname != "tests/009_collision/G03_DSMC":
+        return
+    test_dir = Path(HERE).parent.parent / "tests/009_collision/G03_DSMC"
+    app.env.note_dependency(str(test_dir / "plot_results.py"))
+    for model in ("HS", "VHS", "VSS"):
+        for schedule in ("ntc", "clock"):
+            app.env.note_dependency(str(test_dir / "results" /
+                                        f"relaxation-{model}-{schedule}.csv"))
+
+
 def setup(app):
     app.add_css_file("custom.css")  # Sphinx >= 1.8
     app.add_css_file("ap-home-hero.css")
     app.add_css_file("contributors.css")
     app.add_css_file("g02-docs.css")
+    app.add_css_file("g03-docs.css")
     app.add_js_file("ap-language-switch.js")
     app.add_js_file("g02-display-titles.js")
+    app.add_js_file("G_Collision/G03_DSMC/collision-embed.js")
+    app.connect("html-page-context", keep_g03_navigation_shallow)
+    app.connect("source-read", track_g03_test_plot_inputs)
     app.connect("build-finished", mark_reference_links_in_html)

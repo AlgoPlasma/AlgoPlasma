@@ -1,5 +1,11 @@
 # J03 continuity tests
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+对应实现见[模块说明](../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)。下列命令均从仓库根目录运行。
+
+需要 Bash 和 GNU Fortran（`gfortran`）；普通测试采用八字节实数并启用数组越界检查。
+
 本目录先运行局部和配置测试，再运行真实前处理接续 J03 的小规模测试：
 
 - `test_J03_continuity_units`：闭合系数、时间步、单步公式、残差及错误返回。

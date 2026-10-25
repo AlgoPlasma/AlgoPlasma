@@ -178,7 +178,7 @@ Tests
 
    ``G_Collision`` has G01 loader-boundary tests and G02 algorithm, statistical
    and zero-dimensional collision-box tests using synthetic data.
-   ``tests/012_fluid`` covers the J01 legacy/FM paths, J02 quadrature/DG/reflection
+   ``tests/012_fluid`` covers the J01 FM path, J02 quadrature/DG/reflection
    and parallel consistency, plus J03 transient and steady solvers.
    The application page reports FM B0, SN B0 and SN ION preprocessing runs
    and their respective J03 solutions.

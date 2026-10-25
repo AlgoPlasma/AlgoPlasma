@@ -33,6 +33,7 @@
     end subroutine sub_J02_build_angular_nodes
 
     subroutine sub_J02_build_speed_groups(n_speeds, speed_max, speed, weight, ierr)
+        use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
         integer, intent(in) :: n_speeds
         real, intent(in) :: speed_max
         real, allocatable, intent(out) :: speed(:), weight(:)
@@ -43,6 +44,10 @@
         ierr = SN_SUCCESS
         if (n_speeds < 1) then
             ierr = SN_ERR_SPEED_COUNT
+            return
+        end if
+        if (.not.ieee_is_finite(speed_max)) then
+            ierr = SN_ERR_SPEED_MAX
             return
         end if
         if (speed_max <= 0.0) then
@@ -59,6 +64,38 @@
         end do
     end subroutine sub_J02_build_speed_groups
 
+    !> Explicit radial velocity bins on [0,speed_edge(end)], in m/s.
+    !> Nodes are arithmetic midpoints; weights integrate v dv exactly per bin.
+    !> Angular ordering and the reduced two-velocity model are unchanged.
+    subroutine sub_J02_build_speed_groups_from_edges(speed_edge, speed, weight, ierr)
+        use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+        real, intent(in) :: speed_edge(:)
+        real, allocatable, intent(out) :: speed(:), weight(:)
+        integer, intent(out) :: ierr
+        integer :: n
+        real, allocatable :: dv(:), group_speed(:), group_weight(:)
+
+        ierr = SN_ERR_SPEED_EDGES
+        n = size(speed_edge)-1
+        if (n < 1) return
+        if (.not.all(ieee_is_finite(speed_edge))) return
+        if (abs(speed_edge(1)) > 0.0) return
+        if (any(speed_edge(2:) <= speed_edge(:n))) return
+
+        ! Midpoint form avoids cancellation of squared edges. Publish only valid bins.
+        dv = speed_edge(2:)-speed_edge(:n)
+        group_speed = speed_edge(:n)+0.5*dv
+        ierr = SN_ERR_SPEED_RANGE
+        if (any(group_speed <= 0.0)) return
+        if (any(dv > huge(1.0)/max(1.0,group_speed))) return
+        group_weight = dv*group_speed
+        if (any(group_weight <= 0.0)) return
+        call move_alloc(group_speed, speed)
+        call move_alloc(group_weight, weight)
+        ierr = SN_SUCCESS
+    end subroutine sub_J02_build_speed_groups_from_edges
+
+    !> Original uniform-grid interface; keeps its original nodes and arithmetic.
     subroutine sub_J02_build_phase_quadrature(n_angles, n_speeds, angular_scheme, &
         speed_max, quadrature, ierr)
         integer, intent(in) :: n_angles, n_speeds
@@ -66,14 +103,43 @@
         real, intent(in) :: speed_max
         type(sn_quadrature_type), intent(out) :: quadrature
         integer, intent(out) :: ierr
-        real, allocatable :: mu_a(:), eta_a(:), wa(:), speed_g(:), wg(:)
-        integer :: a, g, m
+        real, allocatable :: angular_mu(:), angular_eta(:), angular_weight(:), group_speed(:), group_weight(:)
 
-        call sub_J02_build_angular_nodes(n_angles, angular_scheme, mu_a, eta_a, wa, ierr)
-        if (ierr /= 0) return
-        call sub_J02_build_speed_groups(n_speeds, speed_max, speed_g, wg, ierr)
-        if (ierr /= 0) return
+        call sub_J02_build_angular_nodes(n_angles, angular_scheme, angular_mu, angular_eta, angular_weight, ierr)
+        if (ierr /= SN_SUCCESS) return
+        call sub_J02_build_speed_groups(n_speeds, speed_max, group_speed, group_weight, ierr)
+        if (ierr /= SN_SUCCESS) return
+        call sub_J02_combine_phase_quadrature(angular_mu, angular_eta, angular_weight, group_speed, group_weight, &
+            speed_max, quadrature)
+    end subroutine sub_J02_build_phase_quadrature
 
+    !> Nonuniform-grid interface. Group count and cutoff are inferred from edges.
+    !> All groups use the same angular rule, preserving specular reflection pairs.
+    subroutine sub_J02_build_phase_quadrature_from_edges(n_angles, speed_edge, angular_scheme, quadrature, ierr)
+        integer, intent(in) :: n_angles
+        real, intent(in) :: speed_edge(:)
+        character(len = *), intent(in) :: angular_scheme
+        type(sn_quadrature_type), intent(out) :: quadrature
+        integer, intent(out) :: ierr
+        real, allocatable :: angular_mu(:), angular_eta(:), angular_weight(:), group_speed(:), group_weight(:)
+
+        call sub_J02_build_angular_nodes(n_angles, angular_scheme, angular_mu, angular_eta, angular_weight, ierr)
+        if (ierr /= SN_SUCCESS) return
+        call sub_J02_build_speed_groups_from_edges(speed_edge, group_speed, group_weight, ierr)
+        if (ierr /= SN_SUCCESS) return
+        call sub_J02_combine_phase_quadrature(angular_mu, angular_eta, angular_weight, group_speed, group_weight, &
+            speed_edge(size(speed_edge)), quadrature)
+    end subroutine sub_J02_build_phase_quadrature_from_edges
+
+    ! Internal tensor-product assembly shared by both public constructors.
+    subroutine sub_J02_combine_phase_quadrature(angular_mu, angular_eta, angular_weight, group_speed, group_weight, &
+        speed_max, quadrature)
+        real, intent(in) :: angular_mu(:), angular_eta(:), angular_weight(:), group_speed(:), group_weight(:), speed_max
+        type(sn_quadrature_type), intent(out) :: quadrature
+        integer :: a, g, m, n_angles, n_speeds
+
+        n_angles = size(angular_mu)
+        n_speeds = size(group_speed)
         quadrature%n_angles = n_angles
         quadrature%n_speeds = n_speeds
         quadrature%n_dir = n_angles*n_speeds
@@ -83,11 +149,10 @@
         do g = 1, n_speeds
             do a = 1, n_angles
                 m = (g-1)*n_angles+a
-                quadrature%mu(m) = mu_a(a)
-                quadrature%eta(m) = eta_a(a)
-                quadrature%speed(m) = speed_g(g)
-                quadrature%weight(m) = wg(g)*wa(a)
+                quadrature%mu(m) = angular_mu(a)
+                quadrature%eta(m) = angular_eta(a)
+                quadrature%speed(m) = group_speed(g)
+                quadrature%weight(m) = group_weight(g)*angular_weight(a)
             end do
         end do
-        ierr = SN_SUCCESS
-    end subroutine sub_J02_build_phase_quadrature
+    end subroutine sub_J02_combine_phase_quadrature
