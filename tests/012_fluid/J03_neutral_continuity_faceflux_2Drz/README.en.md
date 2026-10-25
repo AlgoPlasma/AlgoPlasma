@@ -1,5 +1,11 @@
 # J03 continuity tests
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+Implementation: [module README](../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.en.md). Run the commands below from the repository root.
+
+Requires Bash and GNU Fortran (`gfortran`); the ordinary runner uses eight-byte real values and runtime bounds checks.
+
 The runner executes local/setup checks before actual preprocessing-to-continuity integration:
 
 - `test_J03_continuity_units`: closure, timestep, single-step formulas, residuals and errors.

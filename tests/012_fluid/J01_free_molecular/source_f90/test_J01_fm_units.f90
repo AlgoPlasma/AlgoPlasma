@@ -7,6 +7,7 @@ program test_J01_fm_units
     call test_reflection()
     call test_trajectory()
     call test_statistics()
+    call test_free_molecular_single_cell()
     call test_driver_errors()
     write(*, '(a,i0)') 'n_failed = ', n_failed
     if (n_failed /= 0) error stop 1
@@ -172,6 +173,36 @@ contains
         call close(bout(J01_R_LO,1,1),-3.0,'low-face boundary flux keeps coordinate sign')
         call close(n(2,2),0.0,'unvisited cell stays zero')
     end subroutine test_statistics
+
+    subroutine test_free_molecular_single_cell()
+        real :: re(2), ze(2), rate, area, total_expected, total_actual, rate_tolerance
+        logical :: active(1, 1)
+        integer :: ft(4, 1, 1), ierr, n_completed, n_truncated
+        real, allocatable :: n(:, :), ur(:, :), uz(:, :), fr(:, :), fz(:, :), bout(:, :, :)
+        re = [1.0, 2.0]
+        ze = [0.0, 1.0]
+        active = .true.
+        ft = J01_FACE_WALL
+        ft(J01_Z_LO, 1, 1) = J01_FACE_OPEN
+        ft(J01_Z_HI, 1, 1) = J01_FACE_OPEN
+        call sub_J01_free_molecular_mc_2Drz(re, ze, 1.0, active, ft, 1.0, 2.0, 1.0, &
+            1.0, 1.0, 2.0, 3.0, 0.0, 200, 100, 17, n, ur, uz, fr, fz, bout, rate, &
+            n_completed, n_truncated, ierr)
+        write(*, '(a,3i8)') 'STATUS: FM ierr/completed/truncated: ', ierr, n_completed, n_truncated
+        write(*, '(a,3es24.15)') 'VALUE: FM density/axial velocity/history rate: ', n(1,1), uz(1,1), rate
+        area = 0.5*(re(2)**2-re(1)**2)
+        total_expected = 200.0*rate
+        total_actual = bout(J01_Z_HI, 1, 1)*area
+        rate_tolerance = 1.0e-12*max(total_expected, 1.0)
+        call check(ierr == J01_SUCCESS, 'FM single-cell solver returns success')
+        call check(n_completed == 200 .and. n_truncated == 0, &
+            'FM histories leave through an open face without truncation')
+        write(*, '(a,4es24.15)') 'VALUE: FM inlet/outlet particle-rate conservation actual/reference/error/limit: ', &
+            total_actual, total_expected, abs(total_actual-total_expected), rate_tolerance
+        call check(abs(total_actual-total_expected) <= rate_tolerance, 'FM inlet/outlet particle-rate conservation')
+        call check(n(1, 1) > 0.0 .and. uz(1, 1) > 0.0, &
+            'FM residence estimator returns positive density and axial velocity')
+    end subroutine test_free_molecular_single_cell
 
     subroutine test_driver_errors()
         real :: re(2) = [1.0,2.0], ze(3) = [0.0,1.0,2.0], rate

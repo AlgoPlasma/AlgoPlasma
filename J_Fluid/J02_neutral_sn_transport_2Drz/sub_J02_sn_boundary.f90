@@ -9,11 +9,6 @@
         integer :: i
         real :: lo, hi, rc, hr, full_area, overlap_area
         ierr = SN_SUCCESS
-        if (.not. allocated(mesh%r_edge) .or. .not. allocated(mesh%active) .or. &
-            mesh%nr < 1 .or. mesh%nz < 1) then
-            ierr = SN_ERR_GEOMETRY_MESH
-            return
-        end if
         if (r_min >= r_max .or. r_min < mesh%r_edge(1) .or. &
             r_max > mesh%r_edge(mesh%nr+1)) then
             ierr = SN_ERR_PARTIAL_INLET
@@ -42,19 +37,6 @@
         end if
     end subroutine sub_J02_build_partial_zlo_inlet
 
-    logical function fun_J02_boundary_is_valid(mesh, boundary)
-        type(sn_mesh_2drz_type), intent(in) :: mesh
-        type(sn_boundary_2drz_type), intent(in) :: boundary
-        fun_J02_boundary_is_valid = allocated(boundary%face_r_lo) .and. &
-            allocated(boundary%face_r_hi) .and. allocated(boundary%face_z_lo) .and. &
-            allocated(boundary%face_z_hi)
-        if (.not. fun_J02_boundary_is_valid) return
-        fun_J02_boundary_is_valid = size(boundary%face_r_lo, 1) == mesh%nr .and. &
-            size(boundary%face_r_lo, 2) == mesh%nz .and. &
-            size(boundary%face_r_hi, 1) == mesh%nr .and. size(boundary%face_r_hi, 2) == mesh%nz .and. &
-            size(boundary%face_z_lo, 1) == mesh%nr .and. size(boundary%face_z_lo, 2) == mesh%nz .and. &
-            size(boundary%face_z_hi, 1) == mesh%nr .and. size(boundary%face_z_hi, 2) == mesh%nz
-    end function fun_J02_boundary_is_valid
 
     integer function fun_J02_face_type(boundary, face_id, i, k)
         type(sn_boundary_2drz_type), intent(in) :: boundary
@@ -73,28 +55,6 @@
         end select
     end function fun_J02_face_type
 
-    logical function fun_J02_reflection_inputs_valid(mesh, quadrature, boundary, wall_shape, &
-        psi_old, zlo_source_xi_lo, zlo_source_xi_hi)
-        type(sn_mesh_2drz_type), intent(in) :: mesh
-        type(sn_quadrature_type), intent(in) :: quadrature
-        type(sn_boundary_2drz_type), intent(in) :: boundary
-        real, intent(in) :: wall_shape(:), psi_old(:, :, :, :)
-        real, intent(in), optional :: zlo_source_xi_lo(:), zlo_source_xi_hi(:)
-        logical :: has_lo, has_hi
-        has_lo = present(zlo_source_xi_lo)
-        has_hi = present(zlo_source_xi_hi)
-        fun_J02_reflection_inputs_valid = fun_J02_boundary_is_valid(mesh, boundary) .and. &
-            size(wall_shape) == quadrature%n_dir .and. all(wall_shape >= 0.0) .and. &
-            size(psi_old, 1) == 3 .and. size(psi_old, 2) == mesh%nr .and. &
-            size(psi_old, 3) == mesh%nz .and. size(psi_old, 4) == quadrature%n_dir .and. &
-            (has_lo.eqv.has_hi)
-        if (.not. fun_J02_reflection_inputs_valid .or. .not. has_lo) return
-        fun_J02_reflection_inputs_valid = size(zlo_source_xi_lo) == mesh%nr .and. &
-            size(zlo_source_xi_hi) == mesh%nr
-        if (.not. fun_J02_reflection_inputs_valid) return
-        fun_J02_reflection_inputs_valid = all(zlo_source_xi_lo >= -1.0) .and. &
-            all(zlo_source_xi_hi <= 1.0) .and. all(zlo_source_xi_lo <= zlo_source_xi_hi)
-    end function fun_J02_reflection_inputs_valid
 
     ! Only active-cell walls participate in the transport solve.
     logical function fun_J02_has_reflecting_faces(mesh, boundary)

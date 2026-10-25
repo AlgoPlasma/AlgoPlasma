@@ -43,7 +43,7 @@ Field Reconstruction
 - 输出并分配 ``density(nr,nz)``，单位 :math:`\mathrm{m^{-3}}`；
   ``velocity_r(nr,nz)``、``velocity_z(nr,nz)``，
   单位 :math:`\mathrm{m\,s^{-1}}`。
-- 无效单元输出零；输入场尺寸不匹配时通过 ``ierr`` 报告。
+- 无效单元输出零；输入场须满足求解接口的形状约定，不再重复校验。
   直接调用时应先保证几何与求积对象有效，本过程不重复做完整对象验证。
 
 .. rubric:: 2. 内部面通量的迎风重构
@@ -136,13 +136,13 @@ Field Reconstruction
 
 - 输入 ``mesh,geometry,boundary,quadrature``、
   ``psi(3,nr,nz,n_dir)``。
-- 规定入流通过 ``prescribed_inflow(4,nr,nz,n_dir)``
+- 规定入流通过 ``boundary_inflow(4,nr,nz,n_dir)``
   或 ``zlo_inflow(n_dir)`` 传入。正常流程沿用求解时选定的一种表示。
 - 可选输入两个下端局部区间数组，必须与求解时一致且同时提供。
 - 输出 ``inflow_flux(4,nr,nz)``、``outflow_flux(4,nr,nz)``，
   单位均为 :math:`\mathrm{m^{-2}\,s^{-1}}`；
   只统计 OPEN 面，壁面、内部面与 REMOTE 面位置保持零。
-- 输出 ``ierr``，用于报告分布、规定入流、面类型数组的尺寸错误或区间数据错误。
+- 保留输出 ``ierr`` 以兼容调用，正常返回成功；沿用求解时的合法数组形状与入口区间。
 
 内部函数 ``fun_prescribed_value`` 输入面、单元、方向索引，返回规定入射分布函数。
 它优先读取完整边界数组；否则只在第一排下端读取 ``zlo_inflow``，

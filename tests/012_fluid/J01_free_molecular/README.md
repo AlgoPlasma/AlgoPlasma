@@ -1,14 +1,18 @@
 # J01_free_molecular tests
 
-本目录集中运行 J01 的五个小测试程序，不读取外部历史结果。
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+对应实现见[模块说明](../../../J_Fluid/J01_free_molecular/README.zh-CN.md)。下列命令均从仓库根目录运行。
+
+需要 Bash 和 GNU Fortran（`gfortran`）；普通测试采用八字节实数并启用数组越界检查。
+
+本目录集中运行 J01 的三个自由分子测试程序，不读取外部历史结果。
 
 | 测试源文件 | 被测实现 | 检查内容 |
 | --- | --- | --- |
-| `test_J01_continuity_freeflow.f90` | `sub_J01_continuity_freeflow.f90` | 三维更新公式、源项符号、保护层、六方向输运、周期守恒 |
-| `test_J01_faceflux_2Drz_units.f90` | 二维通量工具及粒子主入口 | 内部和边界通量符号、面积体积权重、单格粒子率守恒、非法密度 |
+| `test_J01_fm_units.f90` | sampling、trajectory、reflection、statistics 与主入口 | 部分入口、采样范围、反射、定位、驻留统计、归一化、单单元粒子率守恒、截断与非法拓扑 |
 | `test_J01_corner_crossings.f90` | `sub_J01_fm_trajectory.f90` | 精确及近角点、两种碰面次序、四种速度符号、阶梯边界、穿面计数与驻留时间 |
 | `test_J01_sampling_distribution.f90` | sampling 与 reflection | 三个固定种子下的环形面积采样、截断正态入射及四面漫反射概率 |
-| `test_J01_fm_units.f90` | sampling、trajectory、reflection、statistics 与主入口 | 部分入口、采样范围、反射、定位、驻留统计、归一化、截断与非法拓扑 |
 
 ```bash
 bash tests/012_fluid/J01_free_molecular/run.sh

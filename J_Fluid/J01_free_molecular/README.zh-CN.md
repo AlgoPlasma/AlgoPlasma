@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-本目录包含自由分子粒子前处理和保留的连续性工具，分别通过两个 Fortran 模块调用。
+本目录通过 Fortran 模块 `mod_J01_neutral_free_molecular_2Drz` 提供自由分子粒子前处理。
 
 ## 粒子前处理
 
@@ -20,17 +20,8 @@
 
 入口径向区间只限制注入位置；它不会把同一开放面的其余部分自动改成壁面。规定入射通量由应用按相同粒子率与面积补齐。历史因跟踪上限中断时，返回的统计场不能视为完整结果。
 
-## 保留工具
-
-`mod_J01_continuity_freeflow` 包含：
-
-- `sub_J01_continuity_freeflow.f90`：原三维归一化密度更新；`s` 是本步扣减量。
-- `sub_J01_continuity_freeflow_2Drz.f90`：二维给定速度的面通量构造，以及给定面通量的单步更新。
-
-这两个工具文件不负责粒子采样或轨迹统计。原接口和三维索引约定不变。
-
 ## 构建与文档
 
-只编译所需模块文件，启用预处理并添加本目录的 include 路径；不要单独编译被包含的实现文件。调用程序须采用相同实数精度。同时使用两个模块时，以 `only` 导入需要的名称，避免同名常量冲突。
+编译 `mod_J01_neutral_free_molecular_2Drz.f90`，启用预处理并添加本目录的 include 路径。该模块包含表中的五个实现文件，构建时只编译模块文件。调用程序须采用相同实数精度。
 
-Sphinx 的 [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) 按“数据 → 入口 → 反射 → 跟踪 → 统计 → 完整计算”讲解。保留接口另见 Legacy Utilities；测试入口见 [J01 tests](../../tests/012_fluid/J01_free_molecular/README.md)。
+Sphinx 的 [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) 按“数据 → 入口 → 反射 → 跟踪 → 统计 → 完整计算”讲解。测试入口见 [J01 tests](../../tests/012_fluid/J01_free_molecular/README.zh-CN.md)。

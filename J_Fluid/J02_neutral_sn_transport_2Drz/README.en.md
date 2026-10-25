@@ -17,7 +17,7 @@ invariant when `mu` is nonzero. Tests must respect this reduced equation
 rather than assume a Cartesian free-stream invariant.
 
 The first implementation stage contains cylindrical geometry, midpoint
-full-circle angular nodes, uniform speed groups, reservoir and MC-sampled
+full-circle angular nodes, uniform or explicitly supplied nonuniform speed groups, reservoir and MC-sampled
 inflow construction, flux normalization, a local P1-DG operator,
 open-boundary directional sweeps, specular/diffuse wall source iteration,
 partial z-low inlet integration, and cell-moment/internal-face-flux
@@ -37,10 +37,11 @@ this is not clipping or preservation of the original P1 mean.
 ## Functional files
 
 - `sub_J02_sn_inflow.f90`: reservoir shapes and crossing-event conversion.
-- `sub_J02_sn_source.f90`: prescribed inlet-flux normalization and shared validation.
+- `sub_J02_sn_source.f90`: prescribed inlet-flux normalization.
+- `sub_J02_sn_validation.f90`: shared inlet-distribution checks.
 - `sub_J02_sn_boundary.f90`: partial-inlet area fractions and local intervals.
 - `sub_J02_sn_wall.f90`: thermal shape, specular mapping and diffuse-flux normalization.
-- `sub_J02_sn_loss.f90`: removal frequency to opacity conversion.
+- `sub_J02_sn_loss.f90`: removal frequency to sigma_t conversion.
 - `sub_J02_sn_sweep.f90`: one sweep, including boundary assembly and positivity recovery.
 - `sub_J02_sn_reflection.f90`: source iteration calling the same sweep.
 
@@ -62,6 +63,11 @@ For zero drift, call `sub_J02_build_drifted_maxwellian_inflow_shape` with both d
 - `sub_J02_build_phase_quadrature`: constructs flattened angle-speed nodes and
   weights. `n_angles` must be at least 8 and divisible by 4 so no ordinate lies
   on a coordinate axis.
+- `sub_J02_build_phase_quadrature_from_edges`: constructs the same speed-angle layout from
+  `speed_edge(:)` in m/s. Edges must be finite, start at zero and strictly increase.
+  Group count and cutoff follow from the array; nodes are arithmetic midpoints and
+  radial weights integrate `v dv` exactly. The original uniform constructor is unchanged.
+- `sub_J02_build_speed_groups_from_edges`: returns only speed nodes and radial weights.
 - `sub_J02_build_drifted_maxwellian_inflow_shape`: samples the same reservoir
   definition with prescribed `(u_r,u_z)`. Temperature is in K, particle mass
   in kg, and drift velocity in m/s.
@@ -79,6 +85,7 @@ For zero drift, call `sub_J02_build_drifted_maxwellian_inflow_shape` with both d
   by flux-conserving diffuse reflection.
 - `sub_J02_solve_source_iteration`: iterates the reflecting boundary state to
   the requested relative tolerance and reports convergence diagnostics.
+  Supply the wall velocity distribution `wall_shape` when diffuse reflection is enabled.
 - `sub_J02_reconstruct_cell_moments` and
   `sub_J02_reconstruct_internal_face_fluxes`: integrate the angular field into
   cell density/velocity and signed internal face number-flux density.
@@ -112,7 +119,7 @@ After flux normalization, the relative discrete-bin crossing probabilities
 are exactly preserved. Do not pass reservoir samples to the MC converter, or
 MC crossing histograms directly to the reservoir normalization routine.
 
-All routines return globally unique `SN_ERR_*` codes. Use
+Status-returning interfaces use globally unique `SN_ERR_*` codes. Use
 `fun_J02_error_message(ierr)` for a readable diagnostic. Error reporting uses
 return values; progress is printed only when a positive `progress_interval`
 is requested.
@@ -183,6 +190,11 @@ The code follows the AlgoPlasma wrapper convention. One public
 preprocessor `include` directives to collect the independently readable
 `sub_J02_sn_*.f90` implementation files.
 
+Suggested reading order, omitting the `sub_J02_` prefix and `.f90` suffix:
+
+- Collision coefficients: `sn_quadrature` → `sn_relative_speed` → `sn_reaction_kernel` → `sn_cex`.
+- Spatial transport: `sn_transport` → `sn_reflection` → `sn_sweep` → `sn_reconstruction`.
+
 Like the existing AlgoPlasma Fortran kernels, the source uses default `real`.
 The ordinary test build uses `-fdefault-real-8`. Parallel consistency tests
 also exercise the compiler's default real precision.
@@ -193,3 +205,61 @@ The model retains two spatial coordinates (r,z) and two velocity components
 (v_r,v_z). It uses speed and one in-plane angle, without v_theta or the
 associated cylindrical velocity dynamics. Cylindrical cell volumes, face
 areas and r-weighted integration do not make it full axisymmetric 2D3V kinetics.
+
+## Nonuniform speed-grid comparison
+
+The new constructors preserve the angle rule, group ordering and 2D velocity measure.
+They do not add CEX or choose an adaptive grid. Callers choose edges according to the
+cold and fast populations, then check density, flux and energy moments separately.
+`tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/run_comparison.py`
+compares uniform, quadratic-edge and piecewise grids at the same cutoff and group count.
+It writes raw moments against analytic 2D Maxwellian integrals, fixed-space/angle
+transport comparisons, angle/cutoff controls, CSV files, figures and a report.
+See the [comparison README](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.en.md).
+
+## Input contracts
+
+Initialize mesh, geometry, quadrature, boundary types and reaction tables successfully before use.
+Keep dimensions, node ordering and interior topology consistent; rebuild derived objects after changing a grid.
+Field arrays must have the documented shapes. Reconstruction consumes a completed sweep or a compatible field.
+Downstream arithmetic does not repeat object-layout checks or guard every product, quotient and sum;
+physical inputs and intermediate results must be finite and representable.
+Runtime failures (normalization, tabulated energy range, local solves, convergence and MPI consistency) still return errors.
+
+## Velocity kinematics before collision assembly
+
+`sub_J02_sn_relative_speed.f90` provides three small interfaces:
+
+- `sub_J02_build_velocity_vectors(quadrature, velocity, ierr)` returns
+  `velocity(3,n_dir)` in m/s, with components `(v_r,v_phi,v_z)` in one local
+  orthonormal basis. It uses `(speed*mu,0,speed*eta)`, retains node ordering,
+  and requires a successfully initialized quadrature; `ierr` is retained for call compatibility.
+- `fun_J02_velocity_cyl_to_cart(velocity_cyl, azimuth)` rotates the three physical
+  velocity components to Cartesian `(v_x,v_y,v_z)`. `azimuth` is the spatial
+  position angle in radians, independent of the SN velocity-direction angle;
+  `v_phi` denotes tangential speed, not angular velocity.
+- `fun_J02_relative_speed(velocity_a, velocity_b)` returns the Euclidean norm
+  of the difference, using scaling to avoid squaring overflow/underflow.
+  Both inputs must use the same orthonormal basis. Velocities at different
+  local azimuths must first be expressed in a common basis.
+
+The two pure functions require finite inputs and representable results; the
+relative-speed function additionally requires representable component differences.
+They do not return status codes. For a common local basis, computing relative
+speed directly and after a common Cartesian rotation gives the same result up
+to roundoff. The three-slot container does not add azimuthal dynamics to J02.
+
+For fixed node sets, each pair has a fixed relative speed, independent of the
+population values. The caller can reuse it while those nodes and their common
+basis remain fixed. Cross-section evaluation and ion-distribution weighting belong
+to the reaction-kernel and CEX coefficient routines below. See the
+[kinematics tests](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.en.md).
+
+## Prescribed-ion CEX coefficients
+
+`sub_J02_sn_relative_speed.f90` owns the pure relative-speed function and its
+node/coordinate helpers. `sub_J02_sn_reaction_kernel.f90` owns the general
+binary-reaction table, energy conversion, and pair kernel `sigma*g`.
+`sub_J02_sn_cex.f90` constructs the prescribed-ion Maxwellian and integrates
+that common kernel into CEX frequency/sigma_t arrays. It does not add a CEX
+gain term or transport iteration. See [the concise usage and three checks](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.en.md).
