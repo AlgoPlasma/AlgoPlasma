@@ -11,7 +11,7 @@
 教程解释“零维”、温度与整体运动的区别、随机碰撞次数，以及三张输出图的读法。
 只需先了解速度、动能和平均数；模块接口见 [G02 说明](G02_MCC_network/README.zh-CN.md)。
 
-若要从分子运动开始系统学习 DSMC，进入 Sphinx 文档的 `G_Collision → G03_DSMC`。文档按物理、算法与源码导读组织；[文档源入口](../docs/source/rst_files/G_Collision/G03_DSMC.rst)与[模块目录说明](G03_DSMC/README.md)供维护时查阅。
+若要从分子运动开始系统学习 DSMC，进入 Sphinx 文档的 `G_Collision → G03_DSMC`。文档按物理、算法与源码导读组织；[文档源入口](../docs/source/rst_files/G_Collision/G03_DSMC.rst)与[模块目录说明](G03_DSMC/README.zh-CN.md)供维护时查阅。
 
 ## 子目录
 
@@ -23,7 +23,7 @@
 
 - `G01_MCC` 使用 MPI 和 Fortran `include`；调用方需要配置 MPI、预处理和 include 路径，并保持物理单位一致。
 - `G02_MCC_network` 使用 CMake 和 C++20；MPI 和 OpenMP 可选。其测试目录可独立配置和运行。
-- `G03_DSMC` 使用 C++20，当前为串行 CPU 实现；构建与输入格式由调用工程决定。[当前测试](../tests/009_collision/G03_DSMC/README.md)覆盖模型、柱坐标网格、两种调度和碰撞弛豫；从仓库根目录运行 `bash tests/009_collision/G03_DSMC/run.sh`。
+- `G03_DSMC` 使用 C++20，当前为串行 CPU 实现；构建与输入格式由调用工程决定。[当前测试](../tests/009_collision/G03_DSMC/README.zh-CN.md)覆盖模型、柱坐标网格、两种调度和碰撞弛豫；从仓库根目录运行 `bash tests/009_collision/G03_DSMC/run.sh`。
 
 ## 文档
 

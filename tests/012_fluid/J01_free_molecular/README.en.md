@@ -1,5 +1,11 @@
 # J01_free_molecular tests
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+Implementation: [module README](../../../J_Fluid/J01_free_molecular/README.en.md). Run the commands below from the repository root.
+
+Requires Bash and GNU Fortran (`gfortran`); the ordinary runner uses eight-byte real values and runtime bounds checks.
+
 Three standalone programs test the free-molecular module without archived external solutions.
 
 | Test source | Implementation | Checks |

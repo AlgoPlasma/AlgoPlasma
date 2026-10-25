@@ -2,8 +2,6 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-[Code reading order and interface names (中文)](READING.zh-CN.md)
-
 `J02_neutral_sn_transport_2Drz` provides reusable deterministic discrete-ordinates
 (SN) building blocks for steady neutral transport on an r-z mesh with cylindrical geometry.
 
@@ -87,6 +85,7 @@ For zero drift, call `sub_J02_build_drifted_maxwellian_inflow_shape` with both d
   by flux-conserving diffuse reflection.
 - `sub_J02_solve_source_iteration`: iterates the reflecting boundary state to
   the requested relative tolerance and reports convergence diagnostics.
+  Supply the wall velocity distribution `wall_shape` when diffuse reflection is enabled.
 - `sub_J02_reconstruct_cell_moments` and
   `sub_J02_reconstruct_internal_face_fluxes`: integrate the angular field into
   cell density/velocity and signed internal face number-flux density.
@@ -191,6 +190,11 @@ The code follows the AlgoPlasma wrapper convention. One public
 preprocessor `include` directives to collect the independently readable
 `sub_J02_sn_*.f90` implementation files.
 
+Suggested reading order, omitting the `sub_J02_` prefix and `.f90` suffix:
+
+- Collision coefficients: `sn_quadrature` → `sn_relative_speed` → `sn_reaction_kernel` → `sn_cex`.
+- Spatial transport: `sn_transport` → `sn_reflection` → `sn_sweep` → `sn_reconstruction`.
+
 Like the existing AlgoPlasma Fortran kernels, the source uses default `real`.
 The ordinary test build uses `-fdefault-real-8`. Parallel consistency tests
 also exercise the compiler's default real precision.
@@ -211,7 +215,7 @@ cold and fast populations, then check density, flux and energy moments separatel
 compares uniform, quadratic-edge and piecewise grids at the same cutoff and group count.
 It writes raw moments against analytic 2D Maxwellian integrals, fixed-space/angle
 transport comparisons, angle/cutoff controls, CSV files, figures and a report.
-See the [comparison README](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.md).
+See the [comparison README](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.en.md).
 
 ## Input contracts
 
@@ -247,9 +251,9 @@ to roundoff. The three-slot container does not add azimuthal dynamics to J02.
 
 For fixed node sets, each pair has a fixed relative speed, independent of the
 population values. The caller can reuse it while those nodes and their common
-basis remain fixed. No cross section, ion-distribution average or CEX gain/loss
-operator is implemented here. See the
-[kinematics tests](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.md).
+basis remain fixed. Cross-section evaluation and ion-distribution weighting belong
+to the reaction-kernel and CEX coefficient routines below. See the
+[kinematics tests](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.en.md).
 
 ## Prescribed-ion CEX coefficients
 
@@ -258,4 +262,4 @@ node/coordinate helpers. `sub_J02_sn_reaction_kernel.f90` owns the general
 binary-reaction table, energy conversion, and pair kernel `sigma*g`.
 `sub_J02_sn_cex.f90` constructs the prescribed-ion Maxwellian and integrates
 that common kernel into CEX frequency/sigma_t arrays. It does not add a CEX
-gain term or transport iteration. See [the concise usage and three checks](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.md).
+gain term or transport iteration. See [the concise usage and three checks](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.en.md).

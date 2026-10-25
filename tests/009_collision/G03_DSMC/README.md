@@ -1,8 +1,15 @@
-# G03_DSMC tests
+# G03_DSMC 测试
 
-验证柱坐标接口的单组分、等权重 HS/VHS/VSS 弹性碰撞。
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+通过柱坐标接口验证 [G03_DSMC 主库](../../../G_Collision/G03_DSMC/README.zh-CN.md)的
+单组分、等权重 HS/VHS/VSS 弹性碰撞，包括 8 个核心检查组和 6 个碰撞弛豫回归。
+
+## 环境与运行
+
 依赖 Bash、支持 C++20 的 GCC/Clang、Python 3 和 Matplotlib 3.6 或以上。
-测试直接编译主库的 8 个实现文件。
+测试直接编译主库的 8 个实现文件。只运行核心检查组或只构建时无需 Python。
+可用 `CXX` 选择 C++ 编译器，`PYTHON` 选择绘图的 Python 环境。
 
 从仓库根目录运行：
 
@@ -12,6 +19,7 @@ bash tests/009_collision/G03_DSMC/run.sh
 
 成功时逐组输出 `PASS`，失败时返回非零状态并报告原因。
 默认构建目录位于系统临时目录，退出时清理；结果保存在本目录的 `results/`，已由 Git 忽略。
+重复运行会覆盖本次运行对应的日志与结果文件。
 
 ## 检查范围
 
@@ -19,7 +27,7 @@ bash tests/009_collision/G03_DSMC/run.sh
 | --- | --- | --- |
 | `models` | `cpp/test_models.cpp` | 确认碰撞核及黏度标定符合模型定义，为事件率提供正确物性 |
 | `scattering` | `cpp/test_models.cpp` | 确认相对速率与碰后方向统计符合指定散射模型 |
-| `random` | `cpp/test_geometry.cpp` | 约束抽样端点和索引均匀性，避免选对偏差、越界及对数异常 |
+| `random` | `cpp/test_geometry.cpp` | 检查随机键重放、字段与用途区分，以及实数端点和整数索引均匀性 |
 | `geometry` | `cpp/test_geometry.cpp` | 确认正确单元、真实体积和共同速度基底进入碰撞计算 |
 | `conservation` | `cpp/test_stepper.cpp` | 确认完整的多单元、多步调用保持动量与能量守恒 |
 | `schedules` | `cpp/test_stepper.cpp` | 确认物理碰撞率正确转化为事件数量、等待时间和选对概率 |
@@ -27,7 +35,7 @@ bash tests/009_collision/G03_DSMC/run.sh
 | `errors` | `cpp/test_stepper.cpp` | 确认异常明确上报，失败时整步保留原状态 |
 | `relaxation` | `examples/relaxation.cpp` | 检查组合演化的全程守恒，以及后期二阶、四阶统计量的相对平衡误差 |
 
-共 8 个核心组与 6 组弛豫回归。单独运行与内存检查：
+单独运行与内存检查：
 
 ```bash
 bash tests/009_collision/G03_DSMC/run.sh schedules
@@ -37,8 +45,6 @@ G03_DSMC_SANITIZERS=1 bash tests/009_collision/G03_DSMC/run.sh
 
 散射角检查每个角参数抽样 60000 次，候选计数与接受频率各使用 20000 个种子。
 这些基础抽样检查与解析结果比较，采用六个标准误差的回归规则。
-可用 `CXX` 选择 C++ 编译器，`PYTHON` 选择绘图的 Python 环境。
-只运行核心检查组或只构建时无需 Python。
 
 ## 弛豫回归
 
@@ -87,9 +93,13 @@ bash tests/009_collision/G03_DSMC/run.sh plots
 
 ```bash
 G03_DSMC_BUILD_DIR=tests/009_collision/G03_DSMC/build bash tests/009_collision/G03_DSMC/run.sh build
+mkdir -p tests/009_collision/G03_DSMC/results
 # MODEL SCHEDULE [particles steps [seed]] [--check]
 tests/009_collision/G03_DSMC/build/relaxation VSS ntc 16384 2000 42 --check \
   > tests/009_collision/G03_DSMC/results/relaxation-VSS-ntc.csv
 ```
 
-测试目的、公式与读图说明见 [G03_DSMC Validation](../../../docs/source/tests/009_collision/G03_DSMC.rst)。
+显式指定的构建目录会保留，脚本只清理自己创建的临时构建目录。
+
+测试目的、公式与读图说明见 [G03_DSMC Validation](../../../docs/source/tests/009_collision/G03_DSMC.rst)，
+模型与接口见[主库说明](../../../G_Collision/G03_DSMC/README.zh-CN.md)。

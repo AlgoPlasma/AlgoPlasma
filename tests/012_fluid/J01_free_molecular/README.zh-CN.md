@@ -1,5 +1,11 @@
 # J01_free_molecular tests
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+对应实现见[模块说明](../../../J_Fluid/J01_free_molecular/README.zh-CN.md)。下列命令均从仓库根目录运行。
+
+需要 Bash 和 GNU Fortran（`gfortran`）；普通测试采用八字节实数并启用数组越界检查。
+
 本目录集中运行 J01 的三个自由分子测试程序，不读取外部历史结果。
 
 | 测试源文件 | 被测实现 | 检查内容 |

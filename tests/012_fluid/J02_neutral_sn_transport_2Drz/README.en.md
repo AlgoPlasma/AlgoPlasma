@@ -1,5 +1,11 @@
 # J02 neutral SN transport tests
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+Implementation: [module README](../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.en.md). Run the commands below from the repository root.
+
+Requires Bash and GNU Fortran (`gfortran`); the ordinary runner uses eight-byte real values and runtime bounds checks.
+
 These deterministic tests exercise the discrete ordinates (SN) neutral-transport module:
 
 - two-dimensional velocity-space quadrature and exact equivalence of the
@@ -21,13 +27,12 @@ Run with:
 bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run.sh
 ```
 
-The ordinary runner defaults to a serial real8 build. To exercise it with
+The ordinary runner executes 12 programs and defaults to a serial real8 build. To exercise it with
 OpenMP, set `OPENMP=1 OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE`.
 It also checks conservative positivity recovery, the unified sweep and
 transport interfaces, and scaling/error regressions.
 
-`source_f90/test_J02_transport_units.f90` now belongs here rather than in the
-J03 directory. It checks axis geometry, topology, the absorption matrix,
+`source_f90/test_J02_transport_units.f90` checks axis geometry, topology, the absorption matrix,
 frequency conversion, PDF/probability representations of the same inflow,
 and signed boundary fluxes.
 
@@ -59,10 +64,11 @@ per worker count. It checks the actual worker count and compares 17-digit text
 records of the distribution, density, both velocities, all internal and
 boundary flux arrays, and convergence/failure diagnostics. Records must match
 exactly **within the same precision**; real4 and real8 are not compared.
-The other non-MPI J02 test programs also run in both real8 builds.
+The other 11 non-MPI numerical test programs also run in both real8 builds, giving 22 auxiliary runs.
 Bounds checking and floating-point exception traps remain enabled.
 
-All of these checks passed on 2026-10-06 with GNU Fortran in WSL.
+The historical 2026-10-06 record contains 18 record comparisons and the then-current
+16 auxiliary runs, all passing with GNU Fortran in WSL. The script defines the current program list.
 Build products and logs are under `build/parallel`; the runner does not remove
 existing application outputs. This demonstrates consistency for the covered
 cases, not a general performance or discretization-accuracy result.
@@ -121,7 +127,7 @@ measure, compatibility with uniform groups, reflection pairing, and transport ba
 with partial inlet and three wall models. It supports default real and real8 builds.
 The MPI fixture accepts `nonuniform` as its fourth argument to use four nonuniform groups.
 The cold/fast accuracy study and its limitations are described in
-[nonuniform_speed/README.md](nonuniform_speed/README.md).
+[nonuniform_speed/README.en.md](nonuniform_speed/README.en.md).
 
 ## Relative speed and coordinate conversion
 
@@ -129,7 +135,7 @@ The cold/fast accuracy study and its limitations are described in
 cylindrical-to-Cartesian rotation, common-frame invariance, different-frame
 conversion, zero diagonals, symmetry and repeatability. It compares all 1,920
 pairs from unequal nonuniform node sets against an independent cosine-law
-reference, checks representable large/small norms, and validates failure cleanup.
+reference and checks representable large/small norms.
 The generic vector helpers support three components; J02 node reconstruction
 sets the azimuthal component to zero and retains the reduced 2D2V model.
 
@@ -142,11 +148,11 @@ python3 tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/run_test.py
 
 The runner verifies actual worker counts and identical pair CSVs between serial
 and OpenMP within each precision. It overwrites its named outputs only.
-See [the test definitions and error measures](relative_speed/README.md).
+See [the test definitions and error measures](relative_speed/README.en.md).
 
 ## CEX coefficient smoke test
 
 `test_J02_cex_coefficients.f90` uses three double-precision checks for analytic
 synthetic kernels, ion density normalization, and the collision frequency/sigma_t.
 Run only these with `bash tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/run.sh`.
-See [usage](cex_coefficients/README.md). No physical CEX data is bundled.
+See [usage](cex_coefficients/README.en.md). No physical CEX data is bundled.

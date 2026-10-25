@@ -1,11 +1,13 @@
 # G03_DSMC
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
 C++20 串行、单组分中性单原子、等权重的 HS/VHS/VSS 弹性碰撞数值库。
 公开入口统一接收柱坐标粒子数组与非均匀三维 `r/theta/z` 网格。
 调用程序负责输入解析、初始化、粒子推进、物理边界、场求解、时间循环与输出；
 主库完成一次指定时间间隔内的单元碰撞，并返回统计与守恒报告。
 
-## 数值入口
+## 接口与使用
 
 包含 `dsmc.hpp` 即可使用模型、标定函数、柱坐标网格、粒子和步进器。
 模型直接通过 `DsmcModel(species, weight, parameters)` 构造，
@@ -76,7 +78,7 @@ int main() {
 也不能被其他代码同时修改。同一个工作区或同一份粒子存储不能并发参与多个 `step()`。
 工作区可供后续时间步复用；下一步重新读取当前粒子状态。
 
-## 源码与章节
+## 文件
 
 全部源码由 11 个头文件与 8 个 `.cpp` 文件组成：
 
@@ -99,21 +101,20 @@ int main() {
 `CollisionCell` 由 `cylindrical.hpp` 定义，内部碰撞函数声明集中在 `collision_kernel.hpp`。
 公开计算入口为 `DsmcStepper::step()`。
 
-- [Theory & Algorithm](../../docs/source/rst_files/G_Collision/G03_DSMC/fundamentals.rst)：物理模型、标定、配对率、候选调度与柱坐标单元；公式旁展示真实源码。
-- [Source Guide](../../docs/source/rst_files/G_Collision/G03_DSMC/implementation.rst)：沿 `step()` 阅读数据、分组、工作区与写回流程。
-- [G03 DSMC Validation](../../docs/source/tests/009_collision/G03_DSMC.rst)：当前接口的调用示例与验证判据。
+## 测试与文档
 
-## 验证与维护
-
-当前测试位于 [tests/009_collision/G03_DSMC](../../tests/009_collision/G03_DSMC/README.md)，
+测试位于 [tests/009_collision/G03_DSMC](../../tests/009_collision/G03_DSMC/README.zh-CN.md)，
 包含 8 个核心检查组和 6 个碰撞弛豫检查。从仓库根目录运行：
 
 ```bash
 bash tests/009_collision/G03_DSMC/run.sh
 ```
 
-测试使用当前柱坐标接口；默认临时构建并自动清理。
-验证页面说明解析依据、统计容差和后续输运算例的判据。
+测试使用柱坐标接口；默认临时构建并自动清理。依赖、运行组和输出位置见测试 README。
 
-随机流用途编号 0–4 与抽样顺序属于重放约定。
+- [Theory & Algorithm](../../docs/source/rst_files/G_Collision/G03_DSMC/fundamentals.rst)：物理模型、标定、配对率、候选调度与柱坐标单元；公式旁展示真实源码。
+- [Source Guide](../../docs/source/rst_files/G_Collision/G03_DSMC/implementation.rst)：沿 `step()` 阅读数据、分组、工作区与写回流程。
+- [G03_DSMC Validation](../../docs/source/tests/009_collision/G03_DSMC.rst)：调用示例、解析依据、统计容差与检查范围。
+
+随机键的字段顺序、位置标记、用途编号 0–4 与抽样顺序属于重放约定；修改这些规则会改变碰撞轨迹。
 文档通过 `literalinclude` 引入当前源码。

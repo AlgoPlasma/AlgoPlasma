@@ -24,4 +24,4 @@ Compile the required `mod_*.f90` with preprocessing enabled, not the included `s
 
 The Sphinx [J_Fluid](../docs/source/rst_files/J_Fluid.rst) section contains independent J01 and J02 routes with their local data conventions, followed by J03 with its complete calling sequence.
 
-Commands and assertions belong to [tests/012_fluid](../tests/012_fluid/README.md), separate from algorithm derivations.
+Commands and assertions belong to [tests/012_fluid](../tests/012_fluid/README.en.md), separate from algorithm derivations.

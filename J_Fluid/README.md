@@ -27,4 +27,4 @@ Sphinx 的 [J_Fluid](../docs/source/rst_files/J_Fluid.rst) 按以下顺序组织
 1. J01 或 J02：独立阅读所需方法的网格、模型、推导与接口。
 2. J03：参考场闭合、瞬态推进和完整调用流程。
 
-运行命令与断言集中在 [tests/012_fluid](../tests/012_fluid/README.md)，不与算法推导混排。
+运行命令与断言集中在 [tests/012_fluid](../tests/012_fluid/README.zh-CN.md)，不与算法推导混排。

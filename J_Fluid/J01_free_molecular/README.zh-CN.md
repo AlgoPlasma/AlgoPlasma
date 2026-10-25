@@ -24,4 +24,4 @@
 
 编译 `mod_J01_neutral_free_molecular_2Drz.f90`，启用预处理并添加本目录的 include 路径。该模块包含表中的五个实现文件，构建时只编译模块文件。调用程序须采用相同实数精度。
 
-Sphinx 的 [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) 按“数据 → 入口 → 反射 → 跟踪 → 统计 → 完整计算”讲解。测试入口见 [J01 tests](../../tests/012_fluid/J01_free_molecular/README.md)。
+Sphinx 的 [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) 按“数据 → 入口 → 反射 → 跟踪 → 统计 → 完整计算”讲解。测试入口见 [J01 tests](../../tests/012_fluid/J01_free_molecular/README.zh-CN.md)。

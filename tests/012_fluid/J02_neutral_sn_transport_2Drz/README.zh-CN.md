@@ -1,5 +1,11 @@
 # J02 中性粒子 SN 输运测试
 
+[中文](README.zh-CN.md) | [English](README.en.md)
+
+对应实现见[模块说明](../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.zh-CN.md)。下列命令均从仓库根目录运行。
+
+需要 Bash 和 GNU Fortran（`gfortran`）；普通测试采用八字节实数并启用数组越界检查。
+
 本目录验证离散纵标（SN）中性粒子输运模块。测试分为逐过程检查、模块内组装和并行一致性三层。
 
 ## 局部过程与组装
@@ -47,8 +53,9 @@ bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run_parallel.sh
 记录包括分布系数、密度、两个速度分量、全部内部与边界面通量、收敛及错误状态。
 只在相同精度之间比较，不要求四字节与八字节结果相同。
 
-其余 8 个非 MPI 测试程序也分别在串行和 OpenMP 八字节版本中运行，
-保留数组越界检查和浮点异常捕获。2026-10-06 的 18 组记录对照和 16 次辅助运行全部通过。
+另外 11 个非 MPI 数值测试程序也分别在串行和 OpenMP 八字节版本中运行，共 22 次辅助运行，
+保留数组越界检查和浮点异常捕获。
+2026-10-06 的历史记录包含 18 组记录对照和当时的 16 次辅助运行，均已通过；当前程序清单以脚本为准。
 结果保存在 `build/parallel`。这些测试验证当前算例的一致性，不用于衡量加速比。
 
 ## 空间 MPI 与混合并行一致性
@@ -99,7 +106,7 @@ bash tests/012_fluid/J02_neutral_sn_transport_2Drz/clean.sh
 原等宽接口兼容性、镜面速度组配对，以及部分入口和三种反射比例下的粒子收支。
 此程序支持默认实数精度及 `-fdefault-real-8`。
 MPI 测试程序的第四个参数可设为 `nonuniform`，启用四个非均匀速率组。
-跨冷/快速度尺度的误差对比与局限见 [nonuniform_speed/README.md](nonuniform_speed/README.md)。
+跨冷/快速度尺度的误差对比与局限见 [nonuniform_speed/README.zh-CN.md](nonuniform_speed/README.zh-CN.md)。
 
 ## 相对速率与坐标转换
 
@@ -117,11 +124,11 @@ python3 tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/run_test.py
 ```
 
 脚本检查实际线程数，并逐字比较同一精度的串行/OpenMP 节点对 CSV。
-具体测试定义与误差见[说明](relative_speed/README.md)。
+具体测试定义与误差见[说明](relative_speed/README.zh-CN.md)。
 
 ## CEX 系数最小测试
 
 `test_J02_cex_coefficients.f90` 只保留三项双精度检查：合成截面与碰撞核、
 离子密度归一化、碰撞频率与损失系数。
 可单独运行 `bash tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/run.sh`。
-见[简短说明](cex_coefficients/README.md)。测试不使用真实 CEX 数据。
+见[简短说明](cex_coefficients/README.zh-CN.md)。测试不使用真实 CEX 数据。

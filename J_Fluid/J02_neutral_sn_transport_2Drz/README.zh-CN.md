@@ -2,8 +2,6 @@
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-[代码阅读顺序与接口命名](READING.zh-CN.md)
-
 本模块用离散纵标法（Discrete Ordinates Method，SN）求解二维 r-z 网格上的稳态中性粒子输运。
 空间离散采用一阶不连续 Galerkin 方法（P1-DG），体积与面积按柱坐标几何计算。
 
@@ -79,6 +77,7 @@
   Maxwell 速度分布。
 - `sub_J02_solve_source_iteration`：迭代反射边界直到达到给定相对误差，并返回迭代
   次数、最终变化量和失败位置。
+  启用漫反射时须提供壁面速度分布 `wall_shape`。
 - `sub_J02_reconstruct_cell_moments`：重构密度和平均速度。
 - `sub_J02_reconstruct_internal_face_fluxes`：重构带符号的内部面粒子数通量密度。
 - `sub_J02_reconstruct_open_boundary_fluxes`：把给定入射分布函数与单元内分布在面上的值
@@ -180,6 +179,11 @@ B0/ION 应用程序与 J03 当前仍是单域接口；分区结果交给现有 J
 `mod_J02_neutral_sn_transport_2Drz.f90` 模块保存共享类型，并通过预处理
 `include` 纳入按职责拆分、可独立阅读的 `sub_J02_sn_*.f90` 实现文件。
 
+可按以下顺序阅读，名称均省略文件前缀 `sub_J02_` 和后缀 `.f90`：
+
+- 碰撞系数：`sn_quadrature` → `sn_relative_speed` → `sn_reaction_kernel` → `sn_cex`。
+- 空间输运：`sn_transport` → `sn_reflection` → `sn_sweep` → `sn_reconstruction`。
+
 与仓库现有 Fortran 算法保持一致，源码使用默认 `real`；配套测试通过
 `-fdefault-real-8` 按双精度进行数值验证；并行一致性测试还覆盖编译器默认实数精度。
 
@@ -190,7 +194,7 @@ B0/ION 应用程序与 J03 当前仍是单域接口；分区结果交给现有 J
 `tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/run_comparison.py`
 在相同上限和组数下比较等宽、二次幂边界和分段等宽三种方案，输出解析矩误差、
 固定空间/角度下的输运误差、角度/截断检查、CSV、图和报告。
-运行说明与限制见[对比测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.md)。
+运行说明与限制见[对比测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.zh-CN.md)。
 
 ## 输入约定
 
@@ -220,12 +224,12 @@ B0/ION 应用程序与 J03 当前仍是单域接口；分区结果交给现有 J
 在浮点舍入误差内一致。三分量容器不代表 J02 增加了周向动力学。
 
 给定速度节点后，每个节点对的相对速率固定，与节点上的分布数值无关；
-只要节点及共同基底保持不变，就可以复用。此处尚未实现截面、离子分布平均或 CEX 增益损失。
-见[运动学测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.md)。
+只要节点及共同基底保持不变，就可以复用。截面求值和离子分布加权由下节的反应核与 CEX 系数过程完成。
+见[运动学测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.zh-CN.md)。
 
 ## 固定离子背景的 CEX 系数
 
 `sub_J02_sn_relative_speed.f90` 保存纯函数 `fun_J02_relative_speed` 及其速度重构/坐标转换辅助过程。
 `sub_J02_sn_reaction_kernel.f90` 保存反应通用的截面表、能量换算和节点对碰撞核 `sigma*g`。
 `sub_J02_sn_cex.f90` 负责离子 Maxwell 背景和 CEX 频率求和，调用通用反应核。
-本轮尚未接入 CEX 增益项和空间迭代。见[调用与三项检查](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.md)。
+CEX 系数尚未接入碰撞增益项和空间输运迭代。见[调用与三项检查](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.zh-CN.md)。
