@@ -20,9 +20,12 @@ class RandomStream {
 public:
     RandomStream(std::uint64_t seed, std::uint64_t step = 0, CellId cell = 0,
                  std::uint64_t event = 0, std::uint64_t purpose = 0, std::uint32_t substep = 0) {
-        state_ = mix(seed);
-        for (auto key : {step, cell, event, purpose, std::uint64_t{substep}}) {
-            state_ = mix(state_ ^ mix(key));
+        // 各字段按位置加入不同标记，再依次混合；字段顺序和标记属于重放约定。
+        state_ = 0;
+        std::uint64_t domain = 0;
+        for (auto key : {seed, step, cell, event, purpose, std::uint64_t{substep}}) {
+            domain += 0x9e3779b97f4a7c15ULL;
+            state_ = mix(state_ ^ mix(key + domain));
         }
     }
 

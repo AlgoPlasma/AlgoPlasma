@@ -66,6 +66,40 @@ void random_sampling() {
     for (int i = 0; i < 1000; ++i) {
         require(first.next() == second.next(), "keyed stream replay");
     }
+    const auto require_distinct_streams = [](RandomStream a, RandomStream b, const char* message) {
+        bool different = false;
+        for (int i = 0; i < 16; ++i) {
+            const auto x = a.next(), y = b.next();
+            different |= x != y;
+        }
+        require(different, message);
+    };
+    require_distinct_streams(RandomStream(42, 10, 37, 5, 3, 2),
+                             RandomStream(10, 42, 37, 5, 3, 2),
+                             "swapped seed and step must distinguish streams");
+    for (const std::uint64_t seed : {1, 42, 999}) {
+        require_distinct_streams(RandomStream(0, 0, 37, 5, 3, 2),
+                                 RandomStream(seed, seed, 37, 5, 3, 2),
+                                 "equal seed and step must retain the seed identity");
+    }
+    const std::array changed_keys{
+        RandomStream(92, 2, 37, 4, 1, 3), RandomStream(91, 3, 37, 4, 1, 3),
+        RandomStream(91, 2, 38, 4, 1, 3), RandomStream(91, 2, 37, 5, 1, 3),
+        RandomStream(91, 2, 37, 4, 2, 3), RandomStream(91, 2, 37, 4, 1, 4)
+    };
+    for (const auto& changed : changed_keys) {
+        require_distinct_streams(RandomStream(91, 2, 37, 4, 1, 3), changed,
+                                 "each key field must affect the stream");
+    }
+    constexpr std::array purposes{random_purpose::rounding, random_purpose::pair_selection,
+        random_purpose::acceptance, random_purpose::scattering, random_purpose::candidate_clock};
+    for (std::size_t i = 0; i < purposes.size(); ++i) {
+        for (std::size_t j = 0; j < i; ++j) {
+            require_distinct_streams(RandomStream(91, 2, 37, 4, purposes[i], 3),
+                                     RandomStream(91, 2, 37, 4, purposes[j], 3),
+                                     "collision purposes must distinguish streams");
+        }
+    }
     RandomStream rng(12345);
     for (int i = 0; i < 200000; ++i) {
         const auto closed = rng.uniform(), open = rng.open_uniform();

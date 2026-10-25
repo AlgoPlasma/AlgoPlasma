@@ -76,13 +76,13 @@ G03_DSMC
 
    初次学习可先读完本页的 DSMC/MCC 对比、完整流程与交互演示，
    再顺序阅读 **Theory & Algorithm → Source Guide**。
-   完整调用示例与验证判据集中在 **Tests → 009 Collision → G03 DSMC Validation**，
+   完整调用示例与验证判据集中在 :doc:`Tests → 009_collision Tests → G03_DSMC Validation </tests/009_collision/G03_DSMC>`，
    用于组织算例和检查结果。
 
 .. container:: ap-lang ap-lang-en
 
    For a first reading, finish this page before proceeding through **Theory & Algorithm → Source Guide**.
-   Complete call examples and regression criteria are under **Tests → 009_collision Tests → G03_DSMC Validation**.
+   Complete call examples and regression criteria are under :doc:`Tests → 009_collision Tests → G03_DSMC Validation </tests/009_collision/G03_DSMC>`.
 
 .. toctree::
    :hidden:

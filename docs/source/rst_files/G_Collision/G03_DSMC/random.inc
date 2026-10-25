@@ -99,12 +99,16 @@ Assigning Random Streams to Physical Tasks
 .. container:: ap-lang ap-lang-zh
 
    步进器先按单元 ID、粒子 ID 排序，同一物理单元的同一候选因而面对同一组有序样本。
-   构造函数混合这些稳定标识来初始化 ``state_``；原始粒子数组中的临时存储索引不参与流身份。
+   构造函数按上述固定顺序逐项混合这些标识，每个字段先加入对应的位置标记，
+   再更新 ``state_``。位置标记区分字段的作用，消除种子与时间步的交换对称性及两者相等时的直接抵消。
+   原始粒子数组中的临时存储索引不参与流身份。
 
 .. container:: ap-lang ap-lang-en
 
    The stepper sorts by cell ID and particle ID, so a candidate in a given physical cell
-   sees the same ordered samples. The constructor mixes these stable identifiers into ``state_``.
+   sees the same ordered samples. The constructor folds the identifiers into ``state_`` in the fixed order above,
+   adding a distinct position tag to each field before mixing it into the state.
+   Position tags distinguish field roles and remove the seed/step exchange symmetry and cancellation when seed equals step.
    Temporary storage indices in the original particle array are excluded from stream identity.
 
 .. literalinclude:: ../../../../../G_Collision/G03_DSMC/random.hpp
@@ -141,6 +145,7 @@ Assigning Random Streams to Physical Tasks
    连续时钟在每个候选使用 ``candidate_clock``，并从 ``open_uniform`` 抽取等待强度。
    越过子步末端的最后一次等待用于判断结束，报告只统计实际进入选对过程的候选。
    不同物理时间步或子步需要提供不同的键；重复全部标识会重用同一随机流。
+   字段顺序、位置标记和混合方式同样属于重放约定，修改这些组合规则会改变随机序列及碰撞轨迹。
 
 .. container:: ap-lang ap-lang-en
 
@@ -148,6 +153,8 @@ Assigning Random Streams to Physical Tasks
    ``open_uniform``. The final wait crossing the substep end only determines termination;
    reported candidates count those that actually reach pair selection. Different physical steps
    or substeps need different keys. Repeating every identifier reuses the same stream.
+   Field order, position tags and mixing operations also form part of the replay convention;
+   changing these composition rules changes random sequences and collision trajectories.
 
 .. container:: ap-lang ap-lang-zh
 

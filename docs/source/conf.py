@@ -167,7 +167,7 @@ def mark_reference_links_in_html(app, exception):
 def keep_g03_navigation_shallow(app, pagename, templatename, context, doctree):
     """Keep G03 chapters and selected theory sections at their actual depth."""
     from sphinx import addnodes
-    from sphinx.environment.adapters.toctree import global_toctree_for_doc
+    from sphinx.environment.adapters.toctree import TocTree
 
     root = "rst_files/G_Collision/G03_DSMC"
     chapters = (
@@ -208,9 +208,8 @@ def keep_g03_navigation_shallow(app, pagename, templatename, context, doctree):
             kwargs.pop("maxdepth")
         kwargs.setdefault("collapse", True)
         kwargs.setdefault("includehidden", False)
-        tree = global_toctree_for_doc(
-            app.env, pagename, app.builder, tags=app.builder.tags, **kwargs
-        )
+        # The adapter supplies builder tags only on Sphinx versions that need them.
+        tree = TocTree(app.env).get_toctree_for(pagename, app.builder, **kwargs)
         if tree is None:
             return ""
 

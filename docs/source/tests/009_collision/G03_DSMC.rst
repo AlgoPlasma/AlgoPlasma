@@ -239,16 +239,16 @@ Verification Scope
 
 .. _g03-validation-random:
 
-.. rubric:: 4. random — sampling endpoints and index frequencies
+.. rubric:: 4. random — stream keys, sampling endpoints and index frequencies
 
 .. container:: ap-lang ap-lang-zh
 
-   **测试目的：** 确认实数端点和整数索引的抽样约定正确，并检查索引的等概率性。
+   **测试目的：** 检查随机键组合能区分字段与用途，再确认实数端点和整数索引的抽样约定及索引的等概率性。
    索引偏差会使部分粒子更频繁地被选中；端点错误可能引起越界或对数等待时间计算异常。
 
 .. container:: ap-lang ap-lang-en
 
-   **Purpose:** verify real-number endpoint conventions and equal-probability integer indices.
+   **Purpose:** check that key composition distinguishes fields and purposes, then verify real-number endpoints and equal-probability integer indices.
    These checks constrain selection bias, out-of-range indexing and logarithmic waiting-time errors.
 
 .. container:: ap-lang ap-lang-zh
@@ -266,12 +266,17 @@ Verification Scope
    检查范围 :math:`[0,n)`，并按二项分布的理论方差检验每个索引的频数。
    非二次幂的范围用于检查整数映射的偏差。
    相同随机键还须逐次复现，并覆盖大整数范围和空范围异常。
+   键组合回归比较交换 ``seed`` 与 ``step``、不同运行中各自令 ``seed=step``、
+   逐一修改单个字段以及更换抽样用途后的序列，要求这些指定组合产生不同序列，防止字段混合退化为重复随机流。
 
 .. container:: ap-lang ap-lang-en
 
    Check 200000 draws in each of :math:`[0,1)` and :math:`(0,1)`.
    For each :math:`n=1,3,7,17,1000`, draw 200000 indices in :math:`[0,n)` and compare frequencies using binomial variance.
    Non-power-of-two ranges test integer mapping. Also check identical random-key replay, large integer ranges and empty-range exceptions.
+   Key-composition regressions compare sequences after swapping ``seed`` and ``step``, using different runs with ``seed=step``,
+   changing each field separately and changing sampling purposes. These specified combinations must produce different sequences,
+   guarding against key mixing that collapses distinct tasks onto repeated streams.
 
 .. _g03-validation-implementation:
 
