@@ -6,27 +6,60 @@ Learn how wave growth and coupling lead to the probe-data analysis in Brown &
 Jorns, *Physical Review Letters* **130**, 115101 (2023),
 [doi:10.1103/PhysRevLett.130.115101](https://doi.org/10.1103/PhysRevLett.130.115101).
 
-## Available now
+## Reading guide
 
-The [first page](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
+The [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
+introduces the purpose and lists five peer articles in reading order.
+
+The [first page](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 derives the structure of Eq. (1) of Brown & Jorns (2023). It introduces a real wave, its complex
 envelope, motion of that envelope, quadratic coupling, and restoration of the
 fast phase. Optional derivations fold away. An interactive wave packet separates
 crest motion, envelope motion, and amplitude growth. Its values are illustrative,
 not measurements or a kinetic EDI calculation.
 
-The English view uses English only; the Chinese view includes English terms.
-Revision 4 expands the carrier-phase derivative, proves the matched phase-product
-identity, and gives the one-dimensional full-wave equation before extending it
-to three dimensions. Detailed differentiation, substitution and ordered-pair
-counting fold away. The maintained-input coupling example has been removed.
-Only this revision's changes are colored. See [equation authoring](EQUATIONS.md)
-before adding another K05 page or equation.
+The [second page](../../docs/source/rst_files/K_Diagnostics/K05_envelope_coefficients.rst)
+derives the envelope equation from the plasma response: self-consistency,
+nearby-wave offsets, the group velocity and growth rate, then a separate
+second-order charge response for quadratic coupling. It works in one dimension
+before extending to three. Poisson details, chain-rule calculations and the
+approximation limits are optional disclosures.
 
-**Status: documentation only.** There are no K05 numerical routines, probe-data
-scripts, numerical examples, or numerical tests yet. The illustration is a
-browser teaching aid, not an analysis API. No experimental figures have been
-reproduced.
+A second interactive illustration connects a Gaussian band of wavenumbers to
+its wave packet. Spectral-width and time controls use a linear dispersion
+branch; the exact functions are given in a disclosure. The Taylor explanation
+connects one-variable calculus to the two-variable expansion, retains the
+omitted terms, and compares the sizes of terms in the weak-growth approximation.
+The Poisson substitution is also expanded step by step.
+
+The [third page](../../docs/source/rst_files/K_Diagnostics/K05_probe_signals.rst)
+connects a moving wave to fixed-probe records and derives the time-frequency
+form of Eq. (2). It specifies signed Fourier coefficients, normalization and
+the K01 FFT sign conversion. Optional calculations cover the cancellation,
+finite-record endpoints and propagation between two probes. Python examples
+map the Fourier convention to NumPy; Nyquist frequency and both integrations
+are explained step by step. A linked spatial
+wave and two time traces illustrate the measurement; the ion-current proxy
+is explained separately from the ideal potential detectors.
+
+The [fourth page](../../docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst)
+introduces record averages, bin power versus PSD, cross-power phase, the
+bispectrum and an optional squared-bicoherence normalization. A synthetic
+phase-ensemble illustration keeps powers fixed while phase relations change.
+The page derives a continuous mean-square-potential balance, then introduces
+the two-probe cross bispectrum and a short NumPy moment function.
+
+The [fifth page](../../docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst)
+starts with one pair and two coefficients, then derives the full moment matrix,
+identifiability condition and Kim stationary correction. The correction separates
+measured and modelled power, explains each added moment equation, and develops
+scalar elimination before its optional matrix form. Phase rotation and group velocity connect
+the fit to amplitude growth and mean-square transfer; continuous and finite-step
+budgets and the reference normalization are distinguished explicitly.
+
+The English views use English only; the Chinese views include English terms.
+All five articles use the shared K05 equation sequence and cross-page references.
+See [equation authoring](EQUATIONS.md) before adding a page or equation.
 
 ## Planned path from data to figures
 
@@ -42,17 +75,32 @@ reproduced.
    provenance. Matching the published figures requires appropriate experimental
    data and parameters; none are bundled here.
 
-These are future steps, not implemented commands. Resolve the article's phase,
-normalization, pair-counting and factor-of-two conventions before implementation.
+Resolve the article's phase, normalization, pair-counting and factor-of-two
+conventions before implementation.
 K01 currently uses NumPy's forward `exp(-i omega t)` transform and the cross
 spectrum `X1 * conj(X2)`; do not change that convention implicitly.
 
 ## Edit, build, and continue
 
-- Page: `docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst`.
+- Pages: `docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst` and
+  `K05_envelope_coefficients.rst` and `K05_probe_signals.rst` in the same directory; the first article is
+  `K05_wave_growth.rst` and the entry page is a short overview.
 - Teaching assets: `docs/source/_static/K_Diagnostics/k05-wave-packet.{js,css,svg}`.
+- Packet-band assets in that directory: `k05-packet-band.js` and bilingual
+  `k05-packet-band-{en,zh}.svg` fallbacks. To regenerate a fallback, load the
+  JavaScript with Node's `require`, call `plotSvg(0.30, 0, lang, uniqueId)`,
+  and save the returned SVG as UTF-8. The browser uses the same renderer.
+- Probe illustration: `k05-probe-signals.js` and bilingual
+  `k05-probe-signals-{en,zh}.svg` fallbacks. Regenerate using the exported
+  `plotSvg(0.5, 0, lang, uniqueId)` renderer. Controls use arbitrary units.
 - Numbering and link infrastructure: see [EQUATIONS.md](EQUATIONS.md).
-- Navigation: `docs/source/rst_files/K_Diagnostics.rst` and the K-group READMEs.
+- Fifth article: `docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst`.
+- Fourth article: `docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst`.
+- Phase statistics: `k05-phase-statistics.js` and bilingual SVG fallbacks in the
+  K05 static-asset directory. The exported `plotSvg(mode, deltaDegrees, seed,
+  count, lang, uniqueId)` uses exact synthetic coefficients; the default is
+  `("fixed", 60, 7, 32, lang, uniqueId)`.
+- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the five articles.
 - Install the existing `docs/requirements.txt` in a suitable environment; the
   documentation configuration also invokes Doxygen. From the repository root:
 
@@ -65,9 +113,9 @@ Open `http://localhost:8055/rst_files/K_Diagnostics/K05_bispectral_transfer.html
 Do not edit the generated HTML. Check both language views, equations, disclosures,
 and the time/growth/play controls after edits.
 
-Continuation note (2026-10-23): the first review should improve this short lesson
-using the reader's questions. Then explain the time Fourier transform from Eq.
-(1) to Eq. (2), before implementing inversion. Keep the main narrative simple;
+Reading order: wave growth and coupling → the origin of the envelope equation
+and its coefficients → fixed-probe records and the time Fourier form of Eq. (2)
+→ power, cross and bispectral statistics. Keep the main narrative simple;
 put technical qualifications in optional disclosures. Check equations against
 the original paper, printed page 115101-2. The local literature study project's
 shared `HANDOFF.md` records the wider reading history; this checkout and that

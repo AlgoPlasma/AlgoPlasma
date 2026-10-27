@@ -34,11 +34,6 @@ Use this directive for K05 display equations instead of manual `\tag` numbers.
 The current renderer uses `math_numfig = False` (the Sphinx default); do not
 enable global figure-based math numbering without adapting this domain.
 
-Revision classes are temporary reading aids. Remove old `k05-added` and
-`k05-revised` markers before marking the next round. The optional directive
-class `k05-new-number` colors a newly assigned number without coloring the
-unchanged formula. It is not required for numbering or references.
-
 With documentation dependencies installed, run from the repository root:
 
 ```sh
@@ -51,3 +46,65 @@ Revision 4 retires IDs `example-inputs`, `example-forcing`, and `example-solutio
 entries reserved; do not reuse them. New derivation steps have numbers 18–21.
 The envelope equation remains K05.7, the one-dimensional result is K05.20,
 and the three-dimensional result remains K05.15.
+
+The response derivation now lives in `K05_envelope_coefficients.rst`.
+Moved IDs `dielectric-expansion` and `response-coefficients` keep numbers 16
+and 17; new intermediate steps use 22–34. Cross-page equation roles resolve
+to their new document. Legacy fragments for 16 and 17 on the first page lead
+to the next-page preview, which links to the relocated equations.
+Revision 6 adds 35–44 for the packet spectrum, Taylor expansions, offset
+substitution, growth-ordering checks and Poisson rearrangement. Add further
+IDs after 99; do not renumber the sequence into reading order.
+
+The overview and articles use neutral text without temporary revision colours.
+Illustration colours continue to identify the plotted quantities.
+Implementation-status reminders belong in the project handoff, not the reader pages.
+
+The probe-record page `K05_probe_signals.rst` adds 45–59. Its time Fourier
+series uses normalized two-sided voltage coefficients and a positive exponent
+in the forward transform. The K01/NumPy forward FFT has the opposite sign;
+the page gives the conversion explicitly. Do not merge these conventions silently.
+
+Revision 8 keeps `K05_bispectral_transfer.rst` as a short overview. Its toctree
+lists `K05_wave_growth`, `K05_envelope_coefficients`, and `K05_probe_signals`
+as peer documents. The child documents must not contain one another in a toctree.
+The first article retains its semantic labels; equation roles find its new URL.
+`k05-legacy-links.js`, loaded only by the overview, routes observed old fragment
+URLs to the moved article (and old 16/17 fragments to the response page).
+
+Numbers 60–62 are the Nyquist definition, integration by parts and integrating
+factor derivation. Existing IDs and numbers, including 54 and 56, stay unchanged.
+The NumPy snippets use default FFT normalization and real one-dimensional inputs;
+the positive-exponent coefficients agree with `ifft(s)` and `conj(fft(s))/N`.
+
+Revision 10 adds the fourth peer article `K05_spectral_statistics.rst` and
+numbers 63–75. Preserve the positive-exponent, normalized voltage coefficients.
+Bin powers and cross powers have units V^2; the bispectra have units V^3.
+The auto-bispectrum is <X1 X2 X3*>; the cross bispectrum is <Y3 X1* X2*>.
+The latter reduces to the conjugate of the former when Y=X. State conventions
+before connecting them to estimators. The continuous power balance keeps the
+group velocity on the left and the factor 2 on both growth and nonlinear terms;
+it is an explanatory derivation, not a redefinition of the paper's discrete rate.
+The interactive illustration prescribes phases and uses exact coefficients;
+it does not simulate coupling or infer causality. Finite random averages do
+not generally vanish. The sample NumPy function is in a disclosure, not an API.
+
+Revision 11 adds `K05_coefficient_inference.rst` as the fifth peer, with 76–93.
+Use b_i=<X Z_i*> and d_i=<Y Z_i*> as column vectors; F_ij=<Z_i* Z_j>.
+Keep all fourth-order entries. Merge duplicate ordered products before fitting;
+the combined coefficient contains both orders when the inputs differ.
+Joint least-squares estimation and Kim's stationary model-power inference are
+different estimators and must not be presented as interchangeable.
+Raw L,Q retain propagation phase; use exp(-i delta) before the continuous rate
+conversion. Preserve the factor 2 in the continuous mean-square balance, and
+distinguish it from the displayed reference Eq. (6) and the finite-step Q-squared
+term. The overview credits Yinjian Zhao, Harbin Institute of Technology.
+
+Revision 12 removes the fifth-page NumPy disclosure and its unused reference.
+The Kim disclosure introduces modelled/nonideal Fourier components, their power
+split, explicit cross-power terms, and the three scalar moment equations before
+stationarity. New intermediate equations use 94–99. Equations 84–86 retain their
+numbers and LaTeX inside a nested algebra disclosure; equation links reveal both
+levels. The nonideal-moment approximation is an assumption, not a general noise
+cancellation identity. Pages remain neutral; wait for reader feedback before
+starting another page.

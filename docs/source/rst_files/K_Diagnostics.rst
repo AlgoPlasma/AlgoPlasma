@@ -65,9 +65,10 @@ K_Diagnostics
    :doc:`K04 呼吸波形提取 <K_Diagnostics/K04_breathing_waveform>` 是独立的学习入口，
    从人工数据逐步说明怎样从同一空间点、相同条件下的重复记录得到相位重复波形 C 与残差 R。
 
-   :doc:`K05 波增长与耦合 <K_Diagnostics/K05_bispectral_transfer>` 是正在建立的独立学习入口：
-   第一课从简单波形推导 Brown 与 Jorns (2023) 公式 (1)，提供折叠推导和互动波包图。
-   目前仅有教学页面；双谱反演与探针数据分析脚本尚未实现。
+   :doc:`K05 波增长与耦合 <K_Diagnostics/K05_bispectral_transfer>` 是独立的学习入口：
+   第一页面从简单波形推导 Brown 与 Jorns (2023) 公式 (1)，提供折叠推导和互动波包图。
+   :doc:`第二页面 <K_Diagnostics/K05_envelope_coefficients>` 从等离子体响应推导包络方程及其系数。
+   :doc:`第三页面 <K_Diagnostics/K05_probe_signals>` 用固定探针、时间傅里叶系数和双探针比较连接文献公式 (1) 与 (2)。
 
    .. rubric:: 相关测试
 
@@ -131,10 +132,13 @@ K_Diagnostics
    Artificial data illustrate how repeated records at one spatial point under the same conditions
    yield a phase-repeatable waveform C and a residual R.
 
-   :doc:`K05 wave growth and coupling <K_Diagnostics/K05_bispectral_transfer>` is a new learning route:
-   the first lesson builds Brown & Jorns (2023) Eq. (1) from a simple wave,
-   with optional derivations and an interactive wave packet. It currently provides
-   documentation only; bispectral inversion and probe-data analysis scripts are not yet implemented.
+   :doc:`K05 wave growth and coupling <K_Diagnostics/K05_bispectral_transfer>` is a learning route:
+   the first page builds Brown & Jorns (2023) Eq. (1) from a simple wave,
+   with optional derivations and an interactive wave packet. The
+   :doc:`second page <K_Diagnostics/K05_envelope_coefficients>` derives the
+   envelope equation and its coefficients from the plasma response. The
+   :doc:`third page <K_Diagnostics/K05_probe_signals>` connects Eqs. (1) and (2)
+   through fixed probe records, time Fourier coefficients and a two-probe comparison.
 
    .. rubric:: Related Tests
 

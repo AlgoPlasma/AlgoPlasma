@@ -1,10 +1,5 @@
-/* Scoped to the K05 teaching page. */
+/* Shared layout for the K05 theory pages. */
 .k05-lesson .rubric { margin-top: 1.8rem; }
-.k05-lesson .k05-added { color: #145da0; }
-.k05-lesson .k05-revised { color: #922b72; }
-.k05-lesson .k05-added a, .k05-lesson .k05-revised a { color: inherit; text-decoration: underline; }
-.k05-lesson .k05-revision-key { font-size: .86rem; padding: .6rem .8rem; background: #f2f5f8; }
-.k05-lesson .k05-figure-revised { border-left: 3px solid #922b72; }
 /* Keep the number and its permalink in a fixed column, outside math scrolling. */
 .k05-lesson div.math {
   display: grid;
@@ -82,8 +77,47 @@
   .k05-lesson .k05-note { padding: .7rem; }
 }
 
-/* Current revision: newly assigned numbers; existing equation text stays neutral. */
-.k05-lesson .k05-new-number .eqno { color: #922b72; }
-.k05-lesson .k05-note summary.k05-revised { color: #922b72; }
-.k05-lesson .k05-note.k05-added > summary { color: #145da0; }
-.k05-lesson .k05-note.k05-revised > summary { color: #922b72; }
+.k05-band {
+  color: #243746;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: .4rem;
+  padding: 1rem;
+  margin: 1.2rem 0;
+}
+.k05-band-title { font-weight: 600; margin-bottom: .8rem; }
+.k05-band svg, .k05-band img { display: block; width: 100%; height: auto; }
+.k05-band-controls { display: flex; align-items: end; flex-wrap: wrap; gap: 1rem; }
+.k05-band-controls label { display: flex; flex: 1 1 12rem; flex-direction: column; gap: .3rem; font-size: .9rem; }
+.k05-band-controls input { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-band-controls button { min-height: 2.3rem; background: #edf4f8; border: 1px solid #889cae; border-radius: .25rem; padding: .4rem .7rem; font: inherit; color: #243746; cursor: pointer; }
+.k05-band :focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-band-readout { font-size: .86rem; font-variant-numeric: tabular-nums; margin: .8rem 0 .2rem; }
+
+.k05-probes { color: #243746; background: #fff; border: 1px solid #cbd5e1; border-radius: .4rem; padding: 1rem; margin: 1.2rem 0; }
+.k05-probes svg, .k05-probes img { display: block; width: 100%; height: auto; }
+.k05-probes-title { font-weight: 600; margin-bottom: .8rem; }
+.k05-probes-controls { display: flex; gap: 1rem; flex-wrap: wrap; align-items: end; }
+.k05-probes-controls label { display: flex; flex: 1 1 12rem; flex-direction: column; gap: .3rem; font-size: .9rem; }
+.k05-probes-controls input { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-probes-controls button { min-height: 2.3rem; background: #edf4f8; border: 1px solid #889cae; border-radius: .25rem; padding: .4rem .7rem; font: inherit; color: #243746; cursor: pointer; }
+.k05-probes :focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-probes-readout { font-size: .86rem; font-variant-numeric: tabular-nums; margin: .8rem 0 .2rem; }
+
+.k05-statistics {
+  padding: 1rem; margin: 1rem 0 .7rem; border: 1px solid #cbd5e1;
+  border-radius: .5rem; background: #fff; color: #243746;
+}
+.k05-statistics svg, .k05-statistics img { display: block; width: 100%; height: auto; }
+.k05-statistics-title { margin: 0 0 .6rem; font-weight: 600; }
+.k05-statistics-controls { display: flex; flex-wrap: wrap; gap: .8rem; align-items: end; }
+.k05-statistics-controls label { display: flex; flex-direction: column; gap: .35rem; flex: 1 1 10rem; font-size: .9rem; }
+.k05-statistics-controls input { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-statistics-controls select, .k05-statistics-controls button {
+  min-height: 2.3rem; padding: .4rem .65rem; border: 1px solid #889cae;
+  border-radius: .25rem; background: #fff; color: #243746; font: inherit;
+}
+.k05-statistics-controls button { cursor: pointer; background: #edf4f8; }
+.k05-statistics :focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-statistics-readout { font-size: .85rem; margin: .7rem 0; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .k05-statistics { padding: .6rem; } }
