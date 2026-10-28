@@ -1,0 +1,735 @@
+{
+  "schema_version": 1,
+  "experiment": {
+    "data_id": "z5p5_a3p7",
+    "instrument": "SIGLENT SDS814X HD",
+    "channels": [
+      1,
+      3
+    ],
+    "capture_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "synchronized_pairs": true,
+    "same_operating_condition": true,
+    "diagnostic": "ion saturation current",
+    "axial_distance_mm": 5.5,
+    "azimuthal_separation_mm": 3.7,
+    "c1_to_c3_physical_direction": null,
+    "voltage_to_current_a_per_v": null,
+    "relative_channel_gain_calibration": null,
+    "relative_channel_delay_s": null,
+    "discharge_parameters": {
+      "log_time": "19:12",
+      "voltage_v": 200,
+      "recorded_current_a": 2.814,
+      "source": "20261014_zzp.xlsx, sheet 1014, row 9 (E9/F9); data-owner mapping on 2026-10-28",
+      "usage": "Experiment context only; not used to set FFT axes or infer local plasma parameters"
+    },
+    "group_velocity_m_per_s": null,
+    "dc_offset_sign_verified": null,
+    "voltage_display_reference": "Each record mean is removed; no DC-offset sign is assumed",
+    "supplementary_evidence": {
+      "lab_reader": "tool02_readbin.py subtracts header vertical offset and cites a DC calibration not included in this dataset",
+      "scope_photo": "Post-experiment photo: 100 MSa/s, 10 Mpts, 10 ms/div, C1/C3 2 V/div, 1X, DC1M, FULL; not a screenshot of these stored waveforms",
+      "operating_log": "20261014_zzp.xlsx, sheet 1014, row 9 at 19:12, selected by data owner; row note says first acquisition had two groups, while supplied data have four numbered captures"
+    },
+    "provenance": {
+      "geometry": "Data-owner note supplied with captures",
+      "synchronization_condition_diagnostic": "Data-owner confirmation, 2026-10-28",
+      "sampling_voltage_scales": "Read separately from each binary header"
+    }
+  },
+  "raw_files": [
+    {
+      "file": "SDS814X_HD_Binary_C1_2.bin",
+      "sha256": "d059f9e598401c983def1a90c331c4cc71ba7cea769dbc1f4e1ba764cf325288",
+      "version": 4,
+      "channel": 1,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.5,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.39933511375,
+      "mean_v_if_add_offset": 0.8993351137500001,
+      "mean_v_if_subtract_offset": -0.10066488624999997,
+      "displayed_mean_v": -3.2378011383116243e-17,
+      "std_v": 0.6275814886366546,
+      "min_v": -5.345168447083334,
+      "max_v": 2.817331552916667,
+      "min_code": 13776,
+      "max_code": 45120,
+      "storage_rail_count": 0
+    },
+    {
+      "file": "SDS814X_HD_Binary_C3_2.bin",
+      "sha256": "7c469d72ffa384d64ca0d6586ae4da99de5062f9f6d9a694218dc45a50dcf07b",
+      "version": 4,
+      "channel": 3,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.6333333253860474,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.9166194179166667,
+      "mean_v_if_add_offset": 1.549952743302714,
+      "mean_v_if_subtract_offset": 0.2832860925306193,
+      "displayed_mean_v": -1.3733369996771216e-17,
+      "std_v": 0.7561449210343857,
+      "min_v": -6.579119417916666,
+      "max_v": 2.9250472487500003,
+      "min_code": 11024,
+      "max_code": 47520,
+      "storage_rail_count": 0
+    },
+    {
+      "file": "SDS814X_HD_Binary_C1_3.bin",
+      "sha256": "2802f7a85e03a8b76389d8c965910b3c011d88738bf112d6ca2ed8655e93c641",
+      "version": 4,
+      "channel": 1,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.5,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.39821868083333334,
+      "mean_v_if_add_offset": 0.8982186808333333,
+      "mean_v_if_subtract_offset": -0.10178131916666666,
+      "displayed_mean_v": -5.8207660913467405e-18,
+      "std_v": 0.6292079229817428,
+      "min_v": -6.619052014166667,
+      "max_v": 2.7934479858333336,
+      "min_code": 8880,
+      "max_code": 45024,
+      "storage_rail_count": 0
+    },
+    {
+      "file": "SDS814X_HD_Binary_C3_3.bin",
+      "sha256": "53d6ff8c617914e368cc776038cfb7e2728626f5a1e92d416367ad10d4fd91f6",
+      "version": 4,
+      "channel": 3,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.6333333253860474,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.9153537533333331,
+      "mean_v_if_add_offset": 1.5486870787193805,
+      "mean_v_if_subtract_offset": 0.28202042794728577,
+      "displayed_mean_v": 2.0179413695586846e-16,
+      "std_v": 0.7583602787233682,
+      "min_v": -7.5861870866666665,
+      "max_v": 2.809646246666667,
+      "min_code": 7152,
+      "max_code": 47072,
+      "storage_rail_count": 0
+    },
+    {
+      "file": "SDS814X_HD_Binary_C1_4.bin",
+      "sha256": "7d853b336e2cb28e11d17d718ca475e12a0cdc9f6c5b5bcf1f716bc3cbb68aca",
+      "version": 4,
+      "channel": 1,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.5,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.4012401120833334,
+      "mean_v_if_add_offset": 0.9012401120833333,
+      "mean_v_if_subtract_offset": -0.09875988791666662,
+      "displayed_mean_v": -3.6425262806005774e-17,
+      "std_v": 0.6263214179216355,
+      "min_v": -5.526240112083333,
+      "max_v": 2.9404265545833335,
+      "min_code": 13088,
+      "max_code": 45600,
+      "storage_rail_count": 0
+    },
+    {
+      "file": "SDS814X_HD_Binary_C3_4.bin",
+      "sha256": "cff7ca9da1b1a09d621e98b6f18f1181ed5275e5bd1cf02ccdda4f9b1a716937",
+      "version": 4,
+      "channel": 3,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.6333333253860474,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.9133777658333332,
+      "mean_v_if_add_offset": 1.5467110912193807,
+      "mean_v_if_subtract_offset": 0.2800444404472858,
+      "displayed_mean_v": 1.4133547665551306e-16,
+      "std_v": 0.7557868915418204,
+      "min_v": -6.250877765833334,
+      "max_v": 3.003288900833333,
+      "min_code": 12272,
+      "max_code": 47808,
+      "storage_rail_count": 0
+    },
+    {
+      "file": "SDS814X_HD_Binary_C1_5.bin",
+      "sha256": "0efc70887e6b4981d82b86cd888d2acfd9bf231f0ab5b44fac3c58146d558c88",
+      "version": 4,
+      "channel": 1,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.5,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.39638624833333336,
+      "mean_v_if_add_offset": 0.8963862483333334,
+      "mean_v_if_subtract_offset": -0.10361375166666664,
+      "displayed_mean_v": -2.4374458007514478e-17,
+      "std_v": 0.6265563448965638,
+      "min_v": -4.458886248333333,
+      "max_v": 2.7244470849999995,
+      "min_code": 17168,
+      "max_code": 44752,
+      "storage_rail_count": 0
+    },
+    {
+      "file": "SDS814X_HD_Binary_C3_5.bin",
+      "sha256": "c1168bf28e045dff046b6a922dc972c1bca56ee5e0303dda58b78c0ee16504cf",
+      "version": 4,
+      "channel": 3,
+      "samples": 10000000,
+      "fs_hz": 100000000.0,
+      "duration_s": 0.1,
+      "dt_s": 1e-08,
+      "nyquist_hz": 50000000.0,
+      "storage_bits": 16,
+      "payload_endian": "little",
+      "v_per_div": 2.0,
+      "offset_v": 0.6333333253860474,
+      "codes_per_div": 7680,
+      "probe_factor": 1.0,
+      "t_start_s": -0.05,
+      "voltage_reference": "record mean",
+      "offset_sign": null,
+      "dc_level_verified": false,
+      "code_centered_mean_v": 0.9154551204166665,
+      "mean_v_if_add_offset": 1.548788445802714,
+      "mean_v_if_subtract_offset": 0.2821217950306192,
+      "displayed_mean_v": 1.2078089639544487e-16,
+      "std_v": 0.7556103465639572,
+      "min_v": -5.3946217870833335,
+      "max_v": 2.9262115462500002,
+      "min_code": 15568,
+      "max_code": 47520,
+      "storage_rail_count": 0
+    }
+  ],
+  "fs_hz": 100000000.0,
+  "direction": "C1 predictors to C3 target; no physical propagation direction assumed",
+  "models": [
+    "linear",
+    "linear_quadratic"
+  ],
+  "main_configuration": "n2048_b5",
+  "target_band_hz": [
+    500000.0,
+    5000000.0
+  ],
+  "fourier": "exp(+iwt)/N",
+  "window": "periodic Hann",
+  "detrend": "segment mean",
+  "overlap": 0,
+  "intercept": false,
+  "rcond": 1e-10,
+  "condition_limit": 100000000.0,
+  "scaling": "training-column RMS only; coefficients restored",
+  "pair_rule": "signed nonzero b<=c, b+c=target, |b| and |c| within input band",
+  "configurations": {
+    "n2048_b5": {
+      "nperseg": 2048,
+      "input_max_mhz": 5,
+      "targets": 92,
+      "quadratic_columns_range": [
+        51,
+        96
+      ],
+      "example_frequency_hz": 2001953.125,
+      "folds": [
+        {
+          "heldout": 2,
+          "train": [
+            3,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.04325611496118154,
+            0.042462803841023695
+          ],
+          "band_improvement": 0.018339860638658334,
+          "bins_improved": 88,
+          "reliable_bins": 92,
+          "condition_max": 10.739303116668975
+        },
+        {
+          "heldout": 3,
+          "train": [
+            2,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.043542365130407885,
+            0.04259983447521482
+          ],
+          "band_improvement": 0.021646289823031406,
+          "bins_improved": 88,
+          "reliable_bins": 92,
+          "condition_max": 10.764519253346275
+        },
+        {
+          "heldout": 4,
+          "train": [
+            2,
+            3,
+            5
+          ],
+          "band_nmse": [
+            0.043171546939823884,
+            0.0423487230647559
+          ],
+          "band_improvement": 0.019059402161680894,
+          "bins_improved": 87,
+          "reliable_bins": 92,
+          "condition_max": 10.712619659532816
+        },
+        {
+          "heldout": 5,
+          "train": [
+            2,
+            3,
+            4
+          ],
+          "band_nmse": [
+            0.04327813457633451,
+            0.04252849755996895
+          ],
+          "band_improvement": 0.017321380038766154,
+          "bins_improved": 90,
+          "reliable_bins": 92,
+          "condition_max": 10.722876478347263
+        }
+      ]
+    },
+    "n1024_b5": {
+      "nperseg": 1024,
+      "input_max_mhz": 5,
+      "targets": 46,
+      "quadratic_columns_range": [
+        25,
+        48
+      ],
+      "example_frequency_hz": 1953125.0,
+      "folds": [
+        {
+          "heldout": 2,
+          "train": [
+            3,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.040627488004150246,
+            0.04013938645691527
+          ],
+          "band_improvement": 0.012014071536618598,
+          "bins_improved": 46,
+          "reliable_bins": 46,
+          "condition_max": 8.881362709212121
+        },
+        {
+          "heldout": 3,
+          "train": [
+            2,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.04086267800826295,
+            0.04036841849190774
+          ],
+          "band_improvement": 0.012095622226601654,
+          "bins_improved": 46,
+          "reliable_bins": 46,
+          "condition_max": 8.841060711650917
+        },
+        {
+          "heldout": 4,
+          "train": [
+            2,
+            3,
+            5
+          ],
+          "band_nmse": [
+            0.041003402555900736,
+            0.04056059472038194
+          ],
+          "band_improvement": 0.010799294885713628,
+          "bins_improved": 46,
+          "reliable_bins": 46,
+          "condition_max": 8.849406437798402
+        },
+        {
+          "heldout": 5,
+          "train": [
+            2,
+            3,
+            4
+          ],
+          "band_nmse": [
+            0.04171143180010751,
+            0.04111019667786903
+          ],
+          "band_improvement": 0.014414156893960195,
+          "bins_improved": 46,
+          "reliable_bins": 46,
+          "condition_max": 8.91004978562548
+        }
+      ]
+    },
+    "n4096_b5": {
+      "nperseg": 4096,
+      "input_max_mhz": 5,
+      "targets": 184,
+      "quadratic_columns_range": [
+        102,
+        193
+      ],
+      "example_frequency_hz": 2001953.125,
+      "folds": [
+        {
+          "heldout": 2,
+          "train": [
+            3,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.04225501256134925,
+            0.04144123743542107
+          ],
+          "band_improvement": 0.019258664868379127,
+          "bins_improved": 154,
+          "reliable_bins": 184,
+          "condition_max": 13.468344874300131
+        },
+        {
+          "heldout": 3,
+          "train": [
+            2,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.04639849731106469,
+            0.0455697046155771
+          ],
+          "band_improvement": 0.017862490027019673,
+          "bins_improved": 156,
+          "reliable_bins": 184,
+          "condition_max": 13.304085316565516
+        },
+        {
+          "heldout": 4,
+          "train": [
+            2,
+            3,
+            5
+          ],
+          "band_nmse": [
+            0.04345130928927223,
+            0.04269912258247267
+          ],
+          "band_improvement": 0.017311025124512547,
+          "bins_improved": 158,
+          "reliable_bins": 184,
+          "condition_max": 13.532633160466656
+        },
+        {
+          "heldout": 5,
+          "train": [
+            2,
+            3,
+            4
+          ],
+          "band_nmse": [
+            0.04245804222003541,
+            0.04176906336086824
+          ],
+          "band_improvement": 0.016227287532396995,
+          "bins_improved": 156,
+          "reliable_bins": 184,
+          "condition_max": 13.469871288698236
+        }
+      ]
+    },
+    "n2048_b3": {
+      "nperseg": 2048,
+      "input_max_mhz": 3,
+      "targets": 92,
+      "quadratic_columns_range": [
+        11,
+        55
+      ],
+      "example_frequency_hz": 2001953.125,
+      "folds": [
+        {
+          "heldout": 2,
+          "train": [
+            3,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.04325611496118154,
+            0.042380831808286536
+          ],
+          "band_improvement": 0.020234899821227503,
+          "bins_improved": 92,
+          "reliable_bins": 92,
+          "condition_max": 7.119681662045537
+        },
+        {
+          "heldout": 3,
+          "train": [
+            2,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.043542365130407885,
+            0.04252775409426614
+          ],
+          "band_improvement": 0.023301697854561265,
+          "bins_improved": 90,
+          "reliable_bins": 92,
+          "condition_max": 7.180798503161145
+        },
+        {
+          "heldout": 4,
+          "train": [
+            2,
+            3,
+            5
+          ],
+          "band_nmse": [
+            0.043171546939823884,
+            0.04225567600068673
+          ],
+          "band_improvement": 0.02121468893421341,
+          "bins_improved": 88,
+          "reliable_bins": 92,
+          "condition_max": 7.3491656758859785
+        },
+        {
+          "heldout": 5,
+          "train": [
+            2,
+            3,
+            4
+          ],
+          "band_nmse": [
+            0.04327813457633451,
+            0.04240866187190036
+          ],
+          "band_improvement": 0.020090346151601435,
+          "bins_improved": 91,
+          "reliable_bins": 92,
+          "condition_max": 7.2530891238666895
+        }
+      ]
+    },
+    "n2048_b8": {
+      "nperseg": 2048,
+      "input_max_mhz": 8,
+      "targets": 92,
+      "quadratic_columns_range": [
+        112,
+        157
+      ],
+      "example_frequency_hz": 2001953.125,
+      "folds": [
+        {
+          "heldout": 2,
+          "train": [
+            3,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.04325611496118154,
+            0.042467748006258875
+          ],
+          "band_improvement": 0.01822556083989879,
+          "bins_improved": 86,
+          "reliable_bins": 92,
+          "condition_max": 13.933661993076862
+        },
+        {
+          "heldout": 3,
+          "train": [
+            2,
+            4,
+            5
+          ],
+          "band_nmse": [
+            0.043542365130407885,
+            0.04266395234452232
+          ],
+          "band_improvement": 0.020173749938818153,
+          "bins_improved": 84,
+          "reliable_bins": 92,
+          "condition_max": 13.932172688540165
+        },
+        {
+          "heldout": 4,
+          "train": [
+            2,
+            3,
+            5
+          ],
+          "band_nmse": [
+            0.043171546939823884,
+            0.0424141660040893
+          ],
+          "band_improvement": 0.01754352089329303,
+          "bins_improved": 83,
+          "reliable_bins": 92,
+          "condition_max": 13.905095457775673
+        },
+        {
+          "heldout": 5,
+          "train": [
+            2,
+            3,
+            4
+          ],
+          "band_nmse": [
+            0.04327813457633451,
+            0.042588218779715414
+          ],
+          "band_improvement": 0.01594144025321187,
+          "bins_improved": 85,
+          "reliable_bins": 92,
+          "condition_max": 13.90727086857744
+        }
+      ]
+    }
+  },
+  "segments": {
+    "1024": {
+      "2": 9765,
+      "3": 9765,
+      "4": 9765,
+      "5": 9765
+    },
+    "2048": {
+      "2": 4882,
+      "3": 4882,
+      "4": 4882,
+      "5": 4882
+    },
+    "4096": {
+      "2": 2441,
+      "3": 2441,
+      "4": 2441,
+      "5": 2441
+    }
+  },
+  "display": "four-capture range is not a confidence interval; all prespecified settings reported",
+  "software": {
+    "python": "3.12.3",
+    "numpy": "2.3.4",
+    "scipy": "1.16.3",
+    "matplotlib": "3.10.7"
+  },
+  "source_sha256": "fb76a3c9418e92a8eb1d8c1e5ff3fb6ce81770abeed59cee55ac2964fd00e2e8",
+  "limitations": [
+    "Errors in predictors are not corrected",
+    "No Kim correction",
+    "Uncalibrated voltage model; no plasma growth or transfer rate",
+    "Predictive improvement is not causal identification",
+    "Four captures do not establish formal statistical significance"
+  ],
+  "plot_source_sha256": "b8bdd001455c68354ecc38b496f8753cb2fb25d460050ee76e4782917705fb32",
+  "render_note": "Final plot layout rendered from saved arrays; numerical calculation source retained as validation_calculation_source.py. No numerical results changed."
+}

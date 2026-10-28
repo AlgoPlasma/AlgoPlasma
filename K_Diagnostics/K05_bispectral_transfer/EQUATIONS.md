@@ -54,7 +54,7 @@ to their new document. Legacy fragments for 16 and 17 on the first page lead
 to the next-page preview, which links to the relocated equations.
 Revision 6 adds 35–44 for the packet spectrum, Taylor expansions, offset
 substitution, growth-ordering checks and Poisson rearrangement. Add further
-IDs after 99; do not renumber the sequence into reading order.
+IDs after 115; do not renumber the sequence into reading order.
 
 The overview and articles use neutral text without temporary revision colours.
 Illustration colours continue to identify the plotted quantities.
@@ -108,3 +108,25 @@ numbers and LaTeX inside a nested algebra disclosure; equation links reveal both
 levels. The nonideal-moment approximation is an assumption, not a general noise
 cancellation identity. Pages remain neutral; wait for reader feedback before
 starting another page.
+
+Revision 13 adds the sixth peer experimental page and numbers 100–105.
+The voltage observable is an ion-current diagnostic output, not calibrated
+plasma potential. Default record centring removes the disputed DC offset sign.
+Windowed coefficients keep exp(+iwt)/N; one-sided PSD corrects Hann mean-square
+gain, without changing bispectrum definitions. Statistical plots do not imply
+physical growth, energy transfer, a unique wavenumber, or a group velocity.
+
+Revision 16 appends 106–108 in experimental-page disclosures: cross-power
+phasor averaging, a shared-signal/uncorrelated-noise coherence model, and the
+positive-exponent Fourier phase of a pure delay. Noise powers in that example
+are illustrative, not measured calibration. Wrapped phase signs alone do not
+identify propagation direction; phase masking is not a physical frequency cutoff.
+
+Revision 18 adds the seventh peer page `K05_model_validation.rst` and 109–115:
+held-out linear/joint predictions, NMSE, relative error reduction, training-only
+column scaling, residual association, and the complete finite-step prediction
+power budget with normalized signed pair cross contributions. These are voltage
+prediction statistics, not Kim-corrected coefficients, physical growth rates or
+plasma energy transfer. Hold out entire captures, retain signed difference pairs,
+and use the same predetermined settings in both languages. Invalid metrics remain
+undefined; negative improvements and failed-identifiability flags are retained.

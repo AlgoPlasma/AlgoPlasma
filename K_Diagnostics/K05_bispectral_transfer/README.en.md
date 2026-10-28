@@ -9,7 +9,7 @@ Jorns, *Physical Review Letters* **130**, 115101 (2023),
 ## Reading guide
 
 The [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
-introduces the purpose and lists five peer articles in reading order.
+introduces the purpose and lists seven peer articles in reading order.
 
 The [first page](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 derives the structure of Eq. (1) of Brown & Jorns (2023). It introduces a real wave, its complex
@@ -58,7 +58,7 @@ the fit to amplitude growth and mean-square transfer; continuous and finite-step
 budgets and the reference normalization are distinguished explicitly.
 
 The English views use English only; the Chinese views include English terms.
-All five articles use the shared K05 equation sequence and cross-page references.
+All seven articles use the shared K05 equation sequence and cross-page references.
 See [equation authoring](EQUATIONS.md) before adding a page or equation.
 
 ## Planned path from data to figures
@@ -100,7 +100,7 @@ spectrum `X1 * conj(X2)`; do not change that convention implicitly.
   K05 static-asset directory. The exported `plotSvg(mode, deltaDegrees, seed,
   count, lang, uniqueId)` uses exact synthetic coefficients; the default is
   `("fixed", 60, 7, 32, lang, uniqueId)`.
-- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the five articles.
+- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the seven articles.
 - Install the existing `docs/requirements.txt` in a suitable environment; the
   documentation configuration also invokes Doxygen. From the repository root:
 
@@ -120,3 +120,17 @@ put technical qualifications in optional disclosures. Check equations against
 the original paper, printed page 115101-2. The local literature study project's
 shared `HANDOFF.md` records the wider reading history; this checkout and that
 project require their own actual synchronization to be available on another PC.
+
+## Experimental walkthrough
+
+The [sixth page](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst)
+uses four synchronized experimental captures. See [reproduction instructions](EXPERIMENT.md)
+for the strict binary reader, analysis script, metadata and numerical tests.
+Raw captures remain external. Figures use record-centred voltage fluctuations;
+DC calibration, channel response and physical rate conversion are distinguished.
+
+The [seventh page](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst)
+compares linear and quadratic predictions with four whole-capture holdouts.
+It follows errors, residual relations, coefficient identifiability and all preset
+sensitivity settings. Reproduce it with `validate_experiment.py` as described
+in [EXPERIMENT.md](EXPERIMENT.md).

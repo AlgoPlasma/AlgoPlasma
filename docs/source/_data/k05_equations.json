@@ -97,5 +97,21 @@
   "kim-cross-power-split": 96,
   "kim-unclosed-scalar-moments": 97,
   "kim-scalar-elimination": 98,
-  "kim-power-quadratic": 99
+  "kim-power-quadratic": 99,
+  "experiment-code-fluctuation": 100,
+  "experiment-block-statistics": 101,
+  "experiment-windowed-coefficients": 102,
+  "experiment-hann-psd": 103,
+  "experiment-coherence-phase": 104,
+  "experiment-measurement-phase": 105,
+  "experiment-cross-phase-average": 106,
+  "experiment-noisy-coherence": 107,
+  "experiment-delay-phase": 108,
+  "validation-two-predictions": 109,
+  "validation-nmse": 110,
+  "validation-improvement": 111,
+  "validation-scaled-solve": 112,
+  "validation-residual-correlation": 113,
+  "validation-power-budget": 114,
+  "validation-pair-cross": 115
 }
