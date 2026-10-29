@@ -156,3 +156,82 @@ and all preset choices. Input hashes are checked again when the run finishes.
 This is predictive least squares with noisy voltage predictors. It does not
 apply Kim's stationary correction, identify a causal coupling, or turn measured
 volts into a calibrated potential, growth rate, or energy transfer.
+
+## Dense high-frequency extension of Figure 2 (page 07)
+
+```bash
+OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+python K_Diagnostics/K05_bispectral_transfer/validate_high_frequency.py \
+  --data /path/to/experiment-data \
+  --output /path/to/high-frequency-validation
+```
+
+This fixed extension fits captures 3, 4, 5 and tests capture 2 only. It uses
+N=2048, the same mean removal, periodic Hann window and positive-exponent/N
+coefficients as the original validation. Every native target bin from 5 to
+20 MHz is evaluated: 307 bins at 100 MS/s, with actual endpoints 5.029296875
+and 19.970703125 MHz. All unique nonzero signed input pairs with both absolute
+frequencies at most 20 MHz are retained; no circular/modulo-N matching is used.
+Difference pairs involving frequencies above 20 MHz are outside this model.
+The input limit and single held-out capture are fixed before scoring.
+
+Only one two-panel figure is generated, `k05-validation-high-frequency-spectra`
+in SVG/PNG. It uses the original Figure 2 PSD factor 2N/(fs U), U=3/8, for
+measured, predicted and residual coefficient powers. Axis/legend symbols are
+f, S_YY^+, S_(Yhat_m Yhat_m)^+ and S_(epsilon_m epsilon_m)^+, where epsilon_m
+= Y-Yhat_m, m=0 (linear) or 1 (joint). The page links these to K05.109 and
+the PSD normalization K05.103. No other existing plots are redrawn.
+
+`high_frequency_arrays.npz` uses the same fields as an individual original
+configuration, without its configuration-name prefix. Its first axis has
+one fold, explicitly identified by `heldout_captures=[2]`. It retains every
+coefficient, scale, singular value, pair, error and model-power term; negative
+improvements remain in the arrays and residual curves. The JSON summary records
+the input hashes, exact frequency grid, fold, software and numerical source
+hashes. Source snapshots are retained beside the outputs. Copy the SVG into
+the K05 static-assets folder, and the summary as
+`k05-validation-high-frequency-summary.json`.
+
+This extension does not establish consistency across four held-out captures
+at high frequency. Because the input basis also expands relative to Figure 2,
+its result cannot isolate the effect of target frequency alone. Error reduction
+is not the quadratic fraction of plasma energy; the two fits have different
+linear coefficients and the complete prediction-power decomposition contains
+a signed cross term.
+
+## Page 08: sweep reconstruction and estimated response scenarios
+
+The data owner confirmed C1 is the left fixed probe; C3 is the right probe in the
+supplied diagram. This identifies positions, not propagation. The 1 kohm resistor
+provides a nominal 0.001 A/V scale, not a frequency-response calibration.
+
+`yokogawa_wdf.py` reads the documented single-history DL350 Trace layout
+(IM DL350-01EN Appendix 9): %WDF/chunk boundaries, XHDR metadata, big-endian IS2
+scales, DrAW size and illegal samples. It rejects unsupported histories/offsets.
+`analyze_probe_response.py` uses CH3_2 and CH4_2, reconstructs probe voltage with
+the battery and resistor drop, retains the first 5–345 V supply upsweep, and bins
+by 2 V with >=20 samples. It fits a signed ion background over -90 to -70 V and
+three electron windows relative to floating potential. Two alternative ion
+windows give nine choices, all saved. These ranges are sensitivity checks, not
+confidence intervals. Files 008–011 and 015–018 remain separate groups.
+
+```bash
+python K_Diagnostics/K05_bispectral_transfer/analyze_probe_response.py \
+  --data /path/to/supplementary_scans \
+  --output /path/to/separate_output \
+  --config K_Diagnostics/K05_bispectral_transfer/probe_response_config.json
+python -m unittest discover -s K_Diagnostics/K05_bispectral_transfer -p test_probe_response.py -v
+```
+
+The JSON configuration labels reported, confirmed and estimated inputs separately.
+Defaults 0 V cathode/chamber offset, 100 pF capacitance, relative gain 1 and delay
+0 ns are provisional; scenario ranges are not measured bounds. No unmeasured
+inverse filter is applied to the fast data. Te=9.17 eV remains a reported value;
+central fits for 008–011 yield 5.78–6.52 eV (mean 6.23), and nine fit choices span
+5.72–9.25 eV. This is a local-slope diagnostic with model/processing dependence.
+
+Output includes file/config/source hashes, extracted headers, arrays, all fits,
+load-line scenarios and five SVG/PNG pairs. Preserve the output alongside the
+configuration when reproducing the page. The slow 50 kHz sweeps do not measure
+MHz temperature fluctuations or establish a MHz bandwidth. Kim correction,
+physical growth rates and cascade inference are subsequent analysis stages.

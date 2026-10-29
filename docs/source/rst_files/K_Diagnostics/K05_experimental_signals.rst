@@ -546,23 +546,98 @@
 
 
    The horizontal coordinate is :math:`f_2`; the vertical is :math:`f_1`.
-   Each colored cell represents one sum-frequency triplet. We show only
-   :math:`0<f_1\leq f_2` with :math:`f_1+f_2\leq5\ \mathrm{MHz}` so that
-   interchanging the first two frequencies does not duplicate the picture.
-   White areas are outside this domain, not measured zeros. Figures 8–10 share a
-   **logarithmic color scale** from :math:`10^{-4}` to :math:`1`. Its ticks still
-   show the actual :math:`b^2`: 0.0001, 0.001, 0.01, 0.1 and 1. Each equal step on
-   the colorbar represents a factor of ten, making weak structure visible alongside
-   strong peaks. Values below :math:`10^{-4}`, including zero, use the darkest
-   color; the arrow at the bottom of the colorbar marks this display floor.
-   The floor is not a significance threshold, and brighter colors alone do not
-   establish a statistically significant interaction. The stored values are unchanged.
+   The third frequency is their sum, :math:`f_3=f_1+f_2`. Each colored cell
+   therefore compares three components of the **same C1 record**, not C1 with C3.
+   We show only :math:`0<f_1\leq f_2` with :math:`f_1+f_2\leq5\ \mathrm{MHz}`
+   to avoid duplicating swapped pairs. White areas are outside this domain, not
+   measured zeros. The triangular outline is an analysis boundary, not a wave branch.
 
-   The maps contain similar low-frequency bands across captures. Spectral leakage,
-   a nonsinusoidal waveform, common modulation and nonlinear plasma interactions
-   can all produce such structure. This positive-frequency view is only part of
-   the signed-frequency sum in the wave equation. Difference interactions and
-   frequencies above 5 MHz are not excluded from the physics by this plot.
+   **What does a brighter region mean?** It means a larger normalized correlation
+   between the product :math:`X(f_1)X(f_2)` and the sum-frequency component
+   :math:`X(f_3)`, as defined in :k05:eq:`bicoherence`. To see the role of phase,
+   call the phase of a Fourier coefficient :math:`\phi(f)`. The three phases enter
+   through :math:`\Delta\phi=\phi(f_1)+\phi(f_2)-\phi(f_3)`.
+   When this combination remains concentrated around a preferred angle across
+   segments, the complex products tend to reinforce one another when averaged.
+   When it wanders around the circle, they tend to cancel. This is called
+   **quadratic phase coupling**. The amplitudes also weight the average, so
+   :math:`b^2` is not a pure phase-locking score; stable phase alone does not
+   guarantee :math:`b^2=1`.
+
+   Unlike the PSD, **brightness does not measure how much wave power is present**.
+   Here a value of 0.1 cannot be read as “10% of plasma energy is being transferred.”
+   The three Fourier components may also be harmonics of one nonsinusoidal
+   oscillation rather than three separately identified plasma modes
+   :ref:`[5] <k05-data-reference-5-en>`.
+
+   **A band represents a family of frequency combinations.** Let :math:`F`
+   denote a fixed frequency in the following guide; it is not a fitted parameter.
+
+   .. list-table:: Read the direction of a band using these axes
+      :header-rows: 1
+      :widths: 24 27 49
+
+      * - Pattern
+        - What stays fixed
+        - What the associated combinations share
+      * - Horizontal band
+        - :math:`f_1\simeq F`
+        - One component near F; the other two are near :math:`f_2` and :math:`f_2+F`.
+      * - Vertical band
+        - :math:`f_2\simeq F`
+        - One component near F; the other two are near :math:`f_1` and :math:`f_1+F`.
+      * - Downward-sloping diagonal band
+        - :math:`f_1+f_2\simeq F`
+        - Many different pairs share the same sum frequency near F.
+
+   In Figure 8, all four captures show a brighter region close to the bottom edge.
+   Here :math:`f_1` is small, so :math:`f_2` and :math:`f_3` are close together:
+   the pattern links a low-frequency component to a range of higher-frequency
+   components and their nearby sum components. A possible mechanism is modulation:
+   if a low-frequency fluctuation is itself present in the record and the amplitude
+   of faster fluctuations varies with its phase, it can produce such relations.
+   This is a candidate explanation, not a mechanism identified by this map.
+   The band does **not** establish that low frequencies feed high frequencies,
+   nor the reverse. The two lowest rows also deserve particular care because
+   their spacing is only 48.828 kHz; the segment-length comparison below shows
+   how this narrow region changes with the analysis window.
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Why is this a clue to wave interactions, but not proof of energy transfer?</summary>
+
+   A quadratic term multiplies two fluctuations. Multiplying two sinusoidal
+   components produces sum and difference frequencies whose phases are tied to
+   the original phases. Wave interactions described by such terms can therefore
+   leave the phase relations that a bicoherence map detects. A bright band is a
+   useful place to investigate that possibility.
+
+   But the measurement only establishes a statistical relation. A repeating
+   nonsinusoidal waveform, a shared modulating process, or a nonlinear probe or
+   electronics response can also produce related Fourier components. Finite
+   records and spectral leakage can spread structure over neighboring bins.
+   Repetition in four captures supports reproducibility of the pattern; it does
+   not distinguish these causes or supply a significance test.
+
+   The nonnegative quantity :math:`b^2` also discards the bispectrum's phase.
+   Determining transfer requires a dynamical coupling coefficient and its phase
+   relative to the bispectrum, as in :k05:eq:`spectral-power-balance`, together with
+   the measurement-response assumptions. Even a bright region alone supplies
+   neither a transfer direction nor a rate. Conversely, dark regions need not
+   rule out dynamics obscured by noise or phase cancellation.
+
+   .. raw:: html
+
+      </details>
+
+   **Read the numerical color scale as well as the pattern.** Figures 8–10 share
+   a logarithmic scale from :math:`10^{-4}` to :math:`1`; ticks are actual
+   :math:`b^2` values. Each equal colorbar interval is a factor of ten, not an
+   equal increase in correlation. Values below :math:`10^{-4}`, including zero,
+   use the darkest color; the lower arrow marks that display floor. A clearly
+   visible band can therefore still have a small :math:`b^2`. The floor is not a
+   significance threshold. The positive-frequency view also does not exclude
+   difference interactions or frequencies above 5 MHz from the physical model.
 
    .. raw:: html
 
@@ -600,35 +675,6 @@
    treated as resolution-independent evidence. A narrower band is not automatically
    more accurate: fewer averages also increase scatter. Nonoverlap does not ensure
    statistically independent segments in a signal with long correlations.
-
-   .. raw:: html
-
-      </details>
-
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>Open one cell: what three frequencies went into it?</summary>
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-triad.svg
-      :alt: Figure 11. One exploratory triplet and a shifted-segment comparison.
-      :width: 100%
-
-      Figure 11. One exploratory triplet and a shifted-segment comparison.
-
-
-   In capture 2 the selected C1 bins are 0.1953125, 0.634765625 and 0.830078125 MHz.
-   Their sum matches exactly on the 2048-point grid. The left plot counts the
-   segment values of arg(Xa Xb X* a+b). The right plot compares b² = 0.06745 with
-   63 calculations that circularly shift the target-frequency segment sequence
-   by a quarter to three quarters of the record; their median is 0.00325.
-
-   This is an exploratory diagnostic. The triplet was selected as the largest
-   b² in capture 2 among computed pairs with f1 at least 0.1 MHz. That selection,
-   correlations between segments, and scanning many cells prevent interpreting
-   the comparison as a corrected significance test. The phase histogram is
-   unweighted, while bicoherence includes amplitudes. Neither plot yields a
-   coupling coefficient, causality or the sign of energy transfer.
 
    .. raw:: html
 
@@ -710,6 +756,13 @@
 
    [4] MathWorks, *Cross Spectrum and Magnitude-Squared Coherence*.
    `Phase interpretation and low-coherence masking <https://www.mathworks.com/help/signal/ug/cross-spectrum-and-magnitude-squared-coherence.html>`_.
+
+   .. _k05-data-reference-5-en:
+
+   [5] T. J. Maccarone, “The biphase explained: understanding the asymmetries in
+   coupled Fourier components of astronomical time series,” *Monthly Notices of
+   the Royal Astronomical Society* **435**, 3547–3558 (2013), Sections 2–4.
+   `doi:10.1093/mnras/stt1546 <https://doi.org/10.1093/mnras/stt1546>`_.
 
 
 .. container:: ap-lang ap-lang-zh k05-lesson
@@ -1158,18 +1211,85 @@
 
 
 
-   横轴为 :math:`f_2`，纵轴为 :math:`f_1`；每个着色格点代表一个和频三元组。
-   只画 :math:`0<f_1\leq f_2` 且 :math:`f_1+f_2\leq5\ \mathrm{MHz}`，
-   避免交换前两个频率后重复画图。白色区域是未计算的域，不是测得的零。
-   图 8–10 统一使用 :math:`10^{-4}` 到 :math:`1` 的 **对数色标（logarithmic color scale）**。
-   刻度仍标实际 :math:`b^2`：0.0001、0.001、0.01、0.1、1；色条上每一段相等的距离
-   表示数值增加十倍，因此弱结构和强峰都能看清。小于 :math:`10^{-4}` 的值（包括零）
-   统一使用最暗颜色，色条底部的箭头表示这一显示下限。
-   这个下限不是统计显著性阈值，颜色变亮也不直接证明存在显著的相互作用；原始统计值保持不变。
+   横轴为 :math:`f_2`，纵轴为 :math:`f_1`，第三个频率是两者之和 :math:`f_3=f_1+f_2`。
+   每个着色格点比较的是 **同一条 C1 记录内部的三个频率成分**，不是 C1 与 C3 的相干度。
+   只画 :math:`0<f_1\leq f_2` 且 :math:`f_1+f_2\leq5\ \mathrm{MHz}`，避免交换前两个频率后重复画图。
+   白色区域是未计算的域，不是测得的零；三角形轮廓由选取的频率范围决定，不是一条波的分支。
 
-   四组都有相似的低频条带。谱泄漏、非正弦波形、共同调制和等离子体非线性作用都可能
-   产生这样的结构。这张正频率图仅显示波动方程带符号频率求和的一部分，
-   并不意味着差频作用或 5 MHz 以上的频率可以从物理模型中删去。
+   **亮的区域代表什么？** 代表两个频率成分的乘积 :math:`X(f_1)X(f_2)`，
+   与和频成分 :math:`X(f_3)` 之间的归一化关联较大，定义见 :k05:eq:`bicoherence`。
+   把 Fourier 系数的相位记为 :math:`\phi(f)`，这里比较的是三者的相位组合
+   :math:`\Delta\phi=\phi(f_1)+\phi(f_2)-\phi(f_3)`。
+   如果这个角度在不同短段中较集中，平均时各段的复数乘积容易同向累加；
+   如果角度在整个圆周上游走，它们就容易相互抵消。
+   这称为 **二次相位耦合（quadratic phase coupling）**。
+   幅度也参与加权，因此 :math:`b^2` 不是只看相位的指标；相位稳定也不保证它等于 1。
+
+   与功率谱不同，**越亮不等于该处波能量越大**。
+   这里的 0.1 也不能解释成“有 10% 的等离子体能量正在转移”。
+   这三个 Fourier 成分还可能是同一个非正弦振荡的谐波，
+   并不自动对应三个已经辨认出的独立等离子体波模 :ref:`[5] <k05-data-reference-5-zh>`。
+
+   **亮带代表一整族相关的频率组合。** 下表用 :math:`F` 表示一个固定频率，
+   它只是读图用的符号，不是拟合参数。
+
+   .. list-table:: 按本图的坐标方向理解亮带
+      :header-rows: 1
+      :widths: 24 27 49
+
+      * - 形状
+        - 保持不变的量
+        - 这些频率组合共有的特征
+      * - 水平亮带
+        - :math:`f_1\simeq F`
+        - 都包含 F 附近的一个成分，另两个在 :math:`f_2` 和 :math:`f_2+F` 附近。
+      * - 竖直亮带
+        - :math:`f_2\simeq F`
+        - 都包含 F 附近的一个成分，另两个在 :math:`f_1` 和 :math:`f_1+F` 附近。
+      * - 向右下方倾斜的亮带
+        - :math:`f_1+f_2\simeq F`
+        - 不同频率对都与同一个 F 附近的和频成分关联。
+
+   图 8 四组在靠近底边处都有较亮的区域。这里 :math:`f_1` 很小，
+   所以 :math:`f_2` 和 :math:`f_3` 很接近：
+   它显示低频成分与多个较高频成分及其邻近和频成分之间存在关联。
+   一种可能的机制是 **调制（modulation）**：如果记录中有这个低频波动，
+   而较快波动的幅度又随着它的相位变化，就可能留下这样的关系。
+   这是候选解释，尚不能仅凭图确认。
+   亮带 **不能判定低频在给高频供能，也不能判定反向供能**。
+   最下面两行还需特别谨慎：频点间隔只有 48.828 kHz，
+   后面的分段长度对比会显示，这个窄区域如何随分析窗口改变。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>为什么它是波—波相互作用的线索，却还不是能量转移的证据？</summary>
+
+   二次项会把两个波动相乘。两个正弦成分相乘会产生和频与差频，
+   其相位由原来的两个相位共同决定。因此，由二次项描述的波—波相互作用
+   （wave–wave interaction）确实可能留下双相干能够检测的相位关系。
+   亮带告诉我们，哪些频率组合值得进一步检查这种可能性。
+
+   但测量直接给出的仍是统计关系。重复出现的非正弦波形、共同的调制过程，
+   以及探针或电路的非线性响应，也可能产生相关的 Fourier 成分。
+   有限记录和谱泄漏还可能把结构扩散到邻近频点。
+   四组中重复出现说明这个图案具有可重复性，不能单凭这一点区分上述来源，也不构成显著性检验。
+
+   此外，:math:`b^2` 非负，并且舍去了双谱本身的相位。
+   要判断转移，还需要动力学耦合系数及其相对双谱的相位，
+   如 :k05:eq:`spectral-power-balance` 所示，并核查测量响应假设。
+   因此，单靠亮区既得不到转移方向，也得不到转移速率。
+   反过来，暗区也不能排除被噪声或相位抵消掩盖的动力学过程。
+
+   .. raw:: html
+
+      </details>
+
+   **读图案时也要看色条上的实际数值。** 图 8–10 统一使用
+   :math:`10^{-4}` 到 :math:`1` 的对数色标（logarithmic color scale），刻度仍是实际 :math:`b^2`。
+   色条上每段相等距离表示数值增加十倍，不是关联强度等量增加。
+   小于 :math:`10^{-4}` 的值（包括零）使用最暗颜色，底部箭头标示这个显示下限。
+   所以，看起来很清楚的亮带，实际 :math:`b^2` 仍可能较小；显示下限不是显著性阈值。
+   这张正频率图也没有从物理模型中排除差频作用或 5 MHz 以上的频率。
 
    .. raw:: html
 
@@ -1205,32 +1325,6 @@
    所以不能把某个亮点、最大数值或第一行正频率格点，当成与分辨能力无关的证据。
    更窄的频点并非必然更准确，因为平均次数减少也会增大随机散布。
    即使短段不重叠，信号具有较长相关时间时，各段仍可能并不独立。
-
-   .. raw:: html
-
-      </details>
-
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>打开一个格点：具体是哪三个频率？</summary>
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-triad.svg
-      :alt: 图 11．一个探索性三频组合及其错位分段对照。
-      :width: 100%
-
-      图 11．一个探索性三频组合及其错位分段对照。
-
-
-   第 2 组 C1 的这个例子取 0.1953125、0.634765625 和 0.830078125 MHz，
-   在 2048 点频率网格上严格满足前两者之和等于第三者。
-   左图统计各段 arg(Xa Xb X* a+b) 的分布；右图把原始 b² = 0.06745 与 63 次错位计算比较。
-   错位时，把目标频率的分段序列循环移动四分之一至四分之三段记录，其 b² 中位数为 0.00325。
-
-   这是探索性诊断：这个频率组合是第 2 组已计算波对中、f1 不低于 0.1 MHz 的最大 b² 点。
-   这种事后挑选、段间相关以及扫描大量格点，意味着右图不能当作经过多重比较校正的显著性检验。
-   左图对每段等权计数，而双相干同时包含幅度权重。
-   两张图都没有给出耦合系数、因果关系或能量转移的正负号。
 
    .. raw:: html
 
@@ -1304,5 +1398,12 @@
 
    [4] MathWorks, *Cross Spectrum and Magnitude-Squared Coherence*.
    `Phase interpretation and low-coherence masking <https://www.mathworks.com/help/signal/ug/cross-spectrum-and-magnitude-squared-coherence.html>`_.
+
+   .. _k05-data-reference-5-zh:
+
+   [5] T. J. Maccarone, “The biphase explained: understanding the asymmetries in
+   coupled Fourier components of astronomical time series,” *Monthly Notices of
+   the Royal Astronomical Society* **435**, 3547–3558 (2013), Sections 2–4.
+   `doi:10.1093/mnras/stt1546 <https://doi.org/10.1093/mnras/stt1546>`_.
 
 

@@ -3,7 +3,7 @@
 [English — start here](README.en.md) | [中文](README.zh-CN.md)
 
 Start at the [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst).
-Its seven peer articles follow Brown & Jorns (2023), in this reading order:
+Its eight peer articles follow Brown & Jorns (2023), in this reading order:
 
 1. [Wave growth and coupling](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst):
    build Eq. (1) from a moving wave, with an interactive wave packet.
@@ -25,6 +25,9 @@ Its seven peer articles follow Brown & Jorns (2023), in this reading order:
 7. [Validate the two-probe model](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst):
    compare linear and quadratic predictions on whole held-out captures, with
    residual, conditioning and sensitivity checks.
+
+8. [What the probe measures](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst):
+   reconstruct swept I–V curves and examine explicitly estimated response scenarios.
 
 Follow the build instructions in either language README to view the HTML.
 

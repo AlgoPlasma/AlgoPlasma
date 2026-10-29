@@ -9,7 +9,7 @@ Jorns, *Physical Review Letters* **130**, 115101 (2023),
 ## Reading guide
 
 The [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
-introduces the purpose and lists seven peer articles in reading order.
+introduces the purpose and lists eight peer articles in reading order.
 
 The [first page](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 derives the structure of Eq. (1) of Brown & Jorns (2023). It introduces a real wave, its complex
@@ -58,7 +58,7 @@ the fit to amplitude growth and mean-square transfer; continuous and finite-step
 budgets and the reference normalization are distinguished explicitly.
 
 The English views use English only; the Chinese views include English terms.
-All seven articles use the shared K05 equation sequence and cross-page references.
+All eight articles use the shared K05 equation sequence and cross-page references.
 See [equation authoring](EQUATIONS.md) before adding a page or equation.
 
 ## Planned path from data to figures
@@ -100,7 +100,7 @@ spectrum `X1 * conj(X2)`; do not change that convention implicitly.
   K05 static-asset directory. The exported `plotSvg(mode, deltaDegrees, seed,
   count, lang, uniqueId)` uses exact synthetic coefficients; the default is
   `("fixed", 60, 7, 32, lang, uniqueId)`.
-- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the seven articles.
+- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the eight articles.
 - Install the existing `docs/requirements.txt` in a suitable environment; the
   documentation configuration also invokes Doxygen. From the repository root:
 
@@ -134,3 +134,8 @@ compares linear and quadratic predictions with four whole-capture holdouts.
 It follows errors, residual relations, coefficient identifiability and all preset
 sensitivity settings. Reproduce it with `validate_experiment.py` as described
 in [EXPERIMENT.md](EXPERIMENT.md).
+
+The [eighth page](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst)
+uses slow DL350 sweeps to reconstruct I–V curves, estimate local-slope temperatures
+and inspect bias and electrical response with explicitly labelled provisional inputs.
+Run `analyze_probe_response.py`; replace assumptions in `probe_response_config.json`.

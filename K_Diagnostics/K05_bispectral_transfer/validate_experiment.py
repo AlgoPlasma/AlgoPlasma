@@ -142,13 +142,19 @@ def load_coefficients(data, metadata):
     return common_fs, groups, audit, files
 
 
-def run_configuration(groups, fs, n, input_mhz):
-    maximum = int(input_mhz*1e6/(fs/n))
-    bins = np.arange(int(np.ceil(.5e6/(fs/n))), int(5e6/(fs/n))+1)
+def run_configuration(groups, fs, n, input_mhz, target_bins=None, heldout_captures=CAPTURES):
+    maximum = min(int(input_mhz*1e6/(fs/n)), n//2-1)
+    bins = (np.arange(int(np.ceil(.5e6/(fs/n))), int(5e6/(fs/n))+1)
+            if target_bins is None else np.asarray(target_bins, dtype=int))
+    if len(bins)==0 or np.any(bins<=0) or np.any(bins>=n//2) or len(set(bins))!=len(bins):
+        raise ValueError('Unique target bins strictly between DC and Nyquist required')
+    if not heldout_captures or len(set(heldout_captures)) != len(heldout_captures) or any(g not in CAPTURES for g in heldout_captures):
+        raise ValueError('Choose unique held-out captures from 2, 3, 4, 5')
     pairs = [signed_pairs(int(k), maximum) for k in bins]
     pmax = 1+max(len(p) for p in pairs)
-    shape = (4, len(bins))
+    shape = (len(heldout_captures), len(bins))
     result = dict(frequency_hz=bins*fs/n, target_bins=bins,
+                  heldout_captures=np.array(heldout_captures),
                   pair_bins=np.zeros((len(bins), pmax-1, 2), dtype=int),
                   pair_count=np.array([len(p) for p in pairs]),
                   coefficients=np.full((*shape, pmax), complex(np.nan, np.nan)),
@@ -167,7 +173,7 @@ def run_configuration(groups, fs, n, input_mhz):
         result['pair_bins'][ti, :len(pp)] = pp
         designs = {g: design_matrix(groups[g][0], k, pp) for g in CAPTURES}
         targets = {g: groups[g][1][:, k] for g in CAPTURES}
-        for gi, g in enumerate(CAPTURES):
+        for gi, g in enumerate(heldout_captures):
             linear, quadratic, training = fit_fold(designs, targets, g)
             ev = evaluate(targets[g], designs[g], linear, quadratic)
             pc = len(pp)+1
@@ -184,20 +190,21 @@ def run_configuration(groups, fs, n, input_mhz):
             result['residual_x'][gi, ti] = ev['residual_corr'][:, 0]
             if len(pp):
                 result['residual_z_max'][gi, ti] = np.nanmax(ev['residual_corr'][:, 1:], axis=1)
-            if g == 2 and ti == example_index:
+            if gi == 0 and ti == example_index:
                 result['example_target'] = targets[g]
                 result['example_prediction_linear'] = ev['prediction_linear']
                 result['example_prediction_quadratic'] = ev['prediction_quadratic']
                 result['example_time_s'] = (np.arange(len(targets[g]))+.5)*n/fs
                 result['example_frequency_hz'] = np.array([k*fs/n])
-        if ti % 25 == 0 or ti == len(bins)-1:
+        if target_bins is not None or ti % 25 == 0 or ti == len(bins)-1:
             print(f'N={n}, input={input_mhz} MHz: {ti+1}/{len(bins)} targets', flush=True)
     return result
 
 
 def configuration_summary(result, n, input_mhz):
     folds = []
-    for gi, g in enumerate(CAPTURES):
+    for gi, g in enumerate(result.get('heldout_captures', CAPTURES)):
+        g = int(g)
         loss = result['mse'][gi].sum(axis=0)
         power = result['target_power'][gi].sum()
         folds.append(dict(heldout=g, train=[t for t in CAPTURES if t != g],

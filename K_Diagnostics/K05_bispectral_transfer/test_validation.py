@@ -1,9 +1,12 @@
 """Known-answer and leakage tests for the complex two-probe predictor."""
 import unittest
+import json
 import numpy as np
 
 from validate_experiment import (signed_pairs, design_matrix, fit_scaled,
-                                 fit_fold, evaluate, normalized_correlation)
+                                 fit_fold, evaluate, normalized_correlation,
+                                 run_configuration, configuration_summary)
+from validate_high_frequency import target_grid
 
 
 class ValidationTests(unittest.TestCase):
@@ -90,6 +93,43 @@ class ValidationTests(unittest.TestCase):
         l['coef'][:]=1;z['coef'][:]=[1,10]
         ev=evaluate(d[:,0]+.1*self.complex_random(100),d,l,z)
         self.assertLess(ev['improvement'],0)
+
+    def test_dense_high_frequency_grid(self):
+        bins = target_grid(100e6, 2048)
+        np.testing.assert_array_equal(bins, np.arange(103, 410))
+        np.testing.assert_allclose(np.diff(bins*100e6/2048), 48828.125)
+        for bounds in ((0,20), (5,50), (20,5)):
+            with self.assertRaises(ValueError):
+                target_grid(100e6, 2048, *bounds)
+
+    def test_selected_high_frequency_fold_recovers_known_model(self):
+        pp = signed_pairs(6, 7)
+        truth = self.complex_random(len(pp)+1)
+        groups = {}
+        for g in (2,3,4,5):
+            x = self.complex_random((150,8)); y = np.zeros_like(x)
+            y[:,6] = design_matrix(x,6,pp)@truth
+            groups[g] = (x,y)
+        result = run_configuration(groups,16e6,16,8,target_bins=[6],heldout_captures=(2,))
+        self.assertEqual(result['nmse'].shape,(1,1,2))
+        np.testing.assert_allclose(result['coefficients'][0,0],truth,atol=1e-12)
+        self.assertLess(result['nmse'][0,0,1],1e-24)
+        np.testing.assert_equal(result['pair_bins'][0],pp)
+        summary = configuration_summary(result,16,8)
+        self.assertEqual(summary['folds'][0]['train'],[3,4,5])
+        self.assertEqual(summary['folds'][0]['heldout'],2)
+        json.dumps(summary, allow_nan=False)
+
+    def test_explicit_default_grid_preserves_original_result(self):
+        groups = {g:(self.complex_random((40,8)),self.complex_random((40,8)))
+                  for g in (2,3,4,5)}
+        default = run_configuration(groups,16e6,16,5)
+        explicit = run_configuration(groups,16e6,16,5,target_bins=np.arange(1,6))
+        for key in default:
+            np.testing.assert_equal(default[key],explicit[key])
+        for bins in ([0], [8], [6,6], []):
+            with self.assertRaises(ValueError):
+                run_configuration(groups,16e6,16,5,target_bins=bins)
 
 
 if __name__=='__main__':

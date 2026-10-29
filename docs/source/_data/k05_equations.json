@@ -113,5 +113,14 @@
   "validation-scaled-solve": 112,
   "validation-residual-correlation": 113,
   "validation-power-budget": 114,
-  "validation-pair-cross": 115
+  "validation-pair-cross": 115,
+  "validation-linear-predictable-power": 116,
+  "response-nominal-current": 117,
+  "response-sweep-circuit": 118,
+  "response-ion-subtraction": 119,
+  "response-temperature-slope": 120,
+  "response-fast-bias": 121,
+  "response-rc": 122,
+  "response-model-coefficients": 123,
+  "response-density-temperature": 124
 }

@@ -31,7 +31,7 @@
 
    .. figure:: /_static/K_Diagnostics/k05-validation-folds.svg
       :alt: Figure 1. Each complete capture is tested once, with the other three used for fitting.
-      :width: 100%
+      :width: 500px
 
       Figure 1. Each complete capture is tested once, with the other three used for fitting.
 
@@ -100,6 +100,143 @@
    :k05:eq:`experiment-hann-psd`, giving V²/Hz. On unseen data the residual need not
    be orthogonal to the prediction, so predicted PSD plus residual PSD is not
    generally equal to measured PSD.
+
+   Similar predicted spectra do not, by themselves, measure the size of the
+   quadratic part. The two fits have different :math:`L` coefficients, and the
+   linear–quadratic cross term can add or subtract power; see
+   :k05:eq:`validation-power-budget`. The residual tests whether the extra terms help.
+
+   .. _k05-validation-high-frequency-en:
+
+   .. rubric:: Figure 2 extended: what changes at 5–20 MHz?
+
+   Keep capture 2 as the test record and fit on captures 3, 4 and 5. Keep the
+   2048-sample segments and preprocessing, but now test every native frequency
+   bin between 5 and 20 MHz. The quadratic inputs also expand to
+   :math:`0<|f_1|,|f_2|\leq20\ \mathrm{MHz}`. Both predictions use exactly this
+   same held-out record; the target grid is not thinned or interpolated.
+
+   .. figure:: /_static/K_Diagnostics/k05-validation-high-frequency-spectra.svg
+      :alt: Figure 2 (higher-frequency extension). The same held-out capture, with dense 5–20 MHz target bins: measured and predicted spectra above, residual spectra below.
+      :width: 100%
+
+      Figure 2 (higher-frequency extension). The same held-out capture, with dense 5–20 MHz target bins: measured and predicted spectra above, residual spectra below.
+
+   The horizontal axis is :math:`f`. Above, :math:`S_{YY}^{+}` is the measured
+   C3 power spectral density, and :math:`S_{\widehat Y_m\widehat Y_m}^{+}` is the
+   PSD of prediction :math:`\widehat Y_{f,m}` in :k05:eq:`validation-two-predictions`.
+   Below, :math:`S_{\varepsilon_m\varepsilon_m}^{+}` is the PSD of the residual
+   :math:`\varepsilon_m=Y_f-\widehat Y_{f,m}`. Here :math:`m=0` is linear and
+   :math:`m=1` includes quadratic terms; the superscript :math:`+` denotes a
+   one-sided spectrum. All vertical values use the conversion in
+   :k05:eq:`experiment-hann-psd` and units V²/Hz.
+
+   The extra terms reduce the total squared prediction error over 5–20 MHz by
+   **7.86%**. Summing errors within each sub-band gives reductions of **10.70%**
+   at 5–10 MHz, **1.04%** at 10–15 MHz, and **1.64%** at 15–20 MHz.
+   The lower panel therefore shows the main improvement below 10 MHz. Around
+   17–19 MHz the predicted spectra separate visibly, yet the residuals remain
+   close: more predicted power need not mean a proportionally better prediction.
+   These percentages describe error reduction, not a fraction of plasma energy.
+
+   .. _k05-validation-unexplained-en:
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Why does the linear–quadratic prediction still fall below the measured spectrum?</summary>
+
+   At some higher frequencies, more of the C3 fluctuation remains beyond
+   what the retained C1 inputs can predict consistently. Quadratic terms recover
+   part of that information, but do not guarantee a complete prediction.
+
+   The fit predicts each segment's **complex Fourier coefficient**, including
+   both amplitude and phase. A component can have substantial amplitude while
+   its phase relation to the predictors varies between segments. It still adds
+   to the measured PSD, but is difficult to predict with fixed coefficients and
+   largely remains in the residual. Matching average spectral power alone would
+   not establish that the segment-by-segment prediction is correct.
+
+   This connects to the reduced high-frequency **coherence** on the preceding
+   page. Consider the optimal linear predictor for one unchanged statistical
+   population. Define :math:`P_X=\langle|X_f|^2\rangle` and
+   :math:`P_Y=\langle|Y_f|^2\rangle`, both in V² and both nonzero; the brackets
+   average over that same population. The least-squares coefficient is
+   :math:`L_{f,0}=\langle Y_fX_f^*\rangle/P_X`, where the star denotes conjugation.
+   Combining this with :k05:eq:`experiment-coherence-phase` [4] gives
+
+   .. k05:equation:: validation-linear-predictable-power
+      :lang: en
+
+      P_{\widehat Y_0}(f)=|L_{f,0}|^2P_X(f)=C_{13}^{2}(f)\,P_Y(f).
+
+
+   :math:`P_{\widehat Y_0}=\langle|\widehat Y_{f,0}|^2\rangle` is the linear
+   prediction power; :math:`C_{13}^{2}` is dimensionless magnitude-squared
+   coherence. Thus coherence 0.1 gives a linear prediction power equal to 10%
+   of the target power in this ideal calculation. The ratio is unchanged when
+   both powers receive the same PSD normalization in :k05:eq:`experiment-hann-psd`.
+   This is a statistical identity for the optimal linear predictor, not an exact
+   constraint on a separately held-out record or on the quadratic model.
+
+   Quadratic terms can use additional information in
+   :math:`X_{f_1}X_{f_2}`. A remaining gap can have several origins:
+
+   - **Measurement noise:** a C3 noise component unrelated to the retained C1
+     inputs cannot be predicted from them. Its relative importance can increase
+     when the physical signal is weaker; no independent noise floor was measured here.
+   - **Spatial decorrelation:** the two positions can contain different physical
+     components, or their propagation-phase relation can vary with time. Fixed
+     coefficients may then fail to describe the full record.
+   - **Model inadequacy:** inputs above 20 MHz, higher-order terms, other physical
+     variables or time-varying coefficients are absent from this model. Relations
+     learned from the training captures may also change in the test capture.
+
+   The figure establishes a remaining prediction error. It does not distinguish
+   these possible causes, or identify the spectral gap as a physical energy-transfer rate.
+
+
+   .. raw:: html
+
+      </details>
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Settings, limits and reproduction of this extension</summary>
+
+   The 307 target bins run from 5.029296875 to 19.970703125 MHz, separated by
+   48.828125 kHz. Each fit uses 14646 training segments and 4882 held-out segments.
+   The actual largest input frequency is 19.970703125 MHz. Retaining every unique
+   signed pair with :math:`f_1+f_2=f` gives 204–357 quadratic columns per target.
+   Negative-frequency coefficients are conjugates; DC is excluded. Pairs with
+   either input above 20 MHz are omitted, including high-frequency pairs whose
+   difference lies in the target band.
+
+   All 307 fits have full rank, with a maximum scaled condition number of 14.10.
+   Error decreases in 225 bins and increases in the other 82; both outcomes remain
+   in the curves. This is one fixed held-out capture, not four-fold evidence at
+   high frequencies. The input basis is wider than in the original Figure 2,
+   so the two figures do not isolate a change in target frequency alone.
+
+   For each quoted sub-band percentage, sum residual powers across its native
+   bins before taking :math:`1-\sum_f\langle|\varepsilon_1|^2\rangle/
+   \sum_f\langle|\varepsilon_0|^2\rangle`. This is not an unweighted mean of
+   per-frequency percentages. No test score was used to choose a winning bandwidth.
+
+   .. code-block:: bash
+
+      OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+      python K_Diagnostics/K05_bispectral_transfer/validate_high_frequency.py \
+        --data /path/to/experiment-data \
+        --output /path/to/high-frequency-validation
+
+   Download the :download:`high-frequency script <../../../../K_Diagnostics/K05_bispectral_transfer/validate_high_frequency.py>`
+   and :download:`run summary <../../_static/K_Diagnostics/k05-validation-high-frequency-summary.json>`.
+   The script uses the same solver, preprocessing, reader and metadata linked below. It writes one SVG/PNG figure, the run summary and a full numerical archive in the chosen output folder.
+
+   .. raw:: html
+
+      </details>
+
 
    .. raw:: html
 
@@ -385,7 +522,9 @@
    sensitive to analysis choices. Together, these results support investigating
    the model further; they do not yet determine EDI growth, an energy-transfer
    direction or an inverse cascade. Such interpretations require the additional
-   measurement-response and propagation assumptions developed on the preceding pages.
+   measurement-response and propagation assumptions. The
+   :ref:`next page <k05-response-en>` uses swept-probe data to examine the
+   collection regime and electrical-response scenarios.
 
    .. raw:: html
 
@@ -428,6 +567,9 @@
    [3] NumPy, ``numpy.linalg.lstsq``.
    `Least-squares solution and singular-value cutoff <https://numpy.org/doc/stable/reference/generated/numpy.linalg.lstsq.html>`_.
 
+   [4] SciPy, ``scipy.signal.coherence``.
+   `Magnitude-squared coherence definition <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.coherence.html>`_.
+
 
 .. container:: ap-lang ap-lang-zh k05-lesson
 
@@ -449,7 +591,7 @@
 
    .. figure:: /_static/K_Diagnostics/k05-validation-folds.svg
       :alt: 图 1．每组完整记录轮流作为测试集，其余三组用于拟合。
-      :width: 100%
+      :width: 500px
 
       图 1．每组完整记录轮流作为测试集，其余三组用于拟合。
 
@@ -513,6 +655,128 @@
    系数功率采用 :k05:eq:`experiment-hann-psd` 相同的单边 PSD 换算，单位为 V²/Hz。
    在未见过的数据上，残差与预测值不保证正交，所以预测谱与残差谱相加，
    一般不严格等于实测谱。
+
+   预测谱接近，不能单独用来读出二次部分的大小。两种拟合的 :math:`L` 不同，
+   线性与二次部分的交叉项还可能增加或抵消功率，见 :k05:eq:`validation-power-budget`。
+   检验额外的项有没有帮助，要继续看残差是否降低。
+
+   .. _k05-validation-high-frequency-zh:
+
+   .. rubric:: 图 2 的高频补充：5–20 MHz 有什么不同？
+
+   仍用第 3、4、5 组拟合，第 2 组检验；保持 2048 点分段和相同预处理，
+   改为逐个检验 5–20 MHz 内的原生频点。
+   二次输入同时扩展为 :math:`0<|f_1|,|f_2|\leq20\ \mathrm{MHz}`。
+   两种模型预测同一份留出记录，没有抽稀目标频点，也没有插值。
+
+   .. figure:: /_static/K_Diagnostics/k05-validation-high-frequency-spectra.svg
+      :alt: 图 2（高频补充）．同一份第 2 组留出记录，密集覆盖 5–20 MHz：上图比较实测与预测谱，下图比较残差谱。
+      :width: 100%
+
+      图 2（高频补充）．同一份第 2 组留出记录，密集覆盖 5–20 MHz：上图比较实测与预测谱，下图比较残差谱。
+
+   横轴是频率 :math:`f`。上图的 :math:`S_{YY}^{+}` 是实测 C3 的功率谱密度
+   （power spectral density, PSD），:math:`S_{\widehat Y_m\widehat Y_m}^{+}` 是
+   :k05:eq:`validation-two-predictions` 中预测量 :math:`\widehat Y_{f,m}` 的 PSD。
+   下图的 :math:`S_{\varepsilon_m\varepsilon_m}^{+}` 是残差
+   :math:`\varepsilon_m=Y_f-\widehat Y_{f,m}` 的 PSD。
+   :math:`m=0` 表示仅线性，:math:`m=1` 表示加入二次项；上标 :math:`+` 表示单边谱。
+   纵轴均按 :k05:eq:`experiment-hann-psd` 换算，单位为 V²/Hz。
+
+   加入二次项后，5–20 MHz 内的总平方预测误差降低 **7.86%**。
+   分频带汇总时，5–10 MHz 降低 **10.70%**，10–15 MHz 降低 **1.04%**，
+   15–20 MHz 降低 **1.64%**；下图中主要的改善出现在 10 MHz 以下。
+   约 17–19 MHz 处，两种预测谱明显分开，但残差仍很接近：
+   预测功率增加，不一定意味着预测误差按相同比例降低。
+   这些百分比描述误差降低，不是等离子体能量中二次项所占的比例。
+
+   .. _k05-validation-unexplained-zh:
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>为什么高频处加入二次项后，预测谱仍低于实测谱？</summary>
+
+   在部分高频段，C3 波动中有更大一部分无法由当前保留的 C1 输入稳定预测。
+   二次项能够补回一部分，但不能保证恢复全部测量信号。
+
+   拟合预测的是每一段的 **复 Fourier 系数（complex Fourier coefficient）**，
+   需要同时预测幅值和相位。某个成分即使幅值不小，如果它与预测输入的相位关系
+   在各段之间不稳定，仍会贡献实测 PSD，却难以被固定系数预测，因而主要留在残差中。
+   仅让平均功率谱接近，还不能说明逐段预测正确。
+
+   这与上一页面看到的高频 **相干度（coherence）** 降低相呼应。
+   先考虑统计关系保持不变、针对同一统计总体得到的最优线性预测。
+   记 :math:`P_X=\langle|X_f|^2\rangle`、:math:`P_Y=\langle|Y_f|^2\rangle`，
+   两者单位均为 V²，且都非零；尖括号对这个相同的统计总体平均。
+   最小二乘系数为 :math:`L_{f,0}=\langle Y_fX_f^*\rangle/P_X`，星号表示共轭。
+   代入 :k05:eq:`experiment-coherence-phase` 的定义 [4]，得到
+
+   .. k05:equation:: validation-linear-predictable-power
+      :lang: zh
+
+      P_{\widehat Y_0}(f)=|L_{f,0}|^2P_X(f)=C_{13}^{2}(f)\,P_Y(f).
+
+
+   :math:`P_{\widehat Y_0}=\langle|\widehat Y_{f,0}|^2\rangle` 是线性预测功率，
+   :math:`C_{13}^{2}` 是无量纲的幅值平方相干度（magnitude-squared coherence）。
+   例如，在这个理想计算中，相干度为 0.1 时，线性预测功率只有目标功率的 10%。
+   按 :k05:eq:`experiment-hann-psd` 给两边乘相同的 PSD 换算因子，比例不变。
+   这是最优线性预测的统计恒等式，不是要求独立留出记录或二次模型严格满足的约束。
+
+   加入二次项，可以利用 :math:`X_{f_1}X_{f_2}` 中额外的预测信息。
+   剩余差异可能来自几类原因：
+
+   - **测量噪声（measurement noise）：** C3 中与保留的 C1 输入无关的噪声无法被预测。
+     物理信号较弱时，其相对影响可能更大；这里没有独立测得噪声底。
+   - **空间失相关（spatial decorrelation）：** 两处可以包含不同的真实波动成分，
+     或传播相位关系随时间变化，固定系数因而无法完整描述记录。
+   - **模型不完整（model inadequacy）：** 当前模型未包含 20 MHz 以上的输入、
+     更高阶项、其他物理变量或随时间变化的系数；训练组学到的关系也可能在测试组改变。
+
+   这张图确认的是仍有预测误差，尚不能区分上述原因，
+   也不能把实测谱与预测谱之间的差额直接解释成物理能量转移率。
+
+
+   .. raw:: html
+
+      </details>
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>这张补充图的设置、边界与复现方法</summary>
+
+   共有 307 个目标频点，实际端点为 5.029296875 和 19.970703125 MHz，
+   间隔 48.828125 kHz。每次拟合使用 14646 个训练段、4882 个留出段。
+   输入的实际最高频率也是 19.970703125 MHz；保留满足 :math:`f_1+f_2=f`
+   的全部不重复带符号波对，每个目标含 204–357 个二次列。
+   负频率由共轭恢复，零频率不参与。任一输入超过 20 MHz 的波对被截去，
+   即使它们的差频落入目标范围，也不在这个模型中。
+
+   307 次拟合均满秩，最大缩放条件数为 14.10。
+   225 个频点的误差降低，另外 82 个频点增加，图中均保留。
+   这里固定检验第 2 组，不能当作高频段的四轮一致性验证。
+   与原图 2 相比，输入频带也变宽了，因此两图的差异不能只归因于目标频率升高。
+
+   上面的分频带百分比先把该频带原生频点的残差功率求和，再计算
+   :math:`1-\sum_f\langle|\varepsilon_1|^2\rangle/
+   \sum_f\langle|\varepsilon_0|^2\rangle`，不是逐频点百分比的简单平均。
+   没有根据测试分数挑选效果最好的频带设置。
+
+   .. code-block:: bash
+
+      OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+      python K_Diagnostics/K05_bispectral_transfer/validate_high_frequency.py \
+        --data /path/to/experiment-data \
+        --output /path/to/high-frequency-validation
+
+   下载 :download:`high-frequency script <../../../../K_Diagnostics/K05_bispectral_transfer/validate_high_frequency.py>`
+   及 :download:`run summary <../../_static/K_Diagnostics/k05-validation-high-frequency-summary.json>`.
+   脚本依赖本页下方提供的同一求解器、预处理、读取器和元数据；在指定输出目录保存一张 SVG／PNG 图、运行摘要及完整数值数组。
+
+   .. raw:: html
+
+      </details>
+
 
    .. raw:: html
 
@@ -772,7 +1036,8 @@
    联合模型对留出电压记录的总体预测略优于仅线性模型，
    所测配置的数值矩阵条件良好；频率依赖和贡献大小仍对分析设置敏感。
    这些结果支持进一步研究模型，但还没有确定 EDI 增长、能量转移方向或逆级联。
-   后者还需要前面页面讨论的测量响应和传播条件。
+   后者还需要测量响应和传播条件。
+   :ref:`下一页面 <k05-response-zh>` 用扫描探针数据检查收集状态和电路响应情景。
 
    .. raw:: html
 
@@ -812,4 +1077,5 @@
    [3] NumPy, ``numpy.linalg.lstsq``.
    `Least-squares solution and singular-value cutoff <https://numpy.org/doc/stable/reference/generated/numpy.linalg.lstsq.html>`_.
 
-
+   [4] SciPy, ``scipy.signal.coherence``.
+   `Magnitude-squared coherence definition <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.coherence.html>`_.

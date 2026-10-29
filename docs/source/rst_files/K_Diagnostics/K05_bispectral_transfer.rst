@@ -51,6 +51,9 @@ K05 · Bispectral transfer
       7. :ref:`Validating the two-probe model <k05-validation-en>` — compare linear
          and quadratic predictions on captures excluded from fitting.
 
+      8. :ref:`What the probe measures <k05-response-en>` — rebuild I–V curves,
+         estimate temperature and inspect bias and electrical-response scenarios.
+
       Follow the main text first; open the calculation notes when needed.
 
    .. rubric:: Contributor
@@ -91,6 +94,9 @@ K05 · Bispectral transfer
       7. :ref:`双探针模型验证：二次项带来了什么？ <k05-validation-zh>` —— 用整组留出的记录，
          比较线性与二次模型的预测，并检查稳定性。
 
+      8. :ref:`探针实际测到了什么 <k05-response-zh>` —— 重建 I–V 曲线、估计温度，
+         并检查工作偏置和电路响应情景。
+
       可以先顺着正文读，需要时再展开计算细节。
 
    .. rubric:: 贡献者
@@ -116,3 +122,4 @@ K05 · Bispectral transfer
    K05_coefficient_inference
    K05_experimental_signals
    K05_model_validation
+   K05_probe_response

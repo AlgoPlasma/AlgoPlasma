@@ -130,3 +130,20 @@ prediction statistics, not Kim-corrected coefficients, physical growth rates or
 plasma energy transfer. Hold out entire captures, retain signed difference pairs,
 and use the same predetermined settings in both languages. Invalid metrics remain
 undefined; negative improvements and failed-identifiability flags are retained.
+
+Revision 21 appends 116 (`validation-linear-predictable-power`) in the
+high-frequency-result disclosure on page 07. For a no-intercept optimal linear
+predictor evaluated in the same statistical population, predicted bin power
+equals magnitude-squared coherence times target bin power. Assume nonzero input
+and target powers. A separately held-out record and a quadratic predictor need
+not satisfy this identity. Retain the distinction between a PSD mismatch,
+prediction error and a physical energy-transfer rate.
+
+Revision 22 adds peer page 08 `K05_probe_response.rst` and equations 117–124.
+The nominal resistor current is positive toward its return; the swept-probe net
+current is electron-positive and has the opposite sign. Probe voltage includes
+the battery and resistor drop. Te is a conditional logarithmic-slope estimate,
+not a unique measured bulk temperature. The RC transfer uses exp(+iwt) forward
+and thus R/(1-iwtau). Estimated capacitance, cathode/chamber offset, gain and delay
+are explicit provisional scenarios. Existing measured spectra are not corrected.
+The metadata now identifies C1 as the left fixed probe. Next equation: 125.
