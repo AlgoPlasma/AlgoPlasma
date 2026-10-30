@@ -209,7 +209,7 @@ provides a nominal 0.001 A/V scale, not a frequency-response calibration.
 (IM DL350-01EN Appendix 9): %WDF/chunk boundaries, XHDR metadata, big-endian IS2
 scales, DrAW size and illegal samples. It rejects unsupported histories/offsets.
 `analyze_probe_response.py` uses CH3_2 and CH4_2, reconstructs probe voltage with
-the battery and resistor drop, retains the first 5–345 V supply upsweep, and bins
+the 100 V DC bias supply and resistor drop, retains the first 5–345 V supply upsweep, and bins
 by 2 V with >=20 samples. It fits a signed ion background over -90 to -70 V and
 three electron windows relative to floating potential. Two alternative ion
 windows give nine choices, all saved. These ranges are sensitivity checks, not
@@ -235,3 +235,41 @@ load-line scenarios and five SVG/PNG pairs. Preserve the output alongside the
 configuration when reproducing the page. The slow 50 kHz sweeps do not measure
 MHz temperature fluctuations or establish a MHz bandwidth. Kim correction,
 physical growth rates and cascade inference are subsequent analysis stages.
+
+
+### Page 08 geometry and circuit drawings
+
+`draw_probe_schematics.py` generates the English/Chinese layout and circuit
+SVG/PNG assets without reading or fitting the experimental records:
+
+```bash
+python K_Diagnostics/K05_bispectral_transfer/draw_probe_schematics.py \
+  --output /path/to/probe_schematics
+```
+
+The Chinese drawings require Noto Sans CJK; SVG glyphs are embedded as paths.
+Copy the four SVGs to `docs/source/_static/K_Diagnostics/`. Geometry follows the
+data owner's layout sketch: C1 left/fixed, C3 right, azimuthal separation 3.7 mm,
+both 5.5 mm downstream of the exit. The drawings are not to scale and do not
+specify wave propagation. C1/C3 are fast channels; CH3_2/CH4_2 are slow channels.
+
+The owner clarified on 2026-10-30 that the slow circuit's 100 V bias comes from
+a power supply, whereas the fast circuit uses a 40.5 V rechargeable battery.
+The preserved calculation input key `sweep_battery_v` is a historical name for
+the 100 V **bias supply voltage**; its numerical value, equations and archived
+calculation hashes remain unchanged. In the page, V_b means bias voltage.
+The voltage-sense polarity is the explicit page assumption, not an independent
+calibration. A measurement branch does not imply an isolated input; the fast
+cathode-negative reference is not silently grounded to the chamber.
+
+
+### Repeated scans, clarified 2026-10-30
+
+The owner identifies 015–018 as a repeated measurement set. The experimenter
+has raised a quality concern about 008–011; the cause is not established, so
+no records are discarded. Applying the existing fixed central fit to 015–018
+gives 6.7262, 6.1403, 6.7225 and 5.9975 eV (mean 6.3966 eV). All nine preset
+choices span 5.9629–9.4796 eV; this is a sensitivity range, not a confidence
+interval. Figure 3 already plots both groups. These results do not independently
+reproduce 9.17 eV. The illustrative 008 load line remains conditional, with its
+quality caveat stated on the page. No original calculation outputs were replaced.

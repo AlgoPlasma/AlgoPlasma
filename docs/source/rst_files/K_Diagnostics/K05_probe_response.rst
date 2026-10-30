@@ -24,7 +24,15 @@
    C1 is the **left, fixed probe** in the experimental diagram; C3 is the right probe,
    3.7 mm away in the azimuthal direction. This identifies the measurement locations,
    not a measured wave-propagation direction. The exposed probe is 0.5 mm in diameter
-   and 2.5 mm long. The supplied circuit uses a 1 kΩ sampling resistor.
+   and 2.5 mm long. Both tips are 5.5 mm downstream of the exit plane.
+   The supplied circuit uses a 1 kΩ sampling resistor.
+
+   .. figure:: /_static/K_Diagnostics/k05-response-layout-en.svg
+      :alt: Figure A. Probe positions, redrawn from the experimental layout. Left: the 5.5 mm axial offset and 3.7 mm local azimuthal spacing. Right: the two probes viewed against the annular exit. Not to scale.
+      :width: 100%
+
+      Figure A. Probe positions, redrawn from the experimental layout. Left: the 5.5 mm axial offset and 3.7 mm local azimuthal spacing. Right: the two probes viewed against the annular exit. Not to scale.
+
 
    .. rubric:: 1. Begin with the two voltages that were actually recorded
 
@@ -49,32 +57,33 @@
       Figure 1. Sweep 008: supply and resistor voltages; shading selects the upward ramp.
 
 
-   The WDF headers identify a Yokogawa DL350: each selected trace has 500001 samples
+   The WDF headers [1] identify a Yokogawa DL350: each selected trace has 500001 samples
    at 50 kHz, spanning 10 s. Channel CH3_2 measures the sweep-source voltage
    :math:`V_s`; CH4_2 measures :math:`u_R`. These channel names belong to the slow
    recorder, and are different from C1/C3 on the fast oscilloscope. Figure 1 shows
    record 008 as 2 ms block medians. The band shows the within-block 16–84% spread,
    not a confidence interval. The calculations retain the full-resolution samples.
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>How the file becomes physical values</summary>
-
-   The reader follows the manufacturer's documented WDF layout [1], including
-   big-endian signed integers, per-channel scale and offset, and the time step.
-   It rejects unsupported histories and nonzero channel start offsets. Selected
-   channels contain no illegal sample codes. A 50 kHz scan has a 25 kHz Nyquist
-   frequency: it measures a slow characteristic, not the 5–20 MHz fluctuations.
-
-
-   .. raw:: html
-
-      </details>
-
-
    .. rubric:: 2. Reconstruct the actual probe voltage and current
 
-   The sweep battery is :math:`V_b=100` V. The resistor's source-side node is therefore
+   Figure B separates the fast and slow circuits. The fast probe uses a 40.5 V
+   rechargeable battery; the slow sweep uses a **100 V DC bias power supply** and
+   a separate 0–350 V variable power supply. In the figure, :math:`V_p` is the probe
+   potential and :math:`V_c` the cathode-negative potential, both relative to the
+   chamber; :math:`V_s` is the variable supply voltage. The bias supply voltage is
+   :math:`V_b=100` V, where the subscript :math:`b` denotes **bias** .
+
+   .. figure:: /_static/K_Diagnostics/k05-response-circuits-en.svg
+      :alt: Figure B. The fast circuit uses a battery and a cathode-negative reference; the slow circuit uses power supplies and a chamber reference. Coloured branches show voltage measurements, with the tip-minus-clip polarity assumed here. The drawing does not establish channel isolation or calibration.
+      :width: 100%
+
+      Figure B. The fast circuit uses a battery and a cathode-negative reference; the slow circuit uses power supplies and a chamber reference. Coloured branches show voltage measurements, with the tip-minus-clip polarity assumed here. The drawing does not establish channel isolation or calibration.
+
+
+   Read the lower circuit from the chamber reference towards the probe. The variable
+   supply raises the potential to :math:`V_s`; crossing the bias supply from its
+   positive to its negative terminal subtracts :math:`V_b`.
+   The resistor's source-side node is therefore
    at :math:`V_s-V_b`, relative to the chamber. The probe-side node differs by
    :math:`u_R`, so the probe potential :math:`V_p` is:
 
@@ -110,7 +119,9 @@
    temperature fit, and is not identified as a plasma saturation law.
 
    Files 008–011 are the sweeps explicitly associated with the supplied circuit note.
-   Files 015–018 are additional sweeps and remain a separate group. Their
+   Files 015–018 are a **repeated measurement set** and remain a separate group.
+   The experimenter has raised a data-quality concern about 008–011; its cause has
+   not been established, so those curves are retained for comparison. The repeat set's
    **floating potential** :math:`V_f`, where :math:`I=0`, is about −18 V, compared
    with about −26 V for 008–011. These are chamber-referenced floating potentials,
    not plasma potentials. The two groups are not merged into one stationary scan.
@@ -154,10 +165,12 @@
 
    Use three fixed windows relative to each curve's own :math:`V_f`:
    :math:`[-10,+5]`, :math:`[-5,+10]` and :math:`[0,+15]` V. Window 2 is the central
-   choice. For 008–011 it gives **5.78–6.52 eV** , with a mean of **6.23 eV** .
-   The supplied experimental note reports **9.17 eV** . Our specified procedure does
-   not independently reproduce that value, and we do not adjust the window to make
-   it agree.
+   choice. Applying the same rule to the repeated measurements 015–018 gives
+   **6.73, 6.14, 6.72 and 6.00 eV** , respectively, with a mean of **6.40 eV** .
+   The first set, 008–011, gives **5.78–6.52 eV** , with a mean of **6.23 eV** .
+   Figure 3 already includes both sets. Using the repeat set therefore does not,
+   by itself, reproduce the experimentally reported **9.17 eV** ; the subtraction
+   and fitting choices also need to be compared.
 
    .. raw:: html
 
@@ -225,8 +238,13 @@
 
 
 
-   For 008–011, the combined range is 5.72–9.25 eV. Thus the electron-window check
-   alone understates the uncertainty: ion-background subtraction matters. The
+   For the repeated measurements 015–018, all nine choices span **5.96–9.48 eV** ;
+   for 008–011 they span **5.72–9.25 eV** . In the repeat set, 9.48 eV comes from
+   017 with an ion-background window of −95 to −75 V and an electron window
+   of :math:`V_f+[-10,+5]` V. This is one preset sensitivity case, not the central
+   estimate or a reason to prefer that window. A range containing 9.17 eV does not
+   independently reproduce that value. Ion-background subtraction matters as well
+   as the electron fit window. The
    reported 9.17 eV may use different regions or corrections; its processing details
    are not available here. We retain both the reported value and these reproducible
    local-slope estimates. Neither is silently declared the uniquely correct bulk
@@ -240,7 +258,7 @@
 
    .. rubric:: 4. Locate the fast probe's operating point
 
-   The fast circuit uses a 40.5 V battery referenced to the cathode, while the sweep
+   The upper circuit in Figure B uses a 40.5 V rechargeable battery referenced to the cathode, while the sweep
    uses the chamber as reference. Define :math:`V_c` as cathode potential minus
    chamber potential. It has not been measured in the supplied material. Use an
    **estimated baseline of 0 V** , and show −20 and +20 V as sensitivity scenarios.
@@ -257,8 +275,8 @@
 
    The current :math:`I(V_p)` comes from the curve, so solve for the voltage at which
    both sides agree. This is a **load-line intersection** . The estimates below use
-   008 as a representative curve; that assumes comparable plasma for the slow and
-   fast recordings, which were not simultaneous.
+   008 as an illustrative curve; that assumes comparable plasma for the slow and
+   fast recordings, which were not simultaneous. The quality concern about 008–011 is a further reason not to treat this example as a verified fast operating point.
 
    .. figure:: /_static/K_Diagnostics/k05-response-bias.svg
       :alt: Figure 4. Conditional fast-probe operating points for three assumed cathode-to-chamber voltages.
@@ -462,7 +480,15 @@
 
    C1 是实验图中 **左侧的固定探针** ，C3 是右侧探针，两者周向间距 3.7 mm。
    这确定了测点位置，还没有测出波的传播方向。暴露在等离子体中的探针直径为 0.5 mm、长度为 2.5 mm；
+   两个测点都位于出口平面下游 5.5 mm。
    电路使用 1 kΩ 取样电阻（sampling resistor）。
+
+   .. figure:: /_static/K_Diagnostics/k05-response-layout-zh.svg
+      :alt: 图 A．依据实验布置重绘的探针位置。左：距出口 5.5 mm 的轴向位置与 3.7 mm 的局部周向间距；右：面对环形出口时的两探针位置。示意图不按比例绘制。
+      :width: 100%
+
+      图 A．依据实验布置重绘的探针位置。左：距出口 5.5 mm 的轴向位置与 3.7 mm 的局部周向间距；右：面对环形出口时的两探针位置。示意图不按比例绘制。
+
 
    .. rubric:: 1. 先看真正记录下来的两路电压
 
@@ -484,29 +510,28 @@
       图 1．008 扫描的电源与电阻电压；阴影选择上升扫描段。
 
 
-   WDF 文件头表明仪器是 Yokogawa DL350：每个选定通道有 500001 个点，采样率 50 kHz，覆盖 10 s。
+   WDF 文件头 [1] 表明仪器是 Yokogawa DL350：每个选定通道有 500001 个点，采样率 50 kHz，覆盖 10 s。
    CH3_2 测扫描电源电压 :math:`V_s`，CH4_2 测电阻电压 :math:`u_R`。
    这些是慢扫描记录仪的通道名，与高频示波器的 C1/C3 不同。图 1 以 008 为例，画每 2 ms 的中位数，
    色带为该小段内的 16–84% 分位范围， **不是置信区间** ；实际计算仍使用完整采样点。
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>文件里的数字怎样变成物理量</summary>
-
-   读取器按制造商的 WDF 说明 [1] 处理大端有符号整数、每通道比例与偏置、时间步长；
-   遇到不支持的多历史记录或非零通道起点偏移会停止，不猜测比例。
-   本批所选通道没有非法采样码。50 kHz 扫描的奈奎斯特频率为 25 kHz：
-   它测量慢变化的特性曲线，不提供 5–20 MHz 的波动。
-
-
-   .. raw:: html
-
-      </details>
-
-
    .. rubric:: 2. 得到探针的实际电压和电流
 
-   扫描电路中的电池为 :math:`V_b=100` V。电阻靠电源一端相对真空罐的电位为 :math:`V_s-V_b`，
+   图 B 把高频与慢扫描电路分开画出。高频波探针使用 40.5 V **蓄电池** ；
+   慢扫描使用 **100 V 直流偏置电源** （DC bias power supply），再串联一个 0–350 V 可调电源。
+   图中 :math:`V_p` 是探针电势，:math:`V_c` 是阴极负端电势，两者都以真空罐为参考；
+   :math:`V_s` 是可调电源电压。偏置电源电压记为 :math:`V_b=100` V，下标 :math:`b` 表示偏置（bias）。
+
+   .. figure:: /_static/K_Diagnostics/k05-response-circuits-zh.svg
+      :alt: 图 B．高频电路使用蓄电池、参考阴极负端；慢扫描电路使用电源、参考真空罐。彩色支路表示电压测量，极性按本文采用的“尖端减地夹”约定；图示不代表已确认通道隔离或完成标定。
+      :width: 100%
+
+      图 B．高频电路使用蓄电池、参考阴极负端；慢扫描电路使用电源、参考真空罐。彩色支路表示电压测量，极性按本文采用的“尖端减地夹”约定；图示不代表已确认通道隔离或完成标定。
+
+
+   沿下图从真空罐参考点走向探针：经过可调电源，电势升到 :math:`V_s`；
+   再从偏置电源正端走到负端，电势减去 :math:`V_b`。
+   所以电阻靠电源一端相对真空罐的电位为 :math:`V_s-V_b`，
    探针一端再与它相差 :math:`u_R`，因此探针电势 :math:`V_p` 为：
 
    .. k05:equation:: response-sweep-circuit
@@ -536,7 +561,8 @@
    保持和返回阶段不进入拟合；图 1 已能看到停止扫描后电流发生改变。
    曲线最右侧的下降保留显示，但不用于温度拟合，也不将它认定为等离子体的饱和规律。
 
-   008–011 是说明中明确对应的扫描文件；015–018 为补充扫描，分开显示。
+   008–011 是第一组扫描；015–018 是 **重复测量的一组扫描** ，两组分开显示。
+   实验人员对 008–011 提出了数据质量疑问，具体原因尚未查明，因此保留这些曲线供比较。
    后者的 **浮动电势（floating potential）** :math:`V_f`，即净电流 :math:`I=0` 的位置，约为 −18 V；
    008–011 则约为 −26 V。它们是相对真空罐的浮动电势，不是等离子体电势。
    两组不合并成一条假定平稳的曲线。
@@ -577,8 +603,9 @@
 
    相对各条曲线自身的 :math:`V_f`，固定使用三个拟合区间：
    :math:`[-10,+5]`、:math:`[-5,+10]`、:math:`[0,+15]` V，以第二个为中心选择。
-   008–011 得到 **5.78–6.52 eV，平均 6.23 eV** 。
-   实验说明报告的是 **9.17 eV** ；当前这套明确的处理方法没有独立复现该数值，也不为靠近它而调整区间。
+   用完全相同的规则处理重复测量 015–018，分别得到 **6.73、6.14、6.72、6.00 eV，平均 6.40 eV** 。
+   第一组 008–011 则为 **5.78–6.52 eV，平均 6.23 eV** 。图 3 已同时展示这两组。
+   因此，换用重复测量这一项还不足以复现实验报告的 **9.17 eV** ；还需要比较离子背景扣除和拟合区间。
 
    .. raw:: html
 
@@ -643,7 +670,10 @@
 
 
 
-   008–011 的合并范围为 5.72–9.25 eV。因此只改变电子拟合区间会低估处理方法的影响，离子背景扣除也很关键。
+   重复测量 015–018 的九种组合合并为 **5.96–9.48 eV** ；008–011 为 **5.72–9.25 eV** 。
+   其中，017 在离子背景区间 −95 至 −75 V、电子区间 :math:`V_f+[-10,+5]` V 下得到 9.48 eV。
+   这是预先列出的一个敏感性情景，不是中心结果，也不说明该区间更正确。
+   范围包含 9.17 eV，不等于独立复现了 9.17 eV；离子背景扣除与电子拟合区间都需要核对。
    报告的 9.17 eV 可能采用了不同的区间或修正；当前没有其处理细节。
    这里同时保留报告值与可复现的局部斜率估计，不默认为哪一个就是唯一正确的整体电子温度。
    此外，一次较长扫描可能同时混入等离子体随时间的变化。
@@ -656,7 +686,7 @@
 
    .. rubric:: 4. 高频探针工作在曲线的什么位置？
 
-   高频电路的 40.5 V 电池参考阴极负，扫描电路参考真空罐。
+   图 B 上方高频电路的 40.5 V 蓄电池参考阴极负端，扫描电路参考真空罐。
    定义 :math:`V_c` 为“阴极电位减真空罐电位”。补充材料尚未给出这个量。
    这里采用 **估计基准 0 V** ，并展示 −20、+20 V 两种敏感性情景。
    它们是示例选择，不是测量得到的上下界。
@@ -671,7 +701,8 @@
 
    电流 :math:`I(V_p)` 本身依赖电压，所以要求出让等式两侧一致的 :math:`V_p`，
    这叫 **负载线交点（load-line intersection）** 。
-   下面用 008 作为代表曲线，额外假定慢扫描与高频记录的等离子体状态可比较；它们不是同时采集的。
+   下面仍用 008 演示负载线计算，额外假定慢扫描与高频记录的等离子体状态可比较；它们不是同时采集的。
+   由于 008–011 的数据质量也有待核查，这个示例不能用来确认真实高频工作点。
 
    .. figure:: /_static/K_Diagnostics/k05-response-bias.svg
       :alt: 图 4．三种假设阴极—罐体电位差下，高频探针的条件工作点。
