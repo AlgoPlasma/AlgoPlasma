@@ -199,43 +199,83 @@ is not the quadratic fraction of plasma energy; the two fits have different
 linear coefficients and the complete prediction-power decomposition contains
 a signed cross term.
 
-## Page 08: sweep reconstruction and estimated response scenarios
+## Page 08: mean swept characteristics and response checks
 
-The data owner confirmed C1 is the left fixed probe; C3 is the right probe in the
-supplied diagram. This identifies positions, not propagation. The 1 kohm resistor
-provides a nominal 0.001 A/V scale, not a frequency-response calibration.
+The data owner confirmed C1 is the left fixed probe and C3 the right probe,
+3.7 mm apart azimuthally and 5.5 mm downstream. This identifies positions, not
+propagation. The 1 kohm sampling resistor supplies a nominal 0.001 A/V scale,
+not a MHz frequency-response calibration.
 
 `yokogawa_wdf.py` reads the documented single-history DL350 Trace layout
-(IM DL350-01EN Appendix 9): %WDF/chunk boundaries, XHDR metadata, big-endian IS2
-scales, DrAW size and illegal samples. It rejects unsupported histories/offsets.
-`analyze_probe_response.py` uses CH3_2 and CH4_2, reconstructs probe voltage with
-the 100 V DC bias supply and resistor drop, retains the first 5–345 V supply upsweep, and bins
-by 2 V with >=20 samples. It fits a signed ion background over -90 to -70 V and
-three electron windows relative to floating potential. Two alternative ion
-windows give nine choices, all saved. These ranges are sensitivity checks, not
-confidence intervals. Files 008–011 and 015–018 remain separate groups.
+(IM DL350-01EN Appendix 9). Unsupported histories, scales and illegal samples
+are checked by the reader. CH3_2 is supply voltage Vs; CH4_2 is resistor voltage uR.
+The slow bias is a 100 V **power supply**, while the fast bias is a 40.5 V battery.
+Use Vp=Vs−100+uR and electron-positive net current I=−uR/1000.
+
+The primary R24 analysis is `analyze_probe_sweep.py` with `probe_sweep_config.json`:
+
+1. Select the first upward ramp from the first Vs>5 V to before the first Vs>349 V.
+2. Group by imposed **Vs** in 1 V bins, retain bins with at least 8 samples,
+   and take arithmetic means of both recorded channels. Convert these means
+   to mean Vp and I. Do not remove samples solely for large current.
+3. Find the single negative-to-positive mean-current crossing above −40 V.
+   Fit signed ion background aVp+b over [−80,−50] V.
+4. Interpolate the mean curve to a 0.5 V grid [−80,60) V. A cubic
+   Savitzky–Golay derivative uses nominal spans 5,7,9,11,15,19,23 V.
+   Each odd point-count window is round(span/0.5), incremented if even.
+   Find the derivative maximum in (Vf+5,45) V; median peak position for spans
+   at least 7 V is a **candidate**, not calibrated plasma potential.
+5. Fit ln(Ie/1 mA) on unsmoothed mean bins in [Vf+2,Vpl_candidate−5] V,
+   with equal weight per bin. Reject nonpositive Ie and nonpositive slope;
+   report Te_eV=1/slope. No clipping or log-absolute-value workaround.
+6. Retain all 72 sensitivity choices: lower margins 0,2,5 V × upper 3,5,8 V ×
+   ion intervals [−90,−60], [−80,−50], [−70,−40], [−90,−40] V × linear/constant.
+   Bin widths 0.5/1/2 V are compared at the same physical central fit bounds.
 
 ```bash
-python K_Diagnostics/K05_bispectral_transfer/analyze_probe_response.py \
+python K_Diagnostics/K05_bispectral_transfer/analyze_probe_sweep.py \
   --data /path/to/supplementary_scans \
-  --output /path/to/separate_output \
-  --config K_Diagnostics/K05_bispectral_transfer/probe_response_config.json
-python -m unittest discover -s K_Diagnostics/K05_bispectral_transfer -p test_probe_response.py -v
+  --output /path/to/separate_mean_output \
+  --config K_Diagnostics/K05_bispectral_transfer/probe_sweep_config.json
+python -m unittest discover -s K_Diagnostics/K05_bispectral_transfer -p test_probe_sweep.py -v
 ```
 
-The JSON configuration labels reported, confirmed and estimated inputs separately.
-Defaults 0 V cathode/chamber offset, 100 pF capacitance, relative gain 1 and delay
-0 ns are provisional; scenario ranges are not measured bounds. No unmeasured
-inverse filter is applied to the fast data. Te=9.17 eV remains a reported value;
-central fits for 008–011 yield 5.78–6.52 eV (mean 6.23), and nine fit choices span
-5.72–9.25 eV. This is a local-slope diagnostic with model/processing dependence.
+Record 0015 is the fixed worked example. It reproduces the independently
+supplied `SingleProbe_AxialGroups_20261019` student's binned mean characteristic:
+Vf=−24.145758 V, candidate=4.5 V, slope=0.1090643203 /V, Te=9.1689014105 eV,
+26 selected bins and R²=0.992803. All 72 choices give 8.646744–10.151490 eV;
+this is sensitivity, not a confidence interval or a calibrated bulk temperature.
+015–018 yield 9.168901, 9.054662, 9.064749, 8.966188 eV (mean 9.063625 eV).
+The earlier 008–011 set yields 8.766508, 8.962420, 8.639152, 8.673730 eV.
+Keep the sets separate: the experimenter raised an unresolved quality concern
+about the earlier set. Slow 50 kHz scans do not measure MHz temperature fluctuations.
 
-Output includes file/config/source hashes, extracted headers, arrays, all fits,
-load-line scenarios and five SVG/PNG pairs. Preserve the output alongside the
-configuration when reproducing the page. The slow 50 kHz sweeps do not measure
-MHz temperature fluctuations or establish a MHz bandwidth. Kim correction,
-physical growth rates and cascade inference are subsequent analysis stages.
+The original `analyze_probe_response.py` and `probe_response_config.json` are
+preserved as the **median comparison**, not the main temperature method:
+instantaneous Vp bins of 2 V, medians, [−90,−70] V background,
+central electron interval [Vf−5,Vf+10]. For 0015 this gives 6.726178 eV.
+The mean curve with that relative fit rule gives 9.138003 eV; the old median
+curve with the present absolute intervals gives 6.805970 eV. A source-bin
+median with those same absolute intervals gives 7.056104 eV.
+Current-unit conversion and the two WDF readers agree; curve reduction is the
+dominant cause of this example's 6-to-9 difference.
 
+New outputs are separate from all historical outputs: `probe_sweep_summary.json`,
+`probe_sweep_arrays.npz` and seven SVG/PNG pairs generated by `plot_probe_sweep.py`.
+The report records raw/config/source hashes, all fit bounds and sensitivity
+cases. NPZ keys use r8_… through r18_…; `bins` columns are Vp[V], I[A], Vs[V],
+uR[V], count. The fixed illustrative bin 75≤Vs<76 V retains its raw samples.
+Display-only 2 ms blocks use means and 16–84% spreads, never confidence bands.
+Preserve the output with its configuration. Original WDF, student archive and
+historical median/fast-spectrum outputs remain read-only.
+
+The fast load-line illustration now uses the **0015 mean** characteristic,
+with assumed cathode/chamber offsets −20,0,+20 V. Corresponding Vp values
+are −60.0745, −40.1388, −20.6795 V; fitted Ie/Ii ratios 0.0211,0.0655,1.5288.
+The unchanged R–C illustration comes from the legacy response configuration,
+using 20/100/200 pF. These are assumed scenarios, not measured calibration;
+no inverse filter is applied to fast data. Physical growth/transfer inference
+and Kim correction are not part of this temperature workflow.
 
 ### Page 08 geometry and circuit drawings
 
@@ -262,14 +302,18 @@ The voltage-sense polarity is the explicit page assumption, not an independent
 calibration. A measurement branch does not imply an isolated input; the fast
 cathode-negative reference is not silently grounded to the chamber.
 
+## Page 09: stationary moments and held-out power budgets
 
-### Repeated scans, clarified 2026-10-30
+Run from the repository root (choose a new output directory):
 
-The owner identifies 015–018 as a repeated measurement set. The experimenter
-has raised a quality concern about 008–011; the cause is not established, so
-no records are discarded. Applying the existing fixed central fit to 015–018
-gives 6.7262, 6.1403, 6.7225 and 5.9975 eV (mean 6.3966 eV). All nine preset
-choices span 5.9629–9.4796 eV; this is a sensitivity range, not a confidence
-interval. Figure 3 already plots both groups. These results do not independently
-reproduce 9.17 eV. The illustrative 008 load line remains conditional, with its
-quality caveat stated on the page. No original calculation outputs were replaced.
+```bash
+python K_Diagnostics/K05_bispectral_transfer/analyze_transfer_budget.py --data /path/to/experimental_data --metadata K_Diagnostics/K05_bispectral_transfer/experiment_z5p5_a3p7.json --output /path/to/new_budget_output
+python K_Diagnostics/K05_bispectral_transfer/plot_transfer_budget.py --output /path/to/new_budget_output
+python -m unittest discover -s K_Diagnostics/K05_bispectral_transfer -p test_transfer_budget.py -v
+```
+
+The four whole-capture splits and 2048-point/5 MHz configuration match page07. Full measured fourth moments enter the stationary Kim estimator; RMS scaling and SVD use training rows only. No response correction, gain equalization, group velocity, or Kim-derived density calibration is imposed. A 1e-6 relative tolerance on Pstar <= min(PX,PY) is numerical, not statistical. Save all invalid-bound results instead of clipping or selecting favorable bins. NPZ includes physical-unit coefficients, product pairs, training moments/scales, diagnostic flags, test budgets and increments; JSON and plot provenance include input/source hashes. A failed bound is not repaired by choosing a group velocity.
+
+Current example: 35/368 cases meet the necessary common-power bound; all product matrices are full rank. The complete measured-signal budget includes quadratic self power and the prediction/residual cross term. Kim's common model power is distinct from measured held-out power. Terms in volts squared are not calibrated plasma energy, and positive/negative terms do not alone establish a cascade.
+
+Page08 R25 uses unchanged mean-sweep numerical arrays, with new full-range I–V and layout figures. Historical R24 numerical hashes describe the source at calculation time; plotting changes have a separate replot_provenance.json. Repeat scan labels1–4 map to10140015–10140018.WDF; earlier labels1–4 map to10140008–10140011.WDF. C3 is movable but stationary in these captures. The detailed illustrative R–C response is collapsed; capacitance is parasitic/input capacitance, not an added circuit component.

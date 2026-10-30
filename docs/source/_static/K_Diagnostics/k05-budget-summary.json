@@ -1,0 +1,190 @@
+{
+  "config": {
+    "nperseg": 2048,
+    "target_mhz": [
+      0.5,
+      5
+    ],
+    "input_max_mhz": 5,
+    "fourier": "exp(+i 2 pi f t)/N",
+    "window": "periodic Hann",
+    "demean": "each segment",
+    "overlap": 0,
+    "rcond": 1e-10,
+    "condition_limit": 100000000.0,
+    "admissibility_relative_tolerance": 1e-06,
+    "separation_m": 0.0037,
+    "direction": "positive coordinate C1 to C3; not measured propagation",
+    "response_correction": "none",
+    "group_velocity_m_per_s": null
+  },
+  "metadata": {
+    "data_id": "z5p5_a3p7",
+    "instrument": "SIGLENT SDS814X HD",
+    "channels": [
+      1,
+      3
+    ],
+    "capture_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "synchronized_pairs": true,
+    "same_operating_condition": true,
+    "diagnostic": "ion saturation current",
+    "axial_distance_mm": 5.5,
+    "azimuthal_separation_mm": 3.7,
+    "c1_to_c3_physical_direction": "Left fixed probe C1 to right probe C3 in the supplied front-view diagram; not an inferred wave-propagation direction.",
+    "voltage_to_current_a_per_v": 0.001,
+    "relative_channel_gain_calibration": null,
+    "relative_channel_delay_s": null,
+    "discharge_parameters": {
+      "log_time": "19:12",
+      "voltage_v": 200,
+      "recorded_current_a": 2.814,
+      "source": "20261014_zzp.xlsx, sheet 1014, row 9 (E9/F9); data-owner mapping on 2026-10-28",
+      "usage": "Experiment context only; not used to set FFT axes or infer local plasma parameters"
+    },
+    "group_velocity_m_per_s": null,
+    "dc_offset_sign_verified": null,
+    "voltage_display_reference": "Each record mean is removed; no DC-offset sign is assumed",
+    "supplementary_evidence": {
+      "lab_reader": "tool02_readbin.py subtracts header vertical offset and cites a DC calibration not included in this dataset",
+      "scope_photo": "Post-experiment photo: 100 MSa/s, 10 Mpts, 10 ms/div, C1/C3 2 V/div, 1X, DC1M, FULL; not a screenshot of these stored waveforms",
+      "operating_log": "20261014_zzp.xlsx, sheet 1014, row 9 at 19:12, selected by data owner; row note says first acquisition had two groups, while supplied data have four numbered captures"
+    },
+    "provenance": {
+      "geometry": "Data-owner note supplied with captures",
+      "synchronization_condition_diagnostic": "Data-owner confirmation, 2026-10-28",
+      "sampling_voltage_scales": "Read separately from each binary header",
+      "c1_c3_mapping": "Data-owner confirmation, 2026-10-29: C1 is left fixed probe.",
+      "circuit_geometry_field": "Supplementary circuit and field diagram supplied 2026-10-29; nominal resistor conversion, no dynamic calibration."
+    },
+    "voltage_to_current_status": "Nominal 1 kohm resistor conversion for current toward the resistor return; not a calibrated MHz transimpedance.",
+    "probe_response_assumptions_config": "probe_response_config.json",
+    "probe_geometry": {
+      "c1": "left fixed probe",
+      "c3": "right probe",
+      "exposed_diameter_mm": 0.5,
+      "exposed_length_mm": 2.5
+    },
+    "reported_magnetic_field_at_c1": {
+      "br_magnitude_gauss": 39.48,
+      "bz_magnitude_gauss": 80.34,
+      "radial_direction": "inner to outer radius",
+      "exb_direction": "counterclockwise in supplied front view"
+    }
+  },
+  "metadata_sha256": "45dcb9a38f15adb8dc8d0e1089a14960f1b980f56bb5a4eae2783e341c2b595c",
+  "inputs": [
+    {
+      "name": "SDS814X_HD_Binary_C1_2.bin",
+      "sha256": "d059f9e598401c983def1a90c331c4cc71ba7cea769dbc1f4e1ba764cf325288",
+      "bytes": 20004096
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_2.bin",
+      "sha256": "7c469d72ffa384d64ca0d6586ae4da99de5062f9f6d9a694218dc45a50dcf07b",
+      "bytes": 20004096
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_3.bin",
+      "sha256": "2802f7a85e03a8b76389d8c965910b3c011d88738bf112d6ca2ed8655e93c641",
+      "bytes": 20004096
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_3.bin",
+      "sha256": "53d6ff8c617914e368cc776038cfb7e2728626f5a1e92d416367ad10d4fd91f6",
+      "bytes": 20004096
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_4.bin",
+      "sha256": "7d853b336e2cb28e11d17d718ca475e12a0cdc9f6c5b5bcf1f716bc3cbb68aca",
+      "bytes": 20004096
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_4.bin",
+      "sha256": "cff7ca9da1b1a09d621e98b6f18f1181ed5275e5bd1cf02ccdda4f9b1a716937",
+      "bytes": 20004096
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_5.bin",
+      "sha256": "0efc70887e6b4981d82b86cd888d2acfd9bf231f0ab5b44fac3c58146d558c88",
+      "bytes": 20004096
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_5.bin",
+      "sha256": "c1168bf28e045dff046b6a922dc972c1bca56ee5e0303dda58b78c0ee16504cf",
+      "bytes": 20004096
+    }
+  ],
+  "source_sha256": {
+    "analyze_transfer_budget.py": "fe4fe76f3d8fbdc902e0babb5e1a02e5a0e43e6361f43b8cf517ad6b1f7bc252",
+    "validate_experiment.py": "112ba1ce4353e7890b82060e2e12a7d6fbd95bf55a67c4733c1b3630f8e42e89",
+    "analyze_experiment.py": "7a9230aa230d705bc81a2ec5746973feff27ccbe97715e2d7e83813b802a15a0",
+    "siglent_v4.py": "ff510edb09198793afb74a39faa4fd6dc3c59bfcf2b615666cb74f2503b4dd18"
+  },
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.3.4"
+  },
+  "frequencies": 92,
+  "example_frequency_hz": 2001953.125,
+  "audit": {
+    "identified": 368,
+    "admissible": 35,
+    "total": 368,
+    "max_condition": 10.764349737974815,
+    "max_moment_error": 1.0036003447568333e-15,
+    "max_budget_identity_error": 5.551115123125783e-16,
+    "max_increment_identity_error": 6.938893903907228e-16
+  },
+  "folds": [
+    {
+      "heldout": 2,
+      "train": [
+        3,
+        4,
+        5
+      ],
+      "admissible": 8,
+      "common_fraction_min": 0.9362207122038967,
+      "common_fraction_max": 1.2928335776589013
+    },
+    {
+      "heldout": 3,
+      "train": [
+        2,
+        4,
+        5
+      ],
+      "admissible": 9,
+      "common_fraction_min": 0.9350433487530425,
+      "common_fraction_max": 1.2924604611729906
+    },
+    {
+      "heldout": 4,
+      "train": [
+        2,
+        3,
+        5
+      ],
+      "admissible": 8,
+      "common_fraction_min": 0.9304092758783142,
+      "common_fraction_max": 1.2947967473868554
+    },
+    {
+      "heldout": 5,
+      "train": [
+        2,
+        3,
+        4
+      ],
+      "admissible": 10,
+      "common_fraction_min": 0.9326172610735707,
+      "common_fraction_max": 1.2941034397868723
+    }
+  ]
+}

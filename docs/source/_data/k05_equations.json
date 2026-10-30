@@ -122,5 +122,13 @@
   "response-fast-bias": 121,
   "response-rc": 122,
   "response-model-coefficients": 123,
-  "response-density-temperature": 124
+  "response-density-temperature": 124,
+  "response-mean-sweep-point": 125,
+  "budget-common-power": 126,
+  "budget-reference-phase": 127,
+  "budget-signal-parts": 128,
+  "budget-full-identity": 129,
+  "budget-increment-identity": 130,
+  "budget-increment-parts": 131,
+  "budget-distance-conversion": 132
 }

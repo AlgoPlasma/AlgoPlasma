@@ -9,7 +9,7 @@
 ## 阅读导览
 
 [K05 主页面](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
-简述目的，列出下方八篇平行正文；按 01–08 阅读。
+简述目的，列出下方九篇平行正文；按 01–08 阅读。
 
 [第一页面：波增长与耦合](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 解释 Brown 与 Jorns (2023) 的公式 (1)：实波形 → 复包络 → 随包络运动的变化率 → 二次耦合 → 恢复快相位。
@@ -40,7 +40,7 @@ NumPy 矩计算及互双谱的共轭次序。互动图固定三个频率的幅�
 平稳修正先区分测得功率与模型功率，逐条解释新增矩方程，再用单波对展开消元，矩阵细节另行折叠。
 明确相位旋转、群速度、幅值／功率增长及连续／有限步长转移的区别。
 
-英文视图不含中文；中文视图保留英文术语。八篇正文共用 K05 公式编号，支持跨页引用。
+英文视图不含中文；中文视图保留英文术语。九篇正文共用 K05 公式编号，支持跨页引用。
 
 ## 后续从数据到图的路线
 
@@ -64,7 +64,7 @@ K01 当前使用 NumPy 的正向 `exp(-i omega t)` 变换及 `X1 * conj(X2)` 互
 - 双探针联动图：`k05-probe-signals.js` 及双语 `k05-probe-signals-{en,zh}.svg`。
 - 第五页：`K05_coefficient_inference.rst`。
 - 第四页：`K05_spectral_statistics.rst`；相位图：`k05-phase-statistics.js` 与双语 SVG。
-- 目录：`K05_bispectral_transfer.rst` 的 toctree 并列列出八篇正文。
+- 目录：`K05_bispectral_transfer.rst` 的 toctree 并列列出九篇正文。
 - 环境使用已有 `docs/requirements.txt`；文档配置还会调用 Doxygen。仓库根目录运行：
 
 ```sh
@@ -89,7 +89,7 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 谱宽与展开补充为 K05.35–K05.44；探针记录页面追加 K05.45–K05.59。
 第 8 版追加 K05.60–K05.62，补充奈奎斯特频率、分部积分与空间传播积分。
 第 10 版追加 K05.63–K05.75，介绍平均、谱统计和电势平方收支。
-入口与八篇正文均为中性完成版；插图保留用于区分物理量的正常配色。
+入口与九篇正文均为中性完成版；插图保留用于区分物理量的正常配色。
 后续添加公式或页面时，先读 [公式编号维护说明](EQUATIONS.md)。
 
 ## 实验数据页面
@@ -105,4 +105,8 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 
 [第八页](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst)
 使用 DL350 慢扫描重建 I–V 曲线和温度斜率，并用明确标注的暂用估计检查偏置与电路响应。
-运行 `analyze_probe_response.py`，在 `probe_response_config.json` 中替换假设。
+运行 `analyze_probe_sweep.py`，使用 `probe_sweep_config.json` 复现均值 I–V 流程。
+页面用同一份0015逐步解释分箱、背景扣除、区间与斜率，并对照6.73与9.17 eV的来源。
+原中位数流程保留作比较，详见 [EXPERIMENT.md](EXPERIMENT.md)。
+
+第九页：[从双探针系数到增长与转移：先检查功率收支](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst)。实际检验 Kim 平稳矩、参考相位与完整留出功率收支。复现见 EXPERIMENT.md。

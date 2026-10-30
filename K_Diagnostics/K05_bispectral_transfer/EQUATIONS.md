@@ -142,8 +142,25 @@ prediction error and a physical energy-transfer rate.
 Revision 22 adds peer page 08 `K05_probe_response.rst` and equations 117–124.
 The nominal resistor current is positive toward its return; the swept-probe net
 current is electron-positive and has the opposite sign. Probe voltage includes
-the battery and resistor drop. Te is a conditional logarithmic-slope estimate,
+the slow bias power supply and resistor drop. Te is a conditional logarithmic-slope estimate,
 not a unique measured bulk temperature. The RC transfer uses exp(+iwt) forward
 and thus R/(1-iwtau). Estimated capacitance, cathode/chamber offset, gain and delay
 are explicit provisional scenarios. Existing measured spectra are not corrected.
-The metadata now identifies C1 as the left fixed probe. Next equation: 125.
+The metadata now identifies C1 as the left fixed probe. R22 next equation was 125.
+
+
+Revision 24 rewrites page 08 as a practical mean-I–V workflow, without new
+physical derivations. Append 125 (response-mean-sweep-point); preserve 117–124
+and all earlier equation IDs/numbers. At R24 the next equation was 126; R25 uses 126–132.
+The mean reduction groups by imposed supply voltage and averages both channels;
+the historical instantaneous-probe-voltage median is a controlled comparison.
+0015 gives 9.1689 eV with the mean pipeline and 6.7262 eV with the old median
+pipeline; this difference is mainly curve construction. Temperature means here
+an effective logarithmic slope, not independently calibrated bulk Te.
+The figure label Te,fit in eV is the numerical value of Theta_e in volts in
+equation 120; Te in that equation itself is in kelvin. Bars in 125 denote bin
+arithmetic means; they are omitted in later curve labels where explicitly stated.
+
+## Page 09: measured-power budget
+
+Append-only IDs 126–132: budget-common-power, budget-reference-phase, budget-signal-parts, budget-full-identity, budget-increment-identity, budget-increment-parts, budget-distance-conversion. Both languages share these numbers. Next new number: 133. The local A is a linear predicted signal, r a residual, and D a predicted increment; these are explicitly distinguished from earlier symbols.

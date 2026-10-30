@@ -54,6 +54,8 @@ def save(fig, output, name, description):
     fig.savefig(output / f"{name}.svg", metadata={"Date": None,
                 "Description": description}, facecolor="white")
     fig.savefig(output / f"{name}.png", dpi=160, facecolor="white")
+    svg = output/f'{name}.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
     plt.close(fig)
 
 
@@ -73,7 +75,7 @@ def layout(output, lang):
     for x, color, name in [(2.5, BLUE, "C1"), (3.55, ORANGE, "C3")]:
         ax.add_patch(Circle((x, 1.3), .09, fc="white", ec=color, lw=2.4, zorder=5))
         line(ax, [(x, 1.12), (x, .74)], color=color, lw=1)
-        text(ax, x, .28, name + ("\n固定" if zh else "\nFixed") if name == "C1" else name,
+        text(ax, x, .28, name + ("\n固定" if zh else "\nFixed") if name == "C1" else name + ("\n可移动" if zh else "\nMovable"),
              13, color, weight="bold")
     arrow(ax, (2.5, .79), (3.55, .79), style="<->")
     text(ax, 3.025, 1.0, "3.7 mm", 12)
@@ -100,12 +102,12 @@ def layout(output, lang):
     line(ax, [(2.53, .72), (1.72, .34)], color=BLUE, lw=1)
     line(ax, [(2.97, .72), (3.78, .34)], color=ORANGE, lw=1)
     text(ax, 1.5, .18, "C1 · 左侧固定" if zh else "C1 · Left, fixed", 13, BLUE)
-    text(ax, 4.0, .18, "C3 · 右侧" if zh else "C3 · Right", 13, ORANGE)
+    text(ax, 4.0, .18, "C3 · 右侧可移动" if zh else "C3 · Movable", 13, ORANGE)
     fig.text(.5, .035, "依据实验布置重绘 · 非等比例 · 未标示波传播方向" if zh else
              "Redrawn from the experimental layout · Not to scale · No wave direction inferred",
              ha="center", fontsize=13, color=MUTED)
     save(fig, output, f"k05-response-layout-{lang}",
-         "C1 left fixed, C3 right; azimuthal separation 3.7 mm, axial offset 5.5 mm. Not to scale.")
+         "C1 left fixed, C3 right movable (stationary here); azimuthal separation 3.7 mm, axial offset 5.5 mm. Not to scale.")
 
 
 def resistor(ax, x1, x2, y):
