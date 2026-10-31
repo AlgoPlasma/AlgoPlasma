@@ -12,6 +12,7 @@
 - `D04_hypre_3Draz_nonuniform`: 非均匀柱坐标 `(r,alpha,z)` Poisson 求解器。
 - `D05_phi1d_to_phi3d`: 将 HYPRE 输出的一维解向量展开为含幽灵格点的三维数组，并进行 MPI halo 交换。
 - `D06_phi_to_E`: 使用二阶中心差分由电势计算电场分量。
+- `D07_phi_to_E_nonuniform`: 非均匀柱坐标电势到电场计算，与 D04 配套。
 
 ## 典型调用顺序
 
@@ -21,9 +22,11 @@
 D02  →  D05  →  （边界条件修正）  →  D06  →  H01（电场 MPI 交换）
 ```
 
+D04 对应流程：求解 → D05 展开/交换 → 物理边界修正 → D07 → 电场交换。D07 输出单元中心柱坐标电场。
+
 ## 依赖
 
-D01–D05 需要 MPI、HYPRE、Fortran 编译器和 C 编译器。D06 无外部依赖。
+D01–D05 需要 MPI、HYPRE、Fortran 编译器和 C 编译器。D06、D07 无外部依赖。
 
 ## 文档
 
