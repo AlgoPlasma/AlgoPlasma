@@ -71,7 +71,7 @@
     </td>
     <td width="33.333%" valign="top">
       <div class="ap-member-profile">
-        <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/zhongping-zhao.svg" width="72" height="72" alt="赵中平"></a></span>
+        <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/zhongping-zhao.JPG" width="72" height="72" alt="赵中平"></a></span>
         <div class="ap-member-identity">
           <strong><a href="https://github.com/GooseGH">赵中平</a></strong><br>
           <span class="ap-member-status">博士在读</span>
@@ -267,7 +267,7 @@
     </td>
     <td width="33.333%" valign="top">
       <div class="ap-member-profile">
-        <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/zhongping-zhao.svg" width="72" height="72" alt="Zhongping Zhao"></a></span>
+        <span class="ap-member-avatar"><a href="https://github.com/GooseGH"><img src="../_static/contributors/zhongping-zhao.JPG" width="72" height="72" alt="Zhongping Zhao"></a></span>
         <div class="ap-member-identity">
           <strong><a href="https://github.com/GooseGH">Zhongping Zhao</a></strong><br>
           <span class="ap-member-status">PhD Student</span>
