@@ -1,6 +1,5 @@
-======================
 Scatter Usage Cookbook
-======================
+==============================
 
 .. raw:: html
 
@@ -9,382 +8,126 @@ Scatter Usage Cookbook
      <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: ap-lang ap-lang-zh
+.. container:: ap-lang ap-lang-zh ap-b04-doc
 
-   .. rubric:: 这页解决什么问题
+   .. rubric:: 选择接口并准备调用
 
-   本页面面向 **已经把 B_Scatter 模块编译进自己代码**、要在 PIC 循环里调用沉积算子
-   的开发者。它说明怎么选模块、调用方需要负责什么、最小时间步循环长什么样、
-   OMP / 并行场景的注意事项，以及常见集成错误。不重复
-   :doc:`Learning Path <scatter_learning_path>` 里的理论，
-   也不替代每个 routine 自己的 API 页。
-
-   .. rubric:: 先选哪个模块
+   **先按网格和输出量选择算法，再按该接口准备数组与调用循环。** 各模块的粒子输入、体积归一化和数组更新方式见下表；具体参数以链接页面为准。
 
    .. list-table::
       :header-rows: 1
-      :widths: 14 22 22 42
+      :widths: 22 38 40
 
-      * - 模块 / 子程序
-        - 坐标
-        - 沉积量
-        - 何时选它
-      * - ``sub_B01_scatter_3Dxyz``
-        - Cartesian ``(x,y,z)``
-        - 标量密度 ``den``
-        - 默认选择：3D Cartesian PIC，需要节点密度做 Poisson 求解或电流沉积。
-      * - ``sub_B01_scatter_3Dxyz_v``
-        - Cartesian ``(x,y,z)``
-        - 速度矩 ``den_v``
-        - 需要节点上的速度分量 ``<v_d>`` 时调用，``d=4/5/6`` 对应 ``v_x/v_y/v_z``。
-          流体诊断、Vlasov 矩闭合都走这条。
-      * - ``sub_B01_scatter_3Dxyz_T``
-        - Cartesian ``(x,y,z)``
-        - 温度（方差） ``den_T``
-        - 需要节点上的方差/温度时调用；用最近格子法，不是 CIC。
+      * - 算法
+        - 输入与主要用途
+        - 调用方式与输出
+      * - :doc:`B01 <B01_scatter_3Dxyz>`
+        - Cartesian 网格指标坐标；基础沉积接收 ``par(1:3,1:np)``，分量／方差例程接收 ``par(1:6,1:np)``
+        - 内部遍历粒子。基础及 ``_v`` 例程在最后整体乘 ``w``；``_T`` 写出单元方差
       * - :doc:`B02 <B02_deposit_3d_cyl>`
-        - 柱坐标 ``(r,\phi,z)``
-        - ``rho`` + ``J_r, J_\phi, J_z``
-        - 几何天然柱对称（圆柱腔、聚焦束流、等离子柱）；需要 charge 和 current
-          deposition 一起做。
+        - 均匀柱坐标；电荷沉积使用当前位置，电流沉积使用旧、新位置和时间步
+        - 调用方逐粒子调用；写出已作几何归一化的电荷或电流密度
+      * - :doc:`B03 <B03_scatter_3Dxyz_bspline>`
+        - Cartesian 网格指标坐标、``par(1:6,1:np)`` 与 B-spline 阶数
+        - 内部遍历粒子，将 ``w`` 或 ``w*par(d,p)`` 加入目标数组；保留已有累加量
+      * - :doc:`B04 <B04_scatter_3d_cyl_nonuniform>`
+        - 非均匀柱坐标节点数组、单粒子 ``position``、所在单元 ``cell``、贡献量 ``amount``
+        - 先准备几何量，再逐粒子调用；累加已作体积归一化的节点数密度或电荷密度
 
-   选型判据：
+   .. rubric:: 密度累加与初始化
 
-   - 先按 **几何** 确定 Cartesian (B01) 还是 cylindrical (B02)。
-   - 在 Cartesian 内，按 **需要的物理量** 选择 ``B01`` / ``_v`` / ``_T``。
-     三个互不冲突，可以在同一时间步里依次调用。
-   - 当前没有"相对论 scatter"——所有 routine 都假设宏粒子权重是经典质量/电荷。
-     高 ``\gamma`` 工况下电流沉积要在调用方侧把 ``v`` 换成 ``\gamma v`` 后再传入。
+   - **B01 基础及分量沉积：** 通常每次调用前清零目标数组。代码最后对整个数组乘 ``w``；若分批处理，应分别沉积到临时数组后相加。
+   - **B03 和 B04 沉积：** 每轮新的沉积前清零一次；同一轮中多个粒子或批次可以继续累加。B04 的 ``amount`` 可逐粒子改变。
+   - **B01 方差统计：** ``_T`` 内部初始化并写出各单元方差；调用方按需要将方差换算为温度。
 
-   .. rubric:: 调用方必须负责的事情
+   B02 和 B04 的节点密度已经包含体积归一化。下游需要总量时，按配套有效体积计算 :math:`\sum_a V_aD_a`；下游需要密度时，使用该密度及相应单位。
 
-   scatter routine 是无状态的；它 **只** 做一次累加。下面这些都必须由调用方组织：
+   .. _scatter-b04-calling-zh:
 
-   1. **粒子数组布局**。所有 B_Scatter routine 都要求
-      ``par(1:3, 1:np)`` 是位置（``B01``）或
-      ``par(1:6, 1:np)`` 包含位置+速度（``B01 _v / _T`` 需要 ``v`` 分量）。
-      **传入维度必须严格匹配子程序声明**，否则会 stride 错位（见
-      :doc:`Learning Path <scatter_learning_path>` 里的 "20 单位质量堆 (0,0,0)" 案例）。
-   2. **网格初始化**。目标数组为 ``den``；``den = 0`` 必须 **显式** 完成。routine 采用
-      **累加** 方式，
-      不是覆盖式；第二次调用会叠加在第一次的结果上。
-   3. **粒子权重** ``w``。多数 routine 把 ``w`` 当作整体缩放因子在循环结束后乘上；
-      ``B02`` 里粒子权重直接进沉积公式。请按各 API 页的约定填。
-   4. **Ghost cell / 边界**。``den`` 至少要分配 ``(il-1:iu+1, ...)`` 范围以容纳
-      落在域边的粒子的 CIC 权重外溢；调用方在 routine 之后再处理 ghost cell
-      的同步或周期 wrap。
-   5. **粒子是否在域内**。落在 ``[il-1, iu+1]`` 之外的粒子由调用方在 scatter
-      之前处理（注入、反射、删除等），scatter routine 自己不检查。
-   6. **柱坐标的体积归一化**。``B02`` 沉积出的 ``rho`` 是 "charge per cell"
-      而非物理电荷密度；要除以 ``r \Delta r \Delta\phi \Delta z`` 得到密度，
-      或在场求解器里直接处理"按 cell 体积积过的源项"。
+   .. rubric:: B04：一次准备，多轮沉积
 
-   .. rubric:: 编译和精度
+   1. **网格建立或改变时：** 分配数组，调用 ``sub_B04_build_geometry``，保存 ``inv_volume`` 和 ``phi_measure``。
+   2. **每轮沉积开始：** 清零 ``density``；调用方按应用的边界规则准备粒子位置，并确定粒子所在单元。
+   3. **粒子循环内：** 每个粒子调用一次 ``sub_B04_scatter_3d_cyl_nonuniform``，并检查 ``ierr``。
+   4. **粒子循环之后：** 分区计算先汇集共享节点贡献；含轴全周区域再进行轴点平均。需要单元平均源项时调用 ``sub_B04_project_density``。
 
-   - 默认编译命令（跟测试目录里一致）：
+   所需数组布局与各步骤的直接产物见 :ref:`B04 调用流程 <b04-workflow-zh>`；可直接编译的短程序见 :doc:`B04 调用示例 <B04_scatter_3d_cyl_nonuniform/usage>`。
 
-     .. code-block:: bash
+   .. rubric:: 网格边缘与并行调用
 
-        gfortran -cpp -O3 -fdefault-real-8 -fopenmp main.f90
+   **数组范围由具体例程决定。** B01 的基础／分量沉积使用 ``il-1:iu+1`` 范围，B03 的额外节点层数随阶数变化；B04 使用接口规定的物理节点范围和独立周期节点。
+   物理边界模型、粒子去留和进程间通信由调用程序组织。
 
-   - ``-fdefault-real-8`` 把所有 ``real`` 提升到 8 字节。强烈建议在生产代码里
-     开这个：CIC 权重的累加在 ``np`` 大时会受单精度误差影响，
-     ``sum(den) = sum(w_p)`` 守恒可能就保不住。
-   - ``-fopenmp`` 是必须的：上游 ``!$omp parallel`` 没有 fallback；
-     如果用 ``ifort`` 改成 ``-qopenmp``。
-   - 没有外部依赖，不需要链接 BLAS / FFTW / MPI。
+   对 B04，物理端点只计域内基函数支撑；MPI 内部接口则需要两侧支撑构成的完整有效体积。
+   共享节点各份贡献使用一致体积，再进行求和。几何量的准备方式见 :doc:`build_geometry <B04_scatter_3d_cyl_nonuniform/sub_B04_build_geometry>`。
+   多个线程同时向同一 ``density`` 写入时，调用方使用独立缓冲区再求和，或组织同步。
 
-   .. rubric:: 最小时间步结构
+   .. rubric:: 编译与后续入口
 
-   伪代码骨架，针对一次完整的密度沉积：
+   - module 和调用程序采用一致的默认 ``real`` 精度；GNU Fortran 可用 ``-fdefault-real-8`` 选择双精度默认实数。
+   - 含 ``#include`` 的 module 启用预处理，并提供源文件搜索路径。B04 的具体命令见 :ref:`模块编译说明 <b04-compile-zh>`。
+   - ``-fopenmp`` 用于启用带 OpenMP 指令的例程；各模块的并行方式分别以执行代码为准。B01 的已有性能数据见 :doc:`平台比较 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`。
 
-   .. code-block:: text
+   返回 :doc:`学习入口 <scatter_learning_path>` · :doc:`测试指南 <scatter_testing_guide>` · :doc:`B_Scatter </rst_files/B_Scatter>`。
 
-      ! 一次时间步内的 scatter
-      apply_boundary_or_inject(par, np)              ! 出域粒子和注入由调用方处理
-      den = 0.0                                      ! 必须先清零
+.. container:: ap-lang ap-lang-en ap-b04-doc
 
-      call sub_B01_scatter_3Dxyz(il, iu, den, np, par, w)   ! 累加
+   .. rubric:: Select an interface and prepare the call
 
-      ! 可选：同步 ghost cell（MPI 跨域）
-      call exchange_ghost_cells(den)
-
-      ! 可选：同步 velocity moment / temperature
-      den_v = 0.0
-      call sub_B01_scatter_3Dxyz_v(il, iu, den_v, np, par, w, d=4)
-      ! den_T 无需清零，子程序内部自行归零
-      call sub_B01_scatter_3Dxyz_T(il, iu, den_T, np, par, w, d=4)
-
-      ! 后续：场求解、诊断
-      call poisson_solve(den, phi)
-
-   一些注释：
-
-   - 真实代码会按 ``np`` 数组 **直接** 传入，不需要按粒子写循环；上游已经内部
-     并行。
-   - ``apply_boundary_or_inject`` 是用户代码，本页不展开。
-   - ``exchange_ghost_cells`` 是 ``H_MPI_Exchange`` 模块；在单进程跑测试时
-     可省略。
-   - 多次调用 ``_v`` 需要每次都清零对应的目标数组；``_T`` 由子程序内部清零，调用方无需操作。
-
-   .. rubric:: OMP 和并行考虑
-
-   上游 ``sub_B01_scatter_3Dxyz`` 的 OMP 设计是：
-
-   .. code-block:: fortran
-
-      !$omp parallel default(firstprivate) reduction(+:den)
-      !$omp do
-      do p = 1, np
-          ... CIC accumulation ...
-      end do
-      !$omp end do
-      !$omp end parallel
-
-   两个隐藏代价：
-
-   1. **OpenMP 的** ``default(firstprivate)`` **会把** ``par`` **拷到每个线程的栈**。
-      ``par`` 维度是
-      ``3 × np``，``np = 1e7`` 时每线程占 ~240 MB。64 线程 = 15 GB 拷贝，
-      系统栈 8 MB 直接溢出。因此 **测试目录的 run 脚本已设置所需栈参数**：
-      ``ulimit -s unlimited`` 和 ``OMP_STACKSIZE=1G``。集成到生产代码时
-      要同样设置，否则 ``np`` 一上去就崩。
-   2. **OpenMP 的** ``reduction(+:den)`` **在循环结束时做归约**。每个线程私有的 ``den``
-      在循环结束累加到主 ``den``。线程数高时归约开销不小，但相比 ``par``
-      拷贝是次要的。
-
-   实测数据（见 :doc:`B01 鲲鹏对比 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`）：
-
-   - 小 ``np`` (1e4)：OMP 开销主导，2-4 线程是最优档位，再加线程负扩展。
-   - 大 ``np`` (1e7)：``firstprivate`` 拷贝主导，64 线程比 1 线程慢
-     37 倍（在 AMD服务器上），鲲鹏好一些但也只能做到 2.6 倍慢。
-   - 任何 ``np``：实测加速比不会超过 ~3×，远低于线性。
-
-   换句话说，当前 kernel 不适合高 OMP 并行。
-   生产代码里集成时的可行折中：
-
-   - 把线程数控制在 4-8 档位附近。
-   - 真要做高并行，绕开上游 routine，自己实现 ``default(shared)`` + atomic
-     add 或 per-thread local accumulation 后手动合并的版本。这超出了本页范围。
-
-   .. rubric:: 常见集成错误
-
-   - ``par`` **维度不匹配子程序声明**。调用方分配 ``par(1:6, 1:np_max)``，
-     直接传给只接收 ``par(1:3, 1:np)`` 的 routine——Fortran 按 stride 3
-     重解释，每隔一列读到的是速度槽（0），位置严重错位。**这是上线前必须查的 bug**。
-   - ``den`` **没清零**。多步 PIC 循环里前一步的 ``den`` 残留累加到这一步。
-   - **没分配 guard cell**。``den(il:iu, ...)`` 不留外延一圈，落在域边的粒子的
-     CIC 权重写到边界外、触发段错误或 silent corruption。正确分配是
-     ``den(il-1:iu+1, ...)``。
-   - **B02 把"per cell" 当成 "density"**。``B02`` 直接输出"格内积分量"，
-     不是物理密度。后续 Poisson 求解时要约定是用积分量还是密度。
-   - **栈大小没调**。``ulimit -s`` 默认 8 MB，``OMP_STACKSIZE`` 默认 ~4 MB。
-     ``np = 1e7`` 配 ``firstprivate`` 会直接段错误。修复见上面 OMP 节。
-   - **温度沉积期望 CIC 守恒**。``sub_..._T`` 是最近格子法，不能套
-     ``sum(den_T) = sum(w*v^2)``。它给出节点级方差，不是"二阶矩"。
-
-.. container:: ap-lang ap-lang-en
-
-   .. rubric:: What This Page Is For
-
-   This page targets developers who have already built ``B_Scatter`` into
-   their own code and need to call the scatter operators inside a PIC loop.
-   It covers how to choose a module, what the caller owns, the minimal
-   time-step shape, OMP / parallel considerations, and common integration
-   mistakes. It does not repeat the theory from
-   :doc:`Learning Path <scatter_learning_path>` and does not replace each
-   routine's API page.
-
-   .. rubric:: Choose the Module First
+   **Choose the algorithm by grid and output quantity, then prepare arrays and loops for that interface.** Particle inputs, normalization and array updates differ as follows. Linked pages provide the complete parameters.
 
    .. list-table::
       :header-rows: 1
-      :widths: 14 22 22 42
+      :widths: 22 38 40
 
-      * - Module / subroutine
-        - Coordinates
-        - Deposited quantity
-        - When to pick it
-      * - ``sub_B01_scatter_3Dxyz``
-        - Cartesian ``(x,y,z)``
-        - Scalar density ``den``
-        - Default: 3D Cartesian PIC needing node density for Poisson or
-          current deposition.
-      * - ``sub_B01_scatter_3Dxyz_v``
-        - Cartesian ``(x,y,z)``
-        - Velocity moment ``den_v``
-        - When you need a node-level velocity component ``<v_d>``, with
-          ``d=4/5/6`` for ``v_x/v_y/v_z``. Fluid diagnostics and Vlasov
-          moment closures call this.
-      * - ``sub_B01_scatter_3Dxyz_T``
-        - Cartesian ``(x,y,z)``
-        - Temperature / variance ``den_T``
-        - When you need node-level variance / temperature. Uses
-          nearest-cell, not CIC.
+      * - Algorithm
+        - Inputs and purpose
+        - Calls and output
+      * - :doc:`B01 <B01_scatter_3Dxyz>`
+        - Cartesian grid-index coordinates; basic scatter takes ``par(1:3,1:np)``, component/variance routines take ``par(1:6,1:np)``
+        - Internal particle loop. Basic and ``_v`` routines scale the whole array by ``w`` at the end; ``_T`` writes cell variance
       * - :doc:`B02 <B02_deposit_3d_cyl>`
-        - Cylindrical ``(r,\phi,z)``
-        - ``rho`` and ``J_r, J_\phi, J_z``
-        - Naturally cylindrical geometry (cavities, focused beams, plasma
-          columns) where charge and current deposition are done together.
+        - Uniform cylindrical grid; charge deposition takes current position, current deposition takes old/new positions and a time step
+        - Caller loops over particles; output is geometrically normalized charge or current density
+      * - :doc:`B03 <B03_scatter_3Dxyz_bspline>`
+        - Cartesian grid-index coordinates, ``par(1:6,1:np)`` and B-spline degree
+        - Internal particle loop adds ``w`` or ``w*par(d,p)`` contributions, preserving previous accumulated values
+      * - :doc:`B04 <B04_scatter_3d_cyl_nonuniform>`
+        - Nonuniform cylindrical node arrays, one particle's ``position``, containing ``cell`` and ``amount``
+        - Prepare geometry, then call per particle; accumulate volume-normalized nodal number or charge density
 
-   Selection rules of thumb:
+   .. rubric:: Accumulation and initialization
 
-   - First choose Cartesian (B01) vs cylindrical (B02) by **geometry**.
-   - Inside Cartesian, choose ``B01`` / ``_v`` / ``_T`` by the **physical
-     quantity** you need. The three are independent and can be called in
-     sequence within the same time step.
-   - There is no "relativistic scatter" yet — every routine assumes
-     classical macro-particle mass / charge. At high ``\gamma`` the caller
-     must replace ``v`` with ``\gamma v`` before passing it to ``_v``.
+   - **B01 basic and component scatter:** normally clear the target before each call. The final statement scales the whole array by ``w``; deposit batches into separate temporary arrays and sum them.
+   - **B03 and B04 scatter:** clear once at the start of a new deposition stage; particles or batches in that stage can accumulate into the same array. B04 permits a different ``amount`` for each particle.
+   - **B01 variance:** ``_T`` initializes and writes cell variance internally. The caller supplies any conversion to temperature.
 
-   .. rubric:: What the Caller Owns
+   B02 and B04 nodal densities already include volume normalization. Recover a total as :math:`\sum_a V_aD_a` with the matching effective volumes; consumers of density use the density and its units directly.
 
-   The scatter routines are stateless; they **only** accumulate. The
-   caller owns:
+   .. _scatter-b04-calling-en:
 
-   1. **Particle array layout.** Every B_Scatter routine wants
-      ``par(1:3, 1:np)`` for position-only (``B01``) or
-      ``par(1:6, 1:np)`` including velocity (``B01 _v / _T``). The shape
-      **must match the subroutine declaration exactly**, or Fortran
-      reinterprets the memory by the wrong stride (see the "20 units of
-      mass at ``(0,0,0)``" case in :doc:`Learning Path <scatter_learning_path>`).
-   2. **Initialising the grid array** ``den``. ``den = 0`` must be done **explicitly**.
-      The routine accumulates, not overwrites; a second call adds on top
-      of the first.
-   3. **Particle weight** ``w``. Most routines apply ``w`` as a global
-      scale after the loop; ``B02`` mixes ``w`` into the deposition
-      formula directly. Follow each API page's convention.
-   4. **Ghost cells / boundaries.** ``den`` should be allocated at least
-      ``(il-1:iu+1, ...)`` to absorb the CIC overflow from particles at
-      the domain edge; the caller synchronises ghost cells (or applies
-      periodic wrap) after the call.
-   5. **Out-of-domain particles.** Particles outside ``[il-1, iu+1]`` are
-      not checked. The caller handles injection / reflection / deletion
-      before scatter.
-   6. **Cylindrical volume normalisation.** ``B02`` produces "charge per
-      cell", not physical charge density. Divide by
-      ``r \Delta r \Delta\phi \Delta z`` to recover density, or arrange
-      the field solver to consume the cell-integrated source directly.
+   .. rubric:: B04: prepare once, deposit repeatedly
 
-   .. rubric:: Compilation and Precision
+   1. **At grid creation or change:** allocate arrays, call ``sub_B04_build_geometry`` and retain ``inv_volume`` and ``phi_measure``.
+   2. **At the start of each deposition stage:** clear ``density``; apply the application's particle boundary rules and locate containing cells.
+   3. **Inside the particle loop:** call ``sub_B04_scatter_3d_cyl_nonuniform`` once per particle and check ``ierr``.
+   4. **After the loop:** sum shared-node contributions in partitioned calculations, then average a full-circle axis where present. Call ``sub_B04_project_density`` when a cell-average source is needed.
 
-   - Default command line (matches the test directories):
+   See the :ref:`B04 workflow <b04-workflow-en>` for layouts and direct results, and the :doc:`B04 calling example <B04_scatter_3d_cyl_nonuniform/usage>` for a short compilable program.
 
-     .. code-block:: bash
+   .. rubric:: Grid edges and parallel calls
 
-        gfortran -cpp -O3 -fdefault-real-8 -fopenmp main.f90
+   **Array extents follow the selected routine.** B01 basic/component scatter uses ``il-1:iu+1``; B03 padding depends on degree. B04 uses physical-node extents and independent periodic nodes specified by its interface.
+   The application organizes physical boundary models, particle retention and communication.
 
-   - ``-fdefault-real-8`` promotes every ``real`` to 8 bytes. **Strongly
-     recommended** in production: the CIC accumulation loses
-     ``sum(den) = sum(w_p)`` conservation under single-precision rounding
-     once ``np`` is large.
-   - ``-fopenmp`` is required: the upstream ``!$omp parallel`` has no
-     fallback. Use ``-qopenmp`` if you compile with ``ifort``.
-   - No external dependencies — no BLAS, FFTW, or MPI required.
+   B04 physical endpoints have one-sided basis support; MPI interfaces require complete effective volumes including support on both sides.
+   Shared-node contributions use matching volumes before summation; see :doc:`build_geometry <B04_scatter_3d_cyl_nonuniform/sub_B04_build_geometry>`.
+   Concurrent writes to ``density`` require separate buffers followed by summation, or caller-managed synchronization.
 
-   .. rubric:: Minimal Time-Step Structure
+   .. rubric:: Compilation and further reading
 
-   Pseudo-code skeleton for one full density deposition:
+   - Compile the module and caller with consistent default ``real`` precision; GNU Fortran supports ``-fdefault-real-8`` for double-precision default reals.
+   - Enable preprocessing and source search paths for modules using ``#include``. See :ref:`B04 compilation <b04-compile-en>`.
+   - ``-fopenmp`` enables OpenMP directives in routines that use them. Parallel behavior follows each implementation; existing B01 performance measurements are documented in the :doc:`platform comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`.
 
-   .. code-block:: text
-
-      ! Scatter inside one time step
-      apply_boundary_or_inject(par, np)              ! out-of-domain / injection is caller-side
-      den = 0.0                                      ! must zero first
-
-      call sub_B01_scatter_3Dxyz(il, iu, den, np, par, w)   ! accumulate
-
-      ! Optional: synchronise ghost cells across MPI domains
-      call exchange_ghost_cells(den)
-
-      ! Optional: velocity moment / temperature
-      den_v = 0.0
-      call sub_B01_scatter_3Dxyz_v(il, iu, den_v, np, par, w, d=4)
-      ! den_T needs no pre-zeroing; the subroutine zeroes it internally
-      call sub_B01_scatter_3Dxyz_T(il, iu, den_T, np, par, w, d=4)
-
-      ! Downstream: field solve, diagnostics
-      call poisson_solve(den, phi)
-
-   Notes:
-
-   - Production code passes ``par`` straight in by ``np`` — no per-particle
-     loop; the upstream routine parallelises internally.
-   - ``apply_boundary_or_inject`` is user code; not expanded here.
-   - ``exchange_ghost_cells`` is the ``H_MPI_Exchange`` module; can be
-     skipped in single-process test runs.
-   - Each ``_v`` call needs its own zero-initialised target array.
-     ``_T`` is zeroed internally by the subroutine; no pre-zeroing is
-     required from the caller.
-
-   .. rubric:: OMP and Parallel Considerations
-
-   The upstream ``sub_B01_scatter_3Dxyz`` uses:
-
-   .. code-block:: fortran
-
-      !$omp parallel default(firstprivate) reduction(+:den)
-      !$omp do
-      do p = 1, np
-          ... CIC accumulation ...
-      end do
-      !$omp end do
-      !$omp end parallel
-
-   Two hidden costs:
-
-   1. **OpenMP** ``default(firstprivate)`` **copies** ``par`` **to every thread stack.**
-      ``par`` is ``3 × np`` reals; at ``np = 1e7`` each thread takes
-      ~240 MB. 64 threads = 15 GB of copies, and the default 8 MB OS stack
-      overflows immediately. The test directories' run scripts set
-      ``ulimit -s unlimited`` and ``OMP_STACKSIZE=1G`` for exactly this
-      reason — production code must do the same or it will crash as soon
-      as ``np`` is non-trivial.
-   2. **OpenMP** ``reduction(+:den)`` **does a final merge.** Each thread's private
-      ``den`` is summed into the shared one at loop exit. The merge cost
-      is non-trivial at high thread counts but is secondary compared to
-      the ``par`` copy.
-
-   Measured behaviour (see
-   :doc:`B01 Kunpeng comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`):
-
-   - **Small problem** (``np = 1e4``): OMP overhead dominates; the sweet spot is
-     2-4 threads, and adding more makes it slower.
-   - **Large problem** (``np = 1e7``): ``firstprivate`` copies dominate; 64 threads
-     are **37× slower than 1 thread** on the AMD server, and even on
-     Kunpeng the kernel is only 2.6× slower at 64 threads.
-   - **Across all particle counts** (``np``): measured speedup never reaches more than ~3×,
-     well below linear.
-
-   In other words, **the current kernel does not scale well**. Practical
-   compromises:
-
-   - Keep the thread count in the 4-8 range.
-   - For genuine high parallelism, bypass the upstream routine and write a
-     custom version using ``default(shared)`` with atomic adds or
-     per-thread local accumulation merged by hand. That is beyond this
-     page.
-
-   .. rubric:: Common Integration Mistakes
-
-   - ``par`` **shape mismatch.** Caller allocates ``par(1:6, 1:np_max)``
-     and passes the slab to a routine declared as ``par(1:3, 1:np)`` —
-     Fortran reinterprets the memory with stride 3 and reads every other
-     column as garbage velocity slots. **Always check this before going
-     live.**
-   - ``den`` **not zeroed.** Residue from the previous step accumulates
-     into the current one inside a multi-step PIC loop.
-   - **No guard cell allocated.** ``den(il:iu, ...)`` with no overflow
-     ring catches CIC weights from edge particles writing past the
-     boundary, producing a segfault or silent corruption. The correct
-     layout is ``den(il-1:iu+1, ...)``.
-   - **Treating B02 "per cell" output as density.** ``B02`` produces the
-     cell-integrated quantity, not the physical density. Decide once
-     whether the downstream solver consumes cell integrals or densities.
-   - **Stack too small.** Default ``ulimit -s`` is 8 MB and
-     ``OMP_STACKSIZE`` is around 4 MB; ``np = 1e7`` with
-     ``firstprivate`` segfaults immediately. Fix per the OMP section
-     above.
-   - **Expecting CIC conservation from** ``_T``. ``sub_..._T`` uses
-     nearest-cell, not CIC, so ``sum(den_T) = sum(w*v^2)`` does not hold.
-     It provides per-node variance, not "the second moment".
+   Return to the :doc:`learning path <scatter_learning_path>` · :doc:`testing guide <scatter_testing_guide>` · :doc:`B_Scatter </rst_files/B_Scatter>`.
