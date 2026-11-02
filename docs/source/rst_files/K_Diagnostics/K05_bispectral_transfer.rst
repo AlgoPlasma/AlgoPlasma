@@ -54,8 +54,12 @@ K05 · Bispectral transfer
       8. :ref:`What the probe measures <k05-response-en>` — rebuild I–V curves,
          estimate temperature and inspect bias and electrical-response scenarios.
 
-      9. :ref:`From coefficients to the power budget <k05-budget-en>` — test stationary
-         model power, remove a reference phase and check the complete measured-power balance.
+      9. :ref:`Experimental counterparts of Figures 2 and 3 <k05-comparison-en>` —
+         see the measured spectra, coupling map and conditional growth/transfer plots,
+         then follow their calculation.
+
+      10. :ref:`Supplement: interpreting the plots <k05-budget-en>` — explain the
+          common-power check, reference phase and complete measured-power balance.
 
       Follow the main text first; open the calculation notes when needed.
 
@@ -100,8 +104,11 @@ K05 · Bispectral transfer
       8. :ref:`探针实际测到了什么 <k05-response-zh>` —— 重建 I–V 曲线、估计温度，
          并检查工作偏置和电路响应情景。
 
-      9. :ref:`从双探针系数到增长与转移：先检查功率收支 <k05-budget-zh>` —— 检查平稳模型功率，
-         移除参考相位，核对完整实测功率收支。
+      9. :ref:`把实验数据画成文献图 2、图 3 的形式 <k05-comparison-zh>` ——
+         先看频谱、耦合系数和条件增长／转移曲线，再说明怎样计算。
+
+      10. :ref:`补充：怎样解释增长与转移图 <k05-budget-zh>` ——
+          展开共同功率检查、参考相位与完整实测功率收支。
 
       可以先顺着正文读，需要时再展开计算细节。
 
@@ -129,4 +136,5 @@ K05 · Bispectral transfer
    K05_experimental_signals
    K05_model_validation
    K05_probe_response
+   K05_paper_comparison
    K05_power_budget

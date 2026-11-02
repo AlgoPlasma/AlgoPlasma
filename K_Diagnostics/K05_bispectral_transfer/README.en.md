@@ -9,7 +9,7 @@ Jorns, *Physical Review Letters* **130**, 115101 (2023),
 ## Reading guide
 
 The [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
-introduces the purpose and lists nine peer articles in reading order.
+introduces the purpose and lists ten peer articles in reading order.
 
 The [first page](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 derives the structure of Eq. (1) of Brown & Jorns (2023). It introduces a real wave, its complex
@@ -58,7 +58,7 @@ the fit to amplitude growth and mean-square transfer; continuous and finite-step
 budgets and the reference normalization are distinguished explicitly.
 
 The English views use English only; the Chinese views include English terms.
-All nine articles use the shared K05 equation sequence and cross-page references.
+All ten articles use the shared K05 equation sequence and cross-page references.
 See [equation authoring](EQUATIONS.md) before adding a page or equation.
 
 ## Planned path from data to figures
@@ -100,7 +100,7 @@ spectrum `X1 * conj(X2)`; do not change that convention implicitly.
   K05 static-asset directory. The exported `plotSvg(mode, deltaDegrees, seed,
   count, lang, uniqueId)` uses exact synthetic coefficients; the default is
   `("fixed", 60, 7, 32, lang, uniqueId)`.
-- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the nine articles.
+- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the ten articles.
 - Install the existing `docs/requirements.txt` in a suitable environment; the
   documentation configuration also invokes Doxygen. From the repository root:
 
@@ -143,4 +143,5 @@ The page compares mean and median characteristics on the same 0015 record,
 explaining the 6.73 versus 9.17 eV estimates. The old median pipeline is retained
 for comparison; see [EXPERIMENT.md](EXPERIMENT.md).
 
-Page09: [From coefficients to the power budget](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst) checks Kim stationary moments, reference phase and the complete held-out measured-power budget. Reproduction: EXPERIMENT.md.
+
+Page09: [Experimental counterparts of Figures 2 and 3](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst) shows the five panels first, then explains their calculation and explicit parameter estimates. Page10: [Supplement](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst) explains the common-power and complete-budget checks. Reproduction: EXPERIMENT.md.

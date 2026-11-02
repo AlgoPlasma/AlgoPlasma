@@ -656,11 +656,12 @@
       </details>
 
 
-   .. rubric:: Next: test the coefficient interpretation
+   .. rubric:: Next: compare the experimental figures
 
-   :ref:`The next page <k05-budget-en>` applies the stationary Kim estimator,
-   removes a reference phase and checks the complete power budget on held-out
-   records before interpreting a coefficient as growth or transfer.
+   :ref:`The next page <k05-comparison-en>` displays counterparts of the
+   spectra, dispersion, growth and coupling figures in Brown and Jorns (2023),
+   then explains how each panel is calculated. The following
+   :ref:`supplement <k05-budget-en>` checks the interpretation and complete power budget.
 
    .. rubric:: References
 
@@ -1319,10 +1320,11 @@
       </details>
 
 
-   .. rubric:: 下一步：检查系数的物理解释
+   .. rubric:: 下一步：把实验结果画出来对照
 
-   :ref:`下一页面 <k05-budget-zh>` 实际计算 Kim 平稳修正、移除参考相位，
-   并在整组留出的记录上检查完整功率收支，再讨论系数怎样连接到增长与转移。
+   :ref:`下一页面 <k05-comparison-zh>` 先展示与 Brown 和 Jorns（2023）
+   频谱、色散、增长和耦合图相对应的结果，再解释每个面板怎样计算。
+   随后的 :ref:`补充页 <k05-budget-zh>` 再核对这些曲线的物理解释和完整功率收支。
 
    .. rubric:: 参考文献
 

@@ -1,5 +1,5 @@
-09 · From coefficients to the power budget
-=======================================================
+10 · Supplement: interpreting the growth and transfer plots
+============================================================
 
 .. raw:: html
 
@@ -13,16 +13,24 @@
 
    .. _k05-budget-en:
 
-   .. rubric:: From two-probe coefficients to growth and transfer: check the power budget
+   .. rubric:: Supplement: interpreting the growth and transfer plots
 
-   A model can predict the next probe well while giving a misleading growth
-   coefficient. The :ref:`validation page <k05-validation-en>` checked prediction;
-   the :ref:`probe-response page <k05-response-en>` checked what the measured
-   voltage may represent. Here we connect them to the stationary method used
-   in [1, 2]. First ask whether its inferred power is physically possible.
-   Then remove a reference phase and account for every term in the measured power.
+   The :ref:`preceding results page <k05-comparison-en>` displayed the
+   counterparts of Figures 2 and 3 in [1]. The two estimators gave different
+   apparent growth and transfer, and many Kim points carried open-circle flags.
+   This supplement explains those results: first the common-power check,
+   then the phase rotation, and finally the complete measured-power balance.
+   It uses the same four captures and coefficients, so the checks can be
+   read alongside the plotted results rather than before them.
 
    .. rubric:: 1. Use the same records, but ask a different question
+
+   **The question is: can the common power inferred by Kim's method fit inside
+   both measured powers?** This checks a necessary consequence of the method's
+   assumptions [2], rather than prediction accuracy. Equal modelled powers are
+   already imposed when solving for the coefficients; their equality is not
+   an independent test of stationarity. Here we check whether that solution
+   is consistent with the measured totals.
 
    At one frequency, let :math:`X` be the C1 Fourier coefficient and :math:`Y` the
    simultaneous C3 coefficient, both in volts. Frequency subscripts are omitted
@@ -60,6 +68,30 @@
       :width: 100%
 
       Figure 1. Measured power ratio and inferred common-power bound. Lines use training moments; each line excludes a different whole capture.
+
+   **Upper panel: describe the measurements, without a pass band around 1.**
+   The ratio :math:`P_Y/P_X` is 1 for equal total powers, above 1 when C3 has
+   more power, and below 1 when C1 has more. Kim's assumption concerns the
+   common modelled part, not these totals: the two probes may contain
+   different unmodelled powers. Thus a departure from 1 alone does not fail
+   this check. The blue band shows the four-split range, not an acceptance
+   interval or a confidence interval.
+
+   **Lower panel: apply the necessary bound.** For positive measured powers,
+   :k05:eq:`budget-common-power` requires
+   :math:`0\le P_\star/\min(P_X,P_Y)\le1`.
+   A value above the dashed line at 1, in the red shaded area, fails:
+   the inferred common part exceeds the smaller measured total.
+   Values from 0 to 1 pass **this check only**; negative values would also
+   be inadmissible. The displayed vertical range **0.90–1.32 is a zoom,
+   not an acceptance interval**. A value near zero leaves little common
+   modelled power and is not evidence that the coefficients are useful.
+
+   For example, take :math:`P_X=1` and :math:`P_Y=1.4`, in V².
+   A common power :math:`P_\star=0.8` V² passes: the upper ratio is 1.4,
+   but the lower ratio is 0.8. A common power of 1.1 V² would fail because
+   it exceeds :math:`P_X`. The **35 of 368** passing cases reported below
+   refer to the lower-panel bound, not to proximity to 1 in the upper panel.
 
 
    Only **35 of 368 frequency–split cases** satisfy the bound with the present
@@ -104,6 +136,11 @@
 
    .. rubric:: 2. Separate a phase rotation from a change in amplitude
 
+   Think of a complex Fourier coefficient as an arrow: its length represents
+   amplitude, and its angle represents phase. Two probes can see the same
+   amplitude at different phases. A change in angle therefore needs to be
+   separated from a change in length before interpreting a coefficient.
+
    A travelling signal can rotate in the complex plane between probes without
    growing. Use the **training cross phase** as a reference:
 
@@ -125,16 +162,94 @@
 
       Figure 2. Linear coefficient magnitude, training cross phase, and apparent amplitude increment after reference-phase removal. Bands show the four-split range, not confidence intervals.
 
+   **Read the three panels at the same frequency.** The common horizontal
+   axis is :math:`f` in MHz; moving right selects a different frequency,
+   not a later time or a position farther from C1.
+   Blue means least squares; orange means the Kim algebraic solution.
+   **Both estimate the linear coefficient inside a linear-plus-quadratic
+   model.** These are not the “linear only” and “linear plus quadratic”
+   predictions compared on page 07. Lines are four-split means; shaded bands
+   span the four results and can be too narrow to distinguish.
 
-   At 2.001953 MHz with capture 2 held out, the reference phase is about −19.26°.
-   After rotation, least squares gives :math:`\operatorname{Re}\widetilde L=0.8727`,
-   while Kim gives 1.0530. Thus a naive interpretation changes from decay to growth.
-   **The Kim bound already fails at this frequency. Neither sign establishes
-   physical damping or growth.** The phase is measured modulo :math:`2\pi`;
-   channel response and nonlinear correlations can also enter it. Removing this
-   reference phase does not measure a group velocity or resolve spatial aliasing.
-   Open markers identify Kim values for which at least one split fails the bound;
-   the algebraic results remain visible for diagnosis.
+   **Top: how much does the linear term multiply the input amplitude?**
+   The vertical axis is :math:`|L|`, the length of the complex coefficient.
+   Since :math:`|LX|=|L||X|`, a value 1 means unchanged amplitude for this
+   term, 1.1 means a factor 1.1, and 0.9 means a factor 0.9.
+   This is not the amplitude ratio of the complete measurements
+   :math:`Y` and :math:`X`: the prediction also contains quadratic terms,
+   and a residual remains. Thus :math:`|L|>1` alone does not establish
+   physical wave growth.
+
+   **Middle: which reference angle is removed?**
+   The green curve is :math:`\delta=\arg\langle YX^*\rangle` from the training
+   measurements, common to both estimation methods. The plot uses degrees;
+   :k05:eq:`budget-reference-phase` uses radians.
+   For example, :math:`\delta=-20^\circ` calls for a rotation by
+   :math:`+20^\circ` when multiplying by :math:`e^{-i\delta}`.
+   A negative phase is an angle, not a negative growth rate; its sign alone
+   also does not identify propagation direction.
+
+   **Bottom: after that rotation, how far is the linear coefficient's
+   real part from 1?** The axis is
+   :math:`g_{\mathrm{app}}=\operatorname{Re}\widetilde L-1`.
+   Here :math:`\operatorname{Re}` takes the real part, the projection onto
+   the real axis; “app” means apparent.
+   The dotted zero line means :math:`\operatorname{Re}\widetilde L=1`.
+   Values +0.1 and −0.1 mean real parts 1.1 and 0.9, respectively.
+   This dimensionless increment refers to the linear term, not to the total
+   measured power change or a growth rate in s⁻¹.
+   An orange open circle flags a frequency where **at least one of the four
+   splits failed Figure 1's common-power bound**. It is not an error bar
+   or an extra measurement. Close agreement between splits indicates
+   repeatability, not validity of the physical assumptions.
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Why does rotation preserve amplitude, yet the bottom panel need not equal the top minus 1?</summary>
+
+   The rotating factor has unit magnitude:
+   :math:`|e^{-i\delta}|=1`, so :math:`|\widetilde L|=|L|`.
+   In a purely illustrative case, let
+   :math:`L=e^{i\pi/3}` and :math:`\delta=\pi/3` (60°).
+   Its amplitude factor is 1, although :math:`\operatorname{Re}L=1/2`.
+   Rotation gives :math:`\widetilde L=e^{-i\pi/3}e^{i\pi/3}=1`,
+   so :math:`g_{\mathrm{app}}=0`. Using
+   :math:`\operatorname{Re}L-1=-1/2` before rotating would mistake an angle
+   change for an amplitude decrease.
+
+   More generally, write :math:`L=|L|e^{i\phi_L}`, where
+   :math:`\phi_L=\arg L` is the fitted coefficient's phase.
+   Then :math:`g_{\mathrm{app}}=|L|\cos(\phi_L-\delta)-1`.
+   The top panel measures length; the bottom measures a projection minus 1.
+   They reduce to :math:`g_{\mathrm{app}}=|L|-1` only when the coefficient
+   aligns with the reference phase. In a joint linear-plus-quadratic fit,
+   :math:`\arg L` need not equal the measured cross phase :math:`\delta`:
+   the cross spectrum can also contain contributions from quadratic terms
+   and the residual. The middle panel therefore supplies a reference
+   rotation, not a guaranteed removal of every phase contribution.
+
+   .. raw:: html
+
+      </details>
+
+
+   To read one actual point, take **2.001953 MHz**, with capture 2 held out.
+   The middle-panel reference is about −19.26°.
+   After rotation, least squares gives
+   :math:`\operatorname{Re}\widetilde L=0.8727`, hence
+   :math:`g_{\mathrm{app}}=-0.1273` in the bottom panel.
+   Kim gives 1.0530, hence :math:`g_{\mathrm{app}}=+0.0530`.
+   These are one split's values; the plotted lines average all four.
+   The opposite signs show how the estimation assumptions change the inferred
+   linear contribution. **The Kim bound already fails here. Neither sign
+   establishes physical damping or growth.** Even a positive apparent
+   increment does not include the quadratic contribution or the residual.
+
+   The measured phase is defined modulo :math:`2\pi` and may also contain
+   channel response and nonlinear correlations. Removing this reference
+   phase does not measure a group velocity or resolve spatial aliasing.
+   The next section puts the linear term, quadratic terms and residual
+   together to check the complete measured power.
 
    .. rubric:: 3. Put every piece back into the measured power
 
@@ -290,11 +405,12 @@
    velocity would only rescale them. The 9.17 eV slope temperature from page 08
    does not independently determine :math:`v_g`.
 
-   The comparison with [1] therefore points next to **relative channel/probe
-   response and spatial homogeneity**, followed by a defensible dispersion and
-   group-velocity model. The current records already locate where the stationary
-   interpretation fails its power check. No choice of a convenient velocity
-   repairs that failure.
+   The preceding results page has already used an explicit kinetic scenario
+   for the conditional conversion. To interpret those curves as physical rates,
+   examine **relative channel/probe response and spatial homogeneity** and
+   constrain the assumed dispersion and group velocity. The current records
+   locate where the stationary interpretation fails its power check; choosing
+   a speed does not repair that failure.
 
    .. raw:: html
 
@@ -339,15 +455,21 @@
 
    .. _k05-budget-zh:
 
-   .. rubric:: 从双探针系数到增长与转移：先检查功率收支
+   .. rubric:: 补充：怎样解释增长与转移图
 
-   模型能预测另一支探针，不代表它给出的增长系数就一定可信。
-   :ref:`第七页 <k05-validation-zh>` 检查了预测能力；
-   :ref:`第八页 <k05-response-zh>` 检查了探针电压可能代表什么。
-   本页把它们接到文献 [1, 2] 的平稳模型：先检查模型声称解释的功率是否可能，
-   再移除参考相位，逐项核对测量中的功率收支（power budget）。
+   :ref:`前一结果页 <k05-comparison-zh>` 已经画出文献 [1] 图 2、图 3 的对应结果。
+   两种估计方法给出的表观增长和转移不同，许多 Kim 频点还标有空心圆。
+   本补充页解释这些现象：先看共同功率检查，再展开相位旋转，
+   最后把实测功率收支的全部项放回来。
+   使用的仍是同四组记录和同一套系数，可以对照前页的曲线阅读这些检查。
 
    .. rubric:: 1．使用同一批记录，但换一个要检验的问题
+
+   **这一节要检验：Kim 方法算出的共同功率，能否同时容纳在两路实测总功率之内？**
+   检验的是该方法假设所要求的一个必要条件 [2]，而不是再次比较预测是否准确。
+   两处模型功率相等，已经作为求解系数时的约束；解满足这个等式，
+   不能算独立验证了平稳性（stationarity）。
+   这里检查的是：这个解是否与实测总量相容。
 
    在一个目标频率处，把 C1 的 Fourier 系数记作 :math:`X`，
    同步的 C3 系数记作 :math:`Y`，两者单位均为 V。
@@ -384,6 +506,27 @@
       :width: 100%
 
       图 1．实测功率比与推断共同功率的上界检查。曲线采用训练集矩，每条线排除一整组不同的记录。
+
+   **上图：描述测量差别，不设“接近 1 才合格”的范围。**
+   :math:`P_Y/P_X` 等于 1 表示两路总功率相同，大于 1 表示 C3 较大，
+   小于 1 表示 C1 较大。Kim 假设要求相同的是模型描述的共同部分，
+   两路未被模型描述的功率可以不同，因此总功率比偏离 1 本身不判为不合格。
+   蓝色带是四轮结果的范围，既不是合格区间，也不是置信区间（confidence interval）。
+
+   **下图：才是必要条件的判据。** 当两路实测功率均为正时，
+   :k05:eq:`budget-common-power` 要求
+   :math:`0\le P_\star/\min(P_X,P_Y)\le1`。
+   高于虚线 1、进入红色阴影区，就不满足这个条件：
+   推断的共同部分比两路中较小的总量还大。
+   落在 0–1 内只表示 **通过这一项检查**；负值同样不允许。
+   图中纵轴的 **0.90–1.32 只是放大显示范围，不是合格范围**。
+   接近 0 时，共同模型功率很少，也不能因此认定系数有用。
+
+   举例说，若 :math:`P_X=1`、:math:`P_Y=1.4`，单位均为 V²，
+   取 :math:`P_\star=0.8` V² 就能通过：上图比值虽然为 1.4，
+   下图比值却为 0.8。若共同功率算成 1.1 V²，则因超过 :math:`P_X` 而不能通过。
+   下文的 **368 个案例中只有 35 个通过**，指的是下图的界限，
+   不是上图是否接近 1。
 
 
    对当前尚未作响应校正的电压通道，368 个“频点 × 留出轮次”中，
@@ -422,6 +565,10 @@
 
    .. rubric:: 2．先区分相位旋转与幅值变化
 
+   可以把复 Fourier 系数想成一支箭头：长度表示幅值（amplitude），
+   角度表示相位（phase）。两支探针看到的波即使幅值相同，相位也可能不同。
+   因此，解释系数之前，要先分清箭头是“转了一个角度”，还是“长度变了”。
+
    信号传播到另一支探针时，即使不增长，其复系数也可能旋转。
    本页用 **训练集互谱相位** 作为参考：
 
@@ -443,14 +590,81 @@
 
       图 2．线性系数幅值、训练互谱相位，以及移除参考相位后的表观幅值增量。色带为四轮范围，不是置信区间。
 
+   **先在同一个频率处，从上往下读三个子图。**
+   共用横轴是频率 :math:`f`，单位 MHz；向右走是换一个频率，
+   不是时间推移，也不是离 C1 更远。
+   蓝色表示最小二乘（least squares），橙色表示 Kim 代数解。
+   **两者估计的都是“线性＋二次模型”中的线性系数**，
+   不是第七页“仅线性”与“线性＋二次”两个预测模型的对比。
+   实线是四轮结果的均值，色带覆盖四轮范围；范围很窄时，色带可能看不清。
 
-   第 2 组留出、2.001953 MHz 处，参考相位约为 −19.26°。
-   移相后，最小二乘给出 :math:`\operatorname{Re}\widetilde L=0.8727`，
-   Kim 给出 1.0530。若直接解释，就会从“衰减”变成“增长”。
-   但 **这个频点已经未通过 Kim 功率上界检查，两种符号都不能据此确立物理阻尼或增长**。
-   互谱相位只在模 :math:`2\pi` 意义下确定，还可能包含通道响应和非线性关联。
+   **上图：线性项把输入幅值乘了多少？**
+   纵轴 :math:`|L|` 是复系数的模，也就是箭头长度。
+   因为 :math:`|LX|=|L||X|`，所以 1 表示这个线性项保持输入幅值，
+   1.1 表示乘以 1.1，0.9 表示乘以 0.9。
+   它不是完整测量 :math:`Y` 与 :math:`X` 的幅值比：
+   预测中还有二次项，预测之外还有残差。因此，单凭 :math:`|L|>1`
+   不能认定物理波动正在增长。
+
+   **中图：这次移相，准备扣掉哪个参考角度？**
+   绿线是由训练记录算出的互谱相位 :math:`\delta=\arg\langle YX^*\rangle`，
+   两种估计方法共用它。图中用角度，:k05:eq:`budget-reference-phase` 中用弧度。
+   例如 :math:`\delta=-20^\circ` 时，乘以 :math:`e^{-i\delta}`
+   就是向相反方向转 :math:`+20^\circ`。
+   相位为负只是在说角度，不是负增长率；仅凭这个符号也不能确定传播方向。
+
+   **下图：转过这个角度后，线性系数的实部离 1 还差多少？**
+   纵轴是 :math:`g_{\mathrm{app}}=\operatorname{Re}\widetilde L-1`。
+   :math:`\operatorname{Re}` 表示取实部，即箭头在实轴上的投影；
+   app 表示表观量（apparent）。
+   虚线 0 对应 :math:`\operatorname{Re}\widetilde L=1`；
+   +0.1、−0.1 分别表示实部为 1.1、0.9。
+   这个无量纲增量属于线性项，不是全部实测功率的变化比例，也不是单位为 s⁻¹ 的增长率。
+   橙色空心圆表示该频率处 **四轮中至少一轮未通过图 1 的共同功率上界**，
+   不是误差棒，也不是额外的测量点。四轮很接近只能说明结果可重复，
+   不能证明物理假设成立。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>移相不改变幅值，为什么下图还不一定等于“上图减 1”？</summary>
+
+   旋转因子的模为 1：:math:`|e^{-i\delta}|=1`，
+   因而 :math:`|\widetilde L|=|L|`，箭头长度没有变化。
+   用一组示意数字看：设 :math:`L=e^{i\pi/3}`、
+   :math:`\delta=\pi/3`，即 60°。幅值乘数是 1，
+   但未移相时 :math:`\operatorname{Re}L=1/2`。
+   移相后 :math:`\widetilde L=e^{-i\pi/3}e^{i\pi/3}=1`，
+   所以 :math:`g_{\mathrm{app}}=0`。
+   若直接用未移相的 :math:`\operatorname{Re}L-1=-1/2`，
+   就把角度变化误读成了幅值下降。
+
+   一般地，写成 :math:`L=|L|e^{i\phi_L}`，
+   其中 :math:`\phi_L=\arg L` 是拟合系数自己的相位，
+   则 :math:`g_{\mathrm{app}}=|L|\cos(\phi_L-\delta)-1`。
+   上图看长度，下图看投影再减 1；只有系数与参考相位对齐时，
+   才有 :math:`g_{\mathrm{app}}=|L|-1`。
+   联合拟合线性与二次项时，:math:`\arg L` 不必等于实测互谱相位
+   :math:`\delta`：互谱还可能含有二次项和残差的贡献。
+   所以中图提供的是统一的参考旋转，不保证消除了所有相位成分。
+
+   .. raw:: html
+
+      </details>
+
+
+   具体读一个实测频点：**2.001953 MHz，第 2 组留出**。
+   中图的参考相位约为 −19.26°。移相后，最小二乘得到
+   :math:`\operatorname{Re}\widetilde L=0.8727`，
+   所以下图是 :math:`g_{\mathrm{app}}=-0.1273`；
+   Kim 得到 1.0530，所以下图是 :math:`g_{\mathrm{app}}=+0.0530`。
+   这里列出的是一轮的数值，图中实线则是四轮均值。
+   同一数据甚至得到相反符号，说明估计假设会改变推断出的线性贡献。
+   但 **此处已未通过 Kim 上界检查，两种符号都不能据此确立物理阻尼或增长**。
+   即使表观增量为正，也还没有把二次贡献和残差算进去。
+
+   实测相位只在模 :math:`2\pi` 意义下确定，还可能含有通道响应和非线性关联。
    移除参考相位既没有测出群速度，也没有解决空间混叠（spatial aliasing）。
-   空心点表示至少一轮违反功率上界；保留这些代数结果是为了诊断问题。
+   下一节把线性项、二次项与残差放在一起，检查完整的实测功率收支。
 
    .. rubric:: 3．把每一部分放回实测功率中
 
@@ -597,10 +811,11 @@
    乘上一个假设群速度只会缩放它们。
    第八页的 9.17 eV 斜率温度不能独立给出 :math:`v_g`。
 
-   因此，继续对照文献 [1] 时，应先检查 **相对通道／探针响应及空间均匀性**，
-   再建立有依据的色散与群速度模型。
+   前一结果页已经用明确的动力学参数情景完成了条件换算。
+   如果要把那些曲线解释成物理增长与转移，还需检查
+   **相对通道／探针响应及空间均匀性**，并约束假设的色散和群速度。
    现有记录已经指出平稳解释在哪些频段不满足功率检查；
-   选一个方便的速度数值不能修复这个问题。
+   选择速度数值不能修复这个问题。
 
    .. raw:: html
 

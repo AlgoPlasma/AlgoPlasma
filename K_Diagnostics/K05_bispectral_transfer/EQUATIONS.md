@@ -161,6 +161,23 @@ The figure label Te,fit in eV is the numerical value of Theta_e in volts in
 equation 120; Te in that equation itself is in kelvin. Bars in 125 denote bin
 arithmetic means; they are omitted in later curve labels where explicitly stated.
 
-## Page 09: measured-power budget
+## Page 10 supplement: measured-power budget
 
-Append-only IDs 126–132: budget-common-power, budget-reference-phase, budget-signal-parts, budget-full-identity, budget-increment-identity, budget-increment-parts, budget-distance-conversion. Both languages share these numbers. Next new number: 133. The local A is a linear predicted signal, r a residual, and D a predicted increment; these are explicitly distinguished from earlier symbols.
+Append-only IDs 126–132: budget-common-power, budget-reference-phase, budget-signal-parts, budget-full-identity, budget-increment-identity, budget-increment-parts, budget-distance-conversion. Both languages share these numbers. R28 appends 133–138 below; next new number: 139. The local A is a linear predicted signal, r a residual, and D a predicted increment; these are explicitly distinguished from earlier symbols.
+
+
+## Page 09: experimental counterparts of Figures 2 and 3
+
+R28 moves the existing budget article to reading position10 without changing its
+file path, labels or equations126–132. Page09 is K05_paper_comparison.rst.
+Append133–138 in order: comparison-rate, comparison-dispersion,
+comparison-gordeev, comparison-branch, comparison-transfer, comparison-symmetric-q.
+Next139. The kinetic slab uses k_perp=ky, fixed k_parallel and zero ion Doppler
+shift; explicit estimated inputs are not mode identification. Te in this kinetic
+formula is an energy in joules, converted from the eV configuration. This differs
+from the Kelvin convention of the swept-probe equation120.
+Rates use full complex roots and Re[-E_ky/E_omega] for the illustrative branch.
+The voltage transfer uses the half-power convention of Brown Eq6; the full
+squared-amplitude contribution is twice that value. Symmetric maps split unique
+off-diagonal coefficients in two and reconstruct negative targets by conjugation.
+Do not confuse a missing map cell with a zero coupling estimate.

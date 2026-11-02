@@ -302,7 +302,7 @@ The voltage-sense polarity is the explicit page assumption, not an independent
 calibration. A measurement branch does not imply an isolated input; the fast
 cathode-negative reference is not silently grounded to the chamber.
 
-## Page 09: stationary moments and held-out power budgets
+## Page 10 supplement: stationary moments and held-out power budgets
 
 Run from the repository root (choose a new output directory):
 
@@ -317,3 +317,68 @@ The four whole-capture splits and 2048-point/5 MHz configuration match page07. F
 Current example: 35/368 cases meet the necessary common-power bound; all product matrices are full rank. The complete measured-signal budget includes quadratic self power and the prediction/residual cross term. Kim's common model power is distinct from measured held-out power. Terms in volts squared are not calibrated plasma energy, and positive/negative terms do not alone establish a cascade.
 
 Page08 R25 uses unchanged mean-sweep numerical arrays, with new full-range I–V and layout figures. Historical R24 numerical hashes describe the source at calculation time; plotting changes have a separate replot_provenance.json. Repeat scan labels1–4 map to10140015–10140018.WDF; earlier labels1–4 map to10140008–10140011.WDF. C3 is movable but stationary in these captures. The detailed illustrative R–C response is collapsed; capacitance is parasitic/input capacitance, not an added circuit component.
+
+
+## Page 09: counterparts of Brown & Jorns Figures 2 and 3
+
+The reading order is now page08 probe interpretation, page09 results, then page10
+power-budget checks. The existing K05_power_budget.rst path and equation links
+are preserved. Page09 uses a new K05_paper_comparison.rst and two composite plots.
+
+Run the earlier page06,07 and budget analyses first, or use their preserved
+spectral_arrays.npz, validation_arrays.npz and transfer_arrays.npz outputs:
+
+```bash
+python K_Diagnostics/K05_bispectral_transfer/analyze_paper_comparison.py \
+  --budget /path/to/budget/transfer_arrays.npz \
+  --validation /path/to/validation/validation_arrays.npz \
+  --spectra /path/to/spectra/spectral_arrays.npz \
+  --config K_Diagnostics/K05_bispectral_transfer/paper_comparison_config.json \
+  --output /path/to/new_comparison
+python K_Diagnostics/K05_bispectral_transfer/plot_paper_comparison.py \
+  --output /path/to/new_comparison
+python -m unittest discover -s K_Diagnostics/K05_bispectral_transfer -p test_paper_comparison.py -v
+```
+
+NumPy, SciPy and Matplotlib are required. Use a new, empty output directory.
+Copy the two k05-comparison-figure*.svg files to the K05 static directory and
+comparison_summary.json as k05-comparison-summary.json when updating the example.
+Changing parameters requires a fresh numerical output and matching documentation.
+
+The script does not fit or normalize the raw captures again. It asserts matching
+target grids and saved LS coefficients, obtains held-out PX from saved PY/(PY/PX),
+and converts the exact quadratic cross contribution stored in the budget arrays.
+For the half-power convention of Brown Eq6,
+T_V_half = vg * PX * t_app / (2*dy); the full squared-amplitude cross contribution
+is twice this value. It is in V^2/s, not calibrated plasma energy density.
+The line/magnitude averages use all four splits; ranges are not confidence limits.
+Q maps show mean magnitudes of symmetric ordered coefficients: Q_unique/2 off
+diagonal, Q_unique on the diagonal. Negative targets are conjugate reconstructions.
+Gray marks excluded targets/inputs, not zero coefficients. The 1e-3 V^-1 color
+floor is display-only. No high-frequency single-fold coefficients are mixed in.
+
+The explicitly provisional kinetic scenario uses Te=9.168901410487 eV from
+page08, reported |Br|=39.48 G and |Baxial|=80.34 G, assumed n0=1e17 m^-3,
+VD=+100 km/s, Xe+ mass131.293u, k_parallel*lambda_De=0.03, k_perp=ky and
+zero ion Doppler shift. Parallel is aligned with the total local field.
+Model +y is assumed to point C1 to C3; it is not a propagation measurement.
+This is a magnetized Maxwellian-electron/cold-ion calculation based on the
+Gordeev series, checked against Cavalier thesis Eqs2.7–2.9 and Brown Eq7.
+It is not a fit of the background to the measured peaks. Te's kinetic meaning
+is energy in joules after converting the eV input; do not reuse Kelvin directly.
+
+Follow one positive-frequency root with continuation, require residual<=1e-9,
+and save the full complex frequency. vgy = Re[-E_ky/E_omega] holds k_parallel
+fixed. Fourier convention exp(+i omega t)/N is consistent with exp(-i omega t)
+waves and positive Im(omega) temporal growth. The monotone branch maps to
+measured frequencies without extrapolation; nonmonotone configurations fail
+explicitly rather than choosing between multiple roots silently.
+
+Outputs: comparison_arrays.npz (branch, derivative audits, 4 split Q maps,
+apparent rates, absolute/normalized half-power contributions and spectra),
+comparison_summary.json (configuration, hashes, units, assumptions, checks),
+two SVG/PNG plots, and plot_provenance.json. Parent NPZ and all original
+records remain unchanged. The fit band is0.537–4.980 MHz, inputs<=5 MHz,
+while the Welch spectrum retains up to50 MHz. Rates and Q maps retain failed
+Kim-bound cases; only35/368 pass. Open circles flag frequencies with at least
+one failing split. No claim of identified EDI growth or inverse cascade is made.

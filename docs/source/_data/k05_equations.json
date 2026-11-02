@@ -130,5 +130,11 @@
   "budget-full-identity": 129,
   "budget-increment-identity": 130,
   "budget-increment-parts": 131,
-  "budget-distance-conversion": 132
+  "budget-distance-conversion": 132,
+  "comparison-rate": 133,
+  "comparison-dispersion": 134,
+  "comparison-gordeev": 135,
+  "comparison-branch": 136,
+  "comparison-transfer": 137,
+  "comparison-symmetric-q": 138
 }
