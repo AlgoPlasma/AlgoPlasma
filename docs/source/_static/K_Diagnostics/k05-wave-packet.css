@@ -140,10 +140,3 @@
 .k05-lesson table.k05-reading-table { width: 100%; table-layout: fixed; }
 .k05-lesson table.k05-reading-table th,
 .k05-lesson table.k05-reading-table td { white-space: normal; overflow-wrap: anywhere; }
-
-/* Temporary review colours for the R31 envelope-page edits only. */
-.k05-lesson .k05-r31-added,
-.k05-lesson .k05-r31-added summary,
-.k05-lesson .k05-r31-added a { color: #075da8; }
-.k05-lesson .k05-r31-revised,
-.k05-lesson .k05-r31-revised a { color: #9c2862; }

@@ -3,7 +3,7 @@
 
 .. raw:: html
 
-   <link rel="stylesheet" href="../../_static/K_Diagnostics/k05-wave-packet.css?v=r31-review">
+   <link rel="stylesheet" href="../../_static/K_Diagnostics/k05-wave-packet.css?v=r32-final">
    <script defer src="../../_static/K_Diagnostics/k05-packet-band.js"></script>
    <div class="ap-language-switch" role="group" aria-label="Language switch" data-ap-default-lang="en">
      <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
@@ -41,14 +41,12 @@
    same potential through Poisson's equation. A freely evolving wave must satisfy
    this **self-consistency** requirement.
 
-   .. container:: k05-r31-revised
-
-      For a small sinusoidal wave in a locally uniform background, the linearized
-      plasma equations package this requirement into a response function :math:`D(k,\omega)`. It is dimensionless
-      in our convention and is called the **linear dielectric response**. Its form
-      depends on the plasma: particle distributions, temperatures, drifts and magnetic
-      field. It must be obtained from a physical model; the wave shape alone does not
-      determine it.
+   For a small sinusoidal wave in a locally uniform background, the linearized
+   plasma equations package this requirement into a response function :math:`D(k,\omega)`. It is dimensionless
+   in our convention and is called the **linear dielectric response**. Its form
+   depends on the plasma: particle distributions, temperatures, drifts and magnetic
+   field. It must be obtained from a physical model; the wave shape alone does not
+   determine it.
 
    Recall that :math:`k` is the wavenumber along :math:`y`, in rad/m, and
    :math:`\omega` is angular frequency, in rad/s. We choose a real carrier frequency
@@ -93,7 +91,7 @@
 
    .. raw:: html
 
-      <details class="k05-note k05-r31-added"><summary>Derive these lines: Poisson's equation and the response convention</summary>
+      <details class="k05-note"><summary>Derive these lines: Poisson's equation and the response convention</summary>
 
    The electric field along :math:`y` is :math:`E_y`, in V/m. Gauss's law relates
    its spatial derivative to charge density. For a single Fourier component
@@ -139,7 +137,7 @@
 
    .. raw:: html
 
-      <details class="k05-note k05-r31-added"><summary>A simple susceptibility: cold electrons with fixed ions</summary>
+      <details class="k05-note"><summary>A simple susceptibility: cold electrons with fixed ions</summary>
 
    Consider a uniform plasma with no magnetic field, collisions or equilibrium
    drift. Ignore electron pressure and let the ions supply a fixed neutralizing
@@ -339,7 +337,7 @@
 
       .. raw:: html
 
-         <details class="k05-note"><summary class="k05-r31-revised">Keep the second-order Taylor terms: what was omitted?</summary>
+         <details class="k05-note"><summary>Keep the second-order Taylor terms: what was omitted?</summary>
 
       .. raw:: html
 
@@ -356,19 +354,17 @@
          +\nu^2\partial_\omega^2D\right]+\mathcal R_3.
          \end{aligned}
 
-      .. container:: k05-r31-revised
-
-         Every derivative on the right is evaluated at :math:`(k,\omega)`.
-         :math:`\partial_k^2D` measures curvature in the wavenumber direction;
-         :math:`\partial_\omega^2D` measures curvature in the frequency direction.
-         The **mixed derivative** :math:`\partial_k\partial_\omega D` measures how
-         one slope changes when the other input changes. For a smooth response,
-         the mixed part inside the bracket is
-         :math:`q\nu\,\partial_k\partial_\omega D+\nu q\,\partial_\omega\partial_kD`;
-         the two mixed derivatives agree, giving the factor 2.
-         The remainder :math:`\mathcal R_3` contains cubic and higher-order
-         contributions in the offsets. Keeping that remainder makes this an equality;
-         a finite Taylor polynomial alone is generally only an approximation.
+      Every derivative on the right is evaluated at :math:`(k,\omega)`.
+      :math:`\partial_k^2D` measures curvature in the wavenumber direction;
+      :math:`\partial_\omega^2D` measures curvature in the frequency direction.
+      The **mixed derivative** :math:`\partial_k\partial_\omega D` measures how
+      one slope changes when the other input changes. For a smooth response,
+      the mixed part inside the bracket is
+      :math:`q\nu\,\partial_k\partial_\omega D+\nu q\,\partial_\omega\partial_kD`;
+      the two mixed derivatives agree, giving the factor 2.
+      The remainder :math:`\mathcal R_3` contains cubic and higher-order
+      contributions in the offsets. Keeping that remainder makes this an equality;
+      a finite Taylor polynomial alone is generally only an approximation.
 
       There are two distinct approximations in :k05:eq:`response-taylor`.
       The first line discards the second-order bracket and :math:`\mathcal R_3`.
@@ -643,37 +639,35 @@
       :math:`D_a=1+\sum_s\chi_{s,a}` and move the quadratic source to the left.
       The source has not been dropped: it is precisely the term with the minus sign.
 
-   .. container:: k05-r31-added
+   **Now obtain the last line: remove the carrier and identify the source.**
+   Use :math:`\phi_a=A_a e^{i\theta_a}` and
+   :math:`\rho_a^{(2)}=R_a^{(2)}e^{i\theta_a}`. For a packet, the compact linear
+   response in :k05:eq:`quadratic-poisson` must also be expanded about the carrier,
+   as in :k05:eq:`linear-response-1d`; it is not enough to replace it by a constant
+   :math:`D_a A_a`. To keep the substitution readable, call that already-derived
+   linear combination :math:`\mathcal L_a A_a`:
 
-      **Now obtain the last line: remove the carrier and identify the source.**
-      Use :math:`\phi_a=A_a e^{i\theta_a}` and
-      :math:`\rho_a^{(2)}=R_a^{(2)}e^{i\theta_a}`. For a packet, the compact linear
-      response in :k05:eq:`quadratic-poisson` must also be expanded about the carrier,
-      as in :k05:eq:`linear-response-1d`; it is not enough to replace it by a constant
-      :math:`D_a A_a`. To keep the substitution readable, call that already-derived
-      linear combination :math:`\mathcal L_a A_a`:
+   .. k05:equation:: quadratic-envelope-source-steps
+      :lang: en
 
-      .. k05:equation:: quadratic-envelope-source-steps
-         :lang: en
+      \begin{aligned}
+      \mathcal L_a A_a&\equiv iD_{i,a}A_a
+      -i(\partial_kD_r)_a\partial_yA_a
+      +i(\partial_\omega D_r)_a\partial_tA_a,\\
+      0&\simeq e^{i\theta_a}\left[\mathcal L_a A_a
+      -\frac{R_a^{(2)}}{\epsilon_0k_a^2}\right],\\
+      0&=\mathcal L_a A_a+\mathcal N_a^{(2)},\qquad
+      \mathcal N_a^{(2)}=-\frac{R_a^{(2)}}{\epsilon_0k_a^2}.
+      \end{aligned}
 
-         \begin{aligned}
-         \mathcal L_a A_a&\equiv iD_{i,a}A_a
-         -i(\partial_kD_r)_a\partial_yA_a
-         +i(\partial_\omega D_r)_a\partial_tA_a,\\
-         0&\simeq e^{i\theta_a}\left[\mathcal L_a A_a
-         -\frac{R_a^{(2)}}{\epsilon_0k_a^2}\right],\\
-         0&=\mathcal L_a A_a+\mathcal N_a^{(2)},\qquad
-         \mathcal N_a^{(2)}=-\frac{R_a^{(2)}}{\epsilon_0k_a^2}.
-         \end{aligned}
-
-      The first line only abbreviates the three linear terms; subscript :math:`a`
-      on their coefficients means evaluation at :math:`(k_a,\omega_a)`.
-      The second line substitutes both carrier factors and the linear expansion into
-      the rearranged Poisson equation. Since :math:`e^{i\theta_a}\ne0`, divide it out.
-      Compare what remains with :k05:eq:`quadratic-response-1d`, whose convention is
-      “linear terms + :math:`\mathcal N_a^{(2)}` = 0.” The leftover negative fraction
-      is therefore :math:`\mathcal N_a^{(2)}`. Its units are volts, matching the linear
-      terms; it becomes a rate term only after division by the frequency derivative.
+   The first line only abbreviates the three linear terms; subscript :math:`a`
+   on their coefficients means evaluation at :math:`(k_a,\omega_a)`.
+   The second line substitutes both carrier factors and the linear expansion into
+   the rearranged Poisson equation. Since :math:`e^{i\theta_a}\ne0`, divide it out.
+   Compare what remains with :k05:eq:`quadratic-response-1d`, whose convention is
+   “linear terms + :math:`\mathcal N_a^{(2)}` = 0.” The leftover negative fraction
+   is therefore :math:`\mathcal N_a^{(2)}`. Its units are volts, matching the linear
+   terms; it becomes a rate term only after division by the frequency derivative.
 
    The minus sign belongs to this definition of :math:`\mathcal N^{(2)}`.
    Changing the normalization of :math:`D` requires changing the nonlinear
@@ -750,13 +744,11 @@
    equations quoted from the article.
 
 
-   .. container:: k05-r31-added
+   .. _k05-coefficients-reference-2-en:
 
-      .. _k05-coefficients-reference-2-en:
-
-      [2] R. Fitzpatrick, *Plasma Physics*, “Cold-Plasma Dielectric Permittivity,”
-      equations (5.30) and (5.33), University of Texas at Austin.
-      `Lecture notes <https://farside.ph.utexas.edu/teaching/plasma/Plasma/node64.html>`_.
+   [2] R. Fitzpatrick, *Plasma Physics*, “Cold-Plasma Dielectric Permittivity,”
+   equations (5.30) and (5.33), University of Texas at Austin.
+   `Lecture notes <https://farside.ph.utexas.edu/teaching/plasma/Plasma/node64.html>`_.
 
 
 .. container:: ap-lang ap-lang-zh k05-lesson
@@ -778,13 +770,11 @@
    这些电荷又必须通过泊松方程（Poisson's equation）产生原来的电势。
    自由演化的波需要满足这种 **自洽性（self-consistency）**。
 
-   .. container:: k05-r31-revised
-
-      对于局部均匀背景中的小振幅正弦波，可以把线性化的等离子体方程整理成一个响应函数
-      :math:`D(k,\omega)`。在这里的约定下，它无量纲，称为
-      **线性介电响应（linear dielectric response）**。
-      它的具体形式取决于粒子分布、温度、漂移和磁场等物理信息，必须从等离子体模型求出，
-      不能只凭波形确定。
+   对于局部均匀背景中的小振幅正弦波，可以把线性化的等离子体方程整理成一个响应函数
+   :math:`D(k,\omega)`。在这里的约定下，它无量纲，称为
+   **线性介电响应（linear dielectric response）**。
+   它的具体形式取决于粒子分布、温度、漂移和磁场等物理信息，必须从等离子体模型求出，
+   不能只凭波形确定。
 
    回顾一下，:math:`k` 是沿 :math:`y` 方向的波数，单位 rad/m；
    :math:`\omega` 是角频率，单位 rad/s。这里用响应的实部选取一个实数载波频率：
@@ -825,7 +815,7 @@
 
    .. raw:: html
 
-      <details class="k05-note k05-r31-added"><summary>展开这几行：从泊松方程到响应函数</summary>
+      <details class="k05-note"><summary>展开这几行：从泊松方程到响应函数</summary>
 
    :math:`E_y` 是沿 :math:`y` 方向的电场，单位 V/m。高斯定律（Gauss's law）
    把电场的空间变化与电荷密度联系起来。对单个 Fourier 分量
@@ -867,7 +857,7 @@
 
    .. raw:: html
 
-      <details class="k05-note k05-r31-added"><summary>一个简单的极化率：冷电子与固定离子</summary>
+      <details class="k05-note"><summary>一个简单的极化率：冷电子与固定离子</summary>
 
    考虑均匀等离子体，不加磁场，没有碰撞和背景漂移。忽略电子压强，
    离子只提供固定的中和背景。这个冷电子模型（cold-electron model）给出 [2]
@@ -1046,7 +1036,7 @@
 
       .. raw:: html
 
-         <details class="k05-note"><summary class="k05-r31-revised">保留二阶泰勒项：前面略去了什么？</summary>
+         <details class="k05-note"><summary>保留二阶泰勒项：前面略去了什么？</summary>
 
       .. raw:: html
 
@@ -1063,18 +1053,16 @@
          +\nu^2\partial_\omega^2D\right]+\mathcal R_3.
          \end{aligned}
 
-      .. container:: k05-r31-revised
-
-         右边所有导数都在 :math:`(k,\omega)` 处取值。
-         :math:`\partial_k^2D` 描述沿波数方向的弯曲程度，
-         :math:`\partial_\omega^2D` 描述沿频率方向的弯曲程度。
-         **混合偏导（mixed derivative）** :math:`\partial_k\partial_\omega D`
-         描述“改变一个自变量时，另一个方向的斜率怎样变化”。
-         方括号内的混合项为 :math:`q\nu\,\partial_k\partial_\omega D`
-         与 :math:`\nu q\,\partial_\omega\partial_kD`；响应足够光滑时，
-         两种求导顺序结果相同，合并后就得到系数 2。
-         余项（remainder） :math:`\mathcal R_3` 收纳偏移的三次及更高阶贡献。
-         保留这个余项，才可以写等号；有限项的泰勒多项式通常只是近似。
+      右边所有导数都在 :math:`(k,\omega)` 处取值。
+      :math:`\partial_k^2D` 描述沿波数方向的弯曲程度，
+      :math:`\partial_\omega^2D` 描述沿频率方向的弯曲程度。
+      **混合偏导（mixed derivative）** :math:`\partial_k\partial_\omega D`
+      描述“改变一个自变量时，另一个方向的斜率怎样变化”。
+      方括号内的混合项为 :math:`q\nu\,\partial_k\partial_\omega D`
+      与 :math:`\nu q\,\partial_\omega\partial_kD`；响应足够光滑时，
+      两种求导顺序结果相同，合并后就得到系数 2。
+      余项（remainder） :math:`\mathcal R_3` 收纳偏移的三次及更高阶贡献。
+      保留这个余项，才可以写等号；有限项的泰勒多项式通常只是近似。
 
       :k05:eq:`response-taylor` 实际做了 **两次不同的简化**。
       第一行略去了二阶方括号及 :math:`\mathcal R_3`；第二行又略去了虚响应的导数。
@@ -1320,35 +1308,33 @@
       最后一行用 :math:`D_a=1+\sum_s\chi_{s,a}` 简写，并把二次源移到左边。
       二次源没有被丢掉，它正是那个带负号的分式。
 
-   .. container:: k05-r31-added
+   **再得到最后一行：去掉载波，认出源项。**
+   代入 :math:`\phi_a=A_a e^{i\theta_a}` 和
+   :math:`\rho_a^{(2)}=R_a^{(2)}e^{i\theta_a}`。
+   对波包，:k05:eq:`quadratic-poisson` 中简写的线性响应还要像
+   :k05:eq:`linear-response-1d` 一样，在载波附近展开；不能只把它当成常数
+   :math:`D_a A_a`。为了看清代入过程，把前面已经推得的三个线性项
+   暂时合记为 :math:`\mathcal L_a A_a`：
 
-      **再得到最后一行：去掉载波，认出源项。**
-      代入 :math:`\phi_a=A_a e^{i\theta_a}` 和
-      :math:`\rho_a^{(2)}=R_a^{(2)}e^{i\theta_a}`。
-      对波包，:k05:eq:`quadratic-poisson` 中简写的线性响应还要像
-      :k05:eq:`linear-response-1d` 一样，在载波附近展开；不能只把它当成常数
-      :math:`D_a A_a`。为了看清代入过程，把前面已经推得的三个线性项
-      暂时合记为 :math:`\mathcal L_a A_a`：
+   .. k05:equation:: quadratic-envelope-source-steps
+      :lang: zh
 
-      .. k05:equation:: quadratic-envelope-source-steps
-         :lang: zh
+      \begin{aligned}
+      \mathcal L_a A_a&\equiv iD_{i,a}A_a
+      -i(\partial_kD_r)_a\partial_yA_a
+      +i(\partial_\omega D_r)_a\partial_tA_a,\\
+      0&\simeq e^{i\theta_a}\left[\mathcal L_a A_a
+      -\frac{R_a^{(2)}}{\epsilon_0k_a^2}\right],\\
+      0&=\mathcal L_a A_a+\mathcal N_a^{(2)},\qquad
+      \mathcal N_a^{(2)}=-\frac{R_a^{(2)}}{\epsilon_0k_a^2}.
+      \end{aligned}
 
-         \begin{aligned}
-         \mathcal L_a A_a&\equiv iD_{i,a}A_a
-         -i(\partial_kD_r)_a\partial_yA_a
-         +i(\partial_\omega D_r)_a\partial_tA_a,\\
-         0&\simeq e^{i\theta_a}\left[\mathcal L_a A_a
-         -\frac{R_a^{(2)}}{\epsilon_0k_a^2}\right],\\
-         0&=\mathcal L_a A_a+\mathcal N_a^{(2)},\qquad
-         \mathcal N_a^{(2)}=-\frac{R_a^{(2)}}{\epsilon_0k_a^2}.
-         \end{aligned}
-
-      第一行只是缩写；系数的下标 :math:`a` 表示在 :math:`(k_a,\omega_a)` 处求值。
-      第二行把电势和二次电荷的载波因子，以及线性响应展开，代入整理后的泊松方程。
-      由于 :math:`e^{i\theta_a}\ne0`，两边可除掉这个共同因子。
-      再与 :k05:eq:`quadratic-response-1d` 的“线性项 + :math:`\mathcal N_a^{(2)}` = 0”
-      比较，剩下的负分式正是 :math:`\mathcal N_a^{(2)}`。
-      它的单位是 V，与这些线性项一致；再除以频率导数后，才成为演化方程中的变化率项。
+   第一行只是缩写；系数的下标 :math:`a` 表示在 :math:`(k_a,\omega_a)` 处求值。
+   第二行把电势和二次电荷的载波因子，以及线性响应展开，代入整理后的泊松方程。
+   由于 :math:`e^{i\theta_a}\ne0`，两边可除掉这个共同因子。
+   再与 :k05:eq:`quadratic-response-1d` 的“线性项 + :math:`\mathcal N_a^{(2)}` = 0”
+   比较，剩下的负分式正是 :math:`\mathcal N_a^{(2)}`。
+   它的单位是 V，与这些线性项一致；再除以频率导数后，才成为演化方程中的变化率项。
 
    负号属于这里对 :math:`\mathcal N^{(2)}` 的定义。
    如果改变 :math:`D` 的归一化，也必须一致地改变非线性项。
@@ -1416,11 +1402,9 @@
    中间的响应展开与泊松方程整理是本页面补充的讲解推导，并非从原文逐条引用的公式。
 
 
-   .. container:: k05-r31-added
+   .. _k05-coefficients-reference-2-zh:
 
-      .. _k05-coefficients-reference-2-zh:
-
-      [2] R. Fitzpatrick, *Plasma Physics*, “Cold-Plasma Dielectric Permittivity,”
-      equations (5.30) and (5.33), University of Texas at Austin.
-      `Lecture notes <https://farside.ph.utexas.edu/teaching/plasma/Plasma/node64.html>`_.
+   [2] R. Fitzpatrick, *Plasma Physics*, “Cold-Plasma Dielectric Permittivity,”
+   equations (5.30) and (5.33), University of Texas at Austin.
+   `Lecture notes <https://farside.ph.utexas.edu/teaching/plasma/Plasma/node64.html>`_.
 
