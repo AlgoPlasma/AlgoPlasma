@@ -179,8 +179,9 @@ Only one two-panel figure is generated, `k05-validation-high-frequency-spectra`
 in SVG/PNG. It uses the original Figure 2 PSD factor 2N/(fs U), U=3/8, for
 measured, predicted and residual coefficient powers. Axis/legend symbols are
 f, S_YY^+, S_(Yhat_m Yhat_m)^+ and S_(epsilon_m epsilon_m)^+, where epsilon_m
-= Y-Yhat_m, m=0 (linear) or 1 (joint). The page links these to K05.112 and
-the PSD normalization K05.106. No other existing plots are redrawn.
+= Y-Yhat_m, m=0 (linear) or 1 (joint). The page links these to the
+validation-model and PSD-normalization equations using semantic references,
+so the displayed numbers follow the current registry. No other existing plots are redrawn.
 
 `high_frequency_arrays.npz` uses the same fields as an individual original
 configuration, without its configuration-name prefix. Its first axis has

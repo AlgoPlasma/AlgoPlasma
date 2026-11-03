@@ -34,11 +34,10 @@ The Poisson substitution is also expanded step by step.
 
 The [third page](../../docs/source/rst_files/K_Diagnostics/K05_probe_signals.rst)
 connects a moving wave to fixed-probe records and derives the time-frequency
-form of Eq. (2). It specifies signed Fourier coefficients, normalization and
-the K01 FFT sign conversion. Optional calculations cover the cancellation,
-finite-record endpoints and propagation between two probes. Python examples
-map the Fourier convention to NumPy; Nyquist frequency and both integrations
-are explained step by step. A linked spatial
+form of Eq. (2). It specifies signed, normalized Fourier coefficients and
+shows how derivatives and quadratic products become frequency-domain terms.
+Optional calculations explain the cosine coefficients and carrier cancellation.
+A linked spatial
 wave and two time traces illustrate the measurement; the ion-current proxy
 is explained separately from the ideal potential detectors.
 

@@ -25,6 +25,16 @@ old/new mapping, including removed IDs, is in
 `equation_number_migration_20261103.json`. Removed growth-ordering and Taylor
 helper equations retain legacy HTML anchors at related surviving explanations.
 
+Revision 33 temporarily removes the third page's FFT, finite-record endpoint,
+and uncoupled propagation disclosures. There are now **143 active equations**.
+The removed IDs are `probe-fourier-sign`, `sampling-nyquist`,
+`time-integration-by-parts`, `time-fourier-boundary`,
+`probe-integrating-factor`, and `probe-linear-propagation`. Do not repurpose
+these IDs; the removed explanations can be recovered from Git history when
+needed. The fourth page's phase example now refers to the retained cosine
+coefficients. Display numbers after the removals follow the current registry;
+the Revision 31 migration file remains a historical snapshot.
+
 In an English container:
 
 ```rst

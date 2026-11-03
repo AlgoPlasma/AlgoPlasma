@@ -183,8 +183,9 @@
       G_{YX}(f)=H_fP_X(f).
 
    Since :math:`P_X` is real and positive when that frequency is present,
-   :math:`\arg G_{YX}=\arg H_f`. For the simple propagation model
-   :k05:eq:`probe-linear-propagation`, this is the spatial phase advance.
+   :math:`\arg G_{YX}=\arg H_f`. For the single travelling cosine in
+   :k05:eq:`cosine-time-coefficients`, :math:`H_f=e^{ik\Delta y}`, so this
+   angle is the spatial phase advance :math:`k\Delta y` modulo :math:`2\pi`.
    Swapping the product to :math:`\langle X_fY_f^*\rangle_R` conjugates the
    cross spectrum and reverses the phase sign. A phase difference by itself
    does not determine a growth rate.
@@ -630,7 +631,9 @@
       G_{YX}(f)=H_fP_X(f).
 
    只要这个频率有信号，:math:`P_X` 就是正实数，所以 :math:`\arg G_{YX}=\arg H_f`。
-   对于 :k05:eq:`probe-linear-propagation` 的简单传播模型，它就是空间相位推进。
+   对于 :k05:eq:`cosine-time-coefficients` 中单个传播的余弦波，
+   :math:`H_f=e^{ik\Delta y}`，所以这个角度就是模 :math:`2\pi` 意义下的空间相位推进
+   :math:`k\Delta y`。
    若把乘积换成 :math:`\langle X_fY_f^*\rangle_R`，互谱会变为复共轭，相位符号也会反过来。
    相位差本身不能确定增长率。
 

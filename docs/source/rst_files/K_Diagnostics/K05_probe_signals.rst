@@ -18,14 +18,6 @@
 
    <a class="k05-cite" href="#k05-probe-reference-1-zh" aria-label="参考文献 1">[1]</a>
 
-.. |numpy-en| raw:: html
-
-   <a class="k05-cite" href="#k05-probe-reference-2-en" aria-label="Reference 2">[2]</a>
-
-.. |numpy-zh| raw:: html
-
-   <a class="k05-cite" href="#k05-probe-reference-2-zh" aria-label="参考文献 2">[2]</a>
-
 .. container:: ap-lang ap-lang-en k05-lesson
 
    .. _k05-probe-signals-en:
@@ -151,118 +143,6 @@
    They also allow frequency sums to represent differences. For example,
    :math:`f_1+(-f_2)=f_1-f_2`. They do not by themselves specify a second
    propagation direction.
-
-   .. raw:: html
-
-      </details>
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>How does this convention connect to an FFT?</summary>
-
-   For :math:`N` real samples :math:`s_j=s(j\Delta t_s)`, with sample index
-   :math:`j=0,\ldots,N-1` and sampling interval :math:`\Delta t_s` in seconds,
-   the discrete counterpart is
-
-   .. k05:equation:: probe-fourier-sign
-      :lang: en
-
-      \begin{aligned}
-      \widetilde C_m&=\frac{1}{N}\sum_{j=0}^{N-1}s_j e^{+i2\pi mj/N},
-      \qquad f_m=\frac{m}{N\Delta t_s},\\
-      F_m&=\sum_{j=0}^{N-1}s_j e^{-i2\pi mj/N},\qquad
-      \widetilde C_m=\frac{F_{(-m)\bmod N}}{N}=\frac{F_m^*}{N}\quad(s_j\text{ real}).
-      \end{aligned}
-
-   Here :math:`\widetilde C_m` approximates our normalized time coefficient;
-   :math:`F_m` is the unnormalized forward FFT convention used by NumPy and K01.
-   The modulo operation wraps a negative index into :math:`0,\ldots,N-1`.
-   The conjugate identity in the last equality requires real samples.
-
-   .. container:: k05-text
-
-      The two conventions have opposite phase signs. Convert the FFT output
-      before using it as a coefficient in the equations on this page.
-
-   .. container:: k05-text
-
-      **First define the frequency range.** The sampling frequency :math:`f_s`
-      counts samples per second. The **Nyquist frequency** :math:`f_{\mathrm N}`
-      is half of it; both are measured in Hz:
-
-      .. k05:equation:: sampling-nyquist
-         :lang: en
-
-         f_s=\frac{1}{\Delta t_s},\qquad
-         f_{\mathrm N}=\frac{f_s}{2}=\frac{1}{2\Delta t_s}.
-
-      For example, a 1 ms sampling interval gives :math:`f_s=1000` Hz and
-      :math:`f_{\mathrm N}=500` Hz. Frequencies above this limit can appear as
-      lower frequencies in the sampled record: this is aliasing. To avoid it,
-      the signal entering an ideal uniform sampler must contain no frequencies
-      at or above :math:`f_{\mathrm N}`.
-
-      In the full FFT array, indices with :math:`m>N/2` represent negative
-      frequencies, :math:`(m-N)/(N\Delta t_s)`. ``fftfreq`` supplies these signed
-      values. For even :math:`N`, the Nyquist bin represents both signs:
-      ``fftfreq`` labels it negative and ``rfftfreq`` labels it positive.
-
-      **The formula in Python.** For a one-dimensional real array ``s`` and
-      a positive interval ``dt`` in seconds, NumPy's default normalization |numpy-en|
-      gives the following direct implementation of :k05:eq:`probe-fourier-sign`:
-
-      .. code-block:: python
-
-         import numpy as np
-
-         def time_coefficients(s, dt):
-             s = np.asarray(s, dtype=float)
-             N = s.size
-             F = np.fft.fft(s)              # F_m: negative exponent, no 1/N
-             C = F.conj() / N               # C_m: positive exponent, with 1/N
-             f = np.fft.fftfreq(N, d=dt)    # signed frequencies, in Hz
-             return f, C
-
-      Thus ``fft`` computes :math:`F_m`, ``conj`` takes :math:`F_m^*`, and the
-      division supplies :math:`1/N`. Equivalently, ``C = np.fft.ifft(s)`` directly
-      computes the positive-exponent, :math:`1/N`-normalized sum. Although NumPy
-      calls this operation an inverse FFT, its algebra matches our chosen forward
-      coefficient definition.
-
-      Here is a 50 Hz cosine with peak amplitude 2 and coefficient phase
-      :math:`\pi/3`. Its frequency lies exactly on the grid, so no window is needed
-      for this example:
-
-      .. code-block:: python
-
-         dt = 0.001
-         t = np.arange(1000) * dt
-         s = 2 * np.cos(2 * np.pi * 50 * t - np.pi / 3)
-         f, C = time_coefficients(s, dt)
-         m = np.argmin(abs(f - 50))
-         print(f[m], abs(C[m]), np.angle(C[m]))  # 50.0, 1.0, 1.0472...
-
-         # The same coefficients, retaining only nonnegative frequencies:
-         f_pos = np.fft.rfftfreq(s.size, d=dt)
-         C_pos = np.fft.rfft(s).conj() / s.size
-
-      The coefficient magnitude is 1: the other half of the peak amplitude
-      belongs to the negative-frequency partner. ``rfft`` saves storage but
-      does not double these coefficients. For a grid-aligned cosine, the peak
-      amplitude is :math:`2|C_m|` only away from the zero-frequency and Nyquist bins.
-
-   .. container:: k05-text
-
-      Before the FFT, samples may be mean-subtracted and windowed; see
-      :doc:`segmenting, detrending and window selection <K01_signal_spectra/fun_K01_segment_ffts>`.
-      The conversion above applies to the samples actually transformed and does
-      not undo preprocessing. Recovering a physical peak amplitude needs the
-      window's amplitude normalization. This differs from the power normalization
-      described in :doc:`power spectrum and window energy <K01_signal_spectra/fun_K01_power_spectrum>`.
-
-   The equations below use two-sided voltage coefficients. Changing to one-sided
-   amplitudes, a power spectrum, or an unnormalized continuous Fourier transform
-   changes normalizations and may change the numerical coupling coefficients.
 
    .. raw:: html
 
@@ -409,51 +289,6 @@
 
       </details>
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>What about the ends of a finite time record?</summary>
-
-   .. container:: k05-text
-
-      Hold :math:`y` fixed and use :math:`\int u\,dv=uv-\int v\,du`.
-      Choose :math:`u=e^{i2\pi f_mt}` and :math:`dv=(\partial_t\Phi)dt`.
-      Then :math:`du=i2\pi f_m e^{i2\pi f_mt}dt` and :math:`v=\Phi(y,t)`:
-
-      .. k05:equation:: time-integration-by-parts
-         :lang: en
-
-         \begin{aligned}
-         \frac1T\int_0^T(\partial_t\Phi)e^{i2\pi f_mt}\,dt
-         &=\frac1T\left[\Phi(y,t)e^{i2\pi f_mt}\right]_0^T
-           -\frac{i2\pi f_m}{T}\int_0^T\Phi(y,t)e^{i2\pi f_mt}\,dt,\\
-         \left[\Phi(y,t)e^{i2\pi f_mt}\right]_0^T
-         &=\Phi(y,T)e^{i2\pi m}-\Phi(y,0)
-           =\Phi(y,T)-\Phi(y,0).
-         \end{aligned}
-
-      The brackets mean “value at :math:`T` minus value at 0”. Since
-      :math:`f_mT=m` is an integer, :math:`e^{i2\pi m}=1`.
-      The remaining integral divided by :math:`T` is precisely :math:`C_{f_m}`
-      from :k05:eq:`time-fourier-series`. Substituting these two results gives
-      :k05:eq:`time-fourier-boundary`:
-
-   .. k05:equation:: time-fourier-boundary
-      :lang: en
-
-      \frac{1}{T}\int_0^T\partial_t\Phi\,e^{i2\pi f_mt}\,dt
-      =-i2\pi f_m C_{f_m}+\frac{\Phi(y,T)-\Phi(y,0)}{T}.
-
-   For a periodic record with matching endpoint values, the last term vanishes.
-   For a general finite record it need not. Treating data as periodic, or neglecting
-   end effects in a sufficiently long record, is a modelling step. Applying a
-   window also changes the derivative relation and mixes nearby frequencies.
-   The ideal periodic example explains the cancellation without these extra terms;
-   finite-record choices must be handled explicitly in data analysis.
-
-   .. raw:: html
-
-      </details>
-
    .. rubric:: 4. A second probe makes spatial comparison possible
 
    Using the notation of Ref. |ref-en|, name the two coefficients
@@ -467,69 +302,6 @@
    frequency, obtained from synchronized records. Their magnitudes and phases
    provide different information. For the illustration, only phase changes.
    If growth is also present, their magnitudes can differ.
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>A simple check: propagation and growth without coupling</summary>
-
-   Set :math:`N_f=0` in :k05:eq:`frequency-equation-1d` and hold
-   :math:`k_f`, :math:`v_{g,f}\ne0` and :math:`\gamma_f` constant over the separation.
-
-   .. container:: k05-text
-
-      First divide by :math:`v_{g,f}`. Abbreviate the constant coefficient as
-      :math:`q_f=\gamma_f/v_{g,f}+ik_f`, with units :math:`\mathrm{m^{-1}}`.
-      Multiply by :math:`e^{-q_f(y-y_1)}`. The product rule turns the left-hand
-      side into the derivative of a product, which can then be integrated:
-
-      .. k05:equation:: probe-integrating-factor
-         :lang: en
-
-         \begin{aligned}
-         \frac{dC_f}{dy}&=q_f C_f,\qquad q_f=\frac{\gamma_f}{v_{g,f}}+ik_f,\\
-         \frac{d}{dy}\left[e^{-q_f(y-y_1)}C_f(y)\right]
-         &=e^{-q_f(y-y_1)}\left(\frac{dC_f}{dy}-q_fC_f\right)=0,\\
-         \left[e^{-q_f(y-y_1)}C_f(y)\right]_{y_1}^{y_1+\Delta y}
-         &=\int_{y_1}^{y_1+\Delta y}0\,dy=0,\\
-         e^{-q_f\Delta y}Y_f-X_f&=0\quad\Longrightarrow\quad Y_f=e^{q_f\Delta y}X_f.
-         \end{aligned}
-
-      The multiplier is called an **integrating factor**. At the first probe its
-      value is 1; at the second it is :math:`e^{-q_f\Delta y}`. Use
-      :k05:eq:`probe-frequency-pair` to replace the endpoint coefficients by
-      :math:`X_f` and :math:`Y_f`, then divide by :math:`X_f\ne0`:
-
-   .. k05:equation:: probe-linear-propagation
-      :lang: en
-
-      \begin{aligned}
-      \frac{Y_f}{X_f}&=\exp\!\left[\left(\frac{\gamma_f}{v_{g,f}}+ik_f\right)\Delta y\right],\\
-      \left|\frac{Y_f}{X_f}\right|&=e^{\gamma_f\Delta y/v_{g,f}},\qquad
-      \arg(Y_fX_f^*)=k_f\Delta y\pmod{2\pi}.
-      \end{aligned}
-
-   .. container:: k05-text
-
-      For the second line, split the exponential into
-      :math:`e^{q_f\Delta y}=e^{\gamma_f\Delta y/v_{g,f}}e^{ik_f\Delta y}`.
-      The first factor is positive and changes magnitude; the second has magnitude
-      1 and changes phase. Also :math:`Y_fX_f^*=|X_f|^2e^{q_f\Delta y}`, so its
-      phase is the same as that of the ratio :math:`Y_f/X_f`.
-
-   The absolute value gives the amplitude ratio. The function :math:`\arg` gives
-   the phase angle; it is measured only modulo :math:`2\pi`. A phase measurement
-   therefore cannot distinguish :math:`k_f` from :math:`k_f+2\pi n/\Delta y`
-   for any integer :math:`n`: this is **spatial aliasing**. The graph retains the
-   chosen crest delay even when a measured phase would wrap.
-
-   For this restricted model, magnitude changes can indicate growth after the
-   group velocity is supplied. In the coupled, three-dimensional problem,
-   nonlinear transfer and transport in other directions also affect the comparison.
-   An amplitude ratio alone cannot isolate the linear growth rate.
-
-   .. raw:: html
-
-      </details>
 
    A first view of the spatial derivative is the difference between the two
    coefficients divided by their separation:
@@ -593,15 +365,6 @@
    p. 115101-4. The explicit Fourier convention, intermediate algebra and
    interactive drawing are explanatory additions.
 
-   .. container:: k05-text
-
-      .. _k05-probe-reference-2-en:
-
-      [2] NumPy documentation: `fft <https://numpy.org/doc/stable/reference/generated/numpy.fft.fft.html>`__,
-      `ifft <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft.html>`__,
-      `rfft <https://numpy.org/doc/stable/reference/generated/numpy.fft.rfft.html>`__,
-      `fftfreq <https://numpy.org/doc/stable/reference/generated/numpy.fft.fftfreq.html>`__ and
-      `rfftfreq <https://numpy.org/doc/stable/reference/generated/numpy.fft.rfftfreq.html>`__.
 
 .. container:: ap-lang ap-lang-zh k05-lesson
 
@@ -718,106 +481,6 @@
 
       </details>
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>这个约定与 FFT 怎样对应？</summary>
-
-   对 :math:`N` 个实数采样值 :math:`s_j=s(j\Delta t_s)`，
-   样本下标 :math:`j=0,\ldots,N-1`，采样时间间隔 :math:`\Delta t_s` 的单位为 s。
-   离散形式是
-
-   .. k05:equation:: probe-fourier-sign
-      :lang: zh
-
-      \begin{aligned}
-      \widetilde C_m&=\frac{1}{N}\sum_{j=0}^{N-1}s_j e^{+i2\pi mj/N},
-      \qquad f_m=\frac{m}{N\Delta t_s},\\
-      F_m&=\sum_{j=0}^{N-1}s_j e^{-i2\pi mj/N},\qquad
-      \widetilde C_m=\frac{F_{(-m)\bmod N}}{N}=\frac{F_m^*}{N}\quad(s_j\text{ real}).
-      \end{aligned}
-
-   :math:`\widetilde C_m` 是本页归一化系数的离散近似；:math:`F_m` 是 NumPy 及 K01
-   使用的未归一化正向 FFT。取模运算把负下标折回 :math:`0,\ldots,N-1`。
-   最后一个复共轭等号要求样本为实数。
-
-   .. container:: k05-text
-
-      两种约定的相位符号相反。把 FFT 输出用作本页方程中的系数前，需要做这个转换。
-
-   .. container:: k05-text
-
-      **先定义频率范围。** 采样频率 :math:`f_s` 是每秒采集的样本数。
-      **奈奎斯特频率（Nyquist frequency）** :math:`f_{\mathrm N}` 是采样频率的一半，二者单位都是 Hz：
-
-      .. k05:equation:: sampling-nyquist
-         :lang: zh
-
-         f_s=\frac{1}{\Delta t_s},\qquad
-         f_{\mathrm N}=\frac{f_s}{2}=\frac{1}{2\Delta t_s}.
-
-      例如每隔 1 ms 采样一次，:math:`f_s=1000` Hz，:math:`f_{\mathrm N}=500` Hz。
-      超过这个上限的振荡，在采样记录中可能表现为较低频率，这就是混叠（aliasing）。
-      为避免混叠，进入理想均匀采样器的信号不能包含达到或超过 :math:`f_{\mathrm N}` 的频率成分。
-
-      在完整 FFT 数组里，下标 :math:`m>N/2` 对应负频率 :math:`(m-N)/(N\Delta t_s)`；
-      ``fftfreq`` 会直接给出这些带符号的频率。若 :math:`N` 为偶数，奈奎斯特频点的正负两种符号
-      对应同一组样本；``fftfreq`` 把它标为负值，``rfftfreq`` 则标为正值。
-
-      **把公式写成 Python。** 输入 ``s`` 是一维实数数组，``dt`` 是正的采样间隔，单位为 s。
-      使用 NumPy 的默认归一化 |numpy-zh|，:k05:eq:`probe-fourier-sign` 可以直接写成：
-
-      .. code-block:: python
-
-         import numpy as np
-
-         def time_coefficients(s, dt):
-             s = np.asarray(s, dtype=float)
-             N = s.size
-             F = np.fft.fft(s)              # F_m: negative exponent, no 1/N
-             C = F.conj() / N               # C_m: positive exponent, with 1/N
-             f = np.fft.fftfreq(N, d=dt)    # signed frequencies, in Hz
-             return f, C
-
-      也就是说，``fft`` 算出 :math:`F_m`，``conj`` 取复共轭 :math:`F_m^*`，
-      除以 ``N`` 就补上 :math:`1/N`。也可以直接写 ``C = np.fft.ifft(s)``，
-      因为它计算的正好是“正指数、带 :math:`1/N`”的和。
-      NumPy 把这个运算称为逆 FFT，但它的数学形式恰好符合本页选用的正变换系数定义。
-
-      下面用峰值为 2、系数相位为 :math:`\pi/3` 的 50 Hz 余弦验证。
-      它恰好落在频率网格上，因此这个例子不需要加窗：
-
-      .. code-block:: python
-
-         dt = 0.001
-         t = np.arange(1000) * dt
-         s = 2 * np.cos(2 * np.pi * 50 * t - np.pi / 3)
-         f, C = time_coefficients(s, dt)
-         m = np.argmin(abs(f - 50))
-         print(f[m], abs(C[m]), np.angle(C[m]))  # 50.0, 1.0, 1.0472...
-
-         # The same coefficients, retaining only nonnegative frequencies:
-         f_pos = np.fft.rfftfreq(s.size, d=dt)
-         C_pos = np.fft.rfft(s).conj() / s.size
-
-      系数的模是 1：峰值的另一半属于负频率配对项。
-      ``rfft`` 只减少存储的频点，并不会自动把这些系数乘二。
-      对于落在网格上的余弦，只有在零频和奈奎斯特频点之外，峰值幅度才等于 :math:`2|C_m|`。
-
-   .. container:: k05-text
-
-      FFT 前的样本可能已去均值、加窗，具体见
-      :doc:`分段、去均值与窗函数选择 <K01_signal_spectra/fun_K01_segment_ffts>`。
-      上面的转换针对实际送入变换的样本，不会撤销这些预处理。
-      从加窗记录恢复物理峰值幅度，还需考虑窗函数的幅值归一化；它不同于
-      :doc:`功率谱与窗能量归一化 <K01_signal_spectra/fun_K01_power_spectrum>` 中的功率归一化。
-
-   以下方程采用双边电压系数。改用单边幅值、功率谱或未归一化的连续傅里叶变换，
-   归一化会变化，耦合系数的数值也可能随之变化。
-
-   .. raw:: html
-
-      </details>
-
    .. rubric:: 3. 按频率，把波动方程重新写一遍
 
    对其中一个频率成分，写成
@@ -916,7 +579,7 @@
 
       **符号对照。** 文献的 :math:`\hat\phi_f(\vec r)` 对应这里的
       :math:`C_f(\mathbf r)`，是保留空间相位的时间 Fourier 系数。
-      虽然文献再次使用帽子，它**不是**前面的慢包络 :math:`A_a`。
+      虽然文献再次使用帽子，它 **不是** 前面的慢包络 :math:`A_a`。
       :math:`\vec k_r` 是实波矢，对应 :math:`\mathbf k_f`；这里的下标
       :math:`r` 表示实部，不是某个坐标方向。
       :math:`f=\omega/(2\pi)` 是单位 Hz 的普通频率，:math:`\omega` 是角频率。
@@ -941,48 +604,6 @@
 
       </details>
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>有限时间记录的两端，是否还会多出一项？</summary>
-
-   .. container:: k05-text
-
-      固定位置 :math:`y`，使用熟悉的分部积分公式 :math:`\int u\,dv=uv-\int v\,du`。
-      取 :math:`u=e^{i2\pi f_mt}`，:math:`dv=(\partial_t\Phi)dt`，
-      就有 :math:`du=i2\pi f_m e^{i2\pi f_mt}dt`，:math:`v=\Phi(y,t)`：
-
-      .. k05:equation:: time-integration-by-parts
-         :lang: zh
-
-         \begin{aligned}
-         \frac1T\int_0^T(\partial_t\Phi)e^{i2\pi f_mt}\,dt
-         &=\frac1T\left[\Phi(y,t)e^{i2\pi f_mt}\right]_0^T
-           -\frac{i2\pi f_m}{T}\int_0^T\Phi(y,t)e^{i2\pi f_mt}\,dt,\\
-         \left[\Phi(y,t)e^{i2\pi f_mt}\right]_0^T
-         &=\Phi(y,T)e^{i2\pi m}-\Phi(y,0)
-           =\Phi(y,T)-\Phi(y,0).
-         \end{aligned}
-
-      方括号表示“在 :math:`T` 的值减去在 0 的值”。
-      由于 :math:`f_mT=m` 是整数，:math:`e^{i2\pi m}=1`。
-      剩下的积分再除以 :math:`T`，正好就是 :k05:eq:`time-fourier-series` 定义的 :math:`C_{f_m}`。
-      把这两个结果代回，便得到 :k05:eq:`time-fourier-boundary`：
-
-   .. k05:equation:: time-fourier-boundary
-      :lang: zh
-
-      \frac{1}{T}\int_0^T\partial_t\Phi\,e^{i2\pi f_mt}\,dt
-      =-i2\pi f_m C_{f_m}+\frac{\Phi(y,T)-\Phi(y,0)}{T}.
-
-   如果记录是周期性的，首尾值相等，最后一项就消失；一般有限记录不一定满足这一点。
-   把数据视为周期重复，或在足够长的记录中忽略端点影响，都是建模步骤。
-   加窗（windowing）也会改变导数关系并混合邻近频率。
-   理想周期例子让我们先看清相消过程；实际分析数据时，需要明确处理有限记录的选择。
-
-   .. raw:: html
-
-      </details>
-
    .. rubric:: 4. 第二支探针带来了空间比较
 
    沿用文献 |ref-zh| 的记号，把两处系数命名为
@@ -994,64 +615,6 @@
 
    :math:`X_f` 与 :math:`Y_f` 是同一频率、由同步记录得到的两个复电压系数。
    它们的模和相位提供不同信息。互动图中仅相位改变；如果同时有增长，幅值也可以不同。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>简单检验：只有传播和增长，没有耦合</summary>
-
-   在 :k05:eq:`frequency-equation-1d` 中令 :math:`N_f=0`，
-   并把 :math:`k_f`、:math:`v_{g,f}\ne0` 和 :math:`\gamma_f` 视为两探针之间的常数。
-
-   .. container:: k05-text
-
-      先除以 :math:`v_{g,f}`，并把常数系数简记为
-      :math:`q_f=\gamma_f/v_{g,f}+ik_f`，单位为 :math:`\mathrm{m^{-1}}`。
-      两边乘上 :math:`e^{-q_f(y-y_1)}`。借助乘积求导法则，可以把方程变成“一个乘积的导数等于零”，再积分：
-
-      .. k05:equation:: probe-integrating-factor
-         :lang: zh
-
-         \begin{aligned}
-         \frac{dC_f}{dy}&=q_f C_f,\qquad q_f=\frac{\gamma_f}{v_{g,f}}+ik_f,\\
-         \frac{d}{dy}\left[e^{-q_f(y-y_1)}C_f(y)\right]
-         &=e^{-q_f(y-y_1)}\left(\frac{dC_f}{dy}-q_fC_f\right)=0,\\
-         \left[e^{-q_f(y-y_1)}C_f(y)\right]_{y_1}^{y_1+\Delta y}
-         &=\int_{y_1}^{y_1+\Delta y}0\,dy=0,\\
-         e^{-q_f\Delta y}Y_f-X_f&=0\quad\Longrightarrow\quad Y_f=e^{q_f\Delta y}X_f.
-         \end{aligned}
-
-      这里乘上的指数叫作 **积分因子（integrating factor）**。
-      在第一支探针处它等于 1，在第二支探针处等于 :math:`e^{-q_f\Delta y}`。
-      用 :k05:eq:`probe-frequency-pair` 把两端的系数写成 :math:`X_f` 和 :math:`Y_f`，
-      再除以非零的 :math:`X_f`，就得到下面的第一行：
-
-   .. k05:equation:: probe-linear-propagation
-      :lang: zh
-
-      \begin{aligned}
-      \frac{Y_f}{X_f}&=\exp\!\left[\left(\frac{\gamma_f}{v_{g,f}}+ik_f\right)\Delta y\right],\\
-      \left|\frac{Y_f}{X_f}\right|&=e^{\gamma_f\Delta y/v_{g,f}},\qquad
-      \arg(Y_fX_f^*)=k_f\Delta y\pmod{2\pi}.
-      \end{aligned}
-
-   .. container:: k05-text
-
-      第二行只需把指数拆开：:math:`e^{q_f\Delta y}=e^{\gamma_f\Delta y/v_{g,f}}e^{ik_f\Delta y}`。
-      第一个因子为正实数，改变幅值；第二个因子的模为 1，只改变相位。
-      又因为 :math:`Y_fX_f^*=|X_f|^2e^{q_f\Delta y}`，它的相位与比值 :math:`Y_f/X_f` 相同。
-
-   绝对值给出幅值比；:math:`\arg` 表示相位角，它只能在模 :math:`2\pi` 的意义下测得。
-   因此，仅凭相位不能区分 :math:`k_f` 与 :math:`k_f+2\pi n/\Delta y`，其中 :math:`n` 是任意整数。
-   这叫作 **空间混叠（spatial aliasing）**。图中保留的是选定波峰的传播延迟，
-   即使测得的相位已经折回一个周期，这个延迟仍然继续增加。
-
-   在这个受限模型里，给定群速度后，幅值变化可反映增长。
-   对于有耦合的三维问题，非线性转移和其他方向的输运也会影响比较结果；
-   单靠幅值比不能单独分离出线性增长率。
-
-   .. raw:: html
-
-      </details>
 
    对空间导数的第一个直观近似，是“两个系数之差除以间距”：
 
@@ -1103,14 +666,3 @@
 
    频率域方程及模式对应假设见纸面第 115101-2 页；双探针离散化见第 115101-3 页，
    密度代理关系见第 115101-4 页。本页明确的傅里叶约定、中间代数和互动图为补充讲解。
-
-   .. container:: k05-text
-
-      .. _k05-probe-reference-2-zh:
-
-      [2] NumPy documentation: `fft <https://numpy.org/doc/stable/reference/generated/numpy.fft.fft.html>`__,
-      `ifft <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft.html>`__,
-      `rfft <https://numpy.org/doc/stable/reference/generated/numpy.fft.rfft.html>`__,
-      `fftfreq <https://numpy.org/doc/stable/reference/generated/numpy.fft.fftfreq.html>`__ and
-      `rfftfreq <https://numpy.org/doc/stable/reference/generated/numpy.fft.rfftfreq.html>`__.
-
