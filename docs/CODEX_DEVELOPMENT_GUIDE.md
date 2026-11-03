@@ -4,6 +4,15 @@ This guide is for students and maintainers who use Codex while developing AlgoPl
 It complements `docs/DOCUMENTATION_GUIDE.md`, which defines the documentation
 style.
 
+## Before Writing Explanations
+
+Read [Teaching Design](TEACHING_GUIDE.md) alongside the documentation guide.
+For the requested page, establish the reader's prerequisites, intended capability
+and a small example/check before drafting. Keep the main argument understandable
+with optional panels closed. Choose diagrams and controls for the reasoning they
+enable; do not equate interaction with learning or add every feature everywhere.
+Review these points together with the technical checks below.
+
 ## Working Principles
 
 - Keep module work local. Improve the current module's algorithm explanation,
