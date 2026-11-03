@@ -151,11 +151,14 @@ Page09: [Experimental counterparts of Figures 2 and 3](../../docs/source/rst_fil
 
 Pages01,03,05,09 put the corresponding K05 expression and original reference
 Eqs.(1)–(7) in permanent comparison boxes with symbol/normalization notes.
-The overview links directly to all seven. Source equations have K05.139–145
-for stable links while their headings retain the article's own numbers.
+The overview links directly to all seven. Their semantic IDs provide stable links;
+display numbers follow K05 reading order, while box headings retain the article's
+own equation numbers. After inserting or moving equations, run
+`renumber_equations.py --write`, then `--check` and a full documentation rebuild.
+See [EQUATIONS.md](EQUATIONS.md) for the numbering policy and R31 migration map.
 The page09 disclosure derives the linear Vlasov response, cold-ion susceptibility,
-Maxwellian gyro-orbit average and Poisson closure (K05.146–150).
+Maxwellian gyro-orbit average and Poisson closure.
 [Page11](../../docs/source/rst_files/K_Diagnostics/K05_paper_synthesis.rst)
 reads the original figures, derives the transverse-growth connection and a
-conditional stationary balance (K05.151–152), and closes the reading with a
+conditional stationary balance, and closes the reading with a
 result map and symbol guide. Experimental output arrays are unchanged.

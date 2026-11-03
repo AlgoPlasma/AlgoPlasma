@@ -3,7 +3,7 @@
 
 .. raw:: html
 
-   <link rel="stylesheet" href="../../_static/K_Diagnostics/k05-wave-packet.css">
+   <link rel="stylesheet" href="../../_static/K_Diagnostics/k05-wave-packet.css?v=r31-review">
    <script defer src="../../_static/K_Diagnostics/k05-packet-band.js"></script>
    <div class="ap-language-switch" role="group" aria-label="Language switch" data-ap-default-lang="en">
      <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
@@ -41,12 +41,14 @@
    same potential through Poisson's equation. A freely evolving wave must satisfy
    this **self-consistency** requirement.
 
-   For a small sinusoidal wave, the linearized plasma equations package this
-   requirement into a response function :math:`D(k,\omega)`. It is dimensionless
-   in our convention and is called the **linear dielectric response**. Its form
-   depends on the plasma: particle distributions, temperatures, drifts and magnetic
-   field. It must be obtained from a physical model; the wave shape alone does not
-   determine it.
+   .. container:: k05-r31-revised
+
+      For a small sinusoidal wave in a locally uniform background, the linearized
+      plasma equations package this requirement into a response function :math:`D(k,\omega)`. It is dimensionless
+      in our convention and is called the **linear dielectric response**. Its form
+      depends on the plasma: particle distributions, temperatures, drifts and magnetic
+      field. It must be obtained from a physical model; the wave shape alone does not
+      determine it.
 
    Recall that :math:`k` is the wavenumber along :math:`y`, in rad/m, and
    :math:`\omega` is angular frequency, in rad/s. We choose a real carrier frequency
@@ -89,6 +91,39 @@
    the species in the model. The first line defines the sign convention for
    :math:`\chi_s`; moving its right side to the left gives the second line.
 
+   .. raw:: html
+
+      <details class="k05-note k05-r31-added"><summary>Derive these lines: Poisson's equation and the response convention</summary>
+
+   The electric field along :math:`y` is :math:`E_y`, in V/m. Gauss's law relates
+   its spatial derivative to charge density. For a single Fourier component
+   :math:`\phi\propto e^{i(ky-\omega t)}`, each :math:`y` derivative contributes
+   :math:`ik`, so two derivatives give :math:`-k^2`:
+
+   .. k05:equation:: poisson-response-steps
+      :lang: en
+
+      \begin{aligned}
+      E_y&=-\partial_y\phi,\qquad \partial_yE_y=\rho^{(1)}/\epsilon_0,\\
+      \partial_y^2\phi&=-\rho^{(1)}/\epsilon_0,\qquad
+      \partial_y^2\phi=-k^2\phi,\\
+      \epsilon_0k^2\phi&=-\epsilon_0k^2\left(\sum_s\chi_s\right)\phi,\\
+      \left(1+\sum_s\chi_s\right)\phi&=0.
+      \end{aligned}
+
+   The second line therefore gives :math:`\epsilon_0 k^2\phi=\rho^{(1)}`.
+   For each species, the linear response is written
+   :math:`\rho_s^{(1)}=-\epsilon_0 k^2\chi_s\phi`.
+   This **defines the normalization and sign of** :math:`\chi_s`; Poisson's
+   equation alone does not calculate its value. Sum the species responses and
+   substitute them to get the third line. Move everything to the left and divide
+   by :math:`\epsilon_0k^2\ne0` to get the last line. The coefficient in parentheses
+   is named :math:`D`. No division by :math:`D` is involved.
+
+   .. raw:: html
+
+      </details>
+
    For a nonzero wave, :math:`D\phi=0` requires :math:`D=0`. With a weak imaginary
    response, we use :math:`D_r=0` for the real carrier and keep :math:`D_i` in
    the envelope evolution. The full complex-frequency root is considered below.
@@ -97,6 +132,64 @@
    Computing it requires solving the linearized fluid or kinetic equations
    together with Poisson's equation. No particular susceptibility model is assumed
    in the algebra that follows.
+
+   .. raw:: html
+
+      </details>
+
+   .. raw:: html
+
+      <details class="k05-note k05-r31-added"><summary>A simple susceptibility: cold electrons with fixed ions</summary>
+
+   Consider a uniform plasma with no magnetic field, collisions or equilibrium
+   drift. Ignore electron pressure and let the ions supply a fixed neutralizing
+   background. This illustrative cold-electron model gives [2]
+
+   .. k05:equation:: cold-electron-susceptibility
+      :lang: en
+
+      \chi_e=-\frac{\omega_{pe}^2}{\omega^2},\qquad
+      \omega_{pe}^2=\frac{n_0e^2}{\epsilon_0m_e},\qquad
+      D=1+\chi_e=1-\frac{\omega_{pe}^2}{\omega^2}.
+
+   Here :math:`n_0` is the equilibrium electron number density (m⁻³),
+   :math:`e>0` is the elementary charge (C), :math:`m_e` is electron mass (kg),
+   and :math:`\omega_{pe}` is the electron plasma angular frequency (rad/s).
+   The electron charge is :math:`-e`; both :math:`\chi_e` and :math:`D` are dimensionless.
+
+   To see where the expression comes from, let :math:`\delta u_e` be the electron
+   velocity perturbation (m/s) and :math:`\delta n_e` its density perturbation (m⁻³).
+   The symbol :math:`\delta` means a small departure from equilibrium. Newton's law
+   and particle conservation, linearized about the stationary uniform state, give
+
+   .. k05:equation:: cold-electron-fluid-response
+      :lang: en
+
+      \begin{aligned}
+      m_e\partial_t\delta u_e&=-eE_y,\qquad
+      \partial_t\delta n_e+n_0\partial_y\delta u_e=0,\\
+      -i\omega m_e\delta u_e&=ie k\phi,\qquad
+      -i\omega\delta n_e+ikn_0\delta u_e=0,\\
+      \delta u_e&=-\frac{ek}{m_e\omega}\phi,\qquad
+      \delta n_e=-\frac{n_0ek^2}{m_e\omega^2}\phi,\\
+      \rho_e^{(1)}&=-e\delta n_e=
+      \frac{n_0e^2k^2}{m_e\omega^2}\phi
+      =-\epsilon_0k^2\chi_e\phi.
+      \end{aligned}
+
+   Insert :math:`E_y=-ik\phi`, :math:`\partial_t\to-i\omega` and
+   :math:`\partial_y\to ik` to obtain the second line. Solve for velocity, then
+   density. Comparing the last line with the response convention identifies
+   :math:`\chi_e`. Thus susceptibility summarizes the chain
+   **potential → particle motion → charge response**.
+
+   For example, at :math:`\omega=2\omega_{pe}`, :math:`\chi_e=-1/4` and
+   :math:`D=3/4`. This is a response evaluated at a trial frequency, not a free
+   self-consistent wave. Imposing :math:`D=0` selects
+   :math:`\omega^2=\omega_{pe}^2`. The negative susceptibility is not a negative
+   density; it is the response coefficient in the stated convention.
+   This example explains the notation; the magnetized, drifting model in [1]
+   requires a different susceptibility.
 
    .. raw:: html
 
@@ -246,30 +339,11 @@
 
       .. raw:: html
 
-         <details class="k05-note"><summary>Read (K05.26) as an ordinary Taylor expansion, and put the omitted terms back</summary>
+         <details class="k05-note"><summary class="k05-r31-revised">Keep the second-order Taylor terms: what was omitted?</summary>
 
-      For one variable, a small change gives “old value + slope × change.” Here
-      :math:`D` has two independent inputs: the change in :math:`k` is :math:`q`,
-      and the change in :math:`\omega` is :math:`\nu`. To first order, add the
-      effect of changing each input separately. A partial derivative is simply the
-      slope when the other input is held fixed.
+      .. raw:: html
 
-      It can even be written as a one-variable expansion. Introduce a dimensionless
-      path parameter :math:`\eta` and a helper function :math:`F`:
-
-      .. k05:equation:: taylor-one-parameter
-         :lang: en
-
-         \begin{aligned}
-         F(\eta)&=D(k+\eta q,\omega+\eta\nu),\\
-         F(1)&=F(0)+F'(0)+\frac{1}{2}F''(0)+\mathcal R_3,\\
-         F'(0)&=q\,\partial_kD+\nu\,\partial_\omega D.
-         \end{aligned}
-
-      At :math:`\eta=0` we are at the carrier; at :math:`\eta=1` we have moved
-      by :math:`(q,\nu)`. Primes mean derivatives with respect to :math:`\eta`.
-      The last line is the chain rule. Applying it once more to :math:`F'` produces
-      the second-order terms:
+         <span id="equation-k05-taylor-one-parameter-en"></span>
 
       .. k05:equation:: taylor-second-order
          :lang: en
@@ -282,15 +356,19 @@
          +\nu^2\partial_\omega^2D\right]+\mathcal R_3.
          \end{aligned}
 
-      Every derivative on the right is evaluated at :math:`(k,\omega)`.
-      :math:`\partial_k^2D` measures curvature in the wavenumber direction;
-      :math:`\partial_\omega^2D` measures curvature in the frequency direction.
-      The **mixed derivative** :math:`\partial_k\partial_\omega D` measures how
-      one slope changes when the other input changes. Its factor 2 comes from
-      the two orders of differentiating along the path; they agree for a smooth
-      response. The remainder :math:`\mathcal R_3` contains cubic and higher-order
-      contributions in the offsets. Keeping that remainder makes this an equality;
-      a finite Taylor polynomial alone is generally only an approximation.
+      .. container:: k05-r31-revised
+
+         Every derivative on the right is evaluated at :math:`(k,\omega)`.
+         :math:`\partial_k^2D` measures curvature in the wavenumber direction;
+         :math:`\partial_\omega^2D` measures curvature in the frequency direction.
+         The **mixed derivative** :math:`\partial_k\partial_\omega D` measures how
+         one slope changes when the other input changes. For a smooth response,
+         the mixed part inside the bracket is
+         :math:`q\nu\,\partial_k\partial_\omega D+\nu q\,\partial_\omega\partial_kD`;
+         the two mixed derivatives agree, giving the factor 2.
+         The remainder :math:`\mathcal R_3` contains cubic and higher-order
+         contributions in the offsets. Keeping that remainder makes this an equality;
+         a finite Taylor polynomial alone is generally only an approximation.
 
       There are two distinct approximations in :k05:eq:`response-taylor`.
       The first line discards the second-order bracket and :math:`\mathcal R_3`.
@@ -417,6 +495,18 @@
    change to the time oscillation. Expanding the full dispersion equation about
    the real carrier, with the same weak-response ordering, gives
 
+   .. raw:: html
+
+      <span id="equation-k05-growth-retained-terms-en"></span>
+
+   .. raw:: html
+
+      <span id="equation-k05-growth-size-comparison-en"></span>
+
+   .. raw:: html
+
+      <span id="equation-k05-growth-complex-correction-en"></span>
+
    .. k05:equation:: weak-growth-root
       :lang: en
 
@@ -434,90 +524,6 @@
    weak imaginary response and suitable derivative ordering, not merely a small
    ratio :math:`|\gamma/\omega|`. The chosen real carrier need not be exactly
    the real part of the full complex root.
-
-   .. container:: k05-text
-
-      .. raw:: html
-
-         <details class="k05-note"><summary>Small compared with what? Check the terms we discard</summary>
-
-      Keep the complex slope when expanding about the real carrier. Since
-      :math:`i\gamma\times i\partial_\omega D_i=-\gamma\partial_\omega D_i`,
-      the missing real term appears directly:
-
-      .. k05:equation:: growth-retained-terms
-         :lang: en
-
-         \begin{aligned}
-         D(k,\omega+i\gamma)
-         ={}&iD_i+i\gamma\,\partial_\omega D_r
-         -\gamma\,\partial_\omega D_i\\
-         &-\frac{\gamma^2}{2}\left(\partial_\omega^2D_r
-         +i\partial_\omega^2D_i\right)+\cdots .
-         \end{aligned}
-
-      The dots denote still higher powers of the frequency shift. The approximation
-      in :k05:eq:`weak-growth-root` keeps :math:`iD_i` and
-      :math:`i\gamma\partial_\omega D_r` to balance each other. A discarded term
-      must be small **compared with those retained terms**, not simply small as a
-      number with units.
-
-      For nonzero :math:`\gamma` and :math:`\partial_\omega D_r`, useful local
-      checks for the first omitted terms are
-
-      .. k05:equation:: growth-size-comparison
-         :lang: en
-
-         \begin{aligned}
-         \frac{|\gamma\,\partial_\omega D_i|}
-         {|\gamma\,\partial_\omega D_r|}
-         &=\frac{|\partial_\omega D_i|}{|\partial_\omega D_r|}\ll1,\\
-         \frac{|\gamma^2\partial_\omega^2D|/2}
-         {|\gamma\,\partial_\omega D_r|}
-         &=\frac{|\gamma\,\partial_\omega^2D|}
-         {2|\partial_\omega D_r|}\ll1.
-         \end{aligned}
-
-      The vertical bars mean magnitude; :math:`\ll1` means much smaller than one.
-      In the first ratio, :math:`\gamma` cancels. If the imaginary slope is 2%
-      of the real slope, that omitted term is 2% of the retained derivative term.
-      If the slopes are equally large, so are those two terms, however small
-      :math:`\gamma` is. The second ratio checks curvature over the frequency
-      shift; higher Taylor terms must also remain small.
-
-      This is what **ordering** means here: compare the sizes of contributions
-      before deciding which ones to retain. A small :math:`|\gamma/\omega|`
-      only compares the shift with the carrier frequency. The response may vary
-      on a much smaller frequency scale, so that ratio alone is not enough.
-
-      If the imaginary slope is retained, the real frequency generally shifts too.
-      Let :math:`\delta\omega_r` be that real shift, in rad/s. For this calculation
-      only, abbreviate the two slopes by :math:`a,b` (units s), and the imaginary
-      response by :math:`d` (dimensionless); these are not wave labels:
-
-      .. k05:equation:: growth-complex-correction
-         :lang: en
-
-         \begin{aligned}
-         a&=\partial_\omega D_r,\quad b=\partial_\omega D_i,\quad d=D_i,\\
-         0&\simeq id+(a+ib)(\delta\omega_r+i\gamma)\\
-         &=(a\,\delta\omega_r-b\gamma)
-         +i(d+b\,\delta\omega_r+a\gamma),\\
-         \delta\omega_r&\simeq-\frac{db}{a^2+b^2},\qquad
-         \gamma\simeq-\frac{da}{a^2+b^2}.
-         \end{aligned}
-
-      Set the real and imaginary parts in the middle line separately to zero to
-      obtain the last line. These are still first-order Taylor estimates, not exact
-      roots. For :math:`|b/a|\ll1`, the growth estimate reduces to
-      :math:`-D_i/\partial_\omega D_r`, and the real shift is smaller than
-      the imaginary shift by the factor :math:`|b/a|`. Near a vanishing real slope,
-      this simplification cannot be assumed.
-
-      .. raw:: html
-
-         </details>
-
 
    .. raw:: html
 
@@ -637,6 +643,38 @@
       :math:`D_a=1+\sum_s\chi_{s,a}` and move the quadratic source to the left.
       The source has not been dropped: it is precisely the term with the minus sign.
 
+   .. container:: k05-r31-added
+
+      **Now obtain the last line: remove the carrier and identify the source.**
+      Use :math:`\phi_a=A_a e^{i\theta_a}` and
+      :math:`\rho_a^{(2)}=R_a^{(2)}e^{i\theta_a}`. For a packet, the compact linear
+      response in :k05:eq:`quadratic-poisson` must also be expanded about the carrier,
+      as in :k05:eq:`linear-response-1d`; it is not enough to replace it by a constant
+      :math:`D_a A_a`. To keep the substitution readable, call that already-derived
+      linear combination :math:`\mathcal L_a A_a`:
+
+      .. k05:equation:: quadratic-envelope-source-steps
+         :lang: en
+
+         \begin{aligned}
+         \mathcal L_a A_a&\equiv iD_{i,a}A_a
+         -i(\partial_kD_r)_a\partial_yA_a
+         +i(\partial_\omega D_r)_a\partial_tA_a,\\
+         0&\simeq e^{i\theta_a}\left[\mathcal L_a A_a
+         -\frac{R_a^{(2)}}{\epsilon_0k_a^2}\right],\\
+         0&=\mathcal L_a A_a+\mathcal N_a^{(2)},\qquad
+         \mathcal N_a^{(2)}=-\frac{R_a^{(2)}}{\epsilon_0k_a^2}.
+         \end{aligned}
+
+      The first line only abbreviates the three linear terms; subscript :math:`a`
+      on their coefficients means evaluation at :math:`(k_a,\omega_a)`.
+      The second line substitutes both carrier factors and the linear expansion into
+      the rearranged Poisson equation. Since :math:`e^{i\theta_a}\ne0`, divide it out.
+      Compare what remains with :k05:eq:`quadratic-response-1d`, whose convention is
+      “linear terms + :math:`\mathcal N_a^{(2)}` = 0.” The leftover negative fraction
+      is therefore :math:`\mathcal N_a^{(2)}`. Its units are volts, matching the linear
+      terms; it becomes a rate term only after division by the frequency derivative.
+
    The minus sign belongs to this definition of :math:`\mathcal N^{(2)}`.
    Changing the normalization of :math:`D` requires changing the nonlinear
    term consistently. This fixes the algebra and units; it does not supply a
@@ -682,41 +720,6 @@
    The carrier-phase term comes from that last product rule; the coefficients
    derived here govern the envelope itself.
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>What assumptions make this derivation possible?</summary>
-
-   The background is treated as locally uniform, and the envelope varies slowly
-   compared with the carrier. We retain first slow derivatives and the quadratic
-   response. Higher derivatives, which can describe packet spreading, and higher
-   nonlinear orders are outside this approximation.
-
-   The real dispersion root must be isolated and simple:
-   :math:`\partial_\omega D_r\ne0`. The imaginary response and its omitted
-   derivative terms must be sufficiently small in this expansion.
-
-   .. container:: k05-text
-
-      **Merging roots** means that two frequency solutions approach and meet as
-      a plasma parameter changes. For example, at a double root of the real
-      dispersion relation, :math:`D_r` and its frequency slope both vanish,
-      so division by :math:`\partial_\omega D_r`
-      is no longer valid. Near this situation the expansion may fail even when
-      growth is slow.
-
-   A response that is real on the real-frequency axis does not, by itself,
-   exclude unstable complex roots.
-
-   Ref. |ref-en| discusses this issue for the electron drift instability (EDI):
-   propagation with a component along the magnetic field supplies an imaginary
-   response, and the authors assess the growth approximation for their parameter
-   range. The derivation here establishes the equation's structure; it does not
-   evaluate all kinetic coefficients or establish validity for every EDI regime.
-
-   .. raw:: html
-
-      </details>
-
    The derivation has deliberately left the second-order kernel symbolic.
    Computing it from a chosen velocity distribution would be a separate kinetic
    prediction. The experiment in [1] instead **estimates its effective contribution
@@ -746,6 +749,16 @@
    Poisson bookkeeping are explanatory derivations added here, not extra
    equations quoted from the article.
 
+
+   .. container:: k05-r31-added
+
+      .. _k05-coefficients-reference-2-en:
+
+      [2] R. Fitzpatrick, *Plasma Physics*, “Cold-Plasma Dielectric Permittivity,”
+      equations (5.30) and (5.33), University of Texas at Austin.
+      `Lecture notes <https://farside.ph.utexas.edu/teaching/plasma/Plasma/node64.html>`_.
+
+
 .. container:: ap-lang ap-lang-zh k05-lesson
 
    .. _k05-coefficients-zh:
@@ -765,11 +778,13 @@
    这些电荷又必须通过泊松方程（Poisson's equation）产生原来的电势。
    自由演化的波需要满足这种 **自洽性（self-consistency）**。
 
-   对于幅值很小的正弦波，可以把线性化的等离子体方程整理成一个响应函数
-   :math:`D(k,\omega)`。在这里的约定下，它无量纲，称为
-   **线性介电响应（linear dielectric response）**。
-   它的具体形式取决于粒子分布、温度、漂移和磁场等物理信息，必须从等离子体模型求出，
-   不能只凭波形确定。
+   .. container:: k05-r31-revised
+
+      对于局部均匀背景中的小振幅正弦波，可以把线性化的等离子体方程整理成一个响应函数
+      :math:`D(k,\omega)`。在这里的约定下，它无量纲，称为
+      **线性介电响应（linear dielectric response）**。
+      它的具体形式取决于粒子分布、温度、漂移和磁场等物理信息，必须从等离子体模型求出，
+      不能只凭波形确定。
 
    回顾一下，:math:`k` 是沿 :math:`y` 方向的波数，单位 rad/m；
    :math:`\omega` 是角频率，单位 rad/s。这里用响应的实部选取一个实数载波频率：
@@ -808,11 +823,96 @@
    描述粒子种类 :math:`s` 的响应，例如电子或离子；求和遍历模型中的粒子种类。
    第一行规定了 :math:`\chi_s` 的符号约定，把右边移到左边就得到第二行。
 
+   .. raw:: html
+
+      <details class="k05-note k05-r31-added"><summary>展开这几行：从泊松方程到响应函数</summary>
+
+   :math:`E_y` 是沿 :math:`y` 方向的电场，单位 V/m。高斯定律（Gauss's law）
+   把电场的空间变化与电荷密度联系起来。对单个 Fourier 分量
+   :math:`\phi\propto e^{i(ky-\omega t)}`，每求一次 :math:`y` 导数就乘一个
+   :math:`ik`，两次求导便得到 :math:`-k^2`：
+
+   .. k05:equation:: poisson-response-steps
+      :lang: zh
+
+      \begin{aligned}
+      E_y&=-\partial_y\phi,\qquad \partial_yE_y=\rho^{(1)}/\epsilon_0,\\
+      \partial_y^2\phi&=-\rho^{(1)}/\epsilon_0,\qquad
+      \partial_y^2\phi=-k^2\phi,\\
+      \epsilon_0k^2\phi&=-\epsilon_0k^2\left(\sum_s\chi_s\right)\phi,\\
+      \left(1+\sum_s\chi_s\right)\phi&=0.
+      \end{aligned}
+
+   第二行立刻给出 :math:`\epsilon_0k^2\phi=\rho^{(1)}`。
+   对每种粒子，把线性电荷响应写成
+   :math:`\rho_s^{(1)}=-\epsilon_0k^2\chi_s\phi`。
+   这是对 :math:`\chi_s` 的 **归一化和正负号约定**，不能只靠泊松方程算出它的值。
+   把各粒子的响应相加再代入，就得到第三行。全部移到左边，除以非零的
+   :math:`\epsilon_0k^2`，便得到最后一行。括号内的系数命名为 :math:`D`；
+   这里没有除以 :math:`D`。
+
+   .. raw:: html
+
+      </details>
+
    波不为零时，:math:`D\phi=0` 要求 :math:`D=0`。虚响应较弱时，
    我们用 :math:`D_r=0` 选择实载波，把 :math:`D_i` 留给包络演化；完整复频率根稍后说明。
    在磁化等离子体中，这里的 :math:`D` 是针对所选传播方向的静电响应，
    :math:`\chi_s` 可以依赖传播方向。实际计算它，需要把线性化的流体方程或动理学方程
    与泊松方程联立。下面的代数暂不指定某一个具体的极化率模型。
+
+   .. raw:: html
+
+      </details>
+
+   .. raw:: html
+
+      <details class="k05-note k05-r31-added"><summary>一个简单的极化率：冷电子与固定离子</summary>
+
+   考虑均匀等离子体，不加磁场，没有碰撞和背景漂移。忽略电子压强，
+   离子只提供固定的中和背景。这个冷电子模型（cold-electron model）给出 [2]
+
+   .. k05:equation:: cold-electron-susceptibility
+      :lang: zh
+
+      \chi_e=-\frac{\omega_{pe}^2}{\omega^2},\qquad
+      \omega_{pe}^2=\frac{n_0e^2}{\epsilon_0m_e},\qquad
+      D=1+\chi_e=1-\frac{\omega_{pe}^2}{\omega^2}.
+
+   其中 :math:`n_0` 是平衡电子数密度，单位 m⁻³；:math:`e>0` 是元电荷，单位 C；
+   :math:`m_e` 是电子质量，单位 kg；:math:`\omega_{pe}` 是电子等离子体角频率
+   （electron plasma angular frequency），单位 rad/s。电子电荷为 :math:`-e`，
+   :math:`\chi_e` 与 :math:`D` 都无量纲。
+
+   用 :math:`\delta u_e` 表示电子速度扰动，单位 m/s，用 :math:`\delta n_e`
+   表示电子数密度扰动，单位 m⁻³；:math:`\delta` 表示偏离平衡的小变化。
+   在静止、均匀的背景附近，把牛顿运动定律和粒子数守恒线性化：
+
+   .. k05:equation:: cold-electron-fluid-response
+      :lang: zh
+
+      \begin{aligned}
+      m_e\partial_t\delta u_e&=-eE_y,\qquad
+      \partial_t\delta n_e+n_0\partial_y\delta u_e=0,\\
+      -i\omega m_e\delta u_e&=ie k\phi,\qquad
+      -i\omega\delta n_e+ikn_0\delta u_e=0,\\
+      \delta u_e&=-\frac{ek}{m_e\omega}\phi,\qquad
+      \delta n_e=-\frac{n_0ek^2}{m_e\omega^2}\phi,\\
+      \rho_e^{(1)}&=-e\delta n_e=
+      \frac{n_0e^2k^2}{m_e\omega^2}\phi
+      =-\epsilon_0k^2\chi_e\phi.
+      \end{aligned}
+
+   代入 :math:`E_y=-ik\phi`、:math:`\partial_t\to-i\omega` 和
+   :math:`\partial_y\to ik`，便得到第二行；随后先解出速度，再解出密度。
+   把最后一行与前面的电荷响应约定比较，就读出了 :math:`\chi_e`。
+   因此，极化率把 **电势 → 粒子运动 → 电荷响应** 这一串过程装进一个系数。
+
+   例如，试取 :math:`\omega=2\omega_{pe}`，则 :math:`\chi_e=-1/4`、
+   :math:`D=3/4`。这只是计算某个试探频率下的响应，并不是已经满足自洽条件的自由波；
+   再要求 :math:`D=0`，才选出 :math:`\omega^2=\omega_{pe}^2`。
+   负的极化率不表示负密度，而是当前约定下的响应系数。
+   这个例子帮助认清符号；文献 [1] 的磁化、有漂移模型需要另一种极化率。
 
    .. raw:: html
 
@@ -946,27 +1046,11 @@
 
       .. raw:: html
 
-         <details class="k05-note"><summary>把 (K05.26) 看成普通泰勒展开：被略去的项怎样写？</summary>
+         <details class="k05-note"><summary class="k05-r31-revised">保留二阶泰勒项：前面略去了什么？</summary>
 
-      一元函数的小变化，可以写成“原来的值 + 斜率 × 自变量的变化”。
-      这里 :math:`D` 有两个独立自变量：:math:`k` 改变了 :math:`q`，
-      :math:`\omega` 改变了 :math:`\nu`。保留一阶时，把两个方向各自造成的变化加起来即可。
-      偏导数就是“固定另一个自变量，只沿这个方向看的斜率”。
+      .. raw:: html
 
-      也可以真的把它改写成一元函数。引入无量纲的路径参数 :math:`\eta`，定义辅助函数 :math:`F`：
-
-      .. k05:equation:: taylor-one-parameter
-         :lang: zh
-
-         \begin{aligned}
-         F(\eta)&=D(k+\eta q,\omega+\eta\nu),\\
-         F(1)&=F(0)+F'(0)+\frac{1}{2}F''(0)+\mathcal R_3,\\
-         F'(0)&=q\,\partial_kD+\nu\,\partial_\omega D.
-         \end{aligned}
-
-      :math:`\eta=0` 对应原来的载波点，:math:`\eta=1` 对应移动了 :math:`(q,\nu)` 的新点。
-      撇号表示对 :math:`\eta` 求导；最后一行就是链式法则（chain rule）。
-      对 :math:`F'` 再求一次导数，便得到二阶项：
+         <span id="equation-k05-taylor-one-parameter-zh"></span>
 
       .. k05:equation:: taylor-second-order
          :lang: zh
@@ -979,14 +1063,18 @@
          +\nu^2\partial_\omega^2D\right]+\mathcal R_3.
          \end{aligned}
 
-      右边所有导数都在 :math:`(k,\omega)` 处取值。
-      :math:`\partial_k^2D` 描述沿波数方向的弯曲程度，
-      :math:`\partial_\omega^2D` 描述沿频率方向的弯曲程度。
-      **混合偏导（mixed derivative）** :math:`\partial_k\partial_\omega D`
-      描述“改变一个自变量时，另一个方向的斜率怎样变化”。
-      系数 2 来自沿路径求两次导数时的两种交叉顺序；响应足够光滑时，两种顺序给出相同结果。
-      余项（remainder） :math:`\mathcal R_3` 收纳偏移的三次及更高阶贡献。
-      保留这个余项，才可以写等号；有限项的泰勒多项式通常只是近似。
+      .. container:: k05-r31-revised
+
+         右边所有导数都在 :math:`(k,\omega)` 处取值。
+         :math:`\partial_k^2D` 描述沿波数方向的弯曲程度，
+         :math:`\partial_\omega^2D` 描述沿频率方向的弯曲程度。
+         **混合偏导（mixed derivative）** :math:`\partial_k\partial_\omega D`
+         描述“改变一个自变量时，另一个方向的斜率怎样变化”。
+         方括号内的混合项为 :math:`q\nu\,\partial_k\partial_\omega D`
+         与 :math:`\nu q\,\partial_\omega\partial_kD`；响应足够光滑时，
+         两种求导顺序结果相同，合并后就得到系数 2。
+         余项（remainder） :math:`\mathcal R_3` 收纳偏移的三次及更高阶贡献。
+         保留这个余项，才可以写等号；有限项的泰勒多项式通常只是近似。
 
       :k05:eq:`response-taylor` 实际做了 **两次不同的简化**。
       第一行略去了二阶方括号及 :math:`\mathcal R_3`；第二行又略去了虚响应的导数。
@@ -1101,6 +1189,18 @@
    复频率 :math:`\omega+i\gamma` 会在时间振荡之外，增加指数形式的幅值变化。
    在实载波附近展开完整色散方程，采用同样的弱响应近似：
 
+   .. raw:: html
+
+      <span id="equation-k05-growth-retained-terms-zh"></span>
+
+   .. raw:: html
+
+      <span id="equation-k05-growth-size-comparison-zh"></span>
+
+   .. raw:: html
+
+      <span id="equation-k05-growth-complex-correction-zh"></span>
+
    .. k05:equation:: weak-growth-root
       :lang: zh
 
@@ -1115,86 +1215,6 @@
    这只是复频率根的最低阶近似。其中略去了 :math:`-\gamma\partial_\omega D_i` 等项，
    需要虚响应及其导数满足适当的弱小排序，不能只检查 :math:`|\gamma/\omega|` 很小。
    所选实载波频率也不必严格等于完整复根的实部。
-
-   .. container:: k05-text
-
-      .. raw:: html
-
-         <details class="k05-note"><summary>到底要比什么小？逐项检查被舍弃的贡献</summary>
-
-      在实载波附近展开时，先保留完整的复数斜率。
-      由于 :math:`i\gamma\times i\partial_\omega D_i=-\gamma\partial_\omega D_i`，
-      之前略去的实数项就会直接出现：
-
-      .. k05:equation:: growth-retained-terms
-         :lang: zh
-
-         \begin{aligned}
-         D(k,\omega+i\gamma)
-         ={}&iD_i+i\gamma\,\partial_\omega D_r
-         -\gamma\,\partial_\omega D_i\\
-         &-\frac{\gamma^2}{2}\left(\partial_\omega^2D_r
-         +i\partial_\omega^2D_i\right)+\cdots .
-         \end{aligned}
-
-      省略号表示频率偏移的更高次项。
-      :k05:eq:`weak-growth-root` 保留 :math:`iD_i` 和 :math:`i\gamma\partial_\omega D_r`，
-      让它们相互平衡。因此，舍弃项必须 **相对于这些保留项足够小**，
-      而不是只看某个带单位的数字是否很小。
-
-      当 :math:`\gamma`、:math:`\partial_\omega D_r` 均非零时，
-      可以先对最先被略去的项作以下局部比较：
-
-      .. k05:equation:: growth-size-comparison
-         :lang: zh
-
-         \begin{aligned}
-         \frac{|\gamma\,\partial_\omega D_i|}
-         {|\gamma\,\partial_\omega D_r|}
-         &=\frac{|\partial_\omega D_i|}{|\partial_\omega D_r|}\ll1,\\
-         \frac{|\gamma^2\partial_\omega^2D|/2}
-         {|\gamma\,\partial_\omega D_r|}
-         &=\frac{|\gamma\,\partial_\omega^2D|}
-         {2|\partial_\omega D_r|}\ll1.
-         \end{aligned}
-
-      竖线表示大小或模，:math:`\ll1` 表示远小于 1。
-      第一个比值中，:math:`\gamma` 约掉了。
-      若虚部斜率只有实部斜率的 2%，舍弃项就是保留导数项的 2%；
-      若两种斜率一样大，这两项就一样大，不能因为 :math:`\gamma` 小而只扔掉其中一项。
-      第二个比值检查频率移动这么一点时，曲率修正是否已经明显；更高次项也需要足够小。
-
-      这就是这里 **排序（ordering）** 的意思：先比较各项大小，再决定保留到哪一级。
-      :math:`|\gamma/\omega|` 小，只说明频率偏移小于载波频率。
-      但响应函数可能在远小于载波频率的范围内就变化很快，所以还必须看它的斜率和曲率。
-
-      如果保留虚部斜率，实频率一般也需要修正。
-      用 :math:`\delta\omega_r` 表示实频率修正，单位 rad/s。
-      只在下面这次计算中，把两个斜率简记为 :math:`a,b` （单位 s），
-      把虚部响应简记为 :math:`d` （无量纲）；它们不是波的标签：
-
-      .. k05:equation:: growth-complex-correction
-         :lang: zh
-
-         \begin{aligned}
-         a&=\partial_\omega D_r,\quad b=\partial_\omega D_i,\quad d=D_i,\\
-         0&\simeq id+(a+ib)(\delta\omega_r+i\gamma)\\
-         &=(a\,\delta\omega_r-b\gamma)
-         +i(d+b\,\delta\omega_r+a\gamma),\\
-         \delta\omega_r&\simeq-\frac{db}{a^2+b^2},\qquad
-         \gamma\simeq-\frac{da}{a^2+b^2}.
-         \end{aligned}
-
-      令中间一行的实部、虚部分别为零，就能解出最后一行。
-      这些仍是一阶泰勒近似，不是精确复根。
-      当 :math:`|b/a|\ll1` 时，增长率才简化回 :math:`-D_i/\partial_\omega D_r`，
-      而实频率修正比虚频率修正小一个因子 :math:`|b/a|`。
-      实部斜率接近零时，不能直接套用这个简化。
-
-      .. raw:: html
-
-         </details>
-
 
    .. raw:: html
 
@@ -1300,6 +1320,36 @@
       最后一行用 :math:`D_a=1+\sum_s\chi_{s,a}` 简写，并把二次源移到左边。
       二次源没有被丢掉，它正是那个带负号的分式。
 
+   .. container:: k05-r31-added
+
+      **再得到最后一行：去掉载波，认出源项。**
+      代入 :math:`\phi_a=A_a e^{i\theta_a}` 和
+      :math:`\rho_a^{(2)}=R_a^{(2)}e^{i\theta_a}`。
+      对波包，:k05:eq:`quadratic-poisson` 中简写的线性响应还要像
+      :k05:eq:`linear-response-1d` 一样，在载波附近展开；不能只把它当成常数
+      :math:`D_a A_a`。为了看清代入过程，把前面已经推得的三个线性项
+      暂时合记为 :math:`\mathcal L_a A_a`：
+
+      .. k05:equation:: quadratic-envelope-source-steps
+         :lang: zh
+
+         \begin{aligned}
+         \mathcal L_a A_a&\equiv iD_{i,a}A_a
+         -i(\partial_kD_r)_a\partial_yA_a
+         +i(\partial_\omega D_r)_a\partial_tA_a,\\
+         0&\simeq e^{i\theta_a}\left[\mathcal L_a A_a
+         -\frac{R_a^{(2)}}{\epsilon_0k_a^2}\right],\\
+         0&=\mathcal L_a A_a+\mathcal N_a^{(2)},\qquad
+         \mathcal N_a^{(2)}=-\frac{R_a^{(2)}}{\epsilon_0k_a^2}.
+         \end{aligned}
+
+      第一行只是缩写；系数的下标 :math:`a` 表示在 :math:`(k_a,\omega_a)` 处求值。
+      第二行把电势和二次电荷的载波因子，以及线性响应展开，代入整理后的泊松方程。
+      由于 :math:`e^{i\theta_a}\ne0`，两边可除掉这个共同因子。
+      再与 :k05:eq:`quadratic-response-1d` 的“线性项 + :math:`\mathcal N_a^{(2)}` = 0”
+      比较，剩下的负分式正是 :math:`\mathcal N_a^{(2)}`。
+      它的单位是 V，与这些线性项一致；再除以频率导数后，才成为演化方程中的变化率项。
+
    负号属于这里对 :math:`\mathcal N^{(2)}` 的定义。
    如果改变 :math:`D` 的归一化，也必须一致地改变非线性项。
    这个过程说明了代数和单位，但要得到 :math:`K^{(2)}` 的数值，仍需要具体的二阶响应模型。
@@ -1341,32 +1391,6 @@
    就得到 :k05:eq:`full-wave-equation`，也就是文献 |ref-zh| 公式 (1) 的形式。
    载波相位项来自最后这一步的乘积求导；本页面推导的系数负责包络本身的演化。
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>这个推导用了哪些近似条件？</summary>
-
-   背景被视为局部均匀；相对于载波，包络变化缓慢。
-   我们保留慢变化的一阶导数和二次响应，略去了可描述波包展宽的更高阶导数，以及更高阶非线性。
-
-   实色散根需要是孤立的简单根（simple root），即 :math:`\partial_\omega D_r\ne0`。
-   虚响应及被舍弃的虚部导数项，也需要在这个展开中足够小。
-
-   .. container:: k05-text
-
-      **并根（merging roots）** 是指：某个等离子体参数改变时，两个频率解逐渐靠近并合到一起。
-      例如，实色散关系出现二重根时，:math:`D_r` 及其频率斜率同时为零，因而不能再除以 :math:`\partial_\omega D_r`；
-      接近这种情况时，即使增长缓慢，前面的展开也可能失效。
-
-   介电响应在实频率轴上为实数，本身不能排除不稳定复根。
-
-   文献 |ref-zh| 对电子漂移不稳定性（electron drift instability, EDI）讨论了这个问题：
-   沿磁场的传播分量会引入虚响应，作者针对其参数范围评估了增长率近似。
-   本页面说明方程的结构，没有计算全部动理学系数，也没有证明它适用于每一种 EDI 状态。
-
-   .. raw:: html
-
-      </details>
-
    这里将二阶响应核保留为符号，并不意味着后面的实验分析缺少一个必须先算出的数字。
    从指定速度分布计算它，是另一项动理学预测；文献 [1] 的方法则通过
    :ref:`双探针模型 <k05-inference-zh>`，**用实测统计矩估计它的有效贡献**。
@@ -1390,4 +1414,13 @@
 
    系数定义及 EDI 适用条件依据文献纸面第 115101-2 页公式 (1) 附近的讨论。
    中间的响应展开与泊松方程整理是本页面补充的讲解推导，并非从原文逐条引用的公式。
+
+
+   .. container:: k05-r31-added
+
+      .. _k05-coefficients-reference-2-zh:
+
+      [2] R. Fitzpatrick, *Plasma Physics*, “Cold-Plasma Dielectric Permittivity,”
+      equations (5.30) and (5.33), University of Texas at Austin.
+      `Lecture notes <https://farside.ph.utexas.edu/teaching/plasma/Plasma/node64.html>`_.
 

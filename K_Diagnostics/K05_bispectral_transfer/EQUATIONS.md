@@ -1,13 +1,29 @@
 # K05 equation numbering
 
-K05 uses one stable sequence, `(K05.1)`, `(K05.2)`, …, across pages.
-English and Chinese versions of the same equation share a number but have
-separate link targets. Numbers in the cited article remain its own numbers.
+K05 uses one consecutive reading-order sequence, `(K05.1)`, `(K05.2)`, …,
+across the peer articles listed in the overview. Equations inside disclosures
+participate in that sequence. English and Chinese versions share a number but
+have separate language-specific link targets. The cited paper's numbers are separate.
 
-The registry is `docs/source/_data/k05_equations.json`. Add a semantic ID with
-the next unused integer when adding an equation, including on a new page.
-Do not renumber existing IDs when moving equations or adding an earlier step;
-do not reuse retired IDs. Thus references remain stable as K05 grows.
+**Revision 31 policy (2026-11-03):** at the user's request, display numbers now
+follow article order and then equation appearance. This supersedes the old
+append-only policy. Semantic IDs, rather than display numbers, provide stable
+links. Do not reuse a removed semantic ID for an unrelated equation.
+
+After adding, removing or moving equations, run from the repository root:
+
+```sh
+python K_Diagnostics/K05_bispectral_transfer/renumber_equations.py --write
+python K_Diagnostics/K05_bispectral_transfer/renumber_equations.py --check
+```
+
+The script checks matching bilingual order and unique IDs, then writes
+`docs/source/_data/k05_equations.json`. Use semantic equation roles throughout
+the pages, not literal display numbers. Rebuild every page so cross-references
+receive the new numbers. Revision 31 has 149 active equations; the complete
+old/new mapping, including removed IDs, is in
+`equation_number_migration_20261103.json`. Removed growth-ordering and Taylor
+helper equations retain legacy HTML anchors at related surviving explanations.
 
 In an English container:
 
@@ -38,8 +54,13 @@ With documentation dependencies installed, run from the repository root:
 
 ```sh
 python -m unittest discover -s docs/tests -v
-python -m sphinx -b html -W --keep-going docs/source docs/build/html
+python -m sphinx -E -a -b html -W --keep-going docs/source docs/build/html
 ```
+
+## Historical revision notes (before the numbering migration)
+
+The numbers and append-only instructions below describe earlier editions only.
+Use the current policy above and the registry for maintained references.
 
 Revision 4 retires IDs `example-inputs`, `example-forcing`, and `example-solution`
 (numbers 11–13) after removing the maintained-input example. Keep their registry
