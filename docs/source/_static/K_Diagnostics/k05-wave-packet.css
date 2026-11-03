@@ -121,3 +121,22 @@
 .k05-statistics :focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
 .k05-statistics-readout { font-size: .85rem; margin: .7rem 0; font-variant-numeric: tabular-nums; }
 @media (max-width: 520px) { .k05-statistics { padding: .6rem; } }
+
+
+/* Permanent source-comparison panels, not revision colours. */
+.k05-lesson .k05-paper-match {
+  border: 1px solid #97a6b2; border-left: 4px solid #526575;
+  border-radius: .4rem; padding: 1rem 1.1rem; margin: 1.4rem 0;
+  background: var(--pst-color-surface, #f8fafc);
+}
+.k05-lesson .k05-paper-match > .rubric:first-child { margin-top: 0; }
+.k05-lesson .k05-paper-match > :last-child { margin-bottom: 0; }
+.k05-lesson .k05-paper-match div.math { margin: .6rem 0; }
+@media (max-width: 600px) {
+  .k05-lesson .k05-paper-match { padding: .7rem; }
+}
+
+/* Keep the concluding reading guide usable without horizontal page overflow. */
+.k05-lesson table.k05-reading-table { width: 100%; table-layout: fixed; }
+.k05-lesson table.k05-reading-table th,
+.k05-lesson table.k05-reading-table td { white-space: normal; overflow-wrap: anywhere; }

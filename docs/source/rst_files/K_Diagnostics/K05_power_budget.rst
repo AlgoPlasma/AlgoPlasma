@@ -440,6 +440,12 @@
       </details>
 
 
+   .. rubric:: Continue the reading
+
+   With the conditions separated from the plotted results, return to the original figures and read how the article connects growth, transfer and saturation.
+
+   :ref:`Next page <k05-synthesis-en>`.
+
    .. rubric:: References
 
    [1] Z. A. Brown and B. A. Jorns (2023), “Growth and Saturation of the Electron
@@ -843,6 +849,12 @@
 
       </details>
 
+
+   .. rubric:: 继续阅读
+
+   把适用条件与图形结果分清后，再回到论文原图，阅读作者怎样连接增长、转移和饱和。
+
+   :ref:`下一页面 <k05-synthesis-zh>`.
 
    .. rubric:: 参考文献
 

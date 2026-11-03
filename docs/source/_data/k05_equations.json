@@ -136,5 +136,19 @@
   "comparison-gordeev": 135,
   "comparison-branch": 136,
   "comparison-transfer": 137,
-  "comparison-symmetric-q": 138
+  "comparison-symmetric-q": 138,
+  "paper-equation-1": 139,
+  "paper-equation-2": 140,
+  "paper-equation-3": 141,
+  "paper-equation-4": 142,
+  "paper-equation-5": 143,
+  "paper-equation-6": 144,
+  "paper-equation-7": 145,
+  "kinetic-linear-vlasov": 146,
+  "kinetic-cold-ion": 147,
+  "kinetic-orbit-average": 148,
+  "kinetic-electron-response": 149,
+  "kinetic-poisson-closure": 150,
+  "paper-transverse-growth": 151,
+  "paper-saturated-balance": 152
 }

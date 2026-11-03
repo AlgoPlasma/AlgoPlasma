@@ -354,12 +354,42 @@
    :math:`v_{g,f}\partial_y` by :math:`\mathbf v_{g,f}\cdot\nabla` and
    :math:`k_fv_{g,f}` by :math:`\mathbf k_f\cdot\mathbf v_{g,f}`:
 
-   .. k05:equation:: frequency-equation-3d
-      :lang: en
+   .. _k05-source-2-en:
 
-      \mathbf v_{g,f}\cdot\nabla C_f
-      =\bigl(\gamma_f+i\mathbf k_f\cdot\mathbf v_{g,f}\bigr)C_f
-      +\sum_{f_1+f_2=f}V^Q_{1,2}C_{f_1}C_{f_2}.
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 and reference [1], Eq. (2)
+
+      .. k05:equation:: frequency-equation-3d
+         :lang: en
+
+         \mathbf v_{g,f}\cdot\nabla C_f
+         =\bigl(\gamma_f+i\mathbf k_f\cdot\mathbf v_{g,f}\bigr)C_f
+         +\sum_{f_1+f_2=f}V^Q_{1,2}C_{f_1}C_{f_2}.
+
+      **Original equation, original notation — [1], (2)**
+
+      .. k05:equation:: paper-equation-2
+         :lang: en
+
+         \vec v_g\cdot\frac{\partial\hat\phi_f}{\partial\vec r}
+         =(\gamma_f+i\vec k_r\cdot\vec v_g)\hat\phi_f
+         +\sum_{f=f_1+f_2}V^Q_{1,2}\hat\phi_{f_1}\hat\phi_{f_2}.
+
+      **Symbol map.** The article's :math:`\hat\phi_f(\vec r)` is our
+      :math:`C_f(\mathbf r)`, the time-Fourier coefficient that still contains spatial
+      phase. It is **not** the earlier slow envelope :math:`A_a`, despite the reused
+      hat in the article. :math:`\vec k_r` means the real wavevector, our
+      :math:`\mathbf k_f`; its subscript :math:`r` is not a coordinate index.
+      :math:`f=\omega/(2\pi)` is ordinary frequency in Hz, while :math:`\omega`
+      is angular frequency. The subscript :math:`f` labels components, not derivatives.
+
+      The article keeps potential coefficients. K05 first derives the same equation
+      for an ideal potential signal, then uses measured voltage coefficients in the
+      experiment; this change of observable requires the response discussion on
+      :ref:`page 08 <k05-response-en>`. Replacing wavevector matching by frequency
+      matching requires the single-branch correspondence stated above, not just an FFT.
+
 
    Here :math:`\mathbf r=(x,y,z)` is position, :math:`\nabla=(\partial_x,\partial_y,\partial_z)`
    is the spatial gradient, bold symbols are vectors and the dot is their scalar
@@ -862,12 +892,40 @@
    在三维中，把 :math:`v_{g,f}\partial_y` 换成 :math:`\mathbf v_{g,f}\cdot\nabla`，
    把 :math:`k_fv_{g,f}` 换成 :math:`\mathbf k_f\cdot\mathbf v_{g,f}`：
 
-   .. k05:equation:: frequency-equation-3d
-      :lang: zh
+   .. _k05-source-2-zh:
 
-      \mathbf v_{g,f}\cdot\nabla C_f
-      =\bigl(\gamma_f+i\mathbf k_f\cdot\mathbf v_{g,f}\bigr)C_f
-      +\sum_{f_1+f_2=f}V^Q_{1,2}C_{f_1}C_{f_2}.
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 与文献 [1] 式 (2) 对照
+
+      .. k05:equation:: frequency-equation-3d
+         :lang: zh
+
+         \mathbf v_{g,f}\cdot\nabla C_f
+         =\bigl(\gamma_f+i\mathbf k_f\cdot\mathbf v_{g,f}\bigr)C_f
+         +\sum_{f_1+f_2=f}V^Q_{1,2}C_{f_1}C_{f_2}.
+
+      **文献原式与原符号 — [1], (2)**
+
+      .. k05:equation:: paper-equation-2
+         :lang: zh
+
+         \vec v_g\cdot\frac{\partial\hat\phi_f}{\partial\vec r}
+         =(\gamma_f+i\vec k_r\cdot\vec v_g)\hat\phi_f
+         +\sum_{f=f_1+f_2}V^Q_{1,2}\hat\phi_{f_1}\hat\phi_{f_2}.
+
+      **符号对照。** 文献的 :math:`\hat\phi_f(\vec r)` 对应这里的
+      :math:`C_f(\mathbf r)`，是保留空间相位的时间 Fourier 系数。
+      虽然文献再次使用帽子，它**不是**前面的慢包络 :math:`A_a`。
+      :math:`\vec k_r` 是实波矢，对应 :math:`\mathbf k_f`；这里的下标
+      :math:`r` 表示实部，不是某个坐标方向。
+      :math:`f=\omega/(2\pi)` 是单位 Hz 的普通频率，:math:`\omega` 是角频率。
+      下标 :math:`f` 标记频率分量，不表示求导。
+
+      文献使用电势系数。K05 先对理想电势信号推导相同方程，实验计算再使用实测电压系数；
+      更换观测量需要 :ref:`第 08 页 <k05-response-zh>` 的响应条件。
+      把波矢匹配换成频率匹配，还需要前述单分支对应关系，不能只靠一次 FFT。
+
 
    :math:`\mathbf r=(x,y,z)` 是空间位置；:math:`\nabla=(\partial_x,\partial_y,\partial_z)`
    是空间梯度算符；粗体表示向量，点号表示点积。群速度的下标 :math:`f` 指目标波。

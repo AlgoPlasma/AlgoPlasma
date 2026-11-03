@@ -3,7 +3,6 @@
 
 .. raw:: html
 
-   <style>.k05-r25-revised{color:#9b326d}.k05-r25-added{color:#2869ad}.k05-r25-figure{border-left:3px solid #2869ad;padding-left:10px}</style>
    <link rel="stylesheet" href="../../_static/K_Diagnostics/k05-wave-packet.css">
    <div class="ap-language-switch" role="group" aria-label="Language switch" data-ap-default-lang="en">
      <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
@@ -16,7 +15,7 @@
 
    .. rubric:: Use a swept-probe record to obtain a temperature estimate
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       The :ref:`previous page <k05-validation-en>` compared simultaneous
       high-frequency signals from two probes held at fixed bias. Each probe can also
@@ -25,7 +24,7 @@
       This gives background quantities such as an effective electron temperature.
       Here, “sweep” refers to voltage, not mechanical motion.
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       Different processing choices can give substantially different temperatures
       from the same record. We first build the mean characteristic using
@@ -33,7 +32,7 @@
       and fit the electron-current slope. This is the recommended baseline for an
       average I–V curve; sensitivity checks remain necessary to assess its accuracy.
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       C1 is the **left, fixed probe** ; C3 is the **right, movable probe** , held
       stationary during these records, 3.7 mm away azimuthally. Both tips are
@@ -41,7 +40,6 @@
       These positions do not establish the wave propagation direction.
 
    .. figure:: /_static/K_Diagnostics/k05-response-layout-en.svg
-      :class: k05-r25-figure
       :alt: Figure A. C1/C3 positions redrawn from the experimental layout. Axial distance 5.5 mm; local azimuthal separation 3.7 mm. Not to scale.
       :width: 100%
 
@@ -57,14 +55,13 @@
    the fast oscilloscope's C1/C3.
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-raw.svg
-      :class: k05-r25-figure
       :alt: Figure 1. The example record: supply and resistor voltages. The shaded ramp is used to build the characteristic.
       :width: 100%
 
       Figure 1. The example record: supply and resistor voltages. The shaded ramp is used to build the characteristic.
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       The example record contains 500001 samples at 50 kHz, covering 10 s [1].
       Use only the upward ramp: from the first :math:`V_s>5` V to just before the first
@@ -163,14 +160,13 @@
    .. rubric:: 3. Separate the electron current before taking a logarithm
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-background.svg
-      :class: k05-r25-figure
       :alt: Figure 3. Mean I–V curve and the negative-current interval used to fit the ion background.
       :width: 100%
 
       Figure 3. Mean I–V curve and the negative-current interval used to fit the ion background.
 
 
-   .. container:: k05-r25-added
+   .. container:: k05-text
 
       The full positive-bias branch extends to about 233 V. Current rises much
       more slowly there: mean values over 40–80 and 180–230 V are about 14.07
@@ -178,7 +174,7 @@
       proof of accuracy: geometry, magnetic fields, or instrument current limiting
       can also affect the shape. The right panel magnifies the ion-background fit.
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       The curve's zero crossing is the **floating potential**
       :math:`V_f=-24.1458` V: electron and ion currents balance there.
@@ -222,7 +218,7 @@
       Figure 4. Locate an upper landmark using smoothed derivatives, then fit the logarithm of corrected electron current in the selected interval.
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       For this sweep the candidate is **4.5 V** . Keep a 2 V margin above :math:`V_f` and a
       5 V margin below the candidate. The requested fit interval is therefore
@@ -304,14 +300,13 @@
 
    .. rubric:: 5. Why does another choice give about 6 rather than 9 eV?
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       Keep the raw record fixed at **the example sweep** . Compare the mean workflow above with one
       that first reconstructs each instantaneous :math:`V_p`, groups those values in
       2 V bins, and takes medians. These are different summaries before either fit.
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-comparison.svg
-      :class: k05-r25-figure
       :alt: Figure 5. The same example sweep samples, summarized and fitted in two ways. Thick fitted segments have different slopes, giving 9.17 and 6.73 eV.
       :width: 100%
 
@@ -365,7 +360,7 @@
    :math:`V_f` on the mean curve, retaining the relative rule rather than the old
    absolute endpoints.
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       The complementary checks fix both electron bounds [−22.1458, −0.5] V and ion
       bounds [−80, −50] V: the old 2 V probe-bin median gives 6.81 eV; the 1 V source-bin
@@ -392,7 +387,7 @@
       Figure 6. Electron-fit margins (left) and ion-background choices (right). The outlined cell is the main setting; all 72 combinations are retained in the report.
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       All **72 predefined combinations** give **8.65–10.15 eV** for this sweep:
       three lower margins × three upper margins × four ion intervals × two backgrounds
@@ -426,7 +421,7 @@
 
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       Their mean is **9.06 eV** , with a range of **8.97–9.17 eV** .
       The 9.17 eV value belongs to **the example sweep alone** , not the four-record average.
@@ -436,7 +431,7 @@
 
       <details class="k05-note"><summary>What happens to the earlier sweeps?</summary>
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       The earlier set and repeat set are kept separate.
       The same mean workflow gives:
@@ -463,7 +458,7 @@
 
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       The median workflow gave 5.78–6.52 eV (mean 6.23 eV) for the earlier set, and
       6.00–6.73 eV (mean 6.40 eV) for the repeat set.
@@ -477,7 +472,7 @@
       </details>
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       The late mean current of the example sweep's high-voltage hold is about **26.9% below** its
       early value. The hold is excluded from the fit, but the change prompts a check
@@ -488,7 +483,7 @@
 
    .. rubric:: 7. Use the characteristic to check the fast probe's bias
 
-   .. container:: k05-r25-added
+   .. container:: k05-text
 
       **Why check this?** The high-frequency signal is intended to represent ion
       collection. That interpretation requires the probe to sit on a sufficiently
@@ -513,7 +508,6 @@
    The battery voltage alone does not locate it.
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-bias.svg
-      :class: k05-r25-figure
       :alt: Figure 7. Intersections of the example sweep mean curve and three load lines. Cathode-to-chamber voltages are assumed, not measured.
       :width: 100%
 
@@ -530,7 +524,7 @@
 
    .. rubric:: 8. Separate a slow current conversion from a MHz response
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       A 1 kΩ resistor gives a nominal conversion at low frequency.
       No discrete capacitor is specified in the experimental circuit. Nevertheless,
@@ -544,7 +538,7 @@
 
       <details class="k05-note"><summary>How to use the simple R–C response model</summary>
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       Illustrative effective capacitances are 20, 100 and 200 pF; none is a measured value.
 
@@ -640,7 +634,7 @@
         --data /path/to/supplementary_scans \
         --output /path/to/separate_output
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       File mapping: the example and repeat sweeps 1–4 are 10140015–10140018.WDF;
       the earlier sweeps 1–4 are 10140008–10140011.WDF.
@@ -675,7 +669,7 @@
 
    [3] Tektronix, `ABCs of Probes Primer <https://www.tek.com/en/documents/whitepaper/abcs-probes-primer>`_.
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       [4] Z. A. Brown and B. A. Jorns, “Growth and Saturation of the Electron Drift
       Instability in a Crossed Field Plasma,” *Physical Review Letters* **130** , 115101 (2023).
@@ -691,28 +685,27 @@
 
    .. rubric:: 怎样用一次探针扫描，得到一个温度估计
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       前面的 :ref:`双探针验证 <k05-validation-zh>` 使用两支探针在固定偏压下
       同步记录高频波动。同一支探针也可以单独改接 **电压扫描电路** ：
       缓慢改变偏压，测得平均电流—电压特性（I–V characteristic），
       从中估计电子温度等背景平均量。本页的“扫描”指改变电压，不是移动探针。
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       同一份记录采用不同处理方法，可能得到差别很大的温度。
       下面先按 **外加电源电压分箱取算术平均** 整理平均 I–V 曲线，
       再扣除离子背景、拟合电子电流斜率。这是估计平均特性的推荐基准；
       是否准确仍要结合拟合区间、波动和重复测量检查，不能只看结果接近某个预期值。
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       C1 是 **左侧固定探针** ，C3 是 **右侧可移动探针** ，
       但在本组采集中保持位置不变。两者周向间距 3.7 mm，距出口轴向 5.5 mm，
       暴露尖端直径 0.5 mm、长度 2.5 mm。探针位置本身不能确定波传播方向。
 
    .. figure:: /_static/K_Diagnostics/k05-response-layout-zh.svg
-      :class: k05-r25-figure
       :alt: 图 A．根据实验布置重绘的 C1/C3 位置：轴向距出口 5.5 mm，局部周向间距 3.7 mm。示意图不按比例。
       :width: 100%
 
@@ -727,14 +720,13 @@
    这些慢扫描通道名称与高频示波器的 C1/C3 不同。
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-raw.svg
-      :class: k05-r25-figure
       :alt: 图 1．本例扫描的电源与电阻电压。阴影选中的上升段用于整理 I–V 曲线。
       :width: 100%
 
       图 1．本例扫描的电源与电阻电压。阴影选中的上升段用于整理 I–V 曲线。
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       本例扫描含 500001 个采样点，采样率 50 kHz，记录长 10 s [1]。
       只取上升扫描段：从首次 :math:`V_s>5` V，到首次 :math:`V_s>349` V 之前，
@@ -833,21 +825,20 @@
    .. rubric:: 3．先扣除离子背景，再对电子电流取对数
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-background.svg
-      :class: k05-r25-figure
       :alt: 图 3．平均 I–V 特性，以及用于拟合离子背景的负电流区间。
       :width: 100%
 
       图 3．平均 I–V 特性，以及用于拟合离子背景的负电流区间。
 
 
-   .. container:: k05-r25-added
+   .. container:: k05-text
 
       完整正偏压支延伸到约 233 V。高电压处电流上升明显趋缓：
       40–80 V 与 180–230 V 区间平均电流约为 14.07 和 15.36 mA。
       这种趋平现象有助于检查收集区间，但不能单凭平台就认定实验准确；
       探针几何、磁场或仪器限流也可能改变形状。右图放大离子背景拟合区。
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       电流过零的位置称为 **浮动电势（floating potential）**
       :math:`V_f=-24.1458` V：这里电子与离子电流相互抵消。它不是等离子体电势。
@@ -893,7 +884,7 @@
       图 4．先用平滑导数找上端参考位置，再在选定区间内拟合扣除背景后的电子电流对数。
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       本例扫描的候选值为 **4.5 V** 。下端选在 :math:`V_f` 之上 2 V，
       上端选在候选值之下 5 V，因此请求的拟合区间为 **−22.1458 到 −0.5 V** 。
@@ -975,14 +966,13 @@
 
    .. rubric:: 5．为什么换一种选择，会得到约 6 而不是约 9 eV？
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       仍使用 **同一份原始记录**。另一种流程是：
       先逐点计算瞬时 :math:`V_p`，按它分成 2 V 区间，再取中位数。
       两种流程在拟合之前，就把同一批采样点整理成了不同曲线。
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-comparison.svg
-      :class: k05-r25-figure
       :alt: 图 5．同一份扫描数据经两种整理与拟合得到不同斜率。粗线为实际拟合段，分别对应 9.17 和 6.73 eV。
       :width: 100%
 
@@ -1036,7 +1026,7 @@
    “均值曲线＋原规则”在均值曲线上重新计算 :math:`V_f`，
    再应用相同的相对区间规则，不是固定原绝对端点。
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       另一组比较固定本页电子区间 [−22.1458, −0.5] V、离子区间 [−80, −50] V：
       原 2 V 探针电压分箱中位数得到 6.81 eV，1 V 电源分箱中位数得到 7.06 eV。
@@ -1063,7 +1053,7 @@
       图 6．电子区间余量（左）与离子背景选取（右）的敏感性。框出的格点为主设置；完整 72 种组合保存在数值报告中。
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       本例扫描在全部 **72 种预定组合** 下得到 **8.65–10.15 eV** ：
       3 种下端余量 × 3 种上端余量 × 4 个离子区间 × 2 种背景形式（直线或常数）。
@@ -1097,7 +1087,7 @@
 
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       四次平均为 **9.06 eV** ，范围为 **8.97–9.17 eV** 。
       **9.17 eV 是本例这一条记录的结果** ，不是四次平均。
@@ -1107,7 +1097,7 @@
 
       <details class="k05-note"><summary>更早的扫描，结果怎样变化？</summary>
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       较早的四条扫描与重复组分别保留。
       应用同一均值流程得到：
@@ -1134,7 +1124,7 @@
 
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       原中位数流程对早期组得到 5.78–6.52 eV，平均 6.23 eV；
       对重复组得到 6.00–6.73 eV，平均 6.40 eV。
@@ -1147,7 +1137,7 @@
       </details>
 
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       本例扫描的高电压保持段，后期平均电流比早期低约 **26.9%** 。
       这段没有参与温度拟合，但这种变化提醒我们检查时间依赖性；
@@ -1159,7 +1149,7 @@
 
    .. rubric:: 7．用这条曲线，检查高频探针实际偏在哪里
 
-   .. container:: k05-r25-added
+   .. container:: k05-text
 
       **为什么要检查工作点？** 高频探针希望记录的是以离子收集为主的波动。
       只有偏压足够负、电子电流较小时，这个解释才较合理。
@@ -1183,7 +1173,6 @@
    只看电池的标称值，还不能确定这个交点。
 
    .. figure:: /_static/K_Diagnostics/k05-sweep-bias.svg
-      :class: k05-r25-figure
       :alt: 图 7．本例平均曲线与三条负载线的交点；阴极—罐体电位差为假设值，不是实测值。
       :width: 100%
 
@@ -1199,7 +1188,7 @@
 
    .. rubric:: 8．慢扫描的电流换算，与 MHz 响应要分开看
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       1 kΩ 电阻给出低频下标称的电压—电流换算。实验电路没有注明额外接入电容器，
       但导线／电缆芯线与屏蔽层、示波器测量探头和输入端之间仍有
@@ -1211,7 +1200,7 @@
 
       <details class="k05-note"><summary>这个简单 R–C 响应模型怎样使用？</summary>
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       图 8 使用有效电容为 20、100、200 pF 的估计情景，都不是实测值。
 
@@ -1305,7 +1294,7 @@
         --data /path/to/supplementary_scans \
         --output /path/to/separate_output
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       复现编号对应：本例及重复扫描 1–4 对应 10140015–10140018.WDF；
       早期扫描 1–4 对应 10140008–10140011.WDF。
@@ -1338,7 +1327,7 @@
 
    [3] Tektronix, `ABCs of Probes Primer <https://www.tek.com/en/documents/whitepaper/abcs-probes-primer>`_.
 
-   .. container:: k05-r25-revised
+   .. container:: k05-text
 
       [4] Z. A. Brown and B. A. Jorns, “Growth and Saturation of the Electron Drift
       Instability in a Crossed Field Plasma,” *Physical Review Letters* **130** , 115101 (2023).

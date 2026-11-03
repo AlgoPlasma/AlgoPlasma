@@ -3,7 +3,7 @@
 [English — start here](README.en.md) | [中文](README.zh-CN.md)
 
 Start at the [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst).
-Its ten peer articles follow Brown & Jorns (2023), in this reading order:
+Its eleven peer articles follow Brown & Jorns (2023), in this reading order:
 
 1. [Wave growth and coupling](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst):
    build Eq. (1) from a moving wave, with an interactive wave packet.
@@ -34,6 +34,9 @@ Its ten peer articles follow Brown & Jorns (2023), in this reading order:
 
 10. [Supplement: interpreting the plots](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst):
     explain stationary Kim moments, reference phase and the complete held-out power budget.
+
+11. [Read the paper from equations to conclusions](../../docs/source/rst_files/K_Diagnostics/K05_paper_synthesis.rst):
+    connect the original figures to drive, transfer, saturation and transport implications.
 
 Follow the build instructions in either language README to view the HTML.
 

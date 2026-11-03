@@ -181,3 +181,25 @@ The voltage transfer uses the half-power convention of Brown Eq6; the full
 squared-amplitude contribution is twice that value. Symmetric maps split unique
 off-diagonal coefficients in two and reconstruct negative targets by conjugation.
 Do not confuse a missing map cell with a zero coupling estimate.
+
+
+## R30: original-equation comparison and reading closure
+
+Append139–145 as paper-equation-1 through paper-equation-7. Each is a literal
+mathematical transcription of the source (line wrapping only), placed below
+its K05 counterpart in k05-paper-match. Headers retain source [1] Eq.(n);
+K05 numbers provide stable cross-page links. Do not silently repair original
+phase/factor/index conventions: explain them after the printed expression.
+Source(5) repeats the pair labels in its second line; the notes distinguish
+fixed multiplying row i and summed pair j, without dropping off-diagonal moments.
+
+Append146–150: kinetic-linear-vlasov, kinetic-cold-ion, kinetic-orbit-average,
+kinetic-electron-response, kinetic-poisson-closure. Source(7) is the scaled
+dielectric; derive the full cold-beam form before describing the saved zero-ion-
+Doppler specialization. Append151–152: paper-transverse-growth and
+paper-saturated-balance on new peer page11. Next unused number153.
+All previously active formulas retain their numbers and mathematical text.
+The phase-space distributions F, time lag s, Gordeev X/Y, Larmor rho and
+charge density rho_1 must be distinguished from earlier statistical symbols.
+The static source images k05-reference-figure2/3.png are extracted from the
+supplied paper, not newly generated measurements. Caption them as source figures.

@@ -61,7 +61,30 @@ K05 · Bispectral transfer
       10. :ref:`Supplement: interpreting the plots <k05-budget-en>` — explain the
           common-power check, reference phase and complete measured-power balance.
 
+      11. :ref:`Read the paper from equations to conclusions <k05-synthesis-en>` —
+          use the original figures to connect drive, redistribution and saturation,
+          and distinguish source conclusions from the C1/C3 example.
+
       Follow the main text first; open the calculation notes when needed.
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Find a reference equation</summary>
+
+   Each comparison box puts the K05 equation above the original equation,
+   then explains the symbol and normalization differences.
+
+   - :ref:`[1], Eq. (1): Full wave evolution <k05-source-1-en>`
+   - :ref:`[1], Eq. (2): Time-Fourier equation <k05-source-2-en>`
+   - :ref:`[1], Eq. (3): Two-probe model <k05-source-3-en>`
+   - :ref:`[1], Eq. (4): Coefficients, phase and rates <k05-source-4-en>`
+   - :ref:`[1], Eq. (5): Measured moment equations <k05-source-5-en>`
+   - :ref:`[1], Eq. (6): Signed transfer <k05-source-6-en>`
+   - :ref:`[1], Eq. (7): Kinetic dispersion <k05-source-7-en>`
+
+   .. raw:: html
+
+      </details>
 
    .. rubric:: Contributor
 
@@ -110,7 +133,28 @@ K05 · Bispectral transfer
       10. :ref:`补充：怎样解释增长与转移图 <k05-budget-zh>` ——
           展开共同功率检查、参考相位与完整实测功率收支。
 
+      11. :ref:`从方程读到论文结论 <k05-synthesis-zh>` ——
+          用原图串起驱动、转移和饱和，区分原文结论与 C1/C3 示例。
+
       可以先顺着正文读，需要时再展开计算细节。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>按文献公式查找对应页面</summary>
+
+   每个对照框先放 K05 方程，再列文献原式，随后说明符号、归一化或模型简化的差别。
+
+   - :ref:`[1] 式 (1)：完整波动演化 <k05-source-1-zh>`
+   - :ref:`[1] 式 (2)：时间 Fourier 方程 <k05-source-2-zh>`
+   - :ref:`[1] 式 (3)：双探针模型 <k05-source-3-zh>`
+   - :ref:`[1] 式 (4)：系数、相位与变化率 <k05-source-4-zh>`
+   - :ref:`[1] 式 (5)：实测统计矩方程 <k05-source-5-zh>`
+   - :ref:`[1] 式 (6)：有符号转移 <k05-source-6-zh>`
+   - :ref:`[1] 式 (7)：动理学色散 <k05-source-7-zh>`
+
+   .. raw:: html
+
+      </details>
 
    .. rubric:: 贡献者
 
@@ -138,3 +182,4 @@ K05 · Bispectral transfer
    K05_probe_response
    K05_paper_comparison
    K05_power_budget
+   K05_paper_synthesis

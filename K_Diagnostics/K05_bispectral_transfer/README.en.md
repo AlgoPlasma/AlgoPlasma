@@ -9,7 +9,7 @@ Jorns, *Physical Review Letters* **130**, 115101 (2023),
 ## Reading guide
 
 The [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
-introduces the purpose and lists ten peer articles in reading order.
+introduces the purpose and lists eleven peer articles in reading order.
 
 The [first page](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 derives the structure of Eq. (1) of Brown & Jorns (2023). It introduces a real wave, its complex
@@ -58,10 +58,10 @@ the fit to amplitude growth and mean-square transfer; continuous and finite-step
 budgets and the reference normalization are distinguished explicitly.
 
 The English views use English only; the Chinese views include English terms.
-All ten articles use the shared K05 equation sequence and cross-page references.
+All eleven articles use the shared K05 equation sequence and cross-page references.
 See [equation authoring](EQUATIONS.md) before adding a page or equation.
 
-## Planned path from data to figures
+## Workflow from data to figures
 
 1. Specify synchronized probe voltages, sampling rate, probe order, separation,
    calibration, stationarity windows, and uncertainty inputs.
@@ -75,8 +75,8 @@ See [equation authoring](EQUATIONS.md) before adding a page or equation.
    provenance. Matching the published figures requires appropriate experimental
    data and parameters; none are bundled here.
 
-Resolve the article's phase, normalization, pair-counting and factor-of-two
-conventions before implementation.
+The comparison boxes document phase, normalization, pair counting and the
+factor of two; the experimental example uses explicit conventions throughout.
 K01 currently uses NumPy's forward `exp(-i omega t)` transform and the cross
 spectrum `X1 * conj(X2)`; do not change that convention implicitly.
 
@@ -100,7 +100,7 @@ spectrum `X1 * conj(X2)`; do not change that convention implicitly.
   K05 static-asset directory. The exported `plotSvg(mode, deltaDegrees, seed,
   count, lang, uniqueId)` uses exact synthetic coefficients; the default is
   `("fixed", 60, 7, 32, lang, uniqueId)`.
-- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the ten articles.
+- Navigation: the toctree in `K05_bispectral_transfer.rst` lists the eleven articles.
 - Install the existing `docs/requirements.txt` in a suitable environment; the
   documentation configuration also invokes Doxygen. From the repository root:
 
@@ -145,3 +145,17 @@ for comparison; see [EXPERIMENT.md](EXPERIMENT.md).
 
 
 Page09: [Experimental counterparts of Figures 2 and 3](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst) shows the five panels first, then explains their calculation and explicit parameter estimates. Page10: [Supplement](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst) explains the common-power and complete-budget checks. Reproduction: EXPERIMENT.md.
+
+
+## Equation comparison and concluding synthesis
+
+Pages01,03,05,09 put the corresponding K05 expression and original reference
+Eqs.(1)–(7) in permanent comparison boxes with symbol/normalization notes.
+The overview links directly to all seven. Source equations have K05.139–145
+for stable links while their headings retain the article's own numbers.
+The page09 disclosure derives the linear Vlasov response, cold-ion susceptibility,
+Maxwellian gyro-orbit average and Poisson closure (K05.146–150).
+[Page11](../../docs/source/rst_files/K_Diagnostics/K05_paper_synthesis.rst)
+reads the original figures, derives the transverse-growth connection and a
+conditional stationary balance (K05.151–152), and closes the reading with a
+result map and symbol guide. Experimental output arrays are unchanged.

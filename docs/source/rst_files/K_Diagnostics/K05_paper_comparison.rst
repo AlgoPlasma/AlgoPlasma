@@ -26,23 +26,31 @@
 
    .. figure:: /_static/K_Diagnostics/k05-comparison-figure2.svg
       :width: 100%
-      :alt: Three panels corresponding to reference Figure 2: an illustrative kinetic dispersion, measured voltage spectra, and conditional growth rates with a common vertical scale.
+      :alt: Three panels corresponding to reference Figure 2: an illustrative kinetic dispersion, measured voltage spectra, and conditional growth rates with separate left and right axes matching the reference.
 
       Figure 2 counterpart. (a) An explicitly assumed kinetic scenario.
       (b) Measured voltage spectra. (c) Coefficient-based apparent rates and
-      model growth, on the same vertical scale. Lines and bands for the data
-      show four-split means and ranges, not confidence intervals.
+      model growth, on the left and right axes respectively, as in [1].
+      Axis limits and ticks follow reference Figure 2; uncovered frequencies
+      remain blank. Lines and bands show four-split means and ranges, not
+      confidence intervals. Fixed limits clip out-of-range values; they do
+      not set those values to zero.
 
    **Start with panel (b): what is present in the signals?** C1 and C3 are the
    two probe channels. The vertical axis is the voltage power spectral density
-   :math:`S_V(f)`, in V²/Hz; a taller peak means more fluctuation power per unit
-   frequency. We reuse the :ref:`experimental spectra <k05-experiment-en>`:
+   shown as :math:`P_f=S_V(f)` in μV²/Hz. The saved V²/Hz values are
+   multiplied by :math:`10^{12}` solely to convert units; both channels use
+   the same conversion. Unlike the 1/Hz label in [1], these remain measured
+   voltage spectra, without an assumed plasma-amplitude normalization.
+   A taller peak means more fluctuation power per unit frequency. We reuse the :ref:`experimental spectra <k05-experiment-en>`:
    remove each segment's mean, apply a periodic Hann window, Fourier transform,
    square the magnitude, correct the window's mean-square gain, and average.
    The plotted line averages the four captures equally. This is a one-sided
    spectrum with 16384-point segments, covering the measured frequencies up to
-   50 MHz. The two curves share the same voltage scale; neither was rescaled
-   to force agreement.
+   50 MHz; the reference axis extends to 100 MHz, leaving 50–100 MHz blank.
+   Panel (b) uses the reference's logarithmic ticks and approximately
+   0.2–4000 frame limits (the endpoints are not labelled in [1]).
+   The two curves share the same voltage scale; neither was rescaled to force agreement.
 
    The gray strip is the **0.537–4.980 MHz coefficient-fit band**, not the
    measurement bandwidth. The coefficient calculation uses 2048-point segments,
@@ -58,6 +66,12 @@
    cold-ion model [1, 2], using the measured temperature proxy and magnetic
    components plus the estimates in the disclosure below.
    It is not a wave-number measurement from the two probe signals.
+   The reference labels its ordinate :math:`\omega_k` with Hz; our plot
+   explicitly uses :math:`f=\operatorname{Re}\omega/(2\pi)`.
+   Its printed label alone does not establish whether the original numerical
+   ordinate was divided by :math:`2\pi`. Matching the frame is therefore not
+   a verified frequency-convention match. Do not infer a measured speed ratio
+   from the two plotted slopes.
    Its slope gives the azimuthal group velocity:
    :math:`v_{g,y}=2\pi\,\partial f/\partial k_y`, with other wave-vector
    components held fixed. This scenario gives about **0.32–2.49 km/s**
@@ -94,12 +108,20 @@
    2148 m/s. The apparent rates are about **+3.08 × 10⁴ s⁻¹ (Kim)** and
    **−7.39 × 10⁴ s⁻¹ (least squares)**; the model gives **5.02 × 10⁵ s⁻¹**.
    These are one split's values, while the lines average four splits.
-   Unlike the two growth axes in [1], this plot uses one shared scale.
+   As in [1], the left axis is :math:`\gamma_{f(y)}` (here our
+   :math:`\gamma_{y,\mathrm{app}}`), from −0.5 to 3 × 10⁵ s⁻¹;
+   the right axis is :math:`\gamma_f` (here :math:`\gamma_{\rm th}`),
+   from −0.5 to 3 × 10⁶ s⁻¹. The right-axis scale is ten times the left:
+   equal plotted heights do not mean equal rates. The horizontal axis extends
+   to 35 MHz; these rate curves exist only in the fitted 0.537–4.980 MHz band.
+   Both coefficient-based curves use the same assumed group velocity; the
+   model curve comes from the imaginary part of a numerical dispersion root.
+   Neither least squares nor Kim is a direct growth-versus-time measurement.
    The different signs and magnitudes are results to investigate, not a reason
    to choose whichever curve looks closer to theory.
 
    Orange open circles mark frequencies where at least one split fails the
-   common-power check. The curves are retained so the calculation is visible;
+   common-power check. Flags and curves are retained wherever they fall inside the fixed axes;
    the :ref:`supplementary page <k05-budget-en>` explains the check after these
    results have been introduced.
 
@@ -154,13 +176,48 @@
    In this illustrative slab, magnetized electrons are Maxwellian and ions
    are cold and unmagnetized. With the assumed zero ion Doppler shift, solve
 
-   .. k05:equation:: comparison-dispersion
-      :lang: en
+   .. _k05-source-7-en:
 
-      \mathcal E(\omega,k_y)
-      =1+k^2\lambda_{De}^2+g(\omega,k_y)
-        -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{\omega^2}=0,
-      \qquad k^2=k_y^2+k_\parallel^2 .
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 and reference [1], Eq. (7)
+
+      .. k05:equation:: comparison-dispersion
+         :lang: en
+
+         \mathcal E(\omega,k_y)
+         =1+k^2\lambda_{De}^2+g(\omega,k_y)
+           -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{\omega^2}=0,
+         \qquad k^2=k_y^2+k_\parallel^2 .
+
+      **Original equation, original notation — [1], (7)**
+
+      .. k05:equation:: paper-equation-7
+         :lang: en
+
+         \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
+         -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}.
+
+      **This is a specialization, not just a symbol change.** The article's
+      :math:`x,y,z` are axial, azimuthal and radial, with the magnetic field along
+      :math:`z`. Its :math:`k^2=k_x^2+k_y^2+k_z^2`;
+      :math:`\Omega=(\omega-k_yV_D)/\omega_{ce}`,
+      :math:`X=(k_x^2+k_y^2)\rho^2`, :math:`Y=k_z^2\rho^2`,
+      and :math:`\rho=v_{te}/\omega_{ce}`. Capital :math:`X,Y` in this box are
+      dimensionless Gordeev arguments, **not probe coefficients**.
+      :math:`v_p` is the axial ion beam speed; :math:`k_xv_p` is its Doppler shift.
+      :math:`\lambda_{De},\omega_{pi},\omega_{ce}` denote Debye length, ion plasma
+      angular frequency and electron gyro angular frequency.
+
+      Our :math:`\mathcal E` corresponds to the printed :math:`\epsilon^{(1)}`:
+      both are a dielectric multiplied by :math:`k^2\lambda_{De}^2`, not the
+      unscaled :math:`1+\chi_e+\chi_i`. The present calculation sets
+      :math:`k_x=0`, :math:`k_z\to k_\parallel`, :math:`X\to b`, and
+      :math:`k_xv_p\to0`. It uses the **total tilted field** for the parallel axis,
+      so it does not equate the measured laboratory radial direction with parallel.
+      The response derivation below explains the common structure without silently
+      restoring terms absent from the saved calculation.
+
 
    :math:`\mathcal E` is the dielectric multiplied by
    :math:`k^2\lambda_{De}^2`; the multiplication does not change its roots here.
@@ -214,6 +271,144 @@
    used. This uses the full complex root, not an additional weak-growth
    approximation. Root residuals, harmonic-sum convergence and derivative
    checks are saved with the numerical report.
+
+   .. raw:: html
+
+      </details>
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Where reference Eq. (7) comes from: response, then Poisson closure</summary>
+
+   The question is simple: **if a small potential is imposed, how much charge
+   does each species move, and can that charge sustain the same potential?**
+   We use a locally uniform, collisionless, electrostatic model. Electrons are a
+   drifting Maxwellian in uniform background fields; ions are a cold unmagnetized
+   beam. These are assumptions, not conclusions extracted from a spectrum.
+
+   **1. Linearize the particle response.** Write the distribution of species
+   :math:`s` as a stationary :math:`F_{s0}` plus a small :math:`F_{s1}`.
+   Keep terms linear in the perturbation in the Vlasov equation:
+
+   .. k05:equation:: kinetic-linear-vlasov
+      :lang: en
+
+      \left[\partial_t+\mathbf v\cdot\nabla
+      +\frac{q_s}{m_s}(\mathbf E_0+\mathbf v\times\mathbf B_0)\cdot\nabla_{\mathbf v}\right]F_{s1}
+      =-\frac{q_s}{m_s}\mathbf E_1\cdot\nabla_{\mathbf v}F_{s0},
+      \qquad \mathbf E_1=-\nabla\phi_1.
+
+
+   :math:`F` is a velocity distribution, not the frequency :math:`f` or the
+   fourth-moment matrix on page 05. :math:`q_s,m_s` are charge and mass;
+   :math:`\mathbf v` is particle velocity; :math:`\nabla_{\mathbf v}` differentiates
+   in velocity space. Subscripts 0 and 1 mean background and first-order response.
+   The left side follows the unperturbed particle orbit; the right side is the
+   small electric force acting on the background velocity distribution.
+
+   **2. Cold ions supply the beam denominator.** For a perturbation proportional
+   to :math:`e^{i\mathbf k\cdot\mathbf r-i\omega t}`, cold-ion continuity and
+   momentum reduce to
+
+   .. k05:equation:: kinetic-cold-ion
+      :lang: en
+
+      \begin{aligned}
+      \Omega_i\,\delta n_i&=n_0\mathbf k\cdot\delta\mathbf u_i,
+      &\Omega_i\,\delta\mathbf u_i&=\frac{e}{m_i}\mathbf k\phi_1,\\
+      \delta n_i&=\frac{n_0 e k^2\phi_1}{m_i\Omega_i^2},
+      &\chi_i&=-\frac{\omega_{pi}^2}{\Omega_i^2},\qquad \Omega_i=\omega-k_xv_p.
+      \end{aligned}
+
+
+   :math:`\delta n_i,\delta\mathbf u_i` are density and velocity perturbations.
+   The beam sees the Doppler-shifted angular frequency :math:`\Omega_i`;
+   this is not the dimensionless electron argument :math:`\Omega` below.
+   The susceptibility :math:`\chi_i` is defined by its induced charge
+   :math:`\rho_{i1}=-\epsilon_0 k^2\chi_i\phi_1`.
+   Solving momentum first, then inserting it into continuity, explains the square
+   in :math:`(\omega-k_xv_p)^{-2}`. In the cold-beam limit these moment equations
+   are the corresponding Vlasov response; finite ion temperature changes it.
+
+   **3. Magnetized electrons remember their gyro-orbits.** The electron equation
+   can be integrated along an unperturbed orbit, with the causal response selected
+   by switching the perturbation on from the remote past. Separate the uniform
+   drift from the thermal displacement :math:`\Delta\mathbf r_{\rm th}`.
+   For a positive look-back time :math:`s`, a Gaussian velocity average gives
+
+   .. k05:equation:: kinetic-orbit-average
+      :lang: en
+
+      \begin{aligned}
+      \tau&=\omega_{ce}s,\quad X=k_\perp^2\rho^2,\quad Y=k_\parallel^2\rho^2,\\
+      \left\langle e^{i\mathbf k\cdot\Delta\mathbf r_{\rm th}(s)}\right\rangle_{F_{e0}}
+      &=\exp\!\left[-X(1-\cos\tau)-\tfrac12Y\tau^2\right].
+      \end{aligned}
+
+
+   Here :math:`s` is a time lag, no longer a species index; :math:`\tau` is the
+   dimensionless gyro time, and the brackets average the Maxwellian velocities.
+   Parallel particles move freely, giving a Gaussian factor proportional to
+   :math:`s^2`. Perpendicular particles orbit, giving :math:`1-\cos\tau`.
+   Their one-component thermal variance is :math:`v_{te}^2=T_e/m_e`.
+   For example, the perpendicular phase variance is
+   :math:`2k_\perp^2\rho^2(1-\cos\tau)`; a zero-mean Gaussian phase has average
+   :math:`\langle e^{i\theta}\rangle=e^{-\langle\theta^2\rangle/2}`.
+
+   Integrating the electric-force term over velocity, using
+   :math:`\nabla_{\mathbf v}F_{e0}=-(\mathbf v-\mathbf V_D)F_{e0}/v_{te}^2`
+   and an integration by parts along the orbit gives [2, Eqs. (2.8)–(2.9)]
+
+   .. k05:equation:: kinetic-electron-response
+      :lang: en
+
+      \begin{aligned}
+      \chi_e&=\frac{1+g}{k^2\lambda_{De}^2},\\
+      g&=i\Omega\int_0^\infty
+       \exp\!\left[-X(1-\cos\tau)-\tfrac12Y\tau^2+i\Omega\tau\right]d\tau,\\
+      \Omega&=\frac{\omega-k_yV_D}{\omega_{ce}}.
+      \end{aligned}
+
+
+   The constant 1 is the boundary term; the remaining orbit integral is :math:`g`.
+   The same susceptibility convention defines the electron induced charge.
+   For positive :math:`Y`, the Gaussian factor makes this representation
+   convergent; limiting cases require the causal continuation. Expanding
+   :math:`e^{X\cos\tau}=\sum_m I_m(X)e^{im\tau}` and integrating each harmonic
+   gives the Bessel/plasma-dispersion-function series in
+   :k05:eq:`comparison-gordeev`. With :math:`k_\perp=k_y`, its :math:`X` is
+   our :math:`b`, and :math:`\sqrt{2Y}=\sqrt2 k_\parallel v_{te}/\omega_{ce}`
+   for the positive :math:`k_\parallel` used here. Thus the series and orbit
+   picture describe the same response, rather than two independently fitted models.
+
+   **4. Close the response with Poisson's equation.** Add both induced charges
+   and require a nonzero potential to reproduce itself:
+
+   .. k05:equation:: kinetic-poisson-closure
+      :lang: en
+
+      \begin{aligned}
+      \rho_1&=-\epsilon_0 k^2(\chi_e+\chi_i)\phi_1,
+      &k^2\phi_1&=\rho_1/\epsilon_0,\\
+      \epsilon_L&=1+\chi_e+\chi_i=0,\\
+      k^2\lambda_{De}^2\epsilon_L
+      &=1+k^2\lambda_{De}^2+g
+      -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}=0.
+      \end{aligned}
+
+
+   :math:`\rho_1` is charge density (C/m³), distinct from the Larmor radius
+   :math:`\rho`; :math:`\epsilon_L` is the unscaled longitudinal dielectric.
+   Dividing out the nonzero perturbation and multiplying by
+   :math:`k^2\lambda_{De}^2` gives precisely the structure of reference Eq. (7).
+   This derivation explains why both species enter and what was assumed.
+   It does not determine which root actually dominates an experiment.
+
+   For the current saved curves, remove the ion Doppler shift and the second
+   perpendicular wave-number component as stated in the comparison box.
+   Then solve for the complex root, rather than treating the left side as a
+   known frequency. Group velocity and growth follow from
+   :k05:eq:`comparison-branch`.
 
    .. raw:: html
 
@@ -398,20 +593,25 @@
 
    .. figure:: /_static/K_Diagnostics/k05-comparison-figure2.svg
       :width: 100%
-      :alt: 对应文献图2的三个面板：估计参数下的动力学色散、实测电压谱、共用纵轴尺度的条件增长率对比。
+      :alt: 对应文献图2的三个面板：估计参数下的动力学色散、实测电压谱、采用文献左右双纵轴的条件增长率对比。
 
       图 2 对照图。(a) 明确假设参数下的动力学模型；(b) 实测电压谱；
-      (c) 系数换算的表观增长率与模型增长率，共用纵轴尺度。
+      (c) 系数换算的表观增长率读左轴，模型增长率读右轴，与 [1] 一致。
+      坐标范围和刻度按文献图 2 设置，没有覆盖的频率区域留白。
       数据曲线和色带表示四轮均值与范围，不是置信区间。
+      超出固定纵轴范围的数值会被裁出图框，不代表它们等于零。
 
    **先看 (b)：信号里有哪些频率？** C1、C3 是两支探针的通道。
-   纵轴是电压功率谱密度（power spectral density） :math:`S_V(f)`，单位 V²/Hz；
+   纵轴是电压功率谱密度（power spectral density），标为 :math:`P_f=S_V(f)`，
+   单位 μV²/Hz；保存的 V²/Hz 数值统一乘 :math:`10^{12}`，只是换单位。
+   文献 [1] 标的是 1/Hz；这里保留本实验电压单位，不假设未知的等离子体幅值归一化。
    峰越高，表示该频率附近每单位带宽的波动功率越多。
    这里沿用 :ref:`第六页的实测频谱 <k05-experiment-zh>`：
    每段去均值、乘周期 Hann 窗、作 Fourier 变换、取模平方，
    再校正窗函数的均方增益并平均。图中的实线对四组记录等权平均。
-   这是使用 16384 点分段的单边谱，显示到 50 MHz；
-   两个通道共用电压尺度，没有为了让曲线重合而各自缩放。
+   这是使用 16384 点分段的单边谱，数据到 50 MHz；横轴按文献延伸到 100 MHz，
+   所以 50–100 MHz 留白。(b) 使用文献的对数刻度，纵轴图框约为 0.2–4000
+   （原图没有标注这两个端点）。两个通道共用电压尺度，没有为了让曲线重合而各自缩放。
 
    灰色竖带表示 **0.537–4.980 MHz 的系数拟合频段**，不是采集带宽。
    系数计算沿用 :ref:`第七页 <k05-validation-zh>` 的 2048 点分段，
@@ -425,6 +625,10 @@
    :math:`f` 联系起来。这条曲线使用磁化电子、冷离子的模型 [1, 2]，
    输入已有温度估计和磁场分量，再加上下方折叠区列出的估计参数。
    它不是用两个探针的相位直接测出的波数。
+   原图以 :math:`\omega_k` 标记纵轴并写 Hz；本图明确使用
+   :math:`f=\operatorname{Re}\omega/(2\pi)`。
+   仅凭原图的印刷标签，尚不能确定其绘图数值是否已除过 :math:`2\pi`。
+   图框相同不等于频率约定已经核实一致，不能用两条图线的斜率直接断言实测波速之比。
    曲线斜率给出周向群速度（group velocity）：
    :math:`v_{g,y}=2\pi\,\partial f/\partial k_y`，求导时固定其他波矢分量。
    本参数情景在拟合频段内给出约 **0.32–2.49 km/s**。
@@ -458,11 +662,17 @@
    Kim 的表观率约 **+3.08 × 10⁴ s⁻¹**，最小二乘约 **−7.39 × 10⁴ s⁻¹**，
    理论模型约 **5.02 × 10⁵ s⁻¹**。
    这里列的是一轮数值，图中实线为四轮均值。
-   文献 [1] 的两条增长率曲线用了不同纵轴，本图采用同一纵轴尺度。
+   现在与 [1] 一样，左轴标 :math:`\gamma_{f(y)}`，对应本页的
+   :math:`\gamma_{y,\mathrm{app}}`，范围 −0.5 至 3 × 10⁵ s⁻¹；
+   右轴标 :math:`\gamma_f`，对应 :math:`\gamma_{\rm th}`，范围 −0.5 至 3 × 10⁶ s⁻¹。
+   **右轴量程是左轴的十倍，曲线画在同一高度不表示增长率相等。**
+   横轴延伸到 35 MHz，而这些速率曲线只覆盖拟合过的 0.537–4.980 MHz。
+   两条系数换算曲线借用了同一假设群速度；model 曲线来自数值色散复根的虚部。
+   Least squares 与 Kim 都不是直接跟踪启动时幅值随时间增长的测量。
    符号和数值的差异是需要解释的结果，不能只挑更接近理论的那条曲线。
 
    橙色空心圆标出至少一轮未通过共同功率检查的频率。
-   仍保留曲线，让计算结果完整可见；为什么作这项检查，
+   固定坐标范围内保留曲线和标记；为什么作这项检查，
    放到看完这些结果之后的 :ref:`补充页 <k05-budget-zh>` 说明。
 
    .. raw:: html
@@ -514,13 +724,45 @@
    这个简化情景采用 Maxwellian 磁化电子和非磁化冷离子。
    在离子 Doppler 项暂取零时，求解
 
-   .. k05:equation:: comparison-dispersion
-      :lang: zh
+   .. _k05-source-7-zh:
 
-      \mathcal E(\omega,k_y)
-      =1+k^2\lambda_{De}^2+g(\omega,k_y)
-        -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{\omega^2}=0,
-      \qquad k^2=k_y^2+k_\parallel^2 .
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 与文献 [1] 式 (7) 对照
+
+      .. k05:equation:: comparison-dispersion
+         :lang: zh
+
+         \mathcal E(\omega,k_y)
+         =1+k^2\lambda_{De}^2+g(\omega,k_y)
+           -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{\omega^2}=0,
+         \qquad k^2=k_y^2+k_\parallel^2 .
+
+      **文献原式与原符号 — [1], (7)**
+
+      .. k05:equation:: paper-equation-7
+         :lang: zh
+
+         \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
+         -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}.
+
+      **这里不只是换符号，还作了模型简化。** 文献的 :math:`x,y,z`
+      分别是轴向、周向、径向，磁场沿 :math:`z`。
+      原式 :math:`k^2=k_x^2+k_y^2+k_z^2`，
+      :math:`\Omega=(\omega-k_yV_D)/\omega_{ce}`，
+      :math:`X=(k_x^2+k_y^2)\rho^2`，:math:`Y=k_z^2\rho^2`，
+      :math:`\rho=v_{te}/\omega_{ce}`。
+      本框大写 :math:`X,Y` 是 Gordeev 函数的无量纲参数，**不是双探针系数**。
+      :math:`v_p` 是轴向离子束速度，:math:`k_xv_p` 是离子多普勒频移。
+      :math:`\lambda_{De},\omega_{pi},\omega_{ce}` 分别表示 Debye 长度、离子等离子体角频率、电子回旋角频率。
+
+      本页 :math:`\mathcal E` 对应印刷的 :math:`\epsilon^{(1)}`：
+      它们是乘过 :math:`k^2\lambda_{De}^2` 的介电表达式，不是未缩放的
+      :math:`1+\chi_e+\chi_i`。当前计算取 :math:`k_x=0`、
+      :math:`k_z\to k_\parallel`、:math:`X\to b`，并令 :math:`k_xv_p\to0`。
+      而且平行方向沿**倾斜的总磁场**，不能把实验室径向直接当成平行方向。
+      下方推导解释两种表达式共有的结构，不会把已保存计算中省略的项悄悄加回来。
+
 
    :math:`\mathcal E` 是介电函数乘以 :math:`k^2\lambda_{De}^2`，
    这里该乘法不改变方程的根；:math:`\omega` 是复角频率，单位 rad/s。
@@ -568,6 +810,131 @@
    得到 :math:`v_{g,y}(f)` 和 :math:`\gamma_{\rm th}(f)`；不作外推。
    这里直接求完整复根，没有再用弱增长近似替代。
    数值报告同时保存方程残差、谐波求和收敛和导数检查。
+
+   .. raw:: html
+
+      </details>
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>文献式 (7) 从哪里来：先算粒子响应，再用 Poisson 方程闭合</summary>
+
+   问题可以先说得很简单：**给等离子体一个很小的电势扰动，两类粒子各自移动多少电荷？
+   这些电荷能否反过来维持同一个电势？** 这里使用局部均匀、无碰撞、静电模型：
+   电子是均匀背景场中的漂移 Maxwell 分布，离子是冷的、未磁化的束流。
+   这些是模型假设，不是从频谱自动读出的事实。
+
+   **1．先把粒子响应线性化。** 将物种 :math:`s` 的分布函数写成稳态背景
+   :math:`F_{s0}` 加上小扰动 :math:`F_{s1}`，在 Vlasov 方程中只保留一阶扰动：
+
+   .. k05:equation:: kinetic-linear-vlasov
+      :lang: zh
+
+      \left[\partial_t+\mathbf v\cdot\nabla
+      +\frac{q_s}{m_s}(\mathbf E_0+\mathbf v\times\mathbf B_0)\cdot\nabla_{\mathbf v}\right]F_{s1}
+      =-\frac{q_s}{m_s}\mathbf E_1\cdot\nabla_{\mathbf v}F_{s0},
+      \qquad \mathbf E_1=-\nabla\phi_1.
+
+
+   :math:`F` 是速度分布函数，不是频率 :math:`f`，也不是第 05 页的四阶矩矩阵。
+   :math:`q_s,m_s` 是电荷和质量，:math:`\mathbf v` 是粒子速度，
+   :math:`\nabla_{\mathbf v}` 表示在速度空间求导。下标 0、1 分别表示背景和一阶响应。
+   左边沿未受扰动的粒子轨道变化，右边是小扰动电场作用于背景速度分布。
+
+   **2．冷离子给出带束流速度的分母。** 扰动采用
+   :math:`e^{i\mathbf k\cdot\mathbf r-i\omega t}`，离子的连续性与动量方程化成
+
+   .. k05:equation:: kinetic-cold-ion
+      :lang: zh
+
+      \begin{aligned}
+      \Omega_i\,\delta n_i&=n_0\mathbf k\cdot\delta\mathbf u_i,
+      &\Omega_i\,\delta\mathbf u_i&=\frac{e}{m_i}\mathbf k\phi_1,\\
+      \delta n_i&=\frac{n_0 e k^2\phi_1}{m_i\Omega_i^2},
+      &\chi_i&=-\frac{\omega_{pi}^2}{\Omega_i^2},\qquad \Omega_i=\omega-k_xv_p.
+      \end{aligned}
+
+
+   :math:`\delta n_i,\delta\mathbf u_i` 是密度与速度扰动。
+   离子束感受到的是多普勒频移后的角频率 :math:`\Omega_i`，
+   它不同于下文无量纲的电子参数 :math:`\Omega`。
+   极化率（susceptibility） :math:`\chi_i` 用诱导电荷
+   :math:`\rho_{i1}=-\epsilon_0 k^2\chi_i\phi_1` 定义。
+   先由动量方程求速度，再代入连续性方程，分母便出现两次
+   :math:`\omega-k_xv_p`。在冷束极限，这组矩方程给出对应的 Vlasov 响应；
+   如果保留离子温度，响应会改变。
+
+   **3．磁化电子的响应包含回旋轨道。** 沿未受扰动的轨道积分电子方程，
+   并选取从遥远过去缓慢开启扰动的因果响应（causal response）。
+   将匀速漂移与热运动位移 :math:`\Delta\mathbf r_{\rm th}` 分开。
+   对正的回溯时间 :math:`s`，在 Gaussian 速度分布上平均，得到
+
+   .. k05:equation:: kinetic-orbit-average
+      :lang: zh
+
+      \begin{aligned}
+      \tau&=\omega_{ce}s,\quad X=k_\perp^2\rho^2,\quad Y=k_\parallel^2\rho^2,\\
+      \left\langle e^{i\mathbf k\cdot\Delta\mathbf r_{\rm th}(s)}\right\rangle_{F_{e0}}
+      &=\exp\!\left[-X(1-\cos\tau)-\tfrac12Y\tau^2\right].
+      \end{aligned}
+
+
+   这里 :math:`s` 改作时间间隔，不再是物种标签；:math:`\tau` 是无量纲回旋时间，
+   尖括号是对 Maxwell 速度分布的平均。平行粒子自由运动，所以出现与
+   :math:`s^2` 成正比的 Gaussian 因子；垂直粒子回旋，所以出现
+   :math:`1-\cos\tau`。单个速度分量的热方差是 :math:`v_{te}^2=T_e/m_e`。
+   例如垂直相位方差为 :math:`2k_\perp^2\rho^2(1-\cos\tau)`，
+   而零均值 Gaussian 相位满足
+   :math:`\langle e^{i\theta}\rangle=e^{-\langle\theta^2\rangle/2}`。
+
+   再对电场驱动项作速度积分，使用
+   :math:`\nabla_{\mathbf v}F_{e0}=-(\mathbf v-\mathbf V_D)F_{e0}/v_{te}^2`，
+   沿轨道作一次分部积分，得到 [2，式 (2.8)–(2.9)]
+
+   .. k05:equation:: kinetic-electron-response
+      :lang: zh
+
+      \begin{aligned}
+      \chi_e&=\frac{1+g}{k^2\lambda_{De}^2},\\
+      g&=i\Omega\int_0^\infty
+       \exp\!\left[-X(1-\cos\tau)-\tfrac12Y\tau^2+i\Omega\tau\right]d\tau,\\
+      \Omega&=\frac{\omega-k_yV_D}{\omega_{ce}}.
+      \end{aligned}
+
+
+   常数 1 来自边界项，剩下的轨道积分就是 :math:`g`；电子诱导电荷使用与离子相同的极化率定义。
+   当 :math:`Y>0` 时 Gaussian 因子保证这里的积分收敛，极限情形需要保持因果延拓。
+   展开 :math:`e^{X\cos\tau}=\sum_m I_m(X)e^{im\tau}`，逐个回旋谐波积分，
+   就得到 :k05:eq:`comparison-gordeev` 的 Bessel 函数／等离子体色散函数级数。
+   取 :math:`k_\perp=k_y` 后，:math:`X` 就是本页的 :math:`b`；
+   对于当前正的 :math:`k_\parallel`，有
+   :math:`\sqrt{2Y}=\sqrt2 k_\parallel v_{te}/\omega_{ce}`。
+   因此，级数计算与轨道图像是同一个电子响应的两种写法，不是分别拟合的模型。
+
+   **4．最后用 Poisson 方程闭合。** 将两类诱导电荷相加，要求非零电势扰动能维持自身：
+
+   .. k05:equation:: kinetic-poisson-closure
+      :lang: zh
+
+      \begin{aligned}
+      \rho_1&=-\epsilon_0 k^2(\chi_e+\chi_i)\phi_1,
+      &k^2\phi_1&=\rho_1/\epsilon_0,\\
+      \epsilon_L&=1+\chi_e+\chi_i=0,\\
+      k^2\lambda_{De}^2\epsilon_L
+      &=1+k^2\lambda_{De}^2+g
+      -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}=0.
+      \end{aligned}
+
+
+   :math:`\rho_1` 是电荷密度（C/m³），不要与 Larmor 半径 :math:`\rho` 混淆；
+   :math:`\epsilon_L` 是未缩放的纵向介电函数。
+   除去非零扰动，再乘 :math:`k^2\lambda_{De}^2`，便得到文献式 (7) 的结构。
+   这个推导说明了两类粒子怎样进入方程，以及使用了哪些假设；
+   它没有决定实验中究竟是哪一条根占主导。
+
+   当前保存的曲线还按对照框所述省略离子 Doppler 项和另一垂直波数分量。
+   然后数值求复根，而不是把方程左侧当成已知频率。
+   最后由 :k05:eq:`comparison-branch` 得到群速度与增长率。
 
    .. raw:: html
 

@@ -50,13 +50,40 @@
    :math:`Z_j^{(r)}`. The label :math:`j` counts pairs, not records.
    The labels 1 and 2 select the two input frequencies of pair :math:`j`.
 
-   .. k05:equation:: two-probe-quadratic-model
-      :lang: en
+   .. _k05-source-3-en:
 
-      \begin{aligned}
-      Z_j^{(r)}&=X_{f_{1j}}^{(r)}X_{f_{2j}}^{(r)},\qquad f_{1j}+f_{2j}=f,\\
-      Y_f^{(r)}&=L_fX_f^{(r)}+\sum_{j=1}^{J}Q_{fj}Z_j^{(r)}+\varepsilon_f^{(r)}.
-      \end{aligned}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 and reference [1], Eq. (3)
+
+      .. k05:equation:: two-probe-quadratic-model
+         :lang: en
+
+         \begin{aligned}
+         Z_j^{(r)}&=X_{f_{1j}}^{(r)}X_{f_{2j}}^{(r)},\qquad f_{1j}+f_{2j}=f,\\
+         Y_f^{(r)}&=L_fX_f^{(r)}+\sum_{j=1}^{J}Q_{fj}Z_j^{(r)}+\varepsilon_f^{(r)}.
+         \end{aligned}
+
+      **Original equation, original notation — [1], (3)**
+
+      .. k05:equation:: paper-equation-3
+         :lang: en
+
+         Y_f=L_fX_f+\sum_{f=f_1+f_2}Q_f^{1,2}X_{f_1}X_{f_2}.
+
+      **Symbol map.** :math:`X_f=\hat\phi_f(y)` and
+      :math:`Y_f=\hat\phi_f(y+\Delta y)` are the two positions, not two wave species.
+      Our superscript :math:`(r)` labels a record; the article suppresses it.
+      Our :math:`Z_j=X_{f_{1j}}X_{f_{2j}}` abbreviates one product, and
+      :math:`Q_{fj}` labels its coefficient. The article writes that pair as the
+      superscript :math:`1,2` on :math:`Q_f^{1,2}`.
+
+      K05 explicitly retains the residual :math:`\varepsilon_f^{(r)}`; the printed
+      model has no residual term. Pair grouping also matters: a unique off-diagonal
+      coefficient combines two ordered coefficients. Neither this :math:`\varepsilon`
+      nor the record label :math:`r` is the dielectric or the real-part subscript.
+      :ref:`Page 07 <k05-validation-en>` tests this model on excluded captures.
+
 
    Here :math:`L_f` is the **linear transfer coefficient**: it multiplies the
    component already at :math:`f`. Each :math:`Q_{fj}` is a **quadratic transfer
@@ -134,13 +161,48 @@
    If the residual averages :math:`\langle\varepsilon X^*\rangle_R` and
    :math:`\langle\varepsilon Z^*\rangle_R` vanish, the result is
 
-   .. k05:equation:: single-pair-moment-equations
-      :lang: en
+   .. _k05-source-5-en:
 
-      \begin{aligned}
-      G&=LP+Qb^*,\\
-      d&=Lb+QF.
-      \end{aligned}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 and reference [1], Eq. (5)
+
+      .. k05:equation:: single-pair-moment-equations
+         :lang: en
+
+         \begin{aligned}
+         G&=LP+Qb^*,\\
+         d&=Lb+QF.
+         \end{aligned}
+
+      **Original equation, original notation — [1], (5)**
+
+      .. k05:equation:: paper-equation-5
+         :lang: en
+
+         \begin{aligned}
+         Y_fX_f^*&=L_fX_fX_f^*+\sum_{f=f_1+f_2}Q_f^{1,2}X_{f_1}X_{f_2}X_f^*,\\
+         Y_fX_{f_1}^*X_{f_2}^*&=L_fX_fX_{f_1}^*X_{f_2}^*\\
+         &\quad+\sum_{f=f_1+f_2}Q_f^{1,2}X_{f_1}X_{f_2}X_{f_1}^*X_{f_2}^*.
+         \end{aligned}
+
+      **Symbol map and averaging.** The printed products correspond to our
+      ensemble moments after averaging records. The first row becomes
+      :math:`G=LP+\sum_jQ_jb_j^*`; multiplying by a chosen pair :math:`Z_i^*`
+      gives :math:`d_i=Lb_i+\sum_jF_{ij}Q_j`.
+      Here :math:`b_i=\langle XZ_i^*\rangle` is the conjugate auto-bispectrum,
+      :math:`d_i=\langle YZ_i^*\rangle` is a cross bispectrum, and
+      :math:`F_{ij}=\langle Z_i^*Z_j\rangle` is a fourth-order moment.
+
+      **Read the repeated indices carefully.** The original second line uses
+      :math:`f_1,f_2` both for the multiplying pair and inside the sum; the display
+      above preserves that notation. In a multi-pair calculation the selected row
+      must stay fixed while the summed pair varies. K05 uses separate :math:`i,j`
+      labels and retains the off-diagonal moments, as in :k05:eq:`inference-matrix`.
+      The printed shorthand is not a justification for deleting them. Vanishing
+      residual cross moments and Kim's additional stationary-power assumptions
+      are separate conditions, explained below.
+
 
    Everything except :math:`L,Q` is measured. **The bispectra supply extra equations;
    they are not themselves the coupling coefficients.**
@@ -574,12 +636,45 @@
    for the continuous coupling coefficient of the same grouped pair, in
    :math:`\mathrm{V^{-1}s^{-1}}`. The resulting conversion is
 
-   .. k05:equation:: inferred-growth-coupling
-      :lang: en
+   .. _k05-source-4-en:
 
-      \gamma_f^{(y)}\simeq\frac{v_{g,f}}{\Delta y}
-      \left[\operatorname{Re}(\widetilde L_f)-1\right],\qquad
-      \mathcal V_{fj}\simeq\frac{v_{g,f}}{\Delta y}\widetilde Q_{fj}.
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 and reference [1], Eq. (4)
+
+      .. k05:equation:: inferred-growth-coupling
+         :lang: en
+
+         \gamma_f^{(y)}\simeq\frac{v_{g,f}}{\Delta y}
+         \left[\operatorname{Re}(\widetilde L_f)-1\right],\qquad
+         \mathcal V_{fj}\simeq\frac{v_{g,f}}{\Delta y}\widetilde Q_{fj}.
+
+      **Original equation, original notation — [1], (4)**
+
+      .. k05:equation:: paper-equation-4
+         :lang: en
+
+         \begin{aligned}
+         L_f&=\left[\left(\frac{\gamma_{f(y)}}{v_{g(y)}}+ik_y\right)\Delta y
+         +1-i\Delta\Theta_f\right]e^{i\Delta\Theta_f},\\
+         Q_f^{1,2}&=e^{i\Delta\Theta_f}V^Q_{1,2}\Delta y/v_{g(y)}.
+         \end{aligned}
+
+      **Symbol map.** :math:`\Delta\Theta_f` is our :math:`\delta_f`,
+      the cross-power phase in radians; :math:`v_{g(y)}` is our :math:`v_{g,f}`.
+      :math:`\gamma_{f(y)}` is our :math:`\gamma_f^{(y)}`, the effective azimuthal
+      amplitude rate. The article's :math:`V^Q_{1,2}` becomes :math:`\mathcal V_{fj}`
+      after identical products have been grouped. :math:`\Delta y` is the probe separation.
+
+      **Why the tilde matters.** The original :math:`L_f,Q_f^{1,2}` include
+      :math:`e^{i\Delta\Theta_f}`. K05 writes :math:`\widetilde L=e^{-i\delta}L`
+      and :math:`\widetilde Q=e^{-i\delta}Q`, then takes the real part.
+      The article's sentence after Eq. (5) prints :math:`\operatorname{Re}L_f-1`
+      without restating that rotation. We keep the distinction explicit, rather
+      than claiming to know its unpublished implementation. Both least squares
+      and Kim estimate coefficients in this same model; neither supplies :math:`v_g`
+      from the moments alone.
+
 
    :math:`v_g/\Delta y` supplies the missing inverse seconds. Positive
    :math:`\gamma_f^{(y)}` means amplitude growth in this local model; negative
@@ -612,14 +707,43 @@
    For pair :math:`j`, its auto-bispectrum is :math:`b_j^*=\langle Z_jX_f^*\rangle_R`.
    Its contribution is
 
-   .. k05:equation:: inferred-pair-transfer
-      :lang: en
+   .. _k05-source-6-en:
 
-      \begin{aligned}
-      \mathcal T_{fj}&=2\operatorname{Re}(\mathcal V_{fj}b_j^*)
-      \simeq\frac{2v_{g,f}}{\Delta y}\operatorname{Re}(\widetilde Q_{fj}b_j^*),\\
-      v_{g,f}\partial_yP_f&=2\gamma_f^{(y)}P_f+\sum_j\mathcal T_{fj}.
-      \end{aligned}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 and reference [1], Eq. (6)
+
+      .. k05:equation:: inferred-pair-transfer
+         :lang: en
+
+         \begin{aligned}
+         \mathcal T_{fj}&=2\operatorname{Re}(\mathcal V_{fj}b_j^*)
+         \simeq\frac{2v_{g,f}}{\Delta y}\operatorname{Re}(\widetilde Q_{fj}b_j^*),\\
+         v_{g,f}\partial_yP_f&=2\gamma_f^{(y)}P_f+\sum_j\mathcal T_{fj}.
+         \end{aligned}
+
+      **Original equation, original notation — [1], (6)**
+
+      .. k05:equation:: paper-equation-6
+         :lang: en
+
+         T_f=(v_{g(y)}/\Delta y)\operatorname{Re}\!\left[
+         \sum_{f=f_1+f_2}e^{-i\Delta\Theta_f}Q_f^{1,2}X_{f_1}X_{f_2}X_f^*\right].
+
+      **Symbol map.** The article's :math:`T_f` sums all retained pairs
+      feeding target :math:`f`. Our :math:`\mathcal T_{fj}` is one pair's contribution
+      to the **full** mean-square rate. With the same amplitude normalization and
+      pair counting, :math:`T_f^{[1]}=\tfrac12\sum_j\mathcal T_{fj}`.
+      The data implementation averages :math:`X_{f_1}X_{f_2}X_f^*` over records;
+      the printed expression does not show the brackets.
+
+      This factor follows from :math:`d|C|^2/dt=2\operatorname{Re}(C^*\dot C)`.
+      It is not a change of sign or a claim about the author's code. Page 09 labels
+      the reference-form calculation :math:`T^{(1/2)}_{V,f}` and reports V²/s.
+      The subscript V keeps the measured voltage observable visible; this is not
+      automatically a calibrated plasma-energy density rate. A bright :math:`|Q|`
+      map omits the triple-product phase and therefore cannot replace this signed sum.
+
 
    :math:`\mathcal T_{fj}` has units :math:`\mathrm{V^2/s}`. A positive value
    adds mean-square fluctuation to target :math:`f`; a negative value removes it.
@@ -708,6 +832,12 @@
    constrain coefficients; phase, spacing and group velocity convert coefficients
    to rates.
 
+   .. rubric:: Continue the reading
+
+   The next page starts from real synchronized waveforms and constructs the statistics used here.
+
+   :ref:`Next page <k05-experiment-en>`.
+
    .. rubric:: References
 
    .. _k05-inference-reference-1-en:
@@ -746,13 +876,38 @@
    把每个波对的乘积记作 :math:`Z_j^{(r)}`。这里 :math:`j` 数波对，:math:`r` 数记录，
    下标中的 1、2 分别标记第 :math:`j` 对的两个输入频率。
 
-   .. k05:equation:: two-probe-quadratic-model
-      :lang: zh
+   .. _k05-source-3-zh:
 
-      \begin{aligned}
-      Z_j^{(r)}&=X_{f_{1j}}^{(r)}X_{f_{2j}}^{(r)},\qquad f_{1j}+f_{2j}=f,\\
-      Y_f^{(r)}&=L_fX_f^{(r)}+\sum_{j=1}^{J}Q_{fj}Z_j^{(r)}+\varepsilon_f^{(r)}.
-      \end{aligned}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 与文献 [1] 式 (3) 对照
+
+      .. k05:equation:: two-probe-quadratic-model
+         :lang: zh
+
+         \begin{aligned}
+         Z_j^{(r)}&=X_{f_{1j}}^{(r)}X_{f_{2j}}^{(r)},\qquad f_{1j}+f_{2j}=f,\\
+         Y_f^{(r)}&=L_fX_f^{(r)}+\sum_{j=1}^{J}Q_{fj}Z_j^{(r)}+\varepsilon_f^{(r)}.
+         \end{aligned}
+
+      **文献原式与原符号 — [1], (3)**
+
+      .. k05:equation:: paper-equation-3
+         :lang: zh
+
+         Y_f=L_fX_f+\sum_{f=f_1+f_2}Q_f^{1,2}X_{f_1}X_{f_2}.
+
+      **符号对照。** :math:`X_f=\hat\phi_f(y)`、
+      :math:`Y_f=\hat\phi_f(y+\Delta y)` 表示两个位置，不是两类波。
+      本页的上标 :math:`(r)` 标记第几段记录，文献省略了这个标签。
+      :math:`Z_j=X_{f_{1j}}X_{f_{2j}}` 把一个乘积写短，:math:`Q_{fj}` 是它的系数；
+      文献把这一对输入写成 :math:`Q_f^{1,2}` 的上标 :math:`1,2`。
+
+      K05 明确保留残差 :math:`\varepsilon_f^{(r)}`，文献印刷模型没有这一项。
+      波对的计数也要一致：去重后的非对角系数合并了两个有序系数。
+      这里的 :math:`\varepsilon` 不是介电函数，记录标签 :math:`r` 也不是实部下标。
+      :ref:`第 07 页 <k05-validation-zh>` 用没有参与拟合的记录检验这个模型。
+
 
    :math:`L_f` 是 **线性传递系数（linear transfer coefficient）** ，乘在已经位于 :math:`f` 的分量上。
    :math:`Q_{fj}` 是 **二次传递系数（quadratic transfer coefficient）** ，乘在一对分量的乘积上。
@@ -820,13 +975,45 @@
    若残差满足 :math:`\langle\varepsilon X^*\rangle_R=0`、
    :math:`\langle\varepsilon Z^*\rangle_R=0`，就得到：
 
-   .. k05:equation:: single-pair-moment-equations
-      :lang: zh
+   .. _k05-source-5-zh:
 
-      \begin{aligned}
-      G&=LP+Qb^*,\\
-      d&=Lb+QF.
-      \end{aligned}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 与文献 [1] 式 (5) 对照
+
+      .. k05:equation:: single-pair-moment-equations
+         :lang: zh
+
+         \begin{aligned}
+         G&=LP+Qb^*,\\
+         d&=Lb+QF.
+         \end{aligned}
+
+      **文献原式与原符号 — [1], (5)**
+
+      .. k05:equation:: paper-equation-5
+         :lang: zh
+
+         \begin{aligned}
+         Y_fX_f^*&=L_fX_fX_f^*+\sum_{f=f_1+f_2}Q_f^{1,2}X_{f_1}X_{f_2}X_f^*,\\
+         Y_fX_{f_1}^*X_{f_2}^*&=L_fX_fX_{f_1}^*X_{f_2}^*\\
+         &\quad+\sum_{f=f_1+f_2}Q_f^{1,2}X_{f_1}X_{f_2}X_{f_1}^*X_{f_2}^*.
+         \end{aligned}
+
+      **符号与平均。** 对原式中的乘积作分段平均，就得到本页的统计矩。
+      第一行成为 :math:`G=LP+\sum_jQ_jb_j^*`；乘上选定波对的
+      :math:`Z_i^*`，第二行成为 :math:`d_i=Lb_i+\sum_jF_{ij}Q_j`。
+      这里 :math:`b_i=\langle XZ_i^*\rangle` 是自双谱的共轭，
+      :math:`d_i=\langle YZ_i^*\rangle` 是交叉双谱，
+      :math:`F_{ij}=\langle Z_i^*Z_j\rangle` 是四阶矩。
+
+      **原式重复的标签需要怎样读？** 印刷第二行同时用 :math:`f_1,f_2`
+      标记相乘的波对和求和中的波对，上方保留了这个写法。
+      真正计算多个波对时，选定的方程行应固定，求和波对应变化；
+      所以 K05 用不同的 :math:`i,j` 区分，并在 :k05:eq:`inference-matrix`
+      保留非对角四阶矩。不能把原式的简写当成删除交叉项的依据。
+      残差交叉矩消失与 Kim 额外施加的平稳功率假设，是不同条件，下文分别解释。
+
 
    除了 :math:`L,Q`，其余量都来自测量。 **双谱提供了求系数所需的额外方程，但双谱本身并不等于耦合系数。** 
 
@@ -1192,12 +1379,43 @@
    用 :math:`\mathcal V_{fj}` 表示同一个合并波对在连续方程中的耦合系数，单位
    :math:`\mathrm{V^{-1}s^{-1}}`。最后的换算为：
 
-   .. k05:equation:: inferred-growth-coupling
-      :lang: zh
+   .. _k05-source-4-zh:
 
-      \gamma_f^{(y)}\simeq\frac{v_{g,f}}{\Delta y}
-      \left[\operatorname{Re}(\widetilde L_f)-1\right],\qquad
-      \mathcal V_{fj}\simeq\frac{v_{g,f}}{\Delta y}\widetilde Q_{fj}.
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 与文献 [1] 式 (4) 对照
+
+      .. k05:equation:: inferred-growth-coupling
+         :lang: zh
+
+         \gamma_f^{(y)}\simeq\frac{v_{g,f}}{\Delta y}
+         \left[\operatorname{Re}(\widetilde L_f)-1\right],\qquad
+         \mathcal V_{fj}\simeq\frac{v_{g,f}}{\Delta y}\widetilde Q_{fj}.
+
+      **文献原式与原符号 — [1], (4)**
+
+      .. k05:equation:: paper-equation-4
+         :lang: zh
+
+         \begin{aligned}
+         L_f&=\left[\left(\frac{\gamma_{f(y)}}{v_{g(y)}}+ik_y\right)\Delta y
+         +1-i\Delta\Theta_f\right]e^{i\Delta\Theta_f},\\
+         Q_f^{1,2}&=e^{i\Delta\Theta_f}V^Q_{1,2}\Delta y/v_{g(y)}.
+         \end{aligned}
+
+      **符号对照。** :math:`\Delta\Theta_f` 对应 :math:`\delta_f`，
+      是以弧度计的互谱相位；:math:`v_{g(y)}` 对应 :math:`v_{g,f}`。
+      :math:`\gamma_{f(y)}` 对应 :math:`\gamma_f^{(y)}`，表示有效周向幅值增长率。
+      文献的 :math:`V^Q_{1,2}` 合并相同乘积后成为 :math:`\mathcal V_{fj}`。
+      :math:`\Delta y` 是探针间距。
+
+      **为什么多了波浪号？** 原式的 :math:`L_f,Q_f^{1,2}` 含有
+      :math:`e^{i\Delta\Theta_f}`。K05 先写
+      :math:`\widetilde L=e^{-i\delta}L`、:math:`\widetilde Q=e^{-i\delta}Q`，
+      再取实部。文献式 (5) 后的文字写成 :math:`\operatorname{Re}L_f-1`，
+      没有再次显示移相。这里保留两种符号的区别，不据此猜测作者未公开的实现。
+      Least squares 和 Kim 都在这个模型中估计系数，统计矩本身都不能独立给出 :math:`v_g`。
+
 
    :math:`v_g/\Delta y` 提供了缺少的“每秒”单位。局部模型中，:math:`\gamma_f^{(y)}>0` 表示幅值增长，
    小于零表示阻尼。群速度是额外信息，不能仅由这些矩直接确定；文献 [1] 通过理论色散关系估计它。
@@ -1224,14 +1442,40 @@
    回到连续均方收支 :k05:eq:`spectral-power-balance`。
    第 :math:`j` 个波对的自双谱为 :math:`b_j^*=\langle Z_jX_f^*\rangle_R`，其贡献是：
 
-   .. k05:equation:: inferred-pair-transfer
-      :lang: zh
+   .. _k05-source-6-zh:
 
-      \begin{aligned}
-      \mathcal T_{fj}&=2\operatorname{Re}(\mathcal V_{fj}b_j^*)
-      \simeq\frac{2v_{g,f}}{\Delta y}\operatorname{Re}(\widetilde Q_{fj}b_j^*),\\
-      v_{g,f}\partial_yP_f&=2\gamma_f^{(y)}P_f+\sum_j\mathcal T_{fj}.
-      \end{aligned}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 与文献 [1] 式 (6) 对照
+
+      .. k05:equation:: inferred-pair-transfer
+         :lang: zh
+
+         \begin{aligned}
+         \mathcal T_{fj}&=2\operatorname{Re}(\mathcal V_{fj}b_j^*)
+         \simeq\frac{2v_{g,f}}{\Delta y}\operatorname{Re}(\widetilde Q_{fj}b_j^*),\\
+         v_{g,f}\partial_yP_f&=2\gamma_f^{(y)}P_f+\sum_j\mathcal T_{fj}.
+         \end{aligned}
+
+      **文献原式与原符号 — [1], (6)**
+
+      .. k05:equation:: paper-equation-6
+         :lang: zh
+
+         T_f=(v_{g(y)}/\Delta y)\operatorname{Re}\!\left[
+         \sum_{f=f_1+f_2}e^{-i\Delta\Theta_f}Q_f^{1,2}X_{f_1}X_{f_2}X_f^*\right].
+
+      **符号对照。** 文献的 :math:`T_f` 对所有进入目标频率 :math:`f`
+      的保留波对求和；本页 :math:`\mathcal T_{fj}` 是单个波对对**完整模平方变化率**的贡献。
+      若幅值归一化和波对计数一致，有 :math:`T_f^{[1]}=\tfrac12\sum_j\mathcal T_{fj}`。
+      实际数据计算对 :math:`X_{f_1}X_{f_2}X_f^*` 作分段平均，原式未显示平均括号。
+
+      因子 2 来自 :math:`d|C|^2/dt=2\operatorname{Re}(C^*\dot C)`，
+      不是符号改变，也不是对作者代码的判断。第 09 页将原式约定下的计算标为
+      :math:`T^{(1/2)}_{V,f}`，报告 V²/s；下标 V 强调观测量仍是电压，
+      不能自动视作标定后的等离子体能量密度变化率。
+      明亮的 :math:`|Q|` 图没有三阶乘积的相位，不能替代这里的有符号求和。
+
 
    :math:`\mathcal T_{fj}` 的单位为 :math:`\mathrm{V^2/s}`。
    正值表示向目标频率 :math:`f` 增加均方波动，负值表示从该目标移除均方波动。
@@ -1304,6 +1548,12 @@
 
    现在计算链条已经接起来：记录给出统计量，统计量约束系数，相位、间距和群速度再把系数换成速率。
 
+
+   .. rubric:: 继续阅读
+
+   下一页面从真实同步波形出发，逐步构造本页使用的统计量。
+
+   :ref:`下一页面 <k05-experiment-zh>`.
 
    .. rubric:: 参考文献
 

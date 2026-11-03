@@ -717,6 +717,13 @@
 
       </details>
 
+   The derivation has deliberately left the second-order kernel symbolic.
+   Computing it from a chosen velocity distribution would be a separate kinetic
+   prediction. The experiment in [1] instead **estimates its effective contribution
+   from measured moments** through :ref:`the two-probe model <k05-inference-en>`.
+   Thus the inference chain does not require an independently calculated value
+   of every :math:`V^Q`; it still requires the weakly nonlinear model to be adequate.
+
    .. rubric:: From this equation to probe records
 
    .. container:: k05-text
@@ -1359,6 +1366,11 @@
    .. raw:: html
 
       </details>
+
+   这里将二阶响应核保留为符号，并不意味着后面的实验分析缺少一个必须先算出的数字。
+   从指定速度分布计算它，是另一项动理学预测；文献 [1] 的方法则通过
+   :ref:`双探针模型 <k05-inference-zh>`，**用实测统计矩估计它的有效贡献**。
+   所以反演不要求事先独立知道每个 :math:`V^Q`，但仍要求弱非线性模型适合所测信号。
 
    .. rubric:: 从方程走向探针记录
 

@@ -393,17 +393,54 @@
    replace :math:`k_a v_{g,a}` by :math:`\mathbf k_a\cdot\mathbf v_{g,a}`.
    The matching rule now adds wavevectors. The same steps give
 
-   .. k05:equation:: full-wave-equation
-      :lang: en
+   .. _k05-source-1-en:
 
-      \boxed{\begin{aligned}
-      \partial_t\phi_a+\mathbf v_{g,a}\cdot\nabla\phi_a
-      ={}&\gamma_a\phi_a
-        +i(\mathbf k_a\cdot\mathbf v_{g,a}-\omega_a)\phi_a\\
-      &+\sum_{\substack{\mathbf k_b+\mathbf k_c=\mathbf k_a\\
-                         \omega_b+\omega_c=\omega_a}}
-           V^Q_{a;bc}\phi_b\phi_c .
-      \end{aligned}}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 and reference [1], Eq. (1)
+
+      .. k05:equation:: full-wave-equation
+         :lang: en
+
+         \boxed{\begin{aligned}
+         \partial_t\phi_a+\mathbf v_{g,a}\cdot\nabla\phi_a
+         ={}&\gamma_a\phi_a
+           +i(\mathbf k_a\cdot\mathbf v_{g,a}-\omega_a)\phi_a\\
+         &+\sum_{\substack{\mathbf k_b+\mathbf k_c=\mathbf k_a\\
+                            \omega_b+\omega_c=\omega_a}}
+              V^Q_{a;bc}\phi_b\phi_c .
+         \end{aligned}}
+
+      **Original equation, original notation — [1], (1)**
+
+      .. k05:equation:: paper-equation-1
+         :lang: en
+
+         \begin{aligned}
+         \frac{\partial\phi(\vec k,\omega)}{\partial t}
+         +\vec v_g\cdot\frac{\partial\phi(\vec k,\omega)}{\partial\vec r}
+         &=\gamma_\omega\phi(\vec k,\omega)
+         +i(\vec k\cdot\vec v_g-\omega)\phi(\vec k,\omega)\\
+         &\quad+\sum_{\substack{\omega=\omega_1+\omega_2\\\vec k=\vec k_1+\vec k_2}}
+         V^Q_{1,2}\phi(\vec k_1,\omega_1)\phi(\vec k_2,\omega_2).
+         \end{aligned}
+
+      **Symbol map.** The article's :math:`\phi(\vec k,\omega)` is our
+      :math:`\phi_a`: one full complex wave component, still depending on position
+      and time. Its slow amplitude :math:`\hat\phi(\vec k,\omega)` is our :math:`A_a`.
+      The labels :math:`1,2` are our input-wave labels :math:`b,c`; the target label
+      :math:`a` on :math:`V^Q_{a;bc}` is left implicit in the article.
+      :math:`\gamma_\omega` is our :math:`\gamma_a`, an amplitude rate in s⁻¹.
+      :math:`\vec r` and :math:`\mathbf r` denote the same position vector;
+      :math:`\partial/\partial\vec r` means the spatial gradient :math:`\nabla`.
+      The superscript :math:`Q` means quadratic, not a power of :math:`V`.
+
+      **What this buys us.** The three right-hand terms distinguish growth,
+      carrier-phase evolution and exchange between wave components. Recovering the
+      carrier from the envelope explains the extra imaginary term; it is not extra
+      amplitude growth. The response derivation continues on
+      :ref:`page 02 <k05-coefficients-en>`.
+
 
    Bold :math:`\mathbf k` and :math:`\mathbf v_g` are the wavevector
    and group-velocity vector. :math:`\nabla` is the spatial gradient;
@@ -800,17 +837,52 @@
    换成 :math:`\mathbf k_a\cdot\mathbf v_{g,a}`；匹配条件中的波数相加换成波矢相加。
    相同的步骤就给出三维方程：
 
-   .. k05:equation:: full-wave-equation
-      :lang: zh
+   .. _k05-source-1-zh:
 
-      \boxed{\begin{aligned}
-      \partial_t\phi_a+\mathbf v_{g,a}\cdot\nabla\phi_a
-      ={}&\gamma_a\phi_a
-        +i(\mathbf k_a\cdot\mathbf v_{g,a}-\omega_a)\phi_a\\
-      &+\sum_{\substack{\mathbf k_b+\mathbf k_c=\mathbf k_a\\
-                         \omega_b+\omega_c=\omega_a}}
-           V^Q_{a;bc}\phi_b\phi_c .
-      \end{aligned}}
+   .. container:: k05-paper-match
+
+      .. rubric:: K05 与文献 [1] 式 (1) 对照
+
+      .. k05:equation:: full-wave-equation
+         :lang: zh
+
+         \boxed{\begin{aligned}
+         \partial_t\phi_a+\mathbf v_{g,a}\cdot\nabla\phi_a
+         ={}&\gamma_a\phi_a
+           +i(\mathbf k_a\cdot\mathbf v_{g,a}-\omega_a)\phi_a\\
+         &+\sum_{\substack{\mathbf k_b+\mathbf k_c=\mathbf k_a\\
+                            \omega_b+\omega_c=\omega_a}}
+              V^Q_{a;bc}\phi_b\phi_c .
+         \end{aligned}}
+
+      **文献原式与原符号 — [1], (1)**
+
+      .. k05:equation:: paper-equation-1
+         :lang: zh
+
+         \begin{aligned}
+         \frac{\partial\phi(\vec k,\omega)}{\partial t}
+         +\vec v_g\cdot\frac{\partial\phi(\vec k,\omega)}{\partial\vec r}
+         &=\gamma_\omega\phi(\vec k,\omega)
+         +i(\vec k\cdot\vec v_g-\omega)\phi(\vec k,\omega)\\
+         &\quad+\sum_{\substack{\omega=\omega_1+\omega_2\\\vec k=\vec k_1+\vec k_2}}
+         V^Q_{1,2}\phi(\vec k_1,\omega_1)\phi(\vec k_2,\omega_2).
+         \end{aligned}
+
+      **符号对照。** 文献的 :math:`\phi(\vec k,\omega)` 对应这里的
+      :math:`\phi_a`：一个完整的复波动分量，仍依赖位置和时间。
+      它的慢变幅值 :math:`\hat\phi(\vec k,\omega)` 对应 :math:`A_a`。
+      输入波标签 :math:`1,2` 对应 :math:`b,c`；文献把 :math:`V^Q_{a;bc}`
+      中的目标波标签 :math:`a` 省略了。:math:`\gamma_\omega` 对应
+      :math:`\gamma_a`，是单位 s⁻¹ 的幅值增长率。
+      :math:`\vec r` 与 :math:`\mathbf r` 都是位置矢量，
+      :math:`\partial/\partial\vec r` 就是空间梯度 :math:`\nabla`。
+      :math:`Q` 表示二次（quadratic），不是 :math:`V` 的幂。
+
+      **这一式连接了什么？** 右侧分别描述增长、载波相位变化和波分量之间的耦合。
+      恢复载波产生额外的虚数项，它不是额外的幅值增长。
+      系数的响应推导接在 :ref:`第 02 页 <k05-coefficients-zh>`。
+
 
    粗体 :math:`\mathbf k` 与 :math:`\mathbf v_g` 分别是波矢（wavevector）和群速度矢量。
    :math:`\nabla` 是空间梯度（spatial gradient），:math:`\cdot` 是点积（dot product），
