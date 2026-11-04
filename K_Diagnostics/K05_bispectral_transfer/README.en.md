@@ -49,12 +49,13 @@ The page derives a continuous mean-square-potential balance, then introduces
 the two-probe cross bispectrum and a short NumPy moment function.
 
 The [fifth page](../../docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst)
-starts with one pair and two coefficients, then derives the full moment matrix,
-identifiability condition and Kim stationary correction. The correction separates
-measured and modelled power, explains each added moment equation, and develops
-scalar elimination before its optional matrix form. Phase rotation and group velocity connect
-the fit to amplitude growth and mean-square transfer; continuous and finite-step
-budgets and the reference normalization are distinguished explicitly.
+starts with one pair and two coefficients, then expands a two-pair, three-row
+example before introducing the full moment matrix. A practical Kim calculation
+recipe obtains the common model power and coefficients from measured moments,
+with assumptions and admissibility checks stated explicitly. Intermediate phase
+derivatives and substitutions connect the fit to amplitude growth and mean-square
+transfer. The conclusion distinguishes statistical closure from the additional
+propagation, calibration and plasma-response inputs needed for physical rates.
 
 The English views use English only; the Chinese views include English terms.
 All eleven articles use the shared K05 equation sequence and cross-page references.

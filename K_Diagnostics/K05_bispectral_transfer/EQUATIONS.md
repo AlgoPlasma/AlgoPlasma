@@ -38,11 +38,23 @@ the Revision 31 migration file remains a historical snapshot.
 Revision 34 (2026-11-04) simplifies the fourth page, removing the repeated-record
 conditions, coefficient-cancellation example, bin-power/PSD disclosure and the
 interactive phase-ensemble figure with its parameter disclosure. There are now
-**140 active equations**. IDs `cancellation-average`, `bin-power-density` and
+140 active equations at that revision. IDs `cancellation-average`, `bin-power-density` and
 `phase-ensemble` are removed from the active registry and must not be repurposed.
 Introduce PSD normalization where PSD is actually used, after its required
 preprocessing concepts. The illustration assets remain archived in the static
 directory, but the fourth page neither loads nor displays them.
+
+Revision 35 (2026-11-04) expands a two-pair matrix example, replaces the long Kim
+derivation with a calculation recipe, and expands the phase derivative and
+discrete/continuous coefficient substitution. There are now **138 active equations**.
+The former display numbers 86 and 87 are still identified by
+`phase-aware-difference` and `discrete-continuous-coefficients`.
+`kim-stationary-solution` and `kim-stationary-moments` remain available for
+downstream links. Removed IDs are `inference-rank-bicoherence`, `kim-field-split`,
+`kim-power-split`, `kim-cross-power-split`, `kim-unclosed-scalar-moments`,
+`kim-scalar-elimination`, `kim-elimination-quantities` and `kim-power-quadratic`.
+These must not be reused for unrelated equations. New semantic IDs identify
+the expanded matrix, computation auxiliaries and derivative/substitution steps.
 
 In an English container:
 

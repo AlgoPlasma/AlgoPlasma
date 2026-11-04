@@ -258,6 +258,47 @@
 
       <details class="k05-note"><summary>Several pairs: the same equations in a matrix</summary>
 
+   For a concrete example, retain just two pairs feeding 6 MHz: (1, 5) MHz and
+   (2, 4) MHz. Write :math:`X=X_{6\,\mathrm{MHz}}`, :math:`Y=Y_{6\,\mathrm{MHz}}`,
+   :math:`Z_1=X_{1\,\mathrm{MHz}}X_{5\,\mathrm{MHz}}` and
+   :math:`Z_2=X_{2\,\mathrm{MHz}}X_{4\,\mathrm{MHz}}`.
+   These are illustrative frequency choices. There are three unknowns:
+   :math:`L,Q_1,Q_2`. Multiply :math:`Y=LX+Q_1Z_1+Q_2Z_2+\varepsilon`
+   by :math:`X^*`, :math:`Z_1^*` and :math:`Z_2^*`, then average:
+
+   .. k05:equation:: two-pair-rows
+      :lang: en
+
+      \begin{aligned}
+      G&=PL+b_1^*Q_1+b_2^*Q_2,\\
+      d_1&=b_1L+F_{11}Q_1+F_{12}Q_2,\\
+      d_2&=b_2L+F_{21}Q_1+F_{22}Q_2.
+      \end{aligned}
+
+   Here :math:`b_i=\langle XZ_i^*\rangle_R`,
+   :math:`d_i=\langle YZ_i^*\rangle_R` and :math:`F_{ij}=\langle Z_i^*Z_j\rangle_R`.
+   For example, :math:`F_{12}=\langle Z_1^*Z_2\rangle_R` comes from multiplying
+   the second pair's contribution by the first pair's conjugate.
+   Also :math:`F_{21}=F_{12}^*`. As above, residual cross moments are assumed zero.
+   Put each unknown in its own column, in the order :math:`L,Q_1,Q_2`:
+
+   .. k05:equation:: two-pair-matrix
+      :lang: en
+
+      \begin{pmatrix}
+      P&b_1^*&b_2^*\\
+      b_1&F_{11}&F_{12}\\
+      b_2&F_{21}&F_{22}
+      \end{pmatrix}
+      \begin{pmatrix}L\\Q_1\\Q_2\end{pmatrix}
+      =\begin{pmatrix}G\\d_1\\d_2\end{pmatrix}.
+
+   Multiplying the matrix's second row by the unknown column reproduces the
+   second equation exactly. Every matrix entry and right-hand entry is a
+   measured average; only the middle column is unknown. The first row has
+   units V² and each lower row V³: rows need not share units, but terms within
+   each row must. With more pairs, add one row and one column per pair.
+
    For :math:`J` pairs define column vectors :math:`\mathbf b,\mathbf d,\mathbf q`
    with one entry per pair, and a :math:`J\times J` matrix :math:`\mathbf F`:
 
@@ -292,30 +333,6 @@
 
       </details>
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>Strong phase locking can make the coefficients inseparable</summary>
-
-   For one pair, combine :k05:eq:`single-pair-estimator` with the squared
-   bicoherence in :k05:eq:`bicoherence` (assuming :math:`P,F>0`):
-
-   .. k05:equation:: inference-rank-bicoherence
-      :lang: en
-
-      \Delta=PF\left(1-b_X^2\right),\qquad
-      b_X^2=\frac{|\langle ZX^*\rangle_R|^2}{PF}.
-
-   If :math:`Z^{(r)}=cX^{(r)}` for every record, with the same complex constant
-   :math:`c`, the model only observes :math:`(L+cQ)X`. Infinitely many choices of
-   :math:`L,Q` give the same answer. Then :math:`b_X^2=1` and :math:`\Delta=0`.
-   Values near this limit make estimates sensitive to small errors. A strong
-   bispectral relationship can therefore coexist with poor coefficient identifiability.
-   With several pairs, inspect the full predictor matrix, not only each pair separately.
-
-   .. raw:: html
-
-      </details>
-
    Measured probe data add a complication: noise can enter the first probe as
    well as the second. More averages do not remove that bias automatically.
    Brown and Jorns |ref-en| use a modification of the Ritz method developed by
@@ -323,198 +340,54 @@
    the two locations. This is an extra physical/statistical assumption, beyond
    the joint least-squares algebra above.
 
-   .. raw:: html
+   The additional assumption is equal **modelled** power at the two locations,
+   denoted :math:`P_\star`. Measured powers may differ. The method also neglects
+   the nonideal mixed-moment contributions specified in Ref. [2], Sec. III B;
+   pairwise uncorrelatedness alone does not guarantee this at third and fourth
+   order. Under these assumptions, the computation below jointly determines
+   the common power and coefficients. It does not impose zero linear growth:
+   linear drive and nonlinear removal can balance.
 
-      <details class="k05-note" id="k05-kim-correction-en"><summary>What does the Kim stationarity correction add?</summary>
-
-   The correction estimates **how much of the measured power belongs to the
-   linear-quadratic model**, along with its coefficients. To see why that power
-   is an extra unknown, start with the measured Fourier coefficient at each probe.
-   The target frequency is still fixed, so its subscript is suppressed.
-
-   **Separate the measured field from the part described by the model.** Write
-
-   .. k05:equation:: kim-field-split
-      :lang: en
-
-      X=X_{\mathrm m}+X_{\mathrm n},\qquad Y=Y_{\mathrm m}+Y_{\mathrm n}.
-
-   The subscript :math:`\mathrm m` means modelled: :math:`X_{\mathrm m}` and
-   :math:`Y_{\mathrm m}` are the parts governed by the chosen linear-quadratic
-   equation. The subscript :math:`\mathrm n` means nonideal: noise or fluctuations
-   that this equation does not describe. All four quantities have units V.
-   This is a statistical decomposition; the method does not first identify and
-   subtract a known noise waveform. Real plasma fluctuations omitted by the model
-   can also belong to the nonideal part.
-
-   If the nonideal components have zero mean and are uncorrelated with the
-   modelled component at each probe, their cross terms vanish in the power average. Thus
-
-   .. k05:equation:: kim-power-split
-      :lang: en
-
-      \begin{aligned}
-      P_X&=P_{\mathrm m,X}+P_{\mathrm n,X},\\
-      P_Y&=P_{\mathrm m,Y}+P_{\mathrm n,Y}.
-      \end{aligned}
-
-   Here :math:`P_{\mathrm m,X}=\langle|X_{\mathrm m}|^2\rangle_R` and
-   :math:`P_{\mathrm n,X}=\langle|X_{\mathrm n}|^2\rangle_R`; define the two
-   :math:`Y` powers in the same way. All are in :math:`\mathrm{V^2}`.
-   The measured :math:`P_X` can therefore be larger than the power participating
-   in the model. Increasing the number of records does not remove the positive
-   mean-square noise contribution.
-
-   For a simple illustration, suppose the modelled wave has power
-   :math:`1\,\mathrm{V^2}` and only changes phase, with true coefficient
-   :math:`L=e^{i\delta}`. Add independent, zero-mean noise of power
-   :math:`0.25\,\mathrm{V^2}` to the first probe. With no cross-correlated noise,
-   :math:`P_X=1.25\,\mathrm{V^2}` but :math:`G=e^{i\delta}\,\mathrm{V^2}`.
-   The linear-only ratio becomes :math:`G/P_X=0.8e^{i\delta}`. It appears to lose
-   amplitude even though the modelled wave does not. This example isolates the
-   noise effect; it has no quadratic coupling.
-
-   **Why do cross moments help?** Expand the cross power:
-
-   .. k05:equation:: kim-cross-power-split
-      :lang: en
-
-      \begin{aligned}
-      G=\langle YX^*\rangle_R
-      &=\langle Y_{\mathrm m}X_{\mathrm m}^*\rangle_R
-      +\langle Y_{\mathrm m}X_{\mathrm n}^*\rangle_R\\
-      &\quad+\langle Y_{\mathrm n}X_{\mathrm m}^*\rangle_R
-      +\langle Y_{\mathrm n}X_{\mathrm n}^*\rangle_R.
-      \end{aligned}
-
-   If the last three averages vanish, :math:`G` keeps the modelled correlation
-   without the added noise auto power. This explains the motivation for using
-   cross moments. Applying the same reasoning to higher-order products needs
-   stronger assumptions: ordinary pairwise uncorrelatedness alone does not remove
-   every noise contribution to a third- or fourth-order moment.
-
-   Ref. [2], Sec. III B, drops the specified nonideal terms except their auto
-   powers, and uses the measured :math:`G,b,d,F` as inputs to the resulting moment
-   system. In particular, :math:`F` is still the full measured fourth-order moment;
-   it has not been made noise-free by definition. These are assumptions to assess
-   for the data, not general identities for arbitrary contamination. The following
-   equations use that model.
-
-   **Start with one pair, before introducing matrices.** Under those moment
-   assumptions, multiplying by :math:`X^*`, :math:`Y^*` and :math:`Z^*`, respectively,
-   gives
-
-   .. k05:equation:: kim-unclosed-scalar-moments
-      :lang: en
-
-      \begin{aligned}
-      G&=LP_{\mathrm m,X}+Qb^*,\\
-      P_{\mathrm m,Y}&=LG^*+Qd^*,\\
-      d&=Lb+QF.
-      \end{aligned}
-
-   The first row is the earlier cross-power equation, but the power multiplying
-   :math:`L` is now the unknown :math:`P_{\mathrm m,X}`. The second row is new:
-   multiplication by the second-probe conjugate introduces its modelled power
-   :math:`P_{\mathrm m,Y}`. Its right side uses
-   :math:`\langle XY^*\rangle_R=G^*` and :math:`\langle ZY^*\rangle_R=d^*`.
-   The third row is the cross-bispectrum equation already encountered.
-
-   **Stationarity supplies the missing relation between those two powers.**
-   Assume :math:`P_{\mathrm m,X}=P_{\mathrm m,Y}=P_\star`. The star is part of
-   the name of this real power, not a complex-conjugate operation.
-   In Kim's original time-evolution setting, this is a stationary model spectrum.
-   For the two spatially separated probes it becomes approximate local homogeneity:
-   the modelled mean-square fluctuation is the same at both locations.
-
-   This does not require :math:`X=Y` record by record. Phases can change, and
-   linear drive can balance nonlinear removal while the total modelled power
-   stays constant. The measured powers can still contain different nonideal
-   contributions. The constraint does not simply replace both measured powers by
-   their arithmetic mean: :math:`P_\star,L,Q` must satisfy the moment equations
-   together.
 
    .. raw:: html
 
-      <details class="k05-note"><summary>Follow the elimination to P★, L and Q, then write the matrix form</summary>
+      <details class="k05-note" id="k05-kim-correction-en"><summary>Kim correction: calculate the common power and coefficients</summary>
 
-   For one pair with :math:`F>0`, the last row of
-   :k05:eq:`kim-unclosed-scalar-moments` gives :math:`Q=(d-Lb)/F`.
-   Substitute it into the first two rows after setting both modelled powers to
-   :math:`P_\star`:
+   The outputs are a real common model power :math:`P_\star`, a dimensionless
+   linear coefficient :math:`L`, and pair coefficients :math:`\mathbf q=(Q_1,\ldots,Q_J)^T`
+   in V⁻¹. :math:`P_\star` has units V²; its star is a label, not conjugation.
+   It represents the power assigned to the model at either probe, not the
+   arithmetic mean of the two measured powers. Use the following calculation
+   separately at each target frequency |kim-en|.
 
-   .. k05:equation:: kim-scalar-elimination
+   **1. Calculate the inputs from the same paired records.** Keep the measured
+   powers :math:`P_X=\langle|X|^2\rangle_R` and :math:`P_Y=\langle|Y|^2\rangle_R`
+   for the final check. Calculate :math:`G,\mathbf b,\mathbf d,\mathbf F` using
+   :k05:eq:`inference-moments` and :k05:eq:`inference-matrix`.
+   Keep all off-diagonal entries of :math:`\mathbf F`.
+
+   **2. Solve two linear systems, then form three numbers.**
+
+   .. k05:equation:: kim-computation-quantities
       :lang: en
 
       \begin{aligned}
-      Q&=\frac{d-Lb}{F},\\
-      G&=L\left(P_\star-\frac{|b|^2}{F}\right)+\frac{b^*d}{F},\\
-      P_\star&=L\left(G^*-\frac{d^*b}{F}\right)+\frac{|d|^2}{F}.
+      \mathbf F\mathbf u_b&=\mathbf b,\qquad \mathbf F\mathbf u_d=\mathbf d,\\
+      \alpha&=\mathbf b^\dagger\mathbf u_b,\qquad
+      \beta=\mathbf d^\dagger\mathbf u_d,\qquad
+      \eta=G-\mathbf b^\dagger\mathbf u_d.
       \end{aligned}
 
-   For example, the first substitution uses
-   :math:`Qb^*=(b^*d-L|b|^2)/F`. The second uses
-   :math:`Qd^*=(|d|^2-Lbd^*)/F`. Thus each line is just multiplication and
-   collection of the terms containing :math:`L`.
+   :math:`\mathbf u_b,\mathbf u_d` are auxiliary solution columns, in V⁻¹;
+   they are not new measurements. The dagger means conjugate transpose, so
+   :math:`\mathbf b^\dagger\mathbf u_d=\sum_i b_i^*(u_d)_i`.
+   For a positive-definite :math:`\mathbf F`, :math:`\alpha,\beta` are real,
+   nonnegative powers; :math:`\eta` may be complex. All three have units V².
+   With only one pair, simply use :math:`u_b=b/F`, :math:`u_d=d/F`.
 
-   Abbreviate :math:`\alpha=|b|^2/F`, :math:`\beta=|d|^2/F`, and
-   :math:`\eta=G-b^*d/F`. Then the two lines become
-   :math:`L(P_\star-\alpha)=\eta` and :math:`P_\star-\beta=L\eta^*`.
-   The conjugate in the second expression follows from
-   :math:`\eta^*=G^*-d^*b/F`, since :math:`F` is real.
-
-   For several pairs, the same operation uses the vectors and matrix in
-   :k05:eq:`inference-matrix`. Their entries are still
-   :math:`b_i=\langle XZ_i^*\rangle_R`, :math:`d_i=\langle YZ_i^*\rangle_R`,
-   and :math:`F_{ij}=\langle Z_i^*Z_j\rangle_R`.
-   The three equations are Kim's Eqs. (11)–(14) in our notation:
-
-   .. k05:equation:: kim-stationary-moments
-      :lang: en
-
-      \begin{aligned}
-      G&=LP_\star+\mathbf b^\dagger\mathbf q,\\
-      P_\star&=LG^*+\mathbf d^\dagger\mathbf q,\\
-      \mathbf d&=L\mathbf b+\mathbf F\mathbf q.
-      \end{aligned}
-
-   Here :math:`\mathbf b^\dagger\mathbf q=\sum_j b_j^*Q_j` and
-   :math:`\mathbf d^\dagger\mathbf q=\sum_j d_j^*Q_j`; the dagger is conjugate
-   transpose. For invertible :math:`\mathbf F`, the last row gives
-   :math:`\mathbf q=\mathbf F^{-1}(\mathbf d-L\mathbf b)`.
-   Substitution produces precisely the scalar pattern above:
-
-   .. k05:equation:: kim-elimination-quantities
-      :lang: en
-
-      \begin{aligned}
-      \alpha&=\mathbf b^\dagger\mathbf F^{-1}\mathbf b,\qquad
-      \beta=\mathbf d^\dagger\mathbf F^{-1}\mathbf d,\\
-      \eta&=G-\mathbf b^\dagger\mathbf F^{-1}\mathbf d,\\
-      L(P_\star-\alpha)&=\eta,\qquad P_\star-\beta=L\eta^*.
-      \end{aligned}
-
-   :math:`\alpha,\beta` are real, nonnegative powers, and :math:`\eta` is a
-   complex cross moment; all have units :math:`\mathrm{V^2}`. They summarize
-   the terms generated by eliminating the pair coefficients. They are neither
-   additional measured fields nor extra fitting parameters.
-
-   To remove :math:`L`, multiply :math:`P_\star-\beta=L\eta^*` by
-   :math:`P_\star-\alpha`, then use :math:`L(P_\star-\alpha)=\eta`:
-
-   .. k05:equation:: kim-power-quadratic
-      :lang: en
-
-      \begin{aligned}
-      (P_\star-\alpha)(P_\star-\beta)
-      &=(P_\star-\alpha)L\eta^*=\eta\eta^*=|\eta|^2,\\
-      P_\star^2-(\alpha+\beta)P_\star+\alpha\beta-|\eta|^2&=0.
-      \end{aligned}
-
-   The second line is an ordinary quadratic in the real unknown :math:`P_\star`.
-   Its discriminant simplifies to :math:`(\alpha-\beta)^2+4|\eta|^2`.
-   Choosing the branch compatible with :math:`P_\star\ge\max(\alpha,\beta)`
-   gives the power; then back-substitution gives the coefficients:
+   **3. Calculate the common power, then the coefficients.** Use the positive
+   square-root branch below. In practice the last expression is
+   :math:`\mathbf q=\mathbf u_d-L\mathbf u_b`; no matrix inverse is needed.
 
    .. k05:equation:: kim-stationary-solution
       :lang: en
@@ -526,30 +399,33 @@
       \mathbf q=\mathbf F^{-1}(\mathbf d-L\mathbf b).
       \end{aligned}
 
-   The denominator :math:`P_\star-\alpha` must be nonzero. If it vanishes, the
-   displayed division does not determine :math:`L`. Singular or nearly singular
-   :math:`\mathbf F` also prevents a reliable separation of pair contributions.
-   Numerical implementations should solve linear systems, rather than explicitly
-   form an inverse.
+   **4. Substitute the answers to check the calculation.** All three rows should
+   hold within numerical precision. These are the stationary moment constraints
+   of Ref. [2], Eqs. (11)–(14), in the notation used here:
 
-   .. raw:: html
+   .. k05:equation:: kim-stationary-moments
+      :lang: en
 
-      </details>
+      \begin{aligned}
+      G&=LP_\star+\mathbf b^\dagger\mathbf q,\\
+      P_\star&=LG^*+\mathbf d^\dagger\mathbf q,\\
+      \mathbf d&=L\mathbf b+\mathbf F\mathbf q.
+      \end{aligned}
 
-   As a simple check, in the limit :math:`b=d=0` there is no pair correlation
-   in these equations. Then :math:`\alpha=\beta=0` and :math:`P_\star=|G|`.
-   For the phase-only noise example above this returns
-   :math:`P_\star=1\,\mathrm{V^2}` and :math:`L=e^{i\delta}`: the excess
-   measured auto power is not interpreted as damping. This limiting example
-   illustrates the role of the stationarity assumption; it is not a general
-   noise-removal guarantee.
+   Here :math:`\mathbf b^\dagger\mathbf q=\sum_j b_j^*Q_j`, and similarly for
+   :math:`\mathbf d^\dagger\mathbf q`. Substitution checks the algebra, not the assumptions.
 
-   Finally, compare the inferred power with the measurements. The assumed
-   additive power split requires :math:`0\le P_\star\le\min(P_X,P_Y)` within
-   uncertainty. If that fails, inspect the assumptions and statistics rather than
-   clipping the result. If :math:`P_\star` is only a small fraction of the measured
-   power, the model explains little of the measured fluctuation. Ref. [2] uses
-   this comparison to judge whether the inferred coefficients are meaningful.
+   **5. Check whether the result can be interpreted.** The additive power split
+   requires :math:`0\le P_\star\le\min(P_X,P_Y)`. A larger value fails this
+   necessary check; do not clip it to the bound. If :math:`\mathbf F` is singular
+   or poorly conditioned, or :math:`P_\star-\alpha` is zero or too small relative
+   to moment uncertainty, the coefficients are not reliably determined.
+
+   The correction recomputes :math:`L` and all :math:`Q_j` together. It is not
+   a fixed factor applied to the least-squares growth rate. This step needs
+   measured moments, not a prescribed noise waveform or group velocity.
+   The measured fourth moment is not automatically noise-free; the assumptions
+   stated above are still required.
 
    .. raw:: html
 
@@ -589,6 +465,33 @@
    Approximate the amplitude derivative by the phase-aligned difference and the
    phase derivative by :math:`\delta_f/\Delta y`:
 
+   Let :math:`a_1=a_f(y)`, :math:`a_2=a_f(y+\Delta y)` and
+   :math:`\theta_1=\theta_f(y)`. Use the representative phase increment
+   :math:`\theta_f(y+\Delta y)-\theta_1\simeq\delta_f`. Then
+
+   .. k05:equation:: phase-aligned-endpoints
+      :lang: en
+
+      \begin{aligned}
+      X_f&=a_1e^{i\theta_1},\qquad Y_f\simeq a_2e^{i(\theta_1+\delta_f)},\\
+      e^{-i\delta_f}Y_f-X_f&\simeq(a_2-a_1)e^{i\theta_1},\\
+      (\partial_y a_f)e^{i\theta_1}&\simeq
+      \frac{e^{-i\delta_f}Y_f-X_f}{\Delta y}.
+      \end{aligned}
+
+   This gives the amplitude part. The second part comes from differentiating
+   the phase factor: :math:`\partial_y e^{i\theta_f}=i(\partial_y\theta_f)e^{i\theta_f}`.
+   At the first probe,
+
+   .. k05:equation:: phase-gradient-term
+      :lang: en
+
+      i a_1(\partial_y\theta_f)e^{i\theta_1}
+      \simeq i\frac{\delta_f}{\Delta y}a_1e^{i\theta_1}
+      =i\frac{\delta_f}{\Delta y}X_f.
+
+   Add the amplitude and phase parts to recover the derivative of the full coefficient:
+
    .. k05:equation:: phase-aware-difference
       :lang: en
 
@@ -603,9 +506,42 @@
    consistent phase branch. A vanishing or poorly determined cross power does
    not supply a reliable rotation.
 
+   :math:`k_{y,f}` is the real wavenumber along the probes, in rad/m;
+   :math:`\mathcal V_{fj}` is the continuous quadratic coefficient after grouping
+   identical pair products, in :math:`\mathrm{V^{-1}s^{-1}}`.
+   :math:`\gamma_f^{(y)}` is the effective amplitude growth inferred along the
+   probe direction. In the one-dimensional model it is :math:`\gamma_f`.
+   For three-dimensional propagation, transverse variation can also affect it;
+   two probes alone do not recover the full three-dimensional growth.
+
    Insert :k05:eq:`phase-aware-difference` into
    :k05:eq:`frequency-equation-1d`. After multiplying by :math:`\Delta y/v_{g,f}`
    and rearranging, compare the coefficients of :math:`X_f` and each :math:`Z_j`:
+
+   For clarity, write :math:`\widetilde Y_f=e^{-i\delta_f}Y_f`.
+   With the pair products already grouped, the substitutions are
+
+   .. k05:equation:: coefficient-substitution-steps
+      :lang: en
+
+      \begin{aligned}
+      v_{g,f}\left[\frac{\widetilde Y_f-X_f}{\Delta y}
+      +i\frac{\delta_f}{\Delta y}X_f\right]
+      &\simeq(\gamma_f^{(y)}+ik_{y,f}v_{g,f})X_f+\sum_j\mathcal V_{fj}Z_j,\\
+      \widetilde Y_f-X_f+i\delta_fX_f
+      &\simeq\left(\frac{\gamma_f^{(y)}\Delta y}{v_{g,f}}+ik_{y,f}\Delta y\right)X_f
+      +\sum_j\frac{\mathcal V_{fj}\Delta y}{v_{g,f}}Z_j,\\
+      \widetilde Y_f
+      &\simeq\left[1+\frac{\gamma_f^{(y)}\Delta y}{v_{g,f}}
+      +i(k_{y,f}\Delta y-\delta_f)\right]X_f
+      +\sum_j\frac{\mathcal V_{fj}\Delta y}{v_{g,f}}Z_j.
+      \end{aligned}
+
+   The second line multiplies by :math:`\Delta y/v_{g,f}`; the third moves
+   :math:`-X_f+i\delta_fX_f` to the right. The rotated fitted model is
+   :math:`\widetilde Y_f=\widetilde L_fX_f+\sum_j\widetilde Q_{fj}Z_j`
+   for its modelled part. Thus the bracket is :math:`\widetilde L_f` and
+   each multiplier of :math:`Z_j` is :math:`\widetilde Q_{fj}`:
 
    .. k05:equation:: discrete-continuous-coefficients
       :lang: en
@@ -615,14 +551,6 @@
       +i(k_{y,f}\Delta y-\delta_f),\\
       \widetilde Q_{fj}&\simeq\frac{\mathcal V_{fj}\Delta y}{v_{g,f}}.
       \end{aligned}
-
-   :math:`k_{y,f}` is the real wavenumber along the probes, in rad/m;
-   :math:`\mathcal V_{fj}` is the continuous quadratic coefficient after grouping
-   identical pair products, in :math:`\mathrm{V^{-1}s^{-1}}`.
-   :math:`\gamma_f^{(y)}` is the effective amplitude growth inferred along the
-   probe direction. In the one-dimensional model it is :math:`\gamma_f`.
-   For three-dimensional propagation, transverse variation can also affect it;
-   two probes alone do not recover the full three-dimensional growth.
 
    The raw coefficients are obtained by multiplying these expressions by
    :math:`e^{i\delta_f}`, which gives the structure of Ref. [1], Eq. (4).
@@ -680,26 +608,6 @@
    :math:`\gamma_f^{(y)}` means amplitude growth in this local model; negative
    means damping. The group velocity is separate information: the moments alone
    do not determine it. Ref. [1] estimates it from a theoretical dispersion relation.
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>A pure phase shift is a useful zero-growth check</summary>
-
-   If :math:`Y=e^{i\delta}X` with no amplitude change and no quadratic contribution,
-   the fit gives :math:`L=e^{i\delta}` and :math:`\widetilde L=1`. The converted
-   growth is zero. Applying :math:`\operatorname{Re}L-1` to the raw coefficient
-   would instead give :math:`\cos\delta-1`, a spurious damping term.
-
-   Ref. [1], Eq. (4), includes :math:`e^{i\Delta\Theta_f}` in its transfer
-   coefficients; its growth-rate sentence after Eq. (5) prints
-   :math:`\operatorname{Re}L_f-1` without displaying that rotation. With the
-   coefficients as defined in Eq. (4), taking the real part after dephasing gives
-   :k05:eq:`inferred-growth-coupling`. Keeping raw and rotated symbols separate
-   makes the convention explicit.
-
-   .. raw:: html
-
-      </details>
 
    .. rubric:: 5. Combine a coupling coefficient with its bispectrum
 
@@ -832,6 +740,29 @@
    constrain coefficients; phase, spacing and group velocity convert coefficients
    to rates.
 
+   **What is closed, and what still needs physical input?** Once the retained pairs,
+   Fourier convention and estimator assumptions are fixed, the moments close the
+   algebraic coefficient problem, provided the matrices are identifiable. Kim's
+   common power is another inferred quantity, not an externally supplied parameter.
+   That closes a statistical model; it does not supply all inputs for a physical rate.
+
+   - **For rates in inverse seconds:** supply the signed separation and probe order,
+     a reliable propagation phase after correcting channel delay/response, and the
+     group velocity along the probes. Phase velocity inferred from phase delay is
+     not automatically group velocity. A theoretical group velocity needs a chosen
+     dispersion branch and its plasma inputs, such as electron temperature, density,
+     magnetic field, electric field/drift and ion species. These are inputs to that
+     physical model, not additional moments determined by the fit.
+   - **For physical wave energy:** additionally specify the conversion from recorded
+     voltage to the fluctuation of interest, the probe response, and the plasma
+     energy weighting. V²/s alone is a mean-square-voltage rate. Transverse transport
+     must also be assessed before identifying a two-probe effective rate with full
+     three-dimensional growth.
+
+   The :ref:`probe-response page <k05-response-en>` and
+   :ref:`interpretation supplement <k05-budget-en>` discuss these inputs and checks.
+
+
    .. rubric:: Continue the reading
 
    The next page starts from real synchronized waveforms and constructs the statistics used here.
@@ -853,7 +784,7 @@
    fully developed turbulence,” *Physics of Plasmas* **3**, 3998–4009 (1996).
    `doi:10.1063/1.871572 <https://doi.org/10.1063/1.871572>`_.
 
-   Ref. [1], p. 115101-3, supplies the two-probe model and phase-dependent transfer functions. Ref. [2], Secs. II–III, supplies the finite-step power budget and modified stationary moment method. The scalar elimination, column-vector notation, explicit phase audit and expanded stationarity derivation here are explanatory derivations.
+   Ref. [1], p. 115101-3, supplies the two-probe model and phase-dependent transfer functions. Ref. [2], Secs. II–III, supplies the finite-step power budget and modified stationary moment method. The expanded matrix example, computation recipe and intermediate phase-derivative steps are explanatory additions.
 
 .. container:: ap-lang ap-lang-zh k05-lesson
 
@@ -1062,6 +993,45 @@
 
       <details class="k05-note"><summary>多个波对：把同样的方程排成矩阵</summary>
 
+   先只保留两个馈入 6 MHz 的波对：(1, 5) MHz 和 (2, 4) MHz。
+   记 :math:`X=X_{6\,\mathrm{MHz}}`、:math:`Y=Y_{6\,\mathrm{MHz}}`，
+   :math:`Z_1=X_{1\,\mathrm{MHz}}X_{5\,\mathrm{MHz}}`、
+   :math:`Z_2=X_{2\,\mathrm{MHz}}X_{4\,\mathrm{MHz}}`。
+   这些频率仅用于说明矩阵怎样排列。现在有三个未知数：:math:`L,Q_1,Q_2`。
+   把 :math:`Y=LX+Q_1Z_1+Q_2Z_2+\varepsilon` 分别乘上
+   :math:`X^*`、:math:`Z_1^*` 和 :math:`Z_2^*`，再平均，就得到三行：
+
+   .. k05:equation:: two-pair-rows
+      :lang: zh
+
+      \begin{aligned}
+      G&=PL+b_1^*Q_1+b_2^*Q_2,\\
+      d_1&=b_1L+F_{11}Q_1+F_{12}Q_2,\\
+      d_2&=b_2L+F_{21}Q_1+F_{22}Q_2.
+      \end{aligned}
+
+   其中 :math:`b_i=\langle XZ_i^*\rangle_R`、:math:`d_i=\langle YZ_i^*\rangle_R`，
+   :math:`F_{ij}=\langle Z_i^*Z_j\rangle_R`。
+   例如，:math:`F_{12}=\langle Z_1^*Z_2\rangle_R` 来自“第二个波对的贡献乘上第一个波对的共轭”；
+   :math:`F_{21}=F_{12}^*`。这里仍沿用前面残差互矩为零的条件。
+   按 :math:`L,Q_1,Q_2` 的顺序把三个未知数排成一列，三行方程就变成：
+
+   .. k05:equation:: two-pair-matrix
+      :lang: zh
+
+      \begin{pmatrix}
+      P&b_1^*&b_2^*\\
+      b_1&F_{11}&F_{12}\\
+      b_2&F_{21}&F_{22}
+      \end{pmatrix}
+      \begin{pmatrix}L\\Q_1\\Q_2\end{pmatrix}
+      =\begin{pmatrix}G\\d_1\\d_2\end{pmatrix}.
+
+   用矩阵第二行乘未知数列，就原样得到上面的第二条方程。
+   左边矩阵和右边向量里的数都由记录平均得到；只有中间那列是待求的系数。
+   第一行各项单位为 V²，后两行各项单位为 V³；要求的是同一行内单位相同。
+   每多保留一个波对，就多一个未知系数，也多一行和一列。
+
    有 :math:`J` 个波对时，用列向量 :math:`\mathbf b,\mathbf d,\mathbf q` 各保存每个波对的一项，
    用 :math:`J\times J` 矩阵 :math:`\mathbf F` 保存波对之间的四阶矩：
 
@@ -1091,194 +1061,52 @@
 
       </details>
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>相位关系很强，为什么反而可能分不开系数？</summary>
-
-   对一个波对，将 :k05:eq:`single-pair-estimator` 与 :k05:eq:`bicoherence` 的平方双相干结合，
-   在 :math:`P,F>0` 时有：
-
-   .. k05:equation:: inference-rank-bicoherence
-      :lang: zh
-
-      \Delta=PF\left(1-b_X^2\right),\qquad
-      b_X^2=\frac{|\langle ZX^*\rangle_R|^2}{PF}.
-
-   若每段都满足 :math:`Z^{(r)}=cX^{(r)}`，且复常数 :math:`c` 不变，模型看到的就只有
-   :math:`(L+cQ)X`。许多组不同的 :math:`L,Q` 都产生相同结果，无法分别识别。
-   此时 :math:`b_X^2=1`、:math:`\Delta=0`。接近这种情况时，很小的误差也可能明显改变系数。
-   所以很强的双谱关系，可以与很差的系数可辨识性（identifiability）同时存在。
-   多个波对时，需要检查完整预测量矩阵，不能只逐对看双相干。
-
-   .. raw:: html
-
-      </details>
-
    实际探针数据还有一个问题：噪声不只进入第二支探针，也可能进入第一支。
    增加平均次数并不会自动消除这种偏差。Brown 与 Jorns |ref-zh| 采用 Kim 等人 |kim-zh|
    对 Ritz 方法的修正，并使用两位置功率近似相等的条件。这比上面的联合最小二乘代数，
    多了一层物理与统计假设。
 
-   .. raw:: html
-
-      <details class="k05-note" id="k05-kim-correction-zh"><summary>Kim 的平稳性修正，究竟额外做了什么？</summary>
-
-   这项修正会同时估计两类未知量：系数，以及 **测得的功率中，有多少属于线性—二次模型能描述的部分**。
-   为什么功率也成了未知量？先从每支探针测到的傅里叶系数说起。目标频率仍然固定，下面省略其下标。
-
-   **先区分测得的量与模型描述的部分。** 写成：
-
-   .. k05:equation:: kim-field-split
-      :lang: zh
-
-      X=X_{\mathrm m}+X_{\mathrm n},\qquad Y=Y_{\mathrm m}+Y_{\mathrm n}.
-
-   下标 :math:`\mathrm m` 表示模型部分（modelled）：:math:`X_{\mathrm m},Y_{\mathrm m}`
-   服从选定的线性—二次方程。下标 :math:`\mathrm n` 表示非理想部分（nonideal）：噪声，
-   或该方程没有描述的波动。四个量的单位都是 V。
-   这是统计上的分解；并不是已经知道噪声波形、先把它逐点减掉。
-   模型遗漏的真实等离子体波动，也可能被归入非理想部分。
-
-   若非理想部分均值为零，且在每个探针处都与模型部分不相关，功率平均中的交叉项消失，得到：
-
-   .. k05:equation:: kim-power-split
-      :lang: zh
-
-      \begin{aligned}
-      P_X&=P_{\mathrm m,X}+P_{\mathrm n,X},\\
-      P_Y&=P_{\mathrm m,Y}+P_{\mathrm n,Y}.
-      \end{aligned}
-
-   这里 :math:`P_{\mathrm m,X}=\langle|X_{\mathrm m}|^2\rangle_R`、
-   :math:`P_{\mathrm n,X}=\langle|X_{\mathrm n}|^2\rangle_R`；第二支探针的两个功率同样定义，
-   单位都是 :math:`\mathrm{V^2}`。所以测得的 :math:`P_X`，可能大于真正参与模型关系的功率。
-   多平均几次，并不会让噪声自身正的均方值消失。
-
-   例如，模型波的功率为 :math:`1\,\mathrm{V^2}`，传播时只变相位，真实系数为 :math:`L=e^{i\delta}`。
-   给第一支探针加入独立、零均值、功率为 :math:`0.25\,\mathrm{V^2}` 的噪声。
-   若没有跨探针相关噪声，就有 :math:`P_X=1.25\,\mathrm{V^2}`，而 :math:`G=e^{i\delta}\,\mathrm{V^2}`。
-   直接取比值会得到 :math:`G/P_X=0.8e^{i\delta}`，看起来幅值衰减了，实际模型波并没有衰减。
-   这个小例子只用来说明噪声的影响，没有加入二次耦合。
-
-   **互矩为什么能提供不同的信息？** 把互谱展开：
-
-   .. k05:equation:: kim-cross-power-split
-      :lang: zh
-
-      \begin{aligned}
-      G=\langle YX^*\rangle_R
-      &=\langle Y_{\mathrm m}X_{\mathrm m}^*\rangle_R
-      +\langle Y_{\mathrm m}X_{\mathrm n}^*\rangle_R\\
-      &\quad+\langle Y_{\mathrm n}X_{\mathrm m}^*\rangle_R
-      +\langle Y_{\mathrm n}X_{\mathrm n}^*\rangle_R.
-      \end{aligned}
-
-   若后三个平均量都为零，:math:`G` 就保留模型部分的相关性，而没有叠加噪声自功率。
-   这解释了利用互矩的动机。但对更高阶乘积，还需要更强的假设：
-   普通的“两两不相关”，并不保证三阶、四阶矩里的所有噪声贡献都消失。
-
-   文献 [2] 第 III B 节舍去指定的非理想项、保留其自功率，并把测得的 :math:`G,b,d,F`
-   代入由此得到的矩方程。尤其 :math:`F` 仍是完整的测量四阶矩，不是通过定义就变成了无噪声的量。
-   这些是需要结合数据检查的模型假设，不是任意噪声都满足的恒等式。下面在这些假设下继续。
-
-   **先看一个波对，不急着写矩阵。** 分别乘 :math:`X^*`、:math:`Y^*`、:math:`Z^*`
-   再平均，得到：
-
-   .. k05:equation:: kim-unclosed-scalar-moments
-      :lang: zh
-
-      \begin{aligned}
-      G&=LP_{\mathrm m,X}+Qb^*,\\
-      P_{\mathrm m,Y}&=LG^*+Qd^*,\\
-      d&=Lb+QF.
-      \end{aligned}
-
-   第一行是前面的互谱方程，但乘在 :math:`L` 上的功率现在变成未知的 :math:`P_{\mathrm m,X}`。
-   第二行是新增的关系：乘第二支探针的共轭后，引入它的模型功率 :math:`P_{\mathrm m,Y}`；
-   右侧用到了 :math:`\langle XY^*\rangle_R=G^*`、:math:`\langle ZY^*\rangle_R=d^*`。
-   第三行仍是已经见过的互双谱方程。
-
-   **平稳性补上两个模型功率之间的关系。** 假定
-   :math:`P_{\mathrm m,X}=P_{\mathrm m,Y}=P_\star`。
-   这里星形是这个实数功率的名称标记，不是复共轭运算。
-   在 Kim 原来的时间演化问题里，这是模型谱的统计平稳；换到两支空间探针，
-   对应局部近似均匀，即两位置的模型均方波动相同。
-
-   这个条件不要求每段记录都满足 :math:`X=Y`。相位仍然可以变化，线性驱动也可以与非线性移除相平衡，
-   使总模型功率维持不变。两处测量还可能含有不同大小的非理想功率。
-   因此这里不是简单把两个测得功率取算术平均，而是要求未知的 :math:`P_\star,L,Q` 一起满足矩方程。
+   这里额外假定两处 **归属于模型的功率** 相同，记为 :math:`P_\star`；实测总功率仍可不同。
+   同时按文献 [2] 第 III B 节忽略指定的非理想混合矩贡献；仅有两两不相关，
+   并不能保证三阶、四阶矩都满足这个要求。在这些假设下，下面一起求出共同功率和系数。
+   共同功率不变不等于线性增长为零：线性驱动仍可与非线性移出相平衡。
 
    .. raw:: html
 
-      <details class="k05-note"><summary>逐步求出 P★、L、Q，再写成多个波对的矩阵形式</summary>
+      <details class="k05-note" id="k05-kim-correction-zh"><summary>Kim 修正：从统计量算出共同功率和系数</summary>
 
-   先保留一个波对，并设 :math:`F>0`。从 :k05:eq:`kim-unclosed-scalar-moments` 的第三行得到
-   :math:`Q=(d-Lb)/F`。把两个模型功率都换成 :math:`P_\star`，再将 :math:`Q` 代入前两行：
+   要算出的结果是共同模型功率 :math:`P_\star`、线性系数 :math:`L`，以及
+   波对系数列 :math:`\mathbf q=(Q_1,\ldots,Q_J)^T`。
+   :math:`P_\star` 是实数，单位 V²；星号是名称的一部分，不表示共轭。
+   它表示两探针处分别归属于模型的同一个功率，并不是把两个实测功率取算术平均。
+   :math:`L` 无量纲，各 :math:`Q_j` 的单位为 V⁻¹。
+   每个目标频率分别按下面的步骤计算 |kim-zh|。
 
-   .. k05:equation:: kim-scalar-elimination
+   **1. 从同一批成对记录计算输入。** 保留实测功率
+   :math:`P_X=\langle|X|^2\rangle_R`、:math:`P_Y=\langle|Y|^2\rangle_R`，用于最后检查。
+   按 :k05:eq:`inference-moments` 和 :k05:eq:`inference-matrix` 计算
+   :math:`G,\mathbf b,\mathbf d,\mathbf F`，保留 :math:`\mathbf F` 的非对角元。
+
+   **2. 先解两个线性方程组，再计算三个数。**
+
+   .. k05:equation:: kim-computation-quantities
       :lang: zh
 
       \begin{aligned}
-      Q&=\frac{d-Lb}{F},\\
-      G&=L\left(P_\star-\frac{|b|^2}{F}\right)+\frac{b^*d}{F},\\
-      P_\star&=L\left(G^*-\frac{d^*b}{F}\right)+\frac{|d|^2}{F}.
+      \mathbf F\mathbf u_b&=\mathbf b,\qquad \mathbf F\mathbf u_d=\mathbf d,\\
+      \alpha&=\mathbf b^\dagger\mathbf u_b,\qquad
+      \beta=\mathbf d^\dagger\mathbf u_d,\qquad
+      \eta=G-\mathbf b^\dagger\mathbf u_d.
       \end{aligned}
 
-   第一处代入用到 :math:`Qb^*=(b^*d-L|b|^2)/F`；第二处用到
-   :math:`Qd^*=(|d|^2-Lbd^*)/F`。所以这几行只是展开乘法，再把含 :math:`L` 的项收在一起。
+   :math:`\mathbf u_b,\mathbf u_d` 是刚解出的辅助列向量，单位 V⁻¹，不是额外测量。
+   :math:`\dagger` 表示共轭转置，例如
+   :math:`\mathbf b^\dagger\mathbf u_d=\sum_i b_i^*(u_d)_i`。
+   当 :math:`\mathbf F` 正定时，:math:`\alpha,\beta` 是非负实数，:math:`\eta` 可以为复数；
+   三者单位均为 V²。只有一个波对时，直接用 :math:`u_b=b/F`、:math:`u_d=d/F` 即可。
 
-   为了缩短表达式，记 :math:`\alpha=|b|^2/F`、:math:`\beta=|d|^2/F`、
-   :math:`\eta=G-b^*d/F`。于是最后两行变为
-   :math:`L(P_\star-\alpha)=\eta`、:math:`P_\star-\beta=L\eta^*`。
-   第二式的共轭来自 :math:`\eta^*=G^*-d^*b/F`，其中 :math:`F` 是实数。
-
-   多个波对做的是同样的操作，只把数换成 :k05:eq:`inference-matrix` 中的向量和矩阵。
-   其分量仍是 :math:`b_i=\langle XZ_i^*\rangle_R`、:math:`d_i=\langle YZ_i^*\rangle_R`、
-   :math:`F_{ij}=\langle Z_i^*Z_j\rangle_R`。三组方程就是本页记法下的 Kim 公式 (11)–(14)：
-
-   .. k05:equation:: kim-stationary-moments
-      :lang: zh
-
-      \begin{aligned}
-      G&=LP_\star+\mathbf b^\dagger\mathbf q,\\
-      P_\star&=LG^*+\mathbf d^\dagger\mathbf q,\\
-      \mathbf d&=L\mathbf b+\mathbf F\mathbf q.
-      \end{aligned}
-
-   其中 :math:`\mathbf b^\dagger\mathbf q=\sum_jb_j^*Q_j`、
-   :math:`\mathbf d^\dagger\mathbf q=\sum_jd_j^*Q_j`，:math:`\dagger` 表示共轭转置。
-   当 :math:`\mathbf F` 可逆时，第三行给出
-   :math:`\mathbf q=\mathbf F^{-1}(\mathbf d-L\mathbf b)`。
-   代入后，又得到和单波对完全相同的结构：
-
-   .. k05:equation:: kim-elimination-quantities
-      :lang: zh
-
-      \begin{aligned}
-      \alpha&=\mathbf b^\dagger\mathbf F^{-1}\mathbf b,\qquad
-      \beta=\mathbf d^\dagger\mathbf F^{-1}\mathbf d,\\
-      \eta&=G-\mathbf b^\dagger\mathbf F^{-1}\mathbf d,\\
-      L(P_\star-\alpha)&=\eta,\qquad P_\star-\beta=L\eta^*.
-      \end{aligned}
-
-   :math:`\alpha,\beta` 是非负实功率，:math:`\eta` 是复互矩，三者单位均为 :math:`\mathrm{V^2}`。
-   它们是消去波对系数后出现的几组项的简写，不是额外测到的场，也不是新增拟合参数。
-
-   接着消去 :math:`L`：把 :math:`P_\star-\beta=L\eta^*` 乘 :math:`P_\star-\alpha`，
-   再利用 :math:`L(P_\star-\alpha)=\eta`，就有：
-
-   .. k05:equation:: kim-power-quadratic
-      :lang: zh
-
-      \begin{aligned}
-      (P_\star-\alpha)(P_\star-\beta)
-      &=(P_\star-\alpha)L\eta^*=\eta\eta^*=|\eta|^2,\\
-      P_\star^2-(\alpha+\beta)P_\star+\alpha\beta-|\eta|^2&=0.
-      \end{aligned}
-
-   第二行就是以实数 :math:`P_\star` 为未知量的普通一元二次方程。
-   它的判别式可整理为 :math:`(\alpha-\beta)^2+4|\eta|^2`。
-   选取符合 :math:`P_\star\ge\max(\alpha,\beta)` 的分支，先得到功率，再回代求系数：
+   **3. 先算共同功率，再算系数。** 取下面带正平方根的分支。
+   实际计算最后一项时，用 :math:`\mathbf q=\mathbf u_d-L\mathbf u_b`，不必显式求逆矩阵。
 
    .. k05:equation:: kim-stationary-solution
       :lang: zh
@@ -1290,23 +1118,29 @@
       \mathbf q=\mathbf F^{-1}(\mathbf d-L\mathbf b).
       \end{aligned}
 
-   分母 :math:`P_\star-\alpha` 必须非零；若为零，就不能用这个除法确定 :math:`L`。
-   :math:`\mathbf F` 奇异或接近奇异时，也无法可靠地分开波对贡献。
-   数值计算应求解线性方程，而不是显式生成逆矩阵。
+   **4. 把结果代回，检查是否算对。** 下面三行应在数值精度内同时成立。
+   它们是文献 [2] 公式 (11)–(14) 在本页记号下的平稳矩约束：
 
-   .. raw:: html
+   .. k05:equation:: kim-stationary-moments
+      :lang: zh
 
-      </details>
+      \begin{aligned}
+      G&=LP_\star+\mathbf b^\dagger\mathbf q,\\
+      P_\star&=LG^*+\mathbf d^\dagger\mathbf q,\\
+      \mathbf d&=L\mathbf b+\mathbf F\mathbf q.
+      \end{aligned}
 
-   做一个简单检查：在 :math:`b=d=0`、方程中没有波对相关的极限下，
-   :math:`\alpha=\beta=0`，所以 :math:`P_\star=|G|`。
-   开头那个只变相位的含噪声例子，便得到 :math:`P_\star=1\,\mathrm{V^2}`、:math:`L=e^{i\delta}`，
-   多出来的测量自功率没有被解释为阻尼。这个极限例子说明了平稳性约束的作用，不是一般性的去噪保证。
+   这里 :math:`\mathbf b^\dagger\mathbf q=\sum_j b_j^*Q_j`，
+   :math:`\mathbf d^\dagger\mathbf q` 同理。代回成立只证明代数自洽，并不证明物理假设成立。
 
-   最后要把求出的模型功率与测量比较。根据前面的加性功率分解，结果应在不确定度内满足
-   :math:`0\le P_\star\le\min(P_X,P_Y)`。若不满足，应检查假设和统计量，不能直接截断数值。
-   若 :math:`P_\star` 只占测得功率的一小部分，模型解释的波动就很少。
-   文献 [2] 用这种比较判断推断出的系数是否有意义。
+   **5. 再检查结果是否允许作相应解释。** 模型功率加上非负非理想功率的假设要求
+   :math:`0\le P_\star\le\min(P_X,P_Y)`。若超过上界，就未通过这项必要检查，不能把结果截到上界。
+   若 :math:`\mathbf F` 奇异或病态，或者 :math:`P_\star-\alpha` 为零、
+   或相对于统计矩的不确定度过小，就不能可靠地区分系数，应记录失败原因。
+
+   修正会一起重新求出 :math:`L` 和所有 :math:`Q_j`，不是给最小二乘增长率乘固定因子。
+   此步输入都是实测统计矩，不需要预先指定噪声波形或群速度。
+   但实测四阶矩不会自动变成无噪声量，仍须满足上面说明的模型条件。
 
    .. raw:: html
 
@@ -1340,6 +1174,33 @@
    :math:`\partial_y C_f=(\partial_y a_f+i a_f\partial_y\theta_f)e^{i\theta_f}`。
    幅值导数用相位对齐后的差分近似，相位导数用 :math:`\delta_f/\Delta y` 近似：
 
+   具体地，令 :math:`a_1=a_f(y)`、:math:`a_2=a_f(y+\Delta y)`，
+   :math:`\theta_1=\theta_f(y)`。用共同的代表性相位增量近似每段记录的相位差：
+   :math:`\theta_f(y+\Delta y)-\theta_1\simeq\delta_f`，于是
+
+   .. k05:equation:: phase-aligned-endpoints
+      :lang: zh
+
+      \begin{aligned}
+      X_f&=a_1e^{i\theta_1},\qquad Y_f\simeq a_2e^{i(\theta_1+\delta_f)},\\
+      e^{-i\delta_f}Y_f-X_f&\simeq(a_2-a_1)e^{i\theta_1},\\
+      (\partial_y a_f)e^{i\theta_1}&\simeq
+      \frac{e^{-i\delta_f}Y_f-X_f}{\Delta y}.
+      \end{aligned}
+
+   这样得到了幅值变化的部分。另一部分来自对相位因子求导：
+   :math:`\partial_y e^{i\theta_f}=i(\partial_y\theta_f)e^{i\theta_f}`。
+   在第一支探针处，它给出
+
+   .. k05:equation:: phase-gradient-term
+      :lang: zh
+
+      i a_1(\partial_y\theta_f)e^{i\theta_1}
+      \simeq i\frac{\delta_f}{\Delta y}a_1e^{i\theta_1}
+      =i\frac{\delta_f}{\Delta y}X_f.
+
+   把幅值部分和相位部分加起来，才得到原来整个复系数的空间导数：
+
    .. k05:equation:: phase-aware-difference
       :lang: zh
 
@@ -1351,8 +1212,40 @@
    :math:`\arg G_f` 的主值只确定到模 :math:`2\pi`；若要解释波数，还需选择一致的相位分支。
    互谱接近零或相位估计不可靠时，不能得到可靠的旋转。
 
+   :math:`k_{y,f}` 是沿探针方向的实波数，单位 rad/m；:math:`\mathcal V_{fj}` 是合并相同波对乘积后
+   连续方程的二次系数，单位 :math:`\mathrm{V^{-1}s^{-1}}`。
+   :math:`\gamma_f^{(y)}` 是沿探针方向推断的有效幅值增长率。
+   在一维模型中它等于 :math:`\gamma_f`；三维传播中，横向变化也可能影响它，
+   仅凭两支探针不能恢复完整三维增长率。
+
    把 :k05:eq:`phase-aware-difference` 代入 :k05:eq:`frequency-equation-1d`，
    乘 :math:`\Delta y/v_{g,f}` 并移项，再对照 :math:`X_f` 和各个 :math:`Z_j` 的系数：
+
+   为看清每一步，暂记 :math:`\widetilde Y_f=e^{-i\delta_f}Y_f`。
+   沿探针方向写方程，并把相同波对乘积合并后，代入与移项的过程是
+
+   .. k05:equation:: coefficient-substitution-steps
+      :lang: zh
+
+      \begin{aligned}
+      v_{g,f}\left[\frac{\widetilde Y_f-X_f}{\Delta y}
+      +i\frac{\delta_f}{\Delta y}X_f\right]
+      &\simeq(\gamma_f^{(y)}+ik_{y,f}v_{g,f})X_f+\sum_j\mathcal V_{fj}Z_j,\\
+      \widetilde Y_f-X_f+i\delta_fX_f
+      &\simeq\left(\frac{\gamma_f^{(y)}\Delta y}{v_{g,f}}+ik_{y,f}\Delta y\right)X_f
+      +\sum_j\frac{\mathcal V_{fj}\Delta y}{v_{g,f}}Z_j,\\
+      \widetilde Y_f
+      &\simeq\left[1+\frac{\gamma_f^{(y)}\Delta y}{v_{g,f}}
+      +i(k_{y,f}\Delta y-\delta_f)\right]X_f
+      +\sum_j\frac{\mathcal V_{fj}\Delta y}{v_{g,f}}Z_j.
+      \end{aligned}
+
+   第二行是两边乘 :math:`\Delta y/v_{g,f}`；第三行把左边的
+   :math:`-X_f+i\delta_fX_f` 移到右边。
+   旋转后的拟合模型，其模型部分写成
+   :math:`\widetilde Y_f=\widetilde L_fX_f+\sum_j\widetilde Q_{fj}Z_j`。
+   因此，方括号就是 :math:`\widetilde L_f`，各个 :math:`Z_j` 前的乘数就是
+   :math:`\widetilde Q_{fj}`，得到
 
    .. k05:equation:: discrete-continuous-coefficients
       :lang: zh
@@ -1362,12 +1255,6 @@
       +i(k_{y,f}\Delta y-\delta_f),\\
       \widetilde Q_{fj}&\simeq\frac{\mathcal V_{fj}\Delta y}{v_{g,f}}.
       \end{aligned}
-
-   :math:`k_{y,f}` 是沿探针方向的实波数，单位 rad/m；:math:`\mathcal V_{fj}` 是合并相同波对乘积后
-   连续方程的二次系数，单位 :math:`\mathrm{V^{-1}s^{-1}}`。
-   :math:`\gamma_f^{(y)}` 是沿探针方向推断的有效幅值增长率。
-   在一维模型中它等于 :math:`\gamma_f`；三维传播中，横向变化也可能影响它，
-   仅凭两支探针不能恢复完整三维增长率。
 
    将这些表达式乘回 :math:`e^{i\delta_f}`，就得到文献 [1] 公式 (4) 的原始系数结构。
 
@@ -1419,23 +1306,6 @@
 
    :math:`v_g/\Delta y` 提供了缺少的“每秒”单位。局部模型中，:math:`\gamma_f^{(y)}>0` 表示幅值增长，
    小于零表示阻尼。群速度是额外信息，不能仅由这些矩直接确定；文献 [1] 通过理论色散关系估计它。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>用“只变相位、不变幅值”的波检查零增长</summary>
-
-   若 :math:`Y=e^{i\delta}X`，没有幅值变化也没有二次贡献，拟合给出 :math:`L=e^{i\delta}`，
-   去相位后 :math:`\widetilde L=1`，换算的增长率为零。
-   若直接对原始系数用 :math:`\operatorname{Re}L-1`，就会得到 :math:`\cos\delta-1`，产生虚假的阻尼。
-
-   文献 [1] 公式 (4) 的系数中含 :math:`e^{i\Delta\Theta_f}`；其公式 (5) 后的增长率文字式写作
-   :math:`\operatorname{Re}L_f-1`，没有显式显示这一步旋转。
-   若严格采用公式 (4) 定义的系数，去相位后取实部就得到 :k05:eq:`inferred-growth-coupling`。
-   分别记下原始系数与旋转系数，可以明确所用约定。
-
-   .. raw:: html
-
-      </details>
 
    .. rubric:: 5. 耦合系数乘上双谱，才得到转移贡献
 
@@ -1548,6 +1418,23 @@
 
    现在计算链条已经接起来：记录给出统计量，统计量约束系数，相位、间距和群速度再把系数换成速率。
 
+   **哪里已经闭合，还缺哪些物理输入？** 选定波对、Fourier 约定和估计方法的假设后，
+   只要矩阵能可靠地区分系数，统计矩就足以封闭这套代数求解；Kim 的共同功率也是待求结果，
+   不需要从外部另给一个数。但这只说明统计模型闭合，物理速率的输入还需要补齐。
+
+   - **要得到每秒的增长／转移率：** 还需要带符号的探针间距和顺序、
+     校正通道延迟／频率响应后可信的传播相位，以及沿探针方向的群速度（group velocity）。
+     由相位延迟推得的相速度不自动等于群速度。若从理论色散关系求群速度，
+     还要选定色散分支，并提供该模型所需的电子温度、密度、磁场、电场／漂移和离子种类等参数。
+     这些属于物理模型输入，不是拟合又能额外求出的统计矩。
+   - **要把结果解释成物理波能量：** 还需要记录电压到目标扰动物理量的换算、探针响应和等离子体能量权重。
+     单位 V²/s 本身只是电压模平方的变化率。
+     若要将双探针的有效增长率等同于完整三维增长率，还要评估横向输运的贡献。
+
+   :ref:`探针响应页面 <k05-response-zh>` 和 :ref:`物理解释补充页 <k05-budget-zh>`
+   继续讨论这些输入及适用性检查。
+
+
 
    .. rubric:: 继续阅读
 
@@ -1570,5 +1457,5 @@
    fully developed turbulence,” *Physics of Plasmas*  **3** , 3998–4009 (1996).
    `doi:10.1063/1.871572 <https://doi.org/10.1063/1.871572>`_.
 
-   文献 [1] 纸面 115101-3 给出双探针模型及含相位的传递系数；文献 [2] 第 II–III 节给出有限步长功率收支与修正的平稳矩方法。本页的单波对消元、列向量记法、显式相位核对和平稳修正的展开属于补充推导。
+   文献 [1] 纸面 115101-3 给出双探针模型及含相位的传递系数；文献 [2] 第 II–III 节给出有限步长功率收支与修正的平稳矩方法。本页展开的矩阵例子、计算流程和相位求导中间步骤属于补充讲解。
 
