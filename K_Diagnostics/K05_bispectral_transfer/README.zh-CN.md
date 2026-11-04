@@ -31,8 +31,8 @@
 明确双边归一化、导数与二次乘积的频率域形式，以及离子电流作为电势代理的条件。
 
 [第四页面：从重复记录到功率谱、互谱与双谱](../../docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst)
-从分段与平均讲到功率、互谱相位和双谱；折叠区补充谱密度归一化、平方双相干、
-NumPy 矩计算及互双谱的共轭次序。互动图固定三个频率的幅值，比较固定与独立相位关系。
+从分段与平均讲到功率、互谱相位和双谱；用三个复系数的乘积解释相位关系怎样在平均后保留。
+折叠区补充平方双相干、NumPy 矩计算及互双谱的共轭次序。
 最后从连续波动方程导出电势平方收支，保留耦合系数与双谱的复数乘积。
 
 [第五页面：从统计量估计增长与耦合](../../docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst)
@@ -63,7 +63,7 @@ K01 当前使用 NumPy 的正向 `exp(-i omega t)` 变换及 `X1 * conj(X2)` 互
   静态后备图与浏览器共用渲染函数；重建方法见英文 README。
 - 双探针联动图：`k05-probe-signals.js` 及双语 `k05-probe-signals-{en,zh}.svg`。
 - 第五页：`K05_coefficient_inference.rst`。
-- 第四页：`K05_spectral_statistics.rst`；相位图：`k05-phase-statistics.js` 与双语 SVG。
+- 第四页：`K05_spectral_statistics.rst`。
 - 目录：`K05_bispectral_transfer.rst` 的 toctree 并列列出十一篇正文。
 - 环境使用已有 `docs/requirements.txt`；文档配置还会调用 Doxygen。仓库根目录运行：
 
@@ -84,7 +84,7 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 
 公式采用跨页面、双语共用的 K05.n 编号，按目录中的页面次序和页内出现顺序连续排列，
 折叠区也参与编号。新增或移动公式后，运行 `renumber_equations.py --write`，
-再用 `--check` 检查并完整重建网站。当前有143个有效公式。
+再用 `--check` 检查并完整重建网站。当前有140个有效公式。
 原有语义ID及链接保留；显示编号会随顺序更新。R31新旧号对照见
 `equation_number_migration_20261103.json`。退役语义ID不能用于不同公式。
 求和展开、相位求导与逐项代入仍收纳；第二页补有Poisson步骤和冷电子极化率例子。

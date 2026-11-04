@@ -4,7 +4,6 @@
 .. raw:: html
 
    <link rel="stylesheet" href="../../_static/K_Diagnostics/k05-wave-packet.css">
-   <script defer src="../../_static/K_Diagnostics/k05-phase-statistics.js"></script>
    <div class="ap-language-switch" role="group" aria-label="Language switch" data-ap-default-lang="en">
      <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
      <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
@@ -62,27 +61,6 @@
    frequency. :math:`Z` may be one coefficient, its magnitude squared, or a product
    of several coefficients. Choosing that product determines what the average measures.
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>When can segments stand in for repeated measurements?</summary>
-
-   This is a finite-sample estimate of an **ensemble average**: an average over
-   repeated realizations of comparable conditions. Segments of a long record can
-   serve that purpose when the underlying statistics remain sufficiently steady
-   and the record is representative. A change of operating condition should not
-   silently be mixed into the same ensemble.
-
-   Use the same segment boundaries, sampling interval and processing for the two
-   probes. Each paired segment uses a common local time origin. Correlated or
-   overlapping segments provide fewer independent realizations than their raw
-   count suggests. Increasing :math:`R` reduces random scatter under suitable
-   sampling conditions; it does not remove a systematic instrument error.
-   See :doc:`segmentation and windowing <K01_signal_spectra/fun_K01_segment_ffts>`.
-
-   .. raw:: html
-
-      </details>
-
    .. rubric:: 2. Power keeps the size of a fluctuation
 
    To ask how strong a frequency component is, multiply its coefficient by its
@@ -102,54 +80,6 @@
    The magnitude squared does not depend on the coefficient's phase. A frequency
    can therefore have a substantial power even when its complex coefficients
    point in different directions in different records.
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>Why not average the coefficients first and then square?</summary>
-
-   Take two coefficients with equal magnitude :math:`a>0`, in V, and opposite
-   phases. Their average cancels, but their powers add:
-
-   .. k05:equation:: cancellation-average
-      :lang: en
-
-      X_f^{(1)}=a,\quad X_f^{(2)}=-a,\qquad
-      \left|\langle X_f\rangle_2\right|^2=0,\quad
-      \left\langle |X_f|^2\right\rangle_2=a^2.
-
-   Thus :math:`|\langle X_f\rangle_R|^2` and
-   :math:`\langle |X_f|^2\rangle_R` answer different questions. The first retains
-   only the part coherent with the chosen segment timing; the second measures
-   the mean-square fluctuation at that frequency.
-
-   .. raw:: html
-
-      </details>
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>How does bin power relate to a power spectral density?</summary>
-
-   For :math:`N` samples spaced by :math:`\Delta t_s` seconds, with the normalized
-   coefficients of the previous page and a rectangular window,
-
-   .. k05:equation:: bin-power-density
-      :lang: en
-
-      T=N\Delta t_s,\qquad \Delta f=\frac{1}{T},\qquad
-      S_{XX}(f)=\frac{P_X(f)}{\Delta f}.
-
-   :math:`T` is the segment duration, and :math:`\Delta f` is the frequency-bin
-   spacing in Hz. :math:`S_{XX}` is a two-sided **power spectral density**, in
-   :math:`\mathrm{V^2/Hz}`. Dividing by the bin width changes the units;
-   it is not an additional measurement. A one-sided density doubles the interior
-   positive-frequency bins, excluding zero and the Nyquist bin when present.
-   Other windows require their own normalization; see
-   :doc:`power-spectrum normalization <K01_signal_spectra/fun_K01_power_spectrum>`.
-
-   .. raw:: html
-
-      </details>
 
    .. rubric:: 3. Cross power compares the two probe positions
 
@@ -243,67 +173,6 @@
 
    .. raw:: html
 
-      <div id="k05-statistics-figure-en" class="k05-statistics" data-k05-statistics="en">
-        <img src="../../_static/K_Diagnostics/k05-phase-statistics-en.svg" alt="Products with a fixed phase relation align in the complex plane; their average remains large while all three powers stay fixed.">
-      </div>
-
-   Start with **Fixed phase relation**, then select **Independent phases**.
-   The three powers stay at 1. The grey arrows are the individual products;
-   the orange arrow is their mean. The right-hand curve shows the mean magnitude
-   after each of the first :math:`n` records, up to the selected :math:`R`.
-   Increasing :math:`R` does not force every successive random mean to decrease.
-
-   Change :math:`\delta` to rotate the phase relationship. In the fixed case it
-   rotates the mean without changing its magnitude. **New phases** draws another
-   reproducible set. These are synthetic coefficients, not experimental data
-   or a simulation of interacting plasma waves.
-
-   With a fixed relation, redrawing the individual phases leaves their product
-   unchanged because the same phase constraint is still imposed.
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>The exact records and parameters behind the illustration</summary>
-
-   The coefficients represent ideal one-second real records sampled at 128 Hz
-   (:math:`N=128`, :math:`\Delta t_s=1/128` s). All three frequencies lie on bins
-   below Nyquist. In arbitrary amplitude units, the records are
-
-   .. k05:equation:: phase-ensemble
-      :lang: en
-
-      \begin{aligned}
-      x_r(\tau)&=2\sum_{\ell=1}^{3}\cos(\theta_{\ell,r}-2\pi f_\ell\tau),
-      \qquad(f_1,f_2,f_3)=(3,5,8)\ \mathrm{Hz},\\
-      X_{f_\ell}^{(r)}&=e^{i\theta_{\ell,r}},\qquad
-      P_X(f_1)=P_X(f_2)=P_X(f_3)=1,\\
-      Z^{(r)}&=e^{i\psi_r},\qquad B_X=\frac1R\sum_{r=1}^{R}e^{i\psi_r}.
-      \end{aligned}
-
-   :math:`\tau` is local time within one record. :math:`x_r` is its real signal;
-   the factor 2 gives unit positive-frequency coefficients with the previous
-   page's convention. Negative-frequency coefficients are their conjugates.
-   The plot evaluates the exact coefficients directly.
-
-   In the fixed case, independent uniform phases :math:`\theta_{1,r}` and
-   :math:`\theta_{2,r}` are drawn on :math:`[0,2\pi)`, then
-   :math:`\theta_{3,r}=\theta_{1,r}+\theta_{2,r}-\delta`.
-   Thus :math:`\psi_r=\delta` in every record and :math:`B_X=e^{i\delta}`.
-   In the independent case, draw a third independent uniform phase
-   :math:`\eta_r` and set :math:`\theta_{3,r}=\eta_r-\delta`.
-   The arrows then have independent uniform directions.
-
-   The initial seed is 7, :math:`R=32` and :math:`\delta=60^\circ=\pi/3`.
-   The controls allow 1–128 records and :math:`-180^\circ\le\delta\le180^\circ`.
-   Changing the count keeps the same initial records; only **New phases** changes
-   the seed. Amplitude and power values use arbitrary units throughout the drawing.
-
-   .. raw:: html
-
-      </details>
-
-   .. raw:: html
-
       <details class="k05-note"><summary>A normalized measure: squared bicoherence</summary>
 
    A large bispectrum can partly reflect large amplitudes. One useful
@@ -324,15 +193,14 @@
    amplitudes it is a weighted phase relation, not simply an unweighted average
    of unit arrows.
 
-   In this illustration all magnitudes are 1, so :math:`b_X^2=|B_X|^2`.
-   With only one record it is always 1, even for independent phases: a single
-   record cannot establish a repeatable relationship. For independent uniform
-   arrows, the expected finite-sample value is :math:`1/R`, not exactly zero.
+   With only one record and a nonzero denominator, it is always 1, even for
+   independent phases: a single record cannot establish a repeatable relationship.
+   For fixed magnitudes and independent, uniformly distributed phase combinations
+   :math:`\psi_r`, the expected finite-sample value is :math:`1/R`, not exactly zero.
    Assessing measured values therefore needs sampling uncertainty or a suitable
    random-phase reference, not just a nonzero result.
 
-   The illustration prescribes phases without solving any dynamics. A nonzero
-   bispectrum alone does not establish the physical coupling mechanism or the
+   A nonzero bispectrum alone does not establish the physical coupling mechanism or the
    direction of energy transfer.
 
    .. raw:: html
@@ -346,8 +214,9 @@
    Let ``x`` and ``y`` be real arrays of shape ``(R, N)``: each row is one
    synchronized segment and each column one sample. Use matching preprocessing.
    Here ``m1`` and ``m2`` are positive bin indices with
-   ``m3 = m1 + m2 < N / 2``. The coefficients use ``ifft`` exactly as explained
-   on the previous page. ``axis=1`` transforms each row; ``axis=0`` averages
+   ``m3 = m1 + m2 < N / 2``. Here ``ifft`` uses the positive exponent and
+   division by :math:`N`, matching :k05:eq:`time-fourier-series`.
+   ``axis=1`` transforms each row; ``axis=0`` averages
    over the records.
 
    .. code-block:: python
@@ -369,8 +238,7 @@
 
    ``PX``, ``PY`` and ``GYX`` contain one value per frequency bin;
    ``BX`` and ``b2`` refer to the selected pair only. ``np.nan`` marks an
-   undefined normalization. This code calculates moments without a one-sided
-   factor or a PSD bin-width conversion.
+   undefined normalization. This code uses normalized, two-sided coefficients.
 
    .. raw:: html
 
@@ -489,7 +357,7 @@
 
    Ref. [1], p. 115101-3, introduces the two-probe moments and ensemble averaging;
    Ref. [2], Secs. II–III, develops the model and its moment-based estimation method.
-   The explicit normalization, examples, illustration and continuous power-balance
+   The explicit normalization, examples and continuous power-balance
    derivation here are explanatory additions.
 
 
@@ -523,23 +391,6 @@
    它 **不是对不同频率求平均**。:math:`Z` 可以是一个复系数、它的模平方，也可以是几个系数的乘积。
    选用什么乘积，就决定这个平均量记录什么信息。
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>什么时候可以把分段当作重复测量？</summary>
-
-   这是集合平均（ensemble average）的有限样本估计：对条件相近的多次实现取平均。
-   当过程的统计性质足够稳定、整段记录又有代表性时，可以用一条长记录的多个片段来估计。
-   不同运行工况下的数据不应悄悄混成同一个集合。
-
-   两支探针采用相同的分段边界、采样间隔和处理方式；每对片段使用共同的局部时间起点。
-   片段相互相关或重叠时，独立信息量通常小于名义段数。
-   在合适的采样条件下，增加 :math:`R` 可以减小随机起伏，但不会自动消除仪器的系统误差。
-   操作细节见 :doc:`分段与窗函数 <K01_signal_spectra/fun_K01_segment_ffts>`。
-
-   .. raw:: html
-
-      </details>
-
    .. rubric:: 2. 功率谱保留某个频率的强度
 
    要问某个频率成分有多强，先把系数乘以它的复共轭，再平均。
@@ -557,50 +408,6 @@
 
    模平方不依赖复系数的相位。因此，即使同一频率的系数在不同记录里指向不同方向，
    这个频率的功率仍然可以很大。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>为什么不能先把复系数平均，再取模平方？</summary>
-
-   取两个模相同、相位相反的系数。:math:`a>0` 是它们的模，单位为 V。
-   平均复数时它们抵消，平均功率时却不会：
-
-   .. k05:equation:: cancellation-average
-      :lang: zh
-
-      X_f^{(1)}=a,\quad X_f^{(2)}=-a,\qquad
-      \left|\langle X_f\rangle_2\right|^2=0,\quad
-      \left\langle |X_f|^2\right\rangle_2=a^2.
-
-   所以 :math:`|\langle X_f\rangle_R|^2` 与 :math:`\langle|X_f|^2\rangle_R` 回答不同问题。
-   前者只保留相对于分段时间起点相干的部分；后者衡量这个频率的平均平方起伏。
-
-   .. raw:: html
-
-      </details>
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>频点功率与功率谱密度是什么关系？</summary>
-
-   每段含 :math:`N` 个样本，采样间隔为 :math:`\Delta t_s` 秒。
-   沿用上一页归一化、且使用矩形窗时，
-
-   .. k05:equation:: bin-power-density
-      :lang: zh
-
-      T=N\Delta t_s,\qquad \Delta f=\frac{1}{T},\qquad
-      S_{XX}(f)=\frac{P_X(f)}{\Delta f}.
-
-   :math:`T` 是每段时长，:math:`\Delta f` 是频率网格间隔，单位为 Hz。
-   :math:`S_{XX}` 是双边功率谱密度（power spectral density），单位为 :math:`\mathrm{V^2/Hz}`。
-   除以频点宽度改变的是归一化和单位，并没有新增一次测量。
-   改成单边谱密度时，正频率内部频点乘二；零频和存在时的奈奎斯特频点不乘二。
-   其他窗函数需要相应归一化，见 :doc:`功率谱归一化 <K01_signal_spectra/fun_K01_power_spectrum>`。
-
-   .. raw:: html
-
-      </details>
 
    .. rubric:: 3. 互谱比较两支探针处的关系
 
@@ -684,63 +491,6 @@
 
    .. raw:: html
 
-      <div id="k05-statistics-figure-zh" class="k05-statistics" data-k05-statistics="zh">
-        <img src="../../_static/K_Diagnostics/k05-phase-statistics-zh.svg" alt="相位关系固定时，各段三频乘积的箭头指向相同方向，平均值保持较大，而三个频点的功率不变。">
-      </div>
-
-   先看 **相位关系固定**，再切换到 **相位彼此独立**。三个功率始终为 1。
-   灰箭头代表各段的乘积，橙箭头代表平均值；右图表示从第 1 段开始，累计平均前
-   :math:`n` 段后得到的模，直到所选的 :math:`R` 段。
-   增加 :math:`R` 不意味着随机平均值每一步都会变小。
-
-   改变 :math:`\delta`，就改变相位关系的偏移。在固定关系下，它只旋转平均箭头，并不改变模。
-   点击 **换一组相位** 可以重抽一组可重复的样本。
-   这是人工构造的系数，不是实验数据，也没有求解等离子体波相互作用的动力学。
-
-   固定关系下重新抽取各个相位，三频乘积仍然不变，因为相同的相位约束一直保留着。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>这个图对应的记录、函数和参数</summary>
-
-   这些系数对应时长 1 s、采样率 128 Hz 的理想实数记录，
-   即 :math:`N=128`、:math:`\Delta t_s=1/128` s。
-   三个频率都恰好落在频率网格上，并低于奈奎斯特频率。
-   用任意幅度单位表示，记录是
-
-   .. k05:equation:: phase-ensemble
-      :lang: zh
-
-      \begin{aligned}
-      x_r(\tau)&=2\sum_{\ell=1}^{3}\cos(\theta_{\ell,r}-2\pi f_\ell\tau),
-      \qquad(f_1,f_2,f_3)=(3,5,8)\ \mathrm{Hz},\\
-      X_{f_\ell}^{(r)}&=e^{i\theta_{\ell,r}},\qquad
-      P_X(f_1)=P_X(f_2)=P_X(f_3)=1,\\
-      Z^{(r)}&=e^{i\psi_r},\qquad B_X=\frac1R\sum_{r=1}^{R}e^{i\psi_r}.
-      \end{aligned}
-
-   :math:`\tau` 是每段内部的局部时间，:math:`x_r` 是第 :math:`r` 段的实数信号。
-   前面的 2 保证在上一页的约定下，每个正频率系数的模恰好为 1；负频率系数是对应的复共轭。
-   图中直接使用这些精确系数计算。
-
-   固定关系模式下，先独立地从 :math:`[0,2\pi)` 均匀抽取
-   :math:`\theta_{1,r}` 和 :math:`\theta_{2,r}`，再设置
-   :math:`\theta_{3,r}=\theta_{1,r}+\theta_{2,r}-\delta`。
-   于是每段都满足 :math:`\psi_r=\delta`，平均值为 :math:`B_X=e^{i\delta}`。
-   独立模式下，再独立均匀抽取第三个相位 :math:`\eta_r`，令
-   :math:`\theta_{3,r}=\eta_r-\delta`；乘积箭头的方向就独立、均匀地分布。
-
-   初始随机种子为 7，:math:`R=32`，:math:`\delta=60^\circ=\pi/3`。
-   控件允许 1–128 段，:math:`-180^\circ\le\delta\le180^\circ`。
-   改变段数时，前面的记录保持不变；只有“换一组相位”会改变种子。
-   图中的幅值和功率数值均使用任意单位。
-
-   .. raw:: html
-
-      </details>
-
-   .. raw:: html
-
       <details class="k05-note"><summary>一种归一化：平方双相干</summary>
 
    双谱大，可能部分来自幅值本身很大。一种有用的归一化是平方双相干（squared bicoherence），
@@ -759,12 +509,12 @@
    分子和分母的 V 次方抵消，故 :math:`b_X^2` 无量纲。
    幅值也变化时，它包含幅值权重，不能一概当作单位箭头的简单平均。
 
-   本图中各系数的模均为 1，因此 :math:`b_X^2=|B_X|^2`。
-   如果只有一段记录，即使相位独立，它也总是 1：单段记录不能证明关系在重复测量中保持稳定。
-   对于独立均匀的箭头，有限样本结果的期望为 :math:`1/R`，而非严格为零。
+   如果只有一段记录且分母非零，即使相位独立，它也总是 1：
+   单段记录不能证明关系在重复测量中保持稳定。
+   当模固定、相位组合 :math:`\psi_r` 彼此独立且均匀分布时，
+   有限样本结果的期望为 :math:`1/R`，而非严格为零。
    所以实际测量需要采样不确定度或合适的随机相位参照，不能只看结果是否非零。
 
-   本图直接指定相位，没有求解动力学。
    仅凭非零双谱，不能确定背后的物理耦合机制，也不能确定能量转移方向。
 
    .. raw:: html
@@ -777,7 +527,8 @@
 
    输入 ``x``、``y`` 是形状为 ``(R, N)`` 的实数数组：每行是一段同步记录，每列是一个采样点。
    两路采用一致的预处理。这里 ``m1``、``m2`` 是正频率的整数下标，
-   并要求 ``m3 = m1 + m2 < N / 2``。系数仍用上一页说明的 ``ifft`` 计算。
+   并要求 ``m3 = m1 + m2 < N / 2``。这里 ``ifft`` 采用正指数并除以 :math:`N`，
+   与 :k05:eq:`time-fourier-series` 的约定一致。
    ``axis=1`` 表示逐行变换；``axis=0`` 表示沿记录方向平均。
 
    .. code-block:: python
@@ -798,7 +549,7 @@
           return PX, PY, GYX, BX, b2
 
    ``PX``、``PY``、``GYX`` 为每个频点返回一个值；``BX`` 和 ``b2`` 只对应选中的频率对。
-   ``np.nan`` 表示归一化无定义。这里没有乘单边谱的因子，也没有除以频点宽度转为谱密度。
+   ``np.nan`` 表示归一化无定义。这里使用归一化的双边系数。
 
    .. raw:: html
 
@@ -901,6 +652,6 @@
    `doi:10.1063/1.871572 <https://doi.org/10.1063/1.871572>`_.
 
    文献 [1] 纸面第 115101-3 页给出双探针矩及集合平均的要求；文献 [2] 第 II–III 节给出模型及相关的矩估计方法。
-   本页明确写出的归一化、示例、互动图和连续功率收支推导属于补充讲解。
+   本页明确写出的归一化、示例和连续功率收支推导属于补充讲解。
 
 

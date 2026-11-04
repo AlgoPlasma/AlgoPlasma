@@ -42,9 +42,9 @@ wave and two time traces illustrate the measurement; the ion-current proxy
 is explained separately from the ideal potential detectors.
 
 The [fourth page](../../docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst)
-introduces record averages, bin power versus PSD, cross-power phase, the
-bispectrum and an optional squared-bicoherence normalization. A synthetic
-phase-ensemble illustration keeps powers fixed while phase relations change.
+introduces record averages, bin power, cross-power phase, the bispectrum
+and an optional squared-bicoherence normalization. The three-coefficient
+product explains how phase relationships survive averaging.
 The page derives a continuous mean-square-potential balance, then introduces
 the two-probe cross bispectrum and a short NumPy moment function.
 
@@ -95,10 +95,6 @@ spectrum `X1 * conj(X2)`; do not change that convention implicitly.
 - Numbering and link infrastructure: see [EQUATIONS.md](EQUATIONS.md).
 - Fifth article: `docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst`.
 - Fourth article: `docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst`.
-- Phase statistics: `k05-phase-statistics.js` and bilingual SVG fallbacks in the
-  K05 static-asset directory. The exported `plotSvg(mode, deltaDegrees, seed,
-  count, lang, uniqueId)` uses exact synthetic coefficients; the default is
-  `("fixed", 60, 7, 32, lang, uniqueId)`.
 - Navigation: the toctree in `K05_bispectral_transfer.rst` lists the eleven articles.
 - Install the existing `docs/requirements.txt` in a suitable environment; the
   documentation configuration also invokes Doxygen. From the repository root:

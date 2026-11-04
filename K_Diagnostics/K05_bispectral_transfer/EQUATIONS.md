@@ -26,7 +26,7 @@ old/new mapping, including removed IDs, is in
 helper equations retain legacy HTML anchors at related surviving explanations.
 
 Revision 33 temporarily removes the third page's FFT, finite-record endpoint,
-and uncoupled propagation disclosures. There are now **143 active equations**.
+and uncoupled propagation disclosures, leaving 143 active equations at that revision.
 The removed IDs are `probe-fourier-sign`, `sampling-nyquist`,
 `time-integration-by-parts`, `time-fourier-boundary`,
 `probe-integrating-factor`, and `probe-linear-propagation`. Do not repurpose
@@ -34,6 +34,15 @@ these IDs; the removed explanations can be recovered from Git history when
 needed. The fourth page's phase example now refers to the retained cosine
 coefficients. Display numbers after the removals follow the current registry;
 the Revision 31 migration file remains a historical snapshot.
+
+Revision 34 (2026-11-04) simplifies the fourth page, removing the repeated-record
+conditions, coefficient-cancellation example, bin-power/PSD disclosure and the
+interactive phase-ensemble figure with its parameter disclosure. There are now
+**140 active equations**. IDs `cancellation-average`, `bin-power-density` and
+`phase-ensemble` are removed from the active registry and must not be repurposed.
+Introduce PSD normalization where PSD is actually used, after its required
+preprocessing concepts. The illustration assets remain archived in the static
+directory, but the fourth page neither loads nor displays them.
 
 In an English container:
 
