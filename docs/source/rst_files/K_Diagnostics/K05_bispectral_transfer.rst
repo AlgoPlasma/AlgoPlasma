@@ -45,7 +45,7 @@ K05 · Bispectral transfer
       5. :ref:`From statistics to growth and coupling <k05-inference-en>` — estimate
          linear and quadratic coefficients, then connect them to growth and transfer.
 
-      6. :ref:`First analysis of experimental probe signals <k05-experiment-en>` —
+      6. :ref:`From probe records to spectral statistics <k05-experiment-en>` —
          inspect four synchronized captures, build spectra and compare phase relations.
 
       7. :ref:`Validating the two-probe model <k05-validation-en>` — compare linear
@@ -119,7 +119,7 @@ K05 · Bispectral transfer
 
       5. :ref:`从统计量估计增长与耦合 <k05-inference-zh>` —— 联合估计线性与二次系数，再连接增长率和转移率。
 
-      6. :ref:`实验探针信号的第一轮分析 <k05-experiment-zh>` —— 从四组同步波形出发，逐步画出频谱和相位关联。
+      6. :ref:`从探针记录算出谱统计量 <k05-experiment-zh>` —— 用同一套分段，从波形得到复系数、功率、互谱与复双谱。
 
       7. :ref:`双探针模型验证：二次项带来了什么？ <k05-validation-zh>` —— 用整组留出的记录，
          比较线性与二次模型的预测，并检查稳定性。

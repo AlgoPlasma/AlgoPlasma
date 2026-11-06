@@ -84,7 +84,7 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 
 公式采用跨页面、双语共用的 K05.n 编号，按目录中的页面次序和页内出现顺序连续排列，
 折叠区也参与编号。新增或移动公式后，运行 `renumber_equations.py --write`，
-再用 `--check` 检查并完整重建网站。当前有138个有效公式。
+再用 `--check` 检查并完整重建网站。当前有139个有效公式。
 原有语义ID及链接保留；显示编号会随顺序更新。R31新旧号对照见
 `equation_number_migration_20261103.json`。退役语义ID不能用于不同公式。
 求和展开、相位求导与逐项代入仍收纳；第二页补有Poisson步骤和冷电子极化率例子。
@@ -94,7 +94,8 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 ## 实验数据页面
 
 [第六页](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst)
-使用四组同步实验记录，从波形逐步走到 PSD、互谱和双相干。
+使用固定的一组同步记录，贯穿波形、复 Fourier 系数、功率／PSD、互谱、复双谱与双相干，其他三组作比较。
+主线统一使用2048点分段，运行 `analyze_spectral_walkthrough.py` 复现。
 读取器、计算参数、测试及重建命令见 [EXPERIMENT.md](EXPERIMENT.md)。
 原始 bin 不放入仓库；图使用去整段均值的电压波动，绝对直流标定与通道响应另行核查。
 

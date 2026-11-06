@@ -46,7 +46,7 @@ directory, but the fourth page neither loads nor displays them.
 
 Revision 35 (2026-11-04) expands a two-pair matrix example, replaces the long Kim
 derivation with a calculation recipe, and expands the phase derivative and
-discrete/continuous coefficient substitution. There are now **138 active equations**.
+discrete/continuous coefficient substitution. There are 138 active equations at that revision.
 The former display numbers 86 and 87 are still identified by
 `phase-aware-difference` and `discrete-continuous-coefficients`.
 `kim-stationary-solution` and `kim-stationary-moments` remain available for
@@ -55,6 +55,12 @@ downstream links. Removed IDs are `inference-rank-bicoherence`, `kim-field-split
 `kim-scalar-elimination`, `kim-elimination-quantities` and `kim-power-quadratic`.
 These must not be reused for unrelated equations. New semantic IDs identify
 the expanded matrix, computation auxiliaries and derivative/substitution steps.
+
+Revision 36 (2026-11-06) reorganizes page 06 around one N=2048 data walkthrough.
+It preserves its existing equation IDs, moves reading/phase diagnostics into
+optional panels, and adds `experiment-running-power`. There are now **139 active
+equations**. The first five pages and their numbers are unchanged. All later
+references resolve through semantic IDs after rebuilding.
 
 In an English container:
 

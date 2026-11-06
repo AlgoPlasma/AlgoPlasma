@@ -120,8 +120,10 @@ project require their own actual synchronization to be available on another PC.
 ## Experimental walkthrough
 
 The [sixth page](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst)
-uses four synchronized experimental captures. See [reproduction instructions](EXPERIMENT.md)
-for the strict binary reader, analysis script, metadata and numerical tests.
+follows a fixed paired capture from samples to complex Fourier coefficients,
+power/PSD, cross spectra and complex bispectra, with four captures for comparison.
+The main path uses N=2048 throughout. Run `analyze_spectral_walkthrough.py`; see
+[reproduction instructions](EXPERIMENT.md) for saved moments and numerical checks.
 Raw captures remain external. Figures use record-centred voltage fluctuations;
 DC calibration, channel response and physical rate conversion are distinguished.
 

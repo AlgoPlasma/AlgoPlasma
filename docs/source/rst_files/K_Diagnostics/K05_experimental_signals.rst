@@ -1,5 +1,5 @@
-06 · First analysis of experimental probe signals
-=================================================
+06 · From probe records to spectral statistics
+================================================================
 
 .. raw:: html
 
@@ -45,204 +45,98 @@
 
    .. _k05-experiment-en:
 
-   .. rubric:: Turn eight files into quantities we can inspect
+   .. rubric:: Use the measured records to calculate the quantities from pages 03–05
 
-   The preceding pages explained the mathematics. We now apply it to four
-   synchronized C1–C3 recordings from two ion-saturation-current probes. Start by
-   looking at the signals, then ask which frequencies carry their fluctuations,
-   whether the two probes share them, and which frequency triplets have a repeatable
-   phase relationship. Each figure below is calculated from these measurements.
+   We now follow four synchronous C1/C3 captures from ion-saturation-current probes.
+   The task is concrete: turn two voltage traces into Fourier coefficients, average
+   their products, and see what each average reveals. The power spectrum is the first
+   connection to Figure 2(b) of Brown and Jorns |brown-en|. The complex statistics
+   then supply the coefficient calculation introduced on :ref:`page 05 <k05-inference-en>`.
 
-   This follows the measurement-to-statistics path used by Brown and Jorns
-   |brown-en|. These are a separate experiment, so a spectral feature must be
-   identified from this experiment's conditions before it is called an EDI mode.
+   Capture 2 is the fixed worked example; captures 3–5 show repeatability at the same
+   operating condition. The first segment and the frequency bin nearest 2 MHz are
+   chosen in advance, not because their results are unusually clear. All main spectral calculations
+   use **the same 2048-sample segments and Fourier normalization**.
 
-   .. rubric:: 1. Establish what one file contains
+   .. rubric:: 1. Start with what the two probes recorded
 
-   Each file stores one oscilloscope channel. The suffixes **2, 3, 4 and 5** identify
-   four captures; C1 and C3 with the same suffix were sampled simultaneously.
-   The data owner confirms the same operating condition for all four captures.
-   The probes are **5.5 mm downstream** of the exit plane and **3.7 mm apart
-   azimuthally**. Their physical ordering around the thruster is unspecified.
+   C1 is the left fixed probe in the experimental front view; C3 is the right movable
+   probe, held at one position for these captures. Their azimuthal separation is
+   3.7 mm, at 5.5 mm downstream of the exit. These positions do not establish a wave's
+   propagation direction. See the :ref:`geometry and circuit diagrams <k05-response-en>`.
 
-   .. list-table:: Acquisition facts
-      :header-rows: 1
-      :widths: 42 58
+   Each trace contains 10,000,000 samples at :math:`f_s=100` MS/s: 10 ns between samples,
+   0.1 s per capture, and a Nyquist frequency of :math:`f_s/2=50` MHz.
+   Write the record-centred voltage fluctuations as :math:`x_1(t)` and :math:`x_3(t)`.
+   Subtracting a mean removes a constant; it does not smooth the fluctuations.
 
-      * - Quantity
-        - Value
-      * - Sample rate :math:`f_s`
-        - 100 MS/s, read from all eight headers
-      * - Samples per channel and capture
-        - 10,000,000
-      * - Sample interval / record duration
-        - 10 ns / 0.1 s
-      * - Nyquist frequency :math:`f_s/2`
-        - 50 MHz
-      * - Stored codes / vertical scale
-        - Unsigned 16-bit codes; 7680 codes/div and 2 V/div
-      * - Measured quantity used here
-        - Voltage fluctuations from an ion-current diagnostic, in V
-
-   The 16-bit file representation is distinct from the oscilloscope's nominal
-   12-bit ADC resolution. The voltage-to-current conversion and channel frequency
-   responses are not calibrated here. In particular, these voltages are **not
-   direct measurements of plasma potential**.
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>Why start with fluctuations rather than quote an absolute DC level?</summary>
-
-   The supplied laboratory reader subtracts the header's vertical offset; the
-   vendor's V4 example |siglent-en| adds it. The laboratory script cites a DC
-   calibration, but its underlying calibration records are not included here.
-   The post-experiment scope photo confirms the acquisition scales, not the mean
-   of the stored plasma waveforms. For capture 2, the two sign conventions give
-   C1 means of −0.100665 or +0.899335 V, and C3 means of +0.283286 or +1.549953 V.
-   Neither candidate is used as a calibrated DC current.
-
-   The difference is a constant for each channel. Subtracting the record or
-   segment mean cancels it exactly. The reader therefore returns record-centred
-   fluctuations by default; its output manifest preserves both candidate DC levels.
-   This does not cancel a gain, polarity or frequency-response error.
-
-   .. raw:: html
-
-      </details>
-
-
-   Let :math:`c_j[n]` be the stored integer at sample :math:`n` of channel
-   :math:`j=1,3`. Subtract the mean code :math:`\overline{c_j}` of that whole
-   record and multiply by its voltage-per-code scale :math:`g_j`:
-
-   .. k05:equation:: experiment-code-fluctuation
-      :lang: en
-
-      x_j[n]=g_j\bigl(c_j[n]-\overline{c_j}\bigr),\qquad g_j=\frac{2\ \mathrm{V/div}}{7680\ \mathrm{codes/div}}.
-
-
-   The result :math:`x_j[n]` is a voltage fluctuation about the record mean.
-   This removes one constant; it does not smooth the waveform. We retain the
-   original files and their hashes. The horizontal origin below is the start of
-   each record, rather than the scope's trigger origin.
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-raw.svg
-      :alt: Figure 1. All four captures after subtracting each record mean. Cyan: C1; orange: C3.
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-records.svg
       :width: 100%
+      :alt: Figure 1. The same capture at C1 and C3: full-record voltage fluctuations.
 
-      Figure 1. All four captures after subtracting each record mean. Cyan: C1; orange: C3.
+      Figure 1. The same capture at C1 and C3: full-record voltage fluctuations.
 
 
+   Each shaded strip spans the minimum and maximum of 10,000 consecutive samples;
+   its thin line is their mean. This compresses the display without hiding every
+   short excursion. The calculations below use every sample, not these display strips.
 
-   The translucent bands contain the minimum and maximum of every 10,000-sample
-   display bin, or 0.1 ms. The thin lines are bin means. Simply plotting every
-   ten-thousandth point could hide a narrow excursion; these bands keep it visible.
-   All samples, not the display bins, enter the analysis. No stored code equals
-   0 or 65535. This checks file-code rails, not every possible analog overload.
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>Zoom in: what was hidden in the full-length bands?</summary>
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-zoom.svg
-      :alt: Figure 2. A 20-microsecond zoom into capture 2 at 50 ms.
-      :width: 100%
-
-      Figure 2. A 20-microsecond zoom into capture 2 at 50 ms.
-
-   The two panels use exactly the same samples in time. Individual excursions now become visible; similar shapes alone do not establish their propagation mechanism.
+   The vertical axis is **measured voltage**, not plasma potential. The 1 kΩ resistor
+   provides a nominal 0.001 A/V conversion, but does not calibrate the whole measurement
+   chain at MHz frequencies. We keep V throughout this calculation so the measured
+   quantity and its units remain explicit.
 
    .. raw:: html
 
-      </details>
+      <details class="k05-note"><summary>Do the four captures have comparable fluctuation levels?</summary>
 
-
-   .. rubric:: 2. Check whether the statistics drift during a record
-
-   A full-record picture can conceal a change in mean or fluctuation strength.
-   Divide it into 100 consecutive **1 ms blocks**, each containing
-   :math:`M=100{,}000` samples. In block :math:`r`, calculate its mean
-   :math:`\mu_{j,r}` and fluctuation RMS :math:`\sigma_{j,r}`:
+   Use the other captures to check how representative the example is. The following diagnostic uses 1 ms blocks for slow changes only; the spectral calculations still use N=2048. For channel j and block r, compute the local mean μ and fluctuation RMS σ:
 
    .. k05:equation:: experiment-block-statistics
       :lang: en
 
       \mu_{j,r}=\frac{1}{M}\sum_{n=0}^{M-1}x_{j,r}[n],\qquad \sigma_{j,r}=\sqrt{\frac{1}{M}\sum_{n=0}^{M-1}\bigl(x_{j,r}[n]-\mu_{j,r}\bigr)^2}.
 
-
-   The RMS is the square root of the mean squared deviation from the local mean.
-   It measures the typical fluctuation size, in V. Here :math:`r` labels a block
-   and :math:`n` a sample within it.
+   Here M=100,000 is the block length, distinct from the spectral segment length N.
 
    .. figure:: /_static/K_Diagnostics/k05-experiment-stability.svg
-      :alt: Figure 3. Local mean relative to the record mean, and local fluctuation RMS.
       :width: 100%
+      :alt: Supplement A. Local means and fluctuation RMS of four captures.
 
-      Figure 3. Local mean relative to the record mean, and local fluctuation RMS.
+      Supplement A. Local means and RMS, using 1 ms blocks.
 
-
-
-   Within each channel, the four captures have similar levels and RMS ranges.
-   Across whole records, C1 has RMS 0.626–0.629 V and C3 0.756–0.758 V:
-   the measured voltage fluctuations in C3 are about 20% larger. This compares
-   the spread around each channel's own mean, not their DC levels.
-   Subtracting the mean removes an offset; it does not make the two fluctuation
-   amplitudes equal.
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>Why can the two probes have different RMS values?</summary>
-
-   RMS describes the size of a measured fluctuation, not the identity of a wave.
-   Even if both probes respond to the same disturbance, the complete measurement
-   responses need not be equal. Different probe collection areas or sensitivities,
-   current-to-voltage conversion, or channel gains can change the recorded amplitude.
-   For a simple illustration, multiplying every fluctuation by 1.2 also multiplies
-   its RMS by 1.2, without requiring any physical growth of the wave.
-   The same oscilloscope V/div setting does not establish equal responses of the
-   probes and their entire measurement circuits.
-
-   The actual local fluctuations may also differ between the two positions, and
-   measurement noise contributes to RMS. Figure 3 alone cannot separate these
-   possibilities. Its clear result is repeatability within each channel together
-   with a persistent amplitude difference between channels; the cause of that
-   difference remains undetermined.
-
-   A pure time delay changes the alignment of a waveform, not its fluctuation size:
-   equal-amplitude, stationary signals have the same RMS in the long-record limit.
-   Finite 1 ms blocks can differ because their endpoints contain different samples,
-   but a stable RMS ratio is not itself evidence of a propagation direction or a
-   growth rate. Moreover, this RMS combines all recorded frequencies; growth of
-   one mode requires separating its frequency-dependent behavior from the
-   measurement response.
+   C1 has whole-record RMS 0.626–0.629 V; C3 has 0.756–0.758 V. Each channel is repeatable across captures, but C3's voltage fluctuations are about 20% larger. A gain or collection-response difference can change RMS without physical wave growth. Local fluctuation differences and noise can also contribute; mean subtraction does not remove these effects. Time stability at one location and Kim's equal modelled powers at two locations are separate assumptions.
 
    .. raw:: html
 
       </details>
 
-   Temporal steadiness and the spatial stationarity assumption in the
-   :ref:`Kim correction <k05-inference-en>` are different requirements.
 
-   .. rubric:: 3. Make short records and inspect what the window changes
+   .. rubric:: 2. Turn one short waveform into complex coefficients
 
-   For a spectrum, use **16,384 samples per segment**, starting at the same sample
-   in both channels. Each segment lasts 163.84 microseconds. One capture gives
-   610 complete, nonoverlapping segments. The final 5760 samples, or 57.6
-   microseconds, are omitted. We keep captures separate rather than joining their
-   endpoints into an artificial continuous signal.
+   Split the two channels at identical sample indices. Each segment has :math:`N=2048`
+   samples and lasts 20.48 µs. Each capture supplies :math:`R=4882` complete pairs;
+   the last 1664 samples, 16.64 µs, are omitted. Captures are processed separately.
+   Here :math:`r=1,\ldots,R` labels a segment and :math:`n=0,\ldots,N-1` labels a sample
+   inside it. Neither label is a frequency. The channel index is :math:`j=1,3`;
+   the time within a segment is :math:`t_n=n/f_s`.
 
-   Subtract each segment's mean, then multiply it by a **periodic Hann window**.
-   This tapers the endpoints and reduces spectral leakage caused by cutting a
-   finite record. It also changes amplitudes, so the normalization must include
-   the window. The figure shows the first C1 segment of capture 2.
+   Subtract each segment's own mean. Then multiply both channels by the same periodic
+   Hann window :math:`w_n=\tfrac12[1-\cos(2\pi n/N)]`.
+   It tapers the ends, reducing leakage caused by treating a finite segment as periodic.
+   It also changes amplitudes and spreads narrow spectral features; the power-density
+   normalization below accounts for its mean-square gain.
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-segments.svg
-      :alt: Figure 4. The same segment before and after Hann weighting.
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-window.svg
       :width: 100%
+      :alt: Figure 2. The first paired segment before and after the periodic Hann window.
 
-      Figure 4. The same segment before and after Hann weighting.
+      Figure 2. The first paired segment before and after the periodic Hann window.
 
 
+   The dashed curve is the dimensionless window, read on the right axis. The coloured
+   curves are the voltages before and after multiplication. The lower curves are the
+   actual inputs to the transform. Applying :k05:eq:`time-fourier-series` to these inputs gives
 
    .. k05:equation:: experiment-windowed-coefficients
       :lang: en
@@ -250,42 +144,81 @@
       X_k^{(r)}=\frac{1}{N}\sum_{n=0}^{N-1}w_n\bigl(x_{1,r}[n]-\overline{x_{1,r}}\bigr)e^{+i2\pi kn/N},\qquad f_k=\frac{k f_s}{N}.
 
 
-   :math:`N` is the samples per segment, :math:`r` the segment number,
-   :math:`w_n` the window, and :math:`k` an integer frequency index.
-   :math:`X_k^{(r)}` is the complex C1 coefficient in V; applying the same operation
-   to C3 gives :math:`Y_k^{(r)}`. The bar now means the mean of that segment.
-   The positive exponential and :math:`1/N` normalization are unchanged from
-   :k05:eq:`time-fourier-series`. Here the frequency-bin spacing is **6.104 kHz**.
+   :math:`k` selects a frequency bin, :math:`f_k=kf_s/N`, with spacing
+   :math:`\Delta f=f_s/N=48.828125` kHz. :math:`X_k^{(r)}` belongs to C1; applying the same
+   operation to C3 gives :math:`Y_k^{(r)}`. Both are complex and have units V.
+   Their phase is measured relative to that segment's time origin.
+
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-coefficients.svg
+      :width: 100%
+      :alt: Figure 3. From a waveform to complex coefficients: vary frequency or vary segment.
+
+      Figure 3. From a waveform to complex coefficients: vary frequency or vary segment.
+
+
+   The left panel holds the segment fixed and varies frequency. The right panel holds
+   :math:`f_\ast=2.001953125` MHz fixed and shows the first 80 segments in the complex
+   plane. Each point's distance from zero is its modulus; its angle is its phase.
+   Squares identify the first segment. At this bin its values are approximately
+   :math:`X^{(1)}=(-0.06217+4.03141i)` mV and :math:`Y^{(1)}=(1.41417+3.43763i)` mV.
+   We now have numerical values for the :math:`X,Y` used on the previous pages.
+   These are windowed coefficients; their moduli are not the uncorrected peak amplitudes
+   of individual plasma waves.
 
    .. raw:: html
 
-      <details class="k05-note"><summary>The transform in Python, with the same sign as the equation</summary>
+      <details class="k05-note"><summary>The Fourier formula in Python</summary>
+
+   For real inputs, conjugating NumPy's negative-exponent transform gives our positive-exponent convention. Division by N sets the normalization. Columns are frequency bins and rows are segments; Y is obtained identically from C3.
 
    .. code-block:: python
 
       blocks = voltage[:R*N].reshape(R, N)
       centered = blocks - blocks.mean(axis=1, keepdims=True)
-      window = scipy.signal.windows.hann(N, sym=False)
-      X = np.fft.rfft(centered * window, axis=1).conj() / N
+      w = scipy.signal.windows.hann(N, sym=False)
+      X = np.fft.rfft(centered * w, axis=1).conj() / N
       f = np.fft.rfftfreq(N, d=1/fs)
 
-   For real input, conjugating NumPy's negative-exponent transform gives the
-   positive-exponent coefficients used here. The division by N sets their units
-   and normalization. No zero padding or resampling is applied. The bin spacing
-   is not the full resolving width of a Hann spectral peak; its equivalent noise
-   bandwidth is 1.5 bins. Segmentation and windowing are introduced in
-   :doc:`the existing processing guide <K01_signal_spectra/fun_K01_segment_ffts>`.
+   The first 5 MHz contains bins 0–102; the complete array extends to 50 MHz. No zero-padding or resampling is used. The bin spacing is not the full width of a Hann-broadened peak. See :doc:`segmentation and windows <K01_signal_spectra/fun_K01_segment_ffts>`.
 
    .. raw:: html
 
       </details>
 
 
-   .. rubric:: 4. Average squared coefficients to obtain the power spectrum
+   .. rubric:: 3. Square each coefficient, then average
 
-   For each frequency, square the coefficient magnitude and average over the
-   610 segments. To express this as a one-sided power spectral density (PSD),
-   correct for the window and the frequency-bin width:
+   At the same frequency :math:`f_\ast`, first calculate one nonnegative number per
+   segment, then average. This is :k05:eq:`record-powers` applied to the real records:
+
+   .. k05:equation:: experiment-running-power
+      :lang: en
+
+      p_{X,f}^{(r)}=|X_f^{(r)}|^2,\qquad
+      P_X^{[m]}(f)=\frac{1}{m}\sum_{r=1}^{m}p_{X,f}^{(r)},\qquad
+      P_X(f)=P_X^{[R]}(f).
+
+
+   :math:`p_{X,f}^{(r)}` is one segment's squared modulus; :math:`m` is the number of
+   segments included so far. The square brackets in :math:`P_X^{[m]}` label this running
+   average, not an exponent. At :math:`m=R` it becomes the full :math:`P_X`.
+   Replace X by Y for C3. All these quantities have units V².
+
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-averaging.svg
+      :width: 100%
+      :alt: Figure 4. Squared coefficients and their running averages at the same fixed frequency.
+
+      Figure 4. Squared coefficients and their running averages at the same fixed frequency.
+
+
+   The left panel shows why one segment is not the average. On the right, more segments
+   are included until the curve reaches the dotted full-record mean. A settling curve
+   is a useful visual check, not proof of stationarity or an uncertainty interval.
+   At :math:`f_\ast`, :math:`P_X=8.09277\times10^{-5}` V² and
+   :math:`P_Y=6.22364\times10^{-5}` V². Repeating this calculation at every bin produces
+   the two frequency-bin power spectra.
+
+   To draw a **one-sided power spectral density (PSD)** in V²/Hz, convert those powers:
 
    .. k05:equation:: experiment-hann-psd
       :lang: en
@@ -293,56 +226,51 @@
       w_n=\frac12\left(1-\cos\frac{2\pi n}{N}\right),\quad U=\frac1N\sum_n w_n^2=\frac38,\qquad S_{XX}^{+}(f_k)=\frac{s_k N}{f_s U}\left\langle|X_k|^2\right\rangle_R.
 
 
-   :math:`U` is the window's mean square; :math:`s_k=2` at interior positive
-   frequencies and :math:`s_k=1` at DC and Nyquist. The brackets average over
-   :math:`R=610` segments. The superscript :math:`+` denotes a one-sided spectrum.
-   :math:`S_{XX}^{+}` has units :math:`\mathrm{V^2/Hz}`. Use Y for the C3 spectrum.
-   This PSD scaling is distinct from a correction for the peak amplitude of a
-   single sinusoid. See :doc:`window and spectrum normalization <K01_signal_spectra/fun_K01_power_spectrum>`.
+   :math:`U=3/8` is the window's mean-square value. The factor :math:`N/f_s=1/\Delta f`
+   converts per-bin power to power density; :math:`s_k=2` combines equal positive and
+   negative frequency contributions for real signals. At DC and Nyquist,
+   :math:`s_k=1`. The superscript + means one-sided. This normalization is for PSD,
+   not for recovering a single sinusoid's peak amplitude.
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-psd.svg
-      :alt: Figure 5. Separate one-sided voltage PSDs for all four captures.
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-psd.svg
       :width: 100%
+      :alt: Figure 5. The resulting one-sided PSD; detail and full band use the same segments.
 
-      Figure 5. Separate one-sided voltage PSDs for all four captures.
+      Figure 5. The resulting one-sided PSD; detail and full band use the same segments.
 
 
-
-   The horizontal axis is frequency; the vertical axis measures voltage variance
-   per unit frequency. Both axes are logarithmic. The four lines in each panel
-   nearly overlap, so the spectral shape is reproducible across captures.
-   The spectrum contains low-frequency peaks and structure at higher frequencies.
-   A peak alone does not identify its plasma mechanism or exclude electrical pickup.
-   The complete spectrum is retained up to 50 MHz; the Nyquist bound does not prove
-   that out-of-band analog signals were adequately rejected.
+   The two panels use the same computed spectrum: 0–5 MHz for detail, 0–50 MHz for the
+   full measured band. Capture 2 is emphasized; faint curves show the other three.
+   This is the same kind of frequency-distribution plot as Figure 2(b) in |brown-en|,
+   with our voltage units stated explicitly. It is not a comparison of identically
+   calibrated plasma energies. A spectral peak alone does not identify an EDI mode.
 
    .. raw:: html
 
-      <details class="k05-note"><summary>Before averaging: does the frequency content change over time?</summary>
+      <details class="k05-note"><summary>Calculate the powers and their PSD normalization</summary>
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-spectrogram.svg
-      :alt: Figure 6. The segment spectra before averaging over time, capture 2.
-      :width: 100%
+   .. code-block:: python
 
-      Figure 6. The segment spectra before averaging over time, capture 2.
+      PX = np.mean(np.abs(X)**2, axis=0)
+      PY = np.mean(np.abs(Y)**2, axis=0)
+      U = np.mean(w**2)
+      s = np.full(X.shape[1], 2.0)
+      s[[0, -1]] = 1.0  # N is even: DC and Nyquist are not doubled.
+      SXX = s * N / (fs * U) * PX
+      SYY = s * N / (fs * U) * PY
 
-
-   Each vertical column is a segment spectrum. Its horizontal position is the
-   segment's midpoint; color is log10 of the PSD in V²/Hz. A horizontal band
-   indicates sustained power near a frequency, whereas a vertical streak indicates
-   a short event spanning frequencies. The 0–5 MHz view exposes temporal variation
-   that a single averaged curve hides. Similar appearance supports checking a
-   stationary window; it is not a formal stationarity test.
+   The powers are windowed frequency-bin moments; the additional factor produces PSD. The script checks both channels against SciPy Welch |scipy-en| with identical settings, and checks the window-weighted Parseval sum. Integrating this PSD does not exactly undo the window sample by sample. See :doc:`window normalization <K01_signal_spectra/fun_K01_power_spectrum>`.
 
    .. raw:: html
 
       </details>
 
 
-   .. rubric:: 5. Compare the two probes without discarding phase
+   .. rubric:: 4. Multiply the two channels to retain their relative phase
 
-   At each frequency calculate cross power :math:`G`, magnitude-squared coherence
-   :math:`C_{13}^2`, and cross phase :math:`\delta`:
+   The powers above do not tell us how the two signals relate. Following
+   :k05:eq:`probe-cross-power`, multiply C3 by the conjugate of C1 **within the same
+   segment**, then average. Use that complex average to compute coherence and phase:
 
    .. k05:equation:: experiment-coherence-phase
       :lang: en
@@ -350,63 +278,45 @@
       C_{13}^2(f)=\frac{|G(f)|^2}{P_X(f)P_Y(f)},\qquad G(f)=\langle Y_fX_f^*\rangle_R,\qquad \delta(f)=\arg G(f).
 
 
-   :math:`P_X=\langle|X|^2\rangle_R` and :math:`P_Y=\langle|Y|^2\rangle_R`
-   are the windowed bin powers, in :math:`\mathrm{V^2}`. Coherence is dimensionless
-   and lies between zero and one: large values mean a repeatable linear relation
-   between the channels at that frequency. The asterisk denotes conjugation and
-   :math:`\arg` extracts phase in radians.
+   :math:`G` has units V²; :math:`C_{13}^2` is dimensionless and :math:`\delta` is in
+   radians. At our fixed bin, :math:`G=(6.68455-2.32260i)\times10^{-5}` V²,
+   :math:`C_{13}^2=0.99427`, and :math:`\delta=-0.33441` rad.
+   The high coherence describes a reproducible linear relationship at this frequency;
+   it does not by itself establish propagation or growth.
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-cross.svg
-      :alt: Figure 7. Coherence and cross phase: full 0–50 MHz band (left), 0–5 MHz detail (right).
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-cross.svg
       :width: 100%
+      :alt: Figure 6. Coherence and relative phase computed from the same cross spectrum.
 
-      Figure 7. Coherence and cross phase: full 0–50 MHz band (left), 0–5 MHz detail (right).
-
-
-
-   At 100 MS/s, the Nyquist frequency is 50 MHz. The left column shows the
-   **full 0–50 MHz range**, matching the range of the PSD; the right column
-   magnifies **0–5 MHz** so its structure remains visible. Both columns use the
-   same calculated frequency points, with no additional filtering or resampling.
-   Five megahertz is only the edge of the detail view, not a sampling or analysis limit.
-
-   Over 0.5–5 MHz, the median coherence is **0.988–0.989** across the four captures.
-   This describes only that interval, not the full band. For readability, phase is
-   drawn only where coherence is at least 0.5, whereas coherence itself is shown
-   at every frequency. Blank phase regions therefore do not mean those frequencies
-   were omitted from the calculation. The 0.5 cutoff is a display choice, not a
-   significance threshold. No delay was removed by shifting one trace to maximize agreement.
-
-   In the **25–50 MHz** interval, the median coherence drops to **0.0017–0.0020**
-   across captures. The measured channels have very little repeatable linear
-   association there. Figure 5 also shows much smaller voltage PSDs at these
-   frequencies. A weak shared signal with relatively stronger independent noise is
-   one possible explanation; these measurements alone do not establish the noise
-   floor or prove that high-frequency plasma fluctuations are absent.
-
-   Positive and negative phase values are relative angles wrapped into the interval
-   from :math:`-\pi` to :math:`\pi`. Beyond about **16.83 MHz**, no frequency point
-   passes the phase-display threshold in any capture, so the phase panel is blank.
-   The phases were calculated, but low coherence makes their interpretation as a
-   stable lag unreliable |phaseguide-en|. The two disclosures below explain why.
-
-   High coherence can arise from a propagating fluctuation, a common source,
-   electrical pickup or cross-talk. To interpret the phase, write the linear
-   measurement response explicitly:
-
-   .. k05:equation:: experiment-measurement-phase
-      :lang: en
-
-      X_f=H_1(f)I_{1,f},\quad Y_f=H_3(f)I_{3,f},\qquad \delta_V=\delta_I+\arg H_3-\arg H_1\pmod{2\pi}.
+      Figure 6. Coherence and relative phase computed from the same cross spectrum.
 
 
-   :math:`I_{j,f}` is the Fourier coefficient of probe current in A,
-   :math:`H_j(f)` its complex current-to-voltage response in V/A,
-   :math:`\delta_I` the current cross phase, and :math:`\delta_V` the measured
-   voltage cross phase. A channel delay contributes to :math:`\arg H_j`.
-   Thus a small, smooth measured phase is not by itself an unambiguous wavelength
-   or group velocity. Physical probe order, relative channel response, and the
-   spatial aliasing branch must be established first.
+   All four captures have median coherence about 0.986 in 0.5–5 MHz. In 25–50 MHz the
+   medians are only 0.00032–0.00061 with these settings. The phase panels display only
+   bins with coherence at least 0.5; blank areas were calculated but hidden. This is
+   a display rule, not a significance threshold or a plasma cutoff frequency.
+   A phase sign is not an energy-transfer sign, and a wrapped angle alone does not
+   uniquely determine which probe saw a propagating wave first.
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Calculate G, coherence and the phase display</summary>
+
+   .. code-block:: python
+
+      G = np.mean(Y * X.conj(), axis=0)
+      den = PX * PY
+      coherence = np.divide(abs(G)**2, den,
+                            out=np.full_like(den, np.nan), where=den > 0)
+      phase = np.angle(G)
+      phase_for_plot = np.where(coherence >= 0.5, phase, np.nan)
+
+   X and Y must have the same segment rows. Zero power makes coherence undefined; NaN is not zero. A zero cross spectrum has no defined phase.
+
+   .. raw:: html
+
+      </details>
+
 
    .. raw:: html
 
@@ -463,7 +373,7 @@
    In the ideal resolved-frequency model, a fixed nonzero gain, phase shift, or
    linear filtering alone cancels out of normalized coherence. A high-frequency
    response roll-off can lower coherence indirectly if it weakens the shared
-   signal relative to added noise. Thus neither the RMS difference in Figure 3
+   signal relative to added noise. Thus neither the RMS difference in Supplement A
    nor proximity to the Nyquist frequency alone explains the drop. Distinguishing
    these causes requires, for example, measured background noise, repeatability
    under different segment lengths, or probe-spacing comparisons.
@@ -500,7 +410,7 @@
    is :math:`1.2\pi`, but the displayed angle is :math:`-0.8\pi`. A negative
    displayed angle can therefore still describe a delayed signal. Phase wrapping
    and the channel responses must be resolved before interpreting a sign as a
-   propagation direction; the pure-delay example is not a fit to Figure 7.
+   propagation direction; the pure-delay example is not a fit to Figure 6.
 
    The high-frequency gaps have a different cause: the plotting code masks
    low-coherence points. In this snippet, ``G`` and ``coherence`` are the arrays
@@ -516,140 +426,96 @@
    small statistical changes can rotate its angle substantially. At exactly zero
    cross power, phase is mathematically undefined, regardless of the value a
    software routine returns. The cutoff of 0.5 is a display rule, not a physical
-   cutoff or a confidence test; the last visible point near 16.83 MHz is therefore
+   cutoff or a confidence test; the last visible point is therefore
    not a measured plasma cutoff frequency.
 
    .. raw:: html
 
       </details>
 
-   .. rubric:: 6. Look for a relation between three frequencies
-
-   Now choose two frequencies :math:`f_1,f_2` and their sum :math:`f_3=f_1+f_2`.
-   The bispectrum averages :math:`X_{f_1}X_{f_2}X_{f_3}^*`, as in
-   :k05:eq:`auto-bispectrum`. Its normalized magnitude squared is the
-   **squared bicoherence** :math:`b^2` in :k05:eq:`bicoherence`.
-   It measures repeatability of a three-frequency relation, not a transfer rate.
-
-   For this exploratory map use 2048-sample segments: 20.48 microseconds,
-   48.828 kHz frequency-bin spacing, and 4882 segments per capture. The last
-   1664 samples are omitted. Shorter segments supply more averages but coarser
-   frequency resolution. The same mean removal, Hann window and Fourier sign are
-   used; the coefficients are recomputed on this new grid.
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-bicoherence.svg
-      :alt: Figure 8. C1 squared-bicoherence maps, with a shared logarithmic color scale.
-      :width: 100%
-
-      Figure 8. C1 squared-bicoherence maps, with a shared logarithmic color scale.
-
-
-
-   The horizontal coordinate is :math:`f_2`; the vertical is :math:`f_1`.
-   The third frequency is their sum, :math:`f_3=f_1+f_2`. Each colored cell
-   therefore compares three components of the **same C1 record**, not C1 with C3.
-   We show only :math:`0<f_1\leq f_2` with :math:`f_1+f_2\leq5\ \mathrm{MHz}`
-   to avoid duplicating swapped pairs. White areas are outside this domain, not
-   measured zeros. The triangular outline is an analysis boundary, not a wave branch.
-
-   **What does a brighter region mean?** It means a larger normalized correlation
-   between the product :math:`X(f_1)X(f_2)` and the sum-frequency component
-   :math:`X(f_3)`, as defined in :k05:eq:`bicoherence`. To see the role of phase,
-   call the phase of a Fourier coefficient :math:`\phi(f)`. The three phases enter
-   through :math:`\Delta\phi=\phi(f_1)+\phi(f_2)-\phi(f_3)`.
-   When this combination remains concentrated around a preferred angle across
-   segments, the complex products tend to reinforce one another when averaged.
-   When it wanders around the circle, they tend to cancel. This is called
-   **quadratic phase coupling**. The amplitudes also weight the average, so
-   :math:`b^2` is not a pure phase-locking score; stable phase alone does not
-   guarantee :math:`b^2=1`.
-
-   Unlike the PSD, **brightness does not measure how much wave power is present**.
-   Here a value of 0.1 cannot be read as “10% of plasma energy is being transferred.”
-   The three Fourier components may also be harmonics of one nonsinusoidal
-   oscillation rather than three separately identified plasma modes
-   :ref:`[5] <k05-data-reference-5-en>`.
-
-   **A band represents a family of frequency combinations.** Let :math:`F`
-   denote a fixed frequency in the following guide; it is not a fitted parameter.
-
-   .. list-table:: Read the direction of a band using these axes
-      :header-rows: 1
-      :widths: 24 27 49
-
-      * - Pattern
-        - What stays fixed
-        - What the associated combinations share
-      * - Horizontal band
-        - :math:`f_1\simeq F`
-        - One component near F; the other two are near :math:`f_2` and :math:`f_2+F`.
-      * - Vertical band
-        - :math:`f_2\simeq F`
-        - One component near F; the other two are near :math:`f_1` and :math:`f_1+F`.
-      * - Downward-sloping diagonal band
-        - :math:`f_1+f_2\simeq F`
-        - Many different pairs share the same sum frequency near F.
-
-   In Figure 8, all four captures show a brighter region close to the bottom edge.
-   Here :math:`f_1` is small, so :math:`f_2` and :math:`f_3` are close together:
-   the pattern links a low-frequency component to a range of higher-frequency
-   components and their nearby sum components. A possible mechanism is modulation:
-   if a low-frequency fluctuation is itself present in the record and the amplitude
-   of faster fluctuations varies with its phase, it can produce such relations.
-   This is a candidate explanation, not a mechanism identified by this map.
-   The band does **not** establish that low frequencies feed high frequencies,
-   nor the reverse. The two lowest rows also deserve particular care because
-   their spacing is only 48.828 kHz; the segment-length comparison below shows
-   how this narrow region changes with the analysis window.
-
    .. raw:: html
 
-      <details class="k05-note"><summary>Why is this a clue to wave interactions, but not proof of energy transfer?</summary>
+      <details class="k05-note"><summary>When can the measured phase be interpreted as propagation?</summary>
 
-   A quadratic term multiplies two fluctuations. Multiplying two sinusoidal
-   components produces sum and difference frequencies whose phases are tied to
-   the original phases. Wave interactions described by such terms can therefore
-   leave the phase relations that a bicoherence map detects. A bright band is a
-   useful place to investigate that possibility.
+   .. k05:equation:: experiment-measurement-phase
+      :lang: en
 
-   But the measurement only establishes a statistical relation. A repeating
-   nonsinusoidal waveform, a shared modulating process, or a nonlinear probe or
-   electronics response can also produce related Fourier components. Finite
-   records and spectral leakage can spread structure over neighboring bins.
-   Repetition in four captures supports reproducibility of the pattern; it does
-   not distinguish these causes or supply a significance test.
+      X_f=H_1(f)I_{1,f},\quad Y_f=H_3(f)I_{3,f},\qquad \delta_V=\delta_I+\arg H_3-\arg H_1\pmod{2\pi}.
 
-   The nonnegative quantity :math:`b^2` also discards the bispectrum's phase.
-   Determining transfer requires a dynamical coupling coefficient and its phase
-   relative to the bispectrum, as in :k05:eq:`spectral-power-balance`, together with
-   the measurement-response assumptions. Even a bright region alone supplies
-   neither a transfer direction nor a rate. Conversely, dark regions need not
-   rule out dynamics obscured by noise or phase cancellation.
+   I is the probe-current Fourier coefficient in A; H is the complex current-to-voltage response in V/A. The measured phase δ_V includes the relative phase of the two responses as well as the current phase δ_I, modulo 2π. Channel delay, the propagation direction and a consistent spatial phase branch must therefore be checked before inferring a wavenumber. Neither spacing alone nor a small phase supplies group velocity.
 
    .. raw:: html
 
       </details>
 
-   **Read the numerical color scale as well as the pattern.** Figures 8–10 share
-   a logarithmic scale from :math:`10^{-4}` to :math:`1`; ticks are actual
-   :math:`b^2` values. Each equal colorbar interval is a factor of ten, not an
-   equal increase in correlation. Values below :math:`10^{-4}`, including zero,
-   use the darkest color; the lower arrow marks that display floor. A clearly
-   visible band can therefore still have a small :math:`b^2`. The floor is not a
-   significance threshold. The positive-frequency view also does not exclude
-   difference interactions or frequencies above 5 MHz from the physical model.
+
+   .. rubric:: 5. Keep the complex bispectrum before normalizing it
+
+   We now compare three components of C1, using :k05:eq:`auto-bispectrum`.
+   For each pair of bins :math:`k_1,k_2`, multiply
+   :math:`X_{k_1}^{(r)}X_{k_2}^{(r)}(X_{k_1+k_2}^{(r)})^*` in each segment and average.
+   The result :math:`B_X(f_1,f_2)` is complex, in V³. It has both a real and an imaginary
+   part; keeping only its magnitude would discard information needed later.
+
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-bispectrum.svg
+      :width: 100%
+      :alt: Figure 7. Real and imaginary parts of the C1 complex bispectrum, capture 2.
+
+      Figure 7. Real and imaginary parts of the C1 complex bispectrum, capture 2.
+
+
+   Both panels use the same frequency coordinates and the same colour scale. The third
+   frequency is always :math:`f_3=f_1+f_2`. We display :math:`0<f_1\le f_2` and
+   :math:`f_1+f_2\le5` MHz; swapping the inputs gives the same product. Grey is outside
+   the computed domain, whereas white inside it is near zero. The signed colour scale
+   is linear for component magnitudes below :math:`10^{-9}` V³ and logarithmic farther away; this display choice is not a significance threshold. Read the colourbar values in V³.
+   The red/blue signs are those of the complex moment's components, **not transfer directions**.
+
+   Next use :k05:eq:`bicoherence` to normalize :math:`|B_X|^2` by the pair and target
+   powers. This yields the dimensionless squared bicoherence :math:`b^2`:
+
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-bicoherence.svg
+      :width: 100%
+      :alt: Figure 8. C1 squared bicoherence across the four captures, with one logarithmic scale.
+
+      Figure 8. C1 squared bicoherence across the four captures, with one logarithmic scale.
+
+
+   A bright cell indicates a larger normalized relation between
+   :math:`X(f_1)X(f_2)` and :math:`X(f_1+f_2)`. The combination of phases tends to survive
+   averaging more strongly, with amplitudes also affecting the result. Brightness is
+   neither wave energy nor the fraction of energy being transferred. A repeated
+   non-sinusoidal waveform or measurement nonlinearity can also create this structure.
+
+   The brighter strip near the bottom involves a small :math:`f_1` and two nearby
+   higher frequencies, :math:`f_2` and :math:`f_2+f_1`. It is a family of related
+   frequency triples, potentially consistent with modulation, not a determined
+   direction of energy flow. Values use logarithmic colours from :math:`10^{-4}` to 1;
+   the floor is a display choice, not a detection threshold. White is outside this
+   map's computed domain. The first few bins are especially sensitive to windowing
+   and frequency resolution.
+
+   The two figures answer different questions: :math:`b^2` shows normalized association,
+   while complex :math:`B_X` retains the magnitude and phase needed in
+   :k05:eq:`spectral-power-balance`. The latter combines B with a coupling coefficient
+   before taking a real part. Neither :math:`\operatorname{Re}B_X` alone nor a bright
+   double-frequency band is already a transfer rate.
 
    .. raw:: html
 
-      <details class="k05-note"><summary>Compare the other probe on exactly the same scale</summary>
+      <details class="k05-note"><summary>The same products give B and squared bicoherence</summary>
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-bicoherence-c3.svg
-      :alt: Figure 9. C3 maps on the same logarithmic color scale as C1.
-      :width: 100%
+   Here a and b are positive integer bin indices, not frequency values in MHz; a+b selects the target bin. The code operates on all rows, using the same X as the preceding calculations.
 
-      Figure 9. C3 maps on the same logarithmic color scale as C1.
+   .. code-block:: python
 
-   Similar maps show repeatable spectral relations at both measurement channels. They do not determine the direction of nonlinear transfer.
+      pair = X[:, a] * X[:, b]
+      target = X[:, a+b]
+      B = np.mean(pair * target.conj())
+      den = np.mean(abs(pair)**2) * np.mean(abs(target)**2)
+      b2 = abs(B)**2 / den if den > 0 else np.nan
+
+   The plotting loop repeats this calculation over the displayed pairs. It retains the complex B and the unmodified b² arrays; the colour floor affects only display.
 
    .. raw:: html
 
@@ -658,75 +524,66 @@
 
    .. raw:: html
 
-      <details class="k05-note"><summary>Check the choice of segment length before interpreting a bright band</summary>
+      <details class="k05-note"><summary>Check repeatability and frequency resolution without selecting a brighter result</summary>
+
+   The four maps use the same colour limits. Their similarity is repeatability, not proof of an independent three-wave mechanism or statistical significance. The script also saves the C3 complex bispectra and bicoherence. For a resolution check, the preserved comparison below changes only segment length at C1.
 
    .. figure:: /_static/K_Diagnostics/k05-experiment-sensitivity.svg
-      :alt: Figure 10. Segment-length comparison, using the same logarithmic color scale as Figures 8–9.
       :width: 100%
+      :alt: Supplement B. C1 bicoherence for 1024, 2048 and 4096 sample segments.
 
-      Figure 10. Segment-length comparison, using the same logarithmic color scale as Figures 8–9.
+      Supplement B. Segment-length sensitivity; the middle panel uses the main setting.
 
-
-   Here the raw C1 record is fixed and N changes from 1024 to 2048 to 4096.
-   The color scale remains identical to Figures 8–9; no panel is rescaled to its own peak.
-   The narrow low-frequency region changes markedly. These three estimates do
-   not have the same bin bandwidth or number of realizations. Therefore a bright
-   cell, its maximum value and the first positive-frequency row should not be
-   treated as resolution-independent evidence. A narrower band is not automatically
-   more accurate: fewer averages also increase scatter. Nonoverlap does not ensure
-   statistically independent segments in a signal with long correlations.
+   Shorter segments give more averages but wider frequency bins. Longer segments do the opposite. The low-frequency strip changes noticeably: it must not be treated as independent of resolution. Even nonoverlapping segments may be statistically dependent. These alternative settings do not replace the main calculation.
 
    .. raw:: html
 
       </details>
 
 
-   .. rubric:: 7. Connect these figures to growth and transfer inference
+   .. rubric:: 6. What now goes into the coefficient calculation?
 
-   The spectra correspond to the type of observable in Fig. 2(b) of |brown-en|,
-   with our explicitly stated voltage-PSD units. To reach the growth curve and
-   nonlinear-transfer results, the next calculation uses the
-   :ref:`joint two-probe model <k05-inference-en>`: construct the cross bispectrum
-   and full fourth-order matrix, estimate coefficients, and check prediction
-   errors on a different capture. The :ref:`next page <k05-validation-en>` compares
-   linear-only and joint predictions by fitting three captures and testing on the
-   fourth, then examines residuals, conditioning and analysis-setting sensitivity.
-   Kim's additional stationarity assumptions are a separate inference choice.
+   The same :math:`X,Y` arrays provide the :math:`P,G,\mathbf b,\mathbf d,\mathbf F`
+   in :k05:eq:`inference-matrix`. For a pair product :math:`Z_j` as defined on page 05,
+   the required averages are :math:`b_j=\langle X_fZ_j^*\rangle`,
+   :math:`d_j=\langle Y_fZ_j^*\rangle`, and :math:`F_{ij}=\langle Z_i^*Z_j\rangle`.
+   For the auto-bispectrum just plotted, :math:`b_j=B_X(f_1,f_2)^*`.
+   The conjugation matters. These averages use complex coefficients; a bicoherence
+   image cannot replace them.
 
-   Two distinctions matter for these measurements. First, ion-current voltage
-   requires a justified current–density–potential response before the result can
-   be expressed as potential or plasma energy. Second, a spatial coefficient
-   needs the signed separation and appropriate group velocity to become a temporal
-   growth or transfer rate. The 3.7 mm separation alone supplies neither velocity
-   nor a unique spatial phase branch. A larger C3 RMS or a nonzero bicoherence
-   must not be substituted for those steps.
+   The positive sum-frequency triangle is a readable display, not the complete
+   quadratic input basis. The coefficient calculation also accounts for the retained
+   difference-frequency pairs using negative-frequency conjugates. With the moments
+   in hand, the next step is to solve for L and Q and test the resulting model, as in
+   the :ref:`following page <k05-validation-en>`. Growth and signed transfer require
+   those coefficients and the propagation/measurement inputs discussed on page 05.
 
    .. raw:: html
 
-      <details class="k05-note"><summary>Reproduce the calculations and inspect their provenance</summary>
+      <details class="k05-note"><summary>Reading the data and reproducing the complete calculation</summary>
 
-   The analysis needs NumPy, SciPy and Matplotlib. From the repository root:
+   The binary reader removes the whole-record mean before applying the header voltage scale:
+
+   .. k05:equation:: experiment-code-fluctuation
+      :lang: en
+
+      x_j[n]=g_j\bigl(c_j[n]-\overline{c_j}\bigr),\qquad g_j=\frac{2\ \mathrm{V/div}}{7680\ \mathrm{codes/div}}.
+
+   c_j[n] is the stored integer, its bar is the record mean, and g_j is volts per code. The 16-bit storage format is distinct from the ADC resolution. The lab reader and manufacturer example use opposite DC-offset signs; that constant disappears after centring. Neither convention is used here to claim calibrated absolute current. The 1 kΩ scale is nominal, while relative gain, delay and frequency response still need calibration.
+
+   Run from the repository root, choosing a new output directory:
 
    .. code-block:: bash
 
-      python K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py \
+      python K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py \
         --data /path/to/experiment-data \
-        --output /path/to/derived-results
+        --output /path/to/new-walkthrough-results
 
-   The data directory is searched recursively for the eight named binary files.
-   Outputs include figures, ``spectral_arrays.npz`` and ``analysis_summary.json``
-   with input hashes, header scales, processing choices and explicit unknowns.
-   The original binary captures are required to recompute; they are not embedded
-   in this page. The displayed figures are saved outputs, so a page load does not
-   rerun Python. The PSD is checked numerically against SciPy's Welch estimator
-   |scipy-en| with the same window, detrending and zero overlap.
+   The reader finds the four synchronous pairs recursively. The script writes eight SVG/PNG figures, walkthrough_arrays.npz and walkthrough_summary.json. The arrays include all plotted moments and capture 2 complex X/Y coefficients through 5 MHz. The summary records settings, software, source and raw-file hashes, numerical checks and the fixed example. Raw input files and earlier analysis outputs remain separate; opening this page does not execute Python.
 
-   Download the :download:`analysis script <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py>`,
-   :download:`binary reader <../../../../K_Diagnostics/K05_bispectral_transfer/siglent_v4.py>` and
-   :download:`acquisition metadata <../../../../K_Diagnostics/K05_bispectral_transfer/experiment_z5p5_a3p7.json>`
-   into one folder if running outside the repository.
-   The :download:`figure provenance <../../_static/K_Diagnostics/k05-experiment-summary.json>`
-   records the run used on this page.
+   The main PSD, coherence and bispectrum all use N=2048. Earlier N=16384 overview spectra remain reproducible with analyze_experiment.py; they must not be substituted for these moments without acknowledging the changed resolution. Later published comparison panels may use that finer overview spectrum; their own provenance determines the settings.
+
+   Download :download:`the walkthrough script <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py>`, :download:`shared spectral helpers <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py>`, :download:`the reader <../../../../K_Diagnostics/K05_bispectral_transfer/siglent_v4.py>` and :download:`metadata <../../../../K_Diagnostics/K05_bispectral_transfer/experiment_z5p5_a3p7.json>` into one directory. The :download:`figure provenance <../../_static/K_Diagnostics/k05-walkthrough-summary.json>` identifies the displayed run.
 
    .. raw:: html
 
@@ -764,187 +621,92 @@
    the Royal Astronomical Society* **435**, 3547–3558 (2013), Sections 2–4.
    `doi:10.1093/mnras/stt1546 <https://doi.org/10.1093/mnras/stt1546>`_.
 
-
 .. container:: ap-lang ap-lang-zh k05-lesson
 
    .. _k05-experiment-zh:
 
-   .. rubric:: 把八个文件变成可以逐步检查的物理统计量
+   .. rubric:: 用探针记录，实际算出第 03–05 页中的量
 
-   前面的页面介绍了数学方法。现在用两支离子饱和电流探针（ion saturation current probes）
-   的四组同步 C1–C3 记录，从波形开始实际计算：先看波动长什么样，再看它包含哪些频率、
-   两支探针是否记录到共同的波动，最后查看三个频率之间是否存在稳定的相位关系。
-   下面的图都来自这组实验数据。
+   现在用两支离子饱和电流探针（ion-saturation-current probes）的四组同步 C1/C3 记录，
+   把前面的公式逐步变成结果：从两条电压波形得到 Fourier 系数，再对系数的乘积取平均，
+   看每个平均量究竟保留了什么。功率谱首先连接 Brown 与 Jorns |brown-zh| 的图 2(b)，
+   复数统计量则为 :ref:`第 05 页 <k05-inference-zh>` 的系数求解提供输入。
 
-   这条分析路线与 Brown 和 Jorns |brown-zh| 从测量走向谱统计量的过程相衔接。
-   这里是另一组实验，频谱中的峰需要结合本实验工况识别，不能直接套用文献中的 EDI 模式名称。
+   固定第 2 组为贯穿本页的示例，第 3–5 组用于比较同一工况下的重复性。
+   示例的第一个短段和最接近 2 MHz 的频点预先固定，不按结果是否清楚来挑选。
+   主线谱统计统一使用 **同一套 2048 点分段和 Fourier 归一化**。
 
-   .. rubric:: 1. 先弄清一个文件装了什么
+   .. rubric:: 1. 先看两支探针实际记录了什么
 
-   每个文件保存一个示波器通道。文件后缀 **2、3、4、5** 对应四次记录；
-   相同后缀的 C1 与 C3 同步采集。数据提供者确认四组工况相同。
-   探针位于出口平面下游 **5.5 mm**，两探针周向距离 **3.7 mm**；
-   C1 到 C3 沿推力器周向的具体方向暂未确定。
+   在实验正视图中，C1 是左侧固定探针，C3 是右侧移动探针；本批记录采集期间，C3 固定在同一位置。
+   两者周向相距 3.7 mm，位于出口下游 5.5 mm。这个位置关系本身不能确定波的传播方向。
+   几何与电路可参见 :ref:`探针示意图 <k05-response-zh>`。
 
-   .. list-table:: 采样信息
-      :header-rows: 1
-      :widths: 42 58
+   每路每组有 10,000,000 个点，采样率 :math:`f_s=100` MS/s：相邻点间隔 10 ns，
+   记录总长 0.1 s，奈奎斯特频率（Nyquist frequency）为 :math:`f_s/2=50` MHz。
+   把相对整段均值的电压波动记为 :math:`x_1(t)` 和 :math:`x_3(t)`。
+   减去均值只去掉一个常数，不会把快速起伏平滑掉。
 
-      * - 量
-        - 数值
-      * - 采样率 :math:`f_s`
-        - 100 MS/s，八个文件头一致
-      * - 每路每组采样点数
-        - 10,000,000
-      * - 采样间隔／记录时长
-        - 10 ns／0.1 s
-      * - 奈奎斯特频率 :math:`f_s/2`
-        - 50 MHz
-      * - 存储码／竖直比例
-        - 16 位无符号整数；7680 码/格，2 V/格
-      * - 本页面实际分析的量
-        - 离子电流诊断输出的电压波动，单位 V
-
-   文件中的 16 位存储格式与示波器标称的 12 位 ADC 分辨率是不同概念。
-   电压到电流的换算和两路频率响应还没有在这里标定。这些电压尤其不能直接视为
-   **等离子体电势**。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>为什么先看波动，而不直接报告绝对直流电平？</summary>
-
-   实验人员提供的读取脚本对文件头竖直偏置取减号；厂商 V4 示例 |siglent-zh| 则写加号。
-   脚本注释称减号经过直流标定，但本数据包尚未包含那次标定的原始记录。
-   实验结束后的示波器照片可以印证采样和量程设置，不能当作这些等离子体记录的均值。
-   例如第 2 组，两个符号会给出 C1 均值 −0.100665 或 +0.899335 V，
-   C3 均值 +0.283286 或 +1.549953 V；这里不把任一候选值当作已标定直流电流。
-
-   这个差别对每路只是一个常数，减去整段或短段均值后恰好消失。
-   所以读取器默认返回相对整段均值的波动，并在输出清单中保留两种直流候选值。
-   去均值不能消除增益、极性或频率响应误差。
-
-   .. raw:: html
-
-      </details>
-
-
-   用 :math:`c_j[n]` 表示通道 :math:`j=1,3` 的第 :math:`n` 个存储整数。
-   先减去整段记录的平均码值 :math:`\overline{c_j}`，再乘以每个码对应的电压 :math:`g_j`：
-
-   .. k05:equation:: experiment-code-fluctuation
-      :lang: zh
-
-      x_j[n]=g_j\bigl(c_j[n]-\overline{c_j}\bigr),\qquad g_j=\frac{2\ \mathrm{V/div}}{7680\ \mathrm{codes/div}}.
-
-
-   得到的 :math:`x_j[n]` 是相对该记录均值的电压波动。这一步只减去常数，没有平滑波形。
-   原文件及其哈希保留；下图把每次记录的起点设为零时刻，而不是使用示波器的触发时刻。
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-raw.svg
-      :alt: 图 1．四组记录分别减去整段均值后的波动。青色为 C1，橙色为 C3。
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-records.svg
       :width: 100%
+      :alt: 图 1．同一次同步采集在 C1、C3 两处的整段电压波动。
 
-      图 1．四组记录分别减去整段均值后的波动。青色为 C1，橙色为 C3。
+      图 1．同一次同步采集在 C1、C3 两处的整段电压波动。
 
 
+   每条半透明带保留连续 10,000 点中的最小值和最大值，细线表示这些点的均值。
+   这样可以压缩显示，同时保留短暂尖峰的范围。后面的计算使用全部采样点，不使用范围带代替原波形。
 
-   半透明带保留每 10,000 点（0.1 ms 显示区间）的最小值与最大值，细线表示该区间均值。
-   如果仅每隔一万点抽取一个点，可能漏掉很短的尖峰；这里的范围带能把它们保留下来。
-   后续计算使用全部原始采样点，不使用这些显示区间代替波形。八个文件中都没有码值达到
-   0 或 65535；这只能排除触及存储码上下限，不能排除所有模拟电路过载。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>放大后，全长范围带中藏着什么？</summary>
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-zoom.svg
-      :alt: 图 2．第 2 组记录在 50 ms 处展开的 20 μs 波形。
-      :width: 100%
-
-      图 2．第 2 组记录在 50 ms 处展开的 20 μs 波形。
-
-   两个面板使用完全相同的采样时刻。现在能看清单次起伏；形状接近本身不能判断它们的传播机制。
+   纵轴是 **实测电压**，不能直接叫作等离子体电势。1 kΩ 电阻提供标称 0.001 A/V 换算，
+   但这还不是整条测量链路在 MHz 频率下的标定。本页保持电压单位，避免在开始计算时就混淆测量量。
 
    .. raw:: html
 
-      </details>
+      <details class="k05-note"><summary>四组记录的波动水平是否接近？</summary>
 
-
-   .. rubric:: 2. 检查一段记录内部是否在缓慢变化
-
-   全长图可能掩盖均值或波动强弱的变化。把每份记录分成 100 个连续的 **1 ms 小段**，
-   每段 :math:`M=100{,}000` 点。对第 :math:`r` 段计算均值 :math:`\mu_{j,r}`
-   和波动的均方根（root mean square, RMS） :math:`\sigma_{j,r}`：
+   用其他记录检查主例是否具有代表性。下方用 1 ms 小段观察慢变化；它只是波形检查，频谱计算仍使用 N=2048。对通道 j 的第 r 个检查区间，计算局部均值 μ 与波动均方根（RMS）σ：
 
    .. k05:equation:: experiment-block-statistics
       :lang: zh
 
       \mu_{j,r}=\frac{1}{M}\sum_{n=0}^{M-1}x_{j,r}[n],\qquad \sigma_{j,r}=\sqrt{\frac{1}{M}\sum_{n=0}^{M-1}\bigl(x_{j,r}[n]-\mu_{j,r}\bigr)^2}.
 
-
-   RMS 的计算就是：减去局部均值、平方、平均、开方。它表示典型波动幅度，单位仍为 V。
-   这里 :math:`r` 是小段序号，:math:`n` 是小段内的采样点序号。
+   这里 M=100,000 是检查区间长度，与频谱短段长度 N 不同。
 
    .. figure:: /_static/K_Diagnostics/k05-experiment-stability.svg
-      :alt: 图 3．相对整段均值的局部均值，以及局部波动 RMS。
       :width: 100%
+      :alt: 补充图 A．四组记录在 1 ms 区间上的局部均值与波动 RMS。
 
-      图 3．相对整段均值的局部均值，以及局部波动 RMS。
+      补充图 A．四组记录在 1 ms 区间上的局部均值与波动 RMS。
 
-
-
-   对同一通道而言，四组记录的均值变化和 RMS 范围相近。
-   对整份记录计算，C1 的 RMS 为 0.626–0.629 V，C3 为 0.756–0.758 V：
-   也就是 **C3 测到的电压波动幅度约大 20%**。这里比较的是各自均值附近的波动大小，
-   不是两路直流电压的高低。减去均值只去掉一个偏置，不会让两路波动幅度自动相等。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>为什么两支探针的 RMS 可以不同？</summary>
-
-   RMS 描述的是测量波动有多大，不是在辨认它是不是同一列波。
-   即使两支探针响应的是同一个扰动，完整的测量响应也不一定相同。
-   例如，探针收集面积或灵敏度、电流到电压的转换、通道增益（gain）有差异，
-   都可能改变记录的幅度。举一个简单例子：把每个波动值都乘以 1.2，
-   它的 RMS 也会乘以 1.2，这并不要求波在等离子体中真的增长。
-   示波器设置相同的 V/div，也不能证明探针及整条测量电路的响应相同。
-
-   两个位置的真实局部波动也可能不同，测量噪声同样会计入 RMS。
-   仅凭图 3 无法区分这些原因。目前清楚的事实是：每个通道内部的四组记录具有较好的重复性，
-   而两个通道之间持续存在幅度差；这个幅度差的具体来源尚不能确定。
-
-   单纯的时间延迟改变波形的先后位置，不改变它本身的波动大小：
-   对于等幅、统计平稳的信号，足够长记录的 RMS 应相同。
-   有限的 1 ms 小段可能因为两端包含不同采样点而略有差别，
-   但稳定的 RMS 比值本身不能证明传播方向或增长率。
-   此外，这里的 RMS 汇总了记录中所有频率的波动；
-   若要判断某个模式是否增长，还需要按频率分析，并区分实际波动和测量响应。
+   C1 的整组 RMS 为 0.626–0.629 V，C3 为 0.756–0.758 V。各通道在四次采集中较可重复，但 C3 的电压波动约大 20%。探针收集响应或通道增益不同，就可能改变 RMS，并不要求波真的增长；局部波动差异与噪声也可能参与。减均值不会消除这些幅度差。同一点的时间稳定性与 Kim 所用的两处共同模型功率，是两项不同的假设。
 
    .. raw:: html
 
       </details>
 
-   同一点随时间统计稳定，与 :ref:`Kim 修正 <k05-inference-zh>` 使用的空间平稳假设，
-   是两件需要分别检查的事。
 
-   .. rubric:: 3. 截取短记录，先看看加窗究竟改了什么
+   .. rubric:: 2. 把一小段波形变成复系数
 
-   计算频谱时，每段取 **16,384 点**，两路从相同采样点起切分。
-   每段时长 163.84 μs；每组得到 610 个完整、不重叠的短段。
-   末尾不足一段的 5760 点，即 57.6 μs，舍去。四组分别计算，不把不同采集的端点
-   拼成一条人为连续的信号。
+   两路从相同采样点开始切段。每段 :math:`N=2048` 点，长 20.48 μs；
+   每组得到 :math:`R=4882` 对完整短段，末尾不足一段的 1664 点、即 16.64 μs，舍去。
+   四组分别处理，不把不同次采集拼成一条连续波形。
+   :math:`r=1,\ldots,R` 是短段编号，:math:`n=0,\ldots,N-1` 是段内采样点编号，都不是频率。通道编号为 :math:`j=1,3`，段内时刻为 :math:`t_n=n/f_s`。
 
-   先减去每个短段自身的均值，再乘以 **周期 Hann 窗（periodic Hann window）**。
-   这个窗让两端逐渐变小，减轻有限截取引起的谱泄漏（spectral leakage）。
-   它也会改变幅度，所以计算功率谱时必须考虑窗的归一化。下图展示第 2 组 C1 的第一个短段。
+   先减去每个短段自己的均值，再给两路乘上同一个周期 Hann 窗（periodic Hann window）：
+   :math:`w_n=\tfrac12[1-\cos(2\pi n/N)]`。
+   它把两端逐渐压低，减轻把有限短段作周期延拓时产生的谱泄漏（spectral leakage）。
+   加窗也会改变幅度、展宽窄谱结构；后面算功率谱密度时，要考虑窗的均方归一化。
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-segments.svg
-      :alt: 图 4．同一个短段在加 Hann 窗前后的形状。
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-window.svg
       :width: 100%
+      :alt: 图 2．第一对短段乘周期 Hann 窗前后的波形。
 
-      图 4．同一个短段在加 Hann 窗前后的形状。
+      图 2．第一对短段乘周期 Hann 窗前后的波形。
 
 
+   虚线是无量纲的窗函数，读右轴；彩色曲线是乘窗前后的电压，读左轴。
+   下图的曲线才是实际送入 Fourier 变换的信号。对它使用 :k05:eq:`time-fourier-series` 的约定，得到
 
    .. k05:equation:: experiment-windowed-coefficients
       :lang: zh
@@ -952,39 +714,76 @@
       X_k^{(r)}=\frac{1}{N}\sum_{n=0}^{N-1}w_n\bigl(x_{1,r}[n]-\overline{x_{1,r}}\bigr)e^{+i2\pi kn/N},\qquad f_k=\frac{k f_s}{N}.
 
 
-   :math:`N` 是每段采样点数，:math:`r` 是短段序号，:math:`w_n` 是窗函数，
-   :math:`k` 是整数频点序号。:math:`X_k^{(r)}` 是 C1 的复数傅里叶系数，单位 V；
-   对 C3 做同样运算得到 :math:`Y_k^{(r)}`。此处横线表示该短段的均值。
-   正指数和 :math:`1/N` 归一化沿用 :k05:eq:`time-fourier-series`。
-   当前相邻频点间隔为 **6.104 kHz**。
+   :math:`k` 是频点编号，对应 :math:`f_k=kf_s/N`，相邻频点间隔
+   :math:`\Delta f=f_s/N=48.828125` kHz。
+   :math:`X_k^{(r)}` 来自 C1；对 C3 作同样计算得到 :math:`Y_k^{(r)}`。
+   两者都是单位为 V 的复数，相位以各自短段的起点为时间参考。
+
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-coefficients.svg
+      :width: 100%
+      :alt: 图 3．从波形得到复系数：固定短段看频率，或固定频率看不同短段。
+
+      图 3．从波形得到复系数：固定短段看频率，或固定频率看不同短段。
+
+
+   左图固定一个短段，沿频率看系数的模。右图固定 :math:`f_\ast=2.001953125` MHz，
+   把前 80 段的系数画在复平面上：点离原点的距离是模，方向角是相位。
+   方块标出第一个短段，此时约为
+   :math:`X^{(1)}=(-0.06217+4.03141i)` mV、:math:`Y^{(1)}=(1.41417+3.43763i)` mV。
+   前面公式里的 X 和 Y，现在有了实际数值。
+   这是加窗后的系数，其模不能直接当作一列等离子体波未经修正的峰值幅度。
 
    .. raw:: html
 
-      <details class="k05-note"><summary>公式对应的 Python 代码：保持同一傅里叶符号</summary>
+      <details class="k05-note"><summary>Fourier 公式对应的 Python 代码</summary>
+
+   对实输入，NumPy 负指数变换的结果取共轭，就是这里的正指数约定；除以 N 设置归一化。数组每一行是一段，每一列是一个频点，C3 的 Y 按完全相同的方法得到。
 
    .. code-block:: python
 
       blocks = voltage[:R*N].reshape(R, N)
       centered = blocks - blocks.mean(axis=1, keepdims=True)
-      window = scipy.signal.windows.hann(N, sym=False)
-      X = np.fft.rfft(centered * window, axis=1).conj() / N
+      w = scipy.signal.windows.hann(N, sym=False)
+      X = np.fft.rfft(centered * w, axis=1).conj() / N
       f = np.fft.rfftfreq(N, d=1/fs)
 
-   对实数输入，NumPy 负指数变换结果取共轭，就得到这里的正指数系数；除以 N 设置归一化。
-   没有补零或重采样。频点间隔也不等于 Hann 谱峰的完整分辨宽度；
-   其等效噪声带宽（equivalent noise bandwidth）是 1.5 个频点。
-   分段和加窗基础可参见 :doc:`已有处理页面 <K01_signal_spectra/fun_K01_segment_ffts>`。
+   前 5 MHz 对应编号 0–102，完整数组一直到 50 MHz。没有补零或重采样。频点间隔不等于 Hann 窗展宽后谱峰的完整宽度。参见 :doc:`分段与窗函数 <K01_signal_spectra/fun_K01_segment_ffts>`。
 
    .. raw:: html
 
       </details>
 
 
-   .. rubric:: 4. 平方后平均，得到功率谱
+   .. rubric:: 3. 每段先取模平方，再把许多段平均
 
-   对每个频点，把 610 个短段的系数模长平方后取平均。
-   若要写成单边功率谱密度（one-sided power spectral density, PSD），
-   还要计入窗函数和频点间隔：
+   继续固定同一个 :math:`f_\ast`。每段先算一个非负的模平方，再平均；
+   这就是把 :k05:eq:`record-powers` 用在真实记录上：
+
+   .. k05:equation:: experiment-running-power
+      :lang: zh
+
+      p_{X,f}^{(r)}=|X_f^{(r)}|^2,\qquad
+      P_X^{[m]}(f)=\frac{1}{m}\sum_{r=1}^{m}p_{X,f}^{(r)},\qquad
+      P_X(f)=P_X^{[R]}(f).
+
+
+   :math:`p_{X,f}^{(r)}` 是第 r 段的模平方；:math:`m` 表示目前已经纳入平均的段数。
+   :math:`P_X^{[m]}` 的方括号上标是这个累计平均的标记，不是乘方。
+   当 :math:`m=R` 时，就得到完整的 :math:`P_X`。把 X 换成 Y 可得 C3 的结果，单位都是 V²。
+
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-averaging.svg
+      :width: 100%
+      :alt: 图 4．同一个固定频点的逐段模平方，以及逐渐纳入更多短段的平均。
+
+      图 4．同一个固定频点的逐段模平方，以及逐渐纳入更多短段的平均。
+
+
+   左图显示单段的值会起伏；右图逐渐纳入更多短段，最后到达虚线所示的整组均值。
+   曲线趋于稳定是一个直观检查，不等于已经证明平稳性，也不是误差条。
+   在 :math:`f_\ast` 处，:math:`P_X=8.09277\times10^{-5}` V²、
+   :math:`P_Y=6.22364\times10^{-5}` V²。对每个频点都重复这一步，就得到两路频点功率谱。
+
+   要画单位为 V²/Hz 的 **单边功率谱密度（one-sided PSD）**，再作一次换算：
 
    .. k05:equation:: experiment-hann-psd
       :lang: zh
@@ -992,52 +791,49 @@
       w_n=\frac12\left(1-\cos\frac{2\pi n}{N}\right),\quad U=\frac1N\sum_n w_n^2=\frac38,\qquad S_{XX}^{+}(f_k)=\frac{s_k N}{f_s U}\left\langle|X_k|^2\right\rangle_R.
 
 
-   :math:`U` 是窗函数的均方值；正频率内部频点取 :math:`s_k=2`，
-   零频率和奈奎斯特频点取 :math:`s_k=1`。尖括号对 :math:`R=610` 个短段平均。
-   上标 :math:`+` 表示单边谱；:math:`S_{XX}^{+}` 的单位是 :math:`\mathrm{V^2/Hz}`。
-   把 X 换成 Y 就得到 C3 的功率谱。这里校正的是 PSD，
-   与恢复单一正弦波峰值幅度的校正不同，参见
-   :doc:`窗函数与功率谱归一化 <K01_signal_spectra/fun_K01_power_spectrum>`。
+   :math:`U=3/8` 是窗函数的均方值。:math:`N/f_s=1/\Delta f` 把每个频点的功率换成每 Hz 的密度；
+   实信号在正、负频率上有相等的功率，内部正频点取 :math:`s_k=2`，把两边合在一边。
+   零频率和奈奎斯特频点不再加倍，取 :math:`s_k=1`。上标 + 表示单边。
+   这套校正针对 PSD，与恢复单一正弦波的峰值幅度不同。
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-psd.svg
-      :alt: 图 5．四组分别计算的单边电压功率谱密度。
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-psd.svg
       :width: 100%
+      :alt: 图 5．从频点功率换算得到单边 PSD，局部与全频段使用相同分段。
 
-      图 5．四组分别计算的单边电压功率谱密度。
+      图 5．从频点功率换算得到单边 PSD，局部与全频段使用相同分段。
 
 
-
-   横轴是频率，纵轴表示单位频率内的电压方差，两轴都使用对数尺度。
-   每个面板的四条曲线非常接近，表明四次采集得到的谱形具有重复性。
-   低频有峰，高频也有结构；仅凭峰的位置还不能确定其等离子体机制或排除电路干扰。
-   这里保留到 50 MHz 的完整单边谱；奈奎斯特上限本身也不保证模拟信号中超出该范围的成分
-   已被充分滤除。
+   两幅图使用同一次计算：左边放大 0–5 MHz，右边保留 0–50 MHz 全频段。
+   第 2 组用实色强调，另外三组用浅色比较重复性。
+   这已对应 |brown-zh| 图 2(b) 所分析的频率分布，但这里明确使用本实验的电压单位，
+   不是两次实验经过相同标定的等离子体能量对比。谱峰的位置本身也不能确认 EDI 模式。
 
    .. raw:: html
 
-      <details class="k05-note"><summary>平均之前：这些频率成分是否随时间改变？</summary>
+      <details class="k05-note"><summary>用代码计算功率，再换成 PSD</summary>
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-spectrogram.svg
-      :alt: 图 6．第 2 组记录在时间平均之前的分段频谱。
-      :width: 100%
+   .. code-block:: python
 
-      图 6．第 2 组记录在时间平均之前的分段频谱。
+      PX = np.mean(np.abs(X)**2, axis=0)
+      PY = np.mean(np.abs(Y)**2, axis=0)
+      U = np.mean(w**2)
+      s = np.full(X.shape[1], 2.0)
+      s[[0, -1]] = 1.0  # N is even: DC and Nyquist are not doubled.
+      SXX = s * N / (fs * U) * PX
+      SYY = s * N / (fs * U) * PY
 
-
-   每一竖列是一段频谱，横坐标为该段的中心时刻，颜色为以 V²/Hz 表示的 PSD 的十进制对数。
-   水平条带表示某个频率附近持续有功率；竖直条纹则表示短时间内多个频率同时变化。
-   这张 0–5 MHz 时频图（spectrogram）保留了平均曲线掩盖的时间变化。
-   外观相近是选择统计区间的线索，还不是严格的平稳性检验。
+   PX、PY 是加窗后的频点功率；后面的因子把它们换成 PSD。脚本与同设置的 SciPy Welch |scipy-zh| 核对两路结果，并检查窗加权的 Parseval 求和。PSD 积分并不是逐点撤销加窗。参见 :doc:`窗函数归一化 <K01_signal_spectra/fun_K01_power_spectrum>`。
 
    .. raw:: html
 
       </details>
 
 
-   .. rubric:: 5. 保留相位，比较两支探针
+   .. rubric:: 4. 把两路系数相乘，保留相对相位
 
-   对每个频率，计算互谱 :math:`G`、平方相干度（magnitude-squared coherence）
-   :math:`C_{13}^2` 和互谱相位 :math:`\delta`：
+   上面的功率没有说明两路之间的关系。按照 :k05:eq:`probe-cross-power`，
+   在 **同一个短段内** 把 C3 系数乘以 C1 系数的共轭，再平均。
+   保留这个复数平均量，然后计算相干度和相位：
 
    .. k05:equation:: experiment-coherence-phase
       :lang: zh
@@ -1045,52 +841,43 @@
       C_{13}^2(f)=\frac{|G(f)|^2}{P_X(f)P_Y(f)},\qquad G(f)=\langle Y_fX_f^*\rangle_R,\qquad \delta(f)=\arg G(f).
 
 
-   :math:`P_X=\langle|X|^2\rangle_R`、:math:`P_Y=\langle|Y|^2\rangle_R`
-   是加窗后的频点功率，单位 :math:`\mathrm{V^2}`。
-   相干度无量纲，范围 0–1；较大值意味着两路在该频率上存在可重复的线性关系。
-   星号表示复共轭，:math:`\arg` 表示取相位角，单位弧度。
+   :math:`G` 的单位是 V²，:math:`C_{13}^2` 无量纲，:math:`\delta` 的单位是 rad。
+   在固定示例频点，:math:`G=(6.68455-2.32260i)\times10^{-5}` V²，
+   :math:`C_{13}^2=0.99427`，:math:`\delta=-0.33441` rad。
+   较大的相干度说明这个频率上的线性关系可重复，但它本身不能确认传播或增长。
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-cross.svg
-      :alt: 图 7．同步双通道的相干度和互谱相位：左列为 0–50 MHz 全范围，右列为 0–5 MHz 局部放大。
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-cross.svg
       :width: 100%
+      :alt: 图 6．从同一互谱得到相干度与两路相对相位。
 
-      图 7．同步双通道的相干度和互谱相位：左列为 0–50 MHz 全范围，右列为 0–5 MHz 局部放大。
-
-
-
-   采样率为 100 MS/s，奈奎斯特频率就是 50 MHz。
-   左列展示与功率谱对应的 **0–50 MHz 全范围**，右列把 **0–5 MHz 局部放大**，
-   便于看清低频细节。两列使用同一组计算频点，没有额外滤波或重新采样。
-   5 MHz 只是局部放大图的边界，不是采样或分析上限。
-
-   在 0.5–5 MHz 内，四组相干度的中位数为 **0.988–0.989**；这个数只描述该频段，
-   不能代表全频段。为了避免图中充满低相干频点的散乱相位，只显示相干度不低于 0.5 的相位点，
-   相干度本身则保留全部频点。因此，相位图中的空白不表示这些频率没有参与计算。
-   0.5 是显示门槛，不是统计显著性阈值。计算没有为了让两路更相似而人为平移某一路信号。
-
-   在 **25–50 MHz** 区间，四组相干度的中位数降到 **0.0017–0.0020**，
-   说明两路测量在这些频率上几乎没有稳定、可重复的线性关联。
-   图 5 中这些频率的电压功率谱也低得多。一种可能是共同信号变弱，独立噪声的相对占比上升；
-   但现有测量没有独立确定噪声底（noise floor），也不能据此证明高频等离子体波动不存在。
-
-   相位的正负是相对角度被包裹在 :math:`-\pi` 到 :math:`\pi` 之间的结果。
-   约 **16.83 MHz** 以上，四组都没有频点通过相位的显示门槛，所以相位图留白。
-   这些相位已经计算，但低相干时不能可靠地把它们解释成稳定的滞后关系 |phaseguide-zh|。
-   下面两个折叠区分别解释相干度降低，以及相位正负和留白的含义。
-
-   高相干既可能来自传播波动，也可能来自共同源、电路干扰或串扰。
-   要把相位解释为传播，先写清测量链路：
-
-   .. k05:equation:: experiment-measurement-phase
-      :lang: zh
-
-      X_f=H_1(f)I_{1,f},\quad Y_f=H_3(f)I_{3,f},\qquad \delta_V=\delta_I+\arg H_3-\arg H_1\pmod{2\pi}.
+      图 6．从同一互谱得到相干度与两路相对相位。
 
 
-   :math:`I_{j,f}` 是探针电流的傅里叶系数，单位 A；:math:`H_j(f)` 是电流到电压的复响应，
-   单位 V/A；:math:`\delta_I` 是电流互谱相位，:math:`\delta_V` 是测得的电压互谱相位。
-   通道延迟会进入 :math:`\arg H_j`。因此，小而平滑的相位差还不能唯一给出波长或群速度。
-   需要确认探针方向、两路相对响应，以及空间混叠（spatial aliasing）对应的相位分支。
+   在当前设置下，四组在 0.5–5 MHz 内的相干度中位数约为 0.986；
+   在 25–50 MHz 内，中位数只有 0.00032–0.00061。
+   相位图只显示相干度不低于 0.5 的频点，空白处已经计算，只是隐藏了散乱相位。
+   0.5 是显示规则，不是显著性门槛，更不是等离子体截止频率。
+   相位正负也不是能量转移正负；仅凭被包裹在一个周期内的角度，不能唯一确定传播波先到哪支探针。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>计算互谱、相干度和用于显示的相位</summary>
+
+   .. code-block:: python
+
+      G = np.mean(Y * X.conj(), axis=0)
+      den = PX * PY
+      coherence = np.divide(abs(G)**2, den,
+                            out=np.full_like(den, np.nan), where=den > 0)
+      phase = np.angle(G)
+      phase_for_plot = np.where(coherence >= 0.5, phase, np.nan)
+
+   X、Y 的行必须对应相同短段。功率为零时相干度未定义；NaN 不是零。如果互谱为零，相位也没有数学定义。
+
+   .. raw:: html
+
+      </details>
+
 
    .. raw:: html
 
@@ -1141,7 +928,7 @@
 
    在理想、频率已分辨的模型中，固定的非零增益、相位差或线性滤波本身会在归一化中抵消，
    并不自动降低相干度。高频响应的衰减若让共同信号相对附加噪声变弱，才可能间接降低相干度。
-   所以，图 3 的 RMS 差异或接近奈奎斯特频率本身，都不能单独解释这个下降。
+   所以，补充图 A 的 RMS 差异或接近奈奎斯特频率本身，都不能单独解释这个下降。
    要区分这些原因，可以对照实测背景噪声、不同分段长度下的重复性，或不同探针间距的结果。
 
    .. raw:: html
@@ -1171,7 +958,7 @@
    即相位包裹（phase wrapping）。在此约定下，未包裹的正延迟对应正相位。
    例如，一个 1 MHz 的正弦波晚到 0.6 μs，未包裹的相位为 :math:`1.2\pi`，
    图上却显示成 :math:`-0.8\pi`。因此，负的显示角度也可能对应晚到的信号。
-   解释传播方向前需要确定相位分支和通道响应；这个纯延迟例子并不是对图 7 的拟合。
+   解释传播方向前需要确定相位分支和通道响应；这个纯延迟例子并不是对图 6 的拟合。
 
    高频留白是另一个原因：绘图时隐藏了低相干点。
    下面代码中，``G`` 和 ``coherence`` 分别是 :k05:eq:`experiment-coherence-phase`
@@ -1186,122 +973,87 @@
    当归一化后的互谱箭头很短时，小的统计变化就可能让它的方向明显改变。
    若互谱恰好为零，相位在数学上没有定义，不能把软件返回的数值当作物理相位。
    这里的 0.5 只是显示规则，不是物理截止或置信度检验；
-   最后一个可见点约为 16.83 MHz，也不能解释成测得了等离子体的截止频率。
+   最后一个可见点也不能解释成测得了等离子体的截止频率。
 
    .. raw:: html
 
       </details>
 
-   .. rubric:: 6. 再看三个频率之间的关系
+   .. raw:: html
 
-   取两个频率 :math:`f_1,f_2`，第三个为 :math:`f_3=f_1+f_2`。
-   按照 :k05:eq:`auto-bispectrum`，对乘积 :math:`X_{f_1}X_{f_2}X_{f_3}^*` 平均得到双谱。
-   其归一化模平方就是 :k05:eq:`bicoherence` 中的 **平方双相干度（squared bicoherence）**
-   :math:`b^2`。它衡量三频关系的重复性，还不是转移率。
+      <details class="k05-note"><summary>什么时候可以把测得相位解释为传播？</summary>
 
-   这张探索图改用每段 2048 点：时长 20.48 μs，频点间隔 48.828 kHz，
-   每组有 4882 段，舍去末尾 1664 点。短段增加平均次数，但降低频率分辨能力。
-   仍使用相同的去均值、Hann 窗和傅里叶符号，在新频率网格上重新计算系数。
+   .. k05:equation:: experiment-measurement-phase
+      :lang: zh
 
-   .. figure:: /_static/K_Diagnostics/k05-experiment-bicoherence.svg
-      :alt: 图 8．C1 四组平方双相干图，使用统一的对数色标。
+      X_f=H_1(f)I_{1,f},\quad Y_f=H_3(f)I_{3,f},\qquad \delta_V=\delta_I+\arg H_3-\arg H_1\pmod{2\pi}.
+
+   I 是单位为 A 的探针电流 Fourier 系数，H 是单位为 V/A 的复数电流—电压响应。测得相位 δ_V 同时包含电流相位 δ_I 和两路响应的相位差，且只在模 2π 意义下确定。因此需要检查通道延迟、传播方向和空间相位分支，才能进一步解释波数；间距本身或一个很小的相位，都不能提供群速度。
+
+   .. raw:: html
+
+      </details>
+
+
+   .. rubric:: 5. 先保留复双谱，再看归一化的亮带
+
+   现在用 :k05:eq:`auto-bispectrum` 比较 C1 中的三个频率成分。
+   对每对频点 :math:`k_1,k_2`，在每段里计算
+   :math:`X_{k_1}^{(r)}X_{k_2}^{(r)}(X_{k_1+k_2}^{(r)})^*`，然后平均。
+   得到的 :math:`B_X(f_1,f_2)` 是复数，单位 V³；它有实部和虚部，
+   如果只存模长，就会丢失后续计算需要的信息。
+
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-bispectrum.svg
       :width: 100%
+      :alt: 图 7．第 2 组 C1 复双谱的实部与虚部。
 
-      图 8．C1 四组平方双相干图，使用统一的对数色标。
+      图 7．第 2 组 C1 复双谱的实部与虚部。
 
 
+   两图的频率坐标和色标相同，第三个频率始终是 :math:`f_3=f_1+f_2`。
+   这里展示 :math:`0<f_1\le f_2`、:math:`f_1+f_2\le5` MHz 的区域，交换两个输入频率不重复画。
+   灰色是未计算域；计算域内接近白色表示接近零。
+   色标保留正负，分量的绝对值小于 :math:`10^{-9}` V³ 时线性显示，超过时按对数压缩；这个显示选择不是显著性门槛，读数仍是 V³。
+   红蓝表示复统计量分量的正负，**不表示能量转移方向**。
 
-   横轴为 :math:`f_2`，纵轴为 :math:`f_1`，第三个频率是两者之和 :math:`f_3=f_1+f_2`。
-   每个着色格点比较的是 **同一条 C1 记录内部的三个频率成分**，不是 C1 与 C3 的相干度。
-   只画 :math:`0<f_1\leq f_2` 且 :math:`f_1+f_2\leq5\ \mathrm{MHz}`，避免交换前两个频率后重复画图。
-   白色区域是未计算的域，不是测得的零；三角形轮廓由选取的频率范围决定，不是一条波的分支。
+   接下来按 :k05:eq:`bicoherence`，用波对乘积和目标成分的功率归一化 :math:`|B_X|^2`，
+   得到无量纲的平方双相干度（squared bicoherence） :math:`b^2`：
 
-   **亮的区域代表什么？** 代表两个频率成分的乘积 :math:`X(f_1)X(f_2)`，
-   与和频成分 :math:`X(f_3)` 之间的归一化关联较大，定义见 :k05:eq:`bicoherence`。
-   把 Fourier 系数的相位记为 :math:`\phi(f)`，这里比较的是三者的相位组合
-   :math:`\Delta\phi=\phi(f_1)+\phi(f_2)-\phi(f_3)`。
-   如果这个角度在不同短段中较集中，平均时各段的复数乘积容易同向累加；
-   如果角度在整个圆周上游走，它们就容易相互抵消。
-   这称为 **二次相位耦合（quadratic phase coupling）**。
-   幅度也参与加权，因此 :math:`b^2` 不是只看相位的指标；相位稳定也不保证它等于 1。
-
-   与功率谱不同，**越亮不等于该处波能量越大**。
-   这里的 0.1 也不能解释成“有 10% 的等离子体能量正在转移”。
-   这三个 Fourier 成分还可能是同一个非正弦振荡的谐波，
-   并不自动对应三个已经辨认出的独立等离子体波模 :ref:`[5] <k05-data-reference-5-zh>`。
-
-   **亮带代表一整族相关的频率组合。** 下表用 :math:`F` 表示一个固定频率，
-   它只是读图用的符号，不是拟合参数。
-
-   .. list-table:: 按本图的坐标方向理解亮带
-      :header-rows: 1
-      :widths: 24 27 49
-
-      * - 形状
-        - 保持不变的量
-        - 这些频率组合共有的特征
-      * - 水平亮带
-        - :math:`f_1\simeq F`
-        - 都包含 F 附近的一个成分，另两个在 :math:`f_2` 和 :math:`f_2+F` 附近。
-      * - 竖直亮带
-        - :math:`f_2\simeq F`
-        - 都包含 F 附近的一个成分，另两个在 :math:`f_1` 和 :math:`f_1+F` 附近。
-      * - 向右下方倾斜的亮带
-        - :math:`f_1+f_2\simeq F`
-        - 不同频率对都与同一个 F 附近的和频成分关联。
-
-   图 8 四组在靠近底边处都有较亮的区域。这里 :math:`f_1` 很小，
-   所以 :math:`f_2` 和 :math:`f_3` 很接近：
-   它显示低频成分与多个较高频成分及其邻近和频成分之间存在关联。
-   一种可能的机制是 **调制（modulation）**：如果记录中有这个低频波动，
-   而较快波动的幅度又随着它的相位变化，就可能留下这样的关系。
-   这是候选解释，尚不能仅凭图确认。
-   亮带 **不能判定低频在给高频供能，也不能判定反向供能**。
-   最下面两行还需特别谨慎：频点间隔只有 48.828 kHz，
-   后面的分段长度对比会显示，这个窄区域如何随分析窗口改变。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>为什么它是波—波相互作用的线索，却还不是能量转移的证据？</summary>
-
-   二次项会把两个波动相乘。两个正弦成分相乘会产生和频与差频，
-   其相位由原来的两个相位共同决定。因此，由二次项描述的波—波相互作用
-   （wave–wave interaction）确实可能留下双相干能够检测的相位关系。
-   亮带告诉我们，哪些频率组合值得进一步检查这种可能性。
-
-   但测量直接给出的仍是统计关系。重复出现的非正弦波形、共同的调制过程，
-   以及探针或电路的非线性响应，也可能产生相关的 Fourier 成分。
-   有限记录和谱泄漏还可能把结构扩散到邻近频点。
-   四组中重复出现说明这个图案具有可重复性，不能单凭这一点区分上述来源，也不构成显著性检验。
-
-   此外，:math:`b^2` 非负，并且舍去了双谱本身的相位。
-   要判断转移，还需要动力学耦合系数及其相对双谱的相位，
-   如 :k05:eq:`spectral-power-balance` 所示，并核查测量响应假设。
-   因此，单靠亮区既得不到转移方向，也得不到转移速率。
-   反过来，暗区也不能排除被噪声或相位抵消掩盖的动力学过程。
-
-   .. raw:: html
-
-      </details>
-
-   **读图案时也要看色条上的实际数值。** 图 8–10 统一使用
-   :math:`10^{-4}` 到 :math:`1` 的对数色标（logarithmic color scale），刻度仍是实际 :math:`b^2`。
-   色条上每段相等距离表示数值增加十倍，不是关联强度等量增加。
-   小于 :math:`10^{-4}` 的值（包括零）使用最暗颜色，底部箭头标示这个显示下限。
-   所以，看起来很清楚的亮带，实际 :math:`b^2` 仍可能较小；显示下限不是显著性阈值。
-   这张正频率图也没有从物理模型中排除差频作用或 5 MHz 以上的频率。
-
-   .. raw:: html
-
-      <details class="k05-note"><summary>用完全相同的色标，再看另一支探针</summary>
-
-   .. figure:: /_static/K_Diagnostics/k05-experiment-bicoherence-c3.svg
-      :alt: 图 9．C3 的平方双相干图，对数色标与 C1 相同。
+   .. figure:: /_static/K_Diagnostics/k05-walkthrough-bicoherence.svg
       :width: 100%
+      :alt: 图 8．C1 四组平方双相干图，使用统一对数色标。
 
-      图 9．C3 的平方双相干图，对数色标与 C1 相同。
+      图 8．C1 四组平方双相干图，使用统一对数色标。
 
-   相似的图说明两路都存在可重复的谱关系；它们仍不能确定非线性转移的方向。
+
+   亮点表示 :math:`X(f_1)X(f_2)` 与 :math:`X(f_1+f_2)` 的归一化关系较大。
+   相位组合在平均后更容易保留下来，幅度也参与加权；亮度既不是波能量，也不是能量转移的百分比。
+   重复的非正弦波形或测量链路的非线性，同样可能产生这类结构。
+
+   靠近底边的亮带涉及较小的 :math:`f_1`，以及两个相近的较高频率 :math:`f_2`、:math:`f_2+f_1`。
+   它是一族相关的三频组合，可能与调制（modulation）有关，但还没有给出供能方向。
+   图中使用 :math:`10^{-4}` 到 1 的统一对数色标；下限是显示选择，不是检测阈值。
+   本图白色表示未计算域。最前几个频点尤其需要留意窗函数和频率分辨能力的影响。
+
+   这两类图各有用途：:math:`b^2` 帮助看归一化关联，复 :math:`B_X` 则保留
+   :k05:eq:`spectral-power-balance` 所需的模与相位。那个公式还要把 B 与耦合系数相乘，再取实部。
+   所以仅有 :math:`\operatorname{Re}B_X`，或看到一条双相干亮带，都还没有得到转移率。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>同一组乘积怎样得到 B 和平方双相干</summary>
+
+   这里 a、b 是正整数频点编号，不是以 MHz 表示的频率值；a+b 定位和频频点。代码使用前面同一套 X，在全部短段上相乘、平均。
+
+   .. code-block:: python
+
+      pair = X[:, a] * X[:, b]
+      target = X[:, a+b]
+      B = np.mean(pair * target.conj())
+      den = np.mean(abs(pair)**2) * np.mean(abs(target)**2)
+      b2 = abs(B)**2 / den if den > 0 else np.nan
+
+   绘图程序对展示域里的每对频点重复这一步。保存的是完整复 B 和未经色标截断的 b²；显示下限只影响着色。
 
    .. raw:: html
 
@@ -1310,65 +1062,64 @@
 
    .. raw:: html
 
-      <details class="k05-note"><summary>解释亮带之前，先改变一下分段长度</summary>
+      <details class="k05-note"><summary>比较重复性和分辨率，不按亮度挑选结果</summary>
+
+   四组采用相同色标。相似说明图案可重复，不等于证明三个独立波模相互作用，也不是显著性检验。脚本同时保存 C3 的复双谱和双相干。下图保留已有的分段长度对照，检查同一 C1 记录对设置是否敏感。
 
    .. figure:: /_static/K_Diagnostics/k05-experiment-sensitivity.svg
-      :alt: 图 10．不同分段长度的比较，对数色标与图 8–9 相同。
       :width: 100%
+      :alt: 补充图 B．C1 使用 1024、2048、4096 点分段时的双相干。
 
-      图 10．不同分段长度的比较，对数色标与图 8–9 相同。
+      补充图 B．分段长度敏感性；中间一幅使用本页主设置。
 
-
-   固定同一条 C1 原始记录，把 N 从 1024 改为 2048、4096。
-   色标与图 8–9 完全相同，没有按各子图的峰值单独缩放。
-   低频窄区域的变化很明显；这三个估计的频点带宽和平均次数都不同。
-   所以不能把某个亮点、最大数值或第一行正频率格点，当成与分辨能力无关的证据。
-   更窄的频点并非必然更准确，因为平均次数减少也会增大随机散布。
-   即使短段不重叠，信号具有较长相关时间时，各段仍可能并不独立。
+   短段提供更多平均，但频点更宽；长段相反。低频窄带的变化较明显，不能把它当成与分辨能力无关的结构。即使分段不重叠，各段也未必统计独立。这些对照不替换主线的计算设置。
 
    .. raw:: html
 
       </details>
 
 
-   .. rubric:: 7. 怎样接到增长率和转移率
+   .. rubric:: 6. 这些结果怎样交给系数求解？
 
-   上面的功率谱已经对应 |brown-zh| 图 2(b) 所分析的那类观测量，
-   这里明确采用电压 PSD 单位。要进一步得到增长曲线和非线性转移结果，
-   接下来需要实际建立 :ref:`双探针联合模型 <k05-inference-zh>`：构造交叉双谱和完整四阶矩阵，
-   求线性、二次系数，再用另一组记录检验预测误差。
-   :ref:`下一页面 <k05-validation-zh>` 用三组估计、另一组检验，比较仅线性与联合模型的预测，
-   并检查残差、矩阵条件及分析设置的敏感性。Kim 额外的平稳约束属于另一项推断选择。
+   现在同一套 X、Y 数组可以提供 :k05:eq:`inference-matrix` 中的
+   :math:`P,G,\mathbf b,\mathbf d,\mathbf F`。
+   沿用第 05 页的波对乘积 :math:`Z_j`，需要的平均分别是
+   :math:`b_j=\langle X_fZ_j^*\rangle`、:math:`d_j=\langle Y_fZ_j^*\rangle`、
+   :math:`F_{ij}=\langle Z_i^*Z_j\rangle`。
+   对刚才画出的自双谱，有 :math:`b_j=B_X(f_1,f_2)^*`，这里的共轭不能漏掉。
+   这些量都来自复系数，不能拿一张双相干强度图替代。
 
-   对本实验有两个关键转换。首先，离子电流的电压信号需要经过有依据的电流—密度—电势响应，
-   才能写成电势或等离子体能量。其次，空间系数需要带方向的间距和相应群速度，
-   才能换算成随时间的增长率或转移率。3.7 mm 间距本身并不能提供速度或唯一的空间相位分支。
-   C3 的 RMS 较大、或者双相干不为零，都不能替代这些步骤。
+   正频率和频三角形只是便于读图的展示域，不是完整的二次模型输入。
+   求系数时还要通过负频率的共轭关系，计入所保留频带内的差频波对。
+   有了这些统计量，下一步就能求 L、Q 并检查模型，见 :ref:`后续页面 <k05-validation-zh>`。
+   要进一步得到增长和有符号转移，还需这些系数，以及第 05 页已经说明的传播与测量信息。
 
    .. raw:: html
 
-      <details class="k05-note"><summary>重算这些图，并查看每一步的来源</summary>
+      <details class="k05-note"><summary>读取数据与复现完整计算</summary>
 
-   计算依赖 NumPy、SciPy 和 Matplotlib。在仓库根目录运行：
+   读取器先去掉整段平均码值，再使用文件头中的电压比例：
+
+   .. k05:equation:: experiment-code-fluctuation
+      :lang: zh
+
+      x_j[n]=g_j\bigl(c_j[n]-\overline{c_j}\bigr),\qquad g_j=\frac{2\ \mathrm{V/div}}{7680\ \mathrm{codes/div}}.
+
+   c_j[n] 是存储整数，横线表示整段平均，g_j 是每码对应的电压。16 位存储格式与 ADC 的分辨率不是同一个概念。实验读取脚本和厂商示例对直流偏置使用相反符号；两者仅相差常数，去均值后消失。因此这里不选其中一个符号来声称得到了标定的直流电流。1 kΩ 仅提供标称比例，相对增益、延迟及频率响应仍需标定。
+
+   在仓库根目录运行，输出选择一个新目录：
 
    .. code-block:: bash
 
-      python K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py \
+      python K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py \
         --data /path/to/experiment-data \
-        --output /path/to/derived-results
+        --output /path/to/new-walkthrough-results
 
-   脚本递归寻找八个指定名称的二进制文件，输出图、``spectral_arrays.npz`` 和
-   ``analysis_summary.json``。清单包含原文件哈希、文件头比例、处理参数及明确的未知项。
-   重算需要原始 bin 文件，页面没有内嵌这些原始记录。页面展示的是保存后的计算图，
-   打开网页不会重新运行 Python。PSD 已与相同窗、去均值方式和零重叠设置的
-   SciPy Welch 实现 |scipy-zh| 做数值对照。
+   读取器递归寻找四对同步文件。程序输出八张 SVG/PNG、walkthrough_arrays.npz 和 walkthrough_summary.json。数组包含绘图统计量，以及第 2 组到 5 MHz 的逐段复 X/Y。清单记录设置、软件、源码与原始文件哈希、数值检查及固定示例。原始输入和早期分析输出分开保存；打开网页不会执行 Python。
 
-   也可把 :download:`分析脚本 <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py>`、
-   :download:`二进制读取器 <../../../../K_Diagnostics/K05_bispectral_transfer/siglent_v4.py>` 和
-   :download:`采集元数据 <../../../../K_Diagnostics/K05_bispectral_transfer/experiment_z5p5_a3p7.json>`
-   下载到同一文件夹运行。
-   :download:`本页图的来源清单 <../../_static/K_Diagnostics/k05-experiment-summary.json>`
-   记录了本页所用计算结果。
+   本页主线 PSD、相干度和双谱均使用 N=2048。早期 N=16384 的频谱概览仍可用 analyze_experiment.py 重现；不能忽略分辨率差别，将其直接替换成本页的矩。后面的既有论文对照图可能使用该细网格概览，具体设置以各图来源为准。
+
+   可将 :download:`本页计算脚本 <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py>`、:download:`共享谱计算函数 <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py>`、:download:`读取器 <../../../../K_Diagnostics/K05_bispectral_transfer/siglent_v4.py>` 和 :download:`元数据 <../../../../K_Diagnostics/K05_bispectral_transfer/experiment_z5p5_a3p7.json>` 放在同一目录运行。:download:`绘图来源清单 <../../_static/K_Diagnostics/k05-walkthrough-summary.json>` 标识了本页展示的计算。
 
    .. raw:: html
 
@@ -1405,5 +1156,4 @@
    coupled Fourier components of astronomical time series,” *Monthly Notices of
    the Royal Astronomical Society* **435**, 3547–3558 (2013), Sections 2–4.
    `doi:10.1093/mnras/stt1546 <https://doi.org/10.1093/mnras/stt1546>`_.
-
 

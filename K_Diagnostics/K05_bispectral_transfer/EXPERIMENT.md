@@ -1,9 +1,56 @@
-# Reproduce the first experimental analysis
+# Reproduce the experimental spectral walkthrough
 
 The sixth peer page uses dataset `z5p5_a3p7`: four synchronous C1/C3 captures
 from ion-saturation-current probes at one operating condition. Acquisition
 facts and explicit unknowns are in `experiment_z5p5_a3p7.json`. Original binary
 data are external inputs; no raw `.bin` files are included in the repository.
+
+## Current page 06: a single N=2048 calculation path
+
+```bash
+python K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py \
+  --data /path/to/experiment-data \
+  --output /path/to/new-walkthrough-results
+```
+
+This is the current page-06 producer. Choose an empty output directory; it refuses
+to overwrite an earlier run. `--metadata` accepts the acquisition JSON. It reuses
+`siglent_v4.py` and the Fourier, PSD and bispectral functions in
+`analyze_experiment.py`, without changing earlier outputs or later fitted models.
+Keep those three scripts together when downloading rather than cloning the repo.
+
+All main statistics use 2048 samples, segment demeaning, periodic Hann, no overlap,
+positive-exponent/N coefficients: 4882 segments and 1664 unused samples per capture.
+The worked example is fixed at capture 2, its first segment and the bin nearest
+2 MHz (k=41, f=2.001953125 MHz); it is not chosen for a large coupling result.
+Four captures are calculated independently. Stored bicoherence and complex B
+cover 0<f1<=f2 and f1+f2<=5 MHz. This displayed triangle is not a regression basis.
+
+The eight `k05-walkthrough-*.svg`/`.png` plots follow records, windowing, complex
+coefficients, power averaging, PSD, cross statistics, complex B, and bicoherence.
+The complex-B panels share a signed symlog scale with a 1e-9 V³ linear threshold
+and the largest absolute component as the common limit. It is only a display scale.
+`walkthrough_arrays.npz` includes `frequency_hz` (all nonnegative bins),
+`g{2,3,4,5}_P_c{1,3}`, `..._psd_c{1,3}`, `..._G`, `..._coherence`, `..._B_c{1,3}`,
+`..._b2_c{1,3}`, and capture-2 segment arrays `g2_X_band`, `g2_Y_band` through 5 MHz.
+Their first axis is segment and second axis is frequency bin; B matrices use
+row=f1, column=f2. NaN in B marks the uncomputed domain. B is `<X1 X2 conj(X3)>`;
+the b vector of page05 uses its conjugate. The products remain in voltage units.
+The first segment, window and min/max display aggregates are also retained.
+
+`walkthrough_summary.json` records settings, metadata, input/source hashes,
+software, the fixed numerical example and checks against SciPy Welch plus the
+window-weighted Parseval identity. Input hashes are checked again after plotting.
+Copy the eight new SVGs and the summary as `k05-walkthrough-summary.json` into the
+K05 static-assets folder. Full arrays and PNGs stay outside Git. The supplemental
+1 ms RMS and segment-length sensitivity figures retain their original provenance.
+
+The older N=16384 PSD/coherence overview below is retained for reproduction of
+historical figures and existing paper-comparison panels. It is not the main grid
+on the rewritten page06; do not mix its averages with N=2048 moments. Pages07–11
+retain their existing computations until a separate update is requested.
+
+## Preserved first-analysis producer
 
 Use Python with NumPy, SciPy and Matplotlib. The actual versions used for the
 displayed results are recorded in the figure provenance JSON. From the repo root:
