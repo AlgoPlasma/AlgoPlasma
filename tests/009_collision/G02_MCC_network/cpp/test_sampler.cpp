@@ -3,6 +3,7 @@
 #include "test_util.hpp"
 
 #include "mcc.hpp"
+#include "rng.hpp"
 
 #include <cmath>
 #include <cstdint>
@@ -12,6 +13,12 @@
 using namespace algoplasma::mcc;
 
 int main() {
+    // First 64-bit draws from the pre-optimization generator. Exercise both
+    // reuse within a step and invalidation when the step or seed changes.
+    G02_CHECK(CounterRng(104729, 100, 10, 0, 1).next_u64() == 0x70faa1dcfad897f7ULL);
+    G02_CHECK(CounterRng(104729, 100, 20, 0, 1).next_u64() == 0xed78f31abee00aa2ULL);
+    G02_CHECK(CounterRng(104729, 101, 10, 0, 1).next_u64() == 0xfda652ef9a1fa9daULL);
+    G02_CHECK(CounterRng(130363, 101, 10, 0, 1).next_u64() == 0x2ac0de36ed8deb96ULL);
     const auto root = g02test::temp_package_root("sampler");
     g02test::write_package(root, g02test::two_channel_package(2.0e-20, 1.0e-20));
     const MccEngine engine = MccEngine::load(root);

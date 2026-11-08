@@ -15,6 +15,10 @@
 
 #include <cstdint>
 
+#ifndef G02_RNG_PREFIX
+#define G02_RNG_PREFIX 1
+#endif
+
 namespace algoplasma {
 namespace mcc {
 
@@ -23,12 +27,11 @@ public:
     CounterRng(const std::uint64_t seed, const std::uint64_t global_step,
                const std::uint64_t particle_id, const std::uint64_t event_index,
                const std::uint64_t slot) noexcept
-        : key_(mix(seed ^ tag_seed)) {
+        : key_(step_prefix(seed, global_step)) {
         // Give every tuple position its own domain and mix after each field.
         // A commutative XOR of fields would reuse a stream when event_index
         // and slot are swapped, correlating the clock and acceptance draws.
         // 每个维度有独立标记，并按固定顺序逐层混合；交换事件号和用途号不会复用流。
-        key_ = mix(key_ ^ mix(global_step ^ tag_step));
         key_ = mix(key_ ^ mix(particle_id ^ tag_particle));
         key_ = mix(key_ ^ mix(event_index ^ tag_event));
         key_ = mix(key_ ^ mix(slot ^ tag_slot));
@@ -89,6 +92,22 @@ public:
     }
 
 private:
+    // Exact common prefix, never a replacement random-number stream.
+    // A thread-local one-entry cache is keyed by both full-width inputs.
+    // Particle, event, slot and draw counter retain their original operations.
+    [[nodiscard]] static std::uint64_t step_prefix(std::uint64_t seed,
+                                                  std::uint64_t step) noexcept {
+#if G02_RNG_PREFIX
+        struct Cache { bool valid=false; std::uint64_t seed=0,step=0,key=0; };
+        static thread_local Cache cache;
+        if (cache.valid && cache.seed==seed && cache.step==step) return cache.key;
+#endif
+        const auto key=mix(mix(seed ^ tag_seed) ^ mix(step ^ tag_step));
+#if G02_RNG_PREFIX
+        cache={true,seed,step,key};
+#endif
+        return key;
+    }
     // Domain labels identify tuple positions, rather than physical parameters.
     static constexpr std::uint64_t tag_seed = 0xa0761d6478bd642fULL;
     static constexpr std::uint64_t tag_step = 0xe7037ed1a0b428dbULL;
