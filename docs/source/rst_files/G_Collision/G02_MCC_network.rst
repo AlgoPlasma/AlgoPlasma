@@ -45,7 +45,7 @@ G02_MCC_network
    .. rubric:: 2. G02 的程序框架
       :class: g02-chapter
 
-   想知道批量处理怎样节省时间，可以先读 :doc:`从三个电子看懂 G02 的优化与测速 <G02_MCC_network/swarm_performance>`。
+   想知道批量处理怎样节省时间，可以先读 :doc:`G02 碰撞计算怎样提速，怎样验证 <G02_MCC_network/swarm_performance>`。
 
    G02 是独立 C++20 实现，**不调用 G01**。主程序提供粒子、背景和 dt；G02 返回粒子变化、反应计数和背景收支。新主程序推荐从批量 ``MccStepper::step()`` 接入。
 
@@ -206,7 +206,7 @@ G02_MCC_network
    .. rubric:: 2. G02 framework
       :class: g02-chapter
 
-   For a worked example, see :doc:`how G02 avoids repeated work and how its speed was measured <G02_MCC_network/swarm_performance>`.
+   For a worked example, see :doc:`how G02 speeds up collision calculations and verifies the results <G02_MCC_network/swarm_performance>`.
 
    G02 is an independent C++20 implementation and **does not call G01**. The host provides particles, backgrounds and dt; G02 returns particle changes, reaction counts and background exchange. Begin with the batch ``MccStepper::step()`` API.
 

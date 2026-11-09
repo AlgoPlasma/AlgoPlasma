@@ -1,7 +1,7 @@
 .. rst-class:: ap-g02 ap-g02-reference
 
-G02 batch performance
-=====================
+G02 collision performance and verification
+==========================================
 
 .. raw:: html
 
@@ -20,7 +20,7 @@ G02 batch performance
 
    .. rubric:: 怎样少做工作，又让电子得到原来的结果？
 
-   **例一：排一次的顺序，可以用几步？** 三个电子按编号 30、10、20 存放。计算时要按 10、20、30 访问，所以程序先整理出“第 2、3、1 个位置”这个顺序。下一步如果存放情况没变，旧版还会为这个无序数组再排一次；新版核对数量、各位置的编号和存活状态后，沿用这个顺序。它照样处理全部电子，也不移动电子本身。
+   **例一：排一次的顺序，可以用几步？** 实际测速从 4,000 个电子开始。为看清排序过程，假设数组中只有三个电子，存放顺序是 30、10、20。计算时要按 10、20、30 访问，所以程序先整理出“第 2、3、1 个位置”这个顺序。下一步如果存放情况没变，旧版还会为这个无序数组再排一次；新版核对数量、各位置的编号和存活状态后，沿用这个顺序。它照样处理全部电子，也不移动电子本身。
 
    .. raw:: html
 
@@ -95,7 +95,7 @@ G02 batch performance
 
    .. rubric:: What work can be skipped?
 
-   **Order.** Electrons stored as 30, 10, 20 must be visited as 10, 20, 30. The old code sorted the index again while the array remained unordered. After checking the count, IDs at each position and live flags, the new code can reuse the visit order (positions 2, 3, 1). Every electron is still processed.
+   **Order.** Each benchmark run starts with 4,000 electrons. To illustrate sorting, consider an array of just three electrons stored as 30, 10, 20. They must be visited as 10, 20, 30. The old code sorted the index again while the array remained unordered. After checking the count, IDs at each position and live flags, the new code can reuse the visit order (positions 2, 3, 1). Every electron is still processed.
 
    .. raw:: html
 

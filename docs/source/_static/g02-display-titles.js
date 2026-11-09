@@ -3,8 +3,8 @@
   "use strict";
   var titles = {
   "swarm_performance": {
-    "zh": "从三个电子看懂 G02 的优化与测速",
-    "en": "How G02 avoids repeated work and how its speed was measured"
+    "zh": "G02 碰撞计算怎样提速，怎样验证",
+    "en": "How G02 speeds up collision calculations and verifies the results"
   },
   "references": {
     "zh": "MCC 方法与验证文献",
