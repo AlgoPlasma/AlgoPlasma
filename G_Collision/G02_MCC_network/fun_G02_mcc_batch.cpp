@@ -857,7 +857,7 @@ PreparedMccStep MccStepper::prepare_step(
                         ++block.visited;
                         continue;
                     }
-                    CounterRng clock_rng(seed, global_step, projectile.id, 0U, 1U);
+                    CounterRng clock_rng(seed, global_step, projectile.id, 0U, slot_clock);
                     const Real uniform = clock_rng.uniform_open();
                     if (clock_definitely_outside(uniform, total_majorant, dt_s)) {
                         ++block.visited;

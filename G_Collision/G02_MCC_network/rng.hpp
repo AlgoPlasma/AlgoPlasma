@@ -22,6 +22,9 @@
 namespace algoplasma {
 namespace mcc {
 
+// Both collision entry points draw candidate waiting times from this RNG slot.
+inline constexpr std::uint64_t slot_clock = 0x01;
+
 class CounterRng {
 public:
     CounterRng(const std::uint64_t seed, const std::uint64_t global_step,

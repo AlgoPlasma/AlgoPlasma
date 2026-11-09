@@ -51,6 +51,8 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    .. rubric:: 同样的工作，实际快了多少？
 
+   :ref:`复现这两张表 <reproduce-tables-zh>`
+
    从三类算例中各选一个：氦气关闭电离，考察没有新电子的情况；氦气开启电离，考察新电子出现时的工作；Reid 是人为规定碰撞截面的模型气体，提供另一种对照。两版在同一台机器上各用一个 CPU 线程，从同一批 4,000 个电子开始。每步 0.05 ps，先走 40,000 步，再测后 40,000 步（2–4 ns）的实际用时。计时包括粒子运动、碰撞、粒子数控制、诊断计算和写出记录。
 
    .. list-table::
@@ -117,6 +119,17 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    速度表由 6ccb13e 中的脚本复现，内存表使用 c20880e 中的脚本。两次比较的 G02 代码都是 develop 的 7db6abe 和修复版 8c9e151。 :download:`逐对内存读数（CSV） <../../../../../tests/009_collision/G02_MCC_network/vmhwm_pairs.csv>`。
 
+   .. _reproduce-tables-zh:
+
+   .. rubric:: 复现这两张表
+
+   在 Linux 或 WSL 的完整 Git 仓库中运行下面的命令。仓库需要包含 !37 的提交，环境需要 Python 3、Git、CMake、支持 C++20 和 OpenMP 的 G++、MPI 开发库及 taskset。两个输出目录均须使用新路径。若本机不能使用逻辑 CPU 2，请在两条命令中指定同一个可用的逻辑 CPU。每批运行会在各自输出目录的 pairs.csv 中写入逐对结果。
+
+   .. literalinclude:: ../../../../../tests/009_collision/G02_MCC_network/PERFORMANCE.md
+      :start-after: ```sh
+      :end-before: ```
+      :language: bash
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Why time a swarm of electrons?
@@ -157,6 +170,8 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
       Historical run, seed 104729: solid blue is the original version before round one, dashed orange the retained round-seven version. Read mean energy on the left and drift velocity on the right, both against simulation time. Both quantities matched at every recorded time.
 
    .. rubric:: How long did the same work take?
+
+   :ref:`Reproduce both tables <reproduce-tables-en>`
 
    Three representative cases cover helium without new electrons, helium with new electrons and Reid, a gas defined by model cross sections. Each version used one CPU thread on the same machine, with 4,000 initial electrons and a 0.05 ps step. After 40,000 steps we timed the next 40,000 (2–4 ns), including particle motion, collisions, population control, diagnostics and output.
 
@@ -222,3 +237,14 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
    The previous 39.4 MiB getrusage reading was sensitive to the launching process and has been withdrawn. The 18 pairs matched byte for byte for diagnostics and final particle states. Collision counts and outputs also matched the corresponding runs in the speed batch.
 
    Use the runner from 6ccb13e for the speed table and c20880e for memory. Both compare G02 at 7db6abe and 8c9e151. :download:`Paired VmHWM readings (CSV) <../../../../../tests/009_collision/G02_MCC_network/vmhwm_pairs.csv>`.
+
+   .. _reproduce-tables-en:
+
+   .. rubric:: Reproduce both tables
+
+   Run these commands in a full Linux or WSL Git checkout containing the !37 commits. Install Python 3, Git, CMake, G++ with C++20 and OpenMP support, MPI development libraries and taskset. Use fresh output directories. If logical CPU 2 is unavailable, use the same available CPU in both commands. Each output directory contains a pairs.csv file with the individual measurements.
+
+   .. literalinclude:: ../../../../../tests/009_collision/G02_MCC_network/PERFORMANCE.md
+      :start-after: ```sh
+      :end-before: ```
+      :language: bash

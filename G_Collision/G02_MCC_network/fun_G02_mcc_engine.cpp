@@ -32,7 +32,6 @@ namespace {
 // 时间、通道、接受判定和末态各用独立 slot；修改某一步取数次数不串扰其他用途。
 // RNG slots. They are part of the replay contract and must never depend on
 // thread, rank or input order.
-constexpr std::uint64_t slot_clock = 0x01;
 constexpr std::uint64_t slot_select = 0x02;
 constexpr std::uint64_t slot_real = 0x03;
 constexpr std::uint64_t slot_final = 0x04;
