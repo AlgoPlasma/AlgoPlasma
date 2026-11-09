@@ -2,6 +2,10 @@
 (function () {
   "use strict";
   var titles = {
+  "swarm_performance": {
+    "zh": "从三个电子看懂 G02 的优化与测速",
+    "en": "How G02 avoids repeated work and how its speed was measured"
+  },
   "references": {
     "zh": "MCC 方法与验证文献",
     "en": "MCC methods and verification references"
@@ -104,6 +108,7 @@
   }
 };
   var sidebarNames = {
+    "swarm_performance": "Swarm benchmark",
     "references": "References",
     "group_foundation": "Basics",
     "mcc": "mcc.hpp",
