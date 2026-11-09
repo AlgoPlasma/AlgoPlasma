@@ -36,10 +36,23 @@ G02 用随机抽样决定一个时间步内哪些粒子发生碰撞。我们希�
 
 每个工况用三个种子。两版按主测顺序各跑一次，再用相同输入交换运行顺序。因此每版在每个工况各有六个用时。表中两列秒数是各版六次运行的平均用时。综合加速比用 develop 六次总用时除以修复版六次总用时，最后两列分别只取对应顺序的三次。 18 对运行的过程记录（每次 800 个时刻）和最终粒子状态逐对、逐字节相同。候选碰撞数、真实碰撞数、计时段及全程的电离新生电子数也逐对相等。 [逐对用时、碰撞计数和输出校验值](final_timings.csv)。
 
-在下述命令中指定两个测速提交，并用 `--reverse-all` 对每个种子调换顺序，可复现本表。输出目录须为新目录。
+**G02 进程峰值内存。** 本次另跑一批内存复测。每次运行由 G02 在写完最终粒子状态后，读取自身 /proc/self/status 中的 VmHWM，即该进程截至此时的峰值常驻内存，包含初始化和模拟。每格给出六次独立运行的最低和最高峰值，右端是该工况观测到的最高值。
+
+| 工况 | develop 峰值范围（MiB） | 修复版峰值范围（MiB） |
+| --- | ---: | ---: |
+| He 关闭电离，50 Td | 20.79–22.30 | 20.56–23.32 |
+| He 开启电离，200 Td | 22.66–24.44 | 22.57–23.79 |
+| Reid 模型气体，12 Td | 5.59–5.75 | 5.61–5.72 |
+
+此前报告的 39.4 MiB 来自 getrusage，在这套启动方式下会受父进程内存占用影响。该数值已撤回。三个工况各用三个种子，并交换运行顺序，共 18 对。每对的过程记录和最终粒子状态逐字节相同，碰撞计数一致，也与上一批测速中相同输入的结果一致。 [逐对内存读数](vmhwm_pairs.csv)保留每次从内核读取的 KiB 数，除以 1024 即为 MiB。历史归档里的 RSS 列仍保留当时的原始读数。
+
+**复现两张表。** 速度表由 6ccb13e 中的脚本复现，内存表使用 c20880e 中的脚本。两次比较的 G02 代码都是 develop 的 7db6abe 和修复版 8c9e151。 在包含 PR 提交的完整 Git 仓库根目录运行以下命令。两次都给被测代码指定相同的 `--baseline` 和 `--candidate`。工作目录和输出目录须为新路径，机器须允许使用逻辑 CPU 2。
 
 ```sh
-python3 tests/009_collision/G02_MCC_network/examples/swarm_benchmark/run.py --baseline 7db6abe --candidate 8c9e151 --reverse-all --cpu 2 --out ../final-swarm
+git worktree add --detach ../g02-speed-runner 6ccb13e
+git worktree add --detach ../g02-memory-runner c20880e
+(cd ../g02-speed-runner && python3 tests/009_collision/G02_MCC_network/examples/swarm_benchmark/run.py --baseline 7db6abe --candidate 8c9e151 --reverse-all --cpu 2 --out ../g02-speed-results)
+(cd ../g02-memory-runner && python3 tests/009_collision/G02_MCC_network/examples/swarm_benchmark/run.py --baseline 7db6abe --candidate 8c9e151 --reverse-all --cpu 2 --out ../g02-memory-results)
 ```
 
 最初的 [WarpX 对照数据](warpx_runs.csv)、[修复前的两批测速](timings.csv)和[两项修复本身的用时比较](safeguard_timings.csv)分别回答不同的问题。历史试验的原始输出及脚本保存在[历史核对包](benchmark_evidence.tar.xz)中。
@@ -147,7 +160,7 @@ python3 "$bench" --smoke --out ../swarm-smoke
 python3 "$bench" --out ../swarm-full
 ```
 
-第一条命令用三个工况各跑一对短算例来检查安装。第二条命令对 He 关闭电离 50 Td、He 开启电离 200 Td 和 Reid 模型气体 12 Td 各跑三个种子（104729、130363、155921），再对每个工况的第一个种子交换运行顺序复测，共 12 对。若要严格指定逻辑 CPU，可加 `--cpu 2`（原测速使用 CPU 2）。要复现最终表，请使用上文同时指定两个提交和 `--reverse-all` 的命令。不同机器的耗时会有差异。
+第一条命令用三个工况各跑一对短算例来检查安装。第二条命令对 He 关闭电离 50 Td、He 开启电离 200 Td 和 Reid 模型气体 12 Td 各跑三个种子（104729、130363、155921），再对每个工况的第一个种子交换运行顺序复测，共 12 对。若要严格指定逻辑 CPU，可加 `--cpu 2`（原测速使用 CPU 2）。速度表与内存表各自的脚本版本和完整命令见上文“复现两张表”。不同机器的耗时会有差异。
 
 两版从相同的 4,000 个电子开始，采用均匀外场和 0.05 ps 时间步，每 100 步做粒子数控制和诊断。各预运行 40,000 步，计时后续 40,000 步（2–4 ns），计时包含 CSV 刷新。每对须通过过程 CSV、最终粒子状态逐字节比较及碰撞计数检查。输出目录的 `pairs.csv` 记录每对的顺序、耗时和峰值内存，`runs/` 保存可核对的原始结果。默认输出报告三个种子的主测加速比。使用 `--reverse-all` 时，三个种子都会换序复测，程序还会报告换序加速比和两个顺序的综合加速比。
 

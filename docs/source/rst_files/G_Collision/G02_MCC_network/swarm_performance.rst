@@ -93,6 +93,30 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    :download:`最终版与 develop 的全部配对记录（CSV） <../../../../../tests/009_collision/G02_MCC_network/final_timings.csv>`。每一行是一对，main 表示主测，reverse 表示换序复测。baseline_s 和 candidate_s 分别是 develop 和修复版的用时（秒）。想看碰撞本身怎样验证，可接着读 :doc:`弹性碰撞盒教程 </tests/009_collision/G02_collision_box>`。
 
+   .. rubric:: G02 的峰值内存是多少？
+
+   本次另跑一批内存复测。每次运行由 G02 在写完最终粒子状态后，读取自身 /proc/self/status 中的 VmHWM，即该进程截至此时的峰值常驻内存，包含初始化和模拟。每格给出六次独立运行的最低和最高峰值，右端是该工况观测到的最高值。
+
+   .. list-table::
+      :header-rows: 1
+
+      * - 工况
+        - develop 峰值范围（MiB）
+        - 修复版峰值范围（MiB）
+      * - He 关闭电离，50 Td
+        - 20.79–22.30
+        - 20.56–23.32
+      * - He 开启电离，200 Td
+        - 22.66–24.44
+        - 22.57–23.79
+      * - Reid 模型气体，12 Td
+        - 5.59–5.75
+        - 5.61–5.72
+
+   此前报告的 39.4 MiB 来自 getrusage，在这套启动方式下会受父进程内存占用影响。该数值已撤回。三个工况各用三个种子，并交换运行顺序，共 18 对。每对的过程记录和最终粒子状态逐字节相同，碰撞计数一致，也与上一批测速中相同输入的结果一致。
+
+   速度表由 6ccb13e 中的脚本复现，内存表使用 c20880e 中的脚本。两次比较的 G02 代码都是 develop 的 7db6abe 和修复版 8c9e151。 :download:`逐对内存读数（CSV） <../../../../../tests/009_collision/G02_MCC_network/vmhwm_pairs.csv>`。
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Why time a swarm of electrons?
@@ -174,3 +198,27 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
    :download:`Original G02 vs WarpX: individual runs (CSV) <../../../../../tests/009_collision/G02_MCC_network/warpx_runs.csv>`. One row per run: engine, measured steps and elapsed seconds.
 
    :download:`Final G02 vs develop: all 18 pairs (CSV) <../../../../../tests/009_collision/G02_MCC_network/final_timings.csv>`. Each row is one pair. main and reverse identify the two orders. baseline_s and candidate_s are the elapsed seconds for develop and the fixed G02. For a physics check, see the :doc:`elastic collision box tutorial </tests/009_collision/G02_collision_box>`.
+
+   .. rubric:: How much memory did G02 use?
+
+   In a separate batch each G02 process read VmHWM from /proc/self/status after writing its final particle state. This gives its peak resident memory up to that point, including initialization and simulation. Each cell shows the lowest and highest of six run peaks.
+
+   .. list-table::
+      :header-rows: 1
+
+      * - Case
+        - develop peaks (MiB)
+        - Fixed G02 peaks (MiB)
+      * - He, ionization off, 50 Td
+        - 20.79–22.30
+        - 20.56–23.32
+      * - He, ionization on, 200 Td
+        - 22.66–24.44
+        - 22.57–23.79
+      * - Reid, 12 Td
+        - 5.59–5.75
+        - 5.61–5.72
+
+   The previous 39.4 MiB getrusage reading was sensitive to the launching process and has been withdrawn. The 18 pairs matched byte for byte for diagnostics and final particle states. Collision counts and outputs also matched the corresponding runs in the speed batch.
+
+   Use the runner from 6ccb13e for the speed table and c20880e for memory. Both compare G02 at 7db6abe and 8c9e151. :download:`Paired VmHWM readings (CSV) <../../../../../tests/009_collision/G02_MCC_network/vmhwm_pairs.csv>`.
