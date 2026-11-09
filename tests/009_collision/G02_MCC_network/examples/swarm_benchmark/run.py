@@ -68,8 +68,8 @@ def run_pair(out, executables, cpu, model, td, seed, order, phase, warm, steps):
             raise ValueError(f'{pair_dir}: {key} differs')
     return dict(phase=phase, model=model, Td=td, seed=seed, order='/'.join(order),
                 baseline_s=a['wall_s'], candidate_s=b['wall_s'], speedup=a['wall_s']/b['wall_s'],
-                baseline_RSS_MiB=a['peak_rss_self_kib']/1024,
-                candidate_RSS_MiB=b['peak_rss_self_kib']/1024)
+                baseline_VmHWM_MiB=a['vmhwm_kib']/1024,
+                candidate_VmHWM_MiB=b['vmhwm_kib']/1024)
 
 
 def main():
@@ -98,6 +98,7 @@ def main():
     with zipfile.ZipFile(archive) as z:
         z.extractall(out)
     protocol = dict(revisions=versions, cpu=cpu, smoke=args.smoke, reverse_all=args.reverse_all, dt_s=5e-14, electrons=4000,
+                    memory_source='Linux /proc/self/status VmHWM after final state output',
                     input_sha256=INPUT_SHA, driver_sha256=hashlib.sha256((HERE/'swarm.cpp').read_bytes()).hexdigest(),
                     compiler=subprocess.check_output(['g++','--version'], text=True).splitlines()[0])
     (out/'environment.json').write_text(json.dumps(protocol, indent=2) + '\n')

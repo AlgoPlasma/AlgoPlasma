@@ -9,12 +9,28 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include <sstream>
 #include <stdexcept>
-#include <sys/resource.h>
+#include <string>
 using namespace algoplasma::mcc;
 using Clock = std::chrono::steady_clock;
 double seconds(Clock::time_point a) {
     return std::chrono::duration<double>(Clock::now() - a).count();
+}
+
+// Linux labels VmHWM in kB, with 1024 bytes per unit.
+static std::uint64_t read_self_vmhwm_kib() {
+    std::ifstream status("/proc/self/status");
+    for (std::string line; std::getline(status, line);) {
+        if (!line.starts_with("VmHWM:")) continue;
+        std::istringstream field(line.substr(6));
+        std::int64_t value = 0;
+        std::string unit;
+        if (field >> value >> unit && value > 0 && unit == "kB")
+            return static_cast<std::uint64_t>(value);
+        break;
+    }
+    throw std::runtime_error("missing or invalid VmHWM in /proc/self/status");
 }
 int main(int argc, char **argv) {
     try {
@@ -170,25 +186,6 @@ int main(int argc, char **argv) {
         f.close();
         if (!f)
             throw std::runtime_error("failed to write diagnostics");
-        struct rusage usage{};
-        getrusage(RUSAGE_SELF, &usage);
-        std::ofstream m(std::string(argv[3]) + ".json");
-        m << std::setprecision(16) << "{\"engine\":\"G02\",\"EN_Td\":" << en << ",\"n0\":" << n
-          << ",\"dt_s\":" << dt << ",\"warmup_steps\":" << warm
-          << ",\"measured_steps\":" << measured << ",\"seed\":" << seed
-          << ",\"interval\":" << interval << ",\"wall_s\":" << wall
-          << ",\"warmup_wall_s\":" << warm_s << ",\"steps_per_s\":" << measured / wall
-          << ",\"advance_s\":" << advance_s << ",\"population_control_s\":" << control_s
-          << ",\"diagnostic_io_s\":" << diagnostic_s << ",\"real_events\":" << events
-          << ",\"candidates\":" << candidates << ",\"particles_visited\":" << visited
-          << ",\"births_measured\":" << births << ",\"births_total\":" << totalbirths
-          << ",\"max_n_before_control\":" << maxn << ",\"max_energy_eV\":" << maxenergy
-          << ",\"peak_rss_self_kib\":" << usage.ru_maxrss << ",\"preparation_s\":" << prep_s
-          << ",\"sampling_s\":" << sampling_s << ",\"reduction_s\":" << reduction_s
-          << ",\"commit_s\":" << commit_s << "}\n";
-        m.close();
-        if (!m)
-            throw std::runtime_error("failed to write timing metadata");
         std::ofstream final(std::string(argv[3]) + ".state", std::ios::binary);
         auto field = [&](const auto &value) {
             final.write(reinterpret_cast<const char *>(&value), sizeof(value));
@@ -210,6 +207,24 @@ int main(int argc, char **argv) {
         final.close();
         if (!final)
             throw std::runtime_error("failed to write final particle state");
+        const auto peak_kib = read_self_vmhwm_kib();
+        std::ofstream m(std::string(argv[3]) + ".json");
+        m << std::setprecision(16) << "{\"engine\":\"G02\",\"EN_Td\":" << en << ",\"n0\":" << n
+          << ",\"dt_s\":" << dt << ",\"warmup_steps\":" << warm
+          << ",\"measured_steps\":" << measured << ",\"seed\":" << seed
+          << ",\"interval\":" << interval << ",\"wall_s\":" << wall
+          << ",\"warmup_wall_s\":" << warm_s << ",\"steps_per_s\":" << measured / wall
+          << ",\"advance_s\":" << advance_s << ",\"population_control_s\":" << control_s
+          << ",\"diagnostic_io_s\":" << diagnostic_s << ",\"real_events\":" << events
+          << ",\"candidates\":" << candidates << ",\"particles_visited\":" << visited
+          << ",\"births_measured\":" << births << ",\"births_total\":" << totalbirths
+          << ",\"max_n_before_control\":" << maxn << ",\"max_energy_eV\":" << maxenergy
+          << ",\"vmhwm_kib\":" << peak_kib << ",\"preparation_s\":" << prep_s
+          << ",\"sampling_s\":" << sampling_s << ",\"reduction_s\":" << reduction_s
+          << ",\"commit_s\":" << commit_s << "}\n";
+        m.close();
+        if (!m)
+            throw std::runtime_error("failed to write timing metadata");
         std::cout << "BENCHMARK_FINISHED " << measured << " " << wall << std::endl;
     } catch (std::exception const &e) {
         std::cerr << e.what() << std::endl;
