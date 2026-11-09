@@ -1,45 +1,45 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md) | [在线文档](https://algoplasma.readthedocs.io/en/latest/index.html)
+[简体中文](README.zh-CN.md) | [Online documentation](https://algoplasma.readthedocs.io/en/latest/index.html)
 
-AlgoPlasma 曾用名为 PMSL，致力于把等离子体建模中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的算法库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。AlgoPlasma 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
+AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma modeling into an open, reusable, tested, and explainable algorithm library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, AlgoPlasma aims to build a shared algorithmic foundation so that others can build upon it instead of starting from scratch.
 
-## 仓库结构
+## Repository Layout
 
 ```text
 AlgoPlasma
-├── A_Pusher          # 粒子推进
-├── B_Scatter         # 粒子到网格沉积
-├── C_Gather          # 网格到粒子插值
-├── D_Poisson         # Poisson 求解及电场后处理
-├── E_Maxwell         # Maxwell / FDTD
-├── F_IO              # 数据输入输出
-├── G_Collision       # 碰撞模型
-├── H_MPI_Exchange    # MPI 数据交换
-├── I_Initializer     # 初始化
-├── J_Fluid           # 流体算法
-├── K_Diagnostics     # 等离子体诊断算法
-├── docs              # Sphinx + Doxygen 文档
-└── tests             # 算法测试与验证案例
+├── A_Pusher          # Particle pushers
+├── B_Scatter         # Particle-to-grid deposition
+├── C_Gather          # Grid-to-particle interpolation
+├── D_Poisson         # Poisson solvers and electric field post-processing
+├── E_Maxwell         # Maxwell / FDTD solvers
+├── F_IO              # Data input and output
+├── G_Collision       # Collision models
+├── H_MPI_Exchange    # MPI data exchange
+├── I_Initializer     # Initialization
+├── J_Fluid           # Fluid algorithms
+├── K_Diagnostics     # Plasma diagnostics algorithms
+├── docs              # Sphinx + Doxygen documentation
+└── tests             # Algorithm tests and validation cases
 ```
 
-一个算法单元通常包含：
+An algorithm unit usually contains:
 
-- 核心实现文件，例如 Fortran 子程序/函数文件、C/C++ 源文件、Python 脚本等。
-- 模块入口或包装接口，例如 Fortran `mod_*.f90`。
-- `README.md` 或 RST 文档，用于说明算法用途、公式和接口。
-- 测试案例，用于验证数值正确性、稳定性、收敛性或物理行为。
-- 可选的可视化脚本、参考结果和教学说明。
+- Core implementation files, such as Fortran subroutine/function files, C/C++ source files, Python scripts, and related files.
+- A module entry point or wrapper interface, such as a Fortran `mod_*.f90` file.
+- A `README.md` or RST document explaining the algorithm purpose, equations, and interface.
+- Test cases that validate numerical correctness, stability, convergence, or physical behavior.
+- Optional visualization scripts, reference results, and educational notes.
 
-## 实现语言
+## Implementation Languages
 
-AlgoPlasma 不限定实现语言。当前仓库以 Fortran 实现为主，同时包含少量 C 辅助代码和 Python 测试、初始化、绘图脚本。未来欢迎 C、C++、Python、CUDA、Julia 或其他适合特定算法的实现。
+AlgoPlasma does not restrict implementation languages. The current repository is mostly Fortran, with some C helper code and Python scripts for testing, initialization, and plotting. Future contributions in C, C++, Python, CUDA, Julia, or other suitable languages are welcome.
 
-## 快速使用
+## Quick Start
 
-AlgoPlasma 当前主要以源码级算法库形式组织。Fortran 模块通常通过 `mod_*.f90` 入口文件集成，该入口文件会使用 C 预处理 `#include` 纳入具体子程序。
+AlgoPlasma is currently organized mainly as a source-level algorithm library. Fortran modules are typically integrated through `mod_*.f90` entry files, which use C preprocessor `#include` directives to include the actual subroutines.
 
-示例：调用 3D Boris 粒子推进器。
+Example: call the 3D Boris particle pusher.
 
 ```fortran
 #include "A_Pusher/A01_Boris_3Dxyz/mod_A01_Boris_3Dxyz.f90"
@@ -59,44 +59,44 @@ program demo_boris
 end program demo_boris
 ```
 
-编译时通常需要开启 C 预处理：
+Compilation usually requires C preprocessing:
 
 ```bash
 gfortran -cpp -O2 -fdefault-real-8 demo_boris.f90
 ```
 
-部分模块可能需要额外依赖，例如 MPI、OpenMP、HYPRE 或 HDF5。请参考对应算法目录和测试目录中的说明。
+Some modules may require extra dependencies such as MPI, OpenMP, HYPRE, or HDF5. See the corresponding algorithm and test directories for details.
 
-## 测试
+## Tests
 
-测试位于 `tests/` 目录。许多测试目录包含：
+Tests live under `tests/`. Many test directories include:
 
-- `make.sh`：编译测试程序。
-- `run.sh`：运行测试。
-- `clean.sh`：清理生成文件。
-- `README.md`：说明测试目的、物理设置和验证标准。
+- `make.sh`: build the test program.
+- `run.sh`: run the test.
+- `clean.sh`: remove generated files.
+- `README.md`: explain the test objective, physical setup, and validation criteria.
 
-例如运行 Maxwell FDTD 单步公式测试：
+For example, run the Maxwell FDTD single-step formula tests:
 
 ```bash
 cd tests/005_maxwell/case_fdtd_single_step_formula
 bash run.sh
 ```
 
-修改某个算法后，建议优先运行与该算法直接相关的局部测试，再运行更长时间尺度或更完整的物理验证案例。
+After changing an algorithm, start with the most local tests for that algorithm, then run longer or more complete physical validation cases as needed.
 
-## 文档
+## Documentation
 
-在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/latest/index.html)。
+Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/latest/index.html) online on Read the Docs.
 
-项目文档基于 Sphinx、Doxygen 和 Breathe 构建：
+The documentation is built with Sphinx, Doxygen, and Breathe:
 
-- 源码中的 Doxygen 注释用于生成 API 文档。
-- `docs/source/developer_onboarding.rst` 提供面向使用者和新开发者的快速入门路线。
-- `docs/source/rst_files/` 中包含算法说明、公式推导、测试指南和示意图。
-- `docs/source/creat_rst.py` 可辅助生成或更新部分 RST 页面。
+- Doxygen comments in source files are used to generate API documentation.
+- `docs/source/developer_onboarding.rst` provides quick-start paths for users and new contributors.
+- `docs/source/rst_files/` contains algorithm notes, derivations, testing guides, and figures.
+- `docs/source/creat_rst.py` helps generate or update some RST pages.
 
-构建文档的一般流程：
+Typical documentation build workflow:
 
 ```bash
 pip install -r docs/requirements.txt
@@ -104,33 +104,33 @@ cd docs
 make html
 ```
 
-系统中还需要安装 Doxygen。Read the Docs 配置见 `.readthedocs.yaml`。构建完成后，HTML 首页通常位于 `docs/build/html/index.html`，可以用浏览器打开该文件查看文档。
+Doxygen is also required on the system. The Read the Docs configuration is in `.readthedocs.yaml`. After a successful build, the HTML entry page is usually at `docs/build/html/index.html`; open that file in a browser to view the documentation.
 
-## 贡献建议
+## Contributing
 
-欢迎贡献任何服务于等离子体学科的算法实现、测试案例、文档说明和验证结果。
+Contributions are welcome for any algorithm implementation, test case, documentation, or validation result that serves plasma science.
 
-建议一个新的算法贡献至少包含：
+A new algorithm contribution should ideally include:
 
-- 清晰命名的算法目录。
-- 核心实现和必要的包装接口。
-- 参数、单位、数组布局和边界约定说明。
-- 算法公式、适用范围和主要参考文献。
-- 一个可以独立运行的测试或验证案例。
-- 必要时提供 Python 可视化或数据分析脚本。
+- A clearly named algorithm directory.
+- The core implementation and any necessary wrapper interface.
+- Documentation for parameters, units, array layout, and boundary conventions.
+- Algorithm equations, applicability notes, and key references.
+- An independently runnable test or validation case.
+- Python visualization or data-analysis scripts when useful.
 
-贡献时请尽量保持算法单元独立、接口清晰、依赖明确。对于已有算法的改进，请同时说明数值行为是否改变，并补充或更新相应测试。
+Please keep algorithm units independent, interfaces clear, and dependencies explicit. For improvements to an existing algorithm, document whether the numerical behavior changes and update the corresponding tests when needed.
 
-## 许可证
+## License
 
-AlgoPlasma 的原创内容采用 [Apache License 2.0](LICENSE) 开源许可证。版权和归属信息见 [NOTICE](NOTICE)。第三方依赖，以及仓库中再分发的第三方代码或数据，仍受各自许可证约束。
+Original AlgoPlasma material is distributed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for copyright and attribution information. Third-party dependencies and any redistributed third-party code or data remain subject to their respective licenses.
 
-源码文件尚未统一配置逐文件许可头；未单独标注的项目原创文件适用仓库顶层的 `LICENSE` 和 `NOTICE`。
+Per-file license headers are not yet uniform across the source tree. Original project files without individual headers are covered by the repository-level `LICENSE` and `NOTICE`.
 
-`D_Poisson/D01_hypre_3Dxyz/fun_D01_hypre_3Dxyz_bc.c` 包含改编自 HYPRE Struct 接口示例的内容，文件头保留了上游版权归属、标明了 AlgoPlasma 的改动，并采用上游双重许可中的 Apache-2.0 选项。相关上游声明保留在 `NOTICE` 中。
+`D_Poisson/D01_hypre_3Dxyz/fun_D01_hypre_3Dxyz_bc.c` contains material adapted from the HYPRE Struct-interface examples. Its header retains the upstream copyright attribution, identifies the AlgoPlasma modifications, and specifies the Apache-2.0 option of the upstream dual license. The relevant upstream notice is retained in `NOTICE`.
 
-## 发起人/联系人
+## Initiator / Contact
 
-- 赵隐剑 / Yinjian Zhao
+- Yinjian Zhao / 赵隐剑
 - Email: contact@algoplasma.com
 - Homepage: <https://homepage.hit.edu.cn/zhaoyinjian>

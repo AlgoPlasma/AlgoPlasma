@@ -1,6 +1,6 @@
 # K04_breathing_waveform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 从同一空间点的多条电压记录中，提取随呼吸周期重复的平均波形 `C`，返回残差 `R = X - C`。
 每次留出一整条记录，用其余记录学习共同形状，再按留出记录自己的相位还原 `C`。
@@ -45,9 +45,9 @@ fun_K04_extract_waveform(records, fs, held_out=0, bins=256, cutoff=3e6,
 
 | 文件 | 用途 |
 | --- | --- |
-| `fun_K04_find_frequency.py` | 原始 FFT 与主频查找 |
+| `fun_K04_find_frequency.py` | 全频 FFT 与主频查找 |
 | `fun_K04_make_complex_signal.py` | 保留正频率带并做复数逆 FFT |
-| `fun_K04_mark_position.py` | 完整相位与周期内位置 |
+| `fun_K04_mark_position.py` | 解缠后的相位与周期内位置 |
 | `fun_K04_put_into_bins.py` | 按相位位置累计原始电压和样本数 |
 | `fun_K04_mean_other_records.py` | 排除留出记录，求共同平均形状 |
 | `fun_K04_mean_to_coefficients.py` | 半箱位置修正后的傅里叶系数 |

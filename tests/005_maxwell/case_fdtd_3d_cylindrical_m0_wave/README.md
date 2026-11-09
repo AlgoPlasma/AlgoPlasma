@@ -1,5 +1,7 @@
 # 3D Cylindrical Waveguide Mode Visualization Case
 
+[简体中文](README.zh-CN.md)
+
 This is a Python-only visualization case. `run.sh` runs
 `fdtd_3d_cylindrical_m0_wave.py` and generates:
 

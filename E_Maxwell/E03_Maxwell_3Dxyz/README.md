@@ -1,18 +1,18 @@
 # E03_Maxwell_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-3D Cartesian `(x,y,z)` Maxwell/FDTD 内核，包含标准 Yee curl 更新和 3D CPML 扩展。
+3D Cartesian `(x,y,z)` Maxwell/FDTD kernels with standard Yee curl updates and a 3D CPML extension.
 
-## 文件
+## Files
 
-- `mod_E03_fdtd_3d_cartesian.f90`: 标准 Cartesian FDTD 模块。
-- `sub_E03_fdtd_3d_cartesian_E.f90`: 从磁场更新 `Ex, Ey, Ez`。
-- `sub_E03_fdtd_3d_cartesian_H.f90`: 从电场更新 `Hx, Hy, Hz`。
-- `mod_E03_cpml_3d_cartesian.f90`: Cartesian CPML 扩展。
-- `sub_E03_cpml_3d_cartesian_E.f90`: 在 CPML 区域更新 `Ex, Ey, Ez` 和 memory variables。
-- `sub_E03_cpml_3d_cartesian_H.f90`: 在 CPML 区域更新 `Hx, Hy, Hz` 和 memory variables。
+- `mod_E03_fdtd_3d_cartesian.f90`: Standard Cartesian FDTD module.
+- `sub_E03_fdtd_3d_cartesian_E.f90`: Updates `Ex, Ey, Ez` from magnetic fields.
+- `sub_E03_fdtd_3d_cartesian_H.f90`: Updates `Hx, Hy, Hz` from electric fields.
+- `mod_E03_cpml_3d_cartesian.f90`: Cartesian CPML extension.
+- `sub_E03_cpml_3d_cartesian_E.f90`: Updates `Ex, Ey, Ez` and memory variables in CPML regions.
+- `sub_E03_cpml_3d_cartesian_H.f90`: Updates `Hx, Hy, Hz` and memory variables in CPML regions.
 
-## 注意
+## Notes
 
-核心更新不负责外部边界、源项或 MPI ghost exchange。CPML memory variables 需要在时间步之间保留。
+Core updates do not own external boundaries, sources, or MPI ghost exchange. CPML memory variables must persist across time steps.

@@ -1,33 +1,33 @@
 # D_Poisson
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`D_Poisson` 包含 AlgoPlasma 的静电 Poisson 求解器及相关后处理工具，主要通过 HYPRE Struct/PFMG 求解 cell-centered 结构网格上的电势方程。后处理例程负责展开求解器输出并计算电场等派生量。
+`D_Poisson` contains the electrostatic Poisson solvers and related post-processing utilities in AlgoPlasma. The solvers mainly use HYPRE Struct/PFMG to solve cell-centered structured-grid potential equations. Post-processing routines unpack the solver output and compute derived quantities such as the electric field.
 
-## 子目录
+## Subdirectories
 
-- `D01_hypre_3Dxyz`: 早期 Cartesian C/HYPRE 求解器和 Fortran-C 桥接接口。
-- `D02_hypre_3Dxyz_bc`: Cartesian 3D Poisson 组装和边界条件版本。
-- `D03_hypre_3Draz_uniform`: 均匀柱坐标 `(r,alpha,z)` Poisson 求解器。
-- `D04_hypre_3Draz_nonuniform`: 非均匀柱坐标 `(r,alpha,z)` Poisson 求解器。
-- `D05_phi1d_to_phi3d`: 将 HYPRE 输出的一维解向量展开为含幽灵格点的三维数组，并进行 MPI halo 交换。
-- `D06_phi_to_E`: 使用二阶中心差分由电势计算电场分量。
-- `D07_phi_to_E_nonuniform`: 非均匀柱坐标电势到电场计算，与 D04 配套。
+- `D01_hypre_3Dxyz`: Earlier Cartesian C/HYPRE solver and Fortran-C bridge.
+- `D02_hypre_3Dxyz_bc`: Cartesian 3D Poisson assembly with boundary conditions.
+- `D03_hypre_3Draz_uniform`: Uniform cylindrical `(r,alpha,z)` Poisson solver.
+- `D04_hypre_3Draz_nonuniform`: Nonuniform cylindrical `(r,alpha,z)` Poisson solver.
+- `D05_phi1d_to_phi3d`: Unpacks the HYPRE 1D solution vector into a 3D ghost-cell array with MPI halo exchange.
+- `D06_phi_to_E`: Computes electric field components from the potential via second-order central differences.
+- `D07_phi_to_E_nonuniform`: Nonuniform cylindrical potential-to-field reconstruction (D04).
 
-## 典型调用顺序
+## Typical Call Order
 
-一次完整的 Poisson 求解和电场更新按如下顺序调用：
+A complete Poisson solve + field update step calls these modules in sequence:
 
 ```
-D02  →  D05  →  （边界条件修正）  →  D06  →  H01（电场 MPI 交换）
+D02  →  D05  →  (boundary BC fixup)  →  D06  →  H01 (MPI exchange of E)
 ```
 
-D04 对应流程：求解 → D05 展开/交换 → 物理边界修正 → D07 → 电场交换。D07 输出单元中心柱坐标电场。
+For D04: solve → D05 unpack/exchange → physical boundary correction → D07 → field halo exchange. D07 returns cell-centered cylindrical fields.
 
-## 依赖
+## Dependencies
 
-D01–D05 需要 MPI、HYPRE、Fortran 编译器和 C 编译器。D06、D07 无外部依赖。
+D01–D05 require MPI, HYPRE, a Fortran compiler, and a C compiler. D06 and D07 have no external dependencies.
 
-## 文档
+## Documentation
 
-完整公式、边界条件说明和测试结果见 Sphinx 文档中的 `D_Poisson` 页面以及 `tests/001_poisson` 测试页。
+Full formulas, boundary-condition notes, and reference test results live in the Sphinx `D_Poisson` page and the `tests/001_poisson` test page.

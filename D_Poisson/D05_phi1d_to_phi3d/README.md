@@ -1,34 +1,34 @@
 # D05_phi1d_to_phi3d
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-将 HYPRE Poisson 求解器输出的一维解向量展开为含幽灵格点的三维数组，并对 phi 场进行 MPI halo 交换。
+Unpacks the 1D solution vector from the HYPRE Poisson solver into a 3D ghost-cell array, and performs MPI halo exchange for the phi field.
 
-## 文件
+## Files
 
-- `mod_D05_phi1d_to_phi3d.f90`: 模块包装文件。
-- `sub_D05_phi1d_to_phi3d.f90`: 主子程序。
-- `inc_exchange_in_x/y/z.f90`: 各 Cartesian 方向的 MPI halo 交换。
-- `inc_send_recv.f90`: 先发后收的点对点通信模式（奇数 rank）。
-- `inc_recv_send.f90`: 先收后发的点对点通信模式（偶数 rank）。
+- `mod_D05_phi1d_to_phi3d.f90`: Module wrapper.
+- `sub_D05_phi1d_to_phi3d.f90`: Main subroutine.
+- `inc_exchange_in_x/y/z.f90`: MPI halo exchange in each Cartesian direction.
+- `inc_send_recv.f90`: Send-then-receive point-to-point pattern (odd ranks).
+- `inc_recv_send.f90`: Receive-then-send point-to-point pattern (even ranks).
 
-## 主接口
+## Main Interface
 
 ```fortran
 call sub_D05_phi1d_to_phi3d(il, iu, phi1d, phi3d, &
     mpi_n, rank_to_ijk, domain_split, ijk_to_rank, l)
 ```
 
-- `phi1d(1:nx*ny*nz)`：HYPRE 输出的一维解，循环顺序为 `i, j, k`。
-- `phi3d(il(1)-1:iu(1)+1, ...)`：含单层幽灵格点的三维输出数组。
-- `l(1:3)`：各方向物理域长度，用于判断是否为周期边界。
+- `phi1d(1:nx*ny*nz)`: 1D solution from HYPRE, loop order `i, j, k`.
+- `phi3d(il(1)-1:iu(1)+1, ...)`: 3D output array including one ghost layer per side.
+- `l(1:3)`: Physical domain length per direction; used to detect periodic BC.
 
-调用后，`phi3d` 的幽灵格点已由相邻 MPI rank 的数据填充。非周期边界的幽灵格点需由调用方在此后自行设置。
+After the call, ghost cells of `phi3d` are filled with values from neighbouring MPI ranks. Non-periodic boundary ghost cells must be set by the caller afterward.
 
-## 幽灵格点约定
+## Ghost Cell Convention
 
-rank 的右幽灵格 `phi3d(iu(1)+1,:,:)` 来自右邻居的 `phi3d(il(1),:,:)`，左幽灵格 `phi3d(il(1)-1,:,:)` 来自左邻居的 `phi3d(iu(1),:,:)`。这与 E 场交换（H01）使用次边界格点的约定不同。
+Each rank's ghost cell `phi3d(iu(1)+1,:,:)` receives `phi3d(il(1),:,:)` from the right neighbour, and `phi3d(il(1)-1,:,:)` receives `phi3d(iu(1),:,:)` from the left neighbour. This differs from the E-field exchange (H01), which uses the second-from-boundary cell.
 
-## 依赖
+## Dependencies
 
-需要 MPI。
+Requires MPI.

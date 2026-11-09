@@ -1,35 +1,39 @@
 # D07_phi_to_E_nonuniform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-对 D04 非均匀柱坐标 `(r,alpha,z)` 单元中心电势计算 `Er,Ea,Ez`。
-`Ea=-(1/r)*dphi/dalpha` 是物理角向电场，不是 Cartesian `Ey`。
+Compute cell-centered cylindrical fields from D04 nonuniform-grid potentials.
 
 ```fortran
 use mod_D07_phi_to_E_nonuniform
 call sub_D07_phi_to_E_nonuniform(il,iu,rface_lo,dr,da,dz,phi,Er,Ea,Ez)
 ```
 
-- `il/iu(3)`：本地拥有单元的上下界，顺序为 r、alpha、z。
-- `rface_lo`：本地最低径向单元的左面全局半径，与 D04 MPI 接口一致。
-- `dr/da/dz`：各方向一维单元宽度，范围为 `il(d)-1:iu(d)+1`，全部为正。
-  `da` 使用弧度；径向、轴向和半径使用与 D04 相同的长度单位。
-- `phi/Er/Ea/Ez`：三维数组，各方向范围为 `il(d)-1:iu(d)+1`。
-  只写拥有单元的电场，输出幽灵层保持原值。
+`il/iu(3)` are local owned bounds in r,alpha,z order. `rface_lo` is the
+global radius of the lower LOCAL radial face, matching D04 A_mpi.
+Positive one-dimensional `dr/da/dz` arrays span `il(d)-1:iu(d)+1`.
+Angular widths are radians; all lengths use D04 units.
+`phi/Er/Ea/Ez` span those bounds in all three dimensions.
+Only owned output cells are overwritten; output halos are preserved.
 
-使用三点二次插值求导，中心距离为相邻单元宽度之和的一半。
-在不等距网格上对二次多项式精确，随相邻中心距离缩小具有二阶截断误差。
-输出单位为电势/长度，无需另乘单位网格间距因子。
+Three-point quadratic interpolation uses center distances equal to half
+the sum of adjacent widths. It is exact for quadratic potentials and has
+second-order truncation error as neighbor distances shrink.
+`Er=-dphi/dr`, `Ea=-(1/r)*dphi/dalpha`, `Ez=-dphi/dz`.
+Ea is a physical cylindrical component, not Cartesian Ey.
+Output units are potential/length, without unit-grid scaling.
 
-调用顺序：D04 求解 → D05 展开并交换电势 → 物理边界修正 → D07 → 电场交换。
-本模块不执行 MPI 通信或边界重构。电势和网格宽度幽灵值必须由调用方预先填充；
-周期接缝宽度取另一端真实单元宽度。单域 D04 的无幽灵宽度需先扩展一层。
-物理边界精度取决于幽灵电势重构，不能仅靠内部二阶公式保证。
-轴线是单元面，首个单元中心半径为 `dr/2`；轴线幽灵电势应满足柱坐标正则性，
-不能对一般非轴对称场简单作同角度偶反射。模块不计算 r=0 点值。
+Workflow: D04 solve, D05 unpack/exchange, physical boundary correction,
+D07, then electric-field halo exchange. Fill potential AND width halos
+before calling. Periodic width halos wrap from the opposite end.
+Single-domain D04 widths need an added halo layer. This module performs
+no MPI communication or boundary reconstruction. Boundary accuracy depends
+on the supplied ghost potentials. An axis is a face, not a cell center;
+the first center is dr/2. Axis ghosts require cylindrical regularity,
+not same-angle even reflection for a general non-axisymmetric potential.
+No r=0 point values are computed.
 
-文件：`mod_D07_phi_to_E_nonuniform.f90` 为包装入口，
-`sub_D07_phi_to_E_nonuniform.f90` 为算法实现。无 MPI/HYPRE 依赖。
-编译选项参考 `-cpp -fdefault-real-8`。
+The module entry is `mod_D07_phi_to_E_nonuniform.f90`, and the algorithm is implemented in `sub_D07_phi_to_E_nonuniform.f90`. There is no MPI or HYPRE dependency.
+Compile with preprocessing, e.g. `-cpp -fdefault-real-8`.
 
-三个输出均为单元中心值，不能直接传给需要交错面中心电场的 C03。
+All outputs are cell-centered and cannot be passed directly to the staggered-field C03 interface.

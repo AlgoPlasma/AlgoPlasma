@@ -1,5 +1,7 @@
 # E03_fdtd_3d_cartesian
 
+[简体中文](README.zh-CN.md)
+
 This benchmark compares the `E_Maxwell/E03_Maxwell_3Dxyz` Cartesian FDTD
 kernels on AMD and Kunpeng machines:
 

@@ -1,5 +1,7 @@
 # C01_gather_3Dxyz test
 
+[简体中文](README.zh-CN.md)
+
 This test validates `C01_gather_3Dxyz` independently from the rest of the PIC
 loop.
 
