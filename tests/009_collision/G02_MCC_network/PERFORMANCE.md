@@ -103,3 +103,19 @@ mpirun -n 4 /tmp/g02_mcc_hybrid/mpi_collision_box \
 MPI 行使用不同的单通道模型，只用于比较同一模型的 rank/thread 扩展，不应和
 100 通道行直接比较。基准只测 MCC 整步，不含 Poisson、电荷沉积、电场、位置
 推进或壁面；真实 PIC 的最终加速比还取决于它们及宿主粒子分区。
+
+## 复现三个电子群工况的配对测速
+
+在 Linux 或 WSL2 的完整 Git 检出中，从仓库根目录执行下列命令。需要 Python 3、Git、CMake ≥ 3.20、支持 C++20 与 OpenMP 的 G++、MPI 开发库和 `taskset`。脚本单独构建上游基线 `7db6abe` 与当前 `HEAD` 的 G02，给两版链接同一份 [电子群驱动](examples/swarm_benchmark/swarm.cpp)。输出目录必须是新目录。
+
+```sh
+bench=tests/009_collision/G02_MCC_network/examples/swarm_benchmark/run.py
+python3 "$bench" --smoke --out ../swarm-smoke
+python3 "$bench" --out ../swarm-full
+```
+
+第一条命令用三个工况各跑一对短算例来检查安装。第二条命令对 He 关闭电离 50 Td、He 开启电离 200 Td 和 Reid 模型气体 12 Td 各跑三个种子（104729、130363、155921），再对每个工况的第一个种子交换运行顺序复测，共 12 对。若要严格指定逻辑 CPU，可加 `--cpu 2`（原测速使用 CPU 2）。要对照 PR 表格的确切源码，可加 `--candidate 7ecac28`。不同机器的耗时会有差异。
+
+两版从相同的 4,000 个电子开始，采用均匀外场和 0.05 ps 时间步，每 100 步做粒子数控制和诊断。各预运行 40,000 步，计时后续 40,000 步（2–4 ns），计时包含 CSV 刷新。每对须通过过程 CSV、最终粒子状态逐字节比较及碰撞计数检查。输出目录的 `pairs.csv` 记录每对的顺序、耗时和峰值内存，`runs/` 保存可核对的原始结果。每个工况的加速比用三次主测的基线总用时除以候选总用时，反序复测单列。
+
+[固定输入](examples/swarm_benchmark/swarm_inputs.zip)含实际使用的三个初始速度文件和三套 G02 模型。初始速度的平均能量为 0.2 eV。He 的电子碰撞截面来自 WarpX 的 `warpx-data/MCC_cross_sections/He`（Biagi，MAGBOLTZ 7.1），能量轴已换算为 G02 使用的相对能量。Reid 使用解析模型截面。压缩包内的 `attribution/` 保留 He 的来源说明、许可与法律声明，`SHA256SUMS` 可用于逐文件核对。这三个算例使用串行后端。
