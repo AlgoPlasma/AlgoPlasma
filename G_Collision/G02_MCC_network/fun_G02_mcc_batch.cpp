@@ -699,6 +699,8 @@ PreparedMccStep MccStepper::prepare_step(
                     return snapshot[a].id < snapshot[b].id;
                 });
                 if constexpr (G02_REUSE_ID_INDEX) {
+                    // A failed allocation must not leave a partly rebuilt index reusable.
+                    state.index_cache_valid = false;
                     state.sorted_active = active;
                     state.index_ids.resize(size);
                     state.index_alive.assign(size, 0);

@@ -49,6 +49,11 @@ target_link_libraries(test_sampler PRIVATE g02_mcc)
 g02_mcc_configure_cxx(test_sampler)
 add_test(NAME G02_MCC_sampler COMMAND test_sampler)
 
+add_executable(test_batch_retry cpp/test_batch_retry.cpp)
+target_link_libraries(test_batch_retry PRIVATE g02_mcc)
+g02_mcc_configure_cxx(test_batch_retry)
+add_test(NAME G02_MCC_batch_retry COMMAND test_batch_retry)
+
 add_executable(bench_batch cpp/bench_batch.cpp)
 target_link_libraries(bench_batch PRIVATE g02_mcc)
 g02_mcc_configure_cxx(bench_batch)

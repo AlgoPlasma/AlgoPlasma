@@ -4,8 +4,10 @@
 
 #include "mcc.hpp"
 #include "rng.hpp"
+#include "waiting_clock.hpp"
 
 #include <cmath>
+#include <cfenv>
 #include <cstdint>
 #include <filesystem>
 #include <vector>
@@ -13,6 +15,12 @@
 using namespace algoplasma::mcc;
 
 int main() {
+    // A speculative product must not raise overflow before the exact clock
+    // gets a chance to run. Volatile inputs exercise runtime FP arithmetic.
+    volatile double rate = 10., remaining = 1.e308;
+    std::feclearexcept(FE_ALL_EXCEPT);
+    G02_CHECK(!clock_definitely_outside(0.5, rate, remaining));
+    G02_CHECK(std::fetestexcept(FE_OVERFLOW) == 0);
     // First 64-bit draws from the pre-optimization generator. Exercise both
     // reuse within a step and invalidation when the step or seed changes.
     G02_CHECK(CounterRng(104729, 100, 10, 0, 1).next_u64() == 0x70faa1dcfad897f7ULL);
