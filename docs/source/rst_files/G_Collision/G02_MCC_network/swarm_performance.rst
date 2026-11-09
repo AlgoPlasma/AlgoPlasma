@@ -40,7 +40,7 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    .. rubric:: 怎样知道结果没变？
 
-   给原版和优化版同一份初始电子文件和同一个种子，各跑一次，称为“一对”。先比较随时间记录的全部数据，再比较最后每个粒子的位置、速度、编号等状态。在下表所属的测速批次中，九对主测和三对调换顺序的补测，这两类文件逐对、逐字节一致。
+   给原版和优化版同一份初始电子文件和同一个种子，各跑一次，称为“一对”。先比较随时间记录的全部数据，再比较最后每个粒子的位置、速度、编号等状态。18 对运行的过程记录（每次 800 个时刻）和最终粒子状态逐对、逐字节相同。候选碰撞数、真实碰撞数、计时段及全程的电离新生电子数也逐对相等。
 
    历史七轮试验也做过这种比较。下面的图取其中一个例子：氦气开启电离，约化电场为 200 Td。约化电场是电场强度除以背景气体数密度，Td 是它的单位。电离指一次电子碰撞可以产生新的电子。
 
@@ -57,33 +57,41 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
       :header-rows: 1
 
       * - 工况
-        - 原版平均用时
-        - 优化版平均用时
-        - 加速比
-      * - 氦气关闭电离，50 Td
-        - 15.205 s
-        - 4.657 s
-        - 3.26 倍
-      * - 氦气开启电离，200 Td
-        - 19.860 s
-        - 4.617 s
-        - 4.30 倍
-      * - Reid，12 Td
-        - 16.083 s
-        - 4.756 s
-        - 3.38 倍
+        - develop 平均用时
+        - 修复版平均用时
+        - 综合加速比
+        - 主测加速比
+        - 换序加速比
+      * - He 关闭电离，50 Td
+        - 17.740 s
+        - 5.070 s
+        - 3.50×
+        - 3.29×
+        - 3.74×
+      * - He 开启电离，200 Td
+        - 21.623 s
+        - 5.996 s
+        - 3.61×
+        - 3.39×
+        - 3.85×
+      * - Reid 模型气体，12 Td
+        - 17.905 s
+        - 5.408 s
+        - 3.31×
+        - 3.39×
+        - 3.23×
 
-   第一行的意思是：同样走完计时段，原版平均要 15.205 秒，优化版要 4.657 秒。加速比用三次原版总用时除以优化版总用时。表中比较的是上游版本与首次测速的优化版，不含后续两项边界修复。这是给定模拟时间段的单线程速度，不代表多核并行速度，也不要求电子群已达到稳态。
+   表中比较上游 develop（``7db6abe``）和完成两项边界修复的 G02（``8c9e151``）。每个工况用三个种子。两版按主测顺序各跑一次，再用相同输入交换运行顺序。因此每版在每个工况各有六个用时。表中两列秒数是各版六次运行的平均用时。综合加速比用 develop 六次总用时除以修复版六次总用时，最后两列分别只取对应顺序的三次。 这批单线程结果适用于上述三个工况和计时窗口。
 
    .. raw:: html
 
       <details><summary>为什么每个工况跑三对，又为什么调换运行顺序？</summary>
       <p>第一对用种子 104729，旧版与新版各跑一次；换成 130363 做第二对，再换成 155921 做第三对。每一对内部都用相同的种子和对应的初始电子；换种子是为了看看结果是否只在一种抽样下成立。</p>
-      <p>另取第一对的输入，把谁先运行、谁后运行对调，再计一次时。三个工况仍是优化版更快。这三对是补测，没有混入表中的平均用时。</p></details>
+      <p>九个组合全部复测。若主测先跑 develop，就先跑修复版复测，反之亦然。这样每一版都有一次先跑、一次后跑。</p></details>
 
    :download:`最初九个算例：旧 G02 和 WarpX 的逐次用时（CSV） <../../../../../tests/009_collision/G02_MCC_network/warpx_runs.csv>`。每行是一次运行：engine 是程序，steps 是计时步数，seconds 是用时（秒）。
 
-   :download:`本次三个算例：原版和优化版 G02 的逐对用时（CSV） <../../../../../tests/009_collision/G02_MCC_network/timings.csv>`。选 first（首次批次）和 main（主测），即可重算上表。想看碰撞本身怎样验证，可接着读 :doc:`弹性碰撞盒教程 </tests/009_collision/G02_collision_box>`。
+   :download:`最终版与 develop 的全部配对记录（CSV） <../../../../../tests/009_collision/G02_MCC_network/final_timings.csv>`。每一行是一对，main 表示主测，reverse 表示换序复测。baseline_s 和 candidate_s 分别是 develop 和修复版的用时（秒）。想看碰撞本身怎样验证，可接着读 :doc:`弹性碰撞盒教程 </tests/009_collision/G02_collision_box>`。
 
 .. container:: ap-lang ap-lang-en
 
@@ -115,7 +123,7 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    .. rubric:: Did the results change?
 
-   One pair runs both versions with the same initial electron file and seed. For all nine main pairs and three reversed-order pairs in the first batch, both the time records and final particle state files matched byte for byte.
+   One pair runs both versions with the same initial electron file and seed. All nine main pairs and all nine reversed-order pairs matched byte for byte for the 800 time records and the final particle states. Candidate events, real collisions and ionization births also matched in each pair.
 
    An earlier seven-round study also compared these outputs. The following example uses ionizing helium at 200 Td. Ionization can create new electrons. Td is the unit of reduced field (electric field divided by neutral gas number density).
 
@@ -132,29 +140,37 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
       :header-rows: 1
 
       * - Case
-        - Original mean
-        - Optimized mean
-        - Speedup
+        - Mean, develop
+        - Mean, fixed G02
+        - Overall speedup
+        - Main order
+        - Reversed order
       * - He, ionization off, 50 Td
-        - 15.205 s
-        - 4.657 s
-        - 3.26×
+        - 17.740 s
+        - 5.070 s
+        - 3.50×
+        - 3.29×
+        - 3.74×
       * - He, ionization on, 200 Td
-        - 19.860 s
-        - 4.617 s
-        - 4.30×
+        - 21.623 s
+        - 5.996 s
+        - 3.61×
+        - 3.39×
+        - 3.85×
       * - Reid, 12 Td
-        - 16.083 s
-        - 4.756 s
-        - 3.38×
+        - 17.905 s
+        - 5.408 s
+        - 3.31×
+        - 3.39×
+        - 3.23×
 
-   Divide the sum of the three original times by the sum of the three optimized times. The table compares upstream G02 with the first timed version, before the two subsequent edge-case fixes. These results describe single-thread performance in this time window; they do not measure multicore performance or require a steady-state swarm.
+   The table compares develop (``7db6abe``) with the fixed G02 (``8c9e151``). Each seed was run in both orders, giving six times per version in each case. The overall speedup divides total develop time by total fixed-version time. The last two columns use three pairs each. These timings describe the single-thread workload in the stated window.
 
    .. raw:: html
 
       <details><summary>Why three pairs, and why reverse their run order?</summary>
-      <p>Use seed 104729 for the first pair, 130363 for the second and 155921 for the third. Within a pair both versions get the same initial particles and seed. To check whether running first affects timing, reuse the first pair's input and swap which program runs first. The optimized version was faster in all three cases. The extra pairs are excluded from the table.</p></details>
+      <p>Use seed 104729 for the first pair, 130363 for the second and 155921 for the third. Within a pair both versions get the same initial particles and seed. Every pair is repeated with its run order reversed. Each version runs first once for each case and seed.</p></details>
 
    :download:`Original G02 vs WarpX: individual runs (CSV) <../../../../../tests/009_collision/G02_MCC_network/warpx_runs.csv>`. One row per run: engine, measured steps and elapsed seconds.
 
-   :download:`Original vs optimized G02: paired timings (CSV) <../../../../../tests/009_collision/G02_MCC_network/timings.csv>`. Select first (first batch) and main (main comparison) to reproduce the table. For a physics check, see the :doc:`elastic collision box tutorial </tests/009_collision/G02_collision_box>`.
+   :download:`Final G02 vs develop: all 18 pairs (CSV) <../../../../../tests/009_collision/G02_MCC_network/final_timings.csv>`. Each row is one pair. main and reverse identify the two orders. baseline_s and candidate_s are the elapsed seconds for develop and the fixed G02. For a physics check, see the :doc:`elastic collision box tutorial </tests/009_collision/G02_collision_box>`.

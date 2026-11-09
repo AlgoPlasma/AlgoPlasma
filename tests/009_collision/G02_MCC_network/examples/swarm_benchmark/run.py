@@ -79,6 +79,8 @@ def main():
     parser.add_argument('--baseline', default=BASE)
     parser.add_argument('--candidate', default='HEAD')
     parser.add_argument('--smoke', action='store_true', help='check the setup without measuring full cases')
+    parser.add_argument('--reverse-all', action='store_true',
+                        help='repeat all nine main pairs with the run order reversed')
     args = parser.parse_args()
     allowed = os.sched_getaffinity(0)
     cpu = min(allowed) if args.cpu is None else args.cpu
@@ -95,7 +97,7 @@ def main():
         raise ValueError('input archive differs from the PR benchmark')
     with zipfile.ZipFile(archive) as z:
         z.extractall(out)
-    protocol = dict(revisions=versions, cpu=cpu, smoke=args.smoke, dt_s=5e-14, electrons=4000,
+    protocol = dict(revisions=versions, cpu=cpu, smoke=args.smoke, reverse_all=args.reverse_all, dt_s=5e-14, electrons=4000,
                     input_sha256=INPUT_SHA, driver_sha256=hashlib.sha256((HERE/'swarm.cpp').read_bytes()).hexdigest(),
                     compiler=subprocess.check_output(['g++','--version'], text=True).splitlines()[0])
     (out/'environment.json').write_text(json.dumps(protocol, indent=2) + '\n')
@@ -109,9 +111,10 @@ def main():
                                  'smoke' if args.smoke else 'main',
                                  100 if args.smoke else 40000, 200 if args.smoke else 40000))
     if not args.smoke:
-        for first in rows[:3]:
+        main_pairs = rows.copy() if args.reverse_all else rows[:3]
+        for first in main_pairs:
             order = first['order'].split('/')[::-1]
-            rows.append(run_pair(out, exes, cpu, first['model'], first['Td'], SEEDS[0],
+            rows.append(run_pair(out, exes, cpu, first['model'], first['Td'], first['seed'],
                                  order, 'reverse', 40000, 40000))
     with (out/'pairs.csv').open('w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=rows[0])
@@ -120,9 +123,14 @@ def main():
     print(f'{len(rows)} pairs matched (diagnostic CSVs, final states and collision counts).')
     if not args.smoke:
         for model, td in CASES:
-            main_rows = [r for r in rows if r['phase'] == 'main' and r['model'] == model]
-            ratio = sum(r['baseline_s'] for r in main_rows) / sum(r['candidate_s'] for r in main_rows)
-            print(f'{model} {td} Td: {ratio:.3f}x (three seeds, pooled times)')
+            case_rows = [r for r in rows if r['model'] == model]
+            groups = [('main order', [r for r in case_rows if r['phase'] == 'main'])]
+            if args.reverse_all:
+                reverse_rows = [r for r in case_rows if r['phase'] == 'reverse']
+                groups.extend([('reversed order', reverse_rows), ('both orders', case_rows)])
+            for label, group in groups:
+                gain = sum(r['baseline_s'] for r in group) / sum(r['candidate_s'] for r in group)
+                print(f'{model} {td} Td: {gain:.3f}x ({label})')
 
 
 if __name__ == '__main__':
