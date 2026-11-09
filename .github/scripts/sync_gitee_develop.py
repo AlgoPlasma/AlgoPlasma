@@ -17,7 +17,7 @@ from dataclasses import dataclass
 
 
 TOOL = "algoplasma-gitee-develop"
-RECIPE_VERSION = 1
+RECIPE_VERSION = 2
 BOOTSTRAP = "4ad1f7d4261a9efe4975a079509c818356de3dc1"
 JS_PATH = "docs/source/_static/ap-language-switch.js"
 CSS_PATH = "docs/source/_static/custom.css"
@@ -85,23 +85,9 @@ def replace_once(text: str, pattern: str, replacement: str, label: str) -> str:
     return updated
 
 
-def generated_tree(repo: Path, source: str) -> tuple[str, int]:
+def generated_tree(repo: Path, source: str) -> str:
     source_entries = entries(repo, source)
     git(repo, "read-tree", source + "^{tree}")
-    count = 0
-    for path, (mode, kind, blob) in source_entries.items():
-        if path == "README.en.md" or path.endswith("/README.en.md"):
-            if kind != "blob" or mode not in {"100644", "100755"}:
-                raise SyncError(f"English README must be a regular file: {path}")
-            target = path[:-len("README.en.md")] + "README.md"
-            existing = source_entries.get(target)
-            if existing and existing[0] not in {"100644", "100755"}:
-                raise SyncError(f"Default README must be a regular file: {target}")
-            target_mode = existing[0] if existing else mode
-            git(repo, "update-index", "--add", "--cacheinfo", target_mode, blob, target)
-            count += 1
-    if not count:
-        raise SyncError("No README.en.md files found; refusing to publish an untranslated tree")
 
     for path in (JS_PATH, CSS_PATH):
         if path not in source_entries:
@@ -128,9 +114,9 @@ def generated_tree(repo: Path, source: str) -> tuple[str, int]:
     final_entries = entries(repo, tree)
     for path in source_entries.keys() | final_entries.keys():
         if source_entries.get(path) != final_entries.get(path):
-            if path not in {JS_PATH, CSS_PATH} and not (path == "README.md" or path.endswith("/README.md")):
+            if path not in {JS_PATH, CSS_PATH}:
                 raise SyncError("Unexpected generated change: " + path)
-    return tree, count
+    return tree
 
 
 def previous_source(repo: Path, target: str, config: Config) -> str | None:
@@ -174,9 +160,9 @@ def synchronize(config: Config, repo: Path) -> dict[str, str]:
     previous = previous_source(repo, target, config)
     if previous and not ancestor(repo, previous, source):
         raise SyncError("Gitee develop was rewound or rewritten; inspect it before resuming")
-    tree, readme_count = generated_tree(repo, source)
+    tree = generated_tree(repo, source)
     already_imported = ancestor(repo, source, target)
-    summary(f"Mode: {'DRY RUN (no push)' if config.dry_run else 'LIVE'}\n\nGitee source: `{source}`\n\nGitHub before: `{target}`\n\nEnglish README defaults: {readme_count}")
+    summary(f"Mode: {'DRY RUN (no push)' if config.dry_run else 'LIVE'}\n\nGitee source: `{source}`\n\nGitHub before: `{target}`")
     if already_imported and tree == revision(repo, target + "^{tree}"):
         summary("Result: already synchronized; no commit and no push.")
         return {"status": "unchanged", "source": source, "before": target, "after": target}
