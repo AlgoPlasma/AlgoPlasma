@@ -3,8 +3,8 @@
   "use strict";
   var titles = {
   "swarm_performance": {
-    "zh": "G02 碰撞计算怎样提速，怎样验证",
-    "en": "How G02 speeds up collision calculations and verifies the results"
+    "zh": "G02 蒙特卡洛碰撞模块的性能优化与验证",
+    "en": "Performance optimization and verification of the G02 Monte Carlo collision module"
   },
   "references": {
     "zh": "MCC 方法与验证文献",

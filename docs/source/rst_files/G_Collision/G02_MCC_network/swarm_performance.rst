@@ -1,7 +1,7 @@
 .. rst-class:: ap-g02 ap-g02-reference
 
-G02 collision performance and verification
-==========================================
+Performance optimization and verification of the G02 Monte Carlo collision module
+=================================================================================
 
 .. raw:: html
 
