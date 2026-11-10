@@ -1,52 +1,54 @@
-# G01 MCC 截面表加载器测试
+# G01 MCC cross-section loader test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-本目录为 `G_Collision/G01_MCC/sub_G01_load_cross_section.f90` 提供一个聚焦的
-回归测试，用于检查两列截面表加载器的数组边界行为。它不验证 MCC 碰撞物理，
-所用截面表也不代表真实物理数据。
+This directory provides a focused regression test for
+`G_Collision/G01_MCC/sub_G01_load_cross_section.f90`. It checks the array-bound
+behavior of the two-column cross-section loader; it does not validate MCC
+collision physics or use physical cross-section data.
 
-## 测试内容
+## Test cases
 
-- `cross_section_exact_nmax.dat` 恰好包含 `Nmax` 行，用于验证加载结果，并确认
-  读取文件结尾时不会访问 `cross_section(:, Nmax + 1)`。
-- `cross_section_too_many_rows.dat` 包含 `Nmax + 1` 行，用于验证加载器会输出
-  尺寸错误信息、以非零状态退出，并且不会触发 AddressSanitizer 越界报告。
+- `cross_section_exact_nmax.dat` contains exactly `Nmax` rows. The test verifies
+  that all values are loaded without probing `cross_section(:, Nmax + 1)`.
+- `cross_section_too_many_rows.dat` contains `Nmax + 1` rows. The test verifies
+  that the loader prints its size diagnostic and exits with a nonzero status
+  without an AddressSanitizer error.
 
-## 环境要求
+## Requirements
 
 - Bash
-- 支持 AddressSanitizer 的 GNU Fortran
+- GNU Fortran with AddressSanitizer support
 
-Ubuntu/Debian 可使用：
+On Ubuntu/Debian, install GNU Fortran with:
 
 ```bash
 sudo apt update
 sudo apt install -y gfortran
 ```
 
-## 运行
+## Run
 
-从仓库根目录执行：
+From the repository root:
 
 ```bash
 bash tests/009_collision/G01_MCC/clean.sh
 bash tests/009_collision/G01_MCC/run.sh
 ```
 
-测试成功时会输出：
+A successful run prints:
 
 ```text
 PASS: exact-length cross-section table loaded.
 PASS: oversized cross-section table rejected without an out-of-bounds access.
 ```
 
-测试可执行文件生成在 `build/` 下。
+The test executables are written under `build/`.
 
-## 清理
+## Clean
 
 ```bash
 bash tests/009_collision/G01_MCC/clean.sh
 ```
 
-该命令删除本测试目录下的 `build/`。
+This removes the local `build/` directory.

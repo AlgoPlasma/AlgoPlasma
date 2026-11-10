@@ -1,9 +1,9 @@
 # D07_phi_to_E_nonuniform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 对 D04 非均匀柱坐标 `(r,alpha,z)` 单元中心电势计算 `Er,Ea,Ez`。
-`Ea=-(1/r)*dphi/dalpha` 是物理角向电场，不是 Cartesian `Ey`。
+三个分量分别为 `Er=-dphi/dr`、`Ea=-(1/r)*dphi/dalpha` 和 `Ez=-dphi/dz`。`Ea` 是柱坐标下的物理角向电场，不是直角坐标的 `Ey`。
 
 ```fortran
 use mod_D07_phi_to_E_nonuniform

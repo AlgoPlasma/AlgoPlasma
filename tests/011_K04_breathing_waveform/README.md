@@ -1,35 +1,37 @@
 # 011_K04_breathing_waveform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-用人工数据验证 [K04 计算函数](../../K_Diagnostics/K04_breathing_waveform/README.zh-CN.md)，
-并复现[逐步学习页](../../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst)的 12 张图，
-以及[省点知识点](../../docs/source/knowledge/compact_phase.rst)的 2 张图。
-本目录包含数据生成器、示例、画图脚本、17 项本地测试和清理脚本。
-详细说明见[文档测试页](../../docs/source/tests/011_K04_breathing_waveform/index.rst)。
+Verify the [K04 numerical routines](../../K_Diagnostics/K04_breathing_waveform/README.md) with artificial data
+and reproduce the 12 figures in the [learning page](../../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst)
+plus the 2 figures in the [compact-phase note](../../docs/source/knowledge/compact_phase.rst).
+This directory contains generators, example drivers, plotting scripts, 17 local tests and cleanup.
+See the [documentation test page](../../docs/source/tests/011_K04_breathing_waveform/index.rst) for details.
 
-## 环境与运行
+## Environment and commands
 
-需要 Python 3.10+。计算和测试依赖 NumPy，画图还需要 Matplotlib；使用 `Agg` 后端，无需显示器或 LaTeX。
-无需编译或安装 AlgoPlasma。本节命令从**仓库根目录**运行；已有依赖时无需重复安装：
+Python 3.10+. Calculations and tests require NumPy; plots also require Matplotlib.
+The `Agg` backend needs neither a display nor LaTeX. AlgoPlasma needs no compilation or package installation.
+Run these commands from the **repository root**; skip installation if dependencies are already available:
 
 ```bash
 python -m pip install -r tests/011_K04_breathing_waveform/requirements.txt
 bash tests/011_K04_breathing_waveform/run.sh
 ```
 
-`run.sh` 完成全部测试、两个数值示例和 14 张图的复现。只运行测试或只清理产物：
+`run.sh` runs all tests, both numerical examples, and all 14 plots. To run only tests or clean generated files:
 
 ```bash
 bash tests/011_K04_breathing_waveform/test.sh
 bash tests/011_K04_breathing_waveform/clean.sh
 ```
 
-这些脚本需要 Bash，可用于 Linux、macOS 和 WSL；进入本目录后也可执行 `bash run.sh`、`bash test.sh`
-和 `bash clean.sh`。运行脚本默认使用 `python3`，例如 `PYTHON=python bash tests/011_K04_breathing_waveform/run.sh`
-可选择当前环境中的 `python`。脚本关闭 Python 字节码写入，避免在算法目录生成缓存。
+These scripts require Bash on Linux, macOS or WSL. Inside this directory, `bash run.sh`, `bash test.sh`
+and `bash clean.sh` also work. The runners use `python3` by default; for example,
+`PYTHON=python bash tests/011_K04_breathing_waveform/run.sh` selects the current environment's `python`.
+The runners disable bytecode writes to avoid creating caches in the numerical routine directory.
 
-也可从仓库根目录逐步运行 Python，不依赖 Bash 调度：
+Alternatively, run each Python step from the repository root without Bash orchestration:
 
 ```bash
 python -B -m unittest discover -s tests/011_K04_breathing_waveform -v
@@ -39,71 +41,77 @@ python -B tests/011_K04_breathing_waveform/source_py/run_compact_phase.py
 python -B tests/011_K04_breathing_waveform/source_py/plot_compact_phase.py
 ```
 
-## 文件
+## Files
 
-| 文件 | 用途 |
+| File | Purpose |
 | --- | --- |
-| `run.sh` / `test.sh` | 完整复现 / 只运行本地测试 |
-| `source_py/generate.py` | 正文和省点示例的人工数据生成器 |
-| `source_py/run_example.py` | 运行正文示例，保存数组和误差指标 |
-| `source_py/plot_figures.py` | 读取保存的结果，重画正文图 1–12 |
-| `source_py/run_compact_phase.py` | 运行省点知识点示例 |
-| `source_py/plot_compact_phase.py` | 重画移频图和相位误差图 |
-| `source_py/_paths.py` | 按脚本位置定位仓库和默认输出目录 |
-| `test_K04_breathing_waveform.py` | 14 项数值及文内代码一致性测试 |
-| `test_clean.py` | 3 项清理范围与符号链接测试 |
-| `clean.sh` | 删除默认运行产物及本目录的 Python 缓存 |
-| `requirements.txt` | NumPy、Matplotlib 依赖 |
-| `output/` | 运行后生成的结果，被 Git 忽略 |
+| `run.sh` / `test.sh` | Full reproduction / local tests only |
+| `source_py/generate.py` | Main and compact-phase artificial-data generators |
+| `source_py/run_example.py` | Run the main example; save arrays and metrics |
+| `source_py/plot_figures.py` | Read saved results and redraw Figures 1–12 |
+| `source_py/run_compact_phase.py` | Run the compact-phase example |
+| `source_py/plot_compact_phase.py` | Redraw the frequency-shift and phase-error figures |
+| `source_py/_paths.py` | Locate the repository and default output directory |
+| `test_K04_breathing_waveform.py` | 14 numerical and documentation-agreement tests |
+| `test_clean.py` | 3 cleanup-scope and symlink tests |
+| `clean.sh` | Remove default outputs and this test case's Python caches |
+| `requirements.txt` | NumPy and Matplotlib dependencies |
+| `output/` | Generated results; ignored by Git |
 
-## 输出与预期结果
+## Outputs and expected results
 
-默认结果位于本目录的 `output/`，重复运行覆盖同名文件：
+Results default to this directory's `output/`. Reruns overwrite matching output names.
 
-- `synthetic_result.npz`：人工输入、生成器答案，以及 `F`、`F_hat`、相位、`mu`、`a`、`w`、`C`、`R` 等中间量。
-- `metrics.json`：固定种子 20261004，10 条记录，每条 160000 点，采样率 8 MHz，留出第 0 条。
-  主频为 39750 Hz，`H=75`，最少训练计数 5566，波形相对生成器答案的 RMSE 约 **0.00493408 V**。
-- `figures/r3_01_x.png` 至 `r3_12_residual.png`：正文图 1–12，文件名与文档一致。
-- `compact_phase_result.npz`、`compact_phase_metrics.json` 和 `compact_figures/`：省点计算结果和两张图。
-  4096 个粗网格点所得相位相对直接法的 RMSE 约 **6.8351e-7 rad**。
+- `synthetic_result.npz`: artificial inputs, checking truth, and intermediate `F`, `F_hat`, phases,
+  `mu`, `a`, `w`, `C`, `R`, and other arrays.
+- `metrics.json`: seed `20261004`, ten 160000-point records sampled at 8 MHz, holding out record 0.
+  Main frequency 39750 Hz, `H=75`, minimum training count 5566, and waveform RMSE
+  against generator truth approximately **0.00493408 V**.
+- `figures/r3_01_x.png` through `r3_12_residual.png`: Figures 1–12 with the documentation filenames.
+- `compact_phase_result.npz`, `compact_phase_metrics.json`, `compact_figures/`: compact-phase results
+  and two figures. With 4096 coarse points, phase RMSE versus the direct method is approximately **6.8351e-7 rad**.
 
-`C_known`、`phi_known` 只用于核对，提取过程不读取答案。`R` 是剩余电压，`error` 是估计误差。
-这些指标针对固定人工数据，不代表实验数据的普遍精度。
+`C_known` and `phi_known` are checking truth, never inputs to extraction. `R` is residual voltage;
+`error` is estimation error. These reference values describe fixed artificial data, not measured-data accuracy.
 
-运行脚本支持 `--output-dir`，正文示例另支持 `--seed`；画图脚本支持 `--input` 和 `--output-dir`。
-用 `--help` 查看选项。改变数值输出目录时，画图输入也应同步修改，例如从仓库根目录运行：
+Run scripts accept `--output-dir`; the main example also accepts `--seed`.
+Plot scripts accept `--input` and `--output-dir`. Append `--help` for options.
+After changing numerical output locations, point the plotter at the new result, for example from the repository root:
 
 ```bash
 python -B tests/011_K04_breathing_waveform/source_py/run_example.py --output-dir /tmp/k04-demo
 python -B tests/011_K04_breathing_waveform/source_py/plot_figures.py --input /tmp/k04-demo/synthetic_result.npz --output-dir /tmp/k04-demo/figures
 ```
 
-## 测试检查了什么？
+## What do the tests check?
 
-14 项数值测试检查已知相位、正频率半振幅、原始电压分箱、样本加权、整条记录留出、半箱位置修正、
-谐波截断、周期查表、输入约束、人工波形恢复、省点归一化与移频、插值精度及首尾整圈数。
-还会读取中英两版正文与知识点中的代码片段，实际执行并核对它们与计算函数的结果一致。
-成功显示 `OK`，失败返回非零退出码。固定人工数据的回归阈值为波形 RMSE <10 mV、
-省点相位 RMSE <1e-6 rad；这些不是普遍的物理精度界限。
+The 14 numerical tests check known phase and positive-frequency half amplitude, original-voltage bins,
+sample weighting and holdout exclusion, half-bin correction, harmonic truncation, periodic lookup,
+input constraints, synthetic recovery, compact normalization/shifts, interpolation accuracy, and endpoint winding.
+They execute both languages of the actual documentation snippets and compare them with the numerical routines.
+Success prints `OK`; failure exits nonzero. The fixed artificial example uses regression budgets of
+waveform RMSE <10 mV and compact phase RMSE <1e-6 rad; these are not universal physical accuracy limits.
 
-另外 3 项测试在临时目录检查清理范围、重复运行、符号链接与脚本位置。
-非 POSIX/Bash 环境跳过这 3 项，数值测试照常运行。
+Three additional tests use temporary directories to check cleanup scope, repeat runs, symlinks and script location.
+They are skipped outside POSIX/Bash environments; numerical tests still run.
 
-## 更新文档图片
+## Update documentation figures
 
-默认画图只写入 `output/`。检查结果后，若要更新文档中的 12+2 张图，从仓库根目录运行：
+Default plotting writes only to `output/`. After inspecting the results, update the 12+2 documentation assets
+from the repository root with:
 
 ```bash
 python -B tests/011_K04_breathing_waveform/source_py/plot_figures.py --output-dir docs/source/images/K_Diagnostics/k04
 python -B tests/011_K04_breathing_waveform/source_py/plot_compact_phase.py --output-dir docs/source/images/knowledge
 ```
 
-这两行会覆盖对应文档图片；须先生成两个数值示例。
-随后按[文档指南](../../docs/DOCUMENTATION_GUIDE.md)重建 Sphinx。
+Generate both numerical examples first. These commands overwrite the corresponding documentation images.
+Then rebuild Sphinx following the [documentation guide](../../docs/DOCUMENTATION_GUIDE.md).
 
-## 清理范围
+## Cleanup scope
 
-`clean.sh` 删除本测试目录的整个默认 `output/` 和其下的数据、指标、图片，以及本测试目录内的
-Python `__pycache__/`，包括 Git 忽略的文件。可重复运行，使默认生成文件恢复到刚克隆时不存在的状态。
-源码、README、文档保存的图片和用户修改会保留。用 `--output-dir` 写到其他位置的结果需单独清理。
-脚本不重置 Git，也不清理其他模块或整个文档构建目录。
+`clean.sh` removes this test case's entire default `output/` directory, including data, metrics and images,
+plus Python `__pycache__/` directories within this test case, including Git-ignored files.
+Repeated cleaning succeeds and restores the absence of default generated artifacts expected in a fresh clone.
+Source, READMEs, saved documentation figures and user edits remain. Results written elsewhere with
+`--output-dir` require separate cleanup. The script does not reset Git or clean other modules or documentation builds.

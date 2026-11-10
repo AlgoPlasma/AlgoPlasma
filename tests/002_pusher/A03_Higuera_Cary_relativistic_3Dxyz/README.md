@@ -1,31 +1,31 @@
-# A03_Higuera_Cary_relativistic_3Dxyz 测试
+# A03_Higuera_Cary_relativistic_3Dxyz Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-本目录提供 `A_Pusher/A03_Higuera_Cary_relativistic_3Dxyz` 的独立测试，用于验证三维直角坐标中的相对论 Higuera-Cary 粒子速度推进器。测试程序会编译一个小型 Fortran 驱动，运行相对论回旋和高 Lorentz 因子 `E x B` 漂移算例，并与解析解或参考容差对比。
+This directory provides an independent test for `A_Pusher/A03_Higuera_Cary_relativistic_3Dxyz`, the relativistic Higuera-Cary particle velocity pusher in 3D Cartesian coordinates. The test builds a small Fortran driver, runs relativistic gyro and high-Lorentz-factor `E x B` drift cases, and compares the numerical result against analytic references or a reference tolerance.
 
-## 测试内容
+## Test Cases
 
-测试入口为 `source_f90/main.f90`，会依次运行 3 个算例：
+The entry point is `source_f90/main.f90`, which runs three cases:
 
-| 输出文件 | 算例 | 验证内容 |
+| Output file | Case | What it checks |
 | --- | --- | --- |
-| `build/case01_gyro.dat` | 相对论纯磁场回旋运动 | 初速度为 `0.9c`，使用相对论修正后的回旋频率对比解析轨道和速度。 |
-| `build/case02_exb_drift.dat` | `gamma = 20` 的力自由 `E x B` 漂移 | 设置 `E = -v_y B_z` 使 Lorentz 力抵消，检查粒子是否保持 `x = 0` 并沿漂移方向匀速运动。 |
-| `build/case03_warpx_exb_drift.dat` | WarpX 参考 `E x B` 漂移测试 | 使用正电子荷质比和 WarpX 参考设置，检查最终 `|x| < 0.001` 的容差。 |
+| `build/case01_gyro.dat` | Relativistic gyromotion in a magnetic field | Uses an initial speed of `0.9c` and compares trajectory and velocity against the analytic solution with the relativistically corrected gyrofrequency. |
+| `build/case02_exb_drift.dat` | Force-free `E x B` drift with `gamma = 20` | Sets `E = -v_y B_z` so the Lorentz force cancels, then checks that the particle keeps `x = 0` while drifting at constant velocity. |
+| `build/case03_warpx_exb_drift.dat` | WarpX reference `E x B` drift test | Uses the positron charge-to-mass ratio and WarpX-style reference setup, then checks the final `abs(x) < 0.001` tolerance. |
 
-运行程序时，每个算例会在终端输出最大速度误差和最大位置误差。第三个算例还会输出 WarpX 参考容差的 `PASS` 或 `FAIL`。
+When the executable runs, each case prints the maximum velocity error and maximum position error. The third case also prints `PASS` or `FAIL` for the WarpX reference tolerance.
 
-## 环境要求
+## Requirements
 
-编译和运行需要：
+Build and run requirements:
 
-- POSIX shell 或 bash。
-- GNU Fortran 编译器 `gfortran`。
-- Python 3。
-- Python 包 `numpy` 和 `matplotlib`。
+- POSIX shell or bash.
+- GNU Fortran compiler `gfortran`.
+- Python 3.
+- Python packages `numpy` and `matplotlib`.
 
-在 Ubuntu/Debian 上可使用：
+On Ubuntu/Debian, install the required tools with:
 
 ```bash
 sudo apt update
@@ -33,7 +33,7 @@ sudo apt install -y gfortran python3 python3-pip
 python3 -m pip install --user numpy matplotlib
 ```
 
-如果希望使用虚拟环境：
+To use a virtual environment instead:
 
 ```bash
 python3 -m venv ~/.venv
@@ -41,9 +41,9 @@ source ~/.venv/bin/activate
 pip install numpy matplotlib
 ```
 
-## 编译与运行
+## Build and Run
 
-从本目录运行：
+Run from this directory:
 
 ```bash
 cd tests/002_pusher/A03_Higuera_Cary_relativistic_3Dxyz
@@ -52,40 +52,40 @@ bash make.sh
 bash run.sh
 ```
 
-`make.sh` 会创建 `build/` 并生成 `build/a.out`。`run.sh` 会进入 `build/` 运行该程序，并生成：
+`make.sh` creates `build/` and builds `build/a.out`. `run.sh` enters `build/`, runs the executable, and generates:
 
 - `build/case01_gyro.dat`
 - `build/case02_exb_drift.dat`
 - `build/case03_warpx_exb_drift.dat`
 
-如果 `make.sh` 提示 `build` 已存在，请先运行 `bash clean.sh`。
+If `make.sh` reports that `build` already exists, run `bash clean.sh` first.
 
-## 绘图
+## Plot
 
-运行：
+Run:
 
 ```bash
 bash plot.sh
 ```
 
-绘图脚本会读取前两个算例的数据文件，并将图片保存到 `figs_cases/`。当前会生成：
+The plotting script reads the first two case data files and saves figures to `figs_cases/`. It currently writes:
 
 - `figs_cases/case01_gyro_traj_xy.png`
 - `figs_cases/case01_gyro_v2_t.png`
 - `figs_cases/case02_exb_drift_x_t.png`
 - `figs_cases/case02_exb_drift_traj_xy.png`
 
-`case03_warpx_exb_drift.dat` 当前用于终端数值检查，不会被 `plot.sh` 绘图。
+`case03_warpx_exb_drift.dat` is currently used for terminal-side numerical checking and is not plotted by `plot.sh`.
 
-## 清理
+## Clean
 
-运行：
+Run:
 
 ```bash
 bash clean.sh
 ```
 
-该命令会删除：
+This removes:
 
 - `build/`
 - `figs_cases/`

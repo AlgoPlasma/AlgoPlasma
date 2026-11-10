@@ -1,5 +1,7 @@
 # E_Maxwell Kunpeng/AMD comparison
 
+[简体中文](README.zh-CN.md)
+
 This directory stores cross-platform comparison tests for `E_Maxwell`
 subroutines. Each subdirectory is one benchmark case and should be runnable on
 both AMD and Kunpeng machines with platform-specific entry points:

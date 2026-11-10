@@ -1,24 +1,25 @@
 # B_Scatter
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`B_Scatter` 收纳 AlgoPlasma 中从粒子到网格的沉积算子。
+`B_Scatter` contains AlgoPlasma particle-to-grid deposition operators.
 
-## 子目录
+## Subdirectories
 
-- `B01_scatter_3Dxyz`: 三维直角坐标 `xyz` 下的 CIC/NGP 风格数密度、动量密度和统计量沉积。
-- `B02_deposit_3d_cyl`: 三维柱坐标 `r,phi,z` 下的电荷密度和电流密度沉积，包含轴线平均处理。
-- `B03_scatter_3Dxyz_bspline`: 三维直角坐标 `xyz` 下的任意阶 B-spline 粒子数和粒子分量沉积。
-- [B04_scatter_3d_cyl_nonuniform](B04_scatter_3d_cyl_nonuniform/README.md)：非均匀三维柱坐标网格上的节点数密度／电荷密度沉积，含体积准备、轴点加权与可选单元平均。
+- `B01_scatter_3Dxyz`: CIC/NGP-style number-density, momentum-density, and statistical deposition on a 3D Cartesian `xyz` grid.
+- `B02_deposit_3d_cyl`: charge-density and current-density deposition on a 3D cylindrical `r,phi,z` grid, including axis averaging.
+- `B03_scatter_3Dxyz_bspline`: arbitrary-order B-spline number and particle-component deposition on a 3D Cartesian `xyz` grid.
+- [B04_scatter_3d_cyl_nonuniform](B04_scatter_3d_cyl_nonuniform/README.md): nodal number/charge density deposition on a nonuniform cylindrical grid, with geometry preparation, axis weighting and optional cell averaging.
 
-## 约定
+## Conventions
 
-- 粒子数组通常使用 `par(1:6,1:np)`，其中 `1:3` 为位置，`4:6` 为速度或其他粒子分量。
-- B01 和 B03 面向 Cartesian 网格；B02 面向 cylindrical 网格，并处理 `r=0` 轴线退化。
-- B04 使用物理节点坐标及调用方给定的单元号；角向周期配置和数组形状见其模块说明。
-- 源码使用默认 `real`；需要双精度默认实数时应统一使用 `-fdefault-real-8` 或 `-real-size 64`。
-- 使用 `include` 或 MPI 交换的入口通常需要启用 Fortran 预处理，例如 `-cpp` 或 `-fpp`。
+- Particle arrays usually use `par(1:6,1:np)`, where `1:3` are positions and `4:6` are velocities or other particle components.
+- B01 and B03 target Cartesian grids; B02 targets cylindrical grids and handles the `r=0` axis degeneracy.
+- B04 uses physical node coordinates and caller-supplied cell indices; see its module guide for angular topology and array shapes.
+- Sources use default `real`; double-precision default reals should be selected consistently with `-fdefault-real-8` or `-real-size 64`.
+- Entry points using `include` or MPI exchange normally require Fortran preprocessing, for example `-cpp` or `-fpp`.
 
-## 测试
+## Tests
 
-相关测试见 `tests/004_scatter` 以及 Sphinx 的 `004_scatter` 测试说明页。
+Related tests live under `tests/004_scatter` and in the Sphinx `004_scatter`
+test overview page.

@@ -1,32 +1,32 @@
 # A01_Boris_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`A01_Boris_3Dxyz` 提供三维直角坐标中的非相对论 Boris 速度推进器。它在给定电场和磁场后，对单个粒子的速度 `v = (v_x, v_y, v_z)` 做一次完整更新。
+`A01_Boris_3Dxyz` provides a non-relativistic Boris velocity pusher for a single particle in 3D Cartesian coordinates. It advances the particle velocity `v = (v_x, v_y, v_z)` under prescribed electric and magnetic fields.
 
-## 文件
+## Files
 
-| 文件 | 作用 |
+| File | Role |
 | --- | --- |
-| `mod_A01_Boris_3Dxyz.f90` | 源码级 Fortran module 入口，用于收纳并导出核心子程序。 |
-| `sub_A01_Boris_3Dxyz.f90` | 核心 Boris 速度更新子程序。 |
+| `mod_A01_Boris_3Dxyz.f90` | Source-level Fortran module entry. It includes and exports the core subroutine. |
+| `sub_A01_Boris_3Dxyz.f90` | Core Boris velocity update routine. |
 
-## 接口
+## Interface
 
 ```fortran
 call sub_A01_Boris_3Dxyz(v, E, B, k)
 ```
 
-| 参数 | 方向 | 含义 |
+| Argument | Direction | Meaning |
 | --- | --- | --- |
-| `v(1:3)` | in/out | 粒子速度的直角坐标分量。 |
-| `E(1:3)` | in | 粒子位置处的电场。 |
-| `B(1:3)` | in | 粒子位置处的磁场。 |
-| `k` | in | Boris 参数，通常为 `q * dt / (2 * m)`。 |
+| `v(1:3)` | in/out | Particle velocity in Cartesian components. |
+| `E(1:3)` | in | Electric field at the particle position. |
+| `B(1:3)` | in | Magnetic field at the particle position. |
+| `k` | in | Boris parameter, usually `q * dt / (2 * m)`. |
 
-## 使用方式
+## Usage
 
-该算法以源码级 Fortran module 组织。调用程序通常先包含 module 入口文件，再 `use` 对应 module：
+The routine is organized as a source-level Fortran module. A calling program usually includes the module entry file and then uses the module:
 
 ```fortran
 #include "A_Pusher/A01_Boris_3Dxyz/mod_A01_Boris_3Dxyz.f90"
@@ -46,20 +46,20 @@ program demo_a01
 end program demo_a01
 ```
 
-由于 module 使用 `#include`，编译时通常需要开启 C 预处理：
+Compilation usually requires C preprocessing because the module uses `#include`:
 
 ```bash
 gfortran -cpp -O2 demo_a01.f90
 ```
 
-源码中使用默认 `real`。如果需要双精度，可在编译时选择对应编译器选项，例如：
+The source uses default `real`. If double precision is required, choose the compiler option at build time, for example:
 
 ```bash
 gfortran -cpp -O2 -fdefault-real-8 demo_a01.f90
 ifx -fpp -O2 -real-size 64 demo_a01.f90
 ```
 
-## 参考文献
+## References
 
 [1] J.P. Boris, Relativistic plasma simulation-optimization of a hybrid code, in: Proceedings of the Fourth Conference on Numerical Simulation of Plasmas, Naval Research Laboratory, Washington, D.C., 1970, pp.3-67.
 

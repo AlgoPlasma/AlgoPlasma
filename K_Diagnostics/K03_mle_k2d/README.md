@@ -1,56 +1,64 @@
 # K03_mle_k2d
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-每条基线通过相位差约束波矢沿该方向的投影。将多个构型的对数似然相加，可以在二维波数平面上寻找共同支持的波矢。基线的方向和长度共同决定相位条纹的交汇位置。
+Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
-## 文件
+## Files
 
-按仓库约定，一个 routine 一个文件，`mod_` 只做汇总。
+One routine per file, as elsewhere in the repository; `mod_` only aggregates.
 
-| 文件 | 作用 |
+| File | Purpose |
 | --- | --- |
-| `mod_K03_mle_k2d.py` | 模块入口，汇总本单元全部 routine。 |
-| `fun_K03_wavenumber_grid.py` | 构造 `[-k_range, +k_range]` 上的均匀网格。 |
-| `fun_K03_predicted_phase.py` | 前向模型 `K·χ` 在网格上的取值。 |
-| `fun_K03_config_log_likelihood.py` | 单构型对数似然。 |
-| `fun_K03_joint_log_likelihood.py` | 多构型求和。 |
-| `fun_K03_peak_wavevector.py` | 峰位及其极坐标形式。 |
-| `fun_K03_search_wavevector.py` | 完整均匀网格遍历（分块向量化）。 |
+| `mod_K03_mle_k2d.py` | Module entry, collecting the routines of this unit. |
+| `fun_K03_wavenumber_grid.py` | Uniform grid on `[-k_range, +k_range]`. |
+| `fun_K03_predicted_phase.py` | The forward model `K . chi` on the grid. |
+| `fun_K03_config_log_likelihood.py` | Log-likelihood of one configuration. |
+| `fun_K03_joint_log_likelihood.py` | Sum over configurations. |
+| `fun_K03_peak_wavevector.py` | Peak location, Cartesian and polar. |
+| `fun_K03_search_wavevector.py` | Exhaustive uniform-grid search in row blocks. |
 
-## 接口
+## Interface
 
-| 函数 | 作用 |
+| Function | Purpose |
 | --- | --- |
-| `fun_K03_wavenumber_grid(k_range_rad_m, n_grid)` | 构造 `[-k_range, +k_range]` 上的均匀网格。 |
-| `fun_K03_predicted_phase(chi, kx_values, ky_values)` | 前向模型 `K·χ` 在网格上的取值。 |
-| `fun_K03_config_log_likelihood(chi, delta_theta, variance, kx_values, ky_values)` | 单构型对数似然。 |
-| `fun_K03_joint_log_likelihood(configurations, kx_values, ky_values, normalise=True)` | 多构型求和。 |
-| `fun_K03_peak_wavevector(log_likelihood, kx_values, ky_values)` | 峰位及其极坐标形式。 |
-| `fun_K03_search_wavevector(configurations, k_range_rad_m, ...)` | 完整均匀网格遍历（分块向量化）。 |
+| `fun_K03_wavenumber_grid(k_range_rad_m, n_grid)` | Uniform grid on `[-k_range, +k_range]`. |
+| `fun_K03_predicted_phase(chi, kx_values, ky_values)` | The forward model `K . chi` on the grid. |
+| `fun_K03_config_log_likelihood(chi, delta_theta, variance, kx_values, ky_values)` | Log-likelihood of one configuration. |
+| `fun_K03_joint_log_likelihood(configurations, kx_values, ky_values, normalise=True)` | Sum over configurations. |
+| `fun_K03_peak_wavevector(log_likelihood, kx_values, ky_values)` | Peak location, Cartesian and polar. |
+| `fun_K03_search_wavevector(configurations, k_range_rad_m, ...)` | Exhaustive uniform-grid search in row blocks. |
 
-数组按 `[iy, ix]` 索引，与 `numpy.meshgrid` 默认次序一致。
+Arrays are indexed `[iy, ix]`, matching the default ordering of
+`numpy.meshgrid`.
 
-## 似然
+## Likelihood
 
 ```
-ln L_j(K) = -½ · wrap(K·χ_j - θ̄_j)² / σ_j²
-ln L(K)   = Σ_j ln L_j(K)
+ln L_j(K) = -0.5 wrap(K.chi_j - theta_bar_j)^2 / sigma_j^2
+ln L(K)   = sum_j ln L_j(K)
 ```
 
-前向模型 `K·χ` 与 `K01_signal_spectra` 的互相位约定一致，不带符号翻转。
+The forward model `K . chi` matches the cross-phase convention of
+`K01_signal_spectra`, with no sign flip.
 
-**残差在平方前先折算到 `(-π, π]`。** 这一步不是数值便利：正是它使混叠构型贡献出周期性的条纹族而非单条脊，混叠信息因而保留在似然里、可以被其他构型解出。
+**The residual is wrapped before squaring.**  That step is not a numerical
+convenience: it is what makes an aliased configuration contribute a periodic
+family of fringes rather than one ridge, so the folded information stays in the
+likelihood and can be resolved by the other configurations.
 
-## 注意事项
+## Notes
 
-- **几何。** 每条基线通过相位差约束波矢沿该方向的投影。将多个构型的对数似然相加，可以在二维波数平面上寻找共同支持的波矢。基线的方向和长度共同决定相位条纹的交汇位置。
-- **搜索范围**。估计值被限制在网格内，`k_range` 必须包含真实波矢；边界峰需要核查范围。网格分辨率同时影响局部峰位与混叠分支选择。
-- 方差描述分段相位的散布，在似然中用于衡量相位残差；众数估计的稳定性可通过改变样本数和分箱检查。
-- **内存**。似然数组为 `n_grid²` 个 float64，401×401 约 1.3 MB，逐构型累加。
-- 在给定的二维波数范围内建立均匀网格，计算各网格点的联合对数似然，取最大值对应的波矢作为估计结果。n_grid 指定每个坐标轴的点数，block_rows 指定每批计算的网格行数。
+- **Geometry.** Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
+- **Search range.**  The estimate is confined to the grid, so `k_range` must
+  contain the true wavevector. A boundary peak warrants a range check. Grid
+  resolution affects both the local peak position and the choice of alias branch.
+- The variance describes segment-phase scatter and scales the phase residual in the likelihood. Vary sample count and histogram binning to assess the stability of the mode estimate.
+- **Memory.**  The likelihood array holds `n_grid^2` float64 values: about
+  1.3 MB at 401x401, accumulated configuration by configuration.
+- Build a uniform grid over the chosen two-dimensional wavenumber range, evaluate the joint log likelihood at every point, and report the wavevector at its maximum. n_grid sets the number of points per axis; block_rows sets the number of rows evaluated in each batch.
 
-## 使用方式
+## Usage
 
 ```python
 import sys
@@ -62,24 +70,31 @@ from K_Diagnostics.K03_mle_k2d.mod_K03_mle_k2d import (
 )
 
 grid = fun_K03_wavenumber_grid(k_range_rad_m=3300.0, n_grid=301)
-configs = [(chi_j, delta_theta_j, variance_j) for ...]   # 来自 K01
+configs = [(chi_j, delta_theta_j, variance_j) for ...]   # from K01
 result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, grid), grid, grid)
 # result["kx"], result["ky"], result["k_magnitude"], result["angle_deg"]
 ```
 
-## 测试
+## Tests
 
-- [基础数值测试](../../tests/010_diagnostics/case_basic_checks/)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
-- [宽带测试](../../tests/010_diagnostics/case_broadband_dispersion/)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
+- [basic_numerical tests](../../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
+- [broadband_dispersion](../../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
 
-宽带页面的图、数值表、逐频点 CSV 和源码哈希来自同次运行。阈值是这个合成案例的工程验收要求，不代表普适精度保证。
+The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
 
 
-## 方法来源
+## Provenance
 
-本实现遵循 Liu 和 Jorns 提出的多构型贝叶斯空间反混叠方法。
+This implementation follows the multi-configuration Bayesian spatial
+anti-aliasing method of Liu and Jorns.
 
-## 参考文献
+## References
 
-- M. F. Liu and B. A. Jorns, "Anti-aliasing technique for inferring dispersion of short-wavelength instabilities in electric propulsion devices," AIAA SciTech Forum, Paper AIAA-2025-1293 (2025), [doi:10.2514/6.2025-1293](https://doi.org/10.2514/6.2025-1293)。
-- M. F. Liu and B. A. Jorns, "Experimental validation of a spatial anti-aliasing plasma wave analysis technique on ion acoustic turbulence in a hollow cathode plume," 39th International Electric Propulsion Conference, Paper IEPC-2025-357 (2025)。
+- M. F. Liu and B. A. Jorns, "Anti-aliasing technique for inferring dispersion
+  of short-wavelength instabilities in electric propulsion devices," AIAA
+  SciTech Forum, Paper AIAA-2025-1293 (2025),
+  [doi:10.2514/6.2025-1293](https://doi.org/10.2514/6.2025-1293).
+- M. F. Liu and B. A. Jorns, "Experimental validation of a spatial
+  anti-aliasing plasma wave analysis technique on ion acoustic turbulence in a
+  hollow cathode plume," 39th International Electric Propulsion Conference,
+  Paper IEPC-2025-357 (2025).

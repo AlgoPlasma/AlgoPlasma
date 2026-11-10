@@ -1,5 +1,7 @@
 # RZ 2D Uniform vs Nonuniform Grid MMS Test
 
+[简体中文](README.zh-CN.md)
+
 ## 1. Purpose
 
 This test is designed to validate the cylindrical `r-z` Poisson solvers on:
@@ -66,7 +68,7 @@ This boundary setup is fully compatible with the current D03 / D04 assembly rout
 
 ### Fortran main program
 
-- `main_compare_uniform_nonuniform_rz_mms.f90`
+- `main_compare_uniform_nonuniform_mms.f90`
 
 This program:
 
@@ -76,7 +78,7 @@ This program:
 
 ### Python plotting script
 
-- `plot_compare_uniform_nonuniform_rz_mms.py`
+- `plot_compare_uniform_nonuniform.py`
 
 This script:
 
@@ -98,3 +100,4 @@ Format:
 
 ```text
 # N err_inf_uniform err_l2_uniform err_inf_nonuniform err_l2_nonuniform
+```

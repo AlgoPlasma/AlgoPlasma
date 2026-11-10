@@ -1,24 +1,25 @@
 # I02_par_init_and_load
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`I02_par_init_and_load` 提供离线二进制粒子初值生成和 MPI 载入流程。
+`I02_par_init_and_load` provides an offline binary particle generator and an MPI
+loader workflow.
 
-## 文件
+## Files
 
-- `init_particles_bin.py`: 在三维 T 形区域中生成电子/离子初始粒子，并输出二进制文件和诊断图。
-- `mod_I02_load_init_particles_bin.f90`: Fortran 模块包装器。
-- `sub_I02_load_init_particles_bin.f90`: 读取二进制粒子文件，并按当前 MPI 子域筛选本地粒子。
+- `init_particles_bin.py`: generates initial electron and ion particles in a three-dimensional T-shaped region, then writes binary files and diagnostic plots.
+- `mod_I02_load_init_particles_bin.f90`: Fortran module wrapper.
+- `sub_I02_load_init_particles_bin.f90`: reads binary particle files and filters local particles for the current MPI subdomain.
 
-## 输入输出
+## Inputs and Outputs
 
-- Python 输出目录：`output_init_particles_bin/`
-- 电子文件：`par_ele_init.bin`
-- 离子文件：`par_ion_init.bin`
-- 每个粒子记录：`x,y,z,vx,vy,vz`，数据类型为 `float64`。
+- Python output directory: `output_init_particles_bin/`
+- Electron file: `par_ele_init.bin`
+- Ion file: `par_ion_init.bin`
+- Particle record layout: `x,y,z,vx,vy,vz` as `float64`.
 
-## 依赖
+## Dependencies
 
-- Python 脚本依赖 NumPy、SciPy 和 Matplotlib。
-- Fortran 载入例程依赖 MPI，并通过 `include` 组织源码。
-- 默认粒子数很大，运行脚本前需要确认内存和磁盘空间。
+- The Python script depends on NumPy, SciPy, and Matplotlib.
+- The Fortran loader depends on MPI and is organized with `include`.
+- The default particle count is large, so check memory and disk space before running the script.

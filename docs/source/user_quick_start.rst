@@ -172,7 +172,7 @@ User Quick Start
 
          .. rubric:: 后续调用其他模块
 
-         - 先看模块目录里的 ``README.zh-CN.md``。
+         - 先看模块目录里的中文说明 ``README.zh-CN.md``。
          - 再看对应测试页，确认运行命令和输出含义。
          - 复杂模块可能需要 MPI、HYPRE、HDF5 或 Python 绘图环境，具体以模块说明为准。
 
@@ -365,7 +365,7 @@ User Quick Start
 
          .. rubric:: Calling Other Modules
 
-         - Start with the module directory's ``README.en.md``.
+         - Start with the module directory's English README (``README.md``).
          - Then read the related test page for run commands and output meaning.
          - More complex modules may require MPI, HYPRE, HDF5, or Python plotting packages; use the module notes as the source of truth.
 

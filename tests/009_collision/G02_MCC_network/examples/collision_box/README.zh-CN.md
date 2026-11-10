@@ -1,6 +1,6 @@
 # 零维碰撞盒：看一群热粒子怎样冷却
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 这个算例只研究一件事：**一群又热、又整体向右运动的 A 粒子，与较冷的 B 气体反复碰撞后，会怎样变化？**
 
@@ -327,7 +327,7 @@ T(t) = m × (Q(t) - |U(t)|^2) / (3 k_B)
 bash tests/009_collision/G02_MCC_network/run.sh
 ```
 
-测试项和 MPI/OpenMP 运行方式见
+测试需要支持 C++20 的编译器和 CMake。测试项和 MPI/OpenMP 运行方式见
 [测试说明](../../README.zh-CN.md)。
 
 如果只运行 C++ 程序、不画图，可以直接调用已构建的可执行文件。
