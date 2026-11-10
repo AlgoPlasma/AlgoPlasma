@@ -127,7 +127,12 @@ The main path uses N=2048 throughout. Run `analyze_spectral_walkthrough.py`; see
 Raw captures remain external. Figures use record-centred voltage fluctuations;
 DC calibration, channel response and physical rate conversion are distinguished.
 
-The [seventh page](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst)
+The [seventh page](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst)
+works from measured complex moments to linear-only L, a real two-pair matrix,
+full signed-pair joint L/Q and the Kim common-power check, ending with held-out
+residuals. Reproduce its seven figures with analyze_coefficient_walkthrough.py.
+
+The [validation supplement](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst)
 compares linear and quadratic predictions with four whole-capture holdouts.
 It follows errors, residual relations, coefficient identifiability and all preset
 sensitivity settings. Reproduce it with `validate_experiment.py` as described

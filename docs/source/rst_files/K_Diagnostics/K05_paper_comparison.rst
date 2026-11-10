@@ -54,9 +54,8 @@
 
    The gray strip is the **0.537–4.980 MHz coefficient-fit band**, not the
    measurement bandwidth. The coefficient calculation uses 2048-point segments,
-   as on :ref:`page 07 <k05-validation-en>`. It retains nonzero quadratic inputs
-   up to 5 MHz in absolute frequency. The 5–20 MHz prediction example on that
-   page used a different input band and only one holdout; it is not silently
+   as on :ref:`page 07 <k05-experiment-coefficients-en>`. It retains nonzero quadratic inputs
+   up to 5 MHz in absolute frequency. The 5–20 MHz prediction example in the :ref:`validation supplement <k05-validation-en>` used a different input band and only one holdout; it is not silently
    combined with these four-split Kim results.
 
    **Panel (a) supplies a frequency-to-wave-number model.** The azimuthal wave
@@ -540,7 +539,7 @@
 
    The saved coefficients and moments come from :code:`analyze_transfer_budget.py`;
    their calculation is described on the supplementary page. The new script
-   reads those arrays, the page 07 target powers and the page 06 spectra.
+   reads those arrays, the validation supplement\'s target powers and the page 06 spectra.
    It does not refit the captures. From the repository root:
 
    .. code-block:: bash
@@ -614,9 +613,9 @@
    （原图没有标注这两个端点）。两个通道共用电压尺度，没有为了让曲线重合而各自缩放。
 
    灰色竖带表示 **0.537–4.980 MHz 的系数拟合频段**，不是采集带宽。
-   系数计算沿用 :ref:`第七页 <k05-validation-zh>` 的 2048 点分段，
+   系数计算沿用 :ref:`第七页 <k05-experiment-coefficients-zh>` 的 2048 点分段，
    二次输入保留绝对频率不超过 5 MHz 的非零频点。
-   第七页的 5–20 MHz 预测示例采用了另一输入频带、且只有一轮留出验证，
+   :ref:`验证补充页 <k05-validation-zh>` 的 5–20 MHz 预测示例采用了另一输入频带、且只有一轮留出验证，
    因此没有直接混入这里的四轮 Kim 结果。
 
    **(a) 提供频率与波数之间的模型关系。**
@@ -1050,7 +1049,7 @@
       <details class="k05-note"><summary>复现图形，或者替换暂用估计参数</summary>
 
    保存的系数和矩来自 :code:`analyze_transfer_budget.py`，详细算法见补充页。
-   新脚本读取这些数组、第七页的检验组功率和第六页的频谱，不重新拟合原始记录。
+   新脚本读取这些数组、验证补充页的检验组功率和第六页的频谱，不重新拟合原始记录。
    在仓库根目录运行：
 
    .. code-block:: bash

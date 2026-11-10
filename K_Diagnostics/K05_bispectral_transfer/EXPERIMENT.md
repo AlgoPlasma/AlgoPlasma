@@ -55,8 +55,59 @@ K05 static-assets folder. Full arrays and PNGs stay outside Git. The supplementa
 
 The older N=16384 PSD/coherence overview below is retained for reproduction of
 historical figures and existing paper-comparison panels. It is not the main grid
-on the rewritten page06; do not mix its averages with N=2048 moments. Pages07–11
-retain their existing computations until a separate update is requested.
+on the rewritten page06; do not mix its averages with N=2048 moments. The coefficient walkthrough reuses and audits the saved fits; it does not change
+those parent results. The detailed validation is now supplement 12.
+
+
+## Page 07: measured moments to coefficients (R38)
+
+Run with NumPy, SciPy and Matplotlib, after generating the preserved validation
+and transfer-budget outputs described below:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+python K_Diagnostics/K05_bispectral_transfer/analyze_coefficient_walkthrough.py \
+  --data /path/to/experiment-data \
+  --validation /path/to/model-validation \
+  --budget /path/to/transfer-budget \
+  --output /path/to/new-coefficient-walkthrough
+```
+
+--metadata optionally replaces experiment_z5p5_a3p7.json. Output must be empty.
+All eight raw hashes must match both parent manifests. The script checks common
+grids and all saved LS coefficients, reconstructs N=2048 coefficients through
+5 MHz, verifies the main split's training PX/PY/G across all targets, and
+independently refits its fixed 2.001953125 MHz example. Parent arrays remain
+unchanged; all-grid curves reuse the audited parent results. This is a new
+explanation and targeted numerical audit, not a new all-grid inference run.
+
+The main fit trains on captures3/4/5 (14646 rows), testing capture2 (4882 rows).
+Page06's worked PX/PY/G were capture2 averages; distinguish these from training
+moments. The teaching model uses fixed bin pairs (10,31) and (-10,51), never
+selected by large Q. It explicitly evaluates the raw and RMS-scaled 3x3 moments.
+The full example uses all81 signed pairs feeding bin41. Linear-only, joint LS
+and Kim are separate fits; never fix the linear-only coefficient when adding Q.
+
+Outputs: coefficient_walkthrough_arrays.npz (actual small design/moments/scales,
+small fitted coefficients, full example b/d/F and LS/Kim coefficients, held-out
+Y and three predictions); coefficient_walkthrough_summary.json (configuration,
+parent/raw/source hashes, units, software and audits); seven SVG/PNG pairs.
+Copy k05-fit-*.svg and the summary as k05-fit-summary.json to the K05 static
+directory. PNGs and complete arrays stay outside Git.
+
+Q maps display unique unordered pairs for the main split, in inverse volts,
+with signed f1/f2 axes. Gray means uncomputed. The 0.01 V^-1 logarithmic color
+floor is display-only, not a significance threshold. The white line selects
+the fixed target. No symmetric duplication or rate conversion is applied.
+Only8/92 main-split and35/368 four-split Kim solutions pass the common-power
+bound; failed cases remain explicitly labelled algebraic results. All LS
+designs are full rank, with scaled conditions4.888–10.765. A numerical rank
+check is not a test of probe calibration or stationary independent noise.
+
+The former page07 remains available at K05_model_validation.rst as supplement12;
+its high-frequency plot, sensitivity results and semantic anchors are preserved.
+Reviewed01–05 prose is retained, apart from relinking page05's next example.
+Renumber in overview reading order and rebuild all pages after this move.
 
 ## Preserved first-analysis producer
 
@@ -138,7 +189,7 @@ held-out prediction, appropriate Kim assumptions and calibrated measurement/phas
 response. Potential/energy and per-second rates additionally require the plasma
 response and group velocity. Those quantities are not claimed by these scripts.
 
-## Leave-one-capture-out model validation (page 07)
+## Leave-one-capture-out model validation (supplement 12)
 
 ```bash
 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
@@ -212,7 +263,7 @@ This is predictive least squares with noisy voltage predictors. It does not
 apply Kim's stationary correction, identify a causal coupling, or turn measured
 volts into a calibrated potential, growth rate, or energy transfer.
 
-## Dense high-frequency extension of Figure 2 (page 07)
+## Dense high-frequency extension of Figure 2 (supplement 12)
 
 ```bash
 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
@@ -381,7 +432,7 @@ The reading order is now page08 probe interpretation, page09 results, then page1
 power-budget checks. The existing K05_power_budget.rst path and equation links
 are preserved. Page09 uses a new K05_paper_comparison.rst and two composite plots.
 
-Run the earlier page06,07 and budget analyses first, or use their preserved
+Run the earlier spectra, validation and budget analyses first, or use their preserved
 spectral_arrays.npz, validation_arrays.npz and transfer_arrays.npz outputs:
 
 ```bash

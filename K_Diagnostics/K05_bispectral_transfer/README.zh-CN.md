@@ -99,7 +99,11 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 读取器、计算参数、测试及重建命令见 [EXPERIMENT.md](EXPERIMENT.md)。
 原始 bin 不放入仓库；图使用去整段均值的电压波动，绝对直流标定与通道响应另行核查。
 
-[第七页](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst)
+[第七页](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst)
+从实测复统计量出发，先求仅线性 L，展开两波对矩阵，再联合拟合全部带符号波对的 L/Q，
+按步骤计算 Kim 共同功率并检查上界，最后用留出残差检验。七张图由 analyze_coefficient_walkthrough.py 复现。
+
+[验证补充页](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst)
 比较线性与二次模型对整组留出记录的预测，依次检查误差、残差关联、系数可辨识性和预定设置的敏感性。
 使用 `validate_experiment.py` 复现，详见 [EXPERIMENT.md](EXPERIMENT.md)。
 

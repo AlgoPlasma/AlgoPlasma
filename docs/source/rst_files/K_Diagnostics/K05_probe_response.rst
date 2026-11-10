@@ -17,7 +17,7 @@
 
    .. container:: k05-text
 
-      The :ref:`previous page <k05-validation-en>` compared simultaneous
+      The :ref:`previous page <k05-experiment-coefficients-en>` compared simultaneous
       high-frequency signals from two probes held at fixed bias. Each probe can also
       be connected separately to a **voltage-sweep circuit** : vary its bias slowly
       and measure a mean current–voltage characteristic (I–V curve).
@@ -683,7 +683,7 @@
 
    .. container:: k05-text
 
-      前面的 :ref:`双探针验证 <k05-validation-zh>` 使用两支探针在固定偏压下
+      前面的 :ref:`实测系数计算 <k05-experiment-coefficients-zh>` 使用两支探针在固定偏压下
       同步记录高频波动。同一支探针也可以单独改接 **电压扫描电路** ：
       缓慢改变偏压，测得平均电流—电压特性（I–V characteristic），
       从中估计电子温度等背景平均量。本页的“扫描”指改变电压，不是移动探针。

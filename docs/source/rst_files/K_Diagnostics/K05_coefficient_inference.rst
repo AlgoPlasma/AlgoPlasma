@@ -82,7 +82,7 @@
       model has no residual term. Pair grouping also matters: a unique off-diagonal
       coefficient combines two ordered coefficients. Neither this :math:`\varepsilon`
       nor the record label :math:`r` is the dielectric or the real-part subscript.
-      :ref:`Page 07 <k05-validation-en>` tests this model on excluded captures.
+      :ref:`Page 07 <k05-experiment-coefficients-en>` tests this model on excluded captures.
 
 
    Here :math:`L_f` is the **linear transfer coefficient**: it multiplies the
@@ -837,7 +837,7 @@
       K05 明确保留残差 :math:`\varepsilon_f^{(r)}`，文献印刷模型没有这一项。
       波对的计数也要一致：去重后的非对角系数合并了两个有序系数。
       这里的 :math:`\varepsilon` 不是介电函数，记录标签 :math:`r` 也不是实部下标。
-      :ref:`第 07 页 <k05-validation-zh>` 用没有参与拟合的记录检验这个模型。
+      :ref:`第 07 页 <k05-experiment-coefficients-zh>` 用没有参与拟合的记录检验这个模型。
 
 
    :math:`L_f` 是 **线性传递系数（linear transfer coefficient）** ，乘在已经位于 :math:`f` 的分量上。

@@ -58,9 +58,15 @@ the expanded matrix, computation auxiliaries and derivative/substitution steps.
 
 Revision 36 (2026-11-06) reorganizes page 06 around one N=2048 data walkthrough.
 It preserves its existing equation IDs, moves reading/phase diagnostics into
-optional panels, and adds `experiment-running-power`. There are now **139 active
-equations**. The first five pages and their numbers are unchanged. All later
+optional panels, and adds `experiment-running-power`. There were **139 active equations** at that revision. The first five pages and their numbers are unchanged. All later
 references resolve through semantic IDs after rebuilding.
+
+Revision 38 (2026-11-10) adds six measured-coefficient example equations in the
+new page07, and moves the former validation page to supplement12 while preserving
+its path and eight equation IDs. There are now **145 active equations**.
+The first six pages still occupy numbers1–101; new page07 uses102–107.
+All downstream display numbers follow the reordered overview; semantic IDs stay
+stable. Run --write/--check and rebuild all references.
 
 In an English container:
 

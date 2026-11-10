@@ -579,7 +579,7 @@
    quadratic input basis. The coefficient calculation also accounts for the retained
    difference-frequency pairs using negative-frequency conjugates. With the moments
    in hand, the next step is to solve for L and Q and test the resulting model, as in
-   the :ref:`following page <k05-validation-en>`. Growth and signed transfer require
+   the :ref:`following page <k05-experiment-coefficients-en>`. Growth and signed transfer require
    those coefficients and the propagation/measurement inputs discussed on page 05.
 
    .. raw:: html
@@ -1134,7 +1134,7 @@
 
    正频率和频三角形只是便于读图的展示域，不是完整的二次模型输入。
    求系数时还要通过负频率的共轭关系，计入所保留频带内的差频波对。
-   有了这些统计量，下一步就能求 L、Q 并检查模型，见 :ref:`后续页面 <k05-validation-zh>`。
+   有了这些统计量，下一步就能求 L、Q 并检查模型，见 :ref:`后续页面 <k05-experiment-coefficients-zh>`。
    要进一步得到增长和有符号转移，还需这些系数，以及第 05 页已经说明的传播与测量信息。
 
    .. raw:: html

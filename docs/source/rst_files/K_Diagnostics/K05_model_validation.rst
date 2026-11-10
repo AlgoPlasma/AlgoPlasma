@@ -1,5 +1,5 @@
-07 · Validating the two-probe model
-==================================================
+12 · Supplement: validating the two-probe model
+===========================================================================
 
 .. raw:: html
 
@@ -15,8 +15,9 @@
 
    .. rubric:: A bright bispectral pattern suggests a question
 
-   The :ref:`previous page <k05-experiment-en>` found repeatable relations between
-   frequencies. Can those relations help predict what the other probe records?
+   The :ref:`spectral-statistics page <k05-experiment-en>` found repeatable relations
+   between frequencies. The :ref:`coefficient walkthrough <k05-experiment-coefficients-en>`
+   used a fixed example to fit L/Q. This supplement expands its prediction checks. Can those relations help predict what the other probe records?
    Here we test the :ref:`two-probe model <k05-inference-en>` using measurements
    excluded from fitting. This checks a necessary predictive property of the
    approach discussed in [1]; prediction alone does not identify a physical interaction.
@@ -72,7 +73,7 @@
    Use all nonzero signed inputs with :math:`|f_1|,|f_2|\leq5\ \mathrm{MHz}`,
    :math:`f_1+f_2=f`, and :math:`f_1\leq f_2`. Negative-frequency coefficients
    are reconstructed as :math:`X_{-f}=X_f^*`. Thus difference interactions are
-   included, unlike the positive-only display on the preceding page. Swapping
+   included, unlike the positive-only display on the spectral-statistics page. Swapping
    the two inputs produces the same column: merge it once, with no extra factor
    of two. The main fits contain 51–96 quadratic columns plus one linear column.
    The finite band is a modelling restriction, not a statement that other
@@ -156,7 +157,7 @@
    largely remains in the residual. Matching average spectral power alone would
    not establish that the segment-by-segment prediction is correct.
 
-   This connects to the reduced high-frequency **coherence** on the preceding
+   This connects to the reduced high-frequency **coherence** on the spectral-statistics
    page. Consider the optimal linear predictor for one unchanged statistical
    population. Define :math:`P_X=\langle|X_f|^2\rangle` and
    :math:`P_Y=\langle|Y_f|^2\rangle`, both in V² and both nonzero; the brackets
@@ -523,7 +524,7 @@
    the model further; they do not yet determine EDI growth, an energy-transfer
    direction or an inverse cascade. Such interpretations require the additional
    measurement-response and propagation assumptions. The
-   :ref:`next page <k05-response-en>` uses swept-probe data to examine the
+   :ref:`probe-response page <k05-response-en>` uses swept-probe data to examine the
    collection regime and electrical-response scenarios.
 
    .. raw:: html
@@ -577,7 +578,9 @@
 
    .. rubric:: 从双谱中的结构，提出一个可检验的问题
 
-   :ref:`上一页面 <k05-experiment-zh>` 看到了频率之间可重复的关联。
+   :ref:`谱统计量页面 <k05-experiment-zh>` 看到了频率之间可重复的关联；
+   :ref:`系数计算页面 <k05-experiment-coefficients-zh>` 用固定例子求出 L/Q。
+   本补充页展开其中的预测检验。
    这些关联能否帮助预测另一支探针的记录？本页面用未参与拟合的数据，检验
    :ref:`双探针模型 <k05-inference-zh>`。这是对文献 [1] 所用模型的一项预测能力检查；
    预测有效本身还不能识别具体的物理相互作用。
@@ -630,7 +633,7 @@
    纳入满足 :math:`|f_1|,|f_2|\leq5\ \mathrm{MHz}`、
    :math:`f_1+f_2=f`、:math:`f_1\leq f_2` 的所有非零带符号频点。
    用 :math:`X_{-f}=X_f^*` 恢复负频率，因此包含差频作用，
-   比上一页仅用于展示的正频率三角域更完整。
+   比谱统计量页仅用于展示的正频率三角域更完整。
    交换输入次序会得到相同预测列，只合并保留一次，不额外乘二。
    主配置每个目标有 51–96 个二次列，再加一个线性列。
    有限输入带是模型截断，不代表带外频率没有物理作用。
@@ -704,7 +707,7 @@
    在各段之间不稳定，仍会贡献实测 PSD，却难以被固定系数预测，因而主要留在残差中。
    仅让平均功率谱接近，还不能说明逐段预测正确。
 
-   这与上一页面看到的高频 **相干度（coherence）** 降低相呼应。
+   这与第 06 页看到的高频 **相干度（coherence）** 降低相呼应。
    先考虑统计关系保持不变、针对同一统计总体得到的最优线性预测。
    记 :math:`P_X=\langle|X_f|^2\rangle`、:math:`P_Y=\langle|Y_f|^2\rangle`，
    两者单位均为 V²，且都非零；尖括号对这个相同的统计总体平均。
@@ -1037,7 +1040,7 @@
    所测配置的数值矩阵条件良好；频率依赖和贡献大小仍对分析设置敏感。
    这些结果支持进一步研究模型，但还没有确定 EDI 增长、能量转移方向或逆级联。
    后者还需要测量响应和传播条件。
-   :ref:`下一页面 <k05-response-zh>` 用扫描探针数据检查收集状态和电路响应情景。
+   :ref:`探针响应页面 <k05-response-zh>` 用扫描探针数据检查收集状态和电路响应情景。
 
    .. raw:: html
 
@@ -1052,7 +1055,7 @@
 
    输出包含九张 SVG／PNG 图、``validation_summary.json`` 和 ``validation_arrays.npz``。
    摘要记录输入哈希、分组、所有预定设置和软件版本；数组保留系数、波对、训练缩放、
-   奇异值、测试误差及模型功率项。使用单独输出目录保留上一页面的分析。
+   奇异值、测试误差及模型功率项。使用单独输出目录保留谱统计量页的分析。
 
    下载 :download:`validation script <../../../../K_Diagnostics/K05_bispectral_transfer/validate_experiment.py>`,
    :download:`shared preprocessing <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py>`,
