@@ -1,3 +1,7 @@
+#include "waiting_clock.hpp"
+#ifndef G02_REUSE_BATCH_VALIDATION
+#define G02_REUSE_BATCH_VALIDATION 1
+#endif
 // SPDX-License-Identifier: Apache-2.0
 // 阅读导引：输入校验/通道准备 → 背景抽样/末态构造 → 守恒检查 → 公开接口。
 // 第一次阅读可先跳到 collide_impl，看标有“步骤”的主流程，再回看辅助函数。
@@ -28,7 +32,6 @@ namespace {
 // 时间、通道、接受判定和末态各用独立 slot；修改某一步取数次数不串扰其他用途。
 // RNG slots. They are part of the replay contract and must never depend on
 // thread, rank or input order.
-constexpr std::uint64_t slot_clock = 0x01;
 constexpr std::uint64_t slot_select = 0x02;
 constexpr std::uint64_t slot_real = 0x03;
 constexpr std::uint64_t slot_final = 0x04;
@@ -135,11 +138,15 @@ void validate_particle(const CompiledModel& model, const ParticleState& particle
 
 [[nodiscard]] PreparedRequest prepare_request(const CompiledModel& model,
                                               const CollisionRequest& request,
-                                              const BackgroundIndex* borrowed = nullptr) {
-    if (!is_finite(request.dt_s) || request.dt_s < 0.0) {
-        throw Error("collision request dt_s must be finite and non-negative");
+                                              const BackgroundIndex* borrowed = nullptr,
+                                              const bool validated_batch = false) {
+    // Only the private batch entry may reuse checks on its immutable step snapshot.
+    if (!validated_batch) {
+        if (!is_finite(request.dt_s) || request.dt_s < 0.0) {
+            throw Error("collision request dt_s must be finite and non-negative");
+        }
+        validate_particle(model, request.projectile, "projectile");
     }
-    validate_particle(model, request.projectile, "projectile");
 
     PreparedRequest prepared;
     prepared.borrowed_components = borrowed;
@@ -616,12 +623,19 @@ BackgroundIndex MccEngine::index_background(
 StepOutcome MccEngine::collide_full_batch(
     const CollisionRequest& request, const BackgroundIndex& background_index,
     const ChannelCacheLookup lookup, void* lookup_context,
-    const std::uint32_t max_candidates, const bool record_events) const {
-    if (max_candidates == 0U || max_candidates == UINT32_MAX) {
-        throw Error("max_candidates must be in [1, UINT32_MAX - 1]");
+    const std::uint32_t max_candidates, const bool record_events,
+    const Real* first_candidate_time) const {
+    // MccStepper checked dt, candidate limit, species/state, weight and velocity
+    // before creating this request from its immutable snapshot. Public calls
+    // retain full validation; channel matching and event checks remain active.
+    if constexpr (!G02_REUSE_BATCH_VALIDATION) {
+        if (max_candidates == 0U || max_candidates == UINT32_MAX) {
+            throw Error("max_candidates must be in [1, UINT32_MAX - 1]");
+        }
     }
     return collide_impl(request, true, max_candidates, record_events,
-                        &background_index, lookup, lookup_context);
+                        &background_index, lookup, lookup_context,
+                        G02_REUSE_BATCH_VALIDATION != 0, first_candidate_time);
 }
 
 // ── 主流程：候选时刻 → 通道 → 背景速度 → 接受/拒绝 → 末态与守恒 ──
@@ -632,9 +646,11 @@ StepOutcome MccEngine::collide_impl(const CollisionRequest& request,
                                    const bool record_events,
                                    const BackgroundIndex* background_index,
                                    const ChannelCacheLookup cache_lookup,
-                                   void* cache_context) const {
+                                   void* cache_context,
+                                   const bool validated_batch,
+                                   const Real* first_candidate_time) const {
     const CompiledModel& model = *model_;
-    const PreparedRequest prepared = prepare_request(model, request, background_index);
+    const PreparedRequest prepared = prepare_request(model, request, background_index, validated_batch);
 
     StepOutcome outcome;
     outcome.primary_after = request.projectile;
@@ -671,10 +687,17 @@ StepOutcome MccEngine::collide_impl(const CollisionRequest& request,
 
         // 步骤 2：总上界 nu_max 对应指数等待时间 tau=-ln(1-U)/nu_max。
         // 先生成比真实碰撞更频繁的候选事件；候选落在本时间步之外就结束。
-        CounterRng clock_rng(request.seed, request.global_step, request.projectile.id,
-                             event_index, slot_clock);
-        const Real uniform = clock_rng.uniform_open();
-        const Real time_to_event = -std::log1p(-uniform) / total_majorant;
+        Real time_to_event;
+        if (event_index == 0U && first_candidate_time != nullptr) {
+            // The private batch path already drew this exact clock sample.
+            time_to_event = *first_candidate_time;
+        } else {
+            CounterRng clock_rng(request.seed, request.global_step, request.projectile.id,
+                                 event_index, slot_clock);
+            const Real uniform = clock_rng.uniform_open();
+            if (clock_definitely_outside(uniform, total_majorant, remaining)) break;
+            time_to_event = -std::log1p(-uniform) / total_majorant;
+        }
         if (!(time_to_event <= remaining)) break; // includes infinite time_to_event
         if (complete_step && outcome.candidates >= max_candidates) {
             throw Error("max_candidates exceeded before completing the collision step");

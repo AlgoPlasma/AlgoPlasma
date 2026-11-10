@@ -54,7 +54,7 @@ All three entries belong to G02. Bounded versus complete describes advancement b
 
 ## Model input
 
-The repository ships no cross-section data files or blank tables. Create a model directory following the [CSV guide](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst), which documents headers, references, units, defaults and a complete inline minimal example.
+The [electron swarm benchmark inputs](../../tests/009_collision/G02_MCC_network/examples/swarm_benchmark/swarm_inputs.zip) include the initial electrons, model files and cross-section tables used in that example. For a custom model, supply cross sections appropriate to its reactions and energy range and create a model directory following the [CSV guide](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst), which documents headers, references, units, defaults and a complete inline minimal example.
 
 Two-body cross sections use relative energy in eV and values in m2. Two-/three-body temperature rate coefficients use m3/s and m6/s. The reader checks units without conversion. Successful loading does not establish the validity of the physical data or approximations.
 
