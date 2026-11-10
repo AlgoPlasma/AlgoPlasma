@@ -1,4 +1,4 @@
-mod_B04_scatter_3d_cyl_nonuniform
+mod_B04_scatter_3d_raz_nonuniform
 =================================
 
 .. raw:: html
@@ -21,13 +21,13 @@ mod_B04_scatter_3d_cyl_nonuniform
    模块提供以下四个子程序，**由调用方按计算需要组织调用**；各自的公式、参数和代码对应关系见链接页面。
 
    - :doc:`sub_B04_build_geometry <sub_B04_build_geometry>`：**准备几何量**，计算有效节点体积的倒数和角向节点基函数积分，供沉积及轴点处理使用。
-   - :doc:`sub_B04_scatter_3d_cyl_nonuniform <sub_B04_scatter_3d_cyl_nonuniform>`：**执行单粒子沉积**，根据粒子位置、所在单元和所代表的粒子数或电荷量，累加节点密度。
+   - :doc:`sub_B04_scatter_3d_raz_nonuniform <sub_B04_scatter_3d_raz_nonuniform>`：**执行单粒子沉积**，根据粒子位置、所在单元和所代表的粒子数或电荷量，累加节点密度。
    - :doc:`sub_B04_average_axis <sub_B04_average_axis>`：**处理全周网格的轴点密度**，对 ``r=0`` 处各角向节点的密度加权平均，使同一轴点具有一致的密度值。
    - :doc:`sub_B04_project_density <sub_B04_project_density>`：**计算单元体积平均密度**，在后续计算需要单元量时，由节点密度计算各单元内的体积平均值。
 
    .. code-block:: fortran
 
-      use mod_B04_scatter_3d_cyl_nonuniform
+      use mod_B04_scatter_3d_raz_nonuniform
 
    .. rubric:: 子程序之间传递的数据
 
@@ -86,7 +86,7 @@ mod_B04_scatter_3d_cyl_nonuniform
    可直接编译的程序及命令见 :doc:`调用示例 <usage>`。
 
 
-   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -101,13 +101,13 @@ mod_B04_scatter_3d_cyl_nonuniform
    The module exposes four routines. **The caller selects and sequences the calls**; the linked pages explain their formulas, parameters and implementation.
 
    - :doc:`sub_B04_build_geometry <sub_B04_build_geometry>`: **prepare geometric measures**, computing inverse effective nodal volumes and angular nodal basis integrals for deposition and axis averaging.
-   - :doc:`sub_B04_scatter_3d_cyl_nonuniform <sub_B04_scatter_3d_cyl_nonuniform>`: **deposit one particle**, using its position, containing cell and represented number or charge to accumulate nodal density.
+   - :doc:`sub_B04_scatter_3d_raz_nonuniform <sub_B04_scatter_3d_raz_nonuniform>`: **deposit one particle**, using its position, containing cell and represented number or charge to accumulate nodal density.
    - :doc:`sub_B04_average_axis <sub_B04_average_axis>`: **average density on a full-circle axis**, giving angular nodes at the same physical point on ``r=0`` a common weighted density.
    - :doc:`sub_B04_project_density <sub_B04_project_density>`: **compute cell-volume-averaged density** from nodal density when downstream calculations require cell-based quantities.
 
    .. code-block:: fortran
 
-      use mod_B04_scatter_3d_cyl_nonuniform
+      use mod_B04_scatter_3d_raz_nonuniform
 
    .. rubric:: Data passed between routines
 
@@ -137,22 +137,22 @@ mod_B04_scatter_3d_cyl_nonuniform
    The :doc:`calling example <usage>` supplies a complete source and build command.
 
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 
    .. rubric:: Generated API
 
-   .. doxygennamespace:: mod_b04_scatter_3d_cyl_nonuniform
+   .. doxygennamespace:: mod_b04_scatter_3d_raz_nonuniform
       :desc-only:
 
-   .. doxygenvariable:: mod_b04_scatter_3d_cyl_nonuniform::b04_ok
+   .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_ok
 
-   .. doxygenvariable:: mod_b04_scatter_3d_cyl_nonuniform::b04_bad_shape
+   .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_bad_shape
 
-   .. doxygenvariable:: mod_b04_scatter_3d_cyl_nonuniform::b04_bad_grid
+   .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_bad_grid
 
-   .. doxygenvariable:: mod_b04_scatter_3d_cyl_nonuniform::b04_bad_cell
+   .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_bad_cell
 
-   .. doxygenvariable:: mod_b04_scatter_3d_cyl_nonuniform::b04_bad_value
+   .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_bad_value
 
-   .. doxygenvariable:: mod_b04_scatter_3d_cyl_nonuniform::b04_bad_volume
+   .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_bad_volume
 

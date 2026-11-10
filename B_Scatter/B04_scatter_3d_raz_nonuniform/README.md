@@ -1,4 +1,4 @@
-# B04_scatter_3d_cyl_nonuniform
+# B04_scatter_3d_raz_nonuniform
 
 [中文说明与公式](README.zh-CN.md) | [English guide and formulas](README.en.md)
 
@@ -9,6 +9,9 @@ First-order CIC number/charge density deposition on a nonuniform cylindrical
 `(r, phi, z)` grid, with nodal geometry preparation, single-particle accumulation,
 volume-weighted axis averaging and optional cell-volume averaging.
 
-- 模块入口 / Module: [mod_B04_scatter_3d_cyl_nonuniform.f90](mod_B04_scatter_3d_cyl_nonuniform.f90)
-- 测试说明 / Tests: [README](../../tests/004_scatter/B04_scatter_3d_cyl_nonuniform/README.md)
+名称中的 `raz` 表示径向、角向和轴向；接口中的角向坐标使用 `phi`。
+In the name, `raz` denotes radial, angular and axial directions; the angular coordinate is named `phi` in the interfaces.
+
+- 模块入口 / Module: [mod_B04_scatter_3d_raz_nonuniform.f90](mod_B04_scatter_3d_raz_nonuniform.f90)
+- 测试说明 / Tests: [README](../../tests/004_scatter/B04_scatter_3d_raz_nonuniform/README.md)
 - 依赖 / Dependencies: Fortran 2008 compiler, preprocessing and intrinsic `ieee_arithmetic`.

@@ -39,7 +39,7 @@
 !> @note Radial and axial array endpoints are treated as physical endpoints.
 !> For MPI interface nodes, use complete nodal volumes including the basis
 !> support on both sides of the interface.
-!> @see @ref sub_b04_scatter_3d_cyl_nonuniform "sub_B04_scatter_3d_cyl_nonuniform",
+!> @see @ref sub_b04_scatter_3d_raz_nonuniform "sub_B04_scatter_3d_raz_nonuniform",
 !> @ref sub_b04_average_axis "sub_B04_average_axis"
 subroutine sub_B04_build_geometry(r, phi, z, periodic_phi, inv_volume, phi_measure, ierr)
     real, intent(in) :: r(0:), phi(0:), z(0:)

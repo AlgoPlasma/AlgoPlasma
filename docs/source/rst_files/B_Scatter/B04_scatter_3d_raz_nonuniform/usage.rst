@@ -16,12 +16,12 @@ B04: Calling Example
    依次完成 **准备体积 → 清零密度 → 沉积 → 读取总粒子数 → 可选单元平均** 。
    例子没有轴线，因而直接使用内径节点。
 
-   .. literalinclude:: ../../../../../examples/B04_scatter_3d_cyl_nonuniform/main.f90
+   .. literalinclude:: ../../../../../examples/B04_scatter_3d_raz_nonuniform/main.f90
       :language: fortran
       :linenos:
 
-   源文件位于仓库的 ``examples/B04_scatter_3d_cyl_nonuniform/main.f90``，也可
-   :download:`下载示例主程序 <../../../../../examples/B04_scatter_3d_cyl_nonuniform/main.f90>`。
+   源文件位于仓库的 ``examples/B04_scatter_3d_raz_nonuniform/main.f90``，也可
+   :download:`下载示例主程序 <../../../../../examples/B04_scatter_3d_raz_nonuniform/main.f90>`。
    按下面的命令，将它与仓库中的 B04 模块一起编译。
 
    .. rubric:: 编译和预期输出
@@ -29,14 +29,14 @@ B04: Calling Example
    .. code-block:: bash
 
       # From the repository root; GNU Fortran
-      mkdir -p examples/B04_scatter_3d_cyl_nonuniform/build
+      mkdir -p examples/B04_scatter_3d_raz_nonuniform/build
       gfortran -cpp -std=f2008 -fdefault-real-8 -O0 -g -fcheck=all \
-        -I B_Scatter/B04_scatter_3d_cyl_nonuniform \
-        -J examples/B04_scatter_3d_cyl_nonuniform/build \
-        B_Scatter/B04_scatter_3d_cyl_nonuniform/mod_B04_scatter_3d_cyl_nonuniform.f90 \
-        examples/B04_scatter_3d_cyl_nonuniform/main.f90 \
-        -o examples/B04_scatter_3d_cyl_nonuniform/build/b04_minimal
-      examples/B04_scatter_3d_cyl_nonuniform/build/b04_minimal
+        -I B_Scatter/B04_scatter_3d_raz_nonuniform \
+        -J examples/B04_scatter_3d_raz_nonuniform/build \
+        B_Scatter/B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform.f90 \
+        examples/B04_scatter_3d_raz_nonuniform/main.f90 \
+        -o examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
+      examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
 
 
    运行结束后，终端显示：
@@ -102,7 +102,7 @@ B04: Calling Example
 
       density = 0.0
       do p = 1, np
-          call sub_B04_scatter_3d_cyl_nonuniform(r, phi, z, periodic_phi, &
+          call sub_B04_scatter_3d_raz_nonuniform(r, phi, z, periodic_phi, &
               particle_cell(:,p), particle_position(:,p), particle_amount(p), &
               inv_volume, density, ierr)
           if (ierr /= B04_OK) error stop 'B04 scatter failed'
@@ -119,10 +119,10 @@ B04: Calling Example
    - **采用 MPI 分区：** 使用包含共享节点两侧贡献的完整有效体积；粒子沉积后先汇总共享节点贡献，再进行所需的全周轴点平均和下游计算。
    - **下游需要单元平均源项：** 如上方示例，调用 :doc:`单元平均例程 <sub_B04_project_density>`，把 ``cell_density`` 交给源项组装；需要节点量时使用 ``density``。
 
-   调用条件和参数细节见 :doc:`几何准备 <sub_B04_build_geometry>` 与 :doc:`单粒子沉积 <sub_B04_scatter_3d_cyl_nonuniform>`；
-   自动误差判据和已有运行结果见 :doc:`测试页 </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`。
+   调用条件和参数细节见 :doc:`几何准备 <sub_B04_build_geometry>` 与 :doc:`单粒子沉积 <sub_B04_scatter_3d_raz_nonuniform>`；
+   自动误差判据和已有运行结果见 :doc:`测试页 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`。
 
-   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`模块与公共接口 <mod_B04_scatter_3d_cyl_nonuniform>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`模块与公共接口 <mod_B04_scatter_3d_raz_nonuniform>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -132,12 +132,12 @@ B04: Calling Example
    It follows **prepare volumes → clear density → scatter → read total number → optionally average over cells**.
    The domain has no axis, so inner-radius nodes are used directly.
 
-   .. literalinclude:: ../../../../../examples/B04_scatter_3d_cyl_nonuniform/main.f90
+   .. literalinclude:: ../../../../../examples/B04_scatter_3d_raz_nonuniform/main.f90
       :language: fortran
       :linenos:
 
-   The source is ``examples/B04_scatter_3d_cyl_nonuniform/main.f90`` in the repository, also available as a
-   :download:`downloadable example main program <../../../../../examples/B04_scatter_3d_cyl_nonuniform/main.f90>`.
+   The source is ``examples/B04_scatter_3d_raz_nonuniform/main.f90`` in the repository, also available as a
+   :download:`downloadable example main program <../../../../../examples/B04_scatter_3d_raz_nonuniform/main.f90>`.
    Compile it together with the repository's B04 module using the command below.
 
    .. rubric:: Build and expected output
@@ -145,14 +145,14 @@ B04: Calling Example
    .. code-block:: bash
 
       # From the repository root; GNU Fortran
-      mkdir -p examples/B04_scatter_3d_cyl_nonuniform/build
+      mkdir -p examples/B04_scatter_3d_raz_nonuniform/build
       gfortran -cpp -std=f2008 -fdefault-real-8 -O0 -g -fcheck=all \
-        -I B_Scatter/B04_scatter_3d_cyl_nonuniform \
-        -J examples/B04_scatter_3d_cyl_nonuniform/build \
-        B_Scatter/B04_scatter_3d_cyl_nonuniform/mod_B04_scatter_3d_cyl_nonuniform.f90 \
-        examples/B04_scatter_3d_cyl_nonuniform/main.f90 \
-        -o examples/B04_scatter_3d_cyl_nonuniform/build/b04_minimal
-      examples/B04_scatter_3d_cyl_nonuniform/build/b04_minimal
+        -I B_Scatter/B04_scatter_3d_raz_nonuniform \
+        -J examples/B04_scatter_3d_raz_nonuniform/build \
+        B_Scatter/B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform.f90 \
+        examples/B04_scatter_3d_raz_nonuniform/main.f90 \
+        -o examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
+      examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
 
 
    After execution, the terminal shows:
@@ -219,7 +219,7 @@ B04: Calling Example
 
       density = 0.0
       do p = 1, np
-          call sub_B04_scatter_3d_cyl_nonuniform(r, phi, z, periodic_phi, &
+          call sub_B04_scatter_3d_raz_nonuniform(r, phi, z, periodic_phi, &
               particle_cell(:,p), particle_position(:,p), particle_amount(p), &
               inv_volume, density, ierr)
           if (ierr /= B04_OK) error stop 'B04 scatter failed'
@@ -236,8 +236,8 @@ B04: Calling Example
    - **MPI partitions:** use complete effective volumes covering both sides of shared nodes. After deposition, sum shared-node contributions before full-circle axis averaging and downstream calculations.
    - **A cell-average source:** as in the example above, call :doc:`cell averaging <sub_B04_project_density>` and pass ``cell_density`` to source assembly. Nodal calculations use ``density``.
 
-   See :doc:`geometry preparation <sub_B04_build_geometry>` and :doc:`single-particle deposition <sub_B04_scatter_3d_cyl_nonuniform>` for call conditions and parameters;
-   :doc:`tests and results </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>` supplies automated criteria and saved results.
+   See :doc:`geometry preparation <sub_B04_build_geometry>` and :doc:`single-particle deposition <sub_B04_scatter_3d_raz_nonuniform>` for call conditions and parameters;
+   :doc:`tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>` supplies automated criteria and saved results.
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`Module and public interfaces <mod_B04_scatter_3d_cyl_nonuniform>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Module and public interfaces <mod_B04_scatter_3d_raz_nonuniform>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 

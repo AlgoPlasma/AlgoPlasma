@@ -1,6 +1,6 @@
-!> @file mod_B04_scatter_3d_cyl_nonuniform.f90
-!> @brief Module entry for B04 cylindrical density deposition.
-!> @see @ref mod_b04_scatter_3d_cyl_nonuniform "mod_B04_scatter_3d_cyl_nonuniform"
+!> @file mod_B04_scatter_3d_raz_nonuniform.f90
+!> @brief Module entry for B04 density deposition on nonuniform r-a-z grids.
+!> @see @ref mod_b04_scatter_3d_raz_nonuniform "mod_B04_scatter_3d_raz_nonuniform"
 
 !> @brief Linear CIC nodal number or charge density deposition and supporting
 !> operations on a three-dimensional structured tensor-product cylindrical
@@ -9,12 +9,14 @@
 !>
 !> @details
 !> Grid geometry is specified by radial, angular and axial node arrays.
+!> In the module name, raz denotes these r-a-z directions; the angular
+!> coordinate is named phi in the interfaces and written as phi in the formulas.
 !> Radius and axial position use consistent length units; angles are in radians.
 !>
 !> @par Public routines
 !> - @ref sub_b04_build_geometry "sub_B04_build_geometry": prepare inverse
 !>   effective nodal volumes and angular weights when the grid or topology changes.
-!> - @ref sub_b04_scatter_3d_cyl_nonuniform "sub_B04_scatter_3d_cyl_nonuniform":
+!> - @ref sub_b04_scatter_3d_raz_nonuniform "sub_B04_scatter_3d_raz_nonuniform":
 !>   add one particle's represented number or charge to nodal density.
 !> - @ref sub_b04_average_axis "sub_B04_average_axis": make density single-valued
 !>   at each axial position on a full-circle r=0 axis by weighted averaging.
@@ -32,20 +34,20 @@
 !> @anchor b04_return_status
 !> @par Return status
 !> Check ierr after every public call. Common definitions are attached to
-!> @ref mod_b04_scatter_3d_cyl_nonuniform::b04_ok "B04_OK",
-!> @ref mod_b04_scatter_3d_cyl_nonuniform::b04_bad_shape "B04_BAD_SHAPE",
-!> @ref mod_b04_scatter_3d_cyl_nonuniform::b04_bad_grid "B04_BAD_GRID",
-!> @ref mod_b04_scatter_3d_cyl_nonuniform::b04_bad_cell "B04_BAD_CELL",
-!> @ref mod_b04_scatter_3d_cyl_nonuniform::b04_bad_value "B04_BAD_VALUE" and
-!> @ref mod_b04_scatter_3d_cyl_nonuniform::b04_bad_volume "B04_BAD_VOLUME".
+!> @ref mod_b04_scatter_3d_raz_nonuniform::b04_ok "B04_OK",
+!> @ref mod_b04_scatter_3d_raz_nonuniform::b04_bad_shape "B04_BAD_SHAPE",
+!> @ref mod_b04_scatter_3d_raz_nonuniform::b04_bad_grid "B04_BAD_GRID",
+!> @ref mod_b04_scatter_3d_raz_nonuniform::b04_bad_cell "B04_BAD_CELL",
+!> @ref mod_b04_scatter_3d_raz_nonuniform::b04_bad_value "B04_BAD_VALUE" and
+!> @ref mod_b04_scatter_3d_raz_nonuniform::b04_bad_volume "B04_BAD_VOLUME".
 !> Each routine documents its input requirements and additional checks.
 !>
 !> @par Compilation and use
 !> Compile this module with preprocessing enabled and the B04 directory on the
 !> include path; it includes the four implementation files. Callers import the
-!> interfaces with `use mod_B04_scatter_3d_cyl_nonuniform`. Compile the module
+!> interfaces with `use mod_B04_scatter_3d_raz_nonuniform`. Compile the module
 !> and callers with the same default real kind.
-module mod_B04_scatter_3d_cyl_nonuniform
+module mod_B04_scatter_3d_raz_nonuniform
     use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
     implicit none
     private
@@ -64,13 +66,13 @@ module mod_B04_scatter_3d_cyl_nonuniform
     !> A nodal volume, inverse volume, angular weight or weight sum fails the routine's validity checks.
     integer, parameter, public :: B04_BAD_VOLUME = 5
 
-    public :: sub_B04_build_geometry, sub_B04_scatter_3d_cyl_nonuniform
+    public :: sub_B04_build_geometry, sub_B04_scatter_3d_raz_nonuniform
     public :: sub_B04_average_axis, sub_B04_project_density
 
 contains
 
 #include "sub_B04_build_geometry.f90"
-#include "sub_B04_scatter_3d_cyl_nonuniform.f90"
+#include "sub_B04_scatter_3d_raz_nonuniform.f90"
 #include "sub_B04_average_axis.f90"
 #include "sub_B04_project_density.f90"
 
@@ -84,4 +86,4 @@ contains
         valid_coordinates = .true.
     end function valid_coordinates
 
-end module mod_B04_scatter_3d_cyl_nonuniform
+end module mod_B04_scatter_3d_raz_nonuniform

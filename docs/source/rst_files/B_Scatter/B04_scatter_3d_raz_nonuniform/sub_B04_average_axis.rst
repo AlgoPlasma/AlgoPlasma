@@ -40,7 +40,7 @@ sub_B04_average_axis
    代码中，``phi_measure(j)`` 对应 :math:`A_j`，``axis_density(j,k)`` 对应 :math:`D_{0,j,k}`。
    循环之前计算 ``total=sum(phi_measure)``，因此 ``phi_measure/total`` 就是归一化角向权重。
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_cyl_nonuniform/sub_B04_average_axis.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_average_axis.f90
       :language: fortran
       :start-at:     do k = 0, size(axis_density,2)-1
       :end-at:     ierr = B04_OK
@@ -73,7 +73,7 @@ sub_B04_average_axis
    已有 :ref:`非均匀轴点测试 <b04-axis-validation-zh>` 检查加权均值及正负密度的总量保持；具体输入与结果集中列在测试页。
 
 
-   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -107,7 +107,7 @@ sub_B04_average_axis
    In code, ``phi_measure(j)`` is :math:`A_j` and ``axis_density(j,k)`` is :math:`D_{0,j,k}`.
    Before the loop, ``total=sum(phi_measure)`` is computed, so ``phi_measure/total`` gives normalized angular weights.
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_cyl_nonuniform/sub_B04_average_axis.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_average_axis.f90
       :language: fortran
       :start-at:     do k = 0, size(axis_density,2)-1
       :end-at:     ierr = B04_OK
@@ -140,7 +140,7 @@ sub_B04_average_axis
    The :ref:`nonuniform-axis test <b04-axis-validation-en>` checks the weighted mean and total preservation for positive and negative densities; its inputs and results are collected on the test page.
 
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 
    .. raw:: html
 

@@ -10,7 +10,7 @@ B_Scatter
     B_Scatter/B01_scatter_3Dxyz
     B_Scatter/B02_deposit_3d_cyl
     B_Scatter/B03_scatter_3Dxyz_bspline
-    B_Scatter/B04_scatter_3d_cyl_nonuniform
+    B_Scatter/B04_scatter_3d_raz_nonuniform
 
 .. raw:: html
 
@@ -52,7 +52,7 @@ B_Scatter
         - 使用 centered B-spline 张量积权重，把粒子数或 ``par(d,p)`` 沉积到直角网格。
 
       * - B04
-        - :doc:`B04_scatter_3d_cyl_nonuniform <B_Scatter/B04_scatter_3d_cyl_nonuniform>`
+        - :doc:`B04_scatter_3d_raz_nonuniform <B_Scatter/B04_scatter_3d_raz_nonuniform>`
         - 非均匀 3D cylindrical / ``r,phi,z``
         - 节点数密度或电荷密度
         - 显式节点坐标下的线性 CIC，配套有效体积、全周轴点平均及可选单元体积平均。
@@ -103,7 +103,7 @@ B_Scatter
         - Deposit particle number or ``par(d,p)`` to a Cartesian grid with centered B-spline tensor-product weights.
 
       * - B04
-        - :doc:`B04_scatter_3d_cyl_nonuniform <B_Scatter/B04_scatter_3d_cyl_nonuniform>`
+        - :doc:`B04_scatter_3d_raz_nonuniform <B_Scatter/B04_scatter_3d_raz_nonuniform>`
         - Nonuniform 3D cylindrical / ``r,phi,z``
         - Nodal number or charge density
         - Linear CIC with explicit coordinates, matching volumes, full-circle axis averaging and optional cell-volume averaging.

@@ -35,9 +35,9 @@ Scatter Learning Path
       * - :doc:`B03 <B03_scatter_3Dxyz_bspline>`
         - 直角网格上的 B-spline 权重，阶数与支撑范围的关系
         - B03 形函数及一维权重构造
-      * - :doc:`B04 <B04_scatter_3d_cyl_nonuniform>`
+      * - :doc:`B04 <B04_scatter_3d_raz_nonuniform>`
         - 各方向间距可变的三维柱坐标网格，以及配套有效体积下的节点密度
-        - :ref:`B04 基本思想 <b04-principle-zh>` → 沉积与几何准备例程 → :doc:`调用示例 <B04_scatter_3d_cyl_nonuniform/usage>`
+        - :ref:`B04 基本思想 <b04-principle-zh>` → 沉积与几何准备例程 → :doc:`调用示例 <B04_scatter_3d_raz_nonuniform/usage>`
 
    .. rubric:: 权重、贡献量与密度的关系
 
@@ -57,11 +57,11 @@ Scatter Learning Path
       D_a=\frac{\sum_p c_p S_a^{(p)}}{V_a},\qquad
       \sum_a V_aD_a=\sum_p c_p.
 
-   这里假定密度从零开始累加，各独立节点只计一次。有效体积来自节点形函数与柱坐标体积元的积分，详见 :doc:`B04 几何准备 <B04_scatter_3d_cyl_nonuniform/sub_B04_build_geometry>`。
+   这里假定密度从零开始累加，各独立节点只计一次。有效体积来自节点形函数与柱坐标体积元的积分，详见 :doc:`B04 几何准备 <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`。
 
    .. rubric:: 从理解原理到正确调用
 
-   - **先看量的位置和单位。** B04 的 ``position`` 是实际柱坐标位置；B01／B03 使用网格指标坐标。节点密度与单元平均密度的区别见 :doc:`B04 单元平均 <B04_scatter_3d_cyl_nonuniform/sub_B04_project_density>`。
+   - **先看量的位置和单位。** B04 的 ``position`` 是实际柱坐标位置；B01／B03 使用网格指标坐标。节点密度与单元平均密度的区别见 :doc:`B04 单元平均 <B04_scatter_3d_raz_nonuniform/sub_B04_project_density>`。
    - **再看接口与调用频率。** B01／B03 在例程内遍历粒子；B04 的核心沉积每次处理一个粒子，几何量可在网格固定时复用。具体安排见 :doc:`使用指南 <scatter_usage_cookbook>`。
    - **最后结合已有测试。** 手算分配、总量检查、均匀密度恢复与电流连续性检查各自回答不同问题，见 :doc:`测试指南 <scatter_testing_guide>`。
 
@@ -94,9 +94,9 @@ Scatter Learning Path
       * - :doc:`B03 <B03_scatter_3Dxyz_bspline>`
         - Cartesian B-spline weights and the relation between degree and support
         - B03 shape functions and one-dimensional weights
-      * - :doc:`B04 <B04_scatter_3d_cyl_nonuniform>`
+      * - :doc:`B04 <B04_scatter_3d_raz_nonuniform>`
         - Nonuniform three-dimensional cylindrical grids and nodal density with matching effective volumes
-        - :ref:`B04 principle <b04-principle-en>` → scatter and geometry routines → :doc:`calling example <B04_scatter_3d_cyl_nonuniform/usage>`
+        - :ref:`B04 principle <b04-principle-en>` → scatter and geometry routines → :doc:`calling example <B04_scatter_3d_raz_nonuniform/usage>`
 
    .. rubric:: Weights, represented amounts and density
 
@@ -116,11 +116,11 @@ Scatter Learning Path
       D_a=\frac{\sum_p c_p S_a^{(p)}}{V_a},\qquad
       \sum_a V_aD_a=\sum_p c_p.
 
-   This assumes zero initial density and counts each independent node once. Effective volumes integrate the nodal basis against the cylindrical volume element; see :doc:`B04 geometry preparation <B04_scatter_3d_cyl_nonuniform/sub_B04_build_geometry>`.
+   This assumes zero initial density and counts each independent node once. Effective volumes integrate the nodal basis against the cylindrical volume element; see :doc:`B04 geometry preparation <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`.
 
    .. rubric:: From the method to a correct call
 
-   - **Locate the quantities and their units.** B04 takes physical cylindrical positions; B01/B03 use grid-index coordinates. See :doc:`B04 cell averaging <B04_scatter_3d_cyl_nonuniform/sub_B04_project_density>` for nodal versus cell-average density.
+   - **Locate the quantities and their units.** B04 takes physical cylindrical positions; B01/B03 use grid-index coordinates. See :doc:`B04 cell averaging <B04_scatter_3d_raz_nonuniform/sub_B04_project_density>` for nodal versus cell-average density.
    - **Identify interfaces and call frequency.** B01/B03 loop over particles internally. B04 deposits one particle per call and reuses geometry on a fixed grid. See the :doc:`usage guide <scatter_usage_cookbook>`.
    - **Read the available checks.** Hand calculations, total-amount checks, uniform-density recovery and current-continuity checks address different properties; see the :doc:`testing guide <scatter_testing_guide>`.
 

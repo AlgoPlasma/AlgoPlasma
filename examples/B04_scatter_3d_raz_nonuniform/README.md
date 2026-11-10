@@ -6,9 +6,9 @@ Prepare geometry, deposit one particle on a nonuniform cylindrical annular secto
 read represented number, and optionally form cell-volume averages.
 
 - [main.f90](main.f90)
-- [双语说明与编译命令 / Bilingual guide and build command](../../docs/source/rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform/usage.rst)
-- [本地编译后的网页 / Locally built HTML](../../docs/build/html/rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform/usage.html)
-- [自动测试 / Automated tests](../../tests/004_scatter/B04_scatter_3d_cyl_nonuniform/README.md)
+- [双语说明与编译命令 / Bilingual guide and build command](../../docs/source/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.rst)
+- [本地编译后的网页 / Locally built HTML](../../docs/build/html/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.html)
+- [自动测试 / Automated tests](../../tests/004_scatter/B04_scatter_3d_raz_nonuniform/README.md)
 
 依赖 / Dependencies: GNU Fortran; preprocessing and matching real precision for module and caller.
 

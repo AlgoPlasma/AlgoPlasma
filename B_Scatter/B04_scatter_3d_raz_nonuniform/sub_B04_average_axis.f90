@@ -37,7 +37,7 @@
 !> total particle number or charge from the averaged densities.
 !> @note A nonzero returned status leaves axis_density unchanged.
 !> @see @ref sub_b04_build_geometry "sub_B04_build_geometry",
-!> @ref sub_b04_scatter_3d_cyl_nonuniform "sub_B04_scatter_3d_cyl_nonuniform"
+!> @ref sub_b04_scatter_3d_raz_nonuniform "sub_B04_scatter_3d_raz_nonuniform"
 subroutine sub_B04_average_axis(phi_measure, axis_density, ierr)
     real, intent(in) :: phi_measure(0:)
     real, intent(inout) :: axis_density(0:,0:)

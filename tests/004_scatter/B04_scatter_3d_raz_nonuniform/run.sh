@@ -18,10 +18,10 @@ case "$mode" in
 esac
 build_dir="$case_dir/build/$precision-$mode"
 mkdir -p "$build_dir"
-b04="$repo_dir/B_Scatter/B04_scatter_3d_cyl_nonuniform"
+b04="$repo_dir/B_Scatter/B04_scatter_3d_raz_nonuniform"
 b02="$repo_dir/B_Scatter/B02_deposit_3d_cyl"
 "$compiler" "${flags[@]}" -J "$build_dir" -I "$build_dir" -I "$b04" -I "$b02" \
-    "$b04/mod_B04_scatter_3d_cyl_nonuniform.f90" \
+    "$b04/mod_B04_scatter_3d_raz_nonuniform.f90" \
     "$b02/mod_B02_deposit_charge_3d_cyl.f90" \
     "$case_dir/source_f90/main.f90" -o "$build_dir/test_b04"
 "$build_dir/test_b04" "$build_dir"

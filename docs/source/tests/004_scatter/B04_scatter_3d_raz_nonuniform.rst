@@ -1,4 +1,4 @@
-B04_scatter_3d_cyl_nonuniform Test
+B04_scatter_3d_raz_nonuniform Test
 ====================================
 
 .. raw:: html
@@ -15,8 +15,8 @@ B04_scatter_3d_cyl_nonuniform Test
    **测试直接编译、调用 B04 的四个公开例程，检查密度分配、几何归一化、轴点处理及单元平均。**
    均匀网格对照还直接调用 B02 的公开电荷沉积例程。参考量由手算、独立 Gauss 积分和解析体积平均给出。
 
-   :doc:`返回 B04 总览 </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` ·
-   :doc:`先看调用示例 </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform/usage>` ·
+   :doc:`返回 B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` ·
+   :doc:`先看调用示例 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage>` ·
    :doc:`返回沉积测试目录 <index>`。
 
    .. rubric:: 算例设置与比较量
@@ -62,7 +62,7 @@ B04_scatter_3d_cyl_nonuniform Test
    完整坐标为 ``r=[1,2,4]`` 、``phi=[0,1,3]`` 、``z=[0,2,3]`` ，粒子位于第一个单元。
    局部坐标为 ``(0.25,0.5,0.25)`` ，三个方向的左右权重为 ``(0.75,0.25)`` 、``(0.5,0.5)`` 、``(0.75,0.25)`` 。
 
-   .. figure:: /images/tests/004_scatter/B04_scatter_3d_cyl_nonuniform/hand_zh.png
+   .. figure:: /images/tests/004_scatter/B04_scatter_3d_raz_nonuniform/hand_zh.png
       :target: ../../_images/hand_zh.png
       :alt: 单粒子在两个轴向平面的分配与八节点实际贡献量
       :width: 100%
@@ -94,7 +94,7 @@ B04_scatter_3d_cyl_nonuniform Test
    这里的 :math:`r_p` 来自圆柱体积元。两点 Gauss 规则可准确积分单元内“线性基函数 × 径向因子”，
    用来检查基函数与有效体积归一化是否配套。
 
-   .. figure:: /images/tests/004_scatter/B04_scatter_3d_cyl_nonuniform/uniform_zh.png
+   .. figure:: /images/tests/004_scatter/B04_scatter_3d_raz_nonuniform/uniform_zh.png
       :target: ../../_images/uniform_zh.png
       :alt: 非均匀网格节点、恢复的密度与节点相对误差
       :width: 100%
@@ -149,7 +149,7 @@ B04_scatter_3d_cyl_nonuniform Test
    **参考值由给定输入和加权公式确定；图中的方形标记取自公开例程的实际输出。**
    四个角向索引对应同一个物理轴点。等权平均值为 3.75，可用来辨认加权方式对结果的影响。
 
-   .. figure:: /images/tests/004_scatter/B04_scatter_3d_cyl_nonuniform/axis_average_zh.png
+   .. figure:: /images/tests/004_scatter/B04_scatter_3d_raz_nonuniform/axis_average_zh.png
       :target: ../../_images/axis_average_zh.png
       :alt: 同一物理轴点四个角向索引的密度从1、2、4、8变为相同值，实际输出与加权参考值4.64323945重合
       :width: 100%
@@ -203,7 +203,7 @@ B04_scatter_3d_cyl_nonuniform Test
    同日 double release 和 single debug 的原有 70 项断言也全部通过；单个周期角单元同样执行总量与角向一致性检查。
    图 3 和本表来自现有测试主程序对真实调用结果的导出。
 
-   权重与有效体积的关系见 :doc:`轴点平均算法页 </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform/sub_B04_average_axis>`；
+   权重与有效体积的关系见 :doc:`轴点平均算法页 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_average_axis>`；
    返回 :ref:`算例列表 <b04-test-axis-zh>`。
 
    .. rubric:: 误差判据
@@ -256,7 +256,7 @@ B04_scatter_3d_cyl_nonuniform Test
    - **已记录的测试环境：** WSL Ubuntu 22.04，GNU Fortran 11.4.0；图 1、图 2 的记录日期为 2026-10-31，图 3 及轴点误差表的记录日期为 2026-11-01。
    - **运行依赖：** Bash、GNU Fortran，以及仓库内 B04 和用于均匀网格对照的 B02 电荷沉积源文件。构建采用 Fortran 2008 标准并启用预处理。
    - **编译配置：** double 使用 ``-fdefault-real-8``；debug 启用 ``-fcheck=all`` 和 ``-ffpe-trap=invalid,zero,overflow``；release 使用 ``-O2``。算法模块与测试主程序采用一致精度。
-   - **可选绘图依赖：** 运行 double debug 测试后，``python tests/004_scatter/B04_scatter_3d_cyl_nonuniform/plot_results.py`` 从本地 ``build/double-debug/`` 的节点数据生成三组双语图，输出到该测试目录的 ``build/figures/``。绘图需要 Python、NumPy、Matplotlib 及可用的中文字体。原始数据和运行日志由 Git 忽略，已选用的文档插图随说明文档保留。
+   - **可选绘图依赖：** 运行 double debug 测试后，``python tests/004_scatter/B04_scatter_3d_raz_nonuniform/plot_results.py`` 从本地 ``build/double-debug/`` 的节点数据生成三组双语图，输出到该测试目录的 ``build/figures/``。绘图需要 Python、NumPy、Matplotlib 及可用的中文字体。原始数据和运行日志由 Git 忽略，已选用的文档插图随说明文档保留。
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -265,8 +265,8 @@ B04_scatter_3d_cyl_nonuniform Test
    **The suite compiles and calls all four public B04 routines, checking assignment, geometric normalization, axis treatment and cell averaging.**
    The uniform-grid comparison also calls the public B02 charge routine. References use hand calculations, independent Gauss quadrature and analytic volume averages.
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` ·
-   :doc:`Calling example </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform/usage>` · :doc:`Scatter tests <index>`.
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` ·
+   :doc:`Calling example </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage>` · :doc:`Scatter tests <index>`.
 
    .. rubric:: Cases and compared quantities
 
@@ -311,7 +311,7 @@ B04_scatter_3d_cyl_nonuniform Test
    The grid is ``r=[1,2,4]``, ``phi=[0,1,3]``, ``z=[0,2,3]``. The particle lies in cell zero with local coordinates ``(0.25,0.5,0.25)``.
    Endpoint weights are ``(0.75,0.25)``, ``(0.5,0.5)`` and ``(0.75,0.25)``.
 
-   .. figure:: /images/tests/004_scatter/B04_scatter_3d_cyl_nonuniform/hand_en.png
+   .. figure:: /images/tests/004_scatter/B04_scatter_3d_raz_nonuniform/hand_en.png
       :target: ../../_images/hand_en.png
       :alt: Particle projections and measured amounts at the eight nodes
       :width: 100%
@@ -342,7 +342,7 @@ B04_scatter_3d_cyl_nonuniform Test
 
    The radial factor comes from cylindrical volume. Two-point Gauss quadrature integrates the local basis times this factor exactly, checking the matching of bases and volume normalization.
 
-   .. figure:: /images/tests/004_scatter/B04_scatter_3d_cyl_nonuniform/uniform_en.png
+   .. figure:: /images/tests/004_scatter/B04_scatter_3d_raz_nonuniform/uniform_en.png
       :target: ../../_images/uniform_en.png
       :alt: Nonuniform nodes, recovered density and nodal relative errors
       :width: 100%
@@ -397,7 +397,7 @@ B04_scatter_3d_cyl_nonuniform Test
    **The reference follows from the specified inputs and weighted formula; square markers show the actual public-routine output.**
    All four entries represent one physical axis point. The equal-weight mean, 3.75, illustrates the effect of the weighting.
 
-   .. figure:: /images/tests/004_scatter/B04_scatter_3d_cyl_nonuniform/axis_average_en.png
+   .. figure:: /images/tests/004_scatter/B04_scatter_3d_raz_nonuniform/axis_average_en.png
       :target: ../../_images/axis_average_en.png
       :alt: Four angular entries at one physical axis point change from 1, 2, 4, 8 to the common weighted reference 4.64323945
       :width: 100%
@@ -452,7 +452,7 @@ B04_scatter_3d_cyl_nonuniform Test
    Double release and single debug also passed all 70 existing assertions that day. The one-periodic-angular-cell case also checks total preservation and angular agreement.
    Figure 3 and this table use actual call results exported by the existing test driver.
 
-   See the :doc:`axis-averaging algorithm </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform/sub_B04_average_axis>` for weights and effective volumes;
+   See the :doc:`axis-averaging algorithm </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_average_axis>` for weights and effective volumes;
    return to the :ref:`case list <b04-test-axis-en>`.
 
    .. rubric:: Error criteria
@@ -504,4 +504,4 @@ B04_scatter_3d_cyl_nonuniform Test
    - **Recorded test environment:** WSL Ubuntu 22.04 with GNU Fortran 11.4.0; Figures 1 and 2 were recorded on 2026-10-31; Figure 3 and the axis-error table on 2026-11-01.
    - **Runtime requirements:** Bash, GNU Fortran, and the repository's B04 sources plus the B02 charge-deposition sources used for uniform-grid comparison. The build selects Fortran 2008 and enables preprocessing.
    - **Build configurations:** double uses ``-fdefault-real-8``; debug enables ``-fcheck=all`` and ``-ffpe-trap=invalid,zero,overflow``; release uses ``-O2``. Algorithm modules and the test driver use consistent precision.
-   - **Optional plotting dependencies:** after the double-debug test, run ``python tests/004_scatter/B04_scatter_3d_cyl_nonuniform/plot_results.py`` to render three bilingual figures from local ``build/double-debug/`` data into the test directory's ``build/figures/``. Plotting requires Python, NumPy, Matplotlib and a font with Chinese glyphs. Git ignores raw data and run logs; selected documentation figures remain with the documentation.
+   - **Optional plotting dependencies:** after the double-debug test, run ``python tests/004_scatter/B04_scatter_3d_raz_nonuniform/plot_results.py`` to render three bilingual figures from local ``build/double-debug/`` data into the test directory's ``build/figures/``. Plotting requires Python, NumPy, Matplotlib and a font with Chinese glyphs. Git ignores raw data and run logs; selected documentation figures remain with the documentation.

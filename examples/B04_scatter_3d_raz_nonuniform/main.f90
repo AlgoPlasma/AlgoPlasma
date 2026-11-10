@@ -1,5 +1,5 @@
 program b04_minimal
-    use mod_B04_scatter_3d_cyl_nonuniform
+    use mod_B04_scatter_3d_raz_nonuniform
     implicit none
     real :: r(0:2), phi(0:2), z(0:2)
     real :: inv_volume(0:2,0:2,0:2), phi_measure(0:2)
@@ -15,7 +15,7 @@ program b04_minimal
 
     density = 0.0
     ! One particle, already located in cell [0,0,0], represents eight real particles.
-    call sub_B04_scatter_3d_cyl_nonuniform(r, phi, z, .false., &
+    call sub_B04_scatter_3d_raz_nonuniform(r, phi, z, .false., &
         [0,0,0], [1.25,0.5,0.5], 8.0, inv_volume, density, ierr)
     if (ierr /= B04_OK) error stop 'B04 scatter failed'
     write(*,'(a,f12.6)') 'Represented number = ', sum(density/inv_volume)

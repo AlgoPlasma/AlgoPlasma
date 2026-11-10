@@ -55,7 +55,7 @@ sub_B04_project_density
    ``na`` 是角向单元数 ``nphi``，``jp`` 是应用周期连接后的角向节点索引：末角单元的上端节点在周期情形下映射到零号节点。
    ``nodes(a,b,c)`` 暂存八个顶点值；接近浮点上限时，先按其最大绝对值 ``density_scale`` 缩放，求平均后再还原量级。
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_cyl_nonuniform/sub_B04_project_density.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_project_density.f90
       :language: fortran
       :start-at:         ratio = r(i)/r(i+1)
       :end-before:     ierr = B04_OK
@@ -93,7 +93,7 @@ sub_B04_project_density
    检查径向坐标、数组形状及密度有限性；非零返回保持输出原值。编译精度与调用方一致。
 
 
-   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -142,7 +142,7 @@ sub_B04_project_density
    ``na`` is the angular cell count ``nphi``; ``jp`` is the angular node index after periodic mapping, which sends the last cell's upper node to zero.
    ``nodes(a,b,c)`` holds the eight vertex values. Near the floating-point limit, values are divided by their maximum absolute value ``density_scale`` before averaging, then the scale is restored.
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_cyl_nonuniform/sub_B04_project_density.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_project_density.f90
       :language: fortran
       :start-at:         ratio = r(i)/r(i+1)
       :end-before:     ierr = B04_OK
@@ -180,7 +180,7 @@ sub_B04_project_density
    Checks cover radial coordinates, shapes and finite density; a nonzero returned status preserves the output. Use the caller's real precision.
 
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_cyl_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_cyl_nonuniform>`
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
 
    .. raw:: html
 

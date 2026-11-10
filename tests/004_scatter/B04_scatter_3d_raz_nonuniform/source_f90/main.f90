@@ -1,5 +1,5 @@
 program test_b04
-    use mod_B04_scatter_3d_cyl_nonuniform
+    use mod_B04_scatter_3d_raz_nonuniform
     use mod_B02_deposit_charge_3d_cyl
     use, intrinsic :: ieee_arithmetic, only: ieee_value, ieee_quiet_nan, ieee_is_finite
     implicit none
@@ -94,27 +94,27 @@ contains
         mass(0:1,0:1,1)=reshape([0.75,0.25,0.75,0.25],[2,2])
         pos=[1.25,0.5,0.5]
         density=0.0
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],pos,8.0,v,density,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],pos,8.0,v,density,ierr)
         call success(ierr,'hand scatter')
         call require(maxval(abs(density-mass*v)) <= tol*maxval(abs(mass*v)),'eight hand-computed contributions')
         call close_value(sum(density/v),8.0,'hand total amount')
         if (export_data) call export_hand(r,a,z,v,density,mass,pos)
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],pos,-8.0,v,density,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],pos,-8.0,v,density,ierr)
         call success(ierr,'opposite charge')
         call close_value(maxval(abs(density)),0.0,'signed amount cancels without clearing')
         density=2.0
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],pos,0.0,v,density,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],pos,0.0,v,density,ierr)
         call success(ierr,'zero amount')
         call close_value(maxval(abs(density-2.0)),0.0,'zero amount preserves existing density')
         relocated=0.0
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],pos,8.0,v,relocated,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],pos,8.0,v,relocated,ierr)
         call success(ierr,'actual array lower bounds')
         call require(maxval(abs(relocated-mass*v)) <= tol*maxval(abs(mass*v)),'actual array lower bounds are positional')
         density=0.0; other=0.0
         pos=[2.0,0.4,0.6]
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],pos,1.0,v,density,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],pos,1.0,v,density,ierr)
         call success(ierr,'left cell endpoint')
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[1,0,0],pos,1.0,v,other,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[1,0,0],pos,1.0,v,other,ierr)
         call success(ierr,'right cell endpoint')
         call require(maxval(abs(density-other)) <= tol,'internal face agrees from adjacent cells')
         density=1.0
@@ -131,10 +131,10 @@ contains
         call sub_B04_build_geometry(r,a,z,.false.,v,va,ierr)
         call success(ierr,'physical corner geometry')
         density=0.0
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],[r(0),a(0),z(0)], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],[r(0),a(0),z(0)], &
             2.0,v,density,ierr)
         call success(ierr,'lower physical corner')
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],[r(1),a(1),z(1)], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],[r(1),a(1),z(1)], &
             3.0,v,density,ierr)
         call success(ierr,'upper physical corner')
         expected=0.0
@@ -202,7 +202,7 @@ contains
             do u=0,1
                 pos=[r(i),a(j),z(k)]+h*([g(u),g(w),g(t)]+1.0)/2.0
                 amount=3.25*pos(1)*product(h)/8.0
-                call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,periodic,[i,j,k],pos,amount,v,density,ierr)
+                call sub_B04_scatter_3d_raz_nonuniform(r,a,z,periodic,[i,j,k],pos,amount,v,density,ierr)
                 call success(ierr,label//' Gauss scatter')
             end do
             end do
@@ -220,7 +220,7 @@ contains
             h=[r(i+1)-r(i),a(j+1)-a(j),z(k+1)-z(k)]
             pos=[r(i),a(j),z(k)]+h*[0.23,0.61,0.47]
             amount=real((-1)**(i+j+k))*(1.0+real(i+2*j+3*k)/13.0)
-            call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,periodic,[i,j,k],pos,amount,v,density,ierr)
+            call sub_B04_scatter_3d_raz_nonuniform(r,a,z,periodic,[i,j,k],pos,amount,v,density,ierr)
             call success(ierr,label//' signed scatter')
             total=total+amount
             scale=scale+abs(amount)
@@ -249,10 +249,10 @@ contains
         if (periodic) then
             density=0.0; other=0.0
             pos=[(r(0)+r(1))/2.0,a(na),(z(0)+z(1))/2.0]
-            call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.true.,[0,na-1,0],pos,2.0,v,density,ierr)
+            call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.true.,[0,na-1,0],pos,2.0,v,density,ierr)
             call success(ierr,label//' upper seam')
             pos(2)=a(0)
-            call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.true.,[0,0,0],pos,2.0,v,other,ierr)
+            call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.true.,[0,0,0],pos,2.0,v,other,ierr)
             call success(ierr,label//' lower seam')
             call require(maxval(abs(density-other)) <= tol*max(1.0,maxval(abs(other))), &
                 label//' periodic seam equivalence')
@@ -331,7 +331,7 @@ contains
             pos=[r(cell(1)),a(cell(2)),z(cell(3))]+f*[dr,dphi,dz]
             qp=real((-1)**p)*0.3
             wp=1.0+0.1*real(p)
-            call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.true.,cell,pos,qp*wp,v,rho,ierr)
+            call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.true.,cell,pos,qp*wp,v,rho,ierr)
             call success(ierr,'uniform B04 call')
             call sub_B02_deposit_charge_3d_cyl(pos(1),pos(2),pos(3),qp,wp,dr,dphi,dz,nr,na-1,nz,old)
         end do
@@ -357,15 +357,15 @@ contains
         call sub_B04_build_geometry(r,a,z,.true.,badv,badva,ierr)
         call require(ierr==B04_BAD_SHAPE .and. all(badv==-7.0),'reject periodic array shape mismatch')
         rho=5.0; pos=[1.25,0.5,0.5]
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[-1,0,0],pos,1.0,v,rho,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[-1,0,0],pos,1.0,v,rho,ierr)
         call require(ierr==B04_BAD_CELL .and. all(rho==5.0),'reject invalid cell before indexing')
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],[2.5,0.5,0.5],1.0,v,rho,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],[2.5,0.5,0.5],1.0,v,rho,ierr)
         call require(ierr==B04_BAD_VALUE .and. all(rho==5.0),'reject position outside supplied cell')
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],pos, &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],pos, &
             ieee_value(1.0,ieee_quiet_nan),v,rho,ierr)
         call require(ierr==B04_BAD_VALUE .and. all(rho==5.0),'reject nonfinite particle amount')
         badv=v; badv(1,1,1)=0.0
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0],pos,1.0,badv,rho,ierr)
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0],pos,1.0,badv,rho,ierr)
         call require(ierr==B04_BAD_VOLUME .and. all(rho==5.0),'reject bad last volume without partial scatter')
         axis=6.0; badva=va; badva(2)=-1.0
         call sub_B04_average_axis(badva,axis,ierr)
@@ -406,13 +406,13 @@ contains
         ! All eight increments are nonzero; only the last destination overflows.
         rho=7.0; rho(1,1,1)=0.875*limit; saved=rho
         amount=limit
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0], &
             [0.5,3.0,0.5],amount,v,rho,ierr)
         call require(ierr==B04_BAD_VALUE .and. all(rho==saved), &
             'reject positive density sum overflow without partial writes')
 
         rho=7.0; rho(1,1,1)=-0.875*limit; saved=rho
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0], &
             [0.5,3.0,0.5],-amount,v,rho,ierr)
         call require(ierr==B04_BAD_VALUE .and. all(rho==saved), &
             'reject negative density sum overflow without partial writes')
@@ -421,14 +421,14 @@ contains
         rho=7.0; rho(1,1,1)=0.5*limit; expected=rho
         amount=(0.25*limit)/v(1,1,1)
         expected(1,1,1)=rho(1,1,1)+amount*v(1,1,1)
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0], &
             [r(1),a(1),z(1)],amount,v,rho,ierr)
         call require(ierr==B04_OK .and. all(rho==expected), &
             'accept finite density sum near upper range')
 
         rho=7.0; rho(1,1,1)=limit; expected=rho; expected(1,1,1)=0.0
         amount=-limit/v(1,1,1)
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0], &
             [r(1),a(1),z(1)],amount,v,rho,ierr)
         call require(ierr==B04_OK .and. all(rho==expected), &
             'accept opposite-sign cancellation at largest finite density')
@@ -437,7 +437,7 @@ contains
         rho=7.0; rho(1,1,1)=1.5*spacing(limit); saved=rho
         increment=nearest(limit,-1.0)
         amount=increment/v(1,1,1)
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0], &
             [r(1),a(1),z(1)],amount,v,rho,ierr)
         call require(ierr==B04_BAD_VALUE .and. all(rho==saved), &
             'reject density overflow at rounded addition bound')
@@ -446,13 +446,13 @@ contains
         call success(ierr,'single-periodic-cell range geometry')
         periodic_rho=7.0; periodic_rho(1,0,1)=0.625*limit; periodic_saved=periodic_rho
         amount=(0.5*limit)/vp(1,0,1)
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.true.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.true.,[0,0,0], &
             [r(1),3.0,z(1)],amount,vp,periodic_rho,ierr)
         call require(ierr==B04_BAD_VALUE .and. all(periodic_rho==periodic_saved), &
             'reject overflow on second periodic contribution without writes')
 
         periodic_rho=7.0; periodic_rho(1,0,1)=-0.625*limit; periodic_saved=periodic_rho
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.true.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.true.,[0,0,0], &
             [r(1),3.0,z(1)],-amount,vp,periodic_rho,ierr)
         call require(ierr==B04_BAD_VALUE .and. all(periodic_rho==periodic_saved), &
             'reject negative overflow on repeated periodic target')
@@ -461,13 +461,13 @@ contains
         increment=amount*0.5*vp(1,0,1)
         reference=(periodic_rho(1,0,1)+increment)+increment
         periodic_saved(1,0,1)=reference
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.true.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.true.,[0,0,0], &
             [r(1),3.0,z(1)],amount,vp,periodic_rho,ierr)
         call require(ierr==B04_OK .and. all(periodic_rho==periodic_saved), &
             'finite periodic accumulation keeps both contributions and order')
 
         rho=7.0; rho(1,1,1)=limit; saved=rho
-        call sub_B04_scatter_3d_cyl_nonuniform(r,a,z,.false.,[0,0,0], &
+        call sub_B04_scatter_3d_raz_nonuniform(r,a,z,.false.,[0,0,0], &
             [r(1),a(1),z(1)],0.0,v,rho,ierr)
         call require(ierr==B04_OK .and. all(rho==saved), &
             'zero amount preserves largest finite density')
