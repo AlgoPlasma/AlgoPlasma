@@ -240,4 +240,3 @@ B04: Calling Example
    :doc:`tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>` supplies automated criteria and saved results.
 
    :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Module and public interfaces <mod_B04_scatter_3d_raz_nonuniform>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
-

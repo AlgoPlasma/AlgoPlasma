@@ -155,4 +155,3 @@ mod_B04_scatter_3d_raz_nonuniform
    .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_bad_value
 
    .. doxygenvariable:: mod_b04_scatter_3d_raz_nonuniform::b04_bad_volume
-

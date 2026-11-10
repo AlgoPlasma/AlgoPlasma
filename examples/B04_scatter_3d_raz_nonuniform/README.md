@@ -1,22 +1,48 @@
-# B04 minimal calling example / 最小调用示例
+# B04 minimal calling example
 
-在非均匀柱坐标环形扇区上，依次准备几何、沉积一个粒子、读取总粒子数，并生成可选的单元体积平均。
+[简体中文](README.zh-CN.md)
 
-Prepare geometry, deposit one particle on a nonuniform cylindrical annular sector,
-read represented number, and optionally form cell-volume averages.
+[main.f90](main.f90) deposits one macroparticle representing eight real particles
+on a nonuniform cylindrical annular sector with physical angular endpoints.
+The sequence is **prepare volumes → clear density → scatter → sum represented
+number → optionally form cell-volume averages**.
 
-- [main.f90](main.f90)
-- [双语说明与编译命令 / Bilingual guide and build command](../../docs/source/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.rst)
-- [本地编译后的网页 / Locally built HTML](../../docs/build/html/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.html)
-- [自动测试 / Automated tests](../../tests/004_scatter/B04_scatter_3d_raz_nonuniform/README.md)
+## Build and run
 
-依赖 / Dependencies: GNU Fortran; preprocessing and matching real precision for module and caller.
+Use Bash (for example, on Linux or WSL) and GNU Fortran. From the repository root:
 
-预期输出 / Expected output:
+```bash
+mkdir -p examples/B04_scatter_3d_raz_nonuniform/build
+gfortran -cpp -std=f2008 -fdefault-real-8 -O0 -g -fcheck=all \
+  -I B_Scatter/B04_scatter_3d_raz_nonuniform \
+  -J examples/B04_scatter_3d_raz_nonuniform/build \
+  B_Scatter/B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform.f90 \
+  examples/B04_scatter_3d_raz_nonuniform/main.f90 \
+  -o examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
+examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
+```
+
+The command enables preprocessing and compiles the module and caller with the
+same double precision. Build artifacts stay in the ignored example `build/` directory.
+
+## Expected output
 
 ```text
 Represented number =     8.000000
 Cell array shape = 2 2 2
 ```
+
+The deposited nodal data represent eight real particles, matching the input
+macroparticle weight. The cell-average array has two cells in each of the radial,
+angular and axial directions.
+
+## Further reading
+
+- [Module and calling conventions](../../B_Scatter/B04_scatter_3d_raz_nonuniform/README.md)
+- [Usage guide and adaptation to your program](../../docs/source/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.rst) (bilingual Sphinx source)
+- [Automated tests](../../tests/004_scatter/B04_scatter_3d_raz_nonuniform/README.md)
+
+After building the documentation, open the repository-relative local file
+`docs/build/html/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.html`.
 
 Author: Xin Luo.
