@@ -1,6 +1,6 @@
 # K04_breathing_waveform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Extract the breathing-phase-repeatable mean waveform `C` from repeated single-point voltage records,
 then return `R = X - C`. Learn the shape from all but one complete record and reconstruct it using
@@ -9,7 +9,7 @@ The routines require NumPy, perform no file I/O, and do not modify inputs.
 
 See the [step-by-step explanation](../../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst).
 Artificial data, tests, plotting and cleanup scripts live in
-[`tests/011_K04_breathing_waveform`](../../tests/011_K04_breathing_waveform/README.en.md).
+[`tests/011_K04_breathing_waveform`](../../tests/011_K04_breathing_waveform/README.md).
 That README and the [documentation test page](../../docs/source/tests/011_K04_breathing_waveform/index.rst)
 provide the running instructions.
 

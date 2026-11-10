@@ -1,6 +1,6 @@
 # A01_Boris_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `A01_Boris_3Dxyz` provides a non-relativistic Boris velocity pusher for a single particle in 3D Cartesian coordinates. It advances the particle velocity `v = (v_x, v_y, v_z)` under prescribed electric and magnetic fields.
 

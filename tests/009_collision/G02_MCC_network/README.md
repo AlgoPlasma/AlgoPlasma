@@ -1,8 +1,8 @@
 # G02_MCC_network tests and validation
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Tests check input parsing and collision behavior under specified models. Begin with the [collision box](examples/collision_box/README.en.md), then the [module guide](../../../G_Collision/G02_MCC_network/README.en.md). User input is described in the [CSV format guide](../../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst).
+Tests check input parsing and collision behavior under specified models. Begin with the [collision box](examples/collision_box/README.md), then the [module guide](../../../G_Collision/G02_MCC_network/README.md). User input is described in the [CSV format guide](../../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst).
 
 ## Layout and data
 

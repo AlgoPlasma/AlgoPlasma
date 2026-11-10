@@ -1,6 +1,6 @@
 # B_Scatter
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `B_Scatter` contains AlgoPlasma particle-to-grid deposition operators.
 

@@ -1,9 +1,9 @@
 # J02 Nonuniform Speed-Group Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Compare uniform, quadratic-edge and piecewise-uniform speed quadratures in
-[J02](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.en.md), checking distribution moments and transport errors on a fixed spatial mesh.
+[J02](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.md), checking distribution moments and transport errors on a fixed spatial mesh.
 Velocity integration uses the reduced two-dimensional measure `v dv dtheta`.
 The case includes a prescribed loss frequency; CEX collisions require separate verification.
 
@@ -88,7 +88,7 @@ The script retains existing directories and overwrites matching results on rerun
 
 ## Module and parallel checks
 
-The ordinary [J02 tests](../README.en.md) and `run_parallel.sh` include
+The ordinary [J02 tests](../README.md) and `run_parallel.sh` include
 [test_J02_nonuniform_quadrature.f90](../source_f90/test_J02_nonuniform_quadrature.f90).
 The spatial MPI program accepts a fourth argument `nonuniform`, selecting four groups with edges
 `[0,0.2,0.6,1.5,3]`. First run the parent directory's `run_mpi.sh` to build the parallel configurations,

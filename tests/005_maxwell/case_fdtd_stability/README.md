@@ -1,5 +1,7 @@
 # FDTD Stability Tests (No Source, Long Run)
 
+[简体中文](README.zh-CN.md)
+
 This directory runs long no-source stability checks for core Maxwell kernels.
 It is separate from MMS accuracy tests.
 

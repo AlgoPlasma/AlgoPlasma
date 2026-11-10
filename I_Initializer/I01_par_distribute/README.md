@@ -1,6 +1,6 @@
 # I01_par_distribute
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `I01_par_distribute` provides Fortran-side particle distribution initialization.
 

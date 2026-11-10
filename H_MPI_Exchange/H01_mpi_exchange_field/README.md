@@ -1,6 +1,6 @@
 # H01_mpi_exchange_field
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `H01_mpi_exchange_field` exchanges one scalar-field ghost/halo cell layer.
 

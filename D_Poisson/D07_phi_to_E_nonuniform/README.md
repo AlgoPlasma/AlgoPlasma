@@ -1,6 +1,6 @@
 # D07_phi_to_E_nonuniform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Compute cell-centered cylindrical fields from D04 nonuniform-grid potentials.
 
@@ -33,7 +33,7 @@ the first center is dr/2. Axis ghosts require cylindrical regularity,
 not same-angle even reflection for a general non-axisymmetric potential.
 No r=0 point values are computed.
 
-The mod_ file wraps the sub_ implementation. No MPI/HYPRE dependency.
+The module entry is `mod_D07_phi_to_E_nonuniform.f90`, and the algorithm is implemented in `sub_D07_phi_to_E_nonuniform.f90`. There is no MPI or HYPRE dependency.
 Compile with preprocessing, e.g. `-cpp -fdefault-real-8`.
 
 All outputs are cell-centered and cannot be passed directly to the staggered-field C03 interface.

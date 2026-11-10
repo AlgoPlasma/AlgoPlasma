@@ -1,12 +1,16 @@
 # J02 neutral SN transport tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Implementation: [module README](../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.en.md). Run the commands below from the repository root.
+Implementation: [module README](../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.md). Run the commands below from the repository root.
 
 Requires Bash and GNU Fortran (`gfortran`); the ordinary runner uses eight-byte real values and runtime bounds checks.
 
-These deterministic tests exercise the discrete ordinates (SN) neutral-transport module:
+These deterministic tests exercise the discrete ordinates (SN) neutral-transport module at three levels: local procedures, assembled solver, and parallel consistency.
+
+## Local procedures and assembly
+
+The ordinary suite covers:
 
 - two-dimensional velocity-space quadrature and exact equivalence of the
   `midpoint` and `gauss-chebyshev` alias names;
@@ -17,7 +21,7 @@ These deterministic tests exercise the discrete ordinates (SN) neutral-transport
 - two-dimensional Maxwell and drifted-Maxwell reservoir shapes;
 - MC crossing-bin conversion and prescribed-flux normalization;
 - specific error messages and separate sweep failure indices;
-- moment and internal-face-flux reconstruction;
+- moment, internal-face flux, and open-boundary flux reconstruction;
 - specular/diffuse wall reflection, partial-face inlet integration, and
   reflecting-boundary source iteration.
 
@@ -37,7 +41,8 @@ frequency conversion, PDF/probability representations of the same inflow,
 and signed boundary fluxes.
 
 Run the ordinary suite before the parallel suites: its build script recreates
-`build/`. Detailed HTML separates module, assembled-solver and parallel tests.
+`build/`. The HTML documentation describes the inputs, reference values and
+measured results for the module, assembled-solver and parallel tests.
 
 ## Serial/OpenMP consistency
 
@@ -73,12 +78,6 @@ Build products and logs are under `build/parallel`; the runner does not remove
 existing application outputs. This demonstrates consistency for the covered
 cases, not a general performance or discretization-accuracy result.
 
-Application-scale B0/ION validation is provided by the J03 application tests.
-Both full SN cases were rerun on 2026-10-06 with four OpenMP threads.
-The application page and its numerical record document these runs. A full-scale
-spatial MPI application has not been validated; small MPI consistency tests do
-not replace that check.
-
 ## Spatial MPI and MPI/OpenMP consistency
 
 `source_f90/test_J02_mpi.f90` tests the same public sweep/transport entries.
@@ -88,7 +87,8 @@ loss, wholly inactive blocks, and repeated successful calls after errors.
 It compares local distributions, moments and all internal/open/REMOTE fluxes
 with an unsplit reference, checks global particle balance, and checks collective
 error codes/global cell locations for one-rank input failures and local numerical
-failures. The small global reference is replicated by the test driver only.
+failures. Only the test driver replicates the small global reference on each rank.
+The solver works on the local partition.
 
 ```bash
 MPIEXEC_FLAGS=--oversubscribe bash tests/012_fluid/J02_neutral_sn_transport_2Drz/run_mpi.sh
@@ -112,7 +112,12 @@ These checks do not establish multi-node scaling, speedup, full B0/ION validatio
 or a distributed J03 implementation.
 
 
-## Cleanup
+## Application validation and cleanup
+
+Application-scale B0/ION validation is provided by the J03 application tests.
+Both full SN cases were rerun on 2026-10-06 with four OpenMP threads.
+The application page and its numerical record document these runs. Large-scale spatial MPI
+applications, multi-node performance, and distributed J03 still require validation.
 
 Build files and logs remain visible under `build/`. When no longer needed, run:
 
@@ -124,10 +129,11 @@ bash tests/012_fluid/J02_neutral_sn_transport_2Drz/clean.sh
 
 `test_J02_nonuniform_quadrature.f90` covers explicit edges, invalid inputs, velocity
 measure, compatibility with uniform groups, reflection pairing, and transport balance
-with partial inlet and three wall models. It supports default real and real8 builds.
+with partial inlet and three wall models. It supports default real and real8
+builds compiled with `-fdefault-real-8`.
 The MPI fixture accepts `nonuniform` as its fourth argument to use four nonuniform groups.
 The cold/fast accuracy study and its limitations are described in
-[nonuniform_speed/README.en.md](nonuniform_speed/README.en.md).
+[nonuniform_speed/README.md](nonuniform_speed/README.md).
 
 ## Relative speed and coordinate conversion
 
@@ -136,6 +142,7 @@ cylindrical-to-Cartesian rotation, common-frame invariance, different-frame
 conversion, zero diagonals, symmetry and repeatability. It compares all 1,920
 pairs from unequal nonuniform node sets against an independent cosine-law
 reference and checks representable large/small norms.
+Velocity-node construction uses initialized quadrature data.
 The generic vector helpers support three components; J02 node reconstruction
 sets the azimuthal component to zero and retains the reduced 2D2V model.
 
@@ -148,11 +155,11 @@ python3 tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/run_test.py
 
 The runner verifies actual worker counts and identical pair CSVs between serial
 and OpenMP within each precision. It overwrites its named outputs only.
-See [the test definitions and error measures](relative_speed/README.en.md).
+See [the test definitions and error measures](relative_speed/README.md).
 
 ## CEX coefficient smoke test
 
 `test_J02_cex_coefficients.f90` uses three double-precision checks for analytic
 synthetic kernels, ion density normalization, and the collision frequency/sigma_t.
 Run only these with `bash tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/run.sh`.
-See [usage](cex_coefficients/README.en.md). No physical CEX data is bundled.
+See [usage](cex_coefficients/README.md). No physical CEX data is bundled.

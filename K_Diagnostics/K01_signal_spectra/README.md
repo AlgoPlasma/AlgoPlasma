@@ -1,6 +1,6 @@
 # K01_signal_spectra
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `K01_signal_spectra` is the front end of the diagnostic chain: it turns two raw
 probe records into the spectral quantities the later units need.  The

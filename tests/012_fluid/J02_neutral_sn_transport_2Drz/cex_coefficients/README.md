@@ -1,8 +1,8 @@
 # J02 CEX Coefficient Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Verify the cell-local CEX coefficients in the [J02 neutral transport module](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.en.md):
+Verify the cell-local CEX coefficients in the [J02 neutral transport module](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.md):
 ion distribution and relative speed → collision energy and cross section → collision kernel → loss frequency and loss per unit path length.
 The tests use a fixed ion background and synthetic cross sections for the current reduced 2D2V model.
 Collision gain and coupling to spatial transport require separate implementations.
@@ -90,4 +90,4 @@ It contains module files and `test_cex.out`. Results are printed to the terminal
 success reports three `PASS` groups and a final `RESULT: PASS`; failure returns a nonzero status.
 The script produces no CSV files or figures. Reruns overwrite matching build files and retain other files in the directory.
 
-See the [J02 test overview](../README.en.md) for the complete test entry points.
+See the [J02 test overview](../README.md) for the complete test entry points.

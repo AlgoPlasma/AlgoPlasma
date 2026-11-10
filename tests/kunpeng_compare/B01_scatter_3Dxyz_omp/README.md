@@ -1,5 +1,7 @@
 # B01_scatter_3Dxyz_omp — Kunpeng comparison
 
+[简体中文](README.zh-CN.md)
+
 Cross-platform OpenMP comparison of the upstream `sub_B01_scatter_3Dxyz` kernel.
 The same benchmark runs on the AMD server and the Kunpeng server, and the
 analyzer overlays both platforms once their logs are present.

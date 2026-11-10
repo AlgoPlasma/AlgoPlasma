@@ -1,6 +1,6 @@
 # G03_DSMC 测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 通过柱坐标接口验证 [G03_DSMC 主库](../../../G_Collision/G03_DSMC/README.zh-CN.md)的
 单组分、等权重 HS/VHS/VSS 弹性碰撞，包括 8 个核心检查组和 6 个碰撞弛豫回归。
@@ -26,7 +26,7 @@ bash tests/009_collision/G03_DSMC/run.sh
 | 运行组 | 源码 | 测试目的 |
 | --- | --- | --- |
 | `models` | `cpp/test_models.cpp` | 确认碰撞核及黏度标定符合模型定义，为事件率提供正确物性 |
-| `scattering` | `cpp/test_models.cpp` | 确认相对速率与碰后方向统计符合指定散射模型 |
+| `scattering` | `cpp/test_models.cpp` | 检查弹性碰撞前后相对速率守恒，以及碰后方向统计是否符合指定散射模型 |
 | `random` | `cpp/test_geometry.cpp` | 检查随机键重放、字段与用途区分，以及实数端点和整数索引均匀性 |
 | `geometry` | `cpp/test_geometry.cpp` | 确认正确单元、真实体积和共同速度基底进入碰撞计算 |
 | `conservation` | `cpp/test_stepper.cpp` | 确认完整的多单元、多步调用保持动量与能量守恒 |

@@ -1,5 +1,7 @@
 # 008_mpi_exchange
 
+[简体中文](README.zh-CN.md)
+
 This directory is the small-rank MPI regression entry for `H_MPI_Exchange`.
 It runs on 4 MPI ranks with a fixed `2 x 2 x 1` logical topology and checks:
 

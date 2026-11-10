@@ -1,6 +1,6 @@
 # H_MPI_Exchange
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `H_MPI_Exchange` provides data-exchange routines used by AlgoPlasma in MPI domain
 decomposition.

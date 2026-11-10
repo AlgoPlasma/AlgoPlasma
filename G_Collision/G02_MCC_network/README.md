@@ -1,10 +1,10 @@
 # G02_MCC_network: C++ collision network
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 G02 is an independent C++20 MCC core. The host supplies particles, backgrounds and a time step. G02 samples reactions and returns particle updates, reaction counts and background momentum/energy exchange. G02 does not call `G01_MCC`; each module implements its own collisions.
 
-Start with `MccStepper::step()`. Read the [collision-box tutorial](../../tests/009_collision/G02_MCC_network/examples/collision_box/README.en.md), then the [main guide](../../docs/source/rst_files/G_Collision/G02_MCC_network.rst) and [CSV format](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst).
+Start with `MccStepper::step()`. Read the [collision-box tutorial](../../tests/009_collision/G02_MCC_network/examples/collision_box/README.md), then the [main guide](../../docs/source/rst_files/G_Collision/G02_MCC_network.rst) and [CSV format](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst).
 
 ## From data to one time step
 

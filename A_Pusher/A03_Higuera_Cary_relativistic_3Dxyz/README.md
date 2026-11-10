@@ -1,6 +1,6 @@
 # A03_Higuera_Cary_relativistic_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `A03_Higuera_Cary_relativistic_3Dxyz` provides a relativistic Higuera-Cary velocity pusher in 3D Cartesian coordinates. It advances the particle velocity under prescribed electric and magnetic fields while accounting for relativistic corrections.
 

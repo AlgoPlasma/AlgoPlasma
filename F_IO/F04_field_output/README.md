@@ -1,6 +1,6 @@
 # F04_field_output
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Writes each MPI rank's local field file for 1D, 3D, and grid-to-cell averaged outputs.
 

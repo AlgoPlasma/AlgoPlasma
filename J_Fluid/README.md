@@ -1,6 +1,6 @@
 # J_Fluid
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This group provides neutral reference fields and density evolution. It can supply neutral density to Particle-in-Cell (PIC) applications; charged-particle pushing, electromagnetic fields and reaction-rate calculations belong to other modules.
 
@@ -24,4 +24,4 @@ Compile the required `mod_*.f90` with preprocessing enabled, not the included `s
 
 The Sphinx [J_Fluid](../docs/source/rst_files/J_Fluid.rst) section contains independent J01 and J02 routes with their local data conventions, followed by J03 with its complete calling sequence.
 
-Commands and assertions belong to [tests/012_fluid](../tests/012_fluid/README.en.md), separate from algorithm derivations.
+Commands and assertions belong to [tests/012_fluid](../tests/012_fluid/README.md), separate from algorithm derivations.

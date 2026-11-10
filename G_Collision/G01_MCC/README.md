@@ -1,6 +1,6 @@
 # G01_MCC
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `G01_MCC` is a null-collision Monte Carlo Collision module.
 

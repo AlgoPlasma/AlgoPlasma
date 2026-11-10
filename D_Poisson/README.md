@@ -1,6 +1,6 @@
 # D_Poisson
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `D_Poisson` contains the electrostatic Poisson solvers and related post-processing utilities in AlgoPlasma. The solvers mainly use HYPRE Struct/PFMG to solve cell-centered structured-grid potential equations. Post-processing routines unpack the solver output and compute derived quantities such as the electric field.
 

@@ -1,6 +1,6 @@
 # H02_mpi_exchange_par
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `H02_mpi_exchange_par` migrates multi-species particles in a 3D Cartesian MPI
 domain decomposition.

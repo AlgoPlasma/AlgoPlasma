@@ -1,10 +1,10 @@
 # FM → J03 Application Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This directory passes the reference density and face fluxes from
-[J01 free-molecular statistics](../../../../J_Fluid/J01_free_molecular/README.en.md)
-to the [J03 continuity solver](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.en.md)
+[J01 free-molecular statistics](../../../../J_Fluid/J01_free_molecular/README.md)
+to the [J03 continuity solver](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.md)
 for the loss-free B0 application. FM tracks straight trajectories in the r-z plane
 with radial and axial velocity components; cylindrical volumes and areas normalize
 the statistics.
@@ -19,7 +19,7 @@ APPLICATION_OUTPUT="$HOME/algoplasma-results/fm-B0" \
 bash tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/application_reference_J01/run.sh
 ```
 
-The default inputs are in the sibling [application_inputs](../application_inputs/README.en.md)
+The default inputs are in the sibling [application_inputs](../application_inputs/README.md)
 directory, and [application_case.f90](../application_case.f90) generates the active
 region. The first script argument can specify another grid directory, which must
 retain the prescribed 256×256 grid and active-region indices. Input validation

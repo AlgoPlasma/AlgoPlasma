@@ -1,6 +1,6 @@
 # C01_gather_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `C01_gather_3Dxyz` interpolates 3D Cartesian electromagnetic fields from a
 cell-centered grid to particle positions. It also provides a fused kernel that

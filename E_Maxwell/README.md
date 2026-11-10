@@ -1,6 +1,6 @@
 # E_Maxwell
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `E_Maxwell` contains AlgoPlasma subroutines for advancing Maxwell fields, finite-difference time-domain (FDTD) implementations, and convolutional perfectly matched layer (CPML) boundary extensions.
 

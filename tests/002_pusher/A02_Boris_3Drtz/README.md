@@ -1,6 +1,6 @@
 # A02_Boris_3Drtz Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This directory provides an independent test for `A_Pusher/A02_Boris_3Drtz`, the non-relativistic Boris particle pusher in 3D cylindrical coordinates. The test builds a small Fortran driver, runs several single-particle analytic cases, and converts the cylindrical numerical position and velocity back to Cartesian coordinates for direct comparison with reference solutions.
 

@@ -1,6 +1,6 @@
 # B01_scatter_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 3D Cartesian PIC particle-deposition utilities. This directory provides CIC
 number-density and quantity deposition, NGP per-cell variance statistics, and

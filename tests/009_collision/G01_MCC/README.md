@@ -1,6 +1,6 @@
 # G01 MCC cross-section loader test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This directory provides a focused regression test for
 `G_Collision/G01_MCC/sub_G01_load_cross_section.f90`. It checks the array-bound

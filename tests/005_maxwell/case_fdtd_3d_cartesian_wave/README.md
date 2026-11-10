@@ -1,5 +1,7 @@
 # 3D Cartesian Wave Visualization Case
 
+[简体中文](README.zh-CN.md)
+
 This is a Python-only visualization case. `run.sh` runs
 `fdtd_3d_cartesian_wave.py` and generates the main triple-slice figure, while
 the directory also keeps a single-plane reference figure:

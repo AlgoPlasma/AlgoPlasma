@@ -1,6 +1,6 @@
 # J03_neutral_continuity_faceflux_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 J03 initializes fixed face transport coefficients from reference density and signed fluxes, evaluates current fluxes with upwind density, and advances transient cylindrical continuity. It does not track particles, solve velocity distributions or rerun preprocessing.
 
@@ -39,4 +39,4 @@ The step does not enforce its stability bound or reject a negative updated densi
 
 Compile the module with preprocessing and the local include path, not the included implementation files. Keep real precision consistent with callers.
 
-Sphinx [J03](../../docs/source/rst_files/J_Fluid/J03_neutral_continuity_faceflux_2Drz.rst) contains derivations, routine inputs/outputs, a complete calculation and error handling. Commands and assertions are in [J03 tests](../../tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/README.en.md).
+Sphinx [J03](../../docs/source/rst_files/J_Fluid/J03_neutral_continuity_faceflux_2Drz.rst) contains derivations, routine inputs/outputs, a complete calculation and error handling. Commands and assertions are in [J03 tests](../../tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/README.md).

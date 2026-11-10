@@ -1,9 +1,9 @@
 # SN → J03 Application Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-This directory passes [J02 SN reference fields](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.en.md)
-to the [J03 continuity solver](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.en.md).
+This directory passes [J02 SN reference fields](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.md)
+to the [J03 continuity solver](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.md).
 It checks complete applications for loss-free B0 and prescribed-volume-loss ION.
 SN retains r-z space and two velocity components, with one in-plane angle in its
 velocity quadrature. J03 advances scalar density. Cylindrical volumes and areas
@@ -26,7 +26,7 @@ set `OPENMP=0` for a serial build. Thread parallelism applies to J02 discrete-ve
 sweeps; J03 time stepping remains serial.
 
 The second script argument can select another grid directory. The default is the
-sibling [application_inputs](../application_inputs/README.en.md) directory.
+sibling [application_inputs](../application_inputs/README.md) directory.
 Inputs must retain the prescribed 256×256 grid and active-region indices.
 Grid validation precedes compilation; [application_case.f90](../application_case.f90)
 generates the active region and ION loss.
@@ -49,7 +49,7 @@ Density change relative to preprocessing is a diagnostic; the J03 equation and
 face-flux closure determine its steady density. Formulas and historical runs are
 documented on the [full-application test page](../../../../docs/source/tests/012_fluid/application_tests.rst).
 Its SN B0/ION records dated 2026-10-06 used four OpenMP workers. See the
-[J02 test guide](../../J02_neutral_sn_transport_2Drz/README.en.md) for the scope of spatial MPI verification.
+[J02 test guide](../../J02_neutral_sn_transport_2Drz/README.md) for the scope of spatial MPI verification.
 
 ## Outputs and cleanup
 

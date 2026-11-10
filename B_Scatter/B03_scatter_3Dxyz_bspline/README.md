@@ -1,6 +1,6 @@
 # B03_scatter_3Dxyz_bspline
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `B03_scatter_3Dxyz_bspline` performs arbitrary-order centered B-spline
 particle deposition on a 3D Cartesian grid. It uses the same family of 1D

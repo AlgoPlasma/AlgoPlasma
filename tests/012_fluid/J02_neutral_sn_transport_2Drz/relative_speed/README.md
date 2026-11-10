@@ -1,11 +1,11 @@
 # J02 Relative-Speed and Coordinate-Conversion Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Verify velocity-node reconstruction, relative speeds and cylindrical velocity conversion in
-[J02](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.en.md), and compare serial/OpenMP results in real4 and real8.
+[J02](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.md), and compare serial/OpenMP results in real4 and real8.
 The checks concern kinematics at representative velocity nodes.
-Cross sections, ion distributions and CEX frequencies are covered by the [coefficient tests](../cex_coefficients/README.en.md).
+Cross sections, ion distributions and CEX frequencies are covered by the [coefficient tests](../cex_coefficients/README.md).
 
 ## Environment and commands
 
@@ -82,7 +82,7 @@ The script checks the actual real size, OpenMP worker count and `RESULT: PASS`,
 then requires serial/threaded `pairs.csv` files at the same precision to match byte for byte.
 Any failed check returns a nonzero status.
 These criteria measure representative-node calculation errors; velocity-interval integration errors are addressed by the
-[speed-quadrature tests](../nonuniform_speed/README.en.md).
+[speed-quadrature tests](../nonuniform_speed/README.md).
 
 ## Outputs
 
@@ -100,5 +100,5 @@ Each `pairs.csv` records all 1920 pairs: calculated relative speeds, cosine-law 
 `summary.json` aggregates precision, actual worker counts and error metrics. This test produces no figures.
 The script retains existing directories and overwrites matching build files and results on rerun.
 
-The ordinary [J02 tests](../README.en.md) also include this Fortran program.
+The ordinary [J02 tests](../README.md) also include this Fortran program.
 Their `make.sh` recreates the parent test directory's `build/`, so run it before the standalone comparison.

@@ -1,9 +1,9 @@
 # 012_fluid Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This directory tests the neutral reference fields and continuity solvers in
-[J_Fluid](../../J_Fluid/README.en.md). J01 and J02 provide free-molecular (FM) and
+[J_Fluid](../../J_Fluid/README.md). J01 and J02 provide free-molecular (FM) and
 discrete-ordinates (SN) preprocessing; J03 advances density using reference-field
 face fluxes. The preprocessors use a reduced r-z model with two velocity components,
 and J03 solves a scalar density equation.
@@ -12,11 +12,11 @@ and J03 solves a scalar density equation.
 
 | Directory | Checks |
 | --- | --- |
-| [J01_free_molecular](J01_free_molecular/README.en.md) | 3 programs: sampling, reflection, trajectories, statistics and the complete FM entry |
-| [J02_neutral_sn_transport_2Drz](J02_neutral_sn_transport_2Drz/README.en.md) | 12 ordinary programs: velocity quadrature, reaction coefficients, DG operators, boundaries, transport and reconstruction; separate parallel-consistency checks |
-| [J03_neutral_continuity_faceflux_2Drz](J03_neutral_continuity_faceflux_2Drz/README.en.md) | 6 programs: closure, transients, equilibria, application configuration and FM/SN-to-J03 integration |
-| [application_reference_J01](J03_neutral_continuity_faceflux_2Drz/application_reference_J01/README.en.md) | Complete FM → J03 loss-free B0 application |
-| [application_reference](J03_neutral_continuity_faceflux_2Drz/application_reference/README.en.md) | Complete SN → J03 B0 and prescribed-loss ION applications |
+| [J01_free_molecular](J01_free_molecular/README.md) | 3 programs: sampling, reflection, trajectories, statistics and the complete FM entry |
+| [J02_neutral_sn_transport_2Drz](J02_neutral_sn_transport_2Drz/README.md) | 12 ordinary programs: velocity quadrature, reaction coefficients, DG operators, boundaries, transport and reconstruction; separate parallel-consistency checks |
+| [J03_neutral_continuity_faceflux_2Drz](J03_neutral_continuity_faceflux_2Drz/README.md) | 6 programs: closure, transients, equilibria, application configuration and FM/SN-to-J03 integration |
+| [application_reference_J01](J03_neutral_continuity_faceflux_2Drz/application_reference_J01/README.md) | Complete FM → J03 loss-free B0 application |
+| [application_reference](J03_neutral_continuity_faceflux_2Drz/application_reference/README.md) | Complete SN → J03 B0 and prescribed-loss ION applications |
 
 The 21 ordinary programs use analytical relations, independent integration or
 discrete balances as references. Two integration tests pass actual preprocessing
@@ -80,5 +80,5 @@ empty output directory, so use a new destination for each rerun.
 The J03 `clean.sh` removes its own build directory and both full-application build
 directories, including stored results. Save needed application outputs elsewhere
 first; outputs directed outside those directories remain under the user's control.
-See the [shared input guide](J03_neutral_continuity_faceflux_2Drz/application_inputs/README.en.md)
+See the [shared input guide](J03_neutral_continuity_faceflux_2Drz/application_inputs/README.md)
 for the grid and application scope.

@@ -1,8 +1,8 @@
 # G03_DSMC tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Verify the [G03_DSMC library](../../../G_Collision/G03_DSMC/README.en.md) through
+Verify the [G03_DSMC library](../../../G_Collision/G03_DSMC/README.md) through
 its cylindrical interface for single-species, equal-weight HS/VHS/VSS elastic
 collisions. The suite contains eight core groups and six collision-relaxation regressions.
 
@@ -116,4 +116,4 @@ build directories it creates itself.
 
 See [G03_DSMC Validation](../../../docs/source/tests/009_collision/G03_DSMC.rst)
 for test purposes, equations and plot interpretation, and the
-[library README](../../../G_Collision/G03_DSMC/README.en.md) for models and interfaces.
+[library README](../../../G_Collision/G03_DSMC/README.md) for models and interfaces.

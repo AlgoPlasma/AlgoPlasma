@@ -1,6 +1,6 @@
 # J02_neutral_sn_transport_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `J02_neutral_sn_transport_2Drz` provides reusable deterministic discrete-ordinates
 (SN) building blocks for steady neutral transport on an r-z mesh with cylindrical geometry.
@@ -51,7 +51,8 @@ For zero drift, call `sub_J02_build_drifted_maxwellian_inflow_shape` with both d
 ## Main interfaces
 
 - `sub_J02_solve_transport`: application entry that selects an open sweep or
-  reflecting source iteration and reconstructs cell and face fields into
+  reflecting source iteration and reconstructs cell fields, internal face fluxes
+  and boundary fluxes into
   `sn_transport_result_type`. Supply exactly one of `boundary_inflow` and
   `zlo_inflow`; partial-inlet interval bounds must be supplied together.
   Check `ierr == SN_SUCCESS` before using any result. Sweep, source iteration and reconstruction can also be called separately.
@@ -95,6 +96,10 @@ For zero drift, call `sub_J02_build_drifted_maxwellian_inflow_shape` with both d
   partially reflecting face.
 - `sub_J02_build_sigma_from_frequency`: converts `nu [s^-1]` to
   `sigma_t=nu/speed [m^-1]` for every discrete direction.
+- `sub_J02_build_mc_crossing_pdf_inflow_shape` and
+  `sub_J02_build_mc_crossing_bins_inflow_shape`: convert a continuous crossing
+  velocity probability density or a discrete bin probability mass, respectively,
+  to an inflow shape.
 
 Boundary face index order is `r-lo`, `r-hi`, `z-lo`, `z-hi`. Values supplied
 for outgoing directions are ignored by the upwind sweep.
@@ -116,8 +121,9 @@ The MC interface deliberately accepts a different object:
 crossing the boundary in incoming bin `m`. The converter divides it by
 `weight(m)*speed(m)*abs(Omega(m).normal)` to recover a phase-density shape.
 After flux normalization, the relative discrete-bin crossing probabilities
-are exactly preserved. Do not pass reservoir samples to the MC converter, or
-MC crossing histograms directly to the reservoir normalization routine.
+are exactly preserved. If the input is already a velocity probability density,
+use the `crossing_pdf` interface, which divides only by the normal speed.
+Normalize reservoir samples directly to the target flux without this conversion.
 
 Status-returning interfaces use globally unique `SN_ERR_*` codes. Use
 `fun_J02_error_message(ierr)` for a readable diagnostic. Error reporting uses
@@ -215,7 +221,7 @@ cold and fast populations, then check density, flux and energy moments separatel
 compares uniform, quadratic-edge and piecewise grids at the same cutoff and group count.
 It writes raw moments against analytic 2D Maxwellian integrals, fixed-space/angle
 transport comparisons, angle/cutoff controls, CSV files, figures and a report.
-See the [comparison README](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.en.md).
+See the [comparison README](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.md).
 
 ## Input contracts
 
@@ -253,7 +259,7 @@ For fixed node sets, each pair has a fixed relative speed, independent of the
 population values. The caller can reuse it while those nodes and their common
 basis remain fixed. Cross-section evaluation and ion-distribution weighting belong
 to the reaction-kernel and CEX coefficient routines below. See the
-[kinematics tests](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.en.md).
+[kinematics tests](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.md).
 
 ## Prescribed-ion CEX coefficients
 
@@ -262,4 +268,4 @@ node/coordinate helpers. `sub_J02_sn_reaction_kernel.f90` owns the general
 binary-reaction table, energy conversion, and pair kernel `sigma*g`.
 `sub_J02_sn_cex.f90` constructs the prescribed-ion Maxwellian and integrates
 that common kernel into CEX frequency/sigma_t arrays. It does not add a CEX
-gain term or transport iteration. See [the concise usage and three checks](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.en.md).
+gain term or transport iteration. See [the concise usage and three checks](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.md).

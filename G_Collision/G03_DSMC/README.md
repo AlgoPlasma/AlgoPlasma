@@ -1,6 +1,6 @@
 # G03_DSMC
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 A serial C++20 numerical library for equal-weight, single-species elastic collisions
 of neutral monatomic particles using HS, VHS or VSS models. The public interface
@@ -118,7 +118,7 @@ collision-function declarations. The public computation entry is `DsmcStepper::s
 
 ## Tests and documentation
 
-[tests/009_collision/G03_DSMC](../../tests/009_collision/G03_DSMC/README.en.md)
+[tests/009_collision/G03_DSMC](../../tests/009_collision/G03_DSMC/README.md)
 provides eight core groups and six collision-relaxation checks. Run from the repository root:
 
 ```bash

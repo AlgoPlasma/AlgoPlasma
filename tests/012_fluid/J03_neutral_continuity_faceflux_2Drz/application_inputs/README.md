@@ -1,6 +1,6 @@
 # Application Inputs
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This directory supplies the nonuniform grid shared by the FM/SN → J03 applications.
 B0 has no volume loss; ION uses a prescribed loss frequency. The FM application
@@ -61,5 +61,5 @@ Success prints `Application input grid: PASS`; missing files or invalid grid
 formats return a nonzero status. Application scripts run the same check before
 compilation.
 
-Execution and output details are in the [FM application](../application_reference_J01/README.en.md)
-and [SN application](../application_reference/README.en.md) guides.
+Execution and output details are in the [FM application](../application_reference_J01/README.md)
+and [SN application](../application_reference/README.md) guides.

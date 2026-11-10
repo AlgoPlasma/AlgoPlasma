@@ -1,8 +1,8 @@
 # J01_free_molecular tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Implementation: [module README](../../../J_Fluid/J01_free_molecular/README.en.md). Run the commands below from the repository root.
+Implementation: [module README](../../../J_Fluid/J01_free_molecular/README.md). Run the commands below from the repository root.
 
 Requires Bash and GNU Fortran (`gfortran`); the ordinary runner uses eight-byte real values and runtime bounds checks.
 
@@ -10,8 +10,8 @@ Three standalone programs test the free-molecular module without archived extern
 
 | Test source | Implementation | Checks |
 | --- | --- | --- |
-| `test_J01_fm_units.f90` | Sampling, reflection, tracking, statistics and driver | Partial inlet, sampling range, lookup, normalization, single-cell rate balance, truncation and invalid topology |
-| `test_J01_corner_crossings.f90` | Trajectory tracking | Exact and near corners, both arrival orders, all four velocity signs, stepped boundaries, crossing counts and residence |
+| `test_J01_fm_units.f90` | Sampling, reflection, tracking, statistics and driver | Partial inlet, sampling range, reflection, lookup, residence statistics, normalization, single-cell rate balance, truncation and invalid topology |
+| `test_J01_corner_crossings.f90` | Trajectory tracking in `sub_J01_fm_trajectory.f90` | Exact and near corners, both arrival orders, all four velocity signs, stepped boundaries, crossing counts and residence |
 | `test_J01_sampling_distribution.f90` | Inlet and wall sampling | Annular-area, truncated-normal inlet and four-face diffuse-reflection probabilities with three seeds |
 
 ```bash

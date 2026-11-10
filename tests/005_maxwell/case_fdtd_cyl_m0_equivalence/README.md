@@ -1,5 +1,7 @@
 # FDTD 3D Cylindrical m=0 Equivalence Test
 
+[简体中文](README.zh-CN.md)
+
 This case keeps only one program: `test_geom_m0_equivalence.f90`.
 It checks TMz/TEz equivalence between 3D cylindrical `m=0` and 2D RZ updates.
 

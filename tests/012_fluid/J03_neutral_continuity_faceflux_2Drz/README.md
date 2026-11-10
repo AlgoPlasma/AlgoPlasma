@@ -1,8 +1,8 @@
 # J03 continuity tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Implementation: [module README](../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.en.md). Run the commands below from the repository root.
+Implementation: [module README](../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.md). Run the commands below from the repository root.
 
 Requires Bash and GNU Fortran (`gfortran`); the ordinary runner uses eight-byte real values and runtime bounds checks.
 
@@ -15,7 +15,9 @@ The runner executes local/setup checks before actual preprocessing-to-continuity
 - `test_J01_J03_channel`: actual trajectories and tallies passed to J03, two-cell analytical evolution, and a complete sampled FM solve.
 - `test_J02_J03_analytic`: spatial refinement against an exact SN distribution, followed by filling from zero with actual reconstructed fluxes.
 
-Independent J01 and J02 tests live in their own directories. These integration checks do not read application outputs.
+Independent J01 particle tests live in `../J01_free_molecular`, and the J02
+local and parallel tests live in `../J02_neutral_sn_transport_2Drz`. These
+integration checks do not read application outputs.
 
 From the repository root:
 
@@ -24,7 +26,8 @@ bash tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/run.sh
 ```
 
 All assertions and exit statuses must indicate success. Logs are written to `build/*.log`.
-The Sphinx J03 module, transient and Integration tests pages explain references and tolerances.
+In the Sphinx documentation, see Tests / 012_fluid / J03 module, J03 transient,
+and Integration tests for analytical references, error definitions and acceptance criteria.
 
 Full applications remain separate in `application_reference_J01` (FM→J03) and
 `application_reference` (SN→J03). The clean script also removes application

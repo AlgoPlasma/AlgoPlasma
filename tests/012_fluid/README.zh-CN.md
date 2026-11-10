@@ -1,6 +1,6 @@
 # 012_fluid Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录验证 [J_Fluid](../../J_Fluid/README.zh-CN.md) 的中性粒子参考场和连续性求解。
 J01、J02 分别提供自由分子（FM）与离散纵标（SN）前处理；J03 使用参考场的面通量推进密度。

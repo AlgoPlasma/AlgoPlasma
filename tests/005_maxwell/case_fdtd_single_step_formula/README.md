@@ -1,5 +1,7 @@
 # FDTD Single-Step Formula Tests
 
+[简体中文](README.zh-CN.md)
+
 This directory validates one-step FDTD update formulas for core Maxwell kernels.
 It does not include CPML, particles, current sources, collisions, or filtering.
 

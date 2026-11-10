@@ -1,6 +1,6 @@
 # Two-dimensional Electrostatic Two-stream Instability
 
-[Chinese](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This compact 2D3V particle-in-cell (PIC) example demonstrates how
 AlgoPlasma components can be assembled into an application-specific
@@ -138,7 +138,7 @@ Diagnostics in `plot.py` gave the following reference values:
 | PIC growth rate, gamma_PIC / omega_pe | 0.2603342007 |
 | Theoretical growth rate, gamma_theory / omega_pe | 0.2615993751 |
 | Log-amplitude fit R-squared | 0.9835732215 |
-| Maximum recorded absolute total-energy error, percent | 0.01825332345 |
+| Maximum recorded absolute relative total-energy error, percent | 0.01825332345 |
 
 The growth-rate fit uses `10 <= omega_pe*t <= 19`. The energy error is
 `100*abs((W(t)-W(0))/W(0))`, evaluated at the stored diagnostics;

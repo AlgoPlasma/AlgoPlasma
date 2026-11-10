@@ -1,6 +1,6 @@
 # Collision box: watch hot particles cool down
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This example asks one question: **what happens when hot A particles, initially moving together to the right, repeatedly collide with a colder B gas?**
 
@@ -85,7 +85,7 @@ A fixed background is an assumption of this example.
 Run these commands in a Linux or WSL terminal from the AlgoPlasma repository root.
 You need CMake 3.20 or newer and a C++20 compiler.
 Plotting also needs Python 3 and Matplotlib.
-MPI and OpenMP are not required by default. Without --model the executable generates a temporary synthetic package and cleans it on exit; --model DIR loads only the specified directory.
+MPI and OpenMP are not required by default. Without `--model`, the executable generates a process-private temporary synthetic package and cleans it up on exit. `--model DIR` loads only the specified directory.
 
 ```sh
 bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
@@ -267,7 +267,7 @@ bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh /tmp/box_
 Both cases should have zero collision counts and unchanged initial values.
 Neither reaches the νt = 2, 10, 20 or final equilibrium checks.
 The automated suite also includes equilibrium initial conditions, different step sizes and parallel comparisons.
-See the [test guide](../../README.en.md).
+See the [test guide](../../README.md).
 
 ### Try two more experiments
 
@@ -347,7 +347,7 @@ bash tests/009_collision/G02_MCC_network/run.sh
 ```
 
 This suite requires a C++20 compiler and CMake.
-See the [test guide](../../README.en.md) for coverage and MPI/OpenMP commands.
+See the [test guide](../../README.md) for coverage and MPI/OpenMP commands.
 
 For a run without plotting, invoke the built executable directly.
 The run script's default build directory is `/tmp/g02_collision_box_build`;
@@ -382,7 +382,7 @@ cmake --build /tmp/collision_box_external
 For background physics, see OpenStax on
 [temperature and particle motion](https://openstax.org/books/university-physics-volume-2/pages/2-2-pressure-temperature-and-rms-speed)
 and [speed distributions](https://openstax.org/books/university-physics-volume-2/pages/2-4-distribution-of-molecular-speeds).
-See the [module guide](../../../../../G_Collision/G02_MCC_network/README.en.md) for interfaces and model tables.
+See the [module guide](../../../../../G_Collision/G02_MCC_network/README.md) for interfaces and model tables.
 
 ## 9. From the experiment to the program
 

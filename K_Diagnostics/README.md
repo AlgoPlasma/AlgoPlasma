@@ -1,6 +1,6 @@
 # K_Diagnostics
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `K_Diagnostics` collects computational methods for extracting physical diagnostic
 quantities from experimental or numerical data. It provides reusable routines for
@@ -25,9 +25,9 @@ still apply.
 
 [K04_breathing_waveform](K04_breathing_waveform/) contains the breathing-waveform extraction routines.
 The [learning page](../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst) explains the method;
-the [routine README](K04_breathing_waveform/README.en.md) describes the Python interface.
+the [routine README](K04_breathing_waveform/README.md) describes the Python interface.
 Artificial examples, local tests, plotting and cleanup live in
-[`tests/011_K04_breathing_waveform`](../tests/011_K04_breathing_waveform/README.en.md), with running instructions.
+[`tests/011_K04_breathing_waveform`](../tests/011_K04_breathing_waveform/README.md), with running instructions.
 K04 learns a phase-repeatable waveform from repeated single-point records and supplies residuals for later spectral analysis.
 
 ## Probe Wave Diagnostics: K01–K03
@@ -88,7 +88,7 @@ while examples and tests orchestrate the calculations. Plotting also needs Matpl
 
 - [basic_numerical tests](../tests/010_diagnostics/case_basic_checks/): deterministic analytic checks, including power normalization, phase statistics, Beall accumulation and variance-weighted inversion.
 - [broadband_dispersion](../tests/010_diagnostics/case_broadband_dispersion/): generated waveforms drive K01–K03. Acceptance checks the aggregate dispersion and every selected wavevector, including boundary and tie flags.
-- [K04 tests and artificial examples](../tests/011_K04_breathing_waveform/README.en.md): checks breathing-cycle waveform extraction and provides running and figure-reproduction instructions.
+- [K04 tests and artificial examples](../tests/011_K04_breathing_waveform/README.md): checks breathing-cycle waveform extraction and provides running and figure-reproduction instructions.
 
 The broadband page publishes figures, numerical tables, per-mode CSV and source hashes from one run. Its thresholds are engineering requirements for this fixed synthetic case, not universal accuracy guarantees.
 

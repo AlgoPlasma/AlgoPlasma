@@ -1,6 +1,6 @@
 # G_Collision
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 `G_Collision` 收集 AlgoPlasma 中的碰撞模型，包含 `G01_MCC`、`G02_MCC_network` 和中性弹性碰撞库 `G03_DSMC`。
 

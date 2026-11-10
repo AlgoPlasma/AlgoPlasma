@@ -1,6 +1,6 @@
 # J01_free_molecular
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 The Fortran module `mod_J01_neutral_free_molecular_2Drz` provides free-molecular particle preprocessing.
 
@@ -24,4 +24,4 @@ The radial injection interval does not turn the remainder of an OPEN face into a
 
 Compile `mod_J01_neutral_free_molecular_2Drz.f90` with preprocessing enabled and this directory on the include path. The module includes the five implementation files listed above, so compile only the module file. Keep real precision consistent between the module and callers.
 
-The Sphinx [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) route covers data, injection, reflection, tracking, estimators and the complete calculation. See [J01 tests](../../tests/012_fluid/J01_free_molecular/README.en.md) for test commands.
+The Sphinx [J01](../../docs/source/rst_files/J_Fluid/J01_free_molecular.rst) route covers data, injection, reflection, tracking, estimators and the complete calculation. See [J01 tests](../../tests/012_fluid/J01_free_molecular/README.md) for test commands.

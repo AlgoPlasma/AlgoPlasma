@@ -1,6 +1,6 @@
 # C03: Nonuniform 3D RAZ Field Gather
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Gather fields at physical coordinates `(r [m],alpha [rad],z [m])` using D04-style cell indexing; return cylindrical E/B components.
 
