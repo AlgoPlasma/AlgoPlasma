@@ -1,30 +1,30 @@
 # A03_Higuera_Cary_relativistic_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`A03_Higuera_Cary_relativistic_3Dxyz` 提供三维直角坐标中的相对论 Higuera-Cary 速度推进器。它在给定电场和磁场后推进粒子速度，并考虑相对论修正。
+`A03_Higuera_Cary_relativistic_3Dxyz` provides a relativistic Higuera-Cary velocity pusher in 3D Cartesian coordinates. It advances the particle velocity under prescribed electric and magnetic fields while accounting for relativistic corrections.
 
-## 文件
+## Files
 
-| 文件 | 作用 |
+| File | Role |
 | --- | --- |
-| `mod_A03_Higuera_Cary_relativistic_3Dxyz_pusher.f90` | 源码级 Fortran module 入口，用于收纳并导出核心子程序。 |
-| `sub_A03_Higuera_Cary_relativistic_3Dxyz_push_v.f90` | 核心 Higuera-Cary 相对论速度更新子程序。 |
+| `mod_A03_Higuera_Cary_relativistic_3Dxyz_pusher.f90` | Source-level Fortran module entry. It includes and exports the core subroutine. |
+| `sub_A03_Higuera_Cary_relativistic_3Dxyz_push_v.f90` | Core relativistic Higuera-Cary velocity update routine. |
 
-## 接口
+## Interface
 
 ```fortran
 call sub_A03_Higuera_Cary_relativistic_3Dxyz_push_v(v, E, B, k)
 ```
 
-| 参数 | 方向 | 含义 |
+| Argument | Direction | Meaning |
 | --- | --- | --- |
-| `v(1:3)` | in/out | 粒子速度的直角坐标分量。 |
-| `E(1:3)` | in | 粒子位置处的电场。 |
-| `B(1:3)` | in | 粒子位置处的磁场。 |
-| `k` | in | 通常为 `q * dt / (2 * m)`。 |
+| `v(1:3)` | in/out | Particle velocity in Cartesian components. |
+| `E(1:3)` | in | Electric field at the particle position. |
+| `B(1:3)` | in | Magnetic field at the particle position. |
+| `k` | in | Usually `q * dt / (2 * m)`. |
 
-## 使用方式
+## Usage
 
 ```fortran
 #include "A_Pusher/A03_Higuera_Cary_relativistic_3Dxyz/mod_A03_Higuera_Cary_relativistic_3Dxyz_pusher.f90"
@@ -44,22 +44,22 @@ program demo_a03
 end program demo_a03
 ```
 
-编译时通常需要开启 C 预处理：
+Compilation usually requires C preprocessing:
 
 ```bash
 gfortran -cpp -O2 demo_a03.f90
 ```
 
-源码中使用默认 `real`。如果需要双精度，可在编译时选择对应编译器选项：
+The source uses default `real`. If double precision is required, choose the compiler option at build time:
 
 ```bash
 gfortran -cpp -O2 -fdefault-real-8 demo_a03.f90
 ifx -fpp -O2 -real-size 64 demo_a03.f90
 ```
 
-子程序内部使用 `c = 299792458.0` 进行相对论修正，因此速度、场量和时间步长的单位应保持一致。
+The subroutine uses `c = 299792458.0` internally for relativistic correction, so velocity, field, and time-step units should be consistent.
 
-## 参考文献
+## References
 
 [1] A.V. Higuera, J.R. Cary, Structure-preserving second-order integration of relativistic charged particle trajectories in electromagnetic fields, Phys. Plasmas 24 (2017) 052104. DOI: <a href="https://doi.org/10.1063/1.4979989" target="_blank" rel="noopener noreferrer">10.1063/1.4979989</a>
 

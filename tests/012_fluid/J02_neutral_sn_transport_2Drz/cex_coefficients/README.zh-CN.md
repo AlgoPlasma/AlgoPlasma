@@ -1,6 +1,6 @@
 # J02 CEX 系数测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 验证 [J02 中性输运模块](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.zh-CN.md) 的单元 CEX 系数计算：
 离子分布与相对速率 → 碰撞能量与截面 → 碰撞核 → 损失频率与单位路程损失系数。

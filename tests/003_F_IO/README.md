@@ -1,5 +1,7 @@
 # 003_F_IO — F_IO I/O Regression Test (MPI + HDF5)
 
+[简体中文](README.zh-CN.md)
+
 This directory provides a small but comprehensive regression test for the `F_IO`
 I/O routines in AlgoPlasma. It validates:
 
@@ -43,3 +45,4 @@ Quick checks:
 which mpirun
 which h5pfc
 h5pfc -show
+```

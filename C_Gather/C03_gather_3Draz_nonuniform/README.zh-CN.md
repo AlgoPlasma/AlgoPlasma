@@ -1,6 +1,6 @@
 # C03：非均匀三维 RAZ 场 Gather
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 使用 D04 风格单元索引，在物理坐标 `(r [m],alpha [rad],z [m])` 处插值场，输出柱坐标 E/B 分量。
 

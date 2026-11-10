@@ -70,10 +70,12 @@ Avoid putting long equation derivations, implementation notes, boundary-case
 analysis, or extensive algorithm discussion in README files. Put that material
 in Sphinx instead.
 
-Directory README pairs should use:
+Use the same pair for directory documentation on GitHub and Gitee.
 
-- `README.zh-CN.md`
-- `README.en.md`
+- `README.md` is the default English README.
+- `README.zh-CN.md` is the Simplified Chinese version.
+
+Keep the technical content aligned and link to the other language near the top of each file.
 
 ## Sphinx Pages
 

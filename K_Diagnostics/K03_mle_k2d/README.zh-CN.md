@@ -1,6 +1,6 @@
 # K03_mle_k2d
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 每条基线通过相位差约束波矢沿该方向的投影。将多个构型的对数似然相加，可以在二维波数平面上寻找共同支持的波矢。基线的方向和长度共同决定相位条纹的交汇位置。
 
@@ -69,8 +69,8 @@ result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, gri
 
 ## 测试
 
-- [基础数值测试](../../tests/010_diagnostics/case_basic_checks/)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
-- [宽带测试](../../tests/010_diagnostics/case_broadband_dispersion/)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
+- [基础数值测试](../../tests/010_diagnostics/case_basic_checks/README.zh-CN.md)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
+- [宽带测试](../../tests/010_diagnostics/case_broadband_dispersion/README.zh-CN.md)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
 
 宽带页面的图、数值表、逐频点 CSV 和源码哈希来自同次运行。阈值是这个合成案例的工程验收要求，不代表普适精度保证。
 

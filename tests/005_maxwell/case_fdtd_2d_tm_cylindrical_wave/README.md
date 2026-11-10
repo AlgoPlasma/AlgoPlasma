@@ -1,5 +1,7 @@
 # 2D TM Circular-Wavefront Visualization Case
 
+[简体中文](README.zh-CN.md)
+
 This is a Python-only visualization case. `run.sh` runs
 `fdtd_2d_tm_cylindrical_wave.py` and generates:
 

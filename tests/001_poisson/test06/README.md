@@ -1,5 +1,7 @@
 # D04_hypre_3Draz_nonuniform — Multi-MPI Nonuniform Cylindrical Poisson Test
 
+[简体中文](README.zh-CN.md)
+
 This directory provides a **multi-MPI-rank** regression test for the 3D
 cylindrical Poisson solver on a nonuniform orthogonal grid in
 \f$(r,\alpha,z)\f$.

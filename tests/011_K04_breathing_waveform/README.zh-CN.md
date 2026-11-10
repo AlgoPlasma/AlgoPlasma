@@ -1,6 +1,6 @@
 # 011_K04_breathing_waveform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 用人工数据验证 [K04 计算函数](../../K_Diagnostics/K04_breathing_waveform/README.zh-CN.md)，
 并复现[逐步学习页](../../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst)的 12 张图，
