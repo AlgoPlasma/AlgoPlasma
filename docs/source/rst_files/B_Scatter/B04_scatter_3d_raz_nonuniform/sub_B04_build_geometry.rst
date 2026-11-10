@@ -56,7 +56,7 @@ sub_B04_build_geometry
    考察一个 **内部径向节点** :math:`r_i`。它的形函数在该节点为一，在两个相邻节点为零，
    中间按直线变化；这两段所在的单元共同提供节点的径向积分。
 
-   .. figure:: /images/B_Scatter/B04_scatter_3d_raz_nonuniform/radial_support_zh.svg
+   .. figure:: /images/B_Scatter/B04_scatter_3d_raz_nonuniform/radial_support_en.svg
       :alt: 径向线性形函数的对照：左图两个相邻单元等宽，右图右侧单元为左侧的两倍宽；两图节点形函数的峰值均为一
       :width: 100%
 

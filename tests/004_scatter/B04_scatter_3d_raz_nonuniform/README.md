@@ -2,7 +2,7 @@
 
 [双语 Sphinx 测试页 / Bilingual Sphinx test page](../../../docs/source/tests/004_scatter/B04_scatter_3d_raz_nonuniform.rst) · [本地编译网页 / Local HTML](../../../docs/build/html/tests/004_scatter/B04_scatter_3d_raz_nonuniform.html)
 
-测试页提供算例说明、双语结果图和误差判据。The page includes case descriptions, bilingual figures and error criteria.
+测试页提供算例说明、结果图和误差判据，中英文页面共用英文图片。The page includes case descriptions, result figures and error criteria; both language versions use the same English figures.
 
 ## 中文：验证什么
 
@@ -62,8 +62,8 @@ bash run.sh single debug
 测试可执行文件的第一个可选参数指定已有输出目录；省略时只运行测试，不导出 CSV。
 
 先运行 `bash run.sh double debug`，再运行 `python plot_results.py`，即可在
-`build/figures/` 生成三组双语图；加 `--axis-only` 仅绘制轴点图。
-绘图依赖 Python、NumPy、Matplotlib 及可显示中文的字体。
+`build/figures/` 生成三张英文图，供中英文页面共用；加 `--axis-only` 仅绘制轴点图。
+绘图依赖 Python、NumPy 和 Matplotlib。
 `--data-dir` 可指定其他双精度结果目录，`--output-dir` 可指定图片输出位置。
 原始数据和运行日志保存在本地并由 Git 忽略；仓库保留源码、测试说明和已选用的文档插图。
 
@@ -120,8 +120,8 @@ densities, errors and totals. The executable's optional first argument names
 an existing output directory; without it, the tests run without CSV export.
 
 Run `bash run.sh double debug`, then `python plot_results.py` to generate all
-three bilingual figures in `build/figures/`; add `--axis-only` for the axis figure.
-Plotting requires Python, NumPy, Matplotlib and a font with Chinese glyphs.
+three English figures in `build/figures/`, shared by both language versions;
+add `--axis-only` for the axis figure. Plotting requires Python, NumPy and Matplotlib.
 Use `--data-dir` for another double-precision result directory and `--output-dir`
 to choose the figure destination. Raw data and run logs stay local and are
 ignored by Git; the repository retains source code, test descriptions and
