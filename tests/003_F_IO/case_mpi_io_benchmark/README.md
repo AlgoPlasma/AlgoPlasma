@@ -1,21 +1,23 @@
 # MPI F_IO Benchmark
 
-这个目录用于测试 `F_IO` 里粒子 I/O 的并行读写速度。
+[简体中文](README.zh-CN.md)
 
-测试内容：
+This directory benchmarks parallel particle read and write throughput for `F_IO`.
 
-- MPI rank 数：默认 `1 2 4 8 16 32 64`
-- 格式：`dat/bin/h5`
-- 例程：`F02` 写、`F01` 读
-- 每个 rank 写自己的文件，所以结果反映的是当前库的 per-rank file I/O 方案
+Test scope
 
-运行：
+- MPI rank counts default to `1 2 4 8 16 32 64`.
+- Formats `dat/bin/h5`.
+- `F02` writes and `F01` reads.
+- Each rank writes its own file, so the results measure the library's current per-rank file I/O scheme.
+
+Run with defaults.
 
 ```bash
 ./run.sh
 ```
 
-默认参数：
+Default parameters
 
 - `TOTAL_PARTICLES=4000000`
 - `NVAR=12`
@@ -23,7 +25,7 @@
 - `MPI_COUNTS="1 2 4 8 16 32 64"`
 - `PRECISION=single`
 
-默认是固定总粒子数的 strong scaling 测试：
+The default test measures strong scaling with a fixed total particle count.
 
 | MPI ranks | np per rank | total particles |
 |---:|---:|---:|
@@ -35,57 +37,57 @@
 | 32 | 125,000 | 4,000,000 |
 | 64 | 62,500 | 4,000,000 |
 
-可以这样改规模：
+To change the scale, use the following command.
 
 ```bash
 TOTAL_PARTICLES=8000000 NREPEAT=2 MPI_COUNTS="1 2 4 8 16 32 64" ./run.sh
 ```
 
-双精度测试：
+To test in double precision, use the following command.
 
 ```bash
 PRECISION=double ./run.sh
 ```
 
-当前磁盘可用空间约 `211G`。按默认 `TOTAL_PARTICLES=4000000`、`NVAR=6`、`NREPEAT=3` 估算，双精度最后保留一轮 `B_dat/B_bin/B_h5` 原始输出大概几 GB，硬盘放得下。
+The workspace had about `211G` of free disk space. An estimate using `TOTAL_PARTICLES=4000000`, `NVAR=6`, and `NREPEAT=3` puts the final retained set of double-precision raw outputs in `B_dat/B_bin/B_h5` at a few GB, which fits within that space.
 
-如果 OpenMPI 需要超订阅参数：
+If Open MPI requires oversubscription, use the following command.
 
 ```bash
 MPI_EXTRA_ARGS="--oversubscribe" ./run.sh
 ```
 
-输出：
+Outputs
 
 - `benchmark_results.csv`
 - `benchmark_io_speedup.png`
 - `benchmark_io_speed.png`
 - `run_np2.log`, `run_np4.log`, `run_np8.log`, `run_np16.log`
-- `B_dat/`, `B_bin/`, `B_h5/` 是最后一次 rank 数运行留下的原始输出
+- `B_dat/`, `B_bin/`, and `B_h5/` hold raw outputs from the run at the last rank count.
 
-CSV 里的 `payload_MB` 按数组原始 payload 计算：
+The CSV column `payload_MB` measures the raw array payload using the following formula.
 
 ```text
 nvar * np_per_rank * sizeof(real) * ranks
 ```
 
-所以 `dat` 的实际磁盘文件会比这个大。主要看 `write_seconds/read_seconds`，它表示完成这一批数据读写实际消耗的总 wall time；`MB/s` 只是用统一 payload 口径换算出来的辅助指标。
+The actual `dat` files on disk are larger than this payload. Use `write_seconds/read_seconds` as the primary metrics because they measure the total wall time to write or read the batch. `MB/s` is a secondary metric calculated using the same payload definition.
 
-`benchmark_io_speedup.png` 用最小 MPI rank 数作为基准。当前结果包含 `1 MPI rank`，所以基准是 `1 MPI rank`：
+`benchmark_io_speedup.png` uses the smallest MPI rank count as the baseline. The current results include `1 MPI rank`, so the baseline is `1 MPI rank`.
 
 ```text
 speedup = time(1 rank) / time(N ranks)
 ```
 
-当前已跑结果：
+Recorded results
 
 - `TOTAL_PARTICLES=4000000`
 - `NVAR=12`
 - `NREPEAT=3`
 - `MPI_COUNTS="1 2 4 8 16 32 64"`
-- 运行时使用了 `MPI_EXTRA_ARGS="--oversubscribe"`
+- The run used `MPI_EXTRA_ARGS="--oversubscribe"`.
 - default real size = `4 bytes`
-- 所有 `max_abs_diff = 0`
+- All runs reported `max_abs_diff = 0`.
 
 | format | ranks | np per rank | payload MB | write seconds | read seconds |
 |---|---:|---:|---:|---:|---:|

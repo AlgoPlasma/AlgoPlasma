@@ -1,6 +1,6 @@
 # A_Pusher
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 `A_Pusher` 收集 AlgoPlasma 中的粒子推进算法，用于在给定电场、磁场、粒子电荷质量比和时间步长的条件下更新粒子速度或粒子相空间状态。当前目录包含三个粒子推进器，覆盖直角坐标、柱坐标和相对论速度推进场景。
 
@@ -8,9 +8,9 @@
 
 | 编号 | 目录 | 算法 | 主要用途 |
 | --- | --- | --- | --- |
-| A01 | [`A01_Boris_3Dxyz`](A01_Boris_3Dxyz/) | 3D 直角坐标非相对论 Boris 推进 | 对单个粒子的速度 `v = (v_x, v_y, v_z)` 做一次完整 Boris 更新。 |
-| A02 | [`A02_Boris_3Drtz`](A02_Boris_3Drtz/) | 3D 柱坐标非相对论 Boris 推进 | 在柱坐标 `x = (r, theta, z)` 中同时更新单个粒子的位置和速度 `v = (v_r, v_theta, v_z)`。 |
-| A03 | [`A03_Higuera_Cary_relativistic_3Dxyz`](A03_Higuera_Cary_relativistic_3Dxyz/) | 3D 直角坐标相对论 Higuera-Cary 推进 | 用 Higuera-Cary 方法更新相对论粒子速度，适合高速粒子和强电磁场问题。 |
+| A01 | [`A01_Boris_3Dxyz`](A01_Boris_3Dxyz/README.zh-CN.md) | 3D 直角坐标非相对论 Boris 推进 | 对单个粒子的速度 `v = (v_x, v_y, v_z)` 做一次完整 Boris 更新。 |
+| A02 | [`A02_Boris_3Drtz`](A02_Boris_3Drtz/README.zh-CN.md) | 3D 柱坐标非相对论 Boris 推进 | 在柱坐标 `x = (r, theta, z)` 中同时更新单个粒子的位置和速度 `v = (v_r, v_theta, v_z)`。 |
+| A03 | [`A03_Higuera_Cary_relativistic_3Dxyz`](A03_Higuera_Cary_relativistic_3Dxyz/README.zh-CN.md) | 3D 直角坐标相对论 Higuera-Cary 推进 | 用 Higuera-Cary 方法更新相对论粒子速度，适合高速粒子和强电磁场问题。 |
 
 ## A01_Boris_3Dxyz
 

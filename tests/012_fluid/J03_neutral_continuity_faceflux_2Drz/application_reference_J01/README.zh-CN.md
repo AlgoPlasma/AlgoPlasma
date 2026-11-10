@@ -1,6 +1,6 @@
 # FM → J03 Application Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录将 [J01 自由分子统计](../../../../J_Fluid/J01_free_molecular/README.zh-CN.md)
 得到的参考密度与面通量接入 [J03 连续性求解](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)，

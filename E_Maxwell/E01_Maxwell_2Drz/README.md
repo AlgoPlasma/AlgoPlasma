@@ -1,22 +1,22 @@
 # E01_Maxwell_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-2D 轴对称柱坐标 `(r,z)` Maxwell/FDTD 内核，包含两套解耦场分量更新和 2D RZ CPML。
+2D axisymmetric cylindrical `(r,z)` Maxwell/FDTD kernels with two decoupled field-set updates plus 2D RZ CPML.
 
-> 注意：`TEz` 和 `TMz` 命名采用相对于 z 轴的物理约定：`TEz` 使用 `Ephi/Hr/Hz`，`TMz` 使用 `Er/Ez/Hphi`。
+> Note: `TEz` and `TMz` names follow the axial physical convention: `TEz` uses `Ephi/Hr/Hz`, and `TMz` uses `Er/Ez/Hphi`.
 
-## 文件
+## Files
 
-- `mod_E01_fdtd_2d_rz_tez.f90`: TEz 分量组模块，收纳 `Ephi` 和 `Hr/Hz` 更新。
-- `sub_E01_fdtd_2d_rz_tez_E.f90`: 用 `Hr/Hz` 更新 `Ephi`。
-- `sub_E01_fdtd_2d_rz_tez_H.f90`: 用 `Ephi` 更新 `Hr/Hz`。
-- `mod_E01_fdtd_2d_rz_tmz.f90`: TMz 分量组模块，收纳 `Er/Ez` 和 `Ha/Hphi` 更新。
-- `sub_E01_fdtd_2d_rz_tmz_E.f90`: 用 `Ha/Hphi` 更新 `Er/Ez`。
-- `sub_E01_fdtd_2d_rz_tmz_H.f90`: 用 `Er/Ez` 更新 `Ha/Hphi`。
-- `mod_E01_cpml_2d_rz_tez.f90`: `Ephi` 与 `Hr/Hz` 的 2D RZ CPML 扩展。
-- `mod_E01_cpml_2d_rz_tmz.f90`: `Er/Ez` 与 `Ha/Hphi` 的 2D RZ CPML 扩展。
+- `mod_E01_fdtd_2d_rz_tez.f90`: TEz component group module for `Ephi` and `Hr/Hz` updates.
+- `sub_E01_fdtd_2d_rz_tez_E.f90`: Updates `Ephi` from `Hr/Hz`.
+- `sub_E01_fdtd_2d_rz_tez_H.f90`: Updates `Hr/Hz` from `Ephi`.
+- `mod_E01_fdtd_2d_rz_tmz.f90`: TMz component group module for `Er/Ez` and `Ha/Hphi` updates.
+- `sub_E01_fdtd_2d_rz_tmz_E.f90`: Updates `Er/Ez` from `Ha/Hphi`.
+- `sub_E01_fdtd_2d_rz_tmz_H.f90`: Updates `Ha/Hphi` from `Er/Ez`.
+- `mod_E01_cpml_2d_rz_tez.f90`: 2D RZ CPML extension for `Ephi` and `Hr/Hz`.
+- `mod_E01_cpml_2d_rz_tmz.f90`: 2D RZ CPML extension for `Er/Ez` and `Ha/Hphi`.
 
-## 注意
+## Notes
 
-轴线 `r=0` 有专门闭合逻辑。调用方需要负责边界/ghost 填充、源项、CPML memory variables 和时间步调度。双精度通常由编译选项决定。
+The `r=0` axis has dedicated closure logic. The caller owns boundary/ghost fill, sources, CPML memory variables, and time-step orchestration. Double precision is normally selected by compiler flags.

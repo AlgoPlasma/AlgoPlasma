@@ -1,6 +1,6 @@
 # J_Fluid
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录提供中性参考场计算与密度演化方法。它可以为粒子网格法（Particle-in-Cell，PIC）应用提供中性密度；带电粒子推进、电磁场和反应率计算由其他模块负责。
 

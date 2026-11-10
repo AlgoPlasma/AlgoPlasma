@@ -1,5 +1,7 @@
 # D01_hypre_3Dxyz MPI-rank comparison
 
+[简体中文](README.zh-CN.md)
+
 This case benchmarks the D01 Cartesian Poisson/HYPRE solver on a fixed
 `320 x 80 x 320` grid. It scans MPI process counts while keeping
 `OMP_NUM_THREADS=1` by default, so the primary signal is MPI-rank scaling rather

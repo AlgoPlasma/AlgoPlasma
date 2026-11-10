@@ -1,6 +1,6 @@
 # J03 continuity tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 对应实现见[模块说明](../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)。下列命令均从仓库根目录运行。
 

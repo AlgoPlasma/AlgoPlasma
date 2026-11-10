@@ -1,6 +1,6 @@
 # G02_MCC_network：C++ 碰撞网络
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 G02 是独立的 C++20 MCC 核心。主程序提供粒子、背景和时间步，G02 按反应网络抽样碰撞，返回粒子更新、反应计数以及背景的动量和能量收支。G02 不调用 `G01_MCC`；两个模块分别实现自己的碰撞算法。
 

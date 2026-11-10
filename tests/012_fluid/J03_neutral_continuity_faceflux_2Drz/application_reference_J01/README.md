@@ -1,62 +1,73 @@
 # FM → J03 Application Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-本目录将 [J01 自由分子统计](../../../../J_Fluid/J01_free_molecular/README.zh-CN.md)
-得到的参考密度与面通量接入 [J03 连续性求解](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)，
-验证无体损失 B0 应用。FM 在 r-z 平面内追踪直线轨迹，保留径向和轴向速度；
-柱坐标体积与面积用于统计归一化。
+This directory passes the reference density and face fluxes from
+[J01 free-molecular statistics](../../../../J_Fluid/J01_free_molecular/README.md)
+to the [J03 continuity solver](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.md)
+for the loss-free B0 application. FM tracks straight trajectories in the r-z plane
+with radial and axial velocity components; cylindrical volumes and areas normalize
+the statistics.
 
-## 环境与运行
+## Requirements and execution
 
-需要 Bash、GNU Fortran、Python 3、NumPy 和 Matplotlib。绘图使用 `Agg` 后端。
-以下命令从仓库根目录运行：
+Bash, GNU Fortran, Python 3, NumPy and Matplotlib are required. Plotting uses the
+`Agg` backend. Run from the repository root:
 
 ```bash
 APPLICATION_OUTPUT="$HOME/algoplasma-results/fm-B0" \
 bash tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/application_reference_J01/run.sh
 ```
 
-默认输入为同级 [application_inputs](../application_inputs/README.zh-CN.md)，
-有效区域由 [application_case.f90](../application_case.f90) 生成。
-脚本第一个参数可指定其他网格目录，但须保持规定的 256×256 网格及有效区域索引。
-输入检查在编译前执行。
+The default inputs are in the sibling [application_inputs](../application_inputs/README.md)
+directory, and [application_case.f90](../application_case.f90) generates the active
+region. The first script argument can specify another grid directory, which must
+retain the prescribed 256×256 grid and active-region indices. Input validation
+precedes compilation.
 
-默认追踪 2400000 条粒子历史；第二个位置参数或环境变量 `J01_FM_HISTORIES` 可设置历史数，
-位置参数优先。改变历史数会改变统计误差和计算耗时。
+By default, the preprocessor tracks 2400000 particle histories. Set the second
+positional argument or `J01_FM_HISTORIES` environment variable to change this count;
+the positional argument takes precedence. The count affects statistical error
+and runtime.
 
-## 检查内容与通过条件
+## Checks and acceptance criteria
 
-脚本依次运行 J01 前处理、J03 连续性求解和公共验收绘图程序。
-通过时 `summary.txt` 包含 `RESULT: PASS`；检查失败时脚本返回非零状态。
+The runner executes J01 preprocessing, J03 continuity and the shared acceptance/plotting
+program in sequence. On success, `summary.txt` contains `RESULT: PASS`; a failed
+check returns a nonzero process status.
 
-| 检查 | 通过条件 |
+| Check | Acceptance criterion |
 | --- | --- |
-| FM 前处理 | 粒子历史完成，无截断 |
-| 前处理与 J03 密度 | 有效单元内有限且非负 |
-| J03 稳态 | 求解器报告收敛 |
-| 局部残差 | 归一化残差 ≤ `1e-8` |
-| 全局收支 | 相对粒子率失衡 ≤ `1e-6` |
+| FM preprocessing | All particle histories finish without truncation |
+| Preprocessing and J03 densities | Finite and nonnegative in active cells |
+| J03 steady state | Solver reports convergence |
+| Local residual | Normalized residual ≤ `1e-8` |
+| Global balance | Relative particle-rate imbalance ≤ `1e-6` |
 
-密度场相对前处理的变化作为诊断输出。FM 前处理按 `1/3` 弧度扇区统计，
-J03 按完整一圈积分；密度和单位面积通量直接传递，
-比较总粒子率时应将 FM 扇区值乘以周向比例 `6*pi`。
+Density change relative to preprocessing is a diagnostic. FM uses a sector of
+`1/3` radian, whereas J03 integrates over a full turn. Density and flux per unit
+area pass directly between them. Multiply the FM sector's total particle rates
+by the azimuthal factor `6*pi` when comparing totals.
 
-公式、图示及 2026-10-06 的历史运行记录见
-[完整应用测试页](../../../../docs/source/tests/012_fluid/application_tests.rst)。
-本应用的模型范围为 r-z 平面内的两速度分量自由分子运动。
+Formulas, figures and the historical run dated 2026-10-06 are documented on the
+[full-application test page](../../../../docs/source/tests/012_fluid/application_tests.rst).
+This application covers free-molecular motion with two velocity components in the
+r-z plane.
 
-## 输出与清理
+## Outputs and cleanup
 
-默认输出位于本目录的 `build/output_B0`。`APPLICATION_OUTPUT` 可覆盖这一位置；
-指定目录须为空，重复运行应选择新的目录。
+The default destination is `build/output_B0` within this directory.
+`APPLICATION_OUTPUT` overrides that location. The destination must be empty;
+choose a new directory for each rerun.
 
-| 输出 | 内容 |
+| Output | Content |
 | --- | --- |
-| `j01/`、`j03/` | 各阶段的场数据、统计或收支记录与 `run.log` |
-| `summary.txt` | 历史完成状态、连续性收敛、残差、收支和密度变化 |
-| `j01_chain_density.png` | 同一色标下的两个面板：FM 参考密度与 J03 稳态密度 |
+| `j01/`, `j03/` | Stage-specific fields, statistics or balance records and `run.log` |
+| `summary.txt` | History completion, continuity convergence, residual, balance and density change |
+| `j01_chain_density.png` | Two panels on a common colour scale: FM reference density and J03 steady density |
 
-图中横轴为 z、纵轴为 r，颜色表示中性密度；结合 `summary.txt` 判断是否通过。
-J03 测试目录的 `clean.sh` 会删除本应用的整个 `build/`，包括默认结果。
-需要保留的输出应先另存；写到外部目录的结果由使用者管理。
+The horizontal axis is z, the vertical axis is r, and colour represents neutral
+density. Use `summary.txt` with the plot to assess acceptance. The J03 test
+directory's `clean.sh` removes this application's entire `build/`, including
+default results. Save needed output elsewhere first; results written to external
+directories remain under the user's control.

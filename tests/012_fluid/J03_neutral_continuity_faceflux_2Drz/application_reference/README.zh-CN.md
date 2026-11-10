@@ -1,6 +1,6 @@
 # SN → J03 Application Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录将 [J02 的 SN 参考场](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.zh-CN.md)
 接入 [J03 连续性求解](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)，
