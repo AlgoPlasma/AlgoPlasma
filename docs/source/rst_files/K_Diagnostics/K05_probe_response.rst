@@ -39,11 +39,7 @@
       5.5 mm downstream of the exit, with exposed diameter 0.5 mm and length 2.5 mm.
       These positions do not establish the wave propagation direction.
 
-   .. figure:: /_static/K_Diagnostics/k05-response-layout-en.svg
-      :alt: Figure A. C1/C3 positions redrawn from the experimental layout. Axial distance 5.5 mm; local azimuthal separation 3.7 mm. Not to scale.
-      :width: 100%
-
-      Figure A. C1/C3 positions redrawn from the experimental layout. Axial distance 5.5 mm; local azimuthal separation 3.7 mm. Not to scale.
+   :ref:`Probe positions and dimensions <k05-experiment-geometry-en>` are shown on page 06.
 
 
    .. rubric:: 1. Select one sweep and identify the two measured voltages
@@ -705,11 +701,7 @@
       但在本组采集中保持位置不变。两者周向间距 3.7 mm，距出口轴向 5.5 mm，
       暴露尖端直径 0.5 mm、长度 2.5 mm。探针位置本身不能确定波传播方向。
 
-   .. figure:: /_static/K_Diagnostics/k05-response-layout-zh.svg
-      :alt: 图 A．根据实验布置重绘的 C1/C3 位置：轴向距出口 5.5 mm，局部周向间距 3.7 mm。示意图不按比例。
-      :width: 100%
-
-      图 A．根据实验布置重绘的 C1/C3 位置：轴向距出口 5.5 mm，局部周向间距 3.7 mm。示意图不按比例。
+   :ref:`探针位置与尺寸示意图 <k05-experiment-geometry-zh>` 见第 06 页。
 
 
    .. rubric:: 1．先选一次扫描，认清两路实际测到的电压

@@ -60,13 +60,29 @@
 
    .. rubric:: 1. Start with what the two probes recorded
 
+   .. _k05-experiment-geometry-en:
+
    C1 is the left fixed probe in the experimental front view; C3 is the right movable
    probe, held at one position for these captures. Their azimuthal separation is
-   3.7 mm, at 5.5 mm downstream of the exit. These positions do not establish a wave's
-   propagation direction. See the :ref:`geometry and circuit diagrams <k05-response-en>`.
+   3.7 mm, and both tips are 5.5 mm downstream of the exit. Each exposed tip has
+   diameter 0.5 mm and length 2.5 mm. These positions do not establish a wave's
+   propagation direction.
+
+   .. figure:: /_static/K_Diagnostics/k05-response-layout-en.svg
+      :alt: Probe geometry. C1/C3 positions redrawn from the experimental layout. Axial distance 5.5 mm; local azimuthal separation 3.7 mm. Not to scale.
+      :width: 100%
+
+      Probe geometry. C1/C3 positions redrawn from the experimental layout. Axial distance 5.5 mm; local azimuthal separation 3.7 mm. Not to scale.
+
+
+   The front view identifies the channels and their local azimuthal separation;
+   the top view locates the tips relative to the exit plane. The drawing is not
+   to scale. Its downstream arrow marks the axial direction, not azimuthal wave propagation.
+   The :ref:`measurement circuits <k05-response-en>` are explained separately.
 
    Each trace contains 10,000,000 samples at :math:`f_s=100` MS/s: 10 ns between samples,
    0.1 s per capture, and a Nyquist frequency of :math:`f_s/2=50` MHz.
+   The :doc:`FFT and Nyquist knowledge page </knowledge/fft>` illustrates this sampling limit.
    Write the record-centred voltage fluctuations as :math:`x_1(t)` and :math:`x_3(t)`.
    Subtracting a mean removes a constant; it does not smooth the fluctuations.
 
@@ -124,6 +140,8 @@
    Subtract each segment's own mean. Then multiply both channels by the same periodic
    Hann window :math:`w_n=\tfrac12[1-\cos(2\pi n/N)]`.
    It tapers the ends, reducing leakage caused by treating a finite segment as periodic.
+   See the :ref:`spectral leakage and windows example <knowledge-leakage-en-record>`
+   for repeated waveforms and their spectra.
    It also changes amplitudes and spreads narrow spectral features; the power-density
    normalization below accounts for its mean-square gain.
 
@@ -156,7 +174,10 @@
       Figure 3. From a waveform to complex coefficients: vary frequency or vary segment.
 
 
-   The left panel holds the segment fixed and varies frequency. The right panel holds
+   The left panel holds the segment fixed and covers 0–50 MHz, including the Nyquist
+   endpoint. Its amplitude axis is logarithmic, so smaller high-frequency coefficients
+   remain visible; the plotted quantity is still the modulus, not power or PSD.
+   The right panel holds
    :math:`f_\ast=2.001953125` MHz fixed and shows the first 80 segments in the complex
    plane. Each point's distance from zero is its modulus; its angle is its phase.
    Squares identify the first segment. At this bin its values are approximately
@@ -282,7 +303,8 @@
    radians. At our fixed bin, :math:`G=(6.68455-2.32260i)\times10^{-5}` V²,
    :math:`C_{13}^2=0.99427`, and :math:`\delta=-0.33441` rad.
    The high coherence describes a reproducible linear relationship at this frequency;
-   it does not by itself establish propagation or growth.
+   it does not by itself establish propagation or growth. See also the
+   :doc:`K01 coherence calculation <K01_signal_spectra/fun_K01_coherence>`.
 
    .. figure:: /_static/K_Diagnostics/k05-walkthrough-cross.svg
       :width: 100%
@@ -411,6 +433,8 @@
    displayed angle can therefore still describe a delayed signal. Phase wrapping
    and the channel responses must be resolved before interpreting a sign as a
    propagation direction; the pure-delay example is not a fit to Figure 6.
+   The :doc:`K01 angle-wrapping page <K01_signal_spectra/fun_K01_wrap_to_pi>`
+   explains how angles are mapped to one period.
 
    The high-frequency gaps have a different cause: the plotting code masks
    low-coherence points. In this snippet, ``G`` and ``coherence`` are the arrays
@@ -442,7 +466,7 @@
 
       X_f=H_1(f)I_{1,f},\quad Y_f=H_3(f)I_{3,f},\qquad \delta_V=\delta_I+\arg H_3-\arg H_1\pmod{2\pi}.
 
-   I is the probe-current Fourier coefficient in A; H is the complex current-to-voltage response in V/A. The measured phase δ_V includes the relative phase of the two responses as well as the current phase δ_I, modulo 2π. Channel delay, the propagation direction and a consistent spatial phase branch must therefore be checked before inferring a wavenumber. Neither spacing alone nor a small phase supplies group velocity.
+   :math:`I` is the probe-current Fourier coefficient in A; :math:`H` is the complex current-to-voltage response in V/A. The measured phase :math:`\delta_V` includes the relative phase of the two responses as well as the current phase :math:`\delta_I`, modulo :math:`2\pi`. Channel delay, the propagation direction and a consistent spatial phase branch must therefore be checked before inferring a wavenumber. Neither spacing alone nor a small phase supplies group velocity.
 
    .. raw:: html
 
@@ -638,12 +662,26 @@
 
    .. rubric:: 1. 先看两支探针实际记录了什么
 
+   .. _k05-experiment-geometry-zh:
+
    在实验正视图中，C1 是左侧固定探针，C3 是右侧移动探针；本批记录采集期间，C3 固定在同一位置。
-   两者周向相距 3.7 mm，位于出口下游 5.5 mm。这个位置关系本身不能确定波的传播方向。
-   几何与电路可参见 :ref:`探针示意图 <k05-response-zh>`。
+   两者周向相距 3.7 mm，两支尖端都位于出口下游 5.5 mm；每支暴露尖端的直径为 0.5 mm、长度为 2.5 mm。
+   这个位置关系本身不能确定波的传播方向。
+
+   .. figure:: /_static/K_Diagnostics/k05-response-layout-zh.svg
+      :alt: 探针几何示意图．根据实验布置重绘的 C1/C3 位置：轴向距出口 5.5 mm，局部周向间距 3.7 mm。示意图不按比例。
+      :width: 100%
+
+      探针几何示意图．根据实验布置重绘的 C1/C3 位置：轴向距出口 5.5 mm，局部周向间距 3.7 mm。示意图不按比例。
+
+
+   正视图用于认清通道和局部周向间距，俯视图用于认清尖端相对出口平面的位置。
+   示意图不按比例；“下游”箭头表示轴向参考方向，不表示波的周向传播方向。
+   :ref:`测量电路 <k05-response-zh>` 另有说明。
 
    每路每组有 10,000,000 个点，采样率 :math:`f_s=100` MS/s：相邻点间隔 10 ns，
    记录总长 0.1 s，奈奎斯特频率（Nyquist frequency）为 :math:`f_s/2=50` MHz。
+   :doc:`FFT 与奈奎斯特频率知识页 </knowledge/fft>` 给出了这个采样边界的图解。
    把相对整段均值的电压波动记为 :math:`x_1(t)` 和 :math:`x_3(t)`。
    减去均值只去掉一个常数，不会把快速起伏平滑掉。
 
@@ -696,6 +734,7 @@
    先减去每个短段自己的均值，再给两路乘上同一个周期 Hann 窗（periodic Hann window）：
    :math:`w_n=\tfrac12[1-\cos(2\pi n/N)]`。
    它把两端逐渐压低，减轻把有限短段作周期延拓时产生的谱泄漏（spectral leakage）。
+   :ref:`“谱泄漏与窗函数”知识页 <knowledge-leakage-zh-record>` 用周期拼接图和频谱比较图解释了这一点。
    加窗也会改变幅度、展宽窄谱结构；后面算功率谱密度时，要考虑窗的均方归一化。
 
    .. figure:: /_static/K_Diagnostics/k05-walkthrough-window.svg
@@ -726,7 +765,8 @@
       图 3．从波形得到复系数：固定短段看频率，或固定频率看不同短段。
 
 
-   左图固定一个短段，沿频率看系数的模。右图固定 :math:`f_\ast=2.001953125` MHz，
+   左图固定一个短段，覆盖 0–50 MHz，包含奈奎斯特频点。纵轴采用对数刻度，
+   便于看清较小的高频系数；画的仍是系数的模，不是功率或 PSD。右图固定 :math:`f_\ast=2.001953125` MHz，
    把前 80 段的系数画在复平面上：点离原点的距离是模，方向角是相位。
    方块标出第一个短段，此时约为
    :math:`X^{(1)}=(-0.06217+4.03141i)` mV、:math:`Y^{(1)}=(1.41417+3.43763i)` mV。
@@ -845,6 +885,7 @@
    在固定示例频点，:math:`G=(6.68455-2.32260i)\times10^{-5}` V²，
    :math:`C_{13}^2=0.99427`，:math:`\delta=-0.33441` rad。
    较大的相干度说明这个频率上的线性关系可重复，但它本身不能确认传播或增长。
+   :doc:`K01 相干度计算 <K01_signal_spectra/fun_K01_coherence>` 也介绍了这一统计量。
 
    .. figure:: /_static/K_Diagnostics/k05-walkthrough-cross.svg
       :width: 100%
@@ -969,6 +1010,8 @@
       phase = np.angle(G)  # 每个频点都计算相位，单位为弧度。
       phase_for_plot = np.where(coherence >= 0.5, phase, np.nan)
 
+   角度映射到一个周期的计算可参见 :doc:`K01 相位包裹 <K01_signal_spectra/fun_K01_wrap_to_pi>`。
+
    ``np.nan`` 让图中该处留白，不代表相位为零、功率为零或没有计算。
    当归一化后的互谱箭头很短时，小的统计变化就可能让它的方向明显改变。
    若互谱恰好为零，相位在数学上没有定义，不能把软件返回的数值当作物理相位。
@@ -988,7 +1031,7 @@
 
       X_f=H_1(f)I_{1,f},\quad Y_f=H_3(f)I_{3,f},\qquad \delta_V=\delta_I+\arg H_3-\arg H_1\pmod{2\pi}.
 
-   I 是单位为 A 的探针电流 Fourier 系数，H 是单位为 V/A 的复数电流—电压响应。测得相位 δ_V 同时包含电流相位 δ_I 和两路响应的相位差，且只在模 2π 意义下确定。因此需要检查通道延迟、传播方向和空间相位分支，才能进一步解释波数；间距本身或一个很小的相位，都不能提供群速度。
+   :math:`I` 是单位为 A 的探针电流 Fourier 系数，:math:`H` 是单位为 V/A 的复数电流—电压响应。测得相位 :math:`\delta_V` 同时包含电流相位 :math:`\delta_I` 和两路响应的相位差，且只在模 :math:`2\pi` 意义下确定。因此需要检查通道延迟、传播方向和空间相位分支，才能进一步解释波数；间距本身或一个很小的相位，都不能提供群速度。
 
    .. raw:: html
 

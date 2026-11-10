@@ -424,5 +424,22 @@
     "analyze_experiment.py": "7a9230aa230d705bc81a2ec5746973feff27ccbe97715e2d7e83813b802a15a0",
     "siglent_v4.py": "ff510edb09198793afb74a39faa4fd6dc3c59bfcf2b615666cb74f2503b4dd18"
   },
-  "raw_hashes_verified_after_run": true
+  "raw_hashes_verified_after_run": true,
+  "figure_revisions": {
+    "coefficients": {
+      "date": "2026-11-10",
+      "figure": "coefficients",
+      "frequency_range_hz": [
+        0,
+        50000000.0
+      ],
+      "amplitude_axis": "logarithmic; modulus in mV, not power",
+      "source_arrays": "output/analysis/z5p5_a3p7_walkthrough_r36/walkthrough_arrays.npz",
+      "source_arrays_sha256": "a6644b3ddad775ab0ac55a321dde51f0a57ecdfc846c060f214bd62bc38ffaf2",
+      "plot_script_sha256": "f732e500cbfc45a214751cf0752df81a2416b74cf290b0f31065ec9ca1d878c8",
+      "method": "Positive-exponent/N rFFT of saved, demeaned first-segment samples times the same periodic Hann; old 103-bin slice matches.",
+      "all_1025_bins": true,
+      "original_statistics_unchanged": true
+    }
+  }
 }

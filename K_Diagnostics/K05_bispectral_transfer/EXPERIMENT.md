@@ -33,6 +33,14 @@ and the largest absolute component as the common limit. It is only a display sca
 `walkthrough_arrays.npz` includes `frequency_hz` (all nonnegative bins),
 `g{2,3,4,5}_P_c{1,3}`, `..._psd_c{1,3}`, `..._G`, `..._coherence`, `..._B_c{1,3}`,
 `..._b2_c{1,3}`, and capture-2 segment arrays `g2_X_band`, `g2_Y_band` through 5 MHz.
+Figure 3 uses all 1025 nonnegative bins through 50 MHz for the first segment,
+with a logarithmic modulus axis. The producer reconstructs this full spectrum
+from the saved demeaned first-segment samples and Hann window; it checks the
+0–5 MHz slice against the stored coefficients. The fixed-frequency complex-plane
+panel is unchanged. The R37 figure-only redraw has separate provenance in
+the published summary's figure_revisions field; the original statistical-run
+hashes are retained rather than relabelled as a new analysis.
+
 Their first axis is segment and second axis is frequency bin; B matrices use
 row=f1, column=f2. NaN in B marks the uncomputed domain. B is `<X1 X2 conj(X3)>`;
 the b vector of page05 uses its conjugate. The products remain in voltage units.

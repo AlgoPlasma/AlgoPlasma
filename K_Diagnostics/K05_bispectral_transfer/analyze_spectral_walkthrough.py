@@ -31,7 +31,38 @@ def save(fig, output, name):
     for ext in ("svg", "png"):
         fig.savefig(output/f"k05-walkthrough-{name}.{ext}", dpi=150,
                     bbox_inches="tight", metadata={"Date": None} if ext == "svg" else None)
+        if ext == "svg":
+            path = output/f"k05-walkthrough-{name}.{ext}"
+            path.write_text("\n".join(line.rstrip() for line in path.read_text(encoding="utf-8").splitlines())+"\n", encoding="utf-8")
     plt.close(fig)
+
+
+def plot_coefficients(a, summary, output):
+    """Plot the full first-segment spectrum and the fixed-bin complex plane."""
+    fs = summary["fs_hz"]
+    f = a["frequency_hz"]/1e6
+    k = summary["example_bin"]
+    fm = f[k]
+    x, y = a["g2_X_band"], a["g2_Y_band"]
+    fig, ax = plt.subplots(1, 2, figsize=(10, 4.2), layout="constrained")
+    for ch, c, name, col in ((1, x, "X", COLORS[0]), (3, y, "Y", COLORS[1])):
+        # All 1025 bins from the saved first segment, not the 0-5 MHz slice.
+        full = np.fft.rfft(a[f"segment_c{ch}"] * a["window"]).conj() / N
+        np.testing.assert_allclose(full[:c.shape[1]], c[0], rtol=1e-10, atol=1e-15)
+        ax[0].semilogy(f, abs(full)*1e3, color=col, label=f"${name}$")
+        ax[0].plot(fm, abs(c[0,k])*1e3, "s", color=col)
+        ax[1].scatter(c[:80,k].real*1e3, c[:80,k].imag*1e3,
+                      s=12, alpha=.45, color=col, label=f"${name}$, first 80 segments")
+        ax[1].plot(c[0,k].real*1e3, c[0,k].imag*1e3, "s", ms=8, color=col, mec="black")
+    ax[0].axvline(fm, color="#777", ls=":", lw=1)
+    ax[0].set(xlabel=r"Frequency $f$ (MHz)", ylabel=r"$|X_f^{(1)}|, |Y_f^{(1)}|$ (mV)", title="One segment: full 0–50 MHz band", xlim=(0,fs/2e6))
+    ax[1].axhline(0, color="#aaa", lw=.6); ax[1].axvline(0, color="#aaa", lw=.6)
+    ax[1].set(xlabel=r"$\mathrm{Re}(X_f^{(r)}),\mathrm{Re}(Y_f^{(r)})$ (mV)",
+              ylabel=r"$\mathrm{Im}(X_f^{(r)}),\mathrm{Im}(Y_f^{(r)})$ (mV)",
+              title=f"One frequency: {fm:.6f} MHz")
+    ax[1].set_aspect("equal", adjustable="datalim")
+    for p in ax: p.legend(fontsize=9)
+    save(fig, output, "coefficients")
 
 
 def plot_results(a, summary, output):
@@ -67,22 +98,7 @@ def plot_results(a, summary, output):
     ax[0].legend(ncol=2); ax[-1].set_xlabel(r"Time within segment $t_n$ (µs)")
     save(fig, output, "window")
 
-    fig, ax = plt.subplots(1, 2, figsize=(10, 4.2), layout="constrained")
-    for c, name, col in ((x, "X", COLORS[0]), (y, "Y", COLORS[1])):
-        ax[0].plot(f[:c.shape[1]], abs(c[0])*1e3, color=col, label=f"${name}$")
-        ax[0].plot(fm, abs(c[0,k])*1e3, "s", color=col)
-        ax[1].scatter(c[:80,k].real*1e3, c[:80,k].imag*1e3,
-                      s=12, alpha=.45, color=col, label=f"${name}$, first 80 segments")
-        ax[1].plot(c[0,k].real*1e3, c[0,k].imag*1e3, "s", ms=8, color=col, mec="black")
-    ax[0].axvline(fm, color="#777", ls=":", lw=1)
-    ax[0].set(xlabel=r"Frequency $f$ (MHz)", ylabel=r"$|X_f^{(1)}|, |Y_f^{(1)}|$ (mV)", title="One segment, many frequencies", xlim=(0,5))
-    ax[1].axhline(0, color="#aaa", lw=.6); ax[1].axvline(0, color="#aaa", lw=.6)
-    ax[1].set(xlabel=r"$\mathrm{Re}(X_f^{(r)}),\mathrm{Re}(Y_f^{(r)})$ (mV)",
-              ylabel=r"$\mathrm{Im}(X_f^{(r)}),\mathrm{Im}(Y_f^{(r)})$ (mV)",
-              title=f"One frequency: {fm:.6f} MHz")
-    ax[1].set_aspect("equal", adjustable="datalim")
-    for p in ax: p.legend(fontsize=9)
-    save(fig, output, "coefficients")
+    plot_coefficients(a, summary, output)
 
     fig, ax = plt.subplots(1, 2, figsize=(10, 3.7), layout="constrained")
     for c, name, col in ((x, "X", COLORS[0]), (y, "Y", COLORS[1])):
