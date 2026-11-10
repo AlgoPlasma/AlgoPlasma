@@ -1,66 +1,66 @@
-# G02_MCC_network：C++ 碰撞网络
+# G02_MCC_network: C++ collision network
 
 [中文](README.zh-CN.md) | [English](README.en.md)
 
-G02 是独立的 C++20 MCC 核心。主程序提供粒子、背景和时间步，G02 按反应网络抽样碰撞，返回粒子更新、反应计数以及背景的动量和能量收支。G02 不调用 `G01_MCC`；两个模块分别实现自己的碰撞算法。
+G02 is an independent C++20 MCC core. The host supplies particles, backgrounds and a time step. G02 samples reactions and returns particle updates, reaction counts and background momentum/energy exchange. G02 does not call `G01_MCC`; each module implements its own collisions.
 
-初次接入推荐 `MccStepper::step()`。先读[零维碰撞盒](../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md)，再看[文档主线](../../docs/source/rst_files/G_Collision/G02_MCC_network.rst)和[CSV 数据格式](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst)。
+Start with `MccStepper::step()`. Read the [collision-box tutorial](../../tests/009_collision/G02_MCC_network/examples/collision_box/README.en.md), then the [main guide](../../docs/source/rst_files/G_Collision/G02_MCC_network.rst) and [CSV format](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst).
 
-## 从数据到一个时间步
+## From data to one time step
 
-1. 用户准备模型目录，`MccEngine::load(model_dir)` 读取 `manifest.csv`，检查物种、内部态、反应和数据表；模型通常只加载一次。
-2. `MccStepper` 读取粒子快照和背景，准备活动通道。为每个粒子抽样候选等待时间，按通道频率上界选择反应，再接受或拒绝。真实事件计算末态；空碰撞只消耗时间。剩余时间继续推进。
-3. 全部粒子准备成功后，统一分配新 ID、准备存储并提交。返回 `StepReport`；主程序用背景收支更新后续背景。
+1. Create a model directory. `MccEngine::load(model_dir)` reads `manifest.csv` and validates species, states, reactions and tables. Load the model once during initialization.
+2. `MccStepper` snapshots particles/backgrounds and prepares active channels. For each particle it samples candidate waiting times, chooses a channel by its frequency bound and accepts or rejects it. A real event computes products; a null event only consumes waiting time. Continue through the remaining time.
+3. After all preparation succeeds, allocate child IDs, prepare storage and commit together. Return `StepReport`; the host applies background exchange to subsequent steps.
 
-![C++ MCC 框架](../../docs/source/images/G_Collision/G02/architecture_zh.svg)
+![C++ MCC architecture](../../docs/source/images/G_Collision/G02/architecture_en.svg)
 
-![一个 MCC 时间步](../../docs/source/images/G_Collision/G02/step_flow_zh.svg)
+![One MCC time step](../../docs/source/images/G_Collision/G02/step_flow_en.svg)
 
-## C++ 接入
+## C++ integration
 
-公共入口头文件是 `mcc.hpp`，命名空间是 `algoplasma::mcc`。`VectorParticleAdapter` 接入 `vector<ParticleState>`；`SoaParticleAdapter` 接入按物种存放的字段数组。粒子容器归主程序所有。
+Include `mcc.hpp`; APIs are in `algoplasma::mcc`. `VectorParticleAdapter` adapts `vector<ParticleState>`, while `SoaParticleAdapter` adapts per-species field arrays. The host owns the particle storage.
 
 ```cpp
 #include "mcc.hpp"
 using namespace algoplasma::mcc;
 
-// model_dir 为用户按 CSV 格式说明准备的目录。
+// model_dir is a user-created directory following the CSV format guide.
 MccEngine engine = MccEngine::load(model_dir);
 MccStepper stepper(engine);
-VectorParticleAdapter adapter(particles); // particles 由主程序创建
-MccWorkspace workspace;                  // 在时间循环外创建
+VectorParticleAdapter adapter(particles); // host-owned particles
+MccWorkspace workspace;                  // retain across time steps
 for (std::uint64_t step = 0; step < steps; ++step) {
     StepReport report = stepper.step(adapter, background, dt_s, step, seed, workspace);
-    // 主程序按 report.reservoir 更新下一步的背景条件。
+    // Apply report.reservoir to background conditions for subsequent steps.
 }
 ```
 
-上述片段的粒子和背景由宿主提供。可直接构建的完整程序见[文档调用示例](../../tests/009_collision/G02_MCC_network/examples/doc_snippets/README.md)。
+The host provides particles and backgrounds in this fragment. A complete buildable caller is in [documented callers](../../tests/009_collision/G02_MCC_network/examples/doc_snippets/README.md).
 
-| 入口 | 时间推进与结果 |
+| Entry | Advancement and result |
 |---|---|
-| `MccStepper::step()` | 推荐的整批入口。完整处理每个主粒子的本步剩余时间，统一提交更新、删除、物种迁移和新产物；新产物从下一步参与。候选数超过 `StepOptions::max_candidates_per_particle`（默认 1000000）时报错，准备失败不提交。 |
-| `MccEngine::collide_full()` | 单粒子完整推进；物种改变后继续剩余时间，移除后结束。候选上限默认 1000000，超过上限抛 `Error`；返回 `StepOutcome`，宿主负责写回和产物存储。 |
-| `MccEngine::collide()` | 单粒子受限推进；`request.max_events_per_step=0` 选模型默认上限 64，统计的是候选，包括空碰撞。达到上限设置 `event_limit_reached` 并返回；`MoveSpecies` 或 `Remove` 时提前结束，因此返回不代表完整处理了 dt。 |
+| `MccStepper::step()` | Recommended batch entry. Completes the remaining time for each primary and commits updates, removals, species changes and children together. Children participate from the next step. Exceeding `StepOptions::max_candidates_per_particle` (default 1000000) throws; preparation failure does not commit. |
+| `MccEngine::collide_full()` | Completes one primary's remaining time, continuing after species changes and ending on removal. Default candidate limit is 1000000; exceeding it throws `Error`. Returns `StepOutcome`; the host owns write-back and child storage. |
+| `MccEngine::collide()` | Bounded single-particle advancement. `request.max_events_per_step=0` selects the model default of 64 candidates, including null events. Reaching the limit sets `event_limit_reached` and returns. `MoveSpecies` or `Remove` also ends processing, so return does not establish completion of dt. |
 
-这些入口都属于 G02。这里的“受限”和“完整”指推进行为，不指 G01/G02 版本迁移。`collide()` 也不是每次只能碰撞一次。
+All three entries belong to G02. Bounded versus complete describes advancement behavior, not migration between G01 and G02. `collide()` can process multiple events.
 
-## 数据对象与单位
+## Objects and units
 
-- `ParticleState`：有效 `species/state`、稳定唯一的 `id`、网格编号 `cell`、速度 m/s、权重和出生步。适配器与 ID 高水位跨步保留，避免重新使用删除粒子的 ID。
-- `CellBackground`：网格编号和 `BackgroundComponent`；背景密度 m^-3、温度 K、平均速度 m/s。`cell=UINT32_MAX` 是全域备用背景；实际局部编号须与粒子一致。
-- 入门时给背景填写实际内部态。`invalid_state=65535` 只表示按物种合并的背景，不是基态，也不自动分配各态密度。
-- `StepReport`：候选、真实/空事件、反应计数、背景粒子数/动量/能量收支、守恒账本和分段耗时。失败抛 `algoplasma::mcc::Error`。
+- `ParticleState`: valid species/state, stable unique ID, mesh cell, velocity in m/s, weight and birth step. Retain the adapter/ID high-water mark across steps to avoid reusing removed IDs.
+- `CellBackground`: mesh cell plus `BackgroundComponent`; density in m^-3, temperature in K and mean velocity in m/s. `cell=UINT32_MAX` selects uniform fallback; local cells must match particles.
+- Start with explicit background state IDs. `invalid_state=65535` selects a species-aggregate background; it is not ground state and does not distribute density among states.
+- `StepReport`: candidates, real/null events, reaction counts, background number/momentum/energy exchange, conservation ledger and timings. Failures throw `algoplasma::mcc::Error`.
 
-## 截面与模型文件
+## Model input
 
-[电子群基准算例输入包](../../tests/009_collision/G02_MCC_network/examples/swarm_benchmark/swarm_inputs.zip)附有该算例使用的初始电子、模型文件和截面表。建立自定义模型时，请自行准备适合所选反应和能量范围的截面数据，并按[CSV 格式说明](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst)创建模型目录；文档列出所有表头、关联关系、单位、默认值和完整的内联最小示例。
+The [electron swarm benchmark inputs](../../tests/009_collision/G02_MCC_network/examples/swarm_benchmark/swarm_inputs.zip) include the initial electrons, model files and cross-section tables used in that example. For a custom model, supply cross sections appropriate to its reactions and energy range and create a model directory following the [CSV guide](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst), which documents headers, references, units, defaults and a complete inline minimal example.
 
-二体截面以相对能量 eV 为横轴、m2 为纵轴；二体/三体温度速率系数分别用 m3/s 和 m6/s。读取器检查单位但不做换算。表格检查通过不等于反应数据或物理近似适用于研究对象。
+Two-body cross sections use relative energy in eV and values in m2. Two-/three-body temperature rate coefficients use m3/s and m6/s. The reader checks units without conversion. Successful loading does not establish the validity of the physical data or approximations.
 
-## 构建与测试
+## Build and test
 
-在 Linux/WSL 的仓库根目录运行，需要 CMake 3.20 和 C++20 编译器：
+From the repository root in Linux/WSL, with CMake 3.20 and a C++20 compiler:
 
 ```bash
 cmake -S tests/009_collision/G02_MCC_network -B /tmp/g02_build -DCMAKE_BUILD_TYPE=Debug
@@ -68,36 +68,36 @@ cmake --build /tmp/g02_build -j 4
 ctest --test-dir /tmp/g02_build --output-on-failure
 ```
 
-测试在运行时生成最小合成数据到 `/tmp/g02_build/generated_models/{demo_binary,demo_three_body,collision_box_elastic}`；CTest 自动安排生成步骤。独立检查用户模型：
+CTest generates minimal synthetic fixtures at runtime under `/tmp/g02_build/generated_models/{demo_binary,demo_three_body,collision_box_elastic}` and schedules their setup automatically. Validate your own package with:
 
 ```bash
 /tmp/g02_build/g02_validate_model /path/to/my_model
 ```
 
-只构建库时加 `-DG02_MCC_BUILD_TESTS=OFF`。安装和外部链接：
+Add `-DG02_MCC_BUILD_TESTS=OFF` for a library-only build. Install with:
 
 ```bash
 cmake --install /tmp/g02_build --prefix /tmp/g02_install
 ```
 
-外部 CMake 使用 `find_package(G02_MCC_network CONFIG REQUIRED)`，链接 `AlgoPlasma::G02_MCC`；安装包只提供 C++ 库和头文件，不提供模型数据。
+External CMake callers use `find_package(G02_MCC_network CONFIG REQUIRED)` and link `AlgoPlasma::G02_MCC`. Installation provides the C++ library and headers, without model data.
 
-## CPU 并行与工作区
+## CPU parallelism and workspace
 
-`MccWorkspace` 复用临时内存和通道缓存，同一对象不能并发重入。省略工作区的 `step()` 重载使用一次性工作区；同一物理时间步只调用一次。
+`MccWorkspace` reuses scratch memory and channel caches and must not serve concurrent calls. The overload without workspace allocates a temporary one. Call one overload once per physical step.
 
-OpenMP：构建时加 `-DG02_MCC_ENABLE_OPENMP=ON`，通过 `StepOptions.backend=CpuBackend::OpenMp` 选择线程后端。MPI：加 `-DG02_MCC_ENABLE_MPI=ON`，包含 `mpi.hpp`，链接 `AlgoPlasma::G02_MCC_MPI`，所有相关进程共同调用 `DistributedMccStepper::step()`。主程序先初始化 MPI，提供至少 `MPI_THREAD_FUNNELED` 的支持，并在 `MPI_Finalize()` 前销毁步进器。
+For OpenMP, build with `-DG02_MCC_ENABLE_OPENMP=ON` and select `StepOptions.backend=CpuBackend::OpenMp`. For MPI, enable `-DG02_MCC_ENABLE_MPI=ON`, include `mpi.hpp`, link `AlgoPlasma::G02_MCC_MPI` and call `DistributedMccStepper::step()` on every participating rank. The host initializes MPI with at least `MPI_THREAD_FUNNELED` and destroys the stepper before `MPI_Finalize()`.
 
-默认使用前缀通道抽样；多通道可选择别名采样。用同一模型和粒子负载测量完整 MCC 步耗时，同时检查统计和守恒，详见[性能说明](../../tests/009_collision/G02_MCC_network/PERFORMANCE.md)。
+Prefix channel sampling is the default; alias sampling is available for many-channel workloads. Compare complete MCC-step timings for the same model and workload while checking statistics and conservation. See [performance notes](../../tests/009_collision/G02_MCC_network/PERFORMANCE.md).
 
-## 支持范围
+## Supported models
 
-G02 的 C01 是公共事件抽样流程，C02–C08 分别处理弹性、离散态跃迁、解离、电离、附着/脱附、电荷交换和复合/中和。CSV 的 `algorithm` 填 C02 等反应值，不填 C01。
+G02 C01 is the common event-sampling flow. C02–C08 implement elastic collisions, discrete-state transitions, dissociation, ionization, attachment/detachment, charge exchange and recombination/neutralization. CSV `algorithm` uses reaction values such as C02, not C01.
 
-每条反应有一个 kinetic projectile 和一到两个 background 反应物；支持二体截面和二体/三体温度速率系数。背景速度按带漂移的 Maxwell 分布抽样。当前运动学为经典非相对论模型，角度模型为 isotropic、cone 或满足严格条件的 identity_exchange，能量模型为 n_body_phase_space 或恰好两个产物的 equal_share。
+Each reaction has one kinetic projectile and one or two background reactants. Two-body cross sections and two-/three-body temperature rate coefficients are supported. Background velocities follow drifting Maxwell distributions. Kinematics is classical and nonrelativistic; angular models are isotropic, cone or strictly constrained identity_exchange. Energy models are n_body_phase_space or equal_share with exactly two products.
 
-G02 不推进位置、不求场、不处理壁面，也不划分 MPI 网格或迁移粒子。新增已有类型的反应可以改数据；新增散射律或其他物理机制需要扩展代码和对应验证。
+G02 does not advance positions, solve fields, handle walls, partition MPI domains or migrate particles. Adding supported reactions changes data; new scattering laws or physical mechanisms require code and dedicated validation.
 
-## 方法依据与文献
+## Method references
 
-空碰撞方法参见 [Skullerud (1968)](https://doi.org/10.1088/0022-3727/1/11/423)，PIC-MCC 背景参见 [Vahedi–Surendra (1995)](https://doi.org/10.1016/0010-4655(94)00171-W)。指数时钟、热背景速度和两体末态的出处及实现对应见[方法与验证文献](../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst)。其中也列出本库流程的适用条件及碰撞盒理论曲线的推导。
+See [Skullerud (1968)](https://doi.org/10.1088/0022-3727/1/11/423) for null collisions and [Vahedi–Surendra (1995)](https://doi.org/10.1016/0010-4655(94)00171-W) for PIC-MCC context. [Methods and verification references](../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst) map the clock, thermal partners and binary outcomes to sources, state the implementation's assumptions, and derive the collision-box reference curves.
