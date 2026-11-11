@@ -10,14 +10,14 @@
 使用 Bash（例如 Linux 或 WSL 环境）和 GNU Fortran。从仓库根目录执行：
 
 ```bash
-mkdir -p examples/B04_scatter_3d_raz_nonuniform/build
+mkdir -p examples/B04_scatter_3Draz_nonuniform/build
 gfortran -cpp -std=f2008 -fdefault-real-8 -O0 -g -fcheck=all \
-  -I B_Scatter/B04_scatter_3d_raz_nonuniform \
-  -J examples/B04_scatter_3d_raz_nonuniform/build \
-  B_Scatter/B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform.f90 \
-  examples/B04_scatter_3d_raz_nonuniform/main.f90 \
-  -o examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
-examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
+  -I B_Scatter/B04_scatter_3Draz_nonuniform \
+  -J examples/B04_scatter_3Draz_nonuniform/build \
+  B_Scatter/B04_scatter_3Draz_nonuniform/mod_B04_scatter_3Draz_nonuniform.f90 \
+  examples/B04_scatter_3Draz_nonuniform/main.f90 \
+  -o examples/B04_scatter_3Draz_nonuniform/build/b04_minimal
+examples/B04_scatter_3Draz_nonuniform/build/b04_minimal
 ```
 
 命令启用预处理，并以相同的双精度选项编译模块和调用方。
@@ -35,11 +35,11 @@ Cell array shape = 2 2 2
 
 ## 继续阅读
 
-- [模块与调用约定](../../B_Scatter/B04_scatter_3d_raz_nonuniform/README.zh-CN.md)
-- [使用指南及接入自己程序的方法](../../docs/source/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.rst)（双语 Sphinx 源文件）
-- [自动测试](../../tests/004_scatter/B04_scatter_3d_raz_nonuniform/README.zh-CN.md)
+- [模块与调用约定](../../B_Scatter/B04_scatter_3Draz_nonuniform/README.zh-CN.md)
+- [使用指南及接入自己程序的方法](../../docs/source/rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage.rst)（双语 Sphinx 源文件）
+- [自动测试](../../tests/004_scatter/B04_scatter_3Draz_nonuniform/README.zh-CN.md)
 
 文档构建完成后，可打开相对于仓库根目录的本地文件
-`docs/build/html/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.html`。
+`docs/build/html/rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage.html`。
 
 作者：Xin Luo。

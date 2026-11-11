@@ -32,7 +32,7 @@ Scatter Testing Guide
         - :doc:`B03 测试 </tests/004_scatter/B03_scatter_3Dxyz_bspline>`
       * - B04
         - 八节点分配、有效体积、均匀密度恢复、轴点加权平均、单元平均及 B02 对照
-        - :doc:`B04 测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+        - :doc:`B04 测试与结果 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
    .. rubric:: B04 的已有测试怎样对应算法？
 
@@ -40,8 +40,8 @@ Scatter Testing Guide
    - **后续处理：** 非均匀角网格检查轴点加权均值及总量；解析线性场检查单元体积平均。
    - **实现与接口：** 均匀网格直接调用 B02 公开电荷沉积例程作对照；参数及浮点范围检查核对返回状态和数组保留。
 
-   当前测试在 double debug、double release、single debug 三种配置下各执行 79 项断言。
-   输入、误差定义、阈值、运行结果摘要与插图集中在 :doc:`B04 测试页 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`。
+   当前测试在单、双精度各自的 debug 和 release 四种配置下各执行 102 项断言。
+   输入、误差定义、阈值、运行结果摘要与插图集中在 :doc:`B04 测试页 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`。
 
    .. rubric:: 怎样理解比较量？
 
@@ -53,7 +53,7 @@ Scatter Testing Guide
 
    .. rubric:: 使用示例与性能数据
 
-   学习调用顺序可先阅读 :doc:`B04 调用示例 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage>`；
+   学习调用顺序可先阅读 :doc:`B04 调用示例 </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage>`；
    研究运行成本可查阅 :doc:`B01 平台比较 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>` 中对应配置的计时结果。
 
    返回 :doc:`学习入口 <scatter_learning_path>` · :doc:`使用指南 <scatter_usage_cookbook>` · :doc:`全部沉积测试 </tests/004_scatter/index>`。
@@ -82,7 +82,7 @@ Scatter Testing Guide
         - :doc:`B03 tests </tests/004_scatter/B03_scatter_3Dxyz_bspline>`
       * - B04
         - Eight-node distribution, effective volumes, uniform-density recovery, weighted axis averages, cell averages and B02 comparison
-        - :doc:`B04 tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+        - :doc:`B04 tests and results </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
    .. rubric:: How B04 checks relate to the algorithm
 
@@ -90,8 +90,8 @@ Scatter Testing Guide
    - **Subsequent operations:** nonuniform angular grids check weighted axis means and totals; an analytic linear field checks cell-volume averages.
    - **Implementation and interfaces:** a uniform-grid comparison calls the public B02 charge routine; invalid-input and floating-point-range checks inspect return status and preserved arrays.
 
-   The current test executes 79 assertions in each of double debug, double release and single debug configurations.
-   Inputs, error definitions, tolerances, result summaries and figures are collected on the :doc:`B04 test page </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`.
+   The current test executes 102 assertions in each of four configurations: single and double precision, each in debug and release mode.
+   Inputs, error definitions, tolerances, result summaries and figures are collected on the :doc:`B04 test page </tests/004_scatter/B04_scatter_3Draz_nonuniform>`.
 
    .. rubric:: Interpret the compared quantity
 
@@ -103,7 +103,7 @@ Scatter Testing Guide
 
    .. rubric:: Usage examples and performance data
 
-   Read the :doc:`B04 calling example </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage>` to learn the calling sequence.
+   Read the :doc:`B04 calling example </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage>` to learn the calling sequence.
    For runtime costs, consult the configurations and measurements in the :doc:`B01 platform comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`.
 
    Return to the :doc:`learning path <scatter_learning_path>` · :doc:`usage guide <scatter_usage_cookbook>` · :doc:`scatter test index </tests/004_scatter/index>`.

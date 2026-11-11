@@ -59,13 +59,13 @@
 !> returned by these checks leaves density unchanged. Final additions are range-checked
 !> in temporary values before writing density. Keep intermediate products within the
 !> selected floating-point range; exception handling follows the compiler configuration.
-!> @note This routine is exported through mod_B04_scatter_3d_raz_nonuniform.
+!> @note This routine is exported through mod_B04_scatter_3Draz_nonuniform.
 !> Compile the module and caller with the same default real kind.
 !> @note Concurrent calls require separate density buffers or caller synchronization.
 !> @see @ref sub_b04_build_geometry "sub_B04_build_geometry",
 !> @ref sub_b04_average_axis "sub_B04_average_axis",
 !> @ref sub_b04_project_density "sub_B04_project_density"
-subroutine sub_B04_scatter_3d_raz_nonuniform(r, phi, z, periodic_phi, &
+subroutine sub_B04_scatter_3Draz_nonuniform(r, phi, z, periodic_phi, &
         cell, position, amount, inv_volume, density, ierr)
 
     real, intent(in) :: r(0:), phi(0:), z(0:), position(3), amount
@@ -152,4 +152,4 @@ subroutine sub_B04_scatter_3d_raz_nonuniform(r, phi, z, periodic_phi, &
     end do
     end do
     ierr = B04_OK
-end subroutine sub_B04_scatter_3d_raz_nonuniform
+end subroutine sub_B04_scatter_3Draz_nonuniform

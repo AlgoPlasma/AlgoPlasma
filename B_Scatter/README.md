@@ -9,7 +9,7 @@
 - `B01_scatter_3Dxyz`: CIC/NGP-style number-density, momentum-density, and statistical deposition on a 3D Cartesian `xyz` grid.
 - `B02_deposit_3d_cyl`: charge-density and current-density deposition on a 3D cylindrical `r,phi,z` grid, including axis averaging.
 - `B03_scatter_3Dxyz_bspline`: arbitrary-order B-spline number and particle-component deposition on a 3D Cartesian `xyz` grid.
-- [B04_scatter_3d_raz_nonuniform](B04_scatter_3d_raz_nonuniform/README.md): nodal number/charge density deposition on a nonuniform cylindrical grid, with geometry preparation, axis weighting and optional cell averaging.
+- [B04_scatter_3Draz_nonuniform](B04_scatter_3Draz_nonuniform/README.md): nodal number/charge density deposition on a nonuniform cylindrical grid, with geometry preparation, axis weighting and optional cell averaging.
 
 ## Conventions
 

@@ -39,7 +39,7 @@
 !> @note Radial and axial array endpoints are treated as physical endpoints.
 !> For MPI interface nodes, use complete nodal volumes including the basis
 !> support on both sides of the interface.
-!> @see @ref sub_b04_scatter_3d_raz_nonuniform "sub_B04_scatter_3d_raz_nonuniform",
+!> @see @ref sub_b04_scatter_3draz_nonuniform "sub_B04_scatter_3Draz_nonuniform",
 !> @ref sub_b04_average_axis "sub_B04_average_axis"
 subroutine sub_B04_build_geometry(r, phi, z, periodic_phi, inv_volume, phi_measure, ierr)
     real, intent(in) :: r(0:), phi(0:), z(0:)
@@ -73,13 +73,13 @@ subroutine sub_B04_build_geometry(r, phi, z, periodic_phi, inv_volume, phi_measu
         vr(i+1) = vr(i+1) + h*(r(i)/6.0+r(i+1)/3.0)
     end do
     do j = 0, na-1
-        h = (phi(j+1)-phi(j))/2.0
+        h = half_interval(phi(j),phi(j+1))
         va(j) = va(j)+h
         va(j+1) = va(j+1)+h
     end do
     if (periodic_phi) va(0) = va(0)+va(na)
     do k = 0, size(z)-2
-        h = (z(k+1)-z(k))/2.0
+        h = half_interval(z(k),z(k+1))
         vz(k) = vz(k)+h
         vz(k+1) = vz(k+1)+h
     end do
@@ -105,4 +105,20 @@ subroutine sub_B04_build_geometry(r, phi, z, periodic_phi, inv_volume, phi_measu
     end do
     phi_measure = va(0:nj-1)
     ierr = B04_OK
+
+contains
+
+    real function half_interval(lower, upper) result(half)
+        real, intent(in) :: lower, upper
+
+        ! Coordinates are already finite and ordered. For large opposite
+        ! signs, halve first to avoid overflow of the full interval width.
+        if (lower < 0.0 .and. upper > 0.0 .and. &
+            max(abs(lower),abs(upper)) > huge(1.0)/2.0) then
+            half = upper/2.0-lower/2.0
+        else
+            ! Subtract first to retain tiny, representable half-widths.
+            half = (upper-lower)/2.0
+        end if
+    end function half_interval
 end subroutine sub_B04_build_geometry

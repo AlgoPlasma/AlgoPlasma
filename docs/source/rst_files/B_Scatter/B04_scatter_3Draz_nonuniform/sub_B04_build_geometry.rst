@@ -56,7 +56,7 @@ sub_B04_build_geometry
    考察一个 **内部径向节点** :math:`r_i`。它的形函数在该节点为一，在两个相邻节点为零，
    中间按直线变化；这两段所在的单元共同提供节点的径向积分。
 
-   .. figure:: /images/B_Scatter/B04_scatter_3d_raz_nonuniform/radial_support_en.svg
+   .. figure:: /images/B_Scatter/B04_scatter_3Draz_nonuniform/radial_support_en.svg
       :alt: 径向线性形函数的对照：左图两个相邻单元等宽，右图右侧单元为左侧的两倍宽；两图节点形函数的峰值均为一
       :width: 100%
 
@@ -109,8 +109,10 @@ sub_B04_build_geometry
    下列循环把这两个积分分别加到 ``vr(i)`` 和 ``vr(i+1)``；同一内部节点会收到相邻两个单元的贡献。
    ``na`` 是角向单元数 ``nphi``。局部变量 ``h`` 在径向循环中保存完整单元宽度，
    在角向循环中改为半个角宽，用于分别累加两端的积分。
+   内部函数 ``half_interval`` 计算角向和轴向的半宽；大幅值异号端点先各减半再求差，
+   其余情况先求差再减半，兼顾大数范围与极小间距的精度。
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_build_geometry.f90
       :language: fortran
       :start-at:     do i = 0, size(r)-2
       :end-at:     if (periodic_phi) va(0) = va(0)+va(na)
@@ -157,7 +159,7 @@ sub_B04_build_geometry
    - 检查包括全部坐标、形状和体积的有限性与可求倒数范围。网格或拓扑变化后重新调用；编译精度与调用方一致。
 
 
-   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -207,7 +209,7 @@ sub_B04_build_geometry
    Consider an **interior radial node** :math:`r_i`. Its basis equals one there and zero at the two neighboring nodes,
    with linear variation between them. Both adjacent cells contribute to its radial integral.
 
-   .. figure:: /images/B_Scatter/B04_scatter_3d_raz_nonuniform/radial_support_en.svg
+   .. figure:: /images/B_Scatter/B04_scatter_3Draz_nonuniform/radial_support_en.svg
       :alt: Radial linear bases: equal adjacent widths on the left, and a right cell twice as wide on the right; both nodal bases peak at one
       :width: 100%
 
@@ -260,8 +262,10 @@ sub_B04_build_geometry
    The loop adds these two integrals to ``vr(i)`` and ``vr(i+1)``; an interior node receives contributions from both adjacent cells.
    ``na`` is the angular cell count ``nphi``. The local variable ``h`` holds the full radial cell width
    in the radial loop, then half the angular width in the angular loop for the two endpoint integrals.
+   The internal ``half_interval`` function computes angular and axial half-widths. It halves large,
+   opposite-sign endpoints before subtraction; otherwise it subtracts first, preserving tiny interval widths.
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_build_geometry.f90
       :language: fortran
       :start-at:     do i = 0, size(r)-2
       :end-at:     if (periodic_phi) va(0) = va(0)+va(na)
@@ -308,7 +312,7 @@ sub_B04_build_geometry
    - Checks cover coordinates, shapes, finite volumes and the reciprocal range. Rebuild on mesh/topology changes and compile with the caller's real precision.
 
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
    .. raw:: html
 

@@ -41,7 +41,7 @@
 !> The first element of each actual array maps to dummy index zero.
 !> @note The caller allocates cell_density; its initial values are unused.
 !> A nonzero returned status leaves cell_density unchanged.
-!> @see @ref sub_b04_scatter_3d_raz_nonuniform "sub_B04_scatter_3d_raz_nonuniform",
+!> @see @ref sub_b04_scatter_3draz_nonuniform "sub_B04_scatter_3Draz_nonuniform",
 !> @ref sub_b04_average_axis "sub_B04_average_axis"
 subroutine sub_B04_project_density(r, periodic_phi, density, cell_density, ierr)
     real, intent(in) :: r(0:), density(0:,0:,0:)

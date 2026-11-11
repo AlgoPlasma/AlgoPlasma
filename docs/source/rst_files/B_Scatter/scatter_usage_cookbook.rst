@@ -30,7 +30,7 @@ Scatter Usage Cookbook
       * - :doc:`B03 <B03_scatter_3Dxyz_bspline>`
         - Cartesian 网格指标坐标、``par(1:6,1:np)`` 与 B-spline 阶数
         - 内部遍历粒子，将 ``w`` 或 ``w*par(d,p)`` 加入目标数组；保留已有累加量
-      * - :doc:`B04 <B04_scatter_3d_raz_nonuniform>`
+      * - :doc:`B04 <B04_scatter_3Draz_nonuniform>`
         - 非均匀柱坐标节点数组、单粒子 ``position``、所在单元 ``cell``、贡献量 ``amount``
         - 先准备几何量，再逐粒子调用；累加已作体积归一化的节点数密度或电荷密度
 
@@ -48,10 +48,10 @@ Scatter Usage Cookbook
 
    1. **网格建立或改变时：** 分配数组，调用 ``sub_B04_build_geometry``，保存 ``inv_volume`` 和 ``phi_measure``。
    2. **每轮沉积开始：** 清零 ``density``；调用方按应用的边界规则准备粒子位置，并确定粒子所在单元。
-   3. **粒子循环内：** 每个粒子调用一次 ``sub_B04_scatter_3d_raz_nonuniform``，并检查 ``ierr``。
+   3. **粒子循环内：** 每个粒子调用一次 ``sub_B04_scatter_3Draz_nonuniform``，并检查 ``ierr``。
    4. **粒子循环之后：** 分区计算先汇集共享节点贡献；含轴全周区域再进行轴点平均。需要单元平均源项时调用 ``sub_B04_project_density``。
 
-   所需数组布局与各步骤的直接产物见 :ref:`B04 调用流程 <b04-workflow-zh>`；可直接编译的短程序见 :doc:`B04 调用示例 <B04_scatter_3d_raz_nonuniform/usage>`。
+   所需数组布局与各步骤的直接产物见 :ref:`B04 调用流程 <b04-workflow-zh>`；可直接编译的短程序见 :doc:`B04 调用示例 <B04_scatter_3Draz_nonuniform/usage>`。
 
    .. rubric:: 网格边缘与并行调用
 
@@ -59,7 +59,7 @@ Scatter Usage Cookbook
    物理边界模型、粒子去留和进程间通信由调用程序组织。
 
    对 B04，物理端点只计域内基函数支撑；MPI 内部接口则需要两侧支撑构成的完整有效体积。
-   共享节点各份贡献使用一致体积，再进行求和。几何量的准备方式见 :doc:`build_geometry <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`。
+   共享节点各份贡献使用一致体积，再进行求和。几何量的准备方式见 :doc:`build_geometry <B04_scatter_3Draz_nonuniform/sub_B04_build_geometry>`。
    多个线程同时向同一 ``density`` 写入时，调用方使用独立缓冲区再求和，或组织同步。
 
    .. rubric:: 编译与后续入口
@@ -92,7 +92,7 @@ Scatter Usage Cookbook
       * - :doc:`B03 <B03_scatter_3Dxyz_bspline>`
         - Cartesian grid-index coordinates, ``par(1:6,1:np)`` and B-spline degree
         - Internal particle loop adds ``w`` or ``w*par(d,p)`` contributions, preserving previous accumulated values
-      * - :doc:`B04 <B04_scatter_3d_raz_nonuniform>`
+      * - :doc:`B04 <B04_scatter_3Draz_nonuniform>`
         - Nonuniform cylindrical node arrays, one particle's ``position``, containing ``cell`` and ``amount``
         - Prepare geometry, then call per particle; accumulate volume-normalized nodal number or charge density
 
@@ -110,10 +110,10 @@ Scatter Usage Cookbook
 
    1. **At grid creation or change:** allocate arrays, call ``sub_B04_build_geometry`` and retain ``inv_volume`` and ``phi_measure``.
    2. **At the start of each deposition stage:** clear ``density``; apply the application's particle boundary rules and locate containing cells.
-   3. **Inside the particle loop:** call ``sub_B04_scatter_3d_raz_nonuniform`` once per particle and check ``ierr``.
+   3. **Inside the particle loop:** call ``sub_B04_scatter_3Draz_nonuniform`` once per particle and check ``ierr``.
    4. **After the loop:** sum shared-node contributions in partitioned calculations, then average a full-circle axis where present. Call ``sub_B04_project_density`` when a cell-average source is needed.
 
-   See the :ref:`B04 workflow <b04-workflow-en>` for layouts and direct results, and the :doc:`B04 calling example <B04_scatter_3d_raz_nonuniform/usage>` for a short compilable program.
+   See the :ref:`B04 workflow <b04-workflow-en>` for layouts and direct results, and the :doc:`B04 calling example <B04_scatter_3Draz_nonuniform/usage>` for a short compilable program.
 
    .. rubric:: Grid edges and parallel calls
 
@@ -121,7 +121,7 @@ Scatter Usage Cookbook
    The application organizes physical boundary models, particle retention and communication.
 
    B04 physical endpoints have one-sided basis support; MPI interfaces require complete effective volumes including support on both sides.
-   Shared-node contributions use matching volumes before summation; see :doc:`build_geometry <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`.
+   Shared-node contributions use matching volumes before summation; see :doc:`build_geometry <B04_scatter_3Draz_nonuniform/sub_B04_build_geometry>`.
    Concurrent writes to ``density`` require separate buffers followed by summation, or caller-managed synchronization.
 
    .. rubric:: Compilation and further reading

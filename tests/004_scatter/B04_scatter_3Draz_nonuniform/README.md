@@ -14,7 +14,7 @@ hand calculations, independent Gauss quadrature and analytic volume averages.
 | [run.sh](run.sh) | Build B04, B02 and the test driver with consistent options; run tests and export data |
 | [plot_results.py](plot_results.py) | Render English documentation figures from local double-precision data |
 
-Each configuration executes **79 assertions**, plus return-status checks after public calls.
+Each configuration executes **102 assertions**, plus return-status checks after public calls.
 
 | Case | Checks |
 | --- | --- |
@@ -25,11 +25,11 @@ Each configuration executes **79 assertions**, plus return-status checks after p
 | Nonuniform axis | Weighted reference value, equal density at one physical axis point, and preserved totals for signed inputs and after deposition |
 | Public B02 comparison | Nodal arrays agree before axis averaging on a uniform full-circle grid starting at the axis; 71 deterministic particles with signed charges and variable weights |
 | Invalid inputs | Return codes and preservation of destination arrays |
-| Floating-point range (19 assertions) | Reciprocal-volume and addition limits, cancellation, repeated periodic destinations, and large-value/zero-field cell averaging; rejected operations retain the full destination array |
+| Floating-point range (42 assertions) | Reciprocal-volume and addition limits, cancellation, repeated periodic destinations, large-value/zero-field axis and cell averaging, and very large or small interval half-widths; rejected operations retain the full destination array |
 
 Deterministic two-point tensor Gauss contributions check that assignment weights
 and cylindrical volume normalization recover a constant physical density.
-Detailed inputs, formulas and figures are in the [bilingual Sphinx test source](../../../docs/source/tests/004_scatter/B04_scatter_3d_raz_nonuniform.rst).
+Detailed inputs, formulas and figures are in the [bilingual Sphinx test source](../../../docs/source/tests/004_scatter/B04_scatter_3Draz_nonuniform.rst).
 
 ## Run and interpret
 
@@ -37,9 +37,10 @@ Requires Bash (for example, on Linux or WSL), GNU Fortran, and the repository's
 B04 and B02 sources. From the repository root:
 
 ```bash
-bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh double debug
-bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh double release
-bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh single debug
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh double debug
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh double release
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh single debug
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh single release
 ```
 
 - `FC` can specify the compiler path; the script flags target GNU Fortran.
@@ -52,14 +53,16 @@ bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh single debug
 Successful execution exits with zero and ends with:
 
 ```text
-B04 PASS: checks=79, real_bits=64
+B04 PASS: checks=102, real_bits=64
 ```
 
 Single precision reports `real_bits=32`. Failed assertions report `FAIL` and exit
 with a nonzero status; unexpected return codes also cause a nonzero exit.
 `METRIC` lines report numerical errors. Most comparisons use
-`2048*epsilon(1.0)` with scaling appropriate to the quantity. Large-value cell
-averages are normalized by `huge(1.0)` and checked within `16*epsilon(1.0)`.
+`2048*epsilon(1.0)` with scaling appropriate to the quantity. Large-value axis
+and cell averages use normalized comparisons within `16*epsilon(1.0)`;
+interval-range cases compare inverse volumes and angular integrals to analytic
+references with the same relative tolerance.
 Status codes and unchanged arrays use direct checks; the test page and
 [source](source_f90/main.f90) give the complete criteria.
 
@@ -74,7 +77,7 @@ it. Without that argument, the executable runs the checks without CSV export.
 After the double-debug test, run from the repository root:
 
 ```bash
-python tests/004_scatter/B04_scatter_3d_raz_nonuniform/plot_results.py
+python tests/004_scatter/B04_scatter_3Draz_nonuniform/plot_results.py
 ```
 
 Plotting requires Python, NumPy and Matplotlib. The script generates three English
@@ -86,9 +89,9 @@ figures remain in the repository.
 
 ## Further reading
 
-- [Module and calling conventions](../../../B_Scatter/B04_scatter_3d_raz_nonuniform/README.md)
-- [Calling example](../../../examples/B04_scatter_3d_raz_nonuniform/README.md)
-- [Detailed test documentation](../../../docs/source/tests/004_scatter/B04_scatter_3d_raz_nonuniform.rst) (bilingual Sphinx source)
+- [Module and calling conventions](../../../B_Scatter/B04_scatter_3Draz_nonuniform/README.md)
+- [Calling example](../../../examples/B04_scatter_3Draz_nonuniform/README.md)
+- [Detailed test documentation](../../../docs/source/tests/004_scatter/B04_scatter_3Draz_nonuniform.rst) (bilingual Sphinx source)
 
 After building the documentation, open the repository-relative local file
-`docs/build/html/tests/004_scatter/B04_scatter_3d_raz_nonuniform.html`.
+`docs/build/html/tests/004_scatter/B04_scatter_3Draz_nonuniform.html`.

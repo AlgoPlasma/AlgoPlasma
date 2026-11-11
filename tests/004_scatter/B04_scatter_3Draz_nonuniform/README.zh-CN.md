@@ -13,7 +13,7 @@
 | [run.sh](run.sh) | 以一致选项编译 B04、B02 和测试主程序，运行测试并导出数据 |
 | [plot_results.py](plot_results.py) | 从本地双精度数据生成英文文档插图 |
 
-每种配置执行 **79 项断言**，另在公开例程调用后检查返回状态。
+每种配置执行 **102 项断言**，另在公开例程调用后检查返回状态。
 
 | 算例 | 检查内容 |
 | --- | --- |
@@ -24,10 +24,10 @@
 | 非均匀轴点 | 加权参考值、同一物理轴点的密度一致性，以及正负输入和沉积后总量的保持 |
 | 公开 B02 对照 | 从轴开始的均匀全周网格上，在轴点平均前比较节点数组；采用 71 个确定性粒子，含正负电荷和可变权重 |
 | 参数错误 | 返回码和目标数组保持原值 |
-| 浮点范围（19 项断言） | 体积倒数及加法的范围限制、抵消、周期重复目标、大幅值和零场的单元平均；拒绝操作时保留整个目标数组 |
+| 浮点范围（42 项断言） | 体积倒数及加法的范围限制、抵消、周期重复目标、大幅值和零场的轴线与单元平均、极大及极小区间的半宽；拒绝操作时保留整个目标数组 |
 
 两点张量积 Gauss 积分构造确定性贡献，检查分配权重与柱坐标体积归一化能否恢复均匀物理密度。
-具体输入、公式和结果图见[双语 Sphinx 测试源文件](../../../docs/source/tests/004_scatter/B04_scatter_3d_raz_nonuniform.rst)。
+具体输入、公式和结果图见[双语 Sphinx 测试源文件](../../../docs/source/tests/004_scatter/B04_scatter_3Draz_nonuniform.rst)。
 
 ## 运行与判读
 
@@ -35,9 +35,10 @@
 从仓库根目录执行：
 
 ```bash
-bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh double debug
-bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh double release
-bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh single debug
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh double debug
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh double release
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh single debug
+bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh single release
 ```
 
 - `FC` 可指定编译器路径；脚本选项按 GNU Fortran 编写。
@@ -50,12 +51,13 @@ bash tests/004_scatter/B04_scatter_3d_raz_nonuniform/run.sh single debug
 成功运行时退出码为 0，最后一行为：
 
 ```text
-B04 PASS: checks=79, real_bits=64
+B04 PASS: checks=102, real_bits=64
 ```
 
 单精度对应 `real_bits=32`。断言失败时输出 `FAIL` 并非零退出；返回码不符合预期时也非零退出。
 `METRIC` 行给出数值误差。多数比较采用 `2048*epsilon(1.0)`，并按对应物理量或数值量缩放。
-大幅值单元平均以 `huge(1.0)` 归一化，按 `16*epsilon(1.0)` 检查。
+大幅值轴线及单元平均采用归一化比较，按 `16*epsilon(1.0)` 检查；
+区间范围案例将体积倒数和角向积分与解析参考值比较，采用相同的相对误差限。
 状态码和数组保留使用直接判断；完整判据见测试页及[测试源码](source_f90/main.f90)。
 
 ## 本地数据与绘图
@@ -68,7 +70,7 @@ B04 PASS: checks=79, real_bits=64
 完成 double/debug 测试后，从仓库根目录执行：
 
 ```bash
-python tests/004_scatter/B04_scatter_3d_raz_nonuniform/plot_results.py
+python tests/004_scatter/B04_scatter_3Draz_nonuniform/plot_results.py
 ```
 
 绘图需要 Python、NumPy 和 Matplotlib。脚本在测试目录的 `build/figures/` 生成三张英文图，
@@ -78,9 +80,9 @@ python tests/004_scatter/B04_scatter_3d_raz_nonuniform/plot_results.py
 
 ## 继续阅读
 
-- [模块与调用约定](../../../B_Scatter/B04_scatter_3d_raz_nonuniform/README.zh-CN.md)
-- [调用示例](../../../examples/B04_scatter_3d_raz_nonuniform/README.zh-CN.md)
-- [详细测试说明](../../../docs/source/tests/004_scatter/B04_scatter_3d_raz_nonuniform.rst)（双语 Sphinx 源文件）
+- [模块与调用约定](../../../B_Scatter/B04_scatter_3Draz_nonuniform/README.zh-CN.md)
+- [调用示例](../../../examples/B04_scatter_3Draz_nonuniform/README.zh-CN.md)
+- [详细测试说明](../../../docs/source/tests/004_scatter/B04_scatter_3Draz_nonuniform.rst)（双语 Sphinx 源文件）
 
 文档构建完成后，可打开相对于仓库根目录的本地文件
-`docs/build/html/tests/004_scatter/B04_scatter_3d_raz_nonuniform.html`。
+`docs/build/html/tests/004_scatter/B04_scatter_3Draz_nonuniform.html`。

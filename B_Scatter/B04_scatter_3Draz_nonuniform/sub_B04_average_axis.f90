@@ -14,6 +14,8 @@
 !> are proportional to the effective nodal volumes, so the update
 !> preserves the volume-weighted particle number or charge to roundoff.
 !> Equal angular spacing reduces the operation to an arithmetic mean.
+!> Near the floating-point upper limit, densities are scaled before averaging;
+!> the normalized mean is bounded to [-1,1] before restoring its magnitude.
 !>
 !> Supply the full-circle axis after deposition and shared-node summation,
 !> including each independent angular node once. The routine overwrites
@@ -37,12 +39,12 @@
 !> total particle number or charge from the averaged densities.
 !> @note A nonzero returned status leaves axis_density unchanged.
 !> @see @ref sub_b04_build_geometry "sub_B04_build_geometry",
-!> @ref sub_b04_scatter_3d_raz_nonuniform "sub_B04_scatter_3d_raz_nonuniform"
+!> @ref sub_b04_scatter_3draz_nonuniform "sub_B04_scatter_3Draz_nonuniform"
 subroutine sub_B04_average_axis(phi_measure, axis_density, ierr)
     real, intent(in) :: phi_measure(0:)
     real, intent(inout) :: axis_density(0:,0:)
     integer, intent(out) :: ierr
-    real :: mean(0:size(axis_density,2)-1), total
+    real :: mean(0:size(axis_density,2)-1), total, density_scale
     integer :: k
 
     ierr = B04_BAD_SHAPE
@@ -56,7 +58,16 @@ subroutine sub_B04_average_axis(phi_measure, axis_density, ierr)
     ierr = B04_BAD_VALUE
     if (.not. all(ieee_is_finite(axis_density))) return
     do k = 0, size(axis_density,2)-1
-        mean(k) = sum((phi_measure/total)*axis_density(:,k))
+        density_scale = maxval(abs(axis_density(:,k)))
+        if (density_scale > huge(1.0)/2.0) then
+            mean(k) = sum((phi_measure/total)*(axis_density(:,k)/density_scale))
+            if (.not. ieee_is_finite(mean(k))) return
+            ! A normalized positive-weight mean lies in [-1,1]. Bound
+            ! endpoint roundoff before rescaling, as in cell projection.
+            mean(k) = density_scale*max(-1.0,min(1.0,mean(k)))
+        else
+            mean(k) = sum((phi_measure/total)*axis_density(:,k))
+        end if
         if (.not. ieee_is_finite(mean(k))) return
     end do
     do k = 0, size(axis_density,2)-1

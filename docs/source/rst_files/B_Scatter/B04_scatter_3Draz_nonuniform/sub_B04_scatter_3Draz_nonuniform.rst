@@ -1,4 +1,4 @@
-sub_B04_scatter_3d_raz_nonuniform
+sub_B04_scatter_3Draz_nonuniform
 =================================
 
 .. raw:: html
@@ -20,7 +20,7 @@ sub_B04_scatter_3d_raz_nonuniform
 
    .. code-block:: fortran
 
-      call sub_B04_scatter_3d_raz_nonuniform(r, phi, z, periodic_phi, &
+      call sub_B04_scatter_3Draz_nonuniform(r, phi, z, periodic_phi, &
           cell, position, amount, inv_volume, density, ierr)
 
    .. _b04-local-weights-zh:
@@ -70,12 +70,12 @@ sub_B04_scatter_3d_raz_nonuniform
       * - ``delta(0:1,0:1,0:1)``
         - 暂存八个局部顶点对应的密度增量 :math:`\Delta D`，检查后累加到目标节点
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90
       :language: fortran
       :start-at:     fraction = (position-lo)/h
       :end-at:     weights(1,:) = fraction
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90
       :language: fortran
       :start-at:         delta(a,b,c) = amount
       :end-at:         if (.not. ieee_is_finite(delta(a,b,c))) return
@@ -131,7 +131,7 @@ sub_B04_scatter_3d_raz_nonuniform
    完整坐标检查在几何准备时完成；逐粒子入口检查局部单元及实际访问的数据。模块与调用方采用相同默认实数精度。
 
 
-   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -145,7 +145,7 @@ sub_B04_scatter_3d_raz_nonuniform
 
    .. code-block:: fortran
 
-      call sub_B04_scatter_3d_raz_nonuniform(r, phi, z, periodic_phi, &
+      call sub_B04_scatter_3Draz_nonuniform(r, phi, z, periodic_phi, &
           cell, position, amount, inv_volume, density, ierr)
 
    .. _b04-local-weights-en:
@@ -195,12 +195,12 @@ sub_B04_scatter_3d_raz_nonuniform
       * - ``delta(0:1,0:1,0:1)``
         - Stages the eight local density increments :math:`\Delta D` before checks and accumulation at target nodes
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90
       :language: fortran
       :start-at:     fraction = (position-lo)/h
       :end-at:     weights(1,:) = fraction
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90
       :language: fortran
       :start-at:         delta(a,b,c) = amount
       :end-at:         if (.not. ieee_is_finite(delta(a,b,c))) return
@@ -256,14 +256,14 @@ sub_B04_scatter_3d_raz_nonuniform
    Geometry preparation validates complete coordinates; this per-particle entry checks local geometry and accessed data. Compile module and caller with the same default real precision.
 
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
    .. raw:: html
 
       <details class="ap-b04-api">
       <summary>Generated API — source reference</summary>
 
-   .. doxygenfile:: sub_B04_scatter_3d_raz_nonuniform.f90
+   .. doxygenfile:: sub_B04_scatter_3Draz_nonuniform.f90
 
    .. raw:: html
 

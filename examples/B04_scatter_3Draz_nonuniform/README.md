@@ -12,14 +12,14 @@ number → optionally form cell-volume averages**.
 Use Bash (for example, on Linux or WSL) and GNU Fortran. From the repository root:
 
 ```bash
-mkdir -p examples/B04_scatter_3d_raz_nonuniform/build
+mkdir -p examples/B04_scatter_3Draz_nonuniform/build
 gfortran -cpp -std=f2008 -fdefault-real-8 -O0 -g -fcheck=all \
-  -I B_Scatter/B04_scatter_3d_raz_nonuniform \
-  -J examples/B04_scatter_3d_raz_nonuniform/build \
-  B_Scatter/B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform.f90 \
-  examples/B04_scatter_3d_raz_nonuniform/main.f90 \
-  -o examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
-examples/B04_scatter_3d_raz_nonuniform/build/b04_minimal
+  -I B_Scatter/B04_scatter_3Draz_nonuniform \
+  -J examples/B04_scatter_3Draz_nonuniform/build \
+  B_Scatter/B04_scatter_3Draz_nonuniform/mod_B04_scatter_3Draz_nonuniform.f90 \
+  examples/B04_scatter_3Draz_nonuniform/main.f90 \
+  -o examples/B04_scatter_3Draz_nonuniform/build/b04_minimal
+examples/B04_scatter_3Draz_nonuniform/build/b04_minimal
 ```
 
 The command enables preprocessing and compiles the module and caller with the
@@ -38,11 +38,11 @@ angular and axial directions.
 
 ## Further reading
 
-- [Module and calling conventions](../../B_Scatter/B04_scatter_3d_raz_nonuniform/README.md)
-- [Usage guide and adaptation to your program](../../docs/source/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.rst) (bilingual Sphinx source)
-- [Automated tests](../../tests/004_scatter/B04_scatter_3d_raz_nonuniform/README.md)
+- [Module and calling conventions](../../B_Scatter/B04_scatter_3Draz_nonuniform/README.md)
+- [Usage guide and adaptation to your program](../../docs/source/rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage.rst) (bilingual Sphinx source)
+- [Automated tests](../../tests/004_scatter/B04_scatter_3Draz_nonuniform/README.md)
 
 After building the documentation, open the repository-relative local file
-`docs/build/html/rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform/usage.html`.
+`docs/build/html/rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage.html`.
 
 Author: Xin Luo.

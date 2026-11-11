@@ -6,12 +6,12 @@ B04: Nonuniform Cylindrical Density Deposition
    :hidden:
    :titlesonly:
 
-   B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform
-   B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry
-   B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform
-   B04_scatter_3d_raz_nonuniform/sub_B04_average_axis
-   B04_scatter_3d_raz_nonuniform/sub_B04_project_density
-   B04_scatter_3d_raz_nonuniform/usage
+   B04_scatter_3Draz_nonuniform/mod_B04_scatter_3Draz_nonuniform
+   B04_scatter_3Draz_nonuniform/sub_B04_build_geometry
+   B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform
+   B04_scatter_3Draz_nonuniform/sub_B04_average_axis
+   B04_scatter_3Draz_nonuniform/sub_B04_project_density
+   B04_scatter_3Draz_nonuniform/usage
 
 .. raw:: html
 
@@ -32,9 +32,9 @@ B04: Nonuniform Cylindrical Density Deposition
    .. rubric:: 按阅读目的进入
 
    - **理解算法：** 先看 :ref:`均匀到非均匀的变化 <b04-grid-difference-zh>`，再读 :ref:`基本思想 <b04-principle-zh>` 和 :ref:`网格约定 <b04-grid-zh>`；详细推导与代码分别由几何准备页和沉积页承接。
-   - **在程序中调用：** 查看 :ref:`调用流程 <b04-workflow-zh>`，再用 :doc:`完整调用示例 <B04_scatter_3d_raz_nonuniform/usage>` 组织自己的代码。
-   - **查接口与公共量：** 进入 :doc:`模块入口 <B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform>`；参数细节在各子程序页，:ref:`状态码 <b04-status-zh>` 集中在模块页。
-   - **查看验证依据：** :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>` 给出已有算例的输入、参考量、判据和结果。
+   - **在程序中调用：** 查看 :ref:`调用流程 <b04-workflow-zh>`，再用 :doc:`完整调用示例 <B04_scatter_3Draz_nonuniform/usage>` 组织自己的代码。
+   - **查接口与公共量：** 进入 :doc:`模块入口 <B04_scatter_3Draz_nonuniform/mod_B04_scatter_3Draz_nonuniform>`；参数细节在各子程序页，:ref:`状态码 <b04-status-zh>` 集中在模块页。
+   - **查看验证依据：** :doc:`测试与结果 </tests/004_scatter/B04_scatter_3Draz_nonuniform>` 给出已有算例的输入、参考量、判据和结果。
 
    .. _b04-grid-difference-zh:
 
@@ -76,8 +76,8 @@ B04: Nonuniform Cylindrical Density Deposition
 
    理解沉积时，可以先沿着 **分配贡献量 → 确定配套体积 → 得到密度** 阅读：
 
-   1. **分配到节点。** 粒子位于一个坐标单元内；各方向的左右线性权重相乘，得到八个顶点的权重 :math:`S_{ijk}^{(p)}`。权重之和为一，因此完整分配粒子贡献量 :math:`c_p`。具体计算见 :doc:`沉积例程 <B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform>`。
-   2. **确定有效节点体积。** 节点密度对应的体积由同一节点形函数在物理域内积分得到。柱坐标体积元包含径向因子 :math:`r`，因此体积随半径、相邻单元宽度和端点位置变化。积分过程见 :doc:`几何准备 <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`。
+   1. **分配到节点。** 粒子位于一个坐标单元内；各方向的左右线性权重相乘，得到八个顶点的权重 :math:`S_{ijk}^{(p)}`。权重之和为一，因此完整分配粒子贡献量 :math:`c_p`。具体计算见 :doc:`沉积例程 <B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform>`。
+   2. **确定有效节点体积。** 节点密度对应的体积由同一节点形函数在物理域内积分得到。柱坐标体积元包含径向因子 :math:`r`，因此体积随半径、相邻单元宽度和端点位置变化。积分过程见 :doc:`几何准备 <B04_scatter_3Draz_nonuniform/sub_B04_build_geometry>`。
    3. **累加密度。** 将分配量除以对应有效体积，累加到节点密度。
 
    .. math::
@@ -145,23 +145,23 @@ B04: Nonuniform Cylindrical Density Deposition
       * - 环节与调用时机
         - 上游提供
         - 直接产物与去向
-      * - :doc:`几何准备 <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`：网格或周期设置改变时
+      * - :doc:`几何准备 <B04_scatter_3Draz_nonuniform/sub_B04_build_geometry>`：网格或周期设置改变时
         - 坐标数组、角向周期设置
         - ``inv_volume`` 供沉积使用；``phi_measure`` 供轴点平均使用。固定网格可复用
-      * - :doc:`粒子沉积 <B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform>`：每轮逐粒子调用
+      * - :doc:`粒子沉积 <B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform>`：每轮逐粒子调用
         - 位置、单元号、贡献量和逆体积
         - 累加 ``density``；供共享节点求和或后续节点运算使用
-      * - :doc:`轴点平均 <B04_scatter_3d_raz_nonuniform/sub_B04_average_axis>`：含轴全周区域，贡献汇集后
+      * - :doc:`轴点平均 <B04_scatter_3Draz_nonuniform/sub_B04_average_axis>`：含轴全周区域，贡献汇集后
         - 完整轴线密度、角向积分权重
         - 更新 ``density`` 的轴线部分，使同一物理位置密度一致；环域直接使用内径节点
-      * - :doc:`单元平均 <B04_scatter_3d_raz_nonuniform/sub_B04_project_density>`：下游需要单元平均源项时
+      * - :doc:`单元平均 <B04_scatter_3Draz_nonuniform/sub_B04_project_density>`：下游需要单元平均源项时
         - 完整节点密度、径向坐标、周期设置
         - 写出另一个数组 ``cell_density``；供单元平均源项组装使用
 
    .. admonition:: 本轮沉积结束后交给下游什么？
 
       **使用节点量的计算接收节点密度** ``density``。需要单元体积平均量时，使用 ``cell_density``。
-      单元平均的物理含义见 :doc:`project_density <B04_scatter_3d_raz_nonuniform/sub_B04_project_density>`；下游按自身离散方程的符号、单位和物理系数组装源项。
+      单元平均的物理含义见 :doc:`project_density <B04_scatter_3Draz_nonuniform/sub_B04_project_density>`；下游按自身离散方程的符号、单位和物理系数组装源项。
 
    .. rubric:: 分区计算时的衔接
 
@@ -193,9 +193,9 @@ B04: Nonuniform Cylindrical Density Deposition
    .. rubric:: Choose a reading route
 
    - **Understand the method:** start with :ref:`what changes on a nonuniform mesh <b04-grid-difference-en>`, then the :ref:`principle <b04-principle-en>` and :ref:`grid conventions <b04-grid-en>`. The geometry and scatter pages develop the derivations and code.
-   - **Call it from a program:** follow the :ref:`workflow <b04-workflow-en>` and adapt the :doc:`complete calling example <B04_scatter_3d_raz_nonuniform/usage>`.
-   - **Look up interfaces and shared definitions:** use the :doc:`module entry <B04_scatter_3d_raz_nonuniform/mod_B04_scatter_3d_raz_nonuniform>` and individual parameter pages. :ref:`Status codes <b04-status-en>` are collected on the module page.
-   - **Inspect verification evidence:** :doc:`tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>` describe inputs, references, criteria and saved results.
+   - **Call it from a program:** follow the :ref:`workflow <b04-workflow-en>` and adapt the :doc:`complete calling example <B04_scatter_3Draz_nonuniform/usage>`.
+   - **Look up interfaces and shared definitions:** use the :doc:`module entry <B04_scatter_3Draz_nonuniform/mod_B04_scatter_3Draz_nonuniform>` and individual parameter pages. :ref:`Status codes <b04-status-en>` are collected on the module page.
+   - **Inspect verification evidence:** :doc:`tests and results </tests/004_scatter/B04_scatter_3Draz_nonuniform>` describe inputs, references, criteria and saved results.
 
    .. _b04-grid-difference-en:
 
@@ -238,8 +238,8 @@ B04: Nonuniform Cylindrical Density Deposition
 
    Read the method as **distribute the amount → identify matching volumes → obtain density**:
 
-   1. **Distribute to nodes.** Multiply lower/upper linear weights in three directions to obtain eight vertex weights :math:`S_{ijk}^{(p)}`. Their sum is one, distributing the full particle amount :math:`c_p`. See the :doc:`scatter routine <B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform>`.
-   2. **Identify effective nodal volumes.** Integrate the same nodal basis over the physical domain. The cylindrical volume element contains :math:`r`, so volumes depend on radius, adjacent cell widths and endpoints. See :doc:`geometry preparation <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`.
+   1. **Distribute to nodes.** Multiply lower/upper linear weights in three directions to obtain eight vertex weights :math:`S_{ijk}^{(p)}`. Their sum is one, distributing the full particle amount :math:`c_p`. See the :doc:`scatter routine <B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform>`.
+   2. **Identify effective nodal volumes.** Integrate the same nodal basis over the physical domain. The cylindrical volume element contains :math:`r`, so volumes depend on radius, adjacent cell widths and endpoints. See :doc:`geometry preparation <B04_scatter_3Draz_nonuniform/sub_B04_build_geometry>`.
    3. **Accumulate density.** Divide each assigned amount by its matching volume and add it to the nodal density.
 
    .. math::
@@ -308,23 +308,23 @@ B04: Nonuniform Cylindrical Density Deposition
       * - Operation and timing
         - Upstream inputs
         - Immediate result and consumer
-      * - :doc:`Geometry <B04_scatter_3d_raz_nonuniform/sub_B04_build_geometry>`: on grid or periodic-configuration changes
+      * - :doc:`Geometry <B04_scatter_3Draz_nonuniform/sub_B04_build_geometry>`: on grid or periodic-configuration changes
         - Coordinates and angular periodicity
         - ``inv_volume`` for scatter; ``phi_measure`` for axis averaging. Reusable on a fixed grid
-      * - :doc:`Scatter <B04_scatter_3d_raz_nonuniform/sub_B04_scatter_3d_raz_nonuniform>`: per particle in each stage
+      * - :doc:`Scatter <B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform>`: per particle in each stage
         - Position, cell, amount and inverse volumes
         - Accumulated ``density`` for shared-node summation or subsequent nodal operations
-      * - :doc:`Axis average <B04_scatter_3d_raz_nonuniform/sub_B04_average_axis>`: full-circle axis after summation
+      * - :doc:`Axis average <B04_scatter_3Draz_nonuniform/sub_B04_average_axis>`: full-circle axis after summation
         - Complete axis density and angular integral weights
         - Updated axis portion of ``density``, single-valued at each physical point. Annuli use their inner nodes directly
-      * - :doc:`Cell average <B04_scatter_3d_raz_nonuniform/sub_B04_project_density>`: when a cell-average source is needed
+      * - :doc:`Cell average <B04_scatter_3Draz_nonuniform/sub_B04_project_density>`: when a cell-average source is needed
         - Complete nodal density, radial coordinates and periodicity
         - Separate ``cell_density`` array for cell-average source assembly
 
    .. admonition:: What does the next calculation receive?
 
       **Nodal calculations receive the nodal density** ``density``. Consumers of cell-volume averages use ``cell_density``.
-      See :doc:`project_density <B04_scatter_3d_raz_nonuniform/sub_B04_project_density>` for the meaning of that average. Downstream assembly supplies the signs, units and physical coefficients of its equation.
+      See :doc:`project_density <B04_scatter_3Draz_nonuniform/sub_B04_project_density>` for the meaning of that average. Downstream assembly supplies the signs, units and physical coefficients of its equation.
 
    .. rubric:: Connecting partitioned calculations
 

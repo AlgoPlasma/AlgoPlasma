@@ -40,12 +40,15 @@ sub_B04_average_axis
    代码中，``phi_measure(j)`` 对应 :math:`A_j`，``axis_density(j,k)`` 对应 :math:`D_{0,j,k}`。
    循环之前计算 ``total=sum(phi_measure)``，因此 ``phi_measure/total`` 就是归一化角向权重。
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_average_axis.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_average_axis.f90
       :language: fortran
       :start-at:     do k = 0, size(axis_density,2)-1
       :end-at:     ierr = B04_OK
 
    ``mean(k)`` 暂存平均值 :math:`\overline D_{0,k}`，检查后再覆写该轴向位置的全部角节点。输出仍保留原来的角向节点布局；统计总量时，各角索引继续使用其自身的有效体积。
+
+   ``density_scale`` 是当前轴向位置各角节点密度绝对值的最大值。接近浮点上限时，先除以该值计算平均，
+   将归一化均值限制在其数学范围 ``[-1,1]`` 内，再恢复量级，以避免末位舍入引起溢出。
 
    .. rubric:: 参数与调用条件
 
@@ -73,7 +76,7 @@ sub_B04_average_axis
    已有 :ref:`非均匀轴点测试 <b04-axis-validation-zh>` 检查加权均值及正负密度的总量保持；具体输入与结果集中列在测试页。
 
 
-   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+   返回 :doc:`B04 总览 </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform>` · :doc:`调用示例 <usage>` · :doc:`测试与结果 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
 .. container:: ap-lang ap-lang-en ap-b04-doc
 
@@ -107,12 +110,16 @@ sub_B04_average_axis
    In code, ``phi_measure(j)`` is :math:`A_j` and ``axis_density(j,k)`` is :math:`D_{0,j,k}`.
    Before the loop, ``total=sum(phi_measure)`` is computed, so ``phi_measure/total`` gives normalized angular weights.
 
-   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3d_raz_nonuniform/sub_B04_average_axis.f90
+   .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_average_axis.f90
       :language: fortran
       :start-at:     do k = 0, size(axis_density,2)-1
       :end-at:     ierr = B04_OK
 
    ``mean(k)`` stages :math:`\overline D_{0,k}` before checks and writeback to all angular entries at that axial node. Retain each angular entry's own volume in later total-amount sums.
+
+   ``density_scale`` is the largest absolute density across angular nodes at the current axial position.
+   Near the floating-point upper limit, divide by this scale before averaging, bound the normalized mean
+   to its mathematical range ``[-1,1]``, then restore the scale to avoid overflow from endpoint roundoff.
 
    .. rubric:: Parameters and calling conditions
 
@@ -140,7 +147,7 @@ sub_B04_average_axis
    The :ref:`nonuniform-axis test <b04-axis-validation-en>` checks the weighted mean and total preservation for positive and negative densities; its inputs and results are collected on the test page.
 
 
-   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3d_raz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3d_raz_nonuniform>`
+   :doc:`B04 overview </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform>` · :doc:`Usage example <usage>` · :doc:`Tests and results </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
    .. raw:: html
 
