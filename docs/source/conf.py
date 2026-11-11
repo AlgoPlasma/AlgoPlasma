@@ -27,11 +27,15 @@ DOXYGEN_FILE_REF_RE = re.compile(
     r"(.*?)</ref>",
     re.DOTALL,
 )
-DOXYGEN_FORTRAN_FUNCTION_SIGNATURE_FIXES = (
+DOXYGEN_FORTRAN_SIGNATURE_FIXES = (
     ("<type>recursive real function</type>", "<type>real</type>"),
     ("<definition>recursive real function ", "<definition>real "),
     ("<type>real function</type>", "<type>real</type>"),
     ("<definition>real function ", "<definition>real "),
+    # Breathe's C++ renderer needs a type without Fortran declaration attributes.
+    # Values and Doxygen descriptions of the public constants are retained.
+    ("<type>integer, parameter, public</type>", "<type>integer</type>"),
+    ("<definition>integer, parameter, public ", "<definition>integer "),
 )
 
 
@@ -44,7 +48,7 @@ def _clean_doxygen_xml_for_sphinx(xml_dir):
     for xml_file in xml_dir.glob("*.xml"):
         text = xml_file.read_text(encoding="utf-8", errors="ignore")
         updated = DOXYGEN_FILE_REF_RE.sub(lambda match: match.group(1), text)
-        for old, new in DOXYGEN_FORTRAN_FUNCTION_SIGNATURE_FIXES:
+        for old, new in DOXYGEN_FORTRAN_SIGNATURE_FIXES:
             updated = updated.replace(old, new)
         if updated != text:
             xml_file.write_text(updated, encoding="utf-8")
@@ -288,6 +292,7 @@ def setup(app):
     app.add_css_file("g02-docs.css")
     app.add_css_file("g03-docs.css")
     app.add_js_file("ap-language-switch.js")
+    app.add_js_file("b04-reference-navigation.js")
     app.add_js_file("g02-display-titles.js")
     app.add_js_file("G_Collision/G03_DSMC/collision-embed.js")
     app.connect("html-page-context", keep_g03_navigation_shallow)
