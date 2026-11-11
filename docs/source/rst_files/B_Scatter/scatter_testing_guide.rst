@@ -40,7 +40,7 @@ Scatter Testing Guide
    - **后续处理：** 非均匀角网格检查轴点加权均值及总量；解析线性场检查单元体积平均。
    - **实现与接口：** 均匀网格直接调用 B02 公开电荷沉积例程作对照；参数及浮点范围检查核对返回状态和数组保留。
 
-   当前测试在单、双精度各自的 debug 和 release 四种配置下各执行 102 项断言。
+   当前测试在单、双精度各自的 debug 和 release 四种配置下各执行 140 项断言。
    输入、误差定义、阈值、运行结果摘要与插图集中在 :doc:`B04 测试页 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`。
 
    .. rubric:: 怎样理解比较量？
@@ -90,7 +90,7 @@ Scatter Testing Guide
    - **Subsequent operations:** nonuniform angular grids check weighted axis means and totals; an analytic linear field checks cell-volume averages.
    - **Implementation and interfaces:** a uniform-grid comparison calls the public B02 charge routine; invalid-input and floating-point-range checks inspect return status and preserved arrays.
 
-   The current test executes 102 assertions in each of four configurations: single and double precision, each in debug and release mode.
+   The current test executes 140 assertions in each of four configurations: single and double precision, each in debug and release mode.
    Inputs, error definitions, tolerances, result summaries and figures are collected on the :doc:`B04 test page </tests/004_scatter/B04_scatter_3Draz_nonuniform>`.
 
    .. rubric:: Interpret the compared quantity

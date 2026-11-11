@@ -21,7 +21,7 @@ B04_scatter_3Draz_nonuniform Test
 
    .. rubric:: 算例设置与比较量
 
-   下表对应测试主程序中的实际检查。每种编译配置执行 102 项断言，另在公开例程调用后检查返回状态。
+   下表对应测试主程序中的实际检查。每种编译配置执行 140 项断言，另在公开例程调用后检查返回状态。
 
    .. list-table::
       :header-rows: 1
@@ -53,9 +53,9 @@ B04_scatter_3Draz_nonuniform Test
       * - 参数错误
         - 非法坐标、形状、单元、位置、贡献量、密度、体积或轴点权重
         - 返回状态及目标数组保留
-      * - 浮点范围（42 项）
-        - 体积与累加范围、重复周期目标、轴线及单元平均的大幅值与零值、极大及极小区间的半宽
-        - 返回状态与数组保留；有效累加、平均值及几何积分符合参考结果
+      * - 浮点范围（80 项）
+        - 体积与累加范围、重复周期目标、轴线及单元平均的大幅值与零值；极大及极小区间的几何准备与沉积
+        - 返回状态与数组保留；有效累加、平均值和几何积分，以及串联沉积的节点贡献、总量和无溢出检查
 
    .. rubric:: 图 1：一个粒子怎样分配到八个节点？
 
@@ -217,10 +217,11 @@ B04_scatter_3Draz_nonuniform Test
    - 单元平均总量比较使用 :math:`|\sum\Omega\overline D-\sum VD|/\sum_p|c_p|`。
    - B02 对照使用 :math:`\max|D_{B04}-D_{B02}|/\max(1,\max|D_{B02}|)`。
    - 大幅值单元平均以 ``huge(1.0)`` 归一化，与解析参考值的差不超过 :math:`16\epsilon`；状态码及失败时数组保留采用直接判断。全部判据在测试主程序中定义。
+   - 极端区间串联调用几何准备与沉积，将节点代表量 ``density/inv_volume`` 及其总和与解析结果比较，误差限为 :math:`16\epsilon\,c_p`，其中本组 :math:`c_p=16`。同时检查有限性与溢出标志，覆盖中心、端点、非对称区间、缩放阈值两侧、同号区间、极小区间、角向与周期目标。
 
    .. rubric:: 已保存的运行结果
 
-   **2026-11-11 最新回归：** 单/双精度各自的 debug 和 release 四种配置均通过 102 项断言，覆盖大幅值轴线平均及极大、极小区间的几何半宽。下列图表保留各自注明日期的运行记录。
+   **2026-11-11 最新回归：** 单/双精度各自的 debug 和 release 四种配置均通过 140 项断言，覆盖大幅值轴线平均、极大和极小区间的几何准备，以及后续沉积的节点贡献与总量。下列图表保留各自注明日期的运行记录。
 
    以下为 **2026-10-31，WSL Ubuntu 22.04 / GNU Fortran 11.4.0** 的运行记录。
    三种配置各 70 项通过；两幅图使用同日 double debug 测试副本额外导出的节点数据，算法调用和比较判据相同。
@@ -270,7 +271,7 @@ B04_scatter_3Draz_nonuniform Test
 
    .. rubric:: Cases and compared quantities
 
-   Each configuration executes 102 assertions, plus return-status checks after public calls.
+   Each configuration executes 140 assertions, plus return-status checks after public calls.
 
    .. list-table::
       :header-rows: 1
@@ -302,9 +303,9 @@ B04_scatter_3Draz_nonuniform Test
       * - Invalid inputs
         - Coordinates, shapes, cells, positions, amounts, densities, volumes or axis weights
         - Status codes and preserved target arrays
-      * - Floating range (42 checks)
-        - Volume and addition limits, repeated periodic targets, large or zero axis/cell densities, and very large or small interval half-widths
-        - Status codes and preserved arrays; valid sums, averages and geometric integrals agree with references
+      * - Floating range (80 checks)
+        - Volume and addition limits, repeated periodic targets, large or zero axis/cell densities; geometry preparation and scatter over very large or small intervals
+        - Status codes and preserved arrays; valid sums, averages and geometric integrals, plus chained scatter's nodal contributions, totals and overflow checks
 
    .. rubric:: Figure 1: eight-node assignment
 
@@ -465,10 +466,11 @@ B04_scatter_3Draz_nonuniform Test
    - Cell-average totals use :math:`|\sum\Omega\overline D-\sum VD|/\sum_p|c_p|`.
    - B02 comparison uses :math:`\max|D_{B04}-D_{B02}|/\max(1,\max|D_{B02}|)`.
    - Large-value cell averages are normalized by ``huge(1.0)`` and compared with analytic references within :math:`16\epsilon`. Status codes and retained arrays use direct checks. The test driver defines every criterion.
+   - Extreme-interval cases call geometry preparation followed by scatter, comparing nodal represented amounts (``density/inv_volume``) and their sum with analytic references within :math:`16\epsilon\,c_p`, where :math:`c_p=16` for these cases. Finiteness and overflow flags are checked for centers, endpoints, asymmetric intervals, both sides of the scaling threshold, same-sign and subnormal intervals, angular coordinates and periodic targets.
 
    .. rubric:: Recorded execution
 
-   **Latest regression, 2026-11-11:** single and double precision, each in debug and release mode, passed all 102 assertions, covering large-value axis averaging and geometric half-widths of very large or small intervals. The figures and tables below retain their dated run records.
+   **Latest regression, 2026-11-11:** single and double precision, each in debug and release mode, passed all 140 assertions, covering large-value axis averaging, geometry preparation for very large or small intervals, and the nodal contributions and totals from subsequent scatter calls. The figures and tables below retain their dated run records.
 
    Results below were recorded on **2026-10-31, WSL Ubuntu 22.04 / GNU Fortran 11.4.0**.
    Each configuration passed 70 assertions. Figures 1 and 2 use node data exported from a same-day double-debug test copy with the same algorithm calls and pass criteria.

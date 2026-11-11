@@ -9,7 +9,9 @@
 !>
 !> For the caller-supplied cell and particle position, the routine forms
 !> one-dimensional linear weights in r, phi and z. Their tensor product
-!> gives the eight local vertex weights. Each nodal density increment is
+!> uses local position fractions; large opposite-sign intervals are scaled
+!> before subtraction to keep both the numerator and denominator finite.
+!> This gives the eight local vertex weights. Each nodal density increment is
 !> @f[
 !> \Delta D=\mathrm{amount}\,w_r w_\phi w_z\,\mathrm{inv\_volume},
 !> @f]
@@ -74,8 +76,8 @@ subroutine sub_B04_scatter_3Draz_nonuniform(r, phi, z, periodic_phi, &
     real, intent(in) :: inv_volume(0:,0:,0:)
     real, intent(inout) :: density(0:,0:,0:)
     integer, intent(out) :: ierr
-    integer :: nc(3), nj, ix(0:1), iy(0:1), iz(0:1), a, b, c, node_b
-    real :: lo(3), hi(3), h(3), fraction(3), weights(0:1,3), delta(0:1,0:1,0:1)
+    integer :: nc(3), nj, ix(0:1), iy(0:1), iz(0:1), a, b, c, d, node_b
+    real :: lo(3), hi(3), fraction(3), weights(0:1,3), delta(0:1,0:1,0:1)
     real :: trial_density(0:1,0:1,0:1), old_value, increment
 
     nc = [size(r)-1,size(phi)-1,size(z)-1]
@@ -95,13 +97,21 @@ subroutine sub_B04_scatter_3Draz_nonuniform(r, phi, z, periodic_phi, &
     if (.not. all(ieee_is_finite(lo))) return
     if (.not. all(ieee_is_finite(hi))) return
     if (any(hi <= lo) .or. lo(1) < 0.0) return
-    h = hi-lo
-    if (.not. all(ieee_is_finite(h))) return
     ierr = B04_BAD_VALUE
     if (.not. all(ieee_is_finite(position))) return
     if (.not. ieee_is_finite(amount)) return
     if (any(position < lo) .or. any(position > hi)) return
-    fraction = (position-lo)/h
+    ! Scale large opposite-sign intervals before either subtraction.
+    ! Keep the direct ratio elsewhere to retain tiny coordinate differences.
+    do d = 1, 3
+        if (lo(d) < 0.0 .and. hi(d) > 0.0 .and. &
+            max(abs(lo(d)),abs(hi(d))) > huge(1.0)/2.0) then
+            fraction(d) = (position(d)/2.0-lo(d)/2.0) / &
+                          (hi(d)/2.0-lo(d)/2.0)
+        else
+            fraction(d) = (position(d)-lo(d))/(hi(d)-lo(d))
+        end if
+    end do
     weights(0,:) = 1.0-fraction
     weights(1,:) = fraction
     ix = [cell(1),cell(1)+1]

@@ -44,7 +44,7 @@
 
       * - B04
         - :doc:`B04_scatter_3Draz_nonuniform 测试 <B04_scatter_3Draz_nonuniform>`
-        - 八节点分配、有效体积、全周轴点、单元平均、B02 对照与数值范围；每种配置 102 项断言，附结果图和运行说明。
+        - 八节点分配、有效体积、全周轴点、单元平均、B02 对照与数值范围；每种配置 140 项断言，附结果图和运行说明。
 
    静态图片来自一次参考运行，并保存到 ``docs/source/images/tests/004_scatter``。
    如果修改了测试程序或绘图脚本，应重新运行并更新这些图片。
@@ -117,7 +117,7 @@
 
       * - B04
         - :doc:`B04_scatter_3Draz_nonuniform tests <B04_scatter_3Draz_nonuniform>`
-        - Assignment, volumes, axis, cell averages, B02 comparison and numerical range; 102 assertions per configuration, figures and run instructions.
+        - Assignment, volumes, axis, cell averages, B02 comparison and numerical range; 140 assertions per configuration, figures and run instructions.
 
    The static figures are copied from one reference run and stored under
    ``docs/source/images/tests/004_scatter``. Regenerate and update them if the

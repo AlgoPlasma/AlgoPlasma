@@ -14,7 +14,7 @@ hand calculations, independent Gauss quadrature and analytic volume averages.
 | [run.sh](run.sh) | Build B04, B02 and the test driver with consistent options; run tests and export data |
 | [plot_results.py](plot_results.py) | Render English documentation figures from local double-precision data |
 
-Each configuration executes **102 assertions**, plus return-status checks after public calls.
+Each configuration executes **140 assertions**, plus return-status checks after public calls.
 
 | Case | Checks |
 | --- | --- |
@@ -25,7 +25,7 @@ Each configuration executes **102 assertions**, plus return-status checks after 
 | Nonuniform axis | Weighted reference value, equal density at one physical axis point, and preserved totals for signed inputs and after deposition |
 | Public B02 comparison | Nodal arrays agree before axis averaging on a uniform full-circle grid starting at the axis; 71 deterministic particles with signed charges and variable weights |
 | Invalid inputs | Return codes and preservation of destination arrays |
-| Floating-point range (42 assertions) | Reciprocal-volume and addition limits, cancellation, repeated periodic destinations, large-value/zero-field axis and cell averaging, and very large or small interval half-widths; rejected operations retain the full destination array |
+| Floating-point range (80 assertions) | Reciprocal-volume and addition limits, cancellation, repeated periodic destinations, large-value/zero-field axis and cell averaging, and very large or small interval half-widths; geometry-to-scatter calls check local fractions, endpoint contributions and totals over extreme intervals; rejected operations retain the full destination array |
 
 Deterministic two-point tensor Gauss contributions check that assignment weights
 and cylindrical volume normalization recover a constant physical density.
@@ -53,7 +53,7 @@ bash tests/004_scatter/B04_scatter_3Draz_nonuniform/run.sh single release
 Successful execution exits with zero and ends with:
 
 ```text
-B04 PASS: checks=102, real_bits=64
+B04 PASS: checks=140, real_bits=64
 ```
 
 Single precision reports `real_bits=32`. Failed assertions report `FAIL` and exit
@@ -63,6 +63,9 @@ with a nonzero status; unexpected return codes also cause a nonzero exit.
 and cell averages use normalized comparisons within `16*epsilon(1.0)`;
 interval-range cases compare inverse volumes and angular integrals to analytic
 references with the same relative tolerance.
+Geometry-to-scatter cases compare nodal represented amounts (`density/inv_volume`)
+and their total with analytic references within `16*epsilon(1.0)*amount`, and check
+that the full call sequence raises no overflow flag.
 Status codes and unchanged arrays use direct checks; the test page and
 [source](source_f90/main.f90) give the complete criteria.
 

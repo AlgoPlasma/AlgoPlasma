@@ -36,6 +36,9 @@ sub_B04_scatter_3Draz_nonuniform
       \xi_\phi=\frac{\phi_p-\phi_j}{\phi_{j+1}-\phi_j},\quad
       \xi_z=\frac{z_p-z_k}{z_{k+1}-z_k}.
 
+   实现时，异号大区间先将粒子坐标和两端坐标同时除以二，再计算分子、分母之比，
+   避免完整宽度或粒子位移的减法溢出。普通区间保留原来的先减后除顺序，以保留极小坐标差。
+
    令 :math:`b_0(\xi)=1-\xi`、:math:`b_1(\xi)=\xi`，则
 
    .. math::
@@ -59,8 +62,8 @@ sub_B04_scatter_3Draz_nonuniform
 
       * - 代码变量
         - 含义与公式对应
-      * - ``lo(1:3), hi(1:3)``；``h=hi-lo``
-        - 当前单元在径向、角向、轴向的下端与上端坐标；``h`` 为三个方向的单元宽度
+      * - ``lo(1:3), hi(1:3)``；``d``
+        - 当前单元三个方向的下端与上端坐标；``d=1,2,3`` 分别选择径向、角向、轴向
       * - ``fraction(1:3)``
         - 粒子在单元内的局部坐标 :math:`(\xi_r,\xi_\phi,\xi_z)`
       * - ``weights(0:1,1:3)``
@@ -72,7 +75,7 @@ sub_B04_scatter_3Draz_nonuniform
 
    .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90
       :language: fortran
-      :start-at:     fraction = (position-lo)/h
+      :start-at:     do d = 1, 3
       :end-at:     weights(1,:) = fraction
 
    .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90
@@ -161,6 +164,10 @@ sub_B04_scatter_3Draz_nonuniform
       \xi_\phi=\frac{\phi_p-\phi_j}{\phi_{j+1}-\phi_j},\quad
       \xi_z=\frac{z_p-z_k}{z_{k+1}-z_k}.
 
+   For large opposite-sign intervals, the implementation halves the particle and
+   endpoint coordinates before subtracting and taking the ratio. This avoids overflow
+   in either difference. Other intervals retain direct subtraction to preserve tiny coordinate differences.
+
    For :math:`b_0(\xi)=1-\xi` and :math:`b_1(\xi)=\xi`, the increments are
 
    .. math::
@@ -184,8 +191,8 @@ sub_B04_scatter_3Draz_nonuniform
 
       * - Code variable
         - Meaning and formula correspondence
-      * - ``lo(1:3), hi(1:3)``; ``h=hi-lo``
-        - Lower and upper cell coordinates in radial, angular and axial order; ``h`` holds the three cell widths
+      * - ``lo(1:3), hi(1:3)``; ``d``
+        - Lower and upper cell coordinates; ``d=1,2,3`` selects the radial, angular and axial direction
       * - ``fraction(1:3)``
         - Local particle coordinates :math:`(\xi_r,\xi_\phi,\xi_z)`
       * - ``weights(0:1,1:3)``
@@ -197,7 +204,7 @@ sub_B04_scatter_3Draz_nonuniform
 
    .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90
       :language: fortran
-      :start-at:     fraction = (position-lo)/h
+      :start-at:     do d = 1, 3
       :end-at:     weights(1,:) = fraction
 
    .. literalinclude:: ../../../../../B_Scatter/B04_scatter_3Draz_nonuniform/sub_B04_scatter_3Draz_nonuniform.f90

@@ -2,6 +2,7 @@ program test_b04
     use mod_B04_scatter_3Draz_nonuniform
     use mod_B02_deposit_charge_3d_cyl
     use, intrinsic :: ieee_arithmetic, only: ieee_value, ieee_quiet_nan, ieee_is_finite
+    use, intrinsic :: ieee_exceptions, only: ieee_get_flag, ieee_set_flag, ieee_overflow
     implicit none
     integer :: checks = 0
     real, parameter :: tol = 2048.0*epsilon(1.0)
@@ -39,6 +40,7 @@ program test_b04
     call range_guard_cases()
     call axis_range_cases()
     call geometry_range_cases()
+    call scatter_interval_cases()
     call projection_range_cases()
     if (export_data) then
         close(nodes_unit)
@@ -599,6 +601,96 @@ contains
         call require(all(ieee_is_finite(va)) .and. all(va>0.0) .and. &
             maxval(abs(va/angular_half-1.0))<=roundoff,label//' angular integrals')
     end subroutine check_geometry_range
+
+    subroutine scatter_interval_cases()
+        real :: r(0:1),a(0:1),z(0:1),pos(3),expected(0:1,0:1,0:1)
+        real :: v(0:1,0:1,0:1),va(0:1),rho(0:1,0:1,0:1),limit,half_span,small
+        logical :: overflowed
+        integer :: ierr
+
+        limit=huge(1.0)
+        r=[0.0,1.0]; a=[0.0,1.0]; z=[-0.75*limit,0.75*limit]
+        ! amount=16 at the cell center gives 2 per vertex; at either axial
+        ! endpoint it gives 4 per vertex on that plane and zero on the other.
+        pos=[0.5,0.5,0.0]; expected=2.0
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large axial center')
+        pos(3)=z(0); expected(:,:,0)=4.0; expected(:,:,1)=0.0
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large axial lower endpoint')
+        pos(3)=z(1); expected(:,:,0)=0.0; expected(:,:,1)=4.0
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large axial upper endpoint')
+
+        ! At z=0 in [-3H/4,H/2], xi_z=3/5; each plane has four equal vertices.
+        z=[-0.75*limit,0.5*limit]; pos(3)=0.0
+        expected(:,:,0)=8.0/5.0; expected(:,:,1)=12.0/5.0
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large asymmetric axial interval')
+
+        half_span=limit/2.0; z=[-half_span,half_span]; expected=2.0
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'axial width at scaling threshold')
+        half_span=nearest(half_span,1.0); z=[-half_span,half_span]
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'axial width above scaling threshold')
+        z=[limit/2.0,limit]; pos(3)=0.75*limit
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large same-sign positive interval')
+        z=[-limit,-limit/2.0]; pos(3)=-0.75*limit
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large same-sign negative interval')
+
+        ! Halving all endpoints first would change this midpoint fraction.
+        ! A large radius keeps the matching nodal volumes representable.
+        small=nearest(0.0,1.0)
+        r=[0.0,scale(1.0,maxexponent(1.0)/2-4)]; a=[0.0,2.0]; z=[small,5.0*small]
+        pos=[r(1)/2.0,1.0,3.0*small]
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'subnormal axial midpoint')
+
+        r=[0.0,1.0]; a=[-0.75*limit,0.75*limit]; z=[0.0,2.0]
+        pos=[0.5,0.0,1.0]
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large angular center')
+        pos(2)=a(1); expected(:,0,:)=0.0; expected(:,1,:)=4.0
+        call check_scatter_interval(r,a,z,.false.,pos,expected,'large angular upper endpoint')
+
+        ! A normal one-cell angular period combines two local vertices at
+        ! each of four stored nodes, giving 4 represented particles per node.
+        a=[0.0,1.0]; z=[-0.75*limit,0.75*limit]; pos=[0.5,0.5,0.0]; expected=4.0
+        call check_scatter_interval(r,a,z,.true.,pos,expected(:,0:0,:),'large axial periodic targets')
+
+        call sub_B04_build_geometry(r,a,z,.false.,v,va,ierr)
+        call success(ierr,'large interval for invalid positions')
+        rho=7.0; pos(3)=limit
+        call ieee_set_flag(ieee_overflow,.false.)
+        call sub_B04_scatter_3Draz_nonuniform(r,a,z,.false.,[0,0,0],pos,16.0,v,rho,ierr)
+        call ieee_get_flag(ieee_overflow,overflowed)
+        call require(ierr==B04_BAD_VALUE .and. all(rho==7.0) .and. .not.overflowed, &
+            'reject out-of-cell position on large interval without writes or overflow')
+        pos(3)=ieee_value(1.0,ieee_quiet_nan)
+        call ieee_set_flag(ieee_overflow,.false.)
+        call sub_B04_scatter_3Draz_nonuniform(r,a,z,.false.,[0,0,0],pos,16.0,v,rho,ierr)
+        call ieee_get_flag(ieee_overflow,overflowed)
+        call require(ierr==B04_BAD_VALUE .and. all(rho==7.0) .and. .not.overflowed, &
+            'reject nonfinite position on large interval without writes or overflow')
+    end subroutine scatter_interval_cases
+
+    subroutine check_scatter_interval(r,a,z,periodic,pos,expected,label)
+        real, intent(in) :: r(0:1),a(0:1),z(0:1),pos(3),expected(0:,0:,0:)
+        logical, intent(in) :: periodic
+        character(*), intent(in) :: label
+        real :: v(0:1,0:size(expected,2)-1,0:1),va(0:size(expected,2)-1)
+        real :: rho(0:1,0:size(expected,2)-1,0:1),contribution(0:1,0:size(expected,2)-1,0:1)
+        real, parameter :: amount=16.0,roundoff=16.0*epsilon(1.0)
+        logical :: overflowed
+        integer :: ierr
+
+        call ieee_set_flag(ieee_overflow,.false.)
+        call sub_B04_build_geometry(r,a,z,periodic,v,va,ierr)
+        call success(ierr,label//' geometry')
+        rho=0.0
+        call sub_B04_scatter_3Draz_nonuniform(r,a,z,periodic,[0,0,0],pos,amount,v,rho,ierr)
+        call success(ierr,label//' scatter')
+        call ieee_get_flag(ieee_overflow,overflowed)
+        call require(all(ieee_is_finite(rho)) .and. .not.overflowed,label//' finite without overflow')
+        ! Check represented amounts rather than tiny densities with a fixed
+        ! absolute tolerance. References above use analytic center/plane weights.
+        contribution=rho/v
+        call require(maxval(abs(contribution-expected))<=roundoff*amount,label//' analytic node contributions')
+        call require(abs(sum(contribution)-amount)<=roundoff*amount,label//' total represented amount')
+    end subroutine check_scatter_interval
 
     subroutine projection_range_cases()
         real :: r(0:1),rho(0:1,0:1,0:1),cc(0:0,0:0,0:0)
