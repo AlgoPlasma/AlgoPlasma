@@ -1,0 +1,155 @@
+{
+  "config": {
+    "nperseg": 2048,
+    "fs_hz": 100000000.0,
+    "fourier": "exp(+i 2 pi f t)/N",
+    "window": "periodic Hann",
+    "demean": "segment",
+    "overlap": 0,
+    "method": "joint LS",
+    "targets_mhz": [
+      0.5,
+      5
+    ],
+    "inputs_max_mhz": 5,
+    "separation_m": 0.0037,
+    "example_heldout": 2,
+    "example_train": [
+      3,
+      4,
+      5
+    ],
+    "moments": "held-out capture",
+    "phase": "training cross power",
+    "kinetic_scenario": {
+      "schema_version": 1,
+      "temperature_ev": 9.168901410487,
+      "density_m3": 1e+17,
+      "magnetic_radial_gauss": 39.48,
+      "magnetic_axial_gauss": 80.34,
+      "ion_mass_u": 131.293,
+      "electron_drift_m_per_s": 100000.0,
+      "k_parallel_debye": 0.03,
+      "separation_m": 0.0037,
+      "ky_min_per_m": 100.0,
+      "ky_max_per_m": 50000.0,
+      "ky_count": 1001,
+      "root_tolerance": 1e-09,
+      "provenance": {
+        "temperature_ev": "Effective mean-I-V slope from the main repeated slow scan on page08; used as a Maxwellian temperature proxy, not a simultaneous bulk-temperature calibration.",
+        "magnetic_field": "Reported local radial/axial component magnitudes at C1; their vector magnitude sets the electron gyrofrequency.",
+        "density_m3": "Provisional order-of-magnitude value; not inferred by fitting the fluctuation spectra.",
+        "ion_mass_u": "Assumed singly ionized xenon; replace if a different working gas is confirmed.",
+        "electron_drift_m_per_s": "Provisional +100 km/s along model +y; not derived from the discharge voltage or measured cross phase.",
+        "k_parallel_debye": "Illustrative finite-parallel-wave-number choice, also used in Brown and Jorns (2023); not a measured value for these captures.",
+        "wave_vector": "Field-aligned slab: k_perp=ky, other perpendicular component zero, fixed k_parallel. The measured field is tilted; parallel is not identified with laboratory radial.",
+        "ion_doppler": "Assume k dot u_i=0 in this illustrative cold-ion branch; this does not assert that the actual ion beam is stationary.",
+        "direction": "Assume model +y and positive group velocity point from C1 to C3; propagation direction remains unmeasured.",
+        "response": "No gain/delay correction, plasma-potential conversion, or inverse circuit filter.",
+        "scope": "Single illustrative kinetic branch, not fitted mode identification or exhaustive root enumeration."
+      }
+    }
+  },
+  "inputs_sha256": {
+    "transfer_arrays.npz": "5e033617ce763f8d2e218c6404fd4d5790dea4003dd70afea3cae97e7a090c2e",
+    "transfer_summary.json": "1e5e35ef3842b314ae769d2e72fb5f304d0000881d2efcd697d32a25af4688d8",
+    "comparison_arrays.npz": "4f76adbd39989e23eb23974b7c06c84459b54a402306d10582f926af18d8db84",
+    "comparison_summary.json": "97ae9f03948cad6ece9599c64f9fc664c07edd42e15db8720da5718147914588",
+    "validation_summary.json": "d149772998b84c4cfc9bd1ac82813b976bfdd55b5b9f0b9a5f2ef0a6f83139b3"
+  },
+  "raw_inputs": [
+    {
+      "name": "SDS814X_HD_Binary_C1_2.bin",
+      "sha256": "d059f9e598401c983def1a90c331c4cc71ba7cea769dbc1f4e1ba764cf325288",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_2.bin",
+      "sha256": "7c469d72ffa384d64ca0d6586ae4da99de5062f9f6d9a694218dc45a50dcf07b",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_3.bin",
+      "sha256": "2802f7a85e03a8b76389d8c965910b3c011d88738bf112d6ca2ed8655e93c641",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_3.bin",
+      "sha256": "53d6ff8c617914e368cc776038cfb7e2728626f5a1e92d416367ad10d4fd91f6",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_4.bin",
+      "sha256": "7d853b336e2cb28e11d17d718ca475e12a0cdc9f6c5b5bcf1f716bc3cbb68aca",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_4.bin",
+      "sha256": "cff7ca9da1b1a09d621e98b6f18f1181ed5275e5bd1cf02ccdda4f9b1a716937",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_5.bin",
+      "sha256": "0efc70887e6b4981d82b86cd888d2acfd9bf231f0ab5b44fac3c58146d558c88",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_5.bin",
+      "sha256": "c1168bf28e045dff046b6a922dc972c1bca56ee5e0303dda58b78c0ee16504cf",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    }
+  ],
+  "sources_sha256": {
+    "analyze_rate_walkthrough.py": "b9dbba04eb29ba584b9b09f574ee7e190b9d841aec8d37cfd1a3e3049d7e70d0"
+  },
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.3.4",
+    "matplotlib": "3.10.7"
+  },
+  "example": {
+    "frequency_hz": 2001953.125,
+    "phase_rad": -0.3360910022247384,
+    "linear_real": 0.8245884452297516,
+    "linear_imag": -0.28586450003260105,
+    "ell_real": -0.12726848448467454,
+    "ell_imag": 0.002078030709891291,
+    "px_v2": 8.092767229071373e-05,
+    "py_v2": 6.223636859939529e-05,
+    "increments": [
+      -0.2545369689693491,
+      0.005240886048704874,
+      0.015832188948500758,
+      0.004162131574442949,
+      -0.0016613082337432656
+    ],
+    "measured_change": -0.23096307063144372,
+    "vg_m_per_s": 2148.0824169029647,
+    "gamma_per_s": -73887.34966146409,
+    "transfer_half_v2_per_s": 0.12311783971776705,
+    "transfer_half_over_px_per_s": 1521.3317797587827
+  },
+  "audit": {
+    "max_balance_error": 6.938893903907228e-16,
+    "max_pair_sum_error": 4.7704895589362195e-17,
+    "kim_admissible": 35,
+    "kim_total": 368
+  },
+  "interpretation": "Measured-voltage finite-step identity; conditional rates, not calibrated plasma energy transfer."
+}

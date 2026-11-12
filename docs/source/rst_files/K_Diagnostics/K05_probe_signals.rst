@@ -267,7 +267,7 @@
       The article keeps potential coefficients. K05 first derives the same equation
       for an ideal potential signal, then uses measured voltage coefficients in the
       experiment; this change of observable requires the response discussion on
-      :ref:`page 08 <k05-response-en>`. Replacing wavevector matching by frequency
+      :ref:`probe-response supplement <k05-response-en>`. Replacing wavevector matching by frequency
       matching requires the single-branch correspondence stated above, not just an FFT.
 
 

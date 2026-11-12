@@ -1,5 +1,5 @@
-11 · Reading the paper from equations to conclusions
-=====================================================
+12 · Reading the paper from equations to conclusions
+====================================================
 
 .. raw:: html
 
@@ -19,8 +19,9 @@
    **what supplies fluctuations, what redistributes them, and how can a finite
    spectrum persist?** The preceding pages explain the inference method and apply
    it to C1/C3. This page reads the original article's evidence and distinguishes
-   it from the new experiment. The original figures below are source material,
-   not additional C1/C3 measurements.
+   it from the new experiment. The diagrams below are independently constructed schematics inspired by the
+   questions in [1]. They contain no digitized paper data and no C1/C3 data.
+   Quantitative statements about the paper are attributed to [1] separately.
 
    .. rubric:: 1. Why use a frequency-based bispectral method?
 
@@ -70,20 +71,23 @@
 
       </details>
 
-   .. rubric:: 2. Read original Figure 2: response, spectrum, then growth
+   .. rubric:: 2. Follow the logic of Figure 2: response, spectrum, then growth
 
-   .. figure:: /_static/K_Diagnostics/k05-reference-figure2.png
-      :width: 95%
-      :alt: Original Figure 2 of Brown and Jorns: model dispersion, measured probe spectra and inferred versus theoretical growth. These are the authors' results.
+   .. figure:: /_static/K_Diagnostics/k05-reading-dispersion-schematic.svg
+      :width: 100%
+      :alt: Independent dimensionless diagrams of dispersion, two spectra and drive or damping, calculated from stated illustrative functions.
 
-      Original Figure 2 from Brown and Jorns [1], p. 115101-2. Source results;
-      compare with :ref:`the C1/C3 counterparts <k05-comparison-en>`.
+      Schematic 1. Independently drawn to explain the questions behind Figure 2
+      of [1]; not a reproduction, fit or numerical reconstruction of its data.
+      All axes are dimensionless and the scale constants are arbitrary.
 
-   Panel (a) supplies the model frequency-to-wavenumber relation and its group
-   velocity. Panel (b) shows the measured fluctuations at the two locations.
-   Panel (c) combines the fitted linear coefficient with that group velocity.
-   The same panel also shows growth predicted by the linear kinetic model.
-   The diagnostic is therefore not wholly independent of a propagation model.
+   Panel A illustrates a frequency–wavenumber relation whose slope supplies
+   a group velocity. B illustrates two nearby spectra. C illustrates positive
+   drive and negative damping. The curves are separate prescribed examples,
+   not a self-consistent kinetic solution or inferred measurement. In the
+   actual article, Figure 2(c) compares a coefficient-based diagnostic with
+   a kinetic growth calculation; :ref:`the C1/C3 counterparts <k05-comparison-en>`
+   explain that distinction for the present experiment.
 
    The article reports growth features near several common frequencies, an
    inferred azimuthal rate roughly an order of magnitude below its theoretical
@@ -92,7 +96,7 @@
    branch related to the EDI when finite parallel structure matters. That mode
    name depends on the dispersion and background conditions, not on frequency alone.
 
-   Notice the left and right axes in (c): their scales differ by ten.
+   When consulting original Figure 2(c) in [1], notice its left and right axes: their scales differ by ten.
    Similar line heights do not mean equal rates. The original (a) also labels
    its ordinate with :math:`\omega_k` and Hz, whereas its text defines
    :math:`f=\omega/(2\pi)`. K05 consistently uses angular frequency in the solver
@@ -137,24 +141,27 @@
 
       </details>
 
-   .. rubric:: 3. Read original Figure 3: coefficients first, signed transfer second
+   .. rubric:: 3. Follow the logic of Figure 3: coefficients first, signed transfer second
 
-   .. figure:: /_static/K_Diagnostics/k05-reference-figure3.png
+   .. figure:: /_static/K_Diagnostics/k05-reading-transfer-schematic.svg
       :width: 100%
-      :alt: Original Figure 3: nonlinear coefficient magnitude and signed nonlinear power transfer. These are source-paper results, not the current experiment.
+      :alt: Independent difference-frequency coefficient geometry and a separately prescribed signed contribution profile, with arbitrary normalized scales.
 
-      Original Figure 3 from Brown and Jorns [1], p. 115101-5.
-      Panel (a) displays coefficient magnitudes; panel (b) includes their phases
-      and the measured third-order moments.
+      Schematic 2. An independent illustration inspired by the interpretation
+      of Figure 3 in [1]. A shows a possible coefficient pattern for positive
+      sum frequencies; B prescribes a positive-low/negative-high contribution.
+      B is not computed from A: magnitudes alone cannot provide its sign.
+      These are illustrative functions, not either experiment's results.
 
    A negative frequency is the conjugate partner of a positive-frequency
-   component of a real signal. For example, 8 MHz plus −7 MHz feeds a 1 MHz
-   target; it is a difference interaction, not a negative-energy wave.
-   In (a), large coefficients near the opposite-sign diagonal therefore connect
+   component of a real signal. For example, the marked pair at 3 and −2 in units of :math:`f_0` feeds
+   the target :math:`f_0`; it is a difference interaction, not a negative-energy wave.
+   In schematic A, large coefficients near the opposite-sign diagonal therefore connect
    relatively high input frequencies to a smaller sum frequency. Coefficient
    magnitudes alone still do not give the sign or amount of transferred power.
 
-   For (b), multiply each complex coefficient by its three-frequency moment,
+   To calculate a measured transfer curve, unlike prescribed schematic B,
+   multiply each complex coefficient by its three-frequency moment,
    remove the reference propagation phase, take the real part and sum all retained
    pairs. In the article, the nonlinear contribution is negative in a higher
    frequency region around 5–10 MHz and positive below about 2 MHz.
@@ -168,6 +175,27 @@
    coefficient region, especially with weak inputs, is not sufficient evidence
    on its own. A summed transfer curve does not uniquely identify every donor–receiver
    pair, and voltage-square transfer is not automatically a calibrated plasma-energy flux.
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Functions used to draw these schematics</summary>
+
+   All quantities below are dimensionless. Scale constants :math:`f_0,k_0,P_0,\gamma_0,Q_0,T_0` are arbitrary positive reference values. The script imports NumPy as ``np``; these functions teach shapes, not fitted physical parameters.
+
+   .. code-block:: python
+
+      # u=f/f0; a=f1/f0; b=f2/f0; x=ky/k0; arbitrary positive scales
+      G = lambda u, m, w: np.exp(-((u-m)/w)**2)
+      frequency = x + 0.06*np.sin(np.pi*x)
+      P1 = 0.15 + G(u,1,.5) + .6*G(u,3,.3) + .35*G(u,5,.3)
+      P2 = .95*P1
+      gamma = .7*G(u,3,.5) + .5*G(u,5,.5) - .5*G(u,1,.4)
+      Qabs = np.exp(-((a+b-1)/.32)**2)*np.exp(-((a-b)/6)**2)*(a*b<0)
+      T = G(u,1,.45)-G(u,3,.45)  # prescribed independently of Qabs
+
+   .. raw:: html
+
+      </details>
 
    .. rubric:: 4. Saturation does not mean that growth and coupling disappear
 
@@ -280,8 +308,8 @@
    Drift Instability in a Crossed Field Plasma,” *Physical Review Letters*
    **130**, 115101, Eqs. (1)–(7), Figs. 1–3 and pp. 115101-4–5.
    `doi:10.1103/PhysRevLett.130.115101 <https://doi.org/10.1103/PhysRevLett.130.115101>`_.
-   Original figure images are reproduced from the supplied article for this
-   equation-and-figure commentary; they are not regenerated experimental results.
+   The original figures can be consulted at the DOI link. Only independently
+   constructed teaching schematics are embedded on this page.
 
 .. container:: ap-lang ap-lang-zh k05-lesson
 
@@ -293,7 +321,8 @@
    什么过程重新分配波动，有限幅度的频谱为什么能维持？**
    前面的页面解释了反演方法，并应用到 C1/C3 数据。
    本页阅读原论文的证据，明确它与新实验的区别。
-   下方原图是文献材料，不是新增的 C1/C3 测量。
+   下方为参考文献[1]的问题与图意、独立绘制的示意图，未提取或描摹原文数据，也不是C1/C3测量。
+   关于论文的定量结论另行注明来自文献[1]，不要从示意曲线上读取论文数值。
 
    .. rubric:: 1．为什么要做基于频率的双谱分析？
 
@@ -333,25 +362,26 @@
 
       </details>
 
-   .. rubric:: 2．读原文图 2：先响应，再频谱，再增长率
+   .. rubric:: 2．理解文献图2的逻辑：先响应，再频谱，再增长率
 
-   .. figure:: /_static/K_Diagnostics/k05-reference-figure2.png
-      :width: 95%
-      :alt: Brown与Jorns原文图2：模型色散、双探针频谱、反演与理论增长率。这是原作者结果。
+   .. figure:: /_static/K_Diagnostics/k05-reading-dispersion-schematic.svg
+      :width: 100%
+      :alt: 用给定示例函数独立绘制的无量纲色散、双位置频谱及驱动和阻尼示意。
 
-      Brown 与 Jorns [1] 原文图 2，第 115101-2 页。
-      这是文献结果，可与 :ref:`C1/C3 对应图 <k05-comparison-zh>` 对照。
+      示意图1．参考文献[1]图2的问题与图意独立绘制，不是原图转载、数据拟合或数值复原。
+      各轴均已无量纲化，尺度常数为任意正值。
 
-   (a) 提供模型频率—波数关系及其群速度，(b) 展示两处实测波动，
-   (c) 将拟合的线性系数与群速度组合成诊断增长率，并与线性动理学模型的增长率比较。
-   因此，这一诊断并不完全独立于传播模型。
+   A示意频率—波数关系，其斜率提供群速度；B示意两处相近的频谱；C示意正驱动与负阻尼。
+   三组曲线分别由示例函数给定，不是一套自洽动理学解，也不是反演的测量结果。
+   实际文献图2(c)比较由拟合系数得到的诊断增长与动理学模型增长；
+   :ref:`C1/C3对应图 <k05-comparison-zh>` 解释本实验里这两类曲线的区别。
 
    论文报告：几处增长特征出现在相近频率，反演的周向增长率比理论值约小一个数量级，
    而约 1.5 MHz 附近出现负增长。作者把这个低频特征联系到修正双流不稳定性
    （modified two-stream instability, MTSI）：在有限平行结构参与时，与 EDI 相关的一条低频分支。
    波模名称依赖色散和背景条件，不能仅凭频率给它命名。
 
-   特别注意 (c) 左右轴相差十倍：曲线在同一高度，不表示增长率相等。
+   查阅文献[1]原图2(c)时，注意其左右轴相差十倍：曲线在同一高度，不表示增长率相等。
    原图 (a) 以 :math:`\omega_k` 标记纵轴却使用 Hz，正文则定义
    :math:`f=\omega/(2\pi)`。K05 在求解器中使用角频率、在 Hz 图轴上使用普通频率。
    仅凭原图标签，作者的绘图转换尚未完全核实；不要把视觉斜率之比直接当成实验波速之比。
@@ -389,21 +419,22 @@
 
       </details>
 
-   .. rubric:: 3．读原文图 3：系数大小之后，还要看有符号转移
+   .. rubric:: 3．理解文献图3的逻辑：系数大小之后，还要看有符号转移
 
-   .. figure:: /_static/K_Diagnostics/k05-reference-figure3.png
+   .. figure:: /_static/K_Diagnostics/k05-reading-transfer-schematic.svg
       :width: 100%
-      :alt: 原文图3：非线性系数模和有符号非线性功率转移。这是论文结果，不是当前实验。
+      :alt: 独立构造的差频系数几何与另行给定的正负贡献曲线，使用任意归一化尺度。
 
-      Brown 与 Jorns [1] 原文图 3，第 115101-5 页。
-      (a) 显示系数模；(b) 进一步包含系数相位和实测三阶统计矩。
+      示意图2．参考文献[1]图3的解释独立绘制。A给出正和频目标的一种系数分布，
+      B另行给定低频正、高频负的贡献。B不是由A计算得到的：单凭系数模不能确定符号。
+      两图均为示例函数，不是原文或本实验结果。
 
    实信号的负频率是正频率的共轭伙伴。
-   例如 8 MHz 加 −7 MHz 可以进入 1 MHz 目标分量，这是差频相互作用，不是负能量波。
-   因此，(a) 异号对角线附近的大系数连接了较高输入频率与较低的和频目标。
+   例如图中标出的 :math:`3f_0+(-2f_0)=f_0`，这是差频相互作用，不是负能量波。
+   因此，示意A中异号对角线附近的大系数连接了较高输入频率与较低的和频目标。
    但系数模本身仍没有给出实际转移的符号或大小。
 
-   要画 (b)，还要将每个复系数乘以对应三频率统计矩，去参考传播相位，取实部，再对保留波对求和。
+   若要算出真实数据的转移曲线，而不是像示意B那样预设曲线，还要将每个复系数乘以对应三频率统计矩，去参考传播相位，取实部，再对保留波对求和。
    论文中，约 5–10 MHz 的较高频段为负非线性贡献，约 2 MHz 以下为正贡献。
    结合图 2(c) 的增长／阻尼分布，作者将其解释为向较低频率、较长波长的逆向转移，
    随后在低频分支中通过阻尼损失能量。
@@ -412,6 +443,27 @@
    论文还指出，和频约 45 MHz 附近的特征可能不物理，因为相关信号已接近噪声底。
    这说明明亮的系数区域，尤其当输入很弱时，不能独立作为物理结论。
    求和后的转移曲线也不能唯一确定每一对供能者与接收者；电压平方转移不自动等于标定后的等离子体能量通量。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>示意图具体用什么函数绘制？</summary>
+
+   以下各量均已无量纲化；:math:`f_0,k_0,P_0,\gamma_0,Q_0,T_0` 是任意正参考尺度。代码用 ``np`` 表示NumPy。这些函数用于讲图意，不是拟合出的物理参数。
+
+   .. code-block:: python
+
+      # u=f/f0; a=f1/f0; b=f2/f0; x=ky/k0; arbitrary positive scales
+      G = lambda u, m, w: np.exp(-((u-m)/w)**2)
+      frequency = x + 0.06*np.sin(np.pi*x)
+      P1 = 0.15 + G(u,1,.5) + .6*G(u,3,.3) + .35*G(u,5,.3)
+      P2 = .95*P1
+      gamma = .7*G(u,3,.5) + .5*G(u,5,.5) - .5*G(u,1,.4)
+      Qabs = np.exp(-((a+b-1)/.32)**2)*np.exp(-((a-b)/6)**2)*(a*b<0)
+      T = G(u,1,.45)-G(u,3,.45)  # prescribed independently of Qabs
+
+   .. raw:: html
+
+      </details>
 
    .. rubric:: 4．饱和不表示增长和耦合全部消失
 
@@ -517,5 +569,5 @@
    Drift Instability in a Crossed Field Plasma,” *Physical Review Letters*
    **130**, 115101，式 (1)–(7)、图 1–3 及第 115101-4–5 页。
    `doi:10.1103/PhysRevLett.130.115101 <https://doi.org/10.1103/PhysRevLett.130.115101>`_。
-   两张原图取自所提供论文，用于逐式、逐图讲解，不是重新计算的实验结果。
+   原图请通过DOI链接查阅；本页仅嵌入独立构造的教学示意图。
 

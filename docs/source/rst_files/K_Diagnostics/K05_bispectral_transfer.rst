@@ -51,21 +51,25 @@ K05 · Bispectral transfer
       7. :ref:`From measured statistics to linear and quadratic coefficients <k05-experiment-coefficients-en>` —
          build the actual moment matrix, fit L/Q and check the Kim result.
 
-      8. :ref:`What the probe measures <k05-response-en>` — rebuild I–V curves,
+      8. :ref:`From fitted coefficients to growth and transfer <k05-rates-en>` —
+         calculate the measured power balance and signed pair contributions,
+         then introduce a group-velocity scenario to obtain conditional rates.
+
+      9. :ref:`Supplement: what the probe measures <k05-response-en>` — rebuild I–V curves,
          estimate temperature and inspect bias and electrical-response scenarios.
 
-      9. :ref:`Experimental counterparts of Figures 2 and 3 <k05-comparison-en>` —
-         see the measured spectra, coupling map and conditional growth/transfer plots,
-         then follow their calculation.
+      10. :ref:`Experimental counterparts of Figures 2 and 3 <k05-comparison-en>` —
+          see the measured spectra, coupling map and conditional growth/transfer plots,
+          then follow their calculation.
 
-      10. :ref:`Supplement: interpreting the plots <k05-budget-en>` — explain the
+      11. :ref:`Supplement: interpreting the plots <k05-budget-en>` — explain the
           common-power check, reference phase and complete measured-power balance.
 
-      11. :ref:`Read the paper from equations to conclusions <k05-synthesis-en>` —
-          use the original figures to connect drive, redistribution and saturation,
+      12. :ref:`Read the paper from equations to conclusions <k05-synthesis-en>` —
+          use independent schematics to connect drive, redistribution and saturation,
           and distinguish source conclusions from the C1/C3 example.
 
-      12. :ref:`Supplement: validating the two-probe model <k05-validation-en>` —
+      13. :ref:`Supplement: validating the two-probe model <k05-validation-en>` —
           inspect complete holdouts, residuals, sensitivity and the higher-frequency example.
 
       Follow the main text first; open the calculation notes when needed.
@@ -127,19 +131,22 @@ K05 · Bispectral transfer
       7. :ref:`从实测统计量求线性与二次系数 <k05-experiment-coefficients-zh>` ——
          展开真实矩阵，求 L/Q，再计算和检查 Kim 结果。
 
-      8. :ref:`探针实际测到了什么 <k05-response-zh>` —— 重建 I–V 曲线、估计温度，
+      8. :ref:`从拟合系数走到增长与转移 <k05-rates-zh>` ——
+         先算实测功率收支与有符号波对贡献，再用群速度情景换算条件变化率。
+
+      9. :ref:`补充：探针实际测到了什么 <k05-response-zh>` —— 重建 I–V 曲线、估计温度，
          并检查工作偏置和电路响应情景。
 
-      9. :ref:`把实验数据画成文献图 2、图 3 的形式 <k05-comparison-zh>` ——
-         先看频谱、耦合系数和条件增长／转移曲线，再说明怎样计算。
+      10. :ref:`把实验数据画成文献图 2、图 3 的形式 <k05-comparison-zh>` ——
+          先看频谱、耦合系数和条件增长／转移曲线，再说明怎样计算。
 
-      10. :ref:`补充：怎样解释增长与转移图 <k05-budget-zh>` ——
+      11. :ref:`补充：怎样解释增长与转移图 <k05-budget-zh>` ——
           展开共同功率检查、参考相位与完整实测功率收支。
 
-      11. :ref:`从方程读到论文结论 <k05-synthesis-zh>` ——
-          用原图串起驱动、转移和饱和，区分原文结论与 C1/C3 示例。
+      12. :ref:`从方程读到论文结论 <k05-synthesis-zh>` ——
+          用独立示意图串起驱动、转移和饱和，区分原文结论与 C1/C3 示例。
 
-      12. :ref:`补充：双探针模型验证 <k05-validation-zh>` ——
+      13. :ref:`补充：双探针模型验证 <k05-validation-zh>` ——
           检查完整留出结果、残差、设置敏感性与更高频率的预测。
 
       可以先顺着正文读，需要时再展开计算细节。
@@ -185,6 +192,7 @@ K05 · Bispectral transfer
    K05_coefficient_inference
    K05_experimental_signals
    K05_experimental_coefficients
+   K05_growth_transfer
    K05_probe_response
    K05_paper_comparison
    K05_power_budget

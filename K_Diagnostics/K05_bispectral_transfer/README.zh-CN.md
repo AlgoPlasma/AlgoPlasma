@@ -107,14 +107,14 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 比较线性与二次模型对整组留出记录的预测，依次检查误差、残差关联、系数可辨识性和预定设置的敏感性。
 使用 `validate_experiment.py` 复现，详见 [EXPERIMENT.md](EXPERIMENT.md)。
 
-[第八页](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst)
+[探针响应补充页](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst)
 使用 DL350 慢扫描重建 I–V 曲线和温度斜率，并用明确标注的暂用估计检查偏置与电路响应。
 运行 `analyze_probe_sweep.py`，使用 `probe_sweep_config.json` 复现均值 I–V 流程。
 页面用同一份0015逐步解释分箱、背景扣除、区间与斜率，并对照6.73与9.17 eV的来源。
 原中位数流程保留作比较，详见 [EXPERIMENT.md](EXPERIMENT.md)。
 
 
-第九页：[把实验数据画成文献图2、图3的形式](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst)，先看五个面板，再说明计算与估计参数。第十页：[结果解释补充](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst)，展开共同功率、相位和完整收支。复现见EXPERIMENT.md。
+完整面板补充：[把实验数据画成文献图2、图3的形式](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst)，先看五个面板，再说明计算与估计参数。功率收支补充：[结果解释补充](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst)，展开共同功率、相位和完整收支。复现见EXPERIMENT.md。
 
 
 ## 原式对照与全文收束
@@ -123,6 +123,10 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 逐项说明符号／归一化／简化；入口可直接跳转。原式也参与当前K05编号，语义ID提供稳定链接；
 框标题保留文献自身式号。09页增加线性Vlasov响应、冷离子极化率、Maxwell回旋轨道平均
 和Poisson闭合推导。
-[第11页](../../docs/source/rst_files/K_Diagnostics/K05_paper_synthesis.rst)
-用原图讲增长、转移和饱和，补周向／总增长的关系与条件平稳收支，
+[论文解读补充页](../../docs/source/rst_files/K_Diagnostics/K05_paper_synthesis.rst)
+用独立示意图讲增长、转移和饱和，补周向／总增长的关系与条件平稳收支，
 附结果路线及符号表。实测数值产物没有重算。
+
+## 从系数到条件变化率
+
+[第08页](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst)沿实测例子计算去相位系数、完整留出功率收支、有符号波对贡献，再用明确的群速度情景换算。四张新图，联合LS仍为统计模型。复现用`analyze_rate_walkthrough.py`，见EXPERIMENT.md。论文解读图由`plot_reading_schematics.py`独立生成，不使用原图或数字化数据。

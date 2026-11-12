@@ -520,3 +520,30 @@ the source-paper findings from the conditional C1/C3 counterparts. Source figure
 images come from Brown2023 PDF page2 image26 and page5 image124; attribution is
 in the page. The reference omega_k/Hz plotting convention remains unresolved
 from its label alone. Matching axes does not establish a measured speed ratio.
+
+
+## Page 08: coefficients, measured changes and conditional rates (R40)
+
+Run `analyze_rate_walkthrough.py --data RAW --budget BUDGET_DIR
+--comparison COMPARISON_DIR --validation VALIDATION_DIR --output NEW_DIR`.
+The three parent directories contain the previously audited transfer, kinetic
+comparison and validation products. The output directory must be empty.
+
+This script verifies all eight raw hashes, regenerates the same N=2048 Fourier
+coefficients, and recomputes test-set pair moments and exact power balances for
+four holdouts and 92 targets. Training-only coefficients and phases are reused,
+not refitted. Pair products are unordered and include signed difference pairs.
+The complete finite-step square and residual cross term are retained. Its
+`rate_walkthrough_arrays.npz` stores all per-pair moments, signed increments,
+powers, rates and group velocity. JSON records configuration, raw/parent/source
+hashes, versions, fixed-example values and numerical identity errors.
+
+Rates reuse the explicit estimated kinetic branch; they are in the measured
+voltage convention, not calibrated plasma-energy transfer. The page gives
+T^(1/2) matching the printed Eq.(6) expression and explicitly uses 2T^(1/2)
+for a full first-order mean-square change. No new Kim validity is inferred.
+
+`plot_reading_schematics.py --output NEW_SCHEMATIC_DIR` generates two independent
+dimensionless teaching diagrams. Its analytic functions are reproduced in the
+paper-reading page; it takes no paper image or data as input. These diagrams
+must not be described as reproductions of measured reference curves.

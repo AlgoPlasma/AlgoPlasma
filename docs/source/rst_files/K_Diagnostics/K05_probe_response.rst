@@ -1,5 +1,5 @@
-08 · What the probe measures
-============================================
+09 · Supplement: what the probe measures
+========================================
 
 .. raw:: html
 
@@ -17,7 +17,7 @@
 
    .. container:: k05-text
 
-      The :ref:`previous page <k05-experiment-coefficients-en>` compared simultaneous
+      The :ref:`coefficient page <k05-experiment-coefficients-en>` compared simultaneous
       high-frequency signals from two probes held at fixed bias. Each probe can also
       be connected separately to a **voltage-sweep circuit** : vary its bias slowly
       and measure a mean current–voltage characteristic (I–V curve).

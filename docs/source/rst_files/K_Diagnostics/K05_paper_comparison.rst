@@ -1,5 +1,5 @@
-09 · Experimental counterparts of Figures 2 and 3
-=================================================
+10 · Supplement: full counterparts of Figures 2 and 3
+=====================================================
 
 .. raw:: html
 
@@ -15,7 +15,8 @@
 
    .. rubric:: Put the experimental results into the form of Figures 2 and 3
 
-   Brown and Jorns [1] connect five panels: a dispersion curve, two probe spectra,
+   After :ref:`the step-by-step rate calculation <k05-rates-en>`, this supplement
+   brings the complete panels together. Brown and Jorns [1] connect five panels: a dispersion curve, two probe spectra,
    growth rates, a coupling-coefficient map and a signed transfer curve.
    Here are their counterparts for the four synchronized C1/C3 captures.
    Read the plots first, then follow how each quantity was calculated.
@@ -137,7 +138,7 @@
         - Status
       * - Temperature energy :math:`T_e`
         - 9.1689 eV
-        - Effective slope from the main slow scan on page 08; assumed representative of the fast records and of a Maxwellian distribution.
+        - Effective slope from the main slow scan on probe-response supplement; assumed representative of the fast records and of a Maxwellian distribution.
       * - Magnetic components :math:`|B_r|,|B_{\rm axial}|`
         - 39.48, 80.34 G
         - Reported local values at C1; magnitude :math:`B_0=89.52` G.
@@ -581,6 +582,8 @@
 
    .. _k05-comparison-zh:
 
+   接续 :ref:`逐步计算增长与转移 <k05-rates-zh>`，本补充页将完整对照面板放在一起。
+
    .. rubric:: 把实验数据画成文献图 2、图 3 的形式
 
    Brown 与 Jorns [1] 用五个面板串起分析：色散曲线、双探针频谱、增长率、
@@ -687,7 +690,7 @@
         - 来源与含义
       * - 温度能量 :math:`T_e`
         - 9.1689 eV
-        - 第八页主扫描的有效斜率温度；暂作高频记录的代表值和 Maxwellian 温度。
+        - 探针响应补充页主扫描的有效斜率温度；暂作高频记录的代表值和 Maxwellian 温度。
       * - 磁场分量 :math:`|B_r|,|B_{\rm axial}|`
         - 39.48、80.34 G
         - 实验人员提供的 C1 局部分量；合成模长 :math:`B_0=89.52` G。

@@ -379,8 +379,9 @@
    and the specified input set supplies enough equations to fit :math:`L,Q`.
    To turn them into physical growth and signed transfer, the measurement
    response, spatial phase interpretation and a justified group velocity still
-   matter. Continue with :ref:`what the probe measures <k05-response-en>`,
-   then the :ref:`comparison with Figures 2 and 3 <k05-comparison-en>`.
+   matter. Continue with :ref:`from coefficients to growth and transfer <k05-rates-en>`:
+   calculate the measured power balance first, then introduce the required
+   propagation assumptions beside the rate plots.
    For the full four-fold validation, bandwidth/segment sensitivity and the
    5–20 MHz example, see the :ref:`validation supplement <k05-validation-en>`.
 
@@ -769,8 +770,8 @@
    统计计算现在已经闭合：记录给出矩，明确的输入集合给出足够的方程，从而拟合出
    :math:`L,Q`。要进一步转成物理增长率和有符号转移，还需要测量响应、
    空间相位的解释和有依据的群速度。
-   接着读 :ref:`探针实际测到了什么 <k05-response-zh>`，
-   再进入 :ref:`文献图 2、图 3 的对照 <k05-comparison-zh>`。
+   接着读 :ref:`从系数走到增长与转移 <k05-rates-zh>`：
+   先算完整实测功率收支，再在变化率图旁引入所需的传播假设。
    完整四轮验证、分段和频带敏感性，以及 5–20 MHz 示例保留在
    :ref:`验证补充页 <k05-validation-zh>`。
 

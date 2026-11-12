@@ -1,5 +1,5 @@
-10 · Supplement: interpreting the growth and transfer plots
-============================================================
+11 · Supplement: interpreting the growth and transfer plots
+===========================================================
 
 .. raw:: html
 
@@ -402,7 +402,7 @@
    For the 2 MHz example, the two estimators give approximately **−34.4 and
    +14.3 m⁻¹**. These conflicting, uncalibrated values are a demonstration of the
    conversion, not accepted growth measurements. Multiplying by an assumed
-   velocity would only rescale them. The 9.17 eV slope temperature from page 08
+   velocity would only rescale them. The 9.17 eV slope temperature from probe-response supplement
    does not independently determine :math:`v_g`.
 
    The preceding results page has already used an explicit kinetic scenario
@@ -442,7 +442,7 @@
 
    .. rubric:: Continue the reading
 
-   With the conditions separated from the plotted results, return to the original figures and read how the article connects growth, transfer and saturation.
+   With the conditions separated from the plotted results, use the reading schematics to follow how the article connects growth, transfer and saturation.
 
    :ref:`Next page <k05-synthesis-en>`.
 
@@ -815,7 +815,7 @@
    约 2 MHz 的例子中，两种估计分别给出约 **−34.4 和 +14.3 m⁻¹**。
    这些相互矛盾、未标定的数值只是换算示范，不能作为已确认的增长测量。
    乘上一个假设群速度只会缩放它们。
-   第八页的 9.17 eV 斜率温度不能独立给出 :math:`v_g`。
+   探针响应补充页的 9.17 eV 斜率温度不能独立给出 :math:`v_g`。
 
    前一结果页已经用明确的动力学参数情景完成了条件换算。
    如果要把那些曲线解释成物理增长与转移，还需检查
@@ -852,7 +852,7 @@
 
    .. rubric:: 继续阅读
 
-   把适用条件与图形结果分清后，再回到论文原图，阅读作者怎样连接增长、转移和饱和。
+   把适用条件与图形结果分清后，再借助论文解读示意图，阅读作者怎样连接增长、转移和饱和。
 
    :ref:`下一页面 <k05-synthesis-zh>`.
 
