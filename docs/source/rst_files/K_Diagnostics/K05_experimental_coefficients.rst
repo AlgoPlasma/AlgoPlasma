@@ -323,6 +323,28 @@
    Equality of the recorded discharge condition does not establish equal
    underlying fluctuation powers or the assumed uncorrelated noise at the probes.
 
+   .. _k05-kim-failure-en:
+
+   **For most frequencies here, the Kim output cannot be accepted as a
+   physically admissible noise correction under the assumptions used.**
+   The estimated moments do not permit the assumed common-power split with
+   nonnegative extra powers. This is a failure of that interpretation for
+   these data and this normalization, not a general failure of the Kim method.
+   Possible causes include unequal underlying powers at the two positions,
+   different channel responses, or nonzero noise-related mixed moments that
+   the model neglects; finite-sample uncertainty can also affect the estimates.
+   Figure 6 alone does not identify which cause dominates. Clipping the ratio
+   to 1 would not repair the assumptions.
+
+   **For prediction of these measured signals, use Joint LS as the baseline
+   and check its held-out errors in Figure 7.** “Joint” means fitting the
+   linear and quadratic coefficients together; it is not the Kim correction.
+   Joint LS does not require equal underlying powers at the two probes, so
+   failure of the Kim bound does not invalidate that predictive fit.
+   However, input noise and channel response can still bias its coefficients.
+   Returning to the Joint LS curve therefore does not, by itself, establish
+   physical growth or energy transfer.
+
    .. rubric:: 5. Return to the recording that was not used for fitting
 
    Apply the three fitted relations to C1 from capture 2, then compare with its
@@ -702,6 +724,21 @@
    下图保留 Kim 的代数解，使它与最小二乘的差别可见；
    空心圆 **不是已经验证的修正系数**。
    放电工况相同，不意味着两处底层波动功率相等，也不意味着噪声符合所需的不相关假设。
+
+   .. _k05-kim-failure-zh:
+
+   **对这里的大多数频点，在当前假设下，不能把 Kim 输出当作物理上可接受的噪声修正。**
+   估计出的统计矩无法同时满足“共同底层功率＋两路非负额外功率”这一分解。
+   这说明这套解释与当前数据及归一化不相容，不是说 Kim 方法对所有实验都无效。
+   可能的原因包括两处底层波动功率本来就不同、通道响应不同，或被模型忽略的噪声混合矩并不为零；
+   有限样本的不确定性也会影响估计。仅凭图 6 还不能确定哪种原因占主导，
+   把比值强行截到 1 也不能修复这些假设。
+
+   **若要评价当前实测信号的预测能力，应以 Joint LS 为基准，并结合图 7 的留出误差判断。**
+   “Joint”指线性与二次系数一起拟合，不是 Kim 修正。
+   Joint LS 不要求两支探针的底层功率相等，因此 Kim 上界失败并不会直接否定这个预测拟合。
+   但输入噪声和通道响应仍可能使其系数有偏差，
+   所以改看 Joint LS 曲线，也不能直接确认物理增长率或能量转移。
 
    .. rubric:: 5. 回到没有参加拟合的记录
 
