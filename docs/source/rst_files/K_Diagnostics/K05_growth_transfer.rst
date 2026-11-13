@@ -45,12 +45,22 @@
    rotation, as explained in :k05:eq:`phase-aligned-transfer`. It does not calibrate
    the channel response or determine an unaliased wave number.
 
+   Before reading the figure, distinguish three symbols: :math:`L_f` is the
+   fitted linear multiplier, :math:`\widetilde L_f=e^{-i\delta_f}L_f` is its
+   phase-rotated value, and :math:`\ell_f=\widetilde L_f-1` is its increment
+   from the unit multiplier. The last symbol is a lowercase script ell, not
+   another uppercase L. :math:`\operatorname{Re}` and :math:`\operatorname{Im}`
+   mean real and imaginary part; the figure uses the same notation.
+
    .. figure:: /_static/K_Diagnostics/k05-rate-phase.svg
       :width: 100%
       :alt: The raw and rotated linear coefficient at the fixed example frequency, followed by the real and imaginary increments throughout the fitted band.
 
       Figure 1. Rotate the jointly fitted linear coefficient, then subtract one.
-      The left panel uses the fixed 2 MHz example; the right uses the same training split.
+      Left: the fixed 2 MHz example. Right: two components of the same
+      increment across frequency, not two probe spectra or two fitted models.
+      The dotted vertical line and markers locate the left-panel frequency.
+      Both panels use training captures 3, 4 and 5.
 
    At the example frequency, :math:`L_f=0.82459-0.28586i` and
    :math:`\delta_f=-0.33609` rad. After rotation,
@@ -60,7 +70,49 @@
    :math:`\ell_f=\widetilde L_f-1`, not the total measured change: quadratic terms
    and the prediction residual remain.
 
-   Write that distinction explicitly:
+   **Read the right panel at one frequency.** The teal solid line is
+   :math:`\operatorname{Re}(\ell_f)=\operatorname{Re}(\widetilde L_f)-1`:
+   the increment along the input signal's direction in the complex plane.
+   Positive values add in that direction and negative values subtract.
+   The orange dashed line is
+   :math:`\operatorname{Im}(\ell_f)=\operatorname{Im}(\widetilde L_f)`:
+   the perpendicular component remaining after the reference rotation.
+   Both are dimensionless. The orange value is not itself a phase angle in radians.
+
+   **Why show both?** Together they describe whether the phase-aligned linear
+   response mostly changes size or still has a substantial perpendicular
+   component. Here the orange line stays near zero and
+   :math:`1+\operatorname{Re}(\ell_f)>0`, so the linear amplitude multiplier
+   is close to :math:`1+\operatorname{Re}(\ell_f)`. The teal curve then indicates
+   its increase or decrease across frequency. At the marked point the readings
+   are −0.12727 and +0.00208: the linear amplitude multiplier is about 0.87273,
+   or 12.73% below one. This is not the total power decrease calculated below.
+
+   The reference rotation was chosen from the measured training cross power,
+   so a small orange curve is not an independent validation of the propagation
+   model. It does not mean the original phase difference was zero or that
+   quadratic coupling is absent. In the following power balance,
+   :math:`2\operatorname{Re}(\ell_f)` gives the first-order linear contribution;
+   the remaining imaginary component still enters the finite-step square.
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>How do these components give the exact linear amplitude and residual phase?</summary>
+
+   The amplitude multiplier is the modulus
+   :math:`|\widetilde L_f|=\sqrt{[1+\operatorname{Re}(\ell_f)]^2+[\operatorname{Im}(\ell_f)]^2}`.
+   Its residual angle is :math:`\arg\widetilde L_f`; for a nonzero multiplier,
+   compute it with :math:`\operatorname{atan2}(\operatorname{Im}(\ell_f),1+\operatorname{Re}(\ell_f))`.
+   ``atan2`` uses both coordinates to select the correct quadrant. At the
+   example frequency the angle is about 0.00238 rad, not 0.00208 rad.
+   If the imaginary component is appreciable, use the full modulus rather
+   than deciding amplitude growth from the real increment alone.
+
+   .. raw:: html
+
+      </details>
+
+   Now include the quadratic prediction and residual explicitly:
 
    .. k05:equation:: rates-rotated-model
       :lang: en
@@ -399,11 +451,19 @@
    乘 :math:`e^{-i\delta_f}` 消去这个参考旋转，正是 :k05:eq:`phase-aligned-transfer` 的操作。
    这一步本身不校准通道响应，也不确定没有空间混叠的波数。
 
+   先分清图中的三个符号：:math:`L_f` 是拟合的线性乘数，
+   :math:`\widetilde L_f=e^{-i\delta_f}L_f` 是去参考相位后的值，
+   :math:`\ell_f=\widetilde L_f-1` 是它相对单位乘数1的增量。
+   最后一个符号是小写花体ell，不是另一个大写L。
+   :math:`\operatorname{Re}`、:math:`\operatorname{Im}` 分别表示取实部、取虚部，图与正文采用同一写法。
+
    .. figure:: /_static/K_Diagnostics/k05-rate-phase.svg
       :width: 100%
       :alt: 固定频点的原始和去相位线性系数，以及整个拟合频带内的实部和虚部增量。
 
-      图1．先旋转联合拟合的线性系数，再减去1。左图为固定2 MHz例子，右图使用同一训练分组。
+      图1．先旋转联合拟合的线性系数，再减去1。左图是固定2 MHz例子；
+      右图是同一个增量的两个分量随频率的变化，不是两支探针的频谱或两种拟合方法。
+      竖点线与圆点标出左图所在频率。两图都用第3、4、5组训练所得的系数。
 
    在示例频点，:math:`L_f=0.82459-0.28586i`，:math:`\delta_f=-0.33609` rad。
    旋转后 :math:`\widetilde L_f=0.87273+0.00208i`。箭头方向变了，长度没有变。
@@ -411,7 +471,43 @@
    旋转后系数与1的差记作 :math:`\ell_f=\widetilde L_f-1`。
    它还不是信号的总变化，因为二次部分和预测残差仍然存在。
 
-   把这几部分明确写出来：
+   **在右图选定一个频率，怎样读两条线？** 青绿色实线是
+   :math:`\operatorname{Re}(\ell_f)=\operatorname{Re}(\widetilde L_f)-1`，
+   表示复平面上沿输入信号方向的增量：正值沿这一方向增加，负值沿这一方向减小。
+   橙色虚线是 :math:`\operatorname{Im}(\ell_f)=\operatorname{Im}(\widetilde L_f)`，
+   表示去掉参考旋转后，仍然垂直于输入信号方向的分量。
+   两者都无量纲，橙色数值本身不是以弧度表示的相位角。
+
+   **把两条线放在一起，是为了判断什么？** 它们共同说明，去参考相位后的线性响应
+   主要是在改变大小，还是仍有明显的垂直分量。
+   本图橙线接近零，且 :math:`1+\operatorname{Re}(\ell_f)>0`，
+   因而线性幅值乘数接近 :math:`1+\operatorname{Re}(\ell_f)`，
+   青绿色曲线便可以直观指示各频率的线性幅值增减。
+   在圆点标记处，两条线分别为−0.12727和+0.00208，线性幅值乘数约为0.87273，
+   即比1小12.73%。这不是下一节计算的总功率下降比例。
+
+   参考旋转来自训练互谱，所以橙线很小并不是传播模型正确的独立证据，
+   也不表示原始相位差为零或没有二次耦合。
+   后面的功率收支使用 :math:`2\operatorname{Re}(\ell_f)` 作为一阶线性贡献，
+   剩余的虚部分量仍会进入有限步长平方项。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>这两个分量怎样给出准确的线性幅值与剩余相位？</summary>
+
+   幅值乘数是模长
+   :math:`|\widetilde L_f|=\sqrt{[1+\operatorname{Re}(\ell_f)]^2+[\operatorname{Im}(\ell_f)]^2}`。
+   剩余角度是 :math:`\arg\widetilde L_f`；当乘数非零时，用
+   :math:`\operatorname{atan2}(\operatorname{Im}(\ell_f),1+\operatorname{Re}(\ell_f))` 计算。
+   ``atan2`` 根据两个坐标确定正确象限。在示例频点，这个角度约为0.00238 rad，
+   不是直接把虚部0.00208当成弧度数。
+   如果虚部不可忽略，就应计算完整模长，不能只看实部增量的正负判断幅值增减。
+
+   .. raw:: html
+
+      </details>
+
+   再把二次预测和残差一起写出来：
 
    .. k05:equation:: rates-rotated-model
       :lang: zh

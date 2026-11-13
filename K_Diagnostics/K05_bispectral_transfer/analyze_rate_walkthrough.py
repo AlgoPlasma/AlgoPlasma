@@ -58,7 +58,8 @@ def derive(groups, budget, comparison):
                 transfer_half_over_px=transfer/px, group_velocity=c["target_vg"])
 
 
-def plots(a, b, output):
+def plot_phase(a, b, output):
+    """Draw Figure 1 from saved coefficients; no refitting or new transforms."""
     plt.rcParams.update({"font.size": 11, "axes.grid": True, "grid.alpha": .2,
                          "svg.fonttype": "none"})
     f = a["frequency_hz"]/1e6; j = int(np.argmin(abs(f-2)))
@@ -73,14 +74,22 @@ def plots(a, b, output):
     ax[0].plot(abs(raw)*np.cos(theta),abs(raw)*np.sin(theta),":",color=".65")
     ax[0].set(xlabel="Real part (dimensionless)",ylabel="Imaginary part (dimensionless)",
               xlim=(-.05,1.08),ylim=(-.42,.15),title="(a) Rotation at 2.00195 MHz")
-    ax[0].set_aspect("equal",adjustable="datalim");ax[0].legend(fontsize=9)
-    ax[1].plot(f,a["ell"][0].real,color=teal,label=r"$\Re\ell_f=\Re\widetilde L_f-1$")
-    ax[1].plot(f,a["ell"][0].imag,color=orange,label=r"$\Im\ell_f$")
+    ax[0].set_aspect("equal",adjustable="box");ax[0].legend(fontsize=9)
+    ax[1].plot(f,a["ell"][0].real,color=teal,label=r"$\operatorname{Re}(\ell_f)=\operatorname{Re}(\widetilde L_f)-1$")
+    ax[1].plot(f,a["ell"][0].imag,color=orange,ls="--",label=r"$\operatorname{Im}(\ell_f)=\operatorname{Im}(\widetilde L_f)$")
     ax[1].axhline(0,color=".4",lw=.7)
+    ax[1].axvline(f[j],color=".65",lw=.8,ls=":")
+    ax[1].plot(f[j],a["ell"][0,j].real,"o",color=teal,ms=4)
+    ax[1].plot(f[j],a["ell"][0,j].imag,"o",color=orange,ms=4)
     ax[1].set(xlabel=r"Target frequency $f$ (MHz)",ylabel=r"$\ell_f$ components (dimensionless)",
-              title="(b) Training captures 3, 4, 5")
+              title=r"(b) Same increment $\ell_f$, across frequencies")
     ax[1].legend(fontsize=9);save(fig,output,"k05-rate-phase")
 
+
+def plots(a, b, output):
+    plot_phase(a, b, output)
+    f = a["frequency_hz"]/1e6; j = int(np.argmin(abs(f-2)))
+    teal, orange, purple = "#007c91", "#d85c32", "#7654a3"
     fig, ax = plt.subplots(1,2,figsize=(10,3.7),layout="constrained")
     vals=a["increments"][0,j]*100
     labels=[r"$g_f$",r"$t_f$",r"$s_f$",r"$r_f$",r"$c_f$","Sum",r"$D_f$"]
