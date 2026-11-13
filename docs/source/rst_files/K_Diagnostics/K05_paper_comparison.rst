@@ -1,4 +1,4 @@
-10 · Supplement: full counterparts of Figures 2 and 3
+10 · Supplement: the narrower-band kinetic comparison
 =====================================================
 
 .. raw:: html
@@ -15,8 +15,12 @@
 
    .. rubric:: Put the experimental results into the form of Figures 2 and 3
 
-   After :ref:`the step-by-step rate calculation <k05-rates-en>`, this supplement
-   brings the complete panels together. Brown and Jorns [1] connect five panels: a dispersion curve, two probe spectra,
+   This supplement preserves the **5 MHz input and target scenario** and its
+   frequency-dependent kinetic time scale. :ref:`Page 08 <k05-rates-en>` instead
+   refits a common 20 MHz input basis and uses an explicit constant-speed
+   scenario for its extended comparison. Their coefficient and rate arrays
+   must not be spliced together. Here the complete narrower-band panels are
+   retained alongside the detailed dispersion calculation. Brown and Jorns [1] connect five panels: a dispersion curve, two probe spectra,
    growth rates, a coupling-coefficient map and a signed transfer curve.
    Here are their counterparts for the four synchronized C1/C3 captures.
    Read the plots first, then follow how each quantity was calculated.
@@ -582,7 +586,9 @@
 
    .. _k05-comparison-zh:
 
-   接续 :ref:`逐步计算增长与转移 <k05-rates-zh>`，本补充页将完整对照面板放在一起。
+   本补充页保留 **输入和目标均限制在5 MHz的情景**，并使用随频率变化的动力学时间尺度。
+   :ref:`第08页 <k05-rates-zh>` 则统一采用20 MHz输入重新拟合，以明确的恒定速度假设做扩展对照。
+   两套系数和速率数组不能直接拼接；这里保留较窄频带的完整面板及详细色散计算。
 
    .. rubric:: 把实验数据画成文献图 2、图 3 的形式
 

@@ -129,4 +129,9 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 
 ## 从系数到条件变化率
 
-[第08页](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst)沿实测例子计算去相位系数、完整留出功率收支、有符号波对贡献，再用明确的群速度情景换算。四张新图，联合LS仍为统计模型。复现用`analyze_rate_walkthrough.py`，见EXPERIMENT.md。论文解读图由`plot_reading_schematics.py`独立生成，不使用原图或数字化数据。
+[第08页](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst)
+在每项文献图2／图3对照之前解释所需计算。四轮整组留出统一使用0.5–20 MHz目标和20 MHz输入基底。
+文献面板为注明来源的近似重绘，不是作者原始数据，不嵌入原图；局部量程折叠、完整功率收支和Kim／预测检查
+区分可计算的电压贡献与条件性速率。复现使用`analyze_extended_comparison.py`和`plot_extended_comparison.py`，
+见EXPERIMENT.md及`reference_digitization/README.md`的来源／使用说明。
+第10页保留较窄的5 MHz动力学情景，第12页的独立教学示意不变。

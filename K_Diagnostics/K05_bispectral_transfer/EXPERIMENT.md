@@ -547,3 +547,56 @@ for a full first-order mean-square change. No new Kim validity is inferred.
 dimensionless teaching diagrams. Its analytic functions are reproduced in the
 paper-reading page; it takes no paper image or data as input. These diagrams
 must not be described as reproductions of measured reference curves.
+
+
+## Page 08 expanded panel comparison (R43)
+
+```bash
+OPENBLAS_NUM_THREADS=2 python K_Diagnostics/K05_bispectral_transfer/analyze_extended_comparison.py \
+  --data /path/to/raw-captures --output /path/to/new-extended-results
+python K_Diagnostics/K05_bispectral_transfer/plot_extended_comparison.py \
+  --extended /path/to/new-extended-results \
+  --comparison /path/to/z5p5_a3p7_paper_comparison \
+  --output /path/to/new-comparison-plots
+```
+
+The new output directory must be empty and outside raw inputs. The optional
+`--metadata` argument defaults to `experiment_z5p5_a3p7.json`. The common basis
+uses all 399 native target bins from 0.537109375 to 19.970703125 MHz, N=2048,
+periodic Hann, segment demean, no overlap, positive-exponent Fourier/N,
+and unique signed nonzero pairs with both absolute frequencies <=19.970703125
+MHz. Each complete capture is held out in turn. Scaling, phase and fitting
+use training rows only; signed moments and errors use held-out rows.
+
+QR of the scaled augmented [D,y] matrix preserves the complete Gram matrix,
+including the y residual. The existing SVD least-squares and Kim solvers operate
+on the reduced rows; common moment normalization is restored. It is not a
+normal-equation inversion. `test_extended_comparison.py` checks equivalence,
+independent noise, rank degeneration, exact budgets and holdout isolation.
+The 307 capture-2 high-frequency LS fits reproduce the earlier saved outputs.
+
+`extended_arrays.npz` contains coefficient/pair grids, test moments, training
+scales, phases, powers, normalized errors, rank/condition and Kim flags.
+`extended_summary.json` records raw/source hashes, config, versions, all four
+folds' band reductions and exact-identity checks. Checkpoints are intermediate
+products, not completed results. The 5 MHz parent outputs and raw files are
+unchanged. All 1596 joint fits are full rank, max scaled condition68.55;
+199/399 targets pass Kim's necessary bound in every fold. High-frequency
+quadratic error reduction is7.84–7.96%, not a physical transfer fraction.
+
+The plotting script produces ten SVG/PNG figures and a hash manifest. Five
+pair source-derived reference redraws with independent experimental results;
+four offer local scales; one displays reliability. Source curves are approximate
+published-image readings, and the Q heat map is image-derived, not raw author
+data or an independent schematic. No original figure image is included.
+See `reference_digitization/README.md` for attribution and the unresolved
+public-reuse/license issue; this material is not represented as licensed under
+the repository software license. Page12 independent schematics remain separate.
+
+Broad-band rates assume +2150 m/s from C1 to C3 across3.7 mm throughout;
+the saved kinetic branch only covers0.179–5.592 MHz and is never extrapolated.
+The local t_f panels require no group velocity. All Kim outputs are retained,
+with failed bounds explicitly flagged; no physical EDI/cascade conclusion is
+asserted. Target/input limits above20 MHz remain excluded even for difference
+pairs. Page10 retains the earlier5 MHz basis with branch-dependent velocity,
+so its coefficients and rates must not be spliced with page08 arrays.

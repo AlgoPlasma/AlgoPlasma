@@ -25,14 +25,14 @@ Its thirteen peer articles follow Brown & Jorns (2023), in this reading order:
 7. [From measured statistics to linear and quadratic coefficients](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst):
    build measured moment matrices, jointly fit L/Q, check Kim and held-out predictions.
 
-8. [From fitted coefficients to growth and transfer](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst):
-   compute the held-out power balance and signed contributions, then convert with an explicit velocity scenario.
+8. [Comparing growth and transfer with the reference](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst):
+   refit a common 20 MHz input basis, explain the calculation, then compare five source-derived redraws with conditional probe results.
 
 9. [Supplement: what the probe measures](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst):
    reconstruct swept I–V curves and examine explicitly estimated response scenarios.
 
-10. [Experimental counterparts of Figures 2 and 3](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst):
-   see spectra, the coupling map and conditional rates before following their calculation.
+10. [Supplement: the narrower-band kinetic comparison](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst):
+   retain the 5 MHz input scenario and detailed kinetic model; its arrays differ from page 08.
 
 11. [Supplement: interpreting the plots](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst):
     explain stationary Kim moments, reference phase and the complete held-out power budget.

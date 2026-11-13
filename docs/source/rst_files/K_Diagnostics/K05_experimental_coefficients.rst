@@ -380,8 +380,9 @@
    To turn them into physical growth and signed transfer, the measurement
    response, spatial phase interpretation and a justified group velocity still
    matter. Continue with :ref:`from coefficients to growth and transfer <k05-rates-en>`:
-   calculate the measured power balance first, then introduce the required
-   propagation assumptions beside the rate plots.
+   follow the required calculations and compare the five reference panels
+   with the measured-voltage counterparts. That page refits a common input
+   basis through 20 MHz and states the time-scale assumptions.
    For the full four-fold validation, bandwidth/segment sensitivity and the
    5–20 MHz example, see the :ref:`validation supplement <k05-validation-en>`.
 
@@ -771,7 +772,8 @@
    :math:`L,Q`。要进一步转成物理增长率和有符号转移，还需要测量响应、
    空间相位的解释和有依据的群速度。
    接着读 :ref:`从系数走到增长与转移 <k05-rates-zh>`：
-   先算完整实测功率收支，再在变化率图旁引入所需的传播假设。
+   先讲所需计算，再将五个文献面板与电压诊断结果逐项对照；
+   该页统一扩展输入到20 MHz重新拟合，并明确时间尺度的假设。
    完整四轮验证、分段和频带敏感性，以及 5–20 MHz 示例保留在
    :ref:`验证补充页 <k05-validation-zh>`。
 
