@@ -127,7 +127,7 @@ Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for 
 }
 ```
 
-请同时注明所用的发布版本或 commit。使用 v1.0.1 时，可引用对应的 [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612)。完整引用说明与相关应用论文见[引用页面](https://algoplasma.readthedocs.io/en/latest/community/citation.html)。
+AlgoPlasma v1.0.1 已存档于 Zenodo：[https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612)。完整引用说明与相关应用论文见[引用页面](https://algoplasma.readthedocs.io/en/latest/community/citation.html)。
 
 ## 贡献建议
 

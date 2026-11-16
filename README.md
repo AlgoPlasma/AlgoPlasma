@@ -127,7 +127,7 @@ Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for 
 }
 ```
 
-Please also report the release or commit used. AlgoPlasma v1.0.1 is archived on Zenodo: [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612). See the [Citation page](https://algoplasma.readthedocs.io/en/latest/community/citation.html) for details and related application papers.
+AlgoPlasma v1.0.1 is archived on Zenodo: [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612). See the [Citation page](https://algoplasma.readthedocs.io/en/latest/community/citation.html) for details and related application papers.
 
 ## Contributing
 
