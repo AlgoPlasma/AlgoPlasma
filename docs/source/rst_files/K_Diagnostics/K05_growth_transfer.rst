@@ -113,8 +113,8 @@
    **Ion energy fixes a speed, but not a unique local electric field.** Assume the
    ions have gained half of the energy available from the 200 V discharge at this
    location. Neglect injection energy and collisions in this estimate. Introduce
-   an effective acceleration length :math:`L_E=1` cm, with 0.5 and 2 cm as sensitivity
-   cases. This is an estimated length, not the probe separation or a measured field profile.
+   an effective acceleration length :math:`L_E=1` cm.
+   This is an estimated length, not the probe separation or a measured field profile.
 
    .. k05:equation:: rates-energy-field-drift
       :lang: en
@@ -133,7 +133,6 @@
    is the magnitude of the electron :math:`E\times B` drift. The full vector relation
    is :math:`\mathbf v_E=\mathbf E\times\mathbf B/B^2`; with a tilted magnetic field,
    substituting :math:`E_x/B` would give the wrong azimuthal component.
-   The three lengths give drift speeds of approximately 985, 493 and 246 km/s.
    Parallel electron bulk flow, pressure-gradient drifts and collisions remain outside this local model.
 
    The wavelength **along the magnetic field** is set to 1 cm. Thus
@@ -141,8 +140,8 @@
    :math:`k_\parallel\lambda_{De}=0.09536`; it is not the distance between the probes.
    One geometric choice is still missing: the perpendicular wavevector need not
    point entirely along the azimuthal direction. We use a **15° perpendicular-plane
-   tilt as an unmeasured scenario**, and compare 0° and 30°. This is not a fitted
-   angle and is not the axial angle used in [1].
+   tilt as an unmeasured scenario**. This is not a fitted angle and is not the
+   axial angle used in [1].
 
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion.svg
       :width: 100%
@@ -153,150 +152,18 @@
 
    Over the calculated range :math:`k_y=10`–100000 m⁻¹, the selected branch covers
    **1.349–26.607 MHz**, including 5–20 MHz. Only its part within the common frame
-   appears above. With zero perpendicular-plane tilt, the otherwise same scenario
-   reaches only about **3.805 MHz**. High-frequency coverage therefore depends on
-   wavevector geometry as well as ion speed; it is not evidence that this branch
-   has been identified experimentally. The source ordinate is labeled
+   appears above. This coverage follows the chosen ion speed and wavevector
+   geometry; it is not evidence that this branch has been identified experimentally.
+   The source ordinate is labeled
    :math:`\omega_k` in Hz, whereas our ordinate is explicitly
    :math:`f=\omega_r/(2\pi)`. Until that source convention is resolved, its digitized
    slope must not be used to infer a quantitative speed ratio.
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>See the complete branches, and vary acceleration length or wavevector tilt</summary>
-
-   .. figure:: /_static/K_Diagnostics/k05-compare-dispersion-local.svg
-      :width: 100%
-      :alt: Both ion-frame branches and the distinction between azimuthal group velocity and oblique-path slope.
-
-      Left: the selected branch and the opposite ion-frame acoustic branch.
-      Right: the azimuthal group velocity and the derivative along the plotted
-      oblique path; the logarithmic speed axis exposes their large difference.
-
-   The second branch demonstrates that a measured frequency does not uniquely
-   select a root. The plots below condition their conversion on the positive
-   ion-frame branch, :math:`\operatorname{Re}(\omega-k_xu_i)>0`; they do not splice
-   the other branch into missing low-frequency intervals. These two continued
-   roots are not an exhaustive search of all kinetic modes.
-
-   .. figure:: /_static/K_Diagnostics/k05-compare-sensitivity.svg
-      :width: 100%
-      :alt: Dispersion and theoretical growth for three acceleration lengths and three perpendicular-plane wavevector tilts.
-
-      Left column: vary only :math:`L_E=0.5,1,2` cm. Right column: vary only
-      the tilt :math:`\theta=0,15,30` degrees. Top: frequency versus wave number.
-      Bottom: theoretical growth versus frequency. The reference case is shared.
-
-   Changing the acceleration length changes the drift and growth markedly, while
-   these frequency curves nearly overlap. Changing the tilt alters the ion
-   Doppler shift and frequency coverage much more: the three upper endpoints
-   are about 3.81, 26.61 and 52.94 MHz at the same maximum wave number. These are
-   sensitivity scenarios, not uncertainty intervals or fitted alternatives.
-
-   .. raw:: html
-
-      </details>
-
    .. _k05-rates-group-velocity-en:
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>Which wavevector enters the dispersion, and which derivative gives the probe-direction group velocity?</summary>
-
-   Let :math:`x,y,r` denote axial, azimuthal and radial directions; choose positive
-   :math:`y` along the assumed drift. Define :math:`\hat{\mathbf b}` along the model
-   magnetic field and :math:`\hat{\mathbf s}` perpendicular to it in the axial-radial
-   plane. The model uses positive component signs; their mapping to the probe
-   ordering is still an assumption. A consistent three-dimensional wavevector is
-
-   .. k05:equation:: rates-oblique-geometry
-      :lang: en
-
-      \begin{aligned}
-      b_x&=B_x/B,\quad b_r=B_r/B,\quad
-      \hat{\mathbf b}=b_x\hat{\mathbf x}+b_r\hat{\mathbf r},\quad
-      \hat{\mathbf s}=b_r\hat{\mathbf x}-b_x\hat{\mathbf r},\\
-      \mathbf k&=k_y\hat{\mathbf y}+k_s\hat{\mathbf s}+k_\parallel\hat{\mathbf b},
-      \qquad k_s=\alpha k_y,\quad \alpha=\tan\theta,\\
-      k_x&=b_xk_\parallel+b_rk_s,\quad
-      k_r=b_rk_\parallel-b_xk_s,\quad
-      k_\perp^2=k_y^2+k_s^2,\quad k^2=k_\perp^2+k_\parallel^2.
-      \end{aligned}
-
-   Hats denote unit vectors; :math:`b_x,b_r` and :math:`\alpha` are dimensionless.
-   All :math:`k` components are in m⁻¹. In particular, the axial component
-   :math:`k_x` is not the field-parallel component :math:`k_\parallel`.
-   With magnetized Maxwellian electrons and cold unmagnetized ions, solve
-
-   .. k05:equation:: rates-model-dispersion
-      :lang: en
-
-      \mathcal E(\omega,k_y,k_s,k_\parallel)
-      =1+k^2\lambda_{De}^2+g(\omega,\mathbf k)
-       -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xu_i)^2}=0.
-
-   :math:`\mathcal E` and the electron response :math:`g` are dimensionless;
-   :math:`\omega_{pi}` is the ion plasma angular frequency in rad/s and
-   :math:`\lambda_{De}` the Debye length in m. Evaluate the Gordeev series in
-   :k05:eq:`comparison-gordeev` with :math:`k_\perp^2=k_y^2+k_s^2`, the prescribed
-   :math:`k_\parallel`, and electron frequency :math:`\omega-k_yV_d`.
-   The ion denominator contains its distinct shift :math:`k_xu_i`.
-   This is included inside the root solve, not added to an old solution afterward.
-
-   **Reference [1], Eq. (7), in its original notation:**
-
-   .. k05:equation:: rates-paper-dispersion
-      :lang: en
-
-      \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
-      -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}=0.
-
-   Its :math:`v_p` corresponds to our :math:`u_i`, and its :math:`\epsilon^{(1)}`
-   to our scaled dispersion function :math:`\mathcal E`. The paper assumes radial
-   :math:`\mathbf B`, so its :math:`k_z` is parallel to the field. Here the field is
-   tilted, and the projection above replaces that identification. The arguments
-   :math:`X,Y` of its Gordeev function are geometric parameters, not probe Fourier coefficients.
-
-   The root :math:`\omega=\omega_r+i\gamma_{\rm th}` gives angular frequency and
-   theoretical growth for :math:`e^{-i\omega t}`. The azimuthal group velocity is
-
-   .. k05:equation:: rates-group-slope
-      :lang: en
-
-      v_{g,y}=\left.\frac{\partial\omega_r}{\partial k_y}\right|_{k_s,k_\parallel}
-      =2\pi\left.\frac{\partial f}{\partial k_y}\right|_{k_s,k_\parallel},
-      \qquad f=\frac{\omega_r}{2\pi}.
-
-   The other components are fixed during this derivative. By contrast, the plotted
-   path changes :math:`k_s=\alpha k_y`, so its slope contains another contribution:
-
-   .. k05:equation:: rates-group-implicit
-      :lang: en
-
-      \begin{aligned}
-      v_{g,y}&=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_y}}{\mathcal E_\omega}\right],
-      \qquad v_{g,s}=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_s}}{\mathcal E_\omega}\right],\\
-      \left.\frac{d\omega_r}{dk_y}\right|_{k_s=\alpha k_y}
-      &=v_{g,y}+\alpha v_{g,s}.
-      \end{aligned}
-
-   Subscripts on :math:`\mathcal E` mean partial derivatives at the same root;
-   :math:`\mathcal E_\omega\ne0` is required. Central differences evaluate them,
-   and independent neighboring-root solves check the result. A sloping oblique-path
-   curve can mainly reflect axial advection, even when :math:`v_{g,y}` is small.
-   **The rate conversion uses the azimuthal partial derivative, not that path slope.**
-
-   On the selected monotone branch, interpolate :math:`(f,v_{g,y})` onto the measured
-   frequency grid without extrapolation. At 2.002, 10.010 and 19.971 MHz, the model
-   gives approximately 2118, 21.5 and 2.14 m/s. The phase speed
-   :math:`\omega_r/k_y` is a different quantity. The small high-frequency azimuthal
-   speeds follow this branch and geometry; they are not measured slow propagation.
-
-   .. raw:: html
-
-      </details>
-
-   The conversion uses the calculated :math:`v_{g,y}(f)`. The positive model direction is provisionally assigned from C1 to C3.
+   The conversion uses the calculated azimuthal group velocity (wave-envelope
+   propagation speed) :math:`v_{g,y}(f)`, in m/s, with the other wavevector components
+   held fixed. The positive model direction is provisionally assigned from C1 to C3.
    The selected branch supports **382 of 399** fitted targets; rates below about
    1.35 MHz remain blank, while their velocity-independent coefficients and
    across-gap contributions remain available. Channel/probe response and the
@@ -871,7 +738,7 @@
 
    **离子能量可以确定速度，但不能单独确定局部电场。** 这里假设离子在测量位置已获得200 V放电
    所能提供能量的一半，忽略初始动能和这一步估计中的碰撞损失。
-   再取有效加速长度 :math:`L_E=1` cm，并用0.5、2 cm作敏感性对照。
+   再取有效加速长度 :math:`L_E=1` cm。
    这是明确的长度估计，不是探针间距，也不是已测出的电场分布。
 
    .. k05:equation:: rates-energy-field-drift
@@ -889,13 +756,12 @@
    :math:`E_x` 是用来近似局部场的平均加速电场；:math:`V_d` 是电子 :math:`E\times B` 漂移速度大小。
    完整矢量关系是 :math:`\mathbf v_E=\mathbf E\times\mathbf B/B^2`。
    磁场有倾斜，因此不能直接用 :math:`E_x/B` 代替周向分量。
-   0.5、1、2 cm三种长度分别给出约985、493、246 km/s的漂移。
    本局部模型仍未包含电子沿磁场的平均流动、压力梯度漂移和碰撞。
 
    **沿磁场的波长** 取1 cm，因此 :math:`k_\parallel=2\pi/0.01=628.3` m⁻¹，
    :math:`k_\parallel\lambda_{De}=0.09536`；这不是两支探针之间的距离。
    波矢还缺少一个几何信息：垂直磁场的分量是否完全沿周向。
-   这里把 **垂直磁场平面内偏离周向15°** 作为未测量的几何情景，并比较0°、30°。
+   这里选取 **垂直磁场平面内偏离周向15°** 作为未测量的几何情景。
    这个角度没有从数据拟合，也不等同于文献[1]的轴向传播角度。
 
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion.svg
@@ -906,134 +772,14 @@
 
    在计算的 :math:`k_y=10`–100000 m⁻¹范围内，所选分支覆盖 **1.349–26.607 MHz**，
    已包含5–20 MHz；上图只显示落在共同图框内的部分。
-   如果去掉垂直平面内的倾斜、其余条件不变，分支最高仅约 **3.805 MHz**。
-   因此高频覆盖既依赖离子速度，也依赖波矢几何；它不表示已经在实验中识别出这一分支。
+   这一覆盖范围来自所选的离子速度和波矢几何，不表示已经在实验中识别出这一分支。
    原文纵轴标为 :math:`\omega_k`、单位Hz，这里明确使用 :math:`f=\omega_r/(2\pi)`。
    原图约定未核清之前，不能从描点斜率定量判断两种实验的波速比。
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>看完整分支，并比较加速长度与传播倾斜角的影响</summary>
-
-   .. figure:: /_static/K_Diagnostics/k05-compare-dispersion-local.svg
-      :width: 100%
-      :alt: 两条离子参考系声学分支，以及周向群速度与斜向路径导数的区别。
-
-      左：所选分支和离子参考系中相反的声学分支。右：周向群速度与沿所绘斜向路径的导数；
-      速度采用对数轴，以看清两者在高频的差距。
-
-   另一分支说明：一个实测频率并不能唯一选出一个根。
-   后面的时间换算固定采用离子参考系正频率分支
-   :math:`\operatorname{Re}(\omega-k_xu_i)>0`，不把另一条分支拼接到低频空缺处。
-   这里只连续跟踪了这两条根，并未穷尽所有动力学模态。
-
-   .. figure:: /_static/K_Diagnostics/k05-compare-sensitivity.svg
-      :width: 100%
-      :alt: 三种加速长度及三种垂直平面传播角下的色散关系与理论增长率。
-
-      左列只改变 :math:`L_E=0.5,1,2` cm；右列只改变倾斜角 :math:`\theta=0,15,30` 度。
-      上排为频率随波数变化，下排为理论增长率随频率变化，两个对照共用同一主情景。
-
-   加速长度改变后，频率曲线几乎重合，但电子漂移及增长率变化明显。
-   倾斜角则显著改变离子多普勒频移和频率覆盖：同一最大波数处，三种角度的上限约为
-   3.81、26.61、52.94 MHz。这些是敏感性情景，不是误差区间，也不是挑选出的拟合结果。
-
-   .. raw:: html
-
-      </details>
-
    .. _k05-rates-group-velocity-zh:
 
-   .. raw:: html
-
-      <details class="k05-note"><summary>哪个波矢进入色散关系？哪个导数才是探针方向的群速度？</summary>
-
-   用 :math:`x,y,r` 分别表示轴向、周向、径向，周向正方向暂取电子漂移方向。
-   :math:`\hat{\mathbf b}` 沿模型磁场，:math:`\hat{\mathbf s}` 位于轴向—径向平面内且垂直磁场。
-   模型采用正的轴向和径向分量；这个坐标与探针前后顺序的对应仍是情景假设。
-   三维波矢统一写为
-
-   .. k05:equation:: rates-oblique-geometry
-      :lang: zh
-
-      \begin{aligned}
-      b_x&=B_x/B,\quad b_r=B_r/B,\quad
-      \hat{\mathbf b}=b_x\hat{\mathbf x}+b_r\hat{\mathbf r},\quad
-      \hat{\mathbf s}=b_r\hat{\mathbf x}-b_x\hat{\mathbf r},\\
-      \mathbf k&=k_y\hat{\mathbf y}+k_s\hat{\mathbf s}+k_\parallel\hat{\mathbf b},
-      \qquad k_s=\alpha k_y,\quad \alpha=\tan\theta,\\
-      k_x&=b_xk_\parallel+b_rk_s,\quad
-      k_r=b_rk_\parallel-b_xk_s,\quad
-      k_\perp^2=k_y^2+k_s^2,\quad k^2=k_\perp^2+k_\parallel^2.
-      \end{aligned}
-
-   帽号表示单位矢量；:math:`b_x,b_r,\alpha` 都无量纲；各个 :math:`k` 分量的单位为m⁻¹。
-   尤其注意：轴向分量 :math:`k_x` 不等于沿磁场分量 :math:`k_\parallel`。
-   电子采用磁化Maxwell分布，离子采用非磁化冷离子，求解
-
-   .. k05:equation:: rates-model-dispersion
-      :lang: zh
-
-      \mathcal E(\omega,k_y,k_s,k_\parallel)
-      =1+k^2\lambda_{De}^2+g(\omega,\mathbf k)
-       -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xu_i)^2}=0.
-
-   :math:`\mathcal E` 和电子响应 :math:`g` 无量纲；:math:`\omega_{pi}` 为离子等离子体角频率，单位rad/s；
-   :math:`\lambda_{De}` 为德拜长度，单位m。
-   计算 :k05:eq:`comparison-gordeev` 的Gordeev级数时，使用
-   :math:`k_\perp^2=k_y^2+k_s^2`、给定的 :math:`k_\parallel`，以及电子频率 :math:`\omega-k_yV_d`。
-   离子分母则使用另一项频移 :math:`k_xu_i`。这一项在求根时就已包含，不能在旧根上事后加一个频移代替。
-
-   **文献[1]式(7)，保留原符号：**
-
-   .. k05:equation:: rates-paper-dispersion
-      :lang: zh
-
-      \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
-      -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}=0.
-
-   原文 :math:`v_p` 对应这里的 :math:`u_i`，:math:`\epsilon^{(1)}` 对应缩放后的色散函数 :math:`\mathcal E`。
-   原文磁场沿径向，其 :math:`k_z` 才是沿磁场分量；本实验磁场倾斜，需要上面的投影关系。
-   原文Gordeev函数中的 :math:`X,Y` 是几何参数，不是探针Fourier系数。
-
-   复根 :math:`\omega=\omega_r+i\gamma_{\rm th}` 给出角频率和理论增长率，时间约定为
-   :math:`e^{-i\omega t}`。周向群速度（group velocity）是
-
-   .. k05:equation:: rates-group-slope
-      :lang: zh
-
-      v_{g,y}=\left.\frac{\partial\omega_r}{\partial k_y}\right|_{k_s,k_\parallel}
-      =2\pi\left.\frac{\partial f}{\partial k_y}\right|_{k_s,k_\parallel},
-      \qquad f=\frac{\omega_r}{2\pi}.
-
-   求这个偏导时，其余波矢分量保持不变。绘图路径却同时改变了 :math:`k_s=\alpha k_y`，
-   因而路径斜率还多出另一个方向的贡献：
-
-   .. k05:equation:: rates-group-implicit
-      :lang: zh
-
-      \begin{aligned}
-      v_{g,y}&=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_y}}{\mathcal E_\omega}\right],
-      \qquad v_{g,s}=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_s}}{\mathcal E_\omega}\right],\\
-      \left.\frac{d\omega_r}{dk_y}\right|_{k_s=\alpha k_y}
-      &=v_{g,y}+\alpha v_{g,s}.
-      \end{aligned}
-
-   :math:`\mathcal E` 的下标表示在同一复根处求偏导，并要求 :math:`\mathcal E_\omega\ne0`。
-   代码用中心差分计算，再独立求解邻近根验证。
-   斜向路径画出的曲线仍在上升，可能主要反映轴向对流，周向群速度却已经很小。
-   **速率换算用周向偏导，不用斜向路径的总斜率。**
-
-   在所选单调分支上，将 :math:`(f,v_{g,y})` 插值到实测频点，不外推。
-   2.002、10.010、19.971 MHz处分别得到约2118、21.5、2.14 m/s。
-   相速度 :math:`\omega_r/k_y` 又是另一个量。
-   高频周向速度很小是这一分支及几何的计算结果，并不表示已实测到这样慢的传播。
-
-   .. raw:: html
-
-      </details>
-
-   后面使用计算得到的 :math:`v_{g,y}(f)`。
+   后面使用计算得到的周向群速度（group velocity） :math:`v_{g,y}(f)`，单位m/s，
+   表示波包包络沿周向的传播速度；计算时保持其他波矢分量不变。
    模型正方向暂对应C1到C3；所选分支支持399个拟合目标中的 **382个**。
    低于约1.35 MHz的速率留白，但不依赖速度的系数与跨距贡献仍保留。
    通道／探针响应、传播方向以及分支识别，仍需单独满足物理解释条件。

@@ -291,3 +291,13 @@ equations. The first 112 numbers and all existing semantic links remain unchange
 The separate local figure-review HTML is outside this repository.
 
 Revision44 adds energy-to-field/drift, oblique geometry, original-paper dispersion and current-unit conversion on page08. Existing IDs remain stable; group-velocity equations now distinguish partial azimuthal derivative from the oblique-path total derivative. Rebuild the reading-order registry; pages01–07 retain numbers1–107.
+
+
+Revision45 (2026-11-16) removes the two optional page08 panels on parameter
+sensitivity and wavevector/group-velocity derivation. The selected 1 cm
+acceleration length and 15 degree perpendicular-plane tilt remain visible.
+The five removed IDs are rates-oblique-geometry, rates-model-dispersion,
+rates-paper-dispersion, rates-group-slope and rates-group-implicit; do not reuse
+them for different equations. The section anchors remain on the short rate
+conversion bridge. Rebuild the consecutive registry (156 active equations);
+pages01-07 still use numbers1-107. Numerical models and saved results are unchanged.
