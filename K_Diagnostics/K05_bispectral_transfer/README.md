@@ -46,3 +46,6 @@ Its thirteen peer articles follow Brown & Jorns (2023), in this reading order:
 Follow the build instructions in either language README to view the HTML.
 
 [Equation numbering and cross-page references](EQUATIONS.md) use the shared K05 sequence.
+
+
+R44: page08 now uses `physical_scenario_config.json`, `analyze_physical_scenario.py` and `plot_physical_comparison.py` for the moving cold-ion scenario, field/geometry sensitivities, nominal current units and all-fold Kim masking. Earlier scripts/outputs remain reproducible. See EXPERIMENT.md.

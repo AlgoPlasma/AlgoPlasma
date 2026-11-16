@@ -135,3 +135,5 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 区分可计算的电压贡献与条件性速率。复现使用`analyze_extended_comparison.py`和`plot_extended_comparison.py`，
 见EXPERIMENT.md及`reference_digitization/README.md`的来源／使用说明。
 第10页保留较窄的5 MHz动力学情景，第12页的独立教学示意不变。
+
+R44：第08页使用 `physical_scenario_config.json`、`analyze_physical_scenario.py` 和 `plot_physical_comparison.py`，计算含离子流的冷离子情景、长度／几何敏感性、标称电流单位与四轮Kim筛选。保留旧脚本和输出以便复现，命令见 EXPERIMENT.md。

@@ -289,3 +289,5 @@ dispersion root to the group velocity used in Figure 4. New IDs
 occupy 113-115; later display numbers shift by three. There are 157 active
 equations. The first 112 numbers and all existing semantic links remain unchanged.
 The separate local figure-review HTML is outside this repository.
+
+Revision44 adds energy-to-field/drift, oblique geometry, original-paper dispersion and current-unit conversion on page08. Existing IDs remain stable; group-velocity equations now distinguish partial azimuthal derivative from the oblique-path total derivative. Rebuild the reading-order registry; pages01–07 retain numbers1–107.

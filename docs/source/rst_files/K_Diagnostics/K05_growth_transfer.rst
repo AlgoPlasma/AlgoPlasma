@@ -53,7 +53,10 @@
    positive-frequency coefficients. :math:`L_f` is dimensionless; :math:`Q_{fj}` is
    in V⁻¹. “Joint LS” below means these coefficients are fitted together by complex
    least squares, not a linear-only fit. “Kim” means the stationary correction
-   explained on page 07; its necessary common-power bound must still be checked.
+   explained on page 07. A Kim target is shown only when every fold is identifiable
+   and passes :math:`0\le P_*\le\min(P_X^{\rm train},P_Y^{\rm train})`.
+   If any fold fails, all four Kim values at that target are masked in result plots;
+   passing folds are never selectively averaged. Blank intervals are not zeros.
 
    Before interpreting growth, remove a reference rotation:
    :math:`\delta_f=\arg\langle Y_fX_f^*\rangle_{\rm train}` in radians.
@@ -95,50 +98,100 @@
 
       </details>
 
-   .. rubric:: 2. Figure 2(a): a dispersion model supplies a time scale
+   .. rubric:: 2. Figure 2(a): build the physical scenario before converting rates
 
-   A fitted multiplier describes a change **between positions**. A growth rate
-   describes a change **per second**. Connecting them requires a travel time.
-   The paper uses a theoretical dispersion relation to obtain a group velocity;
-   its Figure 2(a) is not simply an unwrapped two-probe phase measurement.
+   A fitted multiplier describes a change between positions. A rate describes a
+   change per second. We need a propagation model to connect them. Start with the
+   reported slow-scan electron temperature :math:`T_e=9.1689` eV, the prescribed
+   density :math:`n_0=2.2\times10^{16}` m⁻³, and cold, singly charged xenon ions.
+   The measured magnetic component magnitudes are :math:`B_r=39.48` G radially and
+   :math:`B_x=80.34` G axially, giving :math:`B=89.52` G. The resulting Debye length
+   is 0.152 mm, ion sound speed 2.60 km/s, and ion plasma frequency 2.72 MHz.
+   The temperature is used as a local Maxwellian proxy; the slow scan is not a
+   simultaneous measurement of the fluctuating electron distribution.
+
+   **Ion energy fixes a speed, but not a unique local electric field.** Assume the
+   ions have gained half of the energy available from the 200 V discharge at this
+   location. Neglect injection energy and collisions in this estimate. Introduce
+   an effective acceleration length :math:`L_E=1` cm, with 0.5 and 2 cm as sensitivity
+   cases. This is an estimated length, not the probe separation or a measured field profile.
+
+   .. k05:equation:: rates-energy-field-drift
+      :lang: en
+
+      \begin{aligned}
+      U_i&=\eta U_d=0.5\times200\ \mathrm{V}=100\ \mathrm{V},\\
+      u_i&=\sqrt{2eU_i/m_i}=12.12\ \mathrm{km/s},\\
+      E_x&\simeq U_i/L_E=10.0\ \mathrm{kV/m},\\
+      V_d&=\frac{|E_xB_r|}{B_x^2+B_r^2}=492.7\ \mathrm{km/s}.
+      \end{aligned}
+
+   Here :math:`U_d` is discharge voltage, :math:`\eta` the assumed gained-energy
+   fraction, :math:`U_i` its equivalent accelerating potential drop, :math:`e` the
+   elementary charge and :math:`m_i` the Xe⁺ mass. :math:`u_i` is axial ion speed;
+   :math:`E_x` is the average accelerating field used as a local proxy. :math:`V_d`
+   is the magnitude of the electron :math:`E\times B` drift. The full vector relation
+   is :math:`\mathbf v_E=\mathbf E\times\mathbf B/B^2`; with a tilted magnetic field,
+   substituting :math:`E_x/B` would give the wrong azimuthal component.
+   The three lengths give drift speeds of approximately 985, 493 and 246 km/s.
+   Parallel electron bulk flow, pressure-gradient drifts and collisions remain outside this local model.
+
+   The wavelength **along the magnetic field** is set to 1 cm. Thus
+   :math:`k_\parallel=2\pi/0.01=628.3` m⁻¹ and
+   :math:`k_\parallel\lambda_{De}=0.09536`; it is not the distance between the probes.
+   One geometric choice is still missing: the perpendicular wavevector need not
+   point entirely along the azimuthal direction. We use a **15° perpendicular-plane
+   tilt as an unmeasured scenario**, and compare 0° and 30°. This is not a fitted
+   angle and is not the axial angle used in [1].
 
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion.svg
       :width: 100%
-      :alt: Source-derived dispersion curve and our assumed kinetic branch, with the same displayed axis limits.
+      :alt: Reference dispersion redraw and the moving cold-ion scenario on the reference axis ranges.
 
-      Figure 1. Counterparts of [1], Figure 2(a). Left: approximate reference redraw.
-      Right: a calculated branch under the assumptions below, not measured dispersion.
+      Figure 1. Counterparts of [1], Figure 2(a). Left: approximate redraw.
+      Right: the selected cold-ion branch, including axial ion advection.
 
-   The left panel rises through a much larger displayed frequency range. The right
-   curve lies near the bottom of the same frame. **This alone does not establish
-   a measured speed ratio.** The paper labels its ordinate :math:`\omega_k` in Hz;
-   we explicitly plot :math:`f=\omega_r/(2\pi)` in Hz. That source convention must
-   be resolved before using digitized slopes quantitatively. Our branch also uses
-   different, partly assumed plasma parameters.
-
-   Our kinetic scenario uses the reported slow-scan temperature 9.1689 eV and
-   magnetic components 39.48 and 80.34 G. It assumes Xe⁺, density
-   :math:`n_0=10^{17}` m⁻³, electron drift +100 km/s,
-   :math:`k_\parallel\lambda_{De}=0.03`, and zero ion Doppler shift.
-   The density, drift, field-aligned geometry and applicability of the slow scan to
-   these fast records are assumptions. The retained branch covers only about
-   **0.179–5.592 MHz**. It cannot supply a group velocity throughout 5–20 MHz.
+   Over the calculated range :math:`k_y=10`–100000 m⁻¹, the selected branch covers
+   **1.349–26.607 MHz**, including 5–20 MHz. Only its part within the common frame
+   appears above. With zero perpendicular-plane tilt, the otherwise same scenario
+   reaches only about **3.805 MHz**. High-frequency coverage therefore depends on
+   wavevector geometry as well as ion speed; it is not evidence that this branch
+   has been identified experimentally. The source ordinate is labeled
+   :math:`\omega_k` in Hz, whereas our ordinate is explicitly
+   :math:`f=\omega_r/(2\pi)`. Until that source convention is resolved, its digitized
+   slope must not be used to infer a quantitative speed ratio.
 
    .. raw:: html
 
-      <details class="k05-note"><summary>See our branch on a suitable scale, and compare its slope with the assumed speed</summary>
+      <details class="k05-note"><summary>See the complete branches, and vary acceleration length or wavevector tilt</summary>
 
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion-local.svg
       :width: 100%
-      :alt: Local-scale kinetic dispersion and its group-velocity derivative; a separate horizontal line marks the assumed reference speed.
+      :alt: Both ion-frame branches and the distinction between azimuthal group velocity and oblique-path slope.
 
-      The same branch on a local scale. The derivative varies with frequency;
-      the dashed constant is a separate assumption, not an extrapolation.
+      Left: the selected branch and the opposite ion-frame acoustic branch.
+      Right: the azimuthal group velocity and the derivative along the plotted
+      oblique path; the logarithmic speed axis exposes their large difference.
 
-   At 2.001953125 MHz this model gives about 2148 m/s. This motivates the rounded
-   **reference value** 2150 m/s used below, but does not validate that value at high
-   frequency. Multiplying the assumed speed by two would multiply all converted
-   rates by two, without changing the fits or the across-gap contribution signs.
+   The second branch demonstrates that a measured frequency does not uniquely
+   select a root. The plots below condition their conversion on the positive
+   ion-frame branch, :math:`\operatorname{Re}(\omega-k_xu_i)>0`; they do not splice
+   the other branch into missing low-frequency intervals. These two continued
+   roots are not an exhaustive search of all kinetic modes.
+
+   .. figure:: /_static/K_Diagnostics/k05-compare-sensitivity.svg
+      :width: 100%
+      :alt: Dispersion and theoretical growth for three acceleration lengths and three perpendicular-plane wavevector tilts.
+
+      Left column: vary only :math:`L_E=0.5,1,2` cm. Right column: vary only
+      the tilt :math:`\theta=0,15,30` degrees. Top: frequency versus wave number.
+      Bottom: theoretical growth versus frequency. The reference case is shared.
+
+   Changing the acceleration length changes the drift and growth markedly, while
+   these frequency curves nearly overlap. Changing the tilt alters the ion
+   Doppler shift and frequency coverage much more: the three upper endpoints
+   are about 3.81, 26.61 and 52.94 MHz at the same maximum wave number. These are
+   sensitivity scenarios, not uncertainty intervals or fitted alternatives.
 
    .. raw:: html
 
@@ -148,100 +201,106 @@
 
    .. raw:: html
 
-      <details class="k05-note"><summary>How is the group velocity in the kinetic scenario calculated from the dispersion relation?</summary>
+      <details class="k05-note"><summary>Which wavevector enters the dispersion, and which derivative gives the probe-direction group velocity?</summary>
 
-   The kinetic scenario uses the slope of a calculated dispersion curve. Start with the
-   parameters stated above and solve for the frequency associated with each
-   azimuthal wave number :math:`k_y`. The model assumes magnetized Maxwellian
-   electrons and cold unmagnetized ions. With the ion Doppler shift set to zero,
-   its dispersion relation is
+   Let :math:`x,y,r` denote axial, azimuthal and radial directions; choose positive
+   :math:`y` along the assumed drift. Define :math:`\hat{\mathbf b}` along the model
+   magnetic field and :math:`\hat{\mathbf s}` perpendicular to it in the axial-radial
+   plane. The model uses positive component signs; their mapping to the probe
+   ordering is still an assumption. A consistent three-dimensional wavevector is
+
+   .. k05:equation:: rates-oblique-geometry
+      :lang: en
+
+      \begin{aligned}
+      b_x&=B_x/B,\quad b_r=B_r/B,\quad
+      \hat{\mathbf b}=b_x\hat{\mathbf x}+b_r\hat{\mathbf r},\quad
+      \hat{\mathbf s}=b_r\hat{\mathbf x}-b_x\hat{\mathbf r},\\
+      \mathbf k&=k_y\hat{\mathbf y}+k_s\hat{\mathbf s}+k_\parallel\hat{\mathbf b},
+      \qquad k_s=\alpha k_y,\quad \alpha=\tan\theta,\\
+      k_x&=b_xk_\parallel+b_rk_s,\quad
+      k_r=b_rk_\parallel-b_xk_s,\quad
+      k_\perp^2=k_y^2+k_s^2,\quad k^2=k_\perp^2+k_\parallel^2.
+      \end{aligned}
+
+   Hats denote unit vectors; :math:`b_x,b_r` and :math:`\alpha` are dimensionless.
+   All :math:`k` components are in m⁻¹. In particular, the axial component
+   :math:`k_x` is not the field-parallel component :math:`k_\parallel`.
+   With magnetized Maxwellian electrons and cold unmagnetized ions, solve
 
    .. k05:equation:: rates-model-dispersion
       :lang: en
 
-      \mathcal E(\omega,k_y)
-      =1+k^2\lambda_{De}^2+g(\omega,k_y)
-       -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{\omega^2}=0,
-      \qquad k^2=k_y^2+k_\parallel^2.
+      \mathcal E(\omega,k_y,k_s,k_\parallel)
+      =1+k^2\lambda_{De}^2+g(\omega,\mathbf k)
+       -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xu_i)^2}=0.
 
-   This repeats :k05:eq:`comparison-dispersion`; the
-   :ref:`comparison with reference [1], Eq. (7) <k05-source-7-en>` shows the
-   original equation and the geometric simplifications. Here :math:`\mathcal E`
-   is a dimensionless dispersion function, :math:`\lambda_{De}` is the electron
-   Debye length in m, and :math:`\omega_{pi}` is the ion plasma angular frequency
-   in rad/s. :math:`k_y` and :math:`k_\parallel` are wave numbers in m⁻¹, across
-   and along the magnetic field in this model. The dimensionless
-   :math:`g(\omega,k_y)` describes the electron response, evaluated by the
-   Gordeev series in :k05:eq:`comparison-gordeev`; it is different from the
-   power-balance quantity :math:`g_f` introduced below.
+   :math:`\mathcal E` and the electron response :math:`g` are dimensionless;
+   :math:`\omega_{pi}` is the ion plasma angular frequency in rad/s and
+   :math:`\lambda_{De}` the Debye length in m. Evaluate the Gordeev series in
+   :k05:eq:`comparison-gordeev` with :math:`k_\perp^2=k_y^2+k_s^2`, the prescribed
+   :math:`k_\parallel`, and electron frequency :math:`\omega-k_yV_d`.
+   The ion denominator contains its distinct shift :math:`k_xu_i`.
+   This is included inside the root solve, not added to an old solution afterward.
 
-   The root is complex: :math:`\omega=\omega_r+i\gamma_{\rm th}`.
-   Its real part :math:`\omega_r` is the oscillation angular frequency; the
-   imaginary part :math:`\gamma_{\rm th}` is the model growth rate for the
-   :math:`e^{-i\omega t}` convention. Following one continuous root as
-   :math:`k_y` varies gives a dispersion curve. With
-   :math:`k_\parallel` and all background parameters held fixed, its slope gives
-   the **group velocity**:
+   **Reference [1], Eq. (7), in its original notation:**
+
+   .. k05:equation:: rates-paper-dispersion
+      :lang: en
+
+      \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
+      -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}=0.
+
+   Its :math:`v_p` corresponds to our :math:`u_i`, and its :math:`\epsilon^{(1)}`
+   to our scaled dispersion function :math:`\mathcal E`. The paper assumes radial
+   :math:`\mathbf B`, so its :math:`k_z` is parallel to the field. Here the field is
+   tilted, and the projection above replaces that identification. The arguments
+   :math:`X,Y` of its Gordeev function are geometric parameters, not probe Fourier coefficients.
+
+   The root :math:`\omega=\omega_r+i\gamma_{\rm th}` gives angular frequency and
+   theoretical growth for :math:`e^{-i\omega t}`. The azimuthal group velocity is
 
    .. k05:equation:: rates-group-slope
       :lang: en
 
-      v_{g,y}=\frac{\partial\omega_r}{\partial k_y}
-             =2\pi\frac{\partial f}{\partial k_y},
+      v_{g,y}=\left.\frac{\partial\omega_r}{\partial k_y}\right|_{k_s,k_\parallel}
+      =2\pi\left.\frac{\partial f}{\partial k_y}\right|_{k_s,k_\parallel},
       \qquad f=\frac{\omega_r}{2\pi}.
 
-   Here :math:`f` is frequency in Hz and :math:`v_{g,y}` has units m/s.
-   The factor :math:`2\pi` matters when the dispersion plot uses Hz rather
-   than rad/s. The phase velocity :math:`v_{\rm ph,y}=\omega_r/k_y` describes
-   a constant-phase surface; it is generally different from this slope.
-
-   To obtain the slope without fitting a line to the plot, differentiate
-   :math:`\mathcal E(\omega(k_y),k_y)=0` along the selected root. The chain rule
-   gives the first line below; rearrange it and take the real part to obtain
-   the second:
+   The other components are fixed during this derivative. By contrast, the plotted
+   path changes :math:`k_s=\alpha k_y`, so its slope contains another contribution:
 
    .. k05:equation:: rates-group-implicit
       :lang: en
 
       \begin{aligned}
-      \frac{\partial\mathcal E}{\partial\omega}
-      \frac{d\omega}{dk_y}
-      +\frac{\partial\mathcal E}{\partial k_y}&=0,\\
-      v_{g,y}
-      &=\operatorname{Re}\!\left[
-        -\frac{\partial\mathcal E/\partial k_y}
-              {\partial\mathcal E/\partial\omega}\right].
+      v_{g,y}&=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_y}}{\mathcal E_\omega}\right],
+      \qquad v_{g,s}=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_s}}{\mathcal E_\omega}\right],\\
+      \left.\frac{d\omega_r}{dk_y}\right|_{k_s=\alpha k_y}
+      &=v_{g,y}+\alpha v_{g,s}.
       \end{aligned}
 
-   Evaluate both partial derivatives at the same complex root, with
-   :math:`\partial\mathcal E/\partial\omega\ne0`. In the numerator, vary
-   :math:`k_y` while holding :math:`\omega` fixed; in the denominator, vary
-   :math:`\omega` while holding :math:`k_y` fixed. The total derivative
-   :math:`d\omega/dk_y` instead follows the root, so both change together.
-   The code evaluates the partial derivatives with central differences. This is
-   the same calculation as :k05:eq:`comparison-branch`.
+   Subscripts on :math:`\mathcal E` mean partial derivatives at the same root;
+   :math:`\mathcal E_\omega\ne0` is required. Central differences evaluate them,
+   and independent neighboring-root solves check the result. A sloping oblique-path
+   curve can mainly reflect axial advection, even when :math:`v_{g,y}` is small.
+   **The rate conversion uses the azimuthal partial derivative, not that path slope.**
 
-   Each root now supplies a pair :math:`(f,v_{g,y})`. On the single monotone
-   branch used here, interpolate these pairs onto the measured Fourier
-   frequencies without extrapolating beyond the branch. This produces the
-   local branch plot above. At :math:`f=2.001953125` MHz the model gives
-   :math:`k_y\approx5095.6` m⁻¹ and :math:`v_{g,y}\approx2148` m/s.
-   Across 3.7 mm, the corresponding time is about 1.72 μs.
-
-   A straight dispersion curve :math:`\omega_r=v k_y`, with constant
-   :math:`v`, would give the same group velocity at every frequency. The
-   selected model curve changes slope, producing the frequency dependence along the branch. These speeds depend on the stated parameters and selected branch;
-   they are not an independent measurement of propagation speed. The four-fold ranges of converted rates do not include uncertainty in those assumptions.
+   On the selected monotone branch, interpolate :math:`(f,v_{g,y})` onto the measured
+   frequency grid without extrapolation. At 2.002, 10.010 and 19.971 MHz, the model
+   gives approximately 2118, 21.5 and 2.14 m/s. The phase speed
+   :math:`\omega_r/k_y` is a different quantity. The small high-frequency azimuthal
+   speeds follow this branch and geometry; they are not measured slow propagation.
 
    .. raw:: html
 
       </details>
 
-   For a common comparison across the whole fitted band, we use the explicitly
-   assumed constant :math:`v_*=2150` m/s, directed from C1 to C3. The corresponding
-   time is :math:`\tau_* =0.0037/2150\approx1.72` μs. This is a **conditional
-   conversion scenario**, not a high-frequency dispersion prediction. No measured
-   channel gain, delay or frequency-response correction has been applied.
+   The conversion uses the calculated :math:`v_{g,y}(f)`. The positive model direction is provisionally assigned from C1 to C3.
+   The selected branch supports **382 of 399** fitted targets; rates below about
+   1.35 MHz remain blank, while their velocity-independent coefficients and
+   across-gap contributions remain available. Channel/probe response and the
+   branch identification remain independent conditions for a physical interpretation.
 
    .. rubric:: 3. Figure 2(b): compare the measured spectral features
 
@@ -253,7 +312,7 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-spectra.svg
       :width: 100%
-      :alt: Approximate source spectra and the four-record mean C1 and C3 voltage PSD, on the reference log-log axis ranges.
+      :alt: Approximate source spectra and the four-record mean C1 and C3 nominal current PSD with common frequency ranges.
 
       Figure 2. Counterparts of [1], Figure 2(b). Our spectrum extends to the
       50 MHz Nyquist frequency; the remaining reference frame is left empty.
@@ -263,10 +322,47 @@
    them in the context of prior EDI measurements. In our panel, inspect the
    falling broadband level and differences between C1 and C3. The spectrum itself
    does not say which frequency supplies energy to another.
-   The source plots :math:`P` in Hz⁻¹; our ordinate is
-   :math:`S^+(f)` in μV²/Hz, using only the exact conversion from V²/Hz by
-   :math:`10^{12}`. We do not renormalize either probe to make its height resemble
-   the source. **The absolute heights are not the same physical observable.**
+   Both panels use frequency in Hz. The source labels its spectrum Hz⁻¹; our
+   panel uses nominal current PSD in mA²/Hz and its own vertical range. Both probes
+   use the same 1 kΩ conversion, preserving their amplitude ratio without peak or
+   RMS matching. A unit label alone does not specify the source normalization.
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>Which units can be unified without inventing a normalization?</summary>
+
+   Let :math:`a_I=1/R` in A/V, with :math:`R=1000\ \Omega`. Superscript :math:`I`
+   denotes nominal current. A common constant gain gives
+
+   .. k05:equation:: rates-current-conversion
+      :lang: en
+
+      \begin{aligned}
+      X_f^I&=a_I X_f,\quad Y_f^I=a_I Y_f,\quad L_f^I=L_f,\quad Q_{fj}^I=Q_{fj}/a_I,\\
+      S_I^+&=a_I^2 S_V^+,\quad P_X^I=a_I^2P_X,\quad
+      T_{I,f}^{(1/2)}=a_I^2T_f^{(1/2)},\\
+      \gamma_{y,\mathrm{app}}^I&=\gamma_{y,\mathrm{app}},\qquad
+      T_{I,f}^{(1/2)}/P_X^I=T_f^{(1/2)}/P_X.
+      \end{aligned}
+
+   Substitute :math:`X^I=a_I X` and :math:`Y^I=a_I Y` into the same prediction to
+   obtain these relations. SI units are A² for power, A²/Hz for its PSD, A⁻¹ for
+   :math:`Q^I`, and A²/s for :math:`T_I`. For readable numbers, figures use mA,
+   mA² and mA⁻¹: 1 V across 1 kΩ corresponds to 1 mA. The original symbols
+   :math:`X,Y,Q,T` in the text remain in voltage units, connecting to page 07.
+   This nominal conversion is not a measured MHz amplitude/phase calibration.
+
+   Frequencies and growth rates share Hz and s⁻¹ with the reference. Absolute
+   source :math:`Q,T` amplitudes still lack a verified common normalization;
+   Figure 3(b) does not label a unit for :math:`T_f`. A relative signal
+   :math:`\delta I/I_0` could give a PSD in Hz⁻¹, but needs a trustworthy mean
+   ion current and response. The prescribed density alone does not provide them.
+   We do not assign our current units to the source or normalize each probe by
+   its own RMS to force agreement.
+
+   .. raw:: html
+
+      </details>
 
    .. rubric:: 4. Figure 2(c): calculate apparent growth, then compare it
 
@@ -295,8 +391,9 @@
       :math:`\gamma_{y,\rm app}` is an apparent **amplitude** rate in s⁻¹.
       The subscript “app” preserves its measured-voltage and assumed-propagation
       status. :math:`T_f^{(1/2)}` is in V²/s. Its superscript denotes the
-      half-power convention, not a square root. In this page's broad-band plots,
-      substitute :math:`v_{g,y}=v_*` and :math:`\tau_f=\tau_*`.
+      half-power convention, not a square root. Substitute the computed azimuthal
+      group velocity on the supported branch. Figures show its nominal current
+      counterpart :math:`T_{I,f}^{(1/2)}` in mA²/s.
 
       **Reference [1], Eq. (4), in its original notation:**
 
@@ -317,13 +414,14 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-growth.svg
       :width: 100%
-      :alt: Source growth-rate redraw and joint-LS/Kim apparent growth using an assumed constant speed; separate right axes show theoretical growth.
+      :alt: Source growth-rate redraw and joint-LS/filtered-Kim rates using computed azimuthal group velocity; separate right axes show theoretical growth.
 
       Figure 3. Counterparts of [1], Figure 2(c), using the source axis limits.
       Left axes: diagnosed/apparent rates. Right axes: theoretical rates, with
       a ten-times-larger range. Triangles at the lower/upper edge mark means outside the frame.
-      Open circles retain Kim results that fail the necessary bound in at least
-      one fold. Shading shows the four-fold range, not a confidence interval.
+      Kim gaps remove targets failing the necessary bound in any fold; other gaps
+      indicate unsupported branch frequencies. Shading is the four-fold range,
+      not a confidence interval. All rate axes use s⁻¹; note their multipliers.
 
    The paper's main diagnosed growth peak lies near 7 MHz; its frequency structure
    resembles the theoretical result, while the diagnosed rates are about an order
@@ -338,6 +436,20 @@
    unequal channel response. It is not automatically plasma damping.
    The extended fits include 5–20 MHz even where coherence is low.
 
+   **When LS and Kim disagree, distinguish prediction from physical inference.**
+   For predicting observed records, use held-out errors instead of assuming a
+   correction must improve the result. Even among the 78 targets in 15–20 MHz
+   passing the Kim bound in all folds, the equal-frequency, four-fold mean NMSE
+   is about 0.86 for joint LS and 2.07 for Kim. Above one is worse than predicting
+   zero. This prediction evidence favors joint LS. Retained Kim points have passed
+   a necessary check, not a validation of their physical interpretation.
+
+   Neither estimator automatically gives the latent plasma coefficients. LS can
+   suffer input-noise bias; Kim depends on stationary signal power and its
+   noise/moment assumptions. Their disagreement is model uncertainty, not an
+   error bar to average away. Physical preference requires supported measurement
+   response and signal/noise assumptions, beyond the prediction score.
+
    .. raw:: html
 
       <details class="k05-note"><summary>Show the apparent rates on their own scale, including clipped values</summary>
@@ -350,8 +462,8 @@
 
    Inspect the signed values, disagreement between estimators, and fold spread.
    The extra visibility is not extra physical validation. The theoretical curve
-   retains its own axis and ends at the computed branch limit; there is no hidden
-   extension to 20 MHz.
+   retains its own axis and ends at the computed branch limit; no extrapolation
+   supplies any displayed frequency-dependent speed.
 
    .. raw:: html
 
@@ -368,13 +480,12 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-coupling.svg
       :width: 100%
-      :alt: Image-derived source coupling map and our Kim coefficient magnitude map, with matching plus/minus 50 MHz limits and log color ranges.
+      :alt: Image-derived source coupling map and our joint-LS current coefficient magnitude map, with matching plus/minus 50 MHz limits and log color ranges.
 
       Figure 4. Counterparts of [1], Figure 3(a), with color range −2 to 1.
-      Right: :math:`\log_{10}(|Q^{\rm sym}|/\mathrm{V}^{-1})`.
-      White means not fitted, not zero coupling. Dark values can be below the
-      color-scale minimum; the brightest color also includes values above the maximum.
-      Kim values remain displayed even where its bound fails.
+      Right: joint-LS :math:`\log_{10}(|Q_I^{\rm sym}|/(\mathrm{mA}^{-1}))`.
+      White means not fitted, not zero coupling. Extreme colors include values
+      beyond the limits. Filtered Kim results appear in the local comparison.
 
    In the source map, bright structures in the opposite-sign quadrants close to
    :math:`f_1+f_2=0` associate two large, nearly cancelling input frequencies with
@@ -387,7 +498,7 @@
    to 20 MHz, with targets below 0.5 MHz excluded. The diagonal blank strip around
    :math:`f_1+f_2=0` is therefore an analysis choice. A large coefficient can also
    multiply a weak product, or arise in an inadequately specified model.
-   The source and our measured-voltage coefficients do not share a demonstrated
+   The source and our nominal-current coefficients do not share a demonstrated
    physical normalization; matching the numerical color range does not make
    their absolute magnitudes directly comparable.
 
@@ -404,7 +515,9 @@
 
    Compare the location of structure between estimators before interpreting it.
    The Kim map is not a validated noise-free result: the frequency-wise bound
-   check below applies to its entire diagonal of pairs with that target sum.
+   check applies to its entire diagonal of pairs with that target sum. Any fold
+   failing removes that target diagonal and its conjugate counterpart from the
+   displayed map. These gaps are not evidence for zero coupling.
 
    .. raw:: html
 
@@ -447,11 +560,12 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-transfer.svg
       :width: 100%
-      :alt: Approximate signed transfer from the source and the conditional voltage-domain transfer on matching reference axis ranges.
+      :alt: Approximate source transfer and nominal-current transfer, sharing the frequency range with separately labeled vertical scales.
 
-      Figure 5. Counterparts of [1], Figure 3(b). The common ±4×10⁷ numerical
-      range makes our V²/s result look almost flat. The units and normalization
-      are different; the apparent height ratio has no direct physical meaning.
+      Figure 5. Counterparts of [1], Figure 3(b), with frequency in Hz on both sides.
+      The source keeps its published vertical range; the right panel displays
+      nominal current :math:`T_{I,f}^{(1/2)}` on a readable scale. The unresolved
+      source normalization prevents a common absolute-amplitude scale.
 
    In the paper, negative transfer around 5–10 MHz and positive transfer below
    about 2 MHz, considered together with growth and damping, support transfer
@@ -459,13 +573,12 @@
    saturated state. This is a statistical interpretation, not a time-lapse
    movie of a wave moving through frequency.
 
-   Our four-fold mean half-power values span about −0.119 to +3.164 V²/s for
-   joint LS and −6.268 to +7.223 V²/s for Kim. The near-zero-looking line on
-   the reference frame is a scale effect. Open the local
-   view to determine its actual sign and size. A sign change or a bright
-   difference-frequency band alone is insufficient to establish the same inverse
-   cascade: the reference response, propagation, local-step and stationarity
-   assumptions must also apply.
+   On supported frequencies, the joint-LS four-fold mean spans approximately
+   −0.1125 to +0.1379 mA²/s; retained Kim means span −0.0243 to +0.00872 mA²/s.
+   These numbers depend on the stated normalization and group velocity. No rate
+   is supplied below the selected branch's 1.35 MHz limit. The remaining sign
+   pattern alone cannot establish the same inverse cascade without measurement,
+   propagation, local-step and stationarity conditions.
 
    .. raw:: html
 
@@ -475,19 +588,18 @@
       :width: 100%
       :alt: Separate local views below 5 MHz and from 5 to 20 MHz, showing conditional half-power rates and dimensionless across-gap quadratic contributions.
 
-      Top: :math:`T_f^{(1/2)}` with the assumed speed. Bottom: :math:`t_f`, which
+      Top: :math:`T_{I,f}^{(1/2)}` with computed :math:`v_{g,y}(f)`. Bottom: :math:`t_f`, which
       needs no velocity. Each column has a suitable vertical range; the 20 MHz
       input basis is unchanged throughout. Shading is the four-fold range.
 
    The lower row is the most direct place to compare the signed modeled change
    between probes. The upper row additionally weights it by the target's input
    power and the assumed inverse travel time. Thus a large fractional effect at
-   a weak high-frequency target need not produce a large V²/s value.
-   Both experimental estimates contain alternating signs, but their sizes and
-   even some signs disagree: around 1.5–2 MHz, for example, the positive-to-negative
-   pattern is estimator dependent. This is not a reproduction of the source
-   transfer pattern. Changing a positive assumed speed rescales the upper row but cannot reverse
-   its signs or repair a failed Kim bound.
+   a weak high-frequency target need not produce a large mA²/s value.
+   Small high-frequency rates also reflect this branch's small azimuthal group
+   velocity, not vanishing across-gap contributions. Kim failures are masked in
+   both rows. A different positive velocity rescales the rate but cannot repair
+   a failed Kim condition or reverse a given contribution's sign.
 
    .. raw:: html
 
@@ -559,8 +671,8 @@
 
    **A full-rank fit can still have an invalid physical interpretation.** Values
    above one in the common-power panel fail a necessary Kim condition. The
-   plotted Kim rates then remain algebraic outputs, not accepted noise-corrected
-   growth or transfer. Joint LS does not require this bound to predict voltages,
+   corresponding Kim results are removed from the result curves and maps. Only
+   this diagnostic panel retains failed ratios to explain the missing regions. Joint LS does not require this bound to predict voltages,
    but it does not thereby remove input noise or become a validated physical
    growth estimate. The fold range covers record-to-record variability, not
    uncertainty in velocity, channel response or model choice.
@@ -644,18 +756,21 @@
 
       OPENBLAS_NUM_THREADS=2 python K_Diagnostics/K05_bispectral_transfer/analyze_extended_comparison.py \
         --data /path/to/raw-captures --output /path/to/new-extended-results
-      python K_Diagnostics/K05_bispectral_transfer/plot_extended_comparison.py \
+      python K_Diagnostics/K05_bispectral_transfer/analyze_physical_scenario.py \
+        --extended /path/to/new-extended-results --output /path/to/new-physical-results
+      python K_Diagnostics/K05_bispectral_transfer/plot_physical_comparison.py \
         --extended /path/to/new-extended-results \
         --comparison /path/to/z5p5_a3p7_paper_comparison \
-        --output /path/to/new-comparison-plots
+        --physical /path/to/new-physical-results --output /path/to/new-comparison-plots
 
    The first script saves coefficients, pairs, moments, powers, holdout errors,
    rank/conditioning, Kim checks, configuration and hashes. QR compression of the
    augmented training matrix preserves all inner products, including target
    residual power, before the existing SVD/Kim solve. Tests compare it with the
    uncompressed calculation. No random split mixes segments from a held-out record
-   into training. The second script reads these outputs and the preserved kinetic
-   branch/PSD. The source-derived reference readings and provenance are in
+   into training. The physical-scenario script reuses the fits and computes moving-ion
+   branches from ``physical_scenario_config.json``. The plotter reads the new branches
+   and preserved PSD; no re-fitting is needed for these physical scenarios. The source-derived reference readings and provenance are in
    ``reference_digitization``; the article images are not required to replot them.
 
    .. raw:: html
@@ -704,7 +819,9 @@
    负频率系数由正频率系数取共轭获得。
    :math:`L_f` 无量纲，:math:`Q_{fj}` 的单位为V⁻¹。
    下面的“Joint LS”表示联合拟合这两类系数的复数最小二乘（joint least squares），不是只含线性项的拟合。
-   “Kim”表示第07页的平稳性修正，其共同功率的必要条件仍需检查。
+   “Kim”表示第07页的平稳性修正。只有四轮拟合都可辨识，且都满足
+   :math:`0\le P_*\le\min(P_X^{\rm train},P_Y^{\rm train})`，才显示该目标的Kim结果。
+   任一轮失败，结果图将该目标的四轮全部留白，不只挑通过的轮次求平均。留白不等于零。
 
    解释增长之前，先去掉一个参考旋转：
    :math:`\delta_f=\arg\langle Y_fX_f^*\rangle_{\rm train}`，单位为弧度。
@@ -743,42 +860,83 @@
 
       </details>
 
-   .. rubric:: 2．对照图2(a)：色散模型怎样提供时间尺度
+   .. rubric:: 2．对照图2(a)：先建立物理情景，再换算时间
 
-   拟合乘数描述的是 **从一个位置到另一个位置** 的变化；增长率描述的是 **每秒** 的变化。
-   连接这两者需要传播时间。文献用理论色散关系（dispersion relation）得到群速度（group velocity）；
-   其图2(a)并不是直接把双探针相位展开后得到的实测曲线。
+   拟合乘数描述 **两处之间** 的变化，速率描述 **每秒** 的变化，因此还需要传播模型。
+   先固定慢扫描报告的电子温度 :math:`T_e=9.1689` eV、给定密度
+   :math:`n_0=2.2\times10^{16}` m⁻³，离子采用单电荷Xe⁺并保持冷离子近似。
+   已报告的径向、轴向磁场分量大小分别为 :math:`B_r=39.48` G、:math:`B_x=80.34` G，
+   合成磁场约89.52 G。相应德拜长度为0.152 mm、离子声速为2.60 km/s、离子等离子体频率为2.72 MHz。
+   温度作为局部Maxwell分布的参数；慢扫描并不等于同时测到了高频记录期间的电子分布。
+
+   **离子能量可以确定速度，但不能单独确定局部电场。** 这里假设离子在测量位置已获得200 V放电
+   所能提供能量的一半，忽略初始动能和这一步估计中的碰撞损失。
+   再取有效加速长度 :math:`L_E=1` cm，并用0.5、2 cm作敏感性对照。
+   这是明确的长度估计，不是探针间距，也不是已测出的电场分布。
+
+   .. k05:equation:: rates-energy-field-drift
+      :lang: zh
+
+      \begin{aligned}
+      U_i&=\eta U_d=0.5\times200\ \mathrm{V}=100\ \mathrm{V},\\
+      u_i&=\sqrt{2eU_i/m_i}=12.12\ \mathrm{km/s},\\
+      E_x&\simeq U_i/L_E=10.0\ \mathrm{kV/m},\\
+      V_d&=\frac{|E_xB_r|}{B_x^2+B_r^2}=492.7\ \mathrm{km/s}.
+      \end{aligned}
+
+   :math:`U_d` 是放电电压；:math:`\eta` 是已获得能量占比；:math:`U_i` 是对应的加速电势差；
+   :math:`e` 是元电荷；:math:`m_i` 是Xe⁺质量。:math:`u_i` 是轴向离子速度；
+   :math:`E_x` 是用来近似局部场的平均加速电场；:math:`V_d` 是电子 :math:`E\times B` 漂移速度大小。
+   完整矢量关系是 :math:`\mathbf v_E=\mathbf E\times\mathbf B/B^2`。
+   磁场有倾斜，因此不能直接用 :math:`E_x/B` 代替周向分量。
+   0.5、1、2 cm三种长度分别给出约985、493、246 km/s的漂移。
+   本局部模型仍未包含电子沿磁场的平均流动、压力梯度漂移和碰撞。
+
+   **沿磁场的波长** 取1 cm，因此 :math:`k_\parallel=2\pi/0.01=628.3` m⁻¹，
+   :math:`k_\parallel\lambda_{De}=0.09536`；这不是两支探针之间的距离。
+   波矢还缺少一个几何信息：垂直磁场的分量是否完全沿周向。
+   这里把 **垂直磁场平面内偏离周向15°** 作为未测量的几何情景，并比较0°、30°。
+   这个角度没有从数据拟合，也不等同于文献[1]的轴向传播角度。
 
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion.svg
       :width: 100%
-      :alt: 文献色散曲线的近似重绘与本实验假设动力学分支，采用相同的坐标范围。
+      :alt: 文献色散近似重绘与包含轴向离子流的冷离子情景，沿用原图坐标范围。
 
-      图1．对照文献[1]图2(a)。左：文献近似重绘。右：下述假设下算出的色散分支，不是实测色散。
+      图1．对照文献[1]图2(a)。左：文献近似重绘。右：包含轴向离子对流的所选冷离子分支。
 
-   左图跨越了更大的显示频率范围，右图则贴近相同图框的底部。
-   **不能仅据此说实测波速比文献低多少。** 原文纵轴写的是 :math:`\omega_k`、单位Hz，
-   我们明确画的是 :math:`f=\omega_r/(2\pi)`，单位Hz。
-   在用描点斜率定量比较之前，还需要核清原文的频率约定；右图也使用了不同且部分假设的等离子体参数。
-
-   本实验的动力学情景采用已报告的慢扫描温度9.1689 eV和磁场分量39.48、80.34 G；
-   另外假设Xe⁺、密度 :math:`n_0=10^{17}` m⁻³、电子漂移+100 km/s、
-   :math:`k_\parallel\lambda_{De}=0.03`，并忽略离子多普勒频移。
-   密度、漂移、沿磁场分解的几何，以及慢扫描结果能否代表高频记录，都是假设。
-   现有分支只覆盖约 **0.179–5.592 MHz**，不能用它给整个5–20 MHz频段提供群速度。
+   在计算的 :math:`k_y=10`–100000 m⁻¹范围内，所选分支覆盖 **1.349–26.607 MHz**，
+   已包含5–20 MHz；上图只显示落在共同图框内的部分。
+   如果去掉垂直平面内的倾斜、其余条件不变，分支最高仅约 **3.805 MHz**。
+   因此高频覆盖既依赖离子速度，也依赖波矢几何；它不表示已经在实验中识别出这一分支。
+   原文纵轴标为 :math:`\omega_k`、单位Hz，这里明确使用 :math:`f=\omega_r/(2\pi)`。
+   原图约定未核清之前，不能从描点斜率定量判断两种实验的波速比。
 
    .. raw:: html
 
-      <details class="k05-note"><summary>换成本实验适合的量程，看清色散曲线及其斜率</summary>
+      <details class="k05-note"><summary>看完整分支，并比较加速长度与传播倾斜角的影响</summary>
 
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion-local.svg
       :width: 100%
-      :alt: 同一动力学分支的局部量程，以及由导数得到的群速度和独立假设的恒定参考速度。
+      :alt: 两条离子参考系声学分支，以及周向群速度与斜向路径导数的区别。
 
-      同一分支的局部量程。导数得到的速度随频率改变；水平虚线是另一个假设，不是曲线的外推。
+      左：所选分支和离子参考系中相反的声学分支。右：周向群速度与沿所绘斜向路径的导数；
+      速度采用对数轴，以看清两者在高频的差距。
 
-   在2.001953125 MHz，这个模型给出的群速度约为2148 m/s，下面将它取整为
-   **参考值** 2150 m/s。但这不能验证高频也具有相同速度。
-   若把假设速度加倍，换算后的各变化率会加倍，拟合结果和跨距贡献的符号都不改变。
+   另一分支说明：一个实测频率并不能唯一选出一个根。
+   后面的时间换算固定采用离子参考系正频率分支
+   :math:`\operatorname{Re}(\omega-k_xu_i)>0`，不把另一条分支拼接到低频空缺处。
+   这里只连续跟踪了这两条根，并未穷尽所有动力学模态。
+
+   .. figure:: /_static/K_Diagnostics/k05-compare-sensitivity.svg
+      :width: 100%
+      :alt: 三种加速长度及三种垂直平面传播角下的色散关系与理论增长率。
+
+      左列只改变 :math:`L_E=0.5,1,2` cm；右列只改变倾斜角 :math:`\theta=0,15,30` 度。
+      上排为频率随波数变化，下排为理论增长率随频率变化，两个对照共用同一主情景。
+
+   加速长度改变后，频率曲线几乎重合，但电子漂移及增长率变化明显。
+   倾斜角则显著改变离子多普勒频移和频率覆盖：同一最大波数处，三种角度的上限约为
+   3.81、26.61、52.94 MHz。这些是敏感性情景，不是误差区间，也不是挑选出的拟合结果。
 
    .. raw:: html
 
@@ -788,89 +946,97 @@
 
    .. raw:: html
 
-      <details class="k05-note"><summary>动力学情景的群速度如何从色散关系算出来？</summary>
+      <details class="k05-note"><summary>哪个波矢进入色散关系？哪个导数才是探针方向的群速度？</summary>
 
-   动力学情景使用的是计算得到的色散曲线的斜率。先取上面列出的参数，
-   再求每个周向波数 :math:`k_y` 对应什么频率。
-   当前模型假设电子受磁场约束、服从 Maxwell 分布，离子为非磁化冷离子。
-   暂时忽略离子多普勒频移（Doppler shift）后，使用的色散关系（dispersion relation）为
+   用 :math:`x,y,r` 分别表示轴向、周向、径向，周向正方向暂取电子漂移方向。
+   :math:`\hat{\mathbf b}` 沿模型磁场，:math:`\hat{\mathbf s}` 位于轴向—径向平面内且垂直磁场。
+   模型采用正的轴向和径向分量；这个坐标与探针前后顺序的对应仍是情景假设。
+   三维波矢统一写为
+
+   .. k05:equation:: rates-oblique-geometry
+      :lang: zh
+
+      \begin{aligned}
+      b_x&=B_x/B,\quad b_r=B_r/B,\quad
+      \hat{\mathbf b}=b_x\hat{\mathbf x}+b_r\hat{\mathbf r},\quad
+      \hat{\mathbf s}=b_r\hat{\mathbf x}-b_x\hat{\mathbf r},\\
+      \mathbf k&=k_y\hat{\mathbf y}+k_s\hat{\mathbf s}+k_\parallel\hat{\mathbf b},
+      \qquad k_s=\alpha k_y,\quad \alpha=\tan\theta,\\
+      k_x&=b_xk_\parallel+b_rk_s,\quad
+      k_r=b_rk_\parallel-b_xk_s,\quad
+      k_\perp^2=k_y^2+k_s^2,\quad k^2=k_\perp^2+k_\parallel^2.
+      \end{aligned}
+
+   帽号表示单位矢量；:math:`b_x,b_r,\alpha` 都无量纲；各个 :math:`k` 分量的单位为m⁻¹。
+   尤其注意：轴向分量 :math:`k_x` 不等于沿磁场分量 :math:`k_\parallel`。
+   电子采用磁化Maxwell分布，离子采用非磁化冷离子，求解
 
    .. k05:equation:: rates-model-dispersion
       :lang: zh
 
-      \mathcal E(\omega,k_y)
-      =1+k^2\lambda_{De}^2+g(\omega,k_y)
-       -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{\omega^2}=0,
-      \qquad k^2=k_y^2+k_\parallel^2.
+      \mathcal E(\omega,k_y,k_s,k_\parallel)
+      =1+k^2\lambda_{De}^2+g(\omega,\mathbf k)
+       -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xu_i)^2}=0.
 
-   这是 :k05:eq:`comparison-dispersion` 的重复列出，方便就地读图；
-   :ref:`与文献[1]式(7)的对照 <k05-source-7-zh>` 给出了原式及几何简化。
-   :math:`\mathcal E` 是无量纲色散函数；:math:`\lambda_{De}` 为电子德拜长度，单位m；
-   :math:`\omega_{pi}` 为离子等离子体角频率，单位rad/s。
-   :math:`k_y`、:math:`k_\parallel` 分别是本模型中垂直、平行于磁场的波数分量，单位m⁻¹。
-   无量纲函数 :math:`g(\omega,k_y)` 描述电子响应，用 :k05:eq:`comparison-gordeev`
-   的 Gordeev 级数计算；它与前面功率收支中的 :math:`g_f` 是不同的量。
+   :math:`\mathcal E` 和电子响应 :math:`g` 无量纲；:math:`\omega_{pi}` 为离子等离子体角频率，单位rad/s；
+   :math:`\lambda_{De}` 为德拜长度，单位m。
+   计算 :k05:eq:`comparison-gordeev` 的Gordeev级数时，使用
+   :math:`k_\perp^2=k_y^2+k_s^2`、给定的 :math:`k_\parallel`，以及电子频率 :math:`\omega-k_yV_d`。
+   离子分母则使用另一项频移 :math:`k_xu_i`。这一项在求根时就已包含，不能在旧根上事后加一个频移代替。
 
-   求出的根是复数：:math:`\omega=\omega_r+i\gamma_{\rm th}`。
-   实部 :math:`\omega_r` 是振荡角频率；在 :math:`e^{-i\omega t}` 约定下，
-   虚部 :math:`\gamma_{\rm th}` 是模型的增长率。
-   改变 :math:`k_y` 并连续跟踪同一条根，就得到色散曲线。
-   固定 :math:`k_\parallel` 和所有背景参数，对这条曲线求斜率，得到 **群速度（group velocity）**：
+   **文献[1]式(7)，保留原符号：**
+
+   .. k05:equation:: rates-paper-dispersion
+      :lang: zh
+
+      \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
+      -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}=0.
+
+   原文 :math:`v_p` 对应这里的 :math:`u_i`，:math:`\epsilon^{(1)}` 对应缩放后的色散函数 :math:`\mathcal E`。
+   原文磁场沿径向，其 :math:`k_z` 才是沿磁场分量；本实验磁场倾斜，需要上面的投影关系。
+   原文Gordeev函数中的 :math:`X,Y` 是几何参数，不是探针Fourier系数。
+
+   复根 :math:`\omega=\omega_r+i\gamma_{\rm th}` 给出角频率和理论增长率，时间约定为
+   :math:`e^{-i\omega t}`。周向群速度（group velocity）是
 
    .. k05:equation:: rates-group-slope
       :lang: zh
 
-      v_{g,y}=\frac{\partial\omega_r}{\partial k_y}
-             =2\pi\frac{\partial f}{\partial k_y},
+      v_{g,y}=\left.\frac{\partial\omega_r}{\partial k_y}\right|_{k_s,k_\parallel}
+      =2\pi\left.\frac{\partial f}{\partial k_y}\right|_{k_s,k_\parallel},
       \qquad f=\frac{\omega_r}{2\pi}.
 
-   :math:`f` 是普通频率，单位Hz；:math:`v_{g,y}` 的单位为m/s。
-   如果色散图的纵轴用Hz而不是rad/s，斜率换成群速度时就要保留 :math:`2\pi`。
-   相速度（phase velocity） :math:`v_{\rm ph,y}=\omega_r/k_y` 描述等相位面的移动，
-   一般不等于这里的曲线斜率。
-
-   实际计算斜率时，对 :math:`\mathcal E(\omega(k_y),k_y)=0` 沿所选的根求导。
-   链式法则（chain rule）给出下面第一行；移项、相除，再取实部，得到第二行：
+   求这个偏导时，其余波矢分量保持不变。绘图路径却同时改变了 :math:`k_s=\alpha k_y`，
+   因而路径斜率还多出另一个方向的贡献：
 
    .. k05:equation:: rates-group-implicit
       :lang: zh
 
       \begin{aligned}
-      \frac{\partial\mathcal E}{\partial\omega}
-      \frac{d\omega}{dk_y}
-      +\frac{\partial\mathcal E}{\partial k_y}&=0,\\
-      v_{g,y}
-      &=\operatorname{Re}\!\left[
-        -\frac{\partial\mathcal E/\partial k_y}
-              {\partial\mathcal E/\partial\omega}\right].
+      v_{g,y}&=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_y}}{\mathcal E_\omega}\right],
+      \qquad v_{g,s}=\operatorname{Re}\!\left[-\frac{\mathcal E_{k_s}}{\mathcal E_\omega}\right],\\
+      \left.\frac{d\omega_r}{dk_y}\right|_{k_s=\alpha k_y}
+      &=v_{g,y}+\alpha v_{g,s}.
       \end{aligned}
 
-   两个偏导都在同一个复根处计算，且要求 :math:`\partial\mathcal E/\partial\omega\ne0`。
-   分子的偏导固定 :math:`\omega`、只改变 :math:`k_y`；分母的偏导固定
-   :math:`k_y`、只改变 :math:`\omega`。
-   而 :math:`d\omega/dk_y` 是沿着根的变化求导，两者一起改变。
-   代码用中心差分（central difference）计算这两个偏导，
-   与 :k05:eq:`comparison-branch` 是同一个计算。
+   :math:`\mathcal E` 的下标表示在同一复根处求偏导，并要求 :math:`\mathcal E_\omega\ne0`。
+   代码用中心差分计算，再独立求解邻近根验证。
+   斜向路径画出的曲线仍在上升，可能主要反映轴向对流，周向群速度却已经很小。
+   **速率换算用周向偏导，不用斜向路径的总斜率。**
 
-   现在每个根都给出一对 :math:`(f,v_{g,y})`。
-   本例使用的单条分支上，频率单调变化，因此可以把这些点插值到实测 Fourier 频点，
-   不向分支覆盖范围之外外推，就得到上面的局部分支速度图。
-   在 :math:`f=2.001953125` MHz处，模型给出 :math:`k_y\approx5095.6` m⁻¹、
-   :math:`v_{g,y}\approx2148` m/s；跨过3.7 mm对应的时间约为1.72 μs。
-
-   如果色散关系是一条直线 :math:`\omega_r=v k_y`，其中 :math:`v` 为常数，
-   各频率的群速度就相同。本例所选曲线的斜率在变化，所以动力学情景中的群速度随频率变化。
-   这些速度依赖上述参数和所选分支，尚不是独立测量得到的传播速度；
-   右图阴影也没有包含这些假设的不确定性。
+   在所选单调分支上，将 :math:`(f,v_{g,y})` 插值到实测频点，不外推。
+   2.002、10.010、19.971 MHz处分别得到约2118、21.5、2.14 m/s。
+   相速度 :math:`\omega_r/k_y` 又是另一个量。
+   高频周向速度很小是这一分支及几何的计算结果，并不表示已实测到这样慢的传播。
 
    .. raw:: html
 
       </details>
 
-   为了在整个拟合频带使用一套明确的时间换算，下面统一假设
-   :math:`v_*=2150` m/s，方向从C1指向C3，对应
-   :math:`\tau_*=0.0037/2150\approx1.72` μs。
-   这是 **条件性的换算情景**，不是高频色散预测。未应用实测的通道增益、延迟或频率响应校正。
+   后面使用计算得到的 :math:`v_{g,y}(f)`。
+   模型正方向暂对应C1到C3；所选分支支持399个拟合目标中的 **382个**。
+   低于约1.35 MHz的速率留白，但不依赖速度的系数与跨距贡献仍保留。
+   通道／探针响应、传播方向以及分支识别，仍需单独满足物理解释条件。
 
    .. rubric:: 3．对照图2(b)：先比较测量谱中有哪些结构
 
@@ -881,16 +1047,50 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-spectra.svg
       :width: 100%
-      :alt: 文献功率谱近似重绘与C1、C3四组平均电压功率谱，使用相同的双对数坐标范围。
+      :alt: 文献功率谱近似重绘与C1、C3四组平均标称电流功率谱，频率范围相同。
 
       图2．对照文献[1]图2(b)。本实验谱覆盖到50 MHz奈奎斯特频率，文献图框中其余区域留白。
 
    文献中，低频宽带成分与多个高频共振峰同时出现，峰间隔约为7 MHz。
    作者结合先前的EDI测量研究解释这些峰。我们的右图首先应看随频率下降的宽带背景，以及C1、C3的差异；
    **功率谱本身不能告诉我们哪个频率向哪个频率输送能量。**
-   左图的 :math:`P` 单位为Hz⁻¹，右图的 :math:`S^+(f)` 单位为μV²/Hz，
-   只使用了V²/Hz乘 :math:`10^{12}` 的准确单位换算，没有把两支探针分别缩放到与文献相似的高度。
-   两边的绝对高度不是同一个物理观测量。
+   两边频率统一为Hz。文献谱标为Hz⁻¹，本实验改画标称电流谱，单位mA²/Hz，并采用适合的纵轴范围。
+   两路都使用同一个1 kΩ电阻值换算，因此保留原有幅值比例，不按峰值或RMS对齐。
+   单位标签本身还不能确定文献信号的归一化。
+
+   .. raw:: html
+
+      <details class="k05-note"><summary>哪些单位可以统一？哪些还缺少归一化信息？</summary>
+
+   令 :math:`a_I=1/R`，单位A/V，:math:`R=1000\ \Omega`；上标 :math:`I` 表示标称电流形式。
+   对两路使用同一个常数换算系数，有
+
+   .. k05:equation:: rates-current-conversion
+      :lang: zh
+
+      \begin{aligned}
+      X_f^I&=a_I X_f,\quad Y_f^I=a_I Y_f,\quad L_f^I=L_f,\quad Q_{fj}^I=Q_{fj}/a_I,\\
+      S_I^+&=a_I^2 S_V^+,\quad P_X^I=a_I^2P_X,\quad
+      T_{I,f}^{(1/2)}=a_I^2T_f^{(1/2)},\\
+      \gamma_{y,\mathrm{app}}^I&=\gamma_{y,\mathrm{app}},\qquad
+      T_{I,f}^{(1/2)}/P_X^I=T_f^{(1/2)}/P_X.
+      \end{aligned}
+
+   把 :math:`X^I=a_I X`、:math:`Y^I=a_I Y` 代入原预测式就得到这些关系。
+   SI单位下，电流功率为A²、PSD为A²/Hz、:math:`Q^I` 为A⁻¹、:math:`T_I` 为A²/s。
+   图中使用mA、mA²及mA⁻¹方便读数；1 kΩ电阻上的1 V对应1 mA。
+   正文原有 :math:`X,Y,Q,T` 仍沿用电压形式，便于与第07页衔接。
+   这只是标称电阻换算，并未校准MHz频段的幅值与相位响应。
+
+   频率与增长率已经和文献统一为Hz、s⁻¹。
+   文献 :math:`Q,T` 的绝对幅值仍缺少已核实的共同归一化，图3(b)也没有明示 :math:`T_f` 的单位。
+   使用 :math:`\delta I/I_0` 可以得到Hz⁻¹的谱，但需要可靠的平均离子电流和测量响应；
+   仅给定密度不能补齐这一步标定。因此不把原图纵轴直接重标为本实验电流单位，
+   也不把两支探针各自除以RMS来强行对齐。
+
+   .. raw:: html
+
+      </details>
 
    .. rubric:: 4．对照图2(c)：先算表观增长，再读两种估计
 
@@ -919,7 +1119,8 @@
       :math:`\gamma_{y,\rm app}` 是表观 **幅值** 增长率，单位s⁻¹。
       “app”提醒我们它仍来自测量电压与假设传播。
       :math:`T_f^{(1/2)}` 的单位为V²/s，上标表示半功率约定，不是平方根。
-      本页宽频带图统一代入 :math:`v_{g,y}=v_*`、:math:`\tau_f=\tau_*`。
+      在分支支持的频点代入随频率改变的周向群速度；图中显示标称电流形式
+      :math:`T_{I,f}^{(1/2)}`，单位mA²/s。
 
       **文献[1]式(4)，保留原符号：**
 
@@ -939,11 +1140,11 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-growth.svg
       :width: 100%
-      :alt: 文献增长率近似重绘与恒定假设速度下的联合最小二乘和Kim表观增长率，理论增长使用独立右轴。
+      :alt: 文献增长率近似重绘与计算周向群速度下的联合最小二乘和筛选后Kim表观增长率，理论增长使用独立右轴。
 
       图3．对照文献[1]图2(c)，沿用原图范围。左轴：诊断／表观增长率；右轴：理论增长率，量程大十倍。
-      下／上边缘三角形标出超出图框范围的均值。空心圆保留至少一轮未通过Kim必要条件的结果。
-      阴影是四轮结果的范围，不是置信区间。
+      下／上边缘三角形标出超出图框范围的均值。Kim留白去掉任一轮未通过必要条件的目标；
+      分支不覆盖的频率也留白。阴影是四轮范围，不是置信区间；各速率轴均为s⁻¹，注意倍率。
 
    文献中的主要诊断增长峰在约7 MHz附近，频率结构与理论有相似之处，但数值约小一个数量级。
    两套纵轴会让相近的曲线高度看起来比数值更接近，读图时必须分开看。
@@ -952,7 +1153,18 @@
    我们的两条曲线是 **同一类系数的两种估计**：联合最小二乘与Kim修正。
    点线理论曲线来自独立的动力学计算，仅覆盖已有分支，不是对表观增长曲线的拟合。
    负的表观增长还可能包含空间失相关、输入噪声、两路响应不同等影响，不能直接等同于等离子体阻尼。
-   本次扩展保留了5–20 MHz，即使相干度低也照样显示计算结果。
+   本次扩展保留5–20 MHz，不因相干度低就删除拟合。
+
+   **最小二乘与Kim分歧很大时，先区分要相信哪一件事。**
+   若问题是“谁能更好预测另一支探针实际记录的信号”，应比较留出误差，不能因为叫“修正”就优先相信它。
+   即使只看15–20 MHz内四轮都通过Kim界限的78个频点，按频点等权、再对四轮平均，
+   联合最小二乘的NMSE约为0.86，Kim约为2.07；大于1意味着比直接预测零值还差。
+   当前预测证据因此支持优先使用联合最小二乘，保留的Kim只通过了必要检查。
+
+   若问题是“谁更接近真实等离子体的系数”，则不能只凭预测比较裁定：
+   最小二乘会受输入噪声偏差影响；Kim依赖真实信号功率平稳及相应噪声／统计矩假设。
+   两者分歧是模型不确定性，不能平均成一个“更可靠”的答案。
+   响应标定和信号／噪声假设得到支持后，才有依据优先接受其中一种物理解释。
 
    .. raw:: html
 
@@ -965,7 +1177,7 @@
       数值与时间尺度和图3相同，只改变显示范围。
 
    看清实际正负、两种估计之间的差别和四轮离散程度，但不能把“看得清”当作物理验证。
-   理论曲线仍使用独立纵轴，并在已有分支的频率上限停止，没有暗中延伸到20 MHz。
+   理论曲线仍使用独立纵轴，并在计算分支上限停止；用于换算的速度均来自已求出的根，不外推。
 
    .. raw:: html
 
@@ -980,12 +1192,12 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-coupling.svg
       :width: 100%
-      :alt: 文献系数热图的图像近似重绘与本实验Kim系数模，坐标统一到正负50 MHz，对数色标统一为负2到1。
+      :alt: 文献系数热图的图像近似重绘与本实验联合最小二乘标称电流系数模，坐标统一到正负50 MHz，对数色标统一为负2到1。
 
       图4．对照文献[1]图3(a)，色标统一为−2到1。右图是
-      :math:`\log_{10}(|Q^{\rm sym}|/\mathrm{V}^{-1})`。
-      白色表示未拟合，不表示耦合为零；最暗／最亮的颜色也包括超出色标下／上限的数值。
-      未通过Kim条件的数值仍保留显示。
+      联合最小二乘的 :math:`\log_{10}(|Q_I^{\rm sym}|/(\mathrm{mA}^{-1}))`。
+      白色表示未拟合，不表示耦合为零；最暗／最亮颜色也包括超出色标的值。
+      筛去不合格目标后的Kim图放在下面的局部对照中。
 
    文献热图在异号象限、接近 :math:`f_1+f_2=0` 的亮结构，表示两个较大且几乎互相抵消的输入频率
    对应一个较低的目标频率，这是 **差频组合（difference-frequency pair）** 的几何关系。
@@ -995,7 +1207,8 @@
    本实验有数据的区域较小，因为输入与目标都限制在20 MHz内，且不拟合0.5 MHz以下的目标。
    因此 :math:`f_1+f_2=0` 附近的对角留白带是分析范围造成的。
    较大的系数也可能乘上很弱的输入乘积，或来自不充分的模型。
-   文献系数与电压系数没有经过相同物理归一化；数值色标相同不意味着可以直接比较绝对强弱。
+   本实验按 :k05:eq:`rates-current-conversion` 换算标称电流单位；
+   原图幅值归一化尚未核实，数值色标相同不能直接比较绝对强弱。
 
    .. raw:: html
 
@@ -1010,6 +1223,7 @@
    先比较结构位置是否在两种估计中都存在，再考虑解释。
    Kim图不等于已经验证的无噪声结果：下面按目标频率做的必要条件检查，
    同时约束该目标和频对应的一整条对角线上的系数。
+   任一轮失败，就将该目标整条对角线及其共轭对应区域留白；缺口不表示零耦合。
 
    .. raw:: html
 
@@ -1048,19 +1262,20 @@
 
    .. figure:: /_static/K_Diagnostics/k05-compare-transfer.svg
       :width: 100%
-      :alt: 文献有符号转移曲线的近似重绘与本实验条件性电压转移结果，使用相同的文献坐标范围。
+      :alt: 文献转移近似重绘与本实验标称电流转移，频率范围相同、纵轴分别明确标注。
 
-      图5．对照文献[1]图3(b)。共同的±4×10⁷数值量程使我们的V²/s结果看起来几乎是一条零线。
-      两边单位与归一化不同，外观高度比没有直接的物理意义。
+      图5．对照文献[1]图3(b)，两边频率均为Hz。
+      文献保留原纵轴范围，右图使用标称电流量 :math:`T_{I,f}^{(1/2)}` 及可读量程。
+      原图幅值归一化尚未核实，因此不强行赋予共同的绝对幅值刻度。
 
    文献中，5–10 MHz附近的负转移与约2 MHz以下的正转移，结合增长和阻尼结果，
    支持饱和态下从高频不稳定性模态向低频模态的转移。
    这是统计解释，不是拍到了一个波沿频率轴移动的动画。
 
-   四轮均值的实际半功率范围约为：联合LS −0.119到+3.164 V²/s，Kim −6.268到+7.223 V²/s。
-   右图“近似零线”的外观是量程造成的，实际正负与大小应打开局部图查看。
-   即使出现正负转换或差频亮带，也不能单凭它们确认相同的逆级联（inverse cascade）：
-   还需要测量响应、传播、局部小步长和平稳性等假设成立。
+   在支持的频点上，联合最小二乘四轮均值约为−0.1125到+0.1379 mA²/s；
+   保留的Kim均值约为−0.0243到+0.00872 mA²/s。
+   这些数值依赖明确的归一化和群速度假设；所选分支低于约1.35 MHz时不提供速率。
+   剩余正负结构不能单独确认文献中的逆级联，需要测量响应、传播、局部小步长和平稳性等条件支持。
 
    .. raw:: html
 
@@ -1070,13 +1285,14 @@
       :width: 100%
       :alt: 分别展示低于5 MHz与5到20 MHz的条件性半功率速率，以及不依赖速度的无量纲跨距贡献。
 
-      上排：使用假设速度的 :math:`T_f^{(1/2)}`；下排：不需要群速度的 :math:`t_f`。
+      上排：计算群速度下的 :math:`T_{I,f}^{(1/2)}`；下排：不需要速度的 :math:`t_f`。Kim不合格目标均留白。
       每列采用适合的纵轴范围，输入频带始终统一为20 MHz。阴影是四轮结果范围。
 
    下排最直接反映模型给出的跨探针有符号变化；上排还乘了目标频点的输入功率和假设的逆传播时间。
-   因此，一个很弱的高频目标即使有较大的相对贡献，也不一定对应很大的V²/s数值。
-   两种实验估计都有正负交替，但大小乃至部分符号并不一致，例如约1.5–2 MHz的正负结构明显依赖估计方法。
-   这不能说已经复现了文献的转移模式。改变正的假设速度会缩放上排，却不能改变符号，也不能修复Kim必要条件的失败。
+   因此，一个很弱的高频目标即使有较大的相对贡献，也不一定对应很大的mA²/s数值。
+   高频速率较小也受到这一分支周向群速度很小的影响，不表示跨距贡献消失。
+   即使已有传播模型，Kim不合格目标仍在两排留白。
+   换用另一个正速度会缩放速率，却不能修复Kim条件失败，也不能改变同一贡献的符号。
 
    .. raw:: html
 
@@ -1135,7 +1351,7 @@
    高频预测功率仍不一定能与测量谱重合。
 
    **拟合矩阵满秩，不等于物理解释成立。** 共同功率比超过1，意味着Kim的一项必要条件失败。
-   此时画出的Kim速率只是代数结果，不能当作已接受的去噪增长率或转移率。
+   对应Kim结果已从速率曲线及系数图中移除，仅在诊断面板保留失败的比值，用于解释留白原因。
    联合最小二乘预测电压时不要求这个界限，但这并不让它自动消除输入噪声，或自动成为可靠的物理增长估计。
    四轮范围只反映记录之间的离散，不包含速度、通道响应与模型选择的不确定性。
 
@@ -1211,15 +1427,18 @@
 
       OPENBLAS_NUM_THREADS=2 python K_Diagnostics/K05_bispectral_transfer/analyze_extended_comparison.py \
         --data /path/to/raw-captures --output /path/to/new-extended-results
-      python K_Diagnostics/K05_bispectral_transfer/plot_extended_comparison.py \
+      python K_Diagnostics/K05_bispectral_transfer/analyze_physical_scenario.py \
+        --extended /path/to/new-extended-results --output /path/to/new-physical-results
+      python K_Diagnostics/K05_bispectral_transfer/plot_physical_comparison.py \
         --extended /path/to/new-extended-results \
         --comparison /path/to/z5p5_a3p7_paper_comparison \
-        --output /path/to/new-comparison-plots
+        --physical /path/to/new-physical-results --output /path/to/new-comparison-plots
 
    第一个脚本保存系数、波对、矩、功率、留出误差、秩／条件数、Kim检查、配置和哈希。
    先对增广训练矩阵做QR压缩，保留包括目标残差功率在内的全部内积，再使用既有的SVD／Kim求解器；
    测试核对了它与未压缩计算的一致性。没有把留出记录的短段随机分到训练集。
-   第二个脚本读取这些结果及此前保存的色散分支／PSD。
+   物理情景脚本复用系数，按 ``physical_scenario_config.json`` 计算含离子流的分支；
+   绘图脚本读取新分支与保留的PSD，不重新拟合记录。
    ``reference_digitization`` 保存文献图像读数及来源，重新绘图不需要嵌入文献原图。
 
    .. raw:: html

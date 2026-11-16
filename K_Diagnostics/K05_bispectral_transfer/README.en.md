@@ -178,3 +178,5 @@ conditional rates. Reproduce with `analyze_extended_comparison.py` and
 `plot_extended_comparison.py`; see EXPERIMENT.md and the provenance/reuse note
 in `reference_digitization/README.md`. The narrower 5 MHz kinetic scenario is
 retained on page 10. Page 12's independent teaching schematics are unchanged.
+
+R44: page08 now uses `physical_scenario_config.json`, `analyze_physical_scenario.py` and `plot_physical_comparison.py` for the moving cold-ion scenario, field/geometry sensitivities, nominal current units and all-fold Kim masking. Earlier scripts/outputs remain reproducible. See EXPERIMENT.md.

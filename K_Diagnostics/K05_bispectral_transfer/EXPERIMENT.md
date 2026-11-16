@@ -600,3 +600,44 @@ with failed bounds explicitly flagged; no physical EDI/cascade conclusion is
 asserted. Target/input limits above20 MHz remain excluded even for difference
 pairs. Page10 retains the earlier5 MHz basis with branch-dependent velocity,
 so its coefficients and rates must not be spliced with page08 arrays.
+
+
+## Page 08 moving-ion scenario (R44, 2026-11-16)
+
+The 20 MHz coefficient fits and original captures are unchanged. Reuse them:
+
+```bash
+python K_Diagnostics/K05_bispectral_transfer/analyze_physical_scenario.py \
+  --extended /path/to/z5p5_a3p7_extended_r43 --output /path/to/new-physical-results
+python K_Diagnostics/K05_bispectral_transfer/plot_physical_comparison.py \
+  --extended /path/to/z5p5_a3p7_extended_r43 \
+  --comparison /path/to/z5p5_a3p7_paper_comparison \
+  --physical /path/to/new-physical-results --output /path/to/new-figures
+```
+
+The comparison parent supplies only preserved PSD arrays; its old kinetic roots
+are not used. Config `physical_scenario_config.json` fixes Te=9.1689 eV,
+n=2.2e16 m^-3, cold Xe+, ion energy100 eV, parallel wavelength1 cm. An explicitly
+estimated1 cm acceleration length gives E=10 kV/m and azimuthal ExB drift492.7
+km/s using the full magnetic vector. Length0.5/2 cm and perpendicular-plane
+wavevector tilt0/30 degrees are sensitivity cases around the unmeasured15 degree
+closure. The same full dispersion includes the axial-ion Doppler denominator.
+
+The selected positive ion-frame root covers1.349–26.607 MHz on ky10–100000 m^-1.
+Its true azimuthal group velocity fixes the other wavevector components; it is
+not the total derivative along ks=tan(theta)*ky. No frequency extrapolation;
+382/399 targets support rates, while all399 retain across-gap coefficients. The
+opposite ion-frame branch is shown separately and is never spliced in to fill gaps.
+Root residuals, harmonic convergence, derivative checks, hashes and all scenario
+configs are in physical_summary.json / physical_arrays.npz. Tests independently
+resolve nearby roots, check energy/geometry, unit transforms and all-fold masking.
+
+Kim appears only when all four fits are identifiable and pass the necessary
+common-power bound. Remove entire target diagonals from its Q map, with conjugate
+partners; never average only passing folds. Raw failed values remain in R43
+arrays; only the common-power diagnostic shows why result intervals are missing.
+
+Nominal1 kohm conversion applies equally to both probes: I=aV, L_I=L, Q_I=Q/a,
+P_I=a^2P, T_I=a^2T; figures use mA units. No DC/RMS/peak normalization or MHz
+response calibration is invented. Frequencies and growth-rate units are common
+with the source; source Q/T absolute normalization remains unresolved.

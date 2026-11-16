@@ -17,8 +17,8 @@
 
    This supplement preserves the **5 MHz input and target scenario** and its
    frequency-dependent kinetic time scale. :ref:`Page 08 <k05-rates-en>` instead
-   refits a common 20 MHz input basis and uses an explicit constant-speed
-   scenario for its extended comparison. Their coefficient and rate arrays
+   refits a common 20 MHz input basis and uses a moving cold-ion scenario
+   with explicitly estimated acceleration length and wavevector geometry. Their coefficient and rate arrays
    must not be spliced together. Here the complete narrower-band panels are
    retained alongside the detailed dispersion calculation. Brown and Jorns [1] connect five panels: a dispersion curve, two probe spectra,
    growth rates, a coupling-coefficient map and a signed transfer curve.
@@ -587,7 +587,7 @@
    .. _k05-comparison-zh:
 
    本补充页保留 **输入和目标均限制在5 MHz的情景**，并使用随频率变化的动力学时间尺度。
-   :ref:`第08页 <k05-rates-zh>` 则统一采用20 MHz输入重新拟合，以明确的恒定速度假设做扩展对照。
+   :ref:`第08页 <k05-rates-zh>` 则统一采用20 MHz输入拟合，并在明确估计的加速长度、波矢几何下，用含离子流的冷离子情景做扩展对照。
    两套系数和速率数组不能直接拼接；这里保留较窄频带的完整面板及详细色散计算。
 
    .. rubric:: 把实验数据画成文献图 2、图 3 的形式
