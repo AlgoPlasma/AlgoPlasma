@@ -1,10 +1,11 @@
 cff-version: 1.2.0
 message: >-
-  If you use AlgoPlasma in your research, please cite this software using
-  the metadata below and specify the release or commit used.
+  If you use AlgoPlasma in your research, please cite the paper in
+  preferred-citation and specify the release or commit used.
 type: software
 title: "AlgoPlasma: Open Algorithms for Plasma Modeling"
 version: "v1.0.1"
+doi: "10.5281/zenodo.23227612"
 authors:
   - family-names: Zhao
     given-names: Yinjian
@@ -44,6 +45,39 @@ authors:
   - family-names: Hu
     given-names: Changzheng
     affiliation: "School of Energy Science and Engineering, Harbin Institute of Technology"
+preferred-citation:
+  type: article
+  title: "AlgoPlasma: Open algorithms for plasma modeling"
+  authors:
+    - family-names: Zhao
+      given-names: Yinjian
+    - family-names: Zhao
+      given-names: Zhongping
+    - family-names: Liu
+      given-names: Zhe
+    - family-names: Wang
+      given-names: Baisheng
+    - family-names: Peng
+      given-names: Zilong
+    - family-names: Luo
+      given-names: Xin
+    - family-names: Xie
+      given-names: Lihuan
+    - family-names: Chen
+      given-names: Xi
+    - family-names: Zhou
+      given-names: Zhijun
+    - family-names: Zhong
+      given-names: Kunpeng
+    - family-names: Chen
+      given-names: Yingjie
+    - family-names: Hu
+      given-names: Changzheng
+  journal: SoftwareX
+  volume: 36
+  start: 103176
+  year: 2026
+  doi: "10.1016/j.softx.2026.103176"
 contact:
   - name: AlgoPlasma
     email: contact@algoplasma.com

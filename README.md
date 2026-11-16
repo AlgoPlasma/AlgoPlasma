@@ -106,6 +106,29 @@ make html
 
 Doxygen is also required on the system. The Read the Docs configuration is in `.readthedocs.yaml`. After a successful build, the HTML entry page is usually at `docs/build/html/index.html`; open that file in a browser to view the documentation.
 
+## Citation
+
+If you use AlgoPlasma in your research, please cite the library paper:
+
+Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for plasma modeling," *SoftwareX* 36 (2026), 103176. DOI: [10.1016/j.softx.2026.103176](https://doi.org/10.1016/j.softx.2026.103176).
+
+```bibtex
+@article{ZHAO2026103176,
+  title = {AlgoPlasma: Open algorithms for plasma modeling},
+  journal = {SoftwareX},
+  volume = {36},
+  pages = {103176},
+  year = {2026},
+  issn = {2352-7110},
+  doi = {https://doi.org/10.1016/j.softx.2026.103176},
+  url = {https://www.sciencedirect.com/science/article/pii/S2352711026006667},
+  author = {Yinjian Zhao and Zhongping Zhao and Zhe Liu and Baisheng Wang and Zilong Peng and Xin Luo and Lihuan Xie and Xi Chen and Zhijun Zhou and Kunpeng Zhong and Yingjie Chen and Changzheng Hu},
+  keywords = {AlgoPlasma, Plasma modeling, Numerical algorithms, Parallel computing}
+}
+```
+
+Please also report the release or commit used. AlgoPlasma v1.0.1 is archived on Zenodo: [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612). See the [Citation page](https://algoplasma.readthedocs.io/en/latest/community/citation.html) for details and related application papers.
+
 ## Contributing
 
 Contributions are welcome for any algorithm implementation, test case, documentation, or validation result that serves plasma science.

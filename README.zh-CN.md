@@ -106,6 +106,29 @@ make html
 
 系统中还需要安装 Doxygen。Read the Docs 配置见 `.readthedocs.yaml`。构建完成后，HTML 首页通常位于 `docs/build/html/index.html`，可以用浏览器打开该文件查看文档。
 
+## 引用
+
+如果您在研究中使用 AlgoPlasma，欢迎引用以下介绍本库的论文：
+
+Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for plasma modeling," *SoftwareX* 36 (2026), 103176. DOI: [10.1016/j.softx.2026.103176](https://doi.org/10.1016/j.softx.2026.103176).
+
+```bibtex
+@article{ZHAO2026103176,
+  title = {AlgoPlasma: Open algorithms for plasma modeling},
+  journal = {SoftwareX},
+  volume = {36},
+  pages = {103176},
+  year = {2026},
+  issn = {2352-7110},
+  doi = {https://doi.org/10.1016/j.softx.2026.103176},
+  url = {https://www.sciencedirect.com/science/article/pii/S2352711026006667},
+  author = {Yinjian Zhao and Zhongping Zhao and Zhe Liu and Baisheng Wang and Zilong Peng and Xin Luo and Lihuan Xie and Xi Chen and Zhijun Zhou and Kunpeng Zhong and Yingjie Chen and Changzheng Hu},
+  keywords = {AlgoPlasma, Plasma modeling, Numerical algorithms, Parallel computing}
+}
+```
+
+请同时注明所用的发布版本或 commit。使用 v1.0.1 时，可引用对应的 [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612)。完整引用说明与相关应用论文见[引用页面](https://algoplasma.readthedocs.io/en/latest/community/citation.html)。
+
 ## 贡献建议
 
 欢迎贡献任何服务于等离子体学科的算法实现、测试案例、文档说明和验证结果。
