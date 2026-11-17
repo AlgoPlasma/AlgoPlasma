@@ -230,7 +230,7 @@
    a large coefficient with a weak input can still contribute little.
    Its magnitude also lacks the target's phase relation needed for signed transfer.
    Figure 3(a) of [1] is a coefficient-magnitude plot of this type; the
-   :ref:`paper comparison <k05-comparison-en>` explains its different normalization
+   :ref:`comparison on page 08 <k05-rates-en>` explains its different normalization
    and the conversion from unique pairs to a symmetric ordered-pair display.
 
    .. raw:: html
@@ -347,6 +347,21 @@
 
    .. rubric:: 5. Return to the recording that was not used for fitting
 
+   Use the same held-out segments for every model. The normalized mean-square error is
+
+   .. k05:equation:: validation-nmse
+      :lang: en
+
+      E_m(f)=\frac{\sum_{r\in\mathcal T}|Y_f^{(r)}-\widehat Y_{f,m}^{(r)}|^2}
+      {\sum_{r\in\mathcal T}|Y_f^{(r)}|^2}.
+
+   Here :math:`\mathcal T` is the test-segment set, :math:`r` labels a segment,
+   and :math:`m` labels linear-only, joint-LS or Kim prediction. The hat denotes
+   prediction. All coefficients use the same Fourier convention. NMSE is
+   dimensionless: 0 is exact prediction; 1 is the error of predicting zero.
+   A zero denominator makes it undefined. The test record supplies neither the
+   fitting coefficients nor the training-column scaling.
+
    Apply the three fitted relations to C1 from capture 2, then compare with its
    measured C3. The residual is :math:`Y-\widehat Y`. The upper panel divides
    its mean squared magnitude by :math:`P_{Y,\mathrm{test}}`, as in
@@ -383,8 +398,6 @@
    follow the required calculations and compare the five reference panels
    with the measured-voltage counterparts. That page refits a common input
    basis through 20 MHz and states the time-scale assumptions.
-   For the full four-fold validation, bandwidth/segment sensitivity and the
-   5–20 MHz example, see the :ref:`validation supplement <k05-validation-en>`.
 
    .. raw:: html
 
@@ -643,7 +656,7 @@
    实际预测项是 :math:`Q_jZ_j`，输入很弱时，即使 Q 较大，贡献也可能很小。
    此外，只有模长还缺少与目标的相位关系，不能给出转移方向。
    文献 [1] 图 3(a) 属于这一类系数模长图；后面的
-   :ref:`论文对照页 <k05-comparison-zh>` 会说明归一化差别，
+   :ref:`第08页对照 <k05-rates-zh>` 会说明归一化差别，
    以及如何把这里的唯一波对转换为对称的有序波对显示。
 
    .. raw:: html
@@ -744,6 +757,19 @@
 
    .. rubric:: 5. 回到没有参加拟合的记录
 
+   对三种模型使用同一批留出短段，定义归一化均方误差（NMSE）：
+
+   .. k05:equation:: validation-nmse
+      :lang: zh
+
+      E_m(f)=\frac{\sum_{r\in\mathcal T}|Y_f^{(r)}-\widehat Y_{f,m}^{(r)}|^2}
+      {\sum_{r\in\mathcal T}|Y_f^{(r)}|^2}.
+
+   :math:`\mathcal T` 是测试短段集合，:math:`r` 标记短段，
+   :math:`m` 选择仅线性、联合最小二乘或Kim预测，帽号表示预测值。
+   所有系数使用同一Fourier约定。NMSE无量纲，0表示完全预测正确，1对应直接预测零值的误差。
+   分母为零时不可计算。测试记录不参与拟合系数或训练列缩放的估计。
+
    把三种拟合关系用于第 2 组 C1，再与同组实测 C3 比较。
    残差是 :math:`Y-\widehat Y`。上图用其模平方平均除以
    :math:`P_{Y,\mathrm{test}}`，对应 :k05:eq:`validation-nmse`，
@@ -774,8 +800,6 @@
    接着读 :ref:`从系数走到增长与转移 <k05-rates-zh>`：
    先讲所需计算，再将五个文献面板与电压诊断结果逐项对照；
    该页统一扩展输入到20 MHz重新拟合，并明确时间尺度的假设。
-   完整四轮验证、分段和频带敏感性，以及 5–20 MHz 示例保留在
-   :ref:`验证补充页 <k05-validation-zh>`。
 
    .. raw:: html
 

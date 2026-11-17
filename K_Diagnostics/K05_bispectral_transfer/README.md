@@ -1,51 +1,16 @@
-# K05_bispectral_transfer
+# K05 · Bispectral transfer
 
-[English — start here](README.en.md) | [中文](README.zh-CN.md)
+[English](README.en.md) | [中文](README.zh-CN.md)
 
-Start at the [K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst).
-Its thirteen peer articles follow Brown & Jorns (2023), in this reading order:
+Eight pages connect Brown & Jorns (2023) to a reproducible two-probe example:
+wave evolution → Fourier coefficients → spectral moments → joint L/Q estimation
+→ prediction checks → conditional growth and transfer comparisons.
 
-1. [Wave growth and coupling](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst):
-   build Eq. (1) from a moving wave, with an interactive wave packet.
-2. [Where the envelope equation comes from](../../docs/source/rst_files/K_Diagnostics/K05_envelope_coefficients.rst):
-   derive the envelope equation and its coefficients from the plasma response.
-3. [From waves to probe records](../../docs/source/rst_files/K_Diagnostics/K05_probe_signals.rst):
-   connect fixed-probe time signals and Fourier coefficients to Eq. (2), with a linked two-probe illustration.
+[Read the K05 overview](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
 
-4. [From records to spectral statistics](../../docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst):
-   build ensemble averages, powers, cross powers and bispectra; compare fixed and random phase relations.
+- [Data and figure reproduction](EXPERIMENT.md)
+- [Equation numbering and semantic links](EQUATIONS.md)
+- [Reference-image provenance](reference_digitization/README.md)
 
-5. [From statistics to growth and coupling](../../docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst):
-   infer joint coefficients, distinguish stationary noise correction, and convert phase-aligned coefficients to rates.
-
-6. [First experimental analysis](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst):
-   process four synchronized ion-current probe captures, with plots from waveform
-   inspection through spectra, coherence and bicoherence. See [reproduction](EXPERIMENT.md).
-
-7. [From measured statistics to linear and quadratic coefficients](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst):
-   build measured moment matrices, jointly fit L/Q, check Kim and held-out predictions.
-
-8. [Comparing growth and transfer with the reference](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst):
-   refit a common 20 MHz input basis, explain the calculation, then compare five source-derived redraws with conditional probe results.
-
-9. [Supplement: what the probe measures](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst):
-   reconstruct swept I–V curves and examine explicitly estimated response scenarios.
-
-10. [Supplement: the narrower-band kinetic comparison](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst):
-   retain the 5 MHz input scenario and detailed kinetic model; its arrays differ from page 08.
-
-11. [Supplement: interpreting the plots](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst):
-    explain stationary Kim moments, reference phase and the complete held-out power budget.
-
-12. [Read the paper from equations to conclusions](../../docs/source/rst_files/K_Diagnostics/K05_paper_synthesis.rst):
-    use independent schematics to connect drive, transfer, saturation and transport implications.
-
-13. [Supplement: validating the two-probe model](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst):
-    inspect full holdouts, residuals, conditioning, sensitivity and high-frequency results.
-
-Follow the build instructions in either language README to view the HTML.
-
-[Equation numbering and cross-page references](EQUATIONS.md) use the shared K05 sequence.
-
-
-R44: page08 now uses `physical_scenario_config.json`, `analyze_physical_scenario.py` and `plot_physical_comparison.py` for the moving cold-ion scenario, field/geometry sensitivities, nominal current units and all-fold Kim masking. Earlier scripts/outputs remain reproducible. See EXPERIMENT.md.
+Original experimental captures are not bundled. Statistical prediction, nominal
+current conversion and plasma-energy interpretation are distinct steps.

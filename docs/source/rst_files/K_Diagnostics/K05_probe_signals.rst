@@ -267,7 +267,7 @@
       The article keeps potential coefficients. K05 first derives the same equation
       for an ideal potential signal, then uses measured voltage coefficients in the
       experiment; this change of observable requires the response discussion on
-      :ref:`probe-response supplement <k05-response-en>`. Replacing wavevector matching by frequency
+      :ref:`measurement chain on page 06 <k05-experiment-observable-en>`. Replacing wavevector matching by frequency
       matching requires the single-branch correspondence stated above, not just an FFT.
 
 
@@ -586,7 +586,7 @@
       下标 :math:`f` 标记频率分量，不表示求导。
 
       文献使用电势系数。K05 先对理想电势信号推导相同方程，实验计算再使用实测电压系数；
-      更换观测量需要 :ref:`第 08 页 <k05-response-zh>` 的响应条件。
+      更换观测量需要 :ref:`第06页测量链 <k05-experiment-observable-zh>` 的响应条件。
       把波矢匹配换成频率匹配，还需要前述单分支对应关系，不能只靠一次 FFT。
 
 

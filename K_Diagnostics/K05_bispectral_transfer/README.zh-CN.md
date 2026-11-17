@@ -1,139 +1,51 @@
 # K05 · 双谱转移分析
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.en.md) | [模块入口](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
 
-围绕 Brown 与 Jorns 的 *Physical Review Letters* **130**, 115101 (2023)，
-学习波增长、波间耦合与探针数据分析的联系。
-[论文 DOI](https://doi.org/10.1103/PhysRevLett.130.115101)。
+以Brown与Jorns（2023）的研究为线索，从波动方程走到同步双探针记录的分析。
+文献：[doi:10.1103/PhysRevLett.130.115101](https://doi.org/10.1103/PhysRevLett.130.115101)。
+八篇正文同级，按以下顺序阅读：
 
-## 阅读导览
+01. [波增长与耦合](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
+02. [包络方程与系数来源](../../docs/source/rst_files/K_Diagnostics/K05_envelope_coefficients.rst)
+03. [从波到探针记录](../../docs/source/rst_files/K_Diagnostics/K05_probe_signals.rst)
+04. [谱统计量](../../docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst)
+05. [由统计量估计系数](../../docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst)
+06. [实测记录到统计量](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst)
+07. [实测统计量到L与Q](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst)
+08. [增长与转移的文献对照](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst)
 
-[K05 主页面](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
-简述目的，列出下方十一篇平行正文；按 01–11 阅读。
+## 复现与约定
 
-[第一页面：波增长与耦合](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
-解释 Brown 与 Jorns (2023) 的公式 (1)：实波形 → 复包络 → 随包络运动的变化率 → 二次耦合 → 恢复快相位。
-详细代数可以展开；波包图可调时间、增长或衰减，并可播放。
-图中参数仅用于教学，不是实验数据或 EDI 动理学计算。
+完整依赖顺序和命令见[EXPERIMENT.md](EXPERIMENT.md)。原始记录和完整数值数组需要另行取得；
+06–08页使用可追溯的保存图，打开HTML不会运行分析。
 
-[第二页面：包络方程和系数从哪里来](../../docs/source/rst_files/K_Diagnostics/K05_envelope_coefficients.rst)
-从等离子体响应的自洽性出发，通过邻近波的偏移，推导群速度与增长率，
-再加入独立的二阶电荷响应，得到二次耦合系数。先讲一维，最后推广三维。
-泊松方程整理、链式法则和近似条件可按需展开。
+| 脚本 | 用途 |
+| --- | --- |
+| `analyze_spectral_walkthrough.py` | 第06页：波形与复统计量 |
+| `analyze_coefficient_walkthrough.py` | 第07页：实测矩阵、系数与留出预测 |
+| `analyze_extended_comparison.py` | 第08页：统一20 MHz输入与四轮整组留出 |
+| `analyze_physical_scenario.py` | 选定的流动冷离子情景及条件性群速度 |
+| `plot_physical_comparison.py` | 文献近似重绘与本实验逐项对照 |
 
-新增波数谱宽与波包的互动示意，可调谱宽和时间，完整函数放在折叠区。
-泰勒展开补充从一元到二元的连接、二阶与虚部导数项；增长率补充舍弃项的大小比较，
-泊松方程补充逐项代入和移项。
+读取器、验证与功率收支脚本仍是计算依赖；旧讲解页删除不代表这些工具应删除。
+第07页用5 MHz输入，第08页重新拟合20 MHz输入，不能拼接两套系数。
+K05使用正指数／除以N的Fourier系数与`<Y conj(X)>`互谱，使用K01输出时需明确对齐约定。
 
-[第三页面：从移动的波到探针记录](../../docs/source/rst_files/K_Diagnostics/K05_probe_signals.rst)
-用固定位置记录、时间傅里叶复系数和双探针比较连接文献公式 (1) 与 (2)。
-互动图联动空间波形与两条时间曲线；折叠区补充余弦波的复系数和载波相消。
-明确双边归一化、导数与二次乘积的频率域形式，以及离子电流作为电势代理的条件。
+给定输入波对且矩阵可辨识时，统计模型闭合。物理速率还依赖测量响应标定、传播方向、
+波变量归一化和有依据的色散分支。1 cm有效加速长度与15°倾斜均为选定假设。
+文献面板是注明来源的图像近似重绘，不是作者原始数据，见[来源说明](reference_digitization/README.md)。
 
-[第四页面：从重复记录到功率谱、互谱与双谱](../../docs/source/rst_files/K_Diagnostics/K05_spectral_statistics.rst)
-从分段与平均讲到功率、互谱相位和双谱；用三个复系数的乘积解释相位关系怎样在平均后保留。
-折叠区补充平方双相干、NumPy 矩计算及互双谱的共轭次序。
-最后从连续波动方程导出电势平方收支，保留耦合系数与双谱的复数乘积。
+## 构建与维护
 
-[第五页面：从统计量估计增长与耦合](../../docs/source/rst_files/K_Diagnostics/K05_coefficient_inference.rst)
-从单波对、两个系数出发，用两个波对的三行方程展开矩阵，再推广到一般情况。
-Kim 修正以计算流程给出共同模型功率与系数，明确输入、适用假设和结果检查。
-相位求导及逐项代入连接到增长／转移换算；结尾区分统计闭合与仍需提供的传播、标定和等离子体响应信息。
+在合适的环境安装仓库`docs/requirements.txt`；文档配置还会调用Doxygen。从仓库根目录运行：
 
-英文视图不含中文；中文视图保留英文术语。十一篇正文共用 K05 公式编号，支持跨页引用。
-
-## 从数据到图的工作流程
-
-1. 明确同步探针电压、采样率、探针顺序、间距、标定、平稳时间窗和不确定度。
-2. 核对 Fourier 符号、幅值归一化和正负频率约定，再衔接 K01 频谱工具。
-3. 计算三阶与四阶统计量，估计线性及二次系数，并检查病态性与合成数据真值。
-4. 利用传播信息把空间系数转为增长率和转移率，区分幅值与功率增长率。
-5. 输出频谱、增长率曲线、转移图以及不确定度、数据来源。对照原图还需要相应实验数据和参数。
-
-公式对照框明确记录相位、归一化、波对计数和因子 2 的约定，实验示例按这些约定计算。
-K01 当前使用 NumPy 的正向 `exp(-i omega t)` 变换及 `X1 * conj(X2)` 互谱，不能隐式更改。
-
-## 编辑与接续
-
-- 页面：`docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst`
-  为简短入口；正文在同目录 `K05_wave_growth.rst`、
-  `K05_envelope_coefficients.rst`、`K05_probe_signals.rst`。
-- 插图：`docs/source/_static/K_Diagnostics/k05-wave-packet.{js,css,svg}`。
-- 同目录下 `k05-packet-band.js` 与双语 `k05-packet-band-{en,zh}.svg` 提供谱宽示意。
-  静态后备图与浏览器共用渲染函数；重建方法见英文 README。
-- 双探针联动图：`k05-probe-signals.js` 及双语 `k05-probe-signals-{en,zh}.svg`。
-- 第五页：`K05_coefficient_inference.rst`。
-- 第四页：`K05_spectral_statistics.rst`。
-- 目录：`K05_bispectral_transfer.rst` 的 toctree 并列列出十一篇正文。
-- 环境使用已有 `docs/requirements.txt`；文档配置还会调用 Doxygen。仓库根目录运行：
-
-```sh
-python -m sphinx -b html -W --keep-going docs/source docs/build/html
+```bash
+python K_Diagnostics/K05_bispectral_transfer/renumber_equations.py --check
+python -m sphinx -b html -E -a -W --keep-going docs/source docs/build/html
 python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 ```
 
-访问 `http://localhost:8055/rst_files/K_Diagnostics/K05_bispectral_transfer.html`。
-不要修改生成的 HTML；编辑后检查两种语言、公式、折叠区以及时间、增长和播放控制。
-
-阅读顺序：波增长与耦合 → 包络方程和系数的来源 → 固定探针记录与时间 Fourier 方程
-→ 功率谱、互谱和双谱统计。正文逐步引入概念，技术条件放在折叠区。
-公式核对原文纸面第 115101-2 页。更完整的文献学习历史在文献项目唯一的共享
-`HANDOFF.md` 中；WSL 仓库与文献项目需要分别实际同步，才能在其他电脑继续。
-
-## 公式与推导维护
-
-公式采用跨页面、双语共用的 K05.n 编号，按目录中的页面次序和页内出现顺序连续排列，
-折叠区也参与编号。新增或移动公式后，运行 `renumber_equations.py --write`，
-再用 `--check` 检查并完整重建网站。当前有139个有效公式。
-原有语义ID及链接保留；显示编号会随顺序更新。R31新旧号对照见
-`equation_number_migration_20261103.json`。退役语义ID不能用于不同公式。
-求和展开、相位求导与逐项代入仍收纳；第二页补有Poisson步骤和冷电子极化率例子。
-入口与十一篇正文均为中性完成版；插图保留用于区分物理量的正常配色。
-后续添加公式或页面时，先读 [公式编号维护说明](EQUATIONS.md)。
-
-## 实验数据页面
-
-[第六页](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst)
-使用固定的一组同步记录，贯穿波形、复 Fourier 系数、功率／PSD、互谱、复双谱与双相干，其他三组作比较。
-主线统一使用2048点分段，运行 `analyze_spectral_walkthrough.py` 复现。
-读取器、计算参数、测试及重建命令见 [EXPERIMENT.md](EXPERIMENT.md)。
-原始 bin 不放入仓库；图使用去整段均值的电压波动，绝对直流标定与通道响应另行核查。
-
-[第七页](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst)
-从实测复统计量出发，先求仅线性 L，展开两波对矩阵，再联合拟合全部带符号波对的 L/Q，
-按步骤计算 Kim 共同功率并检查上界，最后用留出残差检验。七张图由 analyze_coefficient_walkthrough.py 复现。
-
-[验证补充页](../../docs/source/rst_files/K_Diagnostics/K05_model_validation.rst)
-比较线性与二次模型对整组留出记录的预测，依次检查误差、残差关联、系数可辨识性和预定设置的敏感性。
-使用 `validate_experiment.py` 复现，详见 [EXPERIMENT.md](EXPERIMENT.md)。
-
-[探针响应补充页](../../docs/source/rst_files/K_Diagnostics/K05_probe_response.rst)
-使用 DL350 慢扫描重建 I–V 曲线和温度斜率，并用明确标注的暂用估计检查偏置与电路响应。
-运行 `analyze_probe_sweep.py`，使用 `probe_sweep_config.json` 复现均值 I–V 流程。
-页面用同一份0015逐步解释分箱、背景扣除、区间与斜率，并对照6.73与9.17 eV的来源。
-原中位数流程保留作比较，详见 [EXPERIMENT.md](EXPERIMENT.md)。
-
-
-完整面板补充：[把实验数据画成文献图2、图3的形式](../../docs/source/rst_files/K_Diagnostics/K05_paper_comparison.rst)，先看五个面板，再说明计算与估计参数。功率收支补充：[结果解释补充](../../docs/source/rst_files/K_Diagnostics/K05_power_budget.rst)，展开共同功率、相位和完整收支。复现见EXPERIMENT.md。
-
-
-## 原式对照与全文收束
-
-01、03、05、09页在对应的K05式下面列出文献原式(1)–(7)，使用固定对照框，
-逐项说明符号／归一化／简化；入口可直接跳转。原式也参与当前K05编号，语义ID提供稳定链接；
-框标题保留文献自身式号。09页增加线性Vlasov响应、冷离子极化率、Maxwell回旋轨道平均
-和Poisson闭合推导。
-[论文解读补充页](../../docs/source/rst_files/K_Diagnostics/K05_paper_synthesis.rst)
-用独立示意图讲增长、转移和饱和，补周向／总增长的关系与条件平稳收支，
-附结果路线及符号表。实测数值产物没有重算。
-
-## 从系数到条件变化率
-
-[第08页](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst)
-在每项文献图2／图3对照之前解释所需计算。四轮整组留出统一使用0.5–20 MHz目标和20 MHz输入基底。
-文献面板为注明来源的近似重绘，不是作者原始数据，不嵌入原图；局部量程折叠、完整功率收支和Kim／预测检查
-区分可计算的电压贡献与条件性速率。复现使用`analyze_extended_comparison.py`和`plot_extended_comparison.py`，
-见EXPERIMENT.md及`reference_digitization/README.md`的来源／使用说明。
-第10页保留较窄的5 MHz动力学情景，第12页的独立教学示意不变。
-
-R44：第08页使用 `physical_scenario_config.json`、`analyze_physical_scenario.py` 和 `plot_physical_comparison.py`，计算含离子流的冷离子情景、长度／几何敏感性、标称电流单位与四轮Kim筛选。保留旧脚本和输出以便复现，命令见 EXPERIMENT.md。
+编辑`docs/source/rst_files/K_Diagnostics/K05_*.rst`，不直接修改生成的HTML。
+英文视图保持纯英文，中文可括注英文术语。连续双语编号和稳定语义ID见[EQUATIONS.md](EQUATIONS.md)。
+互动图资源保存在`docs/source/_static/K_Diagnostics`；波包、邻近波带和双探针示意使用示意参数。

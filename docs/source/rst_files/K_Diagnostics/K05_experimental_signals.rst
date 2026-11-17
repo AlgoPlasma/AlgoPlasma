@@ -78,7 +78,6 @@
    The front view identifies the channels and their local azimuthal separation;
    the top view locates the tips relative to the exit plane. The drawing is not
    to scale. Its downstream arrow marks the axial direction, not azimuthal wave propagation.
-   The :ref:`measurement circuits <k05-response-en>` are explained separately.
 
    Each trace contains 10,000,000 samples at :math:`f_s=100` MS/s: 10 ns between samples,
    0.1 s per capture, and a Nyquist frequency of :math:`f_s/2=50` MHz.
@@ -97,10 +96,22 @@
    its thin line is their mean. This compresses the display without hiding every
    short excursion. The calculations below use every sample, not these display strips.
 
+   .. _k05-experiment-observable-en:
+
    The vertical axis is **measured voltage**, not plasma potential. The 1 kΩ resistor
    provides a nominal 0.001 A/V conversion, but does not calibrate the whole measurement
    chain at MHz frequencies. We keep V throughout this calculation so the measured
    quantity and its units remain explicit.
+
+   The measurement chain is ion collection → current through a resistor → recorded
+   voltage → Fourier coefficient. Converting this current into density or potential
+   additionally requires stable ion collection, temperature and sheath response,
+   and the density–potential approximation in :k05:eq:`probe-density-proxy`.
+   The probes can also be reconnected for a slow voltage sweep to estimate a mean
+   electron temperature; that is a separate measurement from these fast records.
+   The temperature used on page 08 is such an external input, not a value inferred
+   from the fluctuation spectrum. Cable, probe and instrument response can change
+   both amplitude and phase even without a deliberately added capacitor.
 
    .. raw:: html
 
@@ -677,7 +688,6 @@
 
    正视图用于认清通道和局部周向间距，俯视图用于认清尖端相对出口平面的位置。
    示意图不按比例；“下游”箭头表示轴向参考方向，不表示波的周向传播方向。
-   :ref:`测量电路 <k05-response-zh>` 另有说明。
 
    每路每组有 10,000,000 个点，采样率 :math:`f_s=100` MS/s：相邻点间隔 10 ns，
    记录总长 0.1 s，奈奎斯特频率（Nyquist frequency）为 :math:`f_s/2=50` MHz。
@@ -695,8 +705,17 @@
    每条半透明带保留连续 10,000 点中的最小值和最大值，细线表示这些点的均值。
    这样可以压缩显示，同时保留短暂尖峰的范围。后面的计算使用全部采样点，不使用范围带代替原波形。
 
+   .. _k05-experiment-observable-zh:
+
    纵轴是 **实测电压**，不能直接叫作等离子体电势。1 kΩ 电阻提供标称 0.001 A/V 换算，
    但这还不是整条测量链路在 MHz 频率下的标定。本页保持电压单位，避免在开始计算时就混淆测量量。
+
+   测量链是：离子收集→电流流过电阻→记录电压→Fourier系数。
+   再把电流解释为密度或电势，还需要稳定的离子收集、温度和鞘层响应，
+   以及 :k05:eq:`probe-density-proxy` 中的密度—电势近似。
+   同一探针也可以重新接线做慢电压扫描，从而估计平均电子温度；这与本页的高频记录是两种测量。
+   第08页使用的温度属于这样的外部输入，并非从波动谱反演得到。
+   即使没有专门安装电容，电缆、探针和仪器的响应也可能同时改变幅值与相位。
 
    .. raw:: html
 

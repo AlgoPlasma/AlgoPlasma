@@ -143,6 +143,47 @@
    tilt as an unmeasured scenario**. This is not a fitted angle and is not the
    axial angle used in [1].
 
+   .. _k05-source-7-en:
+
+   .. container:: k05-paper-match
+
+      .. rubric:: The theoretical curve uses reference [1], Eq. (7)
+
+      The response model supplies frequency and growth separately from the probe
+      fit. For magnetized Maxwellian electrons and cold ions, solve
+      :math:`\epsilon^{(1)}(\omega,\mathbf k)=0` for
+      :math:`\omega=\omega_r+i\gamma_{\rm th}`. For the time factor
+      :math:`e^{-i\omega t}`, :math:`f=\omega_r/(2\pi)` is frequency in Hz
+      and :math:`\gamma_{\rm th}` is theoretical growth in s⁻¹.
+
+      **Original equation, original notation — [1], (7)**
+
+      .. k05:equation:: paper-equation-7
+         :lang: en
+
+         \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
+         -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}.
+
+      :math:`\epsilon^{(1)}` is the dimensionless scaled dielectric response
+      introduced on :ref:`page 02 <k05-coefficients-en>`; :math:`g` is the magnetized
+      electron response (Gordeev function). :math:`k=|\mathbf k|` is wave-number
+      magnitude in m⁻¹, :math:`\lambda_{De}` the Debye length in m, and
+      :math:`\omega_{pi}` the ion plasma angular frequency in rad/s.
+      The axial wave number :math:`k_x` multiplies the ion speed :math:`v_p`
+      (our :math:`u_i`) to give the ion Doppler shift.
+
+      The dimensionless arguments are :math:`\Omega=(\omega-k_yV_d)/\omega_{ce}`,
+      :math:`X=k_\perp^2\rho^2` and :math:`Y=k_\parallel^2\rho^2`.
+      :math:`\omega_{ce}=eB/m_e` is the positive electron gyro angular frequency;
+      :math:`\rho=\sqrt{T_e/m_e}/\omega_{ce}` is the thermal Larmor radius in m,
+      with electron mass :math:`m_e` and :math:`T_e` converted to joules here.
+      :math:`k_\perp,k_\parallel` are perpendicular and parallel to the magnetic
+      field. These :math:`X,Y` are **not probe Fourier coefficients**.
+      The paper takes a radial field; this calculation projects onto the given
+      tilted field and uses the one geometry specified above.
+      ``gordeev`` in ``analyze_physical_scenario.py`` evaluates the response;
+      parameters and root residuals are saved with the results.
+
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion.svg
       :width: 100%
       :alt: Reference dispersion redraw and the moving cold-ion scenario on the reference axis ranges.
@@ -295,6 +336,12 @@
    of magnitude smaller. The separate vertical axes make similarly tall curves
    look closer than their numerical values are. A low-frequency negative region
    represents damping in the paper's interpretation.
+
+   The diagnostic tracks changes along the probes, whereas the kinetic model
+   predicts total local growth. Transport in the other directions can make those
+   rates differ. A modified electron distribution can also reduce the kinetic
+   drive. Reference [1] discusses both explanations; two azimuthal probes alone
+   cannot separate them.
 
    Our curves are the real parts of **two estimates of the same type of coefficient**:
    joint LS and Kim. The dotted theoretical curve is a separate kinetic calculation,
@@ -611,9 +658,40 @@
    conditional rates. A quantitative EDI or inverse-cascade claim still needs a
    supported propagation direction and branch, channel/probe response, and a
    justified relation between the measured signal and the wave quantity.
-   The :ref:`probe-response supplement <k05-response-en>` examines that measurement
-   chain. The :ref:`dispersion and comparison supplement <k05-comparison-en>` retains
-   the narrower 5 MHz input scenario; its numbers are not the expanded fit here.
+   The :ref:`measurement chain on page 06 <k05-experiment-observable-en>` states
+   the signal conversion, and the complete balance above retains finite-step
+   and residual contributions. Page 07 uses a 5 MHz input basis; this page uses
+   a common 20 MHz basis. Their fitted coefficients must not be spliced.
+
+   .. rubric:: 8. Connect growth and transfer to saturation
+
+   In [1], a high-frequency band has positive linear growth and negative
+   nonlinear transfer; a lower-frequency band receives transfer and is damped.
+   Together these observations support redistribution toward larger scales,
+   using the identified dispersion branch to connect frequency and wavelength.
+   A stationary spectrum can therefore contain continuing drive and loss.
+   In the ideal one-dimensional mean-square balance from page 04,
+
+   .. k05:equation:: paper-saturated-balance
+      :lang: en
+
+      v_{g,y}\partial_yP_f=2\gamma_f^{(y)}P_f+2T_f^{(1/2)},
+      \qquad \partial_yP_f\simeq0\ \Longrightarrow\
+      \gamma_f^{(y)}P_f+T_f^{(1/2)}\simeq0.
+
+   Here :math:`P_f` is a frequency-bin mean square, not a PSD per Hz;
+   :math:`T_f^{(1/2)}` follows the half-power convention above. The final
+   balance additionally requires local spatial uniformity and an adequate
+   retained model. Time stationarity alone does not make the spatial derivative
+   zero. Use :k05:eq:`rates-exact-balance` for the finite-spacing measured data.
+
+   Reference [1] resolves the final stationary state, not the startup history
+   of the instability. Kim's equal-model-power assumption is also imposed during
+   estimation, so its resulting balance is not independent proof of saturation.
+   Our records support the displayed statistical fits and conditional comparisons;
+   they do not yet establish an EDI mode, calibrated wave-energy transfer or an
+   inverse cascade. Those physical conclusions require the response and
+   propagation conditions stated above.
 
    .. raw:: html
 
@@ -629,6 +707,10 @@
         --extended /path/to/new-extended-results \
         --comparison /path/to/z5p5_a3p7_paper_comparison \
         --physical /path/to/new-physical-results --output /path/to/new-comparison-plots
+
+   The ``--comparison`` directory supplies the preserved 16384-point PSD, not
+   its old dispersion roots. The complete parent-data workflow is in
+   :download:`EXPERIMENT.md <../../../../K_Diagnostics/K05_bispectral_transfer/EXPERIMENT.md>`.
 
    The first script saves coefficients, pairs, moments, powers, holdout errors,
    rank/conditioning, Kim checks, configuration and hashes. QR compression of the
@@ -764,6 +846,41 @@
    这里选取 **垂直磁场平面内偏离周向15°** 作为未测量的几何情景。
    这个角度没有从数据拟合，也不等同于文献[1]的轴向传播角度。
 
+   .. _k05-source-7-zh:
+
+   .. container:: k05-paper-match
+
+      .. rubric:: 理论曲线使用文献[1]式(7)
+
+      理论频率和增长率由响应模型给出，与探针系数拟合分开计算。
+      对磁化Maxwell电子和冷离子，求解 :math:`\epsilon^{(1)}(\omega,\mathbf k)=0`，
+      得到复角频率 :math:`\omega=\omega_r+i\gamma_{\rm th}`。
+      对时间因子 :math:`e^{-i\omega t}`，:math:`f=\omega_r/(2\pi)` 是普通频率，单位Hz，
+      :math:`\gamma_{\rm th}` 是理论增长率，单位s⁻¹。
+
+      **文献原式与原符号 — [1]式(7)**
+
+      .. k05:equation:: paper-equation-7
+         :lang: zh
+
+         \epsilon^{(1)}=1+k^2\lambda_{De}^2+g(\Omega,X,Y)
+         -\frac{k^2\lambda_{De}^2\omega_{pi}^2}{(\omega-k_xv_p)^2}.
+
+      :math:`\epsilon^{(1)}` 是 :ref:`第02页 <k05-coefficients-zh>` 引入的无量纲缩放介电响应，
+      :math:`g` 是磁化电子的响应函数（Gordeev function）。
+      :math:`k=|\mathbf k|` 是波数大小，单位m⁻¹；:math:`\lambda_{De}` 是德拜长度，单位m；
+      :math:`\omega_{pi}` 是离子等离子体角频率，单位rad/s。
+      轴向波数 :math:`k_x` 与离子速度 :math:`v_p` （本页的 :math:`u_i`）相乘，给出离子多普勒频移。
+
+      三个无量纲自变量为 :math:`\Omega=(\omega-k_yV_d)/\omega_{ce}`、
+      :math:`X=k_\perp^2\rho^2`、:math:`Y=k_\parallel^2\rho^2`。
+      :math:`\omega_{ce}=eB/m_e` 是取正值的电子回旋角频率；
+      :math:`\rho=\sqrt{T_e/m_e}/\omega_{ce}` 是热运动拉莫尔半径，单位m，
+      其中 :math:`m_e` 是电子质量，此处的 :math:`T_e` 从eV换算为焦耳。
+      :math:`k_\perp,k_\parallel` 分别是垂直、平行磁场的波数分量；这里的 :math:`X,Y` **不是探针Fourier系数**。
+      原文取径向磁场；本例按给定倾斜磁场作投影，只使用上面选定的一种几何情景。
+      ``analyze_physical_scenario.py`` 中的 ``gordeev`` 函数计算电子响应，参数和求根残差随结果保存。
+
    .. figure:: /_static/K_Diagnostics/k05-compare-dispersion.svg
       :width: 100%
       :alt: 文献色散近似重绘与包含轴向离子流的冷离子情景，沿用原图坐标范围。
@@ -895,6 +1012,10 @@
    文献中的主要诊断增长峰在约7 MHz附近，频率结构与理论有相似之处，但数值约小一个数量级。
    两套纵轴会让相近的曲线高度看起来比数值更接近，读图时必须分开看。
    文献也把低频的一段负增长解释为阻尼。
+
+   诊断跟踪沿探针间距方向的变化，动理学模型给出局部总增长；其他方向的输运也会使两者不同。
+   电子分布发生变化也可能降低动理学驱动。文献[1]讨论了这两种解释，
+   仅靠两支周向探针不能把它们分别确定下来。
 
    我们的两条曲线是 **同一类系数的两种估计**：联合最小二乘与Kim修正。
    点线理论曲线来自独立的动力学计算，仅覆盖已有分支，不是对表观增长曲线的拟合。
@@ -1162,12 +1283,39 @@
    至此，**保留频带内的测量电压模型** 已形成闭合的计算链：
    记录→统计量→系数→有符号跨距贡献→条件性变化率。
    定量EDI或逆级联结论仍需要有依据的传播方向与色散分支、通道／探针响应，以及测量信号与波变量的关系。
-   :ref:`探针响应补充页 <k05-response-zh>` 继续检查这条测量链；
-   :ref:`色散与对照补充页 <k05-comparison-zh>` 保留较窄的5 MHz输入情景，其数值不能与本页扩展拟合混用。
+   :ref:`第06页测量链 <k05-experiment-observable-zh>` 说明信号换算，上面的完整收支保留有限步长和残差贡献。
+   第07页采用5 MHz输入基底，本页采用统一20 MHz输入基底，不能直接拼接两套拟合系数。
+
+   .. rubric:: 8．把增长、转移与饱和联系起来
+
+   文献[1]中，高频带具有正线性增长和负非线性转移，较低频带接收转移并发生阻尼。
+   这些观测共同支持向较大尺度的再分配，其中频率与波长的对应依赖所识别的色散分支。
+   因而，稳定的谱仍可包含持续的驱动和损失。第04页的一维理想均方量收支给出
+
+   .. k05:equation:: paper-saturated-balance
+      :lang: zh
+
+      v_{g,y}\partial_yP_f=2\gamma_f^{(y)}P_f+2T_f^{(1/2)},
+      \qquad \partial_yP_f\simeq0\ \Longrightarrow\
+      \gamma_f^{(y)}P_f+T_f^{(1/2)}\simeq0.
+
+   :math:`P_f` 是频点均方量，不是每Hz的PSD；:math:`T_f^{(1/2)}` 沿用上面的半功率约定。
+   右边的平衡还要求局部空间近似均匀，以及保留的模型足够描述信号。
+   时间平稳本身不会让空间导数自动为零。有限探针间距的实测数据应使用
+   :k05:eq:`rates-exact-balance` 的完整收支。
+
+   文献[1]诊断的是最终平稳态，没有测出不稳定性从启动到饱和的完整历程。
+   Kim的共同模型功率条件也是估计时预先施加的假设，因此得到平衡本身不是饱和机制的独立证明。
+   本实验记录支持已展示的统计拟合和条件性对照；尚不能据此确认EDI模态、
+   标定后的波能量转移或逆级联。这些物理结论仍需上面明确的响应与传播条件支持。
 
    .. raw:: html
 
       <details class="k05-note"><summary>复现扩展拟合和逐项对照图</summary>
+
+   ``--comparison`` 目录只提供保留的16384点PSD，不使用其中的旧色散根。
+   从原始记录开始的完整依赖顺序和命令见
+   :download:`EXPERIMENT.md <../../../../K_Diagnostics/K05_bispectral_transfer/EXPERIMENT.md>`。
 
    .. code-block:: bash
 

@@ -1,5 +1,52 @@
 # Reproduce the experimental spectral walkthrough
 
+## Current eight-page workflow (2026-11-17)
+
+The public K05 sequence ends at page08. The commands below close the data
+pipeline without requiring the removed supplement pages. Numerical scripts and
+previous results are retained; the later sections document their settings.
+Run from the repository root with NumPy, SciPy and Matplotlib available.
+Replace each `/path/to/...` with a real path; use a new output directory per run.
+
+```bash
+# Page06: the consistent N=2048 statistical walkthrough.
+python K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py \
+  --data /path/to/raw-captures --output /path/to/walkthrough
+# Page07 parents and worked coefficient example.
+python K_Diagnostics/K05_bispectral_transfer/validate_experiment.py \
+  --data /path/to/raw-captures --output /path/to/validation
+python K_Diagnostics/K05_bispectral_transfer/analyze_transfer_budget.py \
+  --data /path/to/raw-captures --output /path/to/budget
+python K_Diagnostics/K05_bispectral_transfer/analyze_coefficient_walkthrough.py \
+  --data /path/to/raw-captures --validation /path/to/validation \
+  --budget /path/to/budget --output /path/to/coefficients
+# Preserve the N=16384 PSD parent used in the page08 spectrum panel.
+python K_Diagnostics/K05_bispectral_transfer/analyze_experiment.py \
+  --data /path/to/raw-captures --output /path/to/spectra
+python K_Diagnostics/K05_bispectral_transfer/analyze_paper_comparison.py \
+  --budget /path/to/budget/transfer_arrays.npz \
+  --validation /path/to/validation/validation_arrays.npz \
+  --spectra /path/to/spectra/spectral_arrays.npz \
+  --config K_Diagnostics/K05_bispectral_transfer/paper_comparison_config.json \
+  --output /path/to/comparison-parent
+# Page08: expanded coefficients, selected physical scenario and paired plots.
+OPENBLAS_NUM_THREADS=2 python K_Diagnostics/K05_bispectral_transfer/analyze_extended_comparison.py \
+  --data /path/to/raw-captures --output /path/to/extended
+python K_Diagnostics/K05_bispectral_transfer/analyze_physical_scenario.py \
+  --extended /path/to/extended --output /path/to/physical
+python K_Diagnostics/K05_bispectral_transfer/plot_physical_comparison.py \
+  --extended /path/to/extended --comparison /path/to/comparison-parent \
+  --physical /path/to/physical --output /path/to/figures
+```
+
+The comparison parent supplies PSD only to the final plotter; its older
+5 MHz fits and kinetic roots do not replace the page08 20 MHz fit or moving-ion
+scenario. Raw data are read-only. No numerical rerun is needed for a page-only
+edit. Existing physical outputs also retain sensitivity checks for provenance;
+the public page uses only the selected 1 cm acceleration length and 15 degree
+perpendicular-plane tilt. Removed figures are not linked from the page.
+
+
 The sixth peer page uses dataset `z5p5_a3p7`: four synchronous C1/C3 captures
 from ion-saturation-current probes at one operating condition. Acquisition
 facts and explicit unknowns are in `experiment_z5p5_a3p7.json`. Original binary
@@ -56,7 +103,7 @@ K05 static-assets folder. Full arrays and PNGs stay outside Git. The supplementa
 The older N=16384 PSD/coherence overview below is retained for reproduction of
 historical figures and existing paper-comparison panels. It is not the main grid
 on the rewritten page06; do not mix its averages with N=2048 moments. The coefficient walkthrough reuses and audits the saved fits; it does not change
-those parent results. The detailed validation is now supplement 12.
+those parent results. Detailed validation settings remain below.
 
 
 ## Page 07: measured moments to coefficients (R38)
@@ -104,10 +151,8 @@ bound; failed cases remain explicitly labelled algebraic results. All LS
 designs are full rank, with scaled conditions4.888–10.765. A numerical rank
 check is not a test of probe calibration or stationary independent noise.
 
-The former page07 remains available at K05_model_validation.rst as supplement12;
-its high-frequency plot, sensitivity results and semantic anchors are preserved.
-Reviewed01–05 prose is retained, apart from relinking page05's next example.
-Renumber in overview reading order and rebuild all pages after this move.
+The validation producer remains a numerical parent of the eight-page walkthrough.
+Its former standalone explanatory page has been removed; page07 defines NMSE locally.
 
 ## Preserved first-analysis producer
 
@@ -189,7 +234,7 @@ held-out prediction, appropriate Kim assumptions and calibrated measurement/phas
 response. Potential/energy and per-second rates additionally require the plasma
 response and group velocity. Those quantities are not claimed by these scripts.
 
-## Leave-one-capture-out model validation (supplement 12)
+## Leave-one-capture-out model validation producer
 
 ```bash
 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
@@ -263,7 +308,7 @@ This is predictive least squares with noisy voltage predictors. It does not
 apply Kim's stationary correction, identify a causal coupling, or turn measured
 volts into a calibrated potential, growth rate, or energy transfer.
 
-## Dense high-frequency extension of Figure 2 (supplement 12)
+## Preserved dense high-frequency validation producer
 
 ```bash
 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
@@ -306,7 +351,7 @@ is not the quadratic fraction of plasma energy; the two fits have different
 linear coefficients and the complete prediction-power decomposition contains
 a signed cross term.
 
-## Page 08: mean swept characteristics and response checks
+## Preserved slow-sweep analysis and response checks
 
 The data owner confirmed C1 is the left fixed probe and C3 the right probe,
 3.7 mm apart azimuthally and 5.5 mm downstream. This identifies positions, not
@@ -384,7 +429,7 @@ using 20/100/200 pF. These are assumed scenarios, not measured calibration;
 no inverse filter is applied to fast data. Physical growth/transfer inference
 and Kim correction are not part of this temperature workflow.
 
-### Page 08 geometry and circuit drawings
+### Probe geometry and circuit drawings
 
 `draw_probe_schematics.py` generates the English/Chinese layout and circuit
 SVG/PNG assets without reading or fitting the experimental records:
@@ -409,7 +454,7 @@ The voltage-sense polarity is the explicit page assumption, not an independent
 calibration. A measurement branch does not imply an isolated input; the fast
 cathode-negative reference is not silently grounded to the chamber.
 
-## Page 10 supplement: stationary moments and held-out power budgets
+## Stationary moments and held-out power-budget producer
 
 Run from the repository root (choose a new output directory):
 
@@ -426,11 +471,10 @@ Current example: 35/368 cases meet the necessary common-power bound; all product
 Page08 R25 uses unchanged mean-sweep numerical arrays, with new full-range I–V and layout figures. Historical R24 numerical hashes describe the source at calculation time; plotting changes have a separate replot_provenance.json. Repeat scan labels1–4 map to10140015–10140018.WDF; earlier labels1–4 map to10140008–10140011.WDF. C3 is movable but stationary in these captures. The detailed illustrative R–C response is collapsed; capacitance is parasitic/input capacitance, not an added circuit component.
 
 
-## Page 09: counterparts of Brown & Jorns Figures 2 and 3
+## Preserved narrow-band comparison producer
 
-The reading order is now page08 probe interpretation, page09 results, then page10
-power-budget checks. The existing K05_power_budget.rst path and equation links
-are preserved. Page09 uses a new K05_paper_comparison.rst and two composite plots.
+This producer is retained for reproducibility and the preserved PSD input.
+Its former explanatory page is no longer in the public eight-page sequence.
 
 Run the earlier spectra, validation and budget analyses first, or use their preserved
 spectral_arrays.npz, validation_arrays.npz and transfer_arrays.npz outputs:
@@ -598,8 +642,8 @@ the saved kinetic branch only covers0.179–5.592 MHz and is never extrapolated.
 The local t_f panels require no group velocity. All Kim outputs are retained,
 with failed bounds explicitly flagged; no physical EDI/cascade conclusion is
 asserted. Target/input limits above20 MHz remain excluded even for difference
-pairs. Page10 retains the earlier5 MHz basis with branch-dependent velocity,
-so its coefficients and rates must not be spliced with page08 arrays.
+pairs. The earlier5 MHz basis remains in saved parent results; its coefficients
+and rates must not be spliced with page08 arrays.
 
 
 ## Page 08 moving-ion scenario (R44, 2026-11-16)
@@ -627,7 +671,7 @@ The selected positive ion-frame root covers1.349–26.607 MHz on ky10–100000 m
 Its true azimuthal group velocity fixes the other wavevector components; it is
 not the total derivative along ks=tan(theta)*ky. No frequency extrapolation;
 382/399 targets support rates, while all399 retain across-gap coefficients. The
-opposite ion-frame branch is shown separately and is never spliced in to fill gaps.
+opposite ion-frame branch is retained in saved outputs and is never spliced in to fill gaps.
 Root residuals, harmonic convergence, derivative checks, hashes and all scenario
 configs are in physical_summary.json / physical_arrays.npz. Tests independently
 resolve nearby roots, check energy/geometry, unit transforms and all-fold masking.

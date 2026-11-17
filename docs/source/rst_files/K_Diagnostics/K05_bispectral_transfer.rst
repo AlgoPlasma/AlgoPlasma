@@ -55,31 +55,14 @@ K05 · Bispectral transfer
          calculate 0.5–20 MHz counterparts of Figures 2 and 3, compare attributed
          redraws with the measured-voltage results, and check their limits.
 
-      9. :ref:`Supplement: what the probe measures <k05-response-en>` — rebuild I–V curves,
-         estimate temperature and inspect bias and electrical-response scenarios.
-
-      10. :ref:`Supplement: the narrower-band kinetic comparison <k05-comparison-en>` —
-          retain the 5 MHz input scenario and detailed dispersion calculation;
-          distinguish it from the expanded 20 MHz fit on page 08.
-
-      11. :ref:`Supplement: interpreting the plots <k05-budget-en>` — explain the
-          common-power check, reference phase and complete measured-power balance.
-
-      12. :ref:`Read the paper from equations to conclusions <k05-synthesis-en>` —
-          use independent schematics to connect drive, redistribution and saturation,
-          and distinguish source conclusions from the C1/C3 example.
-
-      13. :ref:`Supplement: validating the two-probe model <k05-validation-en>` —
-          inspect complete holdouts, residuals, sensitivity and the higher-frequency example.
-
       Follow the main text first; open the calculation notes when needed.
 
    .. raw:: html
 
       <details class="k05-note"><summary>Find a reference equation</summary>
 
-   Each comparison box puts the K05 equation above the original equation,
-   then explains the symbol and normalization differences.
+   The comparison boxes connect the working equations with the original notation
+   and explain symbol and normalization differences.
 
    - :ref:`[1], Eq. (1): Full wave evolution <k05-source-1-en>`
    - :ref:`[1], Eq. (2): Time-Fourier equation <k05-source-2-en>`
@@ -134,28 +117,13 @@ K05 · Bispectral transfer
       8. :ref:`逐项对照文献中的增长与转移 <k05-rates-zh>` ——
          先讲计算，再将文献近似重绘与0.5–20 MHz电压诊断结果一一对照，检查解释条件。
 
-      9. :ref:`补充：探针实际测到了什么 <k05-response-zh>` —— 重建 I–V 曲线、估计温度，
-         并检查工作偏置和电路响应情景。
-
-      10. :ref:`补充：较窄频带下的动力学对照 <k05-comparison-zh>` ——
-          保留5 MHz输入情景和详细色散计算，与第08页20 MHz扩展拟合区分。
-
-      11. :ref:`补充：怎样解释增长与转移图 <k05-budget-zh>` ——
-          展开共同功率检查、参考相位与完整实测功率收支。
-
-      12. :ref:`从方程读到论文结论 <k05-synthesis-zh>` ——
-          用独立示意图串起驱动、转移和饱和，区分原文结论与 C1/C3 示例。
-
-      13. :ref:`补充：双探针模型验证 <k05-validation-zh>` ——
-          检查完整留出结果、残差、设置敏感性与更高频率的预测。
-
       可以先顺着正文读，需要时再展开计算细节。
 
    .. raw:: html
 
       <details class="k05-note"><summary>按文献公式查找对应页面</summary>
 
-   每个对照框先放 K05 方程，再列文献原式，随后说明符号、归一化或模型简化的差别。
+   对照框将计算中使用的方程与文献原符号连接起来，并说明符号、归一化或模型简化的差别。
 
    - :ref:`[1] 式 (1)：完整波动演化 <k05-source-1-zh>`
    - :ref:`[1] 式 (2)：时间 Fourier 方程 <k05-source-2-zh>`
@@ -193,8 +161,3 @@ K05 · Bispectral transfer
    K05_experimental_signals
    K05_experimental_coefficients
    K05_growth_transfer
-   K05_probe_response
-   K05_paper_comparison
-   K05_power_budget
-   K05_paper_synthesis
-   K05_model_validation

@@ -301,3 +301,13 @@ rates-paper-dispersion, rates-group-slope and rates-group-implicit; do not reuse
 them for different equations. The section anchors remain on the short rate
 conversion bridge. Rebuild the consecutive registry (156 active equations);
 pages01-07 still use numbers1-107. Numerical models and saved results are unchanged.
+
+
+Revision46 (2026-11-17): the public module has eight articles. Remove former
+pages09–13. Move validation-nmse to page07 and paper-equation-7 plus
+paper-saturated-balance to page08, preserving their meanings and IDs. The other
+removed-page equation IDs are inactive and must not be reused for different
+content. Keep source-equation comparison anchors1–7 within the eight pages.
+The former long wavevector/group-velocity panels remain removed. Renumber after
+the moves; equations1–107 remain unchanged. Numerical scripts and saved arrays
+are unaffected by these documentation-only changes.

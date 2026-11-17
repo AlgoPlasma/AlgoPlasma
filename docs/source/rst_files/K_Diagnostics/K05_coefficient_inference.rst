@@ -759,8 +759,8 @@
      must also be assessed before identifying a two-probe effective rate with full
      three-dimensional growth.
 
-   The :ref:`probe-response page <k05-response-en>` and
-   :ref:`interpretation supplement <k05-budget-en>` discuss these inputs and checks.
+   The :ref:`measurement chain on page 06 <k05-experiment-observable-en>` and
+   :ref:`complete comparison on page 08 <k05-rates-en>` apply these inputs and checks.
 
 
    .. rubric:: Continue the reading
@@ -1431,8 +1431,8 @@
      单位 V²/s 本身只是电压模平方的变化率。
      若要将双探针的有效增长率等同于完整三维增长率，还要评估横向输运的贡献。
 
-   :ref:`探针响应页面 <k05-response-zh>` 和 :ref:`物理解释补充页 <k05-budget-zh>`
-   继续讨论这些输入及适用性检查。
+   :ref:`第06页测量链 <k05-experiment-observable-zh>` 和
+   :ref:`第08页结果对照 <k05-rates-zh>` 将这些输入和适用性检查用于实验数据。
 
 
 
