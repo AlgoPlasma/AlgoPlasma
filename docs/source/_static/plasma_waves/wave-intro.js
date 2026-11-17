@@ -20,7 +20,7 @@
     actions: ['Set electrons moving', 'Follow one electron', 'Follow the pattern', 'Reveal the insight', 'Watch again'],
     particlePrompt: 'Follow this electron', particleLabel: 'One electron: back and forth', patternLabel: 'Density pattern →',
     takeaway: '<span class="gold">Electrons oscillate locally.</span><br class="mobile-break"> <span class="mint">The density pattern moves on.</span>',
-    next: 'Next question: why do electrons oscillate?', progress: 'Observation step',
+    next: 'Page 2: why do electrons oscillate? →', progress: 'Observation step',
     descriptions: [
       'A uniform array of green dots represents electrons. Blue plus signs represent a fixed ion background. This is an illustration, not a crystal lattice.',
       'Electrons move horizontally and form alternating dense and sparse regions. The density pattern moves to the right.',
@@ -40,7 +40,7 @@
     actions: ['让电子动起来', '追踪一个电子', '再看疏密图样', '揭示这一页的结论', '重新看一遍'],
     particlePrompt: '追踪这一个电子', particleLabel: '这一个电子：局部往复', patternLabel: '疏密图样 →',
     takeaway: '<span class="gold">电子在局部往复，</span><br class="mobile-break"><span class="mint">疏密图样向前移动。</span>',
-    next: '接下来：电子为什么会往复运动？', progress: '观察步骤',
+    next: '进入第二页：电子为什么会往复运动？ →', progress: '观察步骤',
     descriptions: [
       '均匀排列的绿色点代表电子，蓝色加号代表固定离子背景；点阵只用于示意集体运动，不代表晶格。',
       '电子沿水平方向运动，组成疏密相间、向右移动的密度图样。',
@@ -74,6 +74,7 @@
     $('keyboard-note').textContent = text.keyboard;
     $('takeaway-text').innerHTML = text.takeaway;
     $('next-question').textContent = text.next;
+    $('next-question').href = `02_why_oscillates.html?lang=${language}`;
     $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
     document.querySelectorAll('[data-language]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === language)));
     try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* Optional preference only. */ }

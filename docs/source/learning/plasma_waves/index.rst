@@ -43,7 +43,20 @@ Plasma Waves
    不同位置电子的有序位移，可以组成移动的密度图样。
    **粒子的局部运动与波的图样运动需要分别观察。**
 
-   后续问题是：电子为什么会往复运动？本次先开放这一张开场页。
+   .. rubric:: 第 2 页 · 电子为什么会来回运动？
+
+   接着用电子层相对离子背景整体位移的平板模型，依次观察电荷分离、电场方向、
+   电子受力和释放后的往复运动。先预测方向，再点击揭示箭头；最后观察电子
+   穿过平衡位置时为什么不会立刻停下。本页先建立物理图像，暂不展开频率推导。
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/02_why_oscillates.html?lang=zh"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">进入第二页 →</a></p>
+
+   这是无磁、冷电子、固定离子的简化平板模型，不模拟整列波的空间传播。
+   **电场力指向平衡位置；惯性使电子越过平衡位置。**
+   电子越过原位后，电场和恢复力反向。未计碰撞等阻尼时，模型中的振荡持续存在。
 
 .. container:: ap-lang ap-lang-en
 
@@ -85,5 +98,21 @@ Plasma Waves
    Ordered displacements of electrons at different locations can form a moving
    density pattern. **Observe local particle motion and pattern motion separately.**
 
-   The next question is why electrons oscillate. This first release contains
-   only the opening slide.
+   .. rubric:: Page 2 · Why do electrons keep oscillating?
+
+   Displace an electron layer relative to a fixed ion background. Reveal charge
+   separation, field direction and electron force, then release the layer.
+   Predict each direction before revealing its arrow. Finally, observe why the
+   electrons do not stop as they pass equilibrium. The frequency derivation is
+   deferred; this page establishes the physical mechanism.
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/02_why_oscillates.html?lang=en"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">Open page 2 →</a></p>
+
+   This unmagnetized cold-electron slab approximation fixes the ions and isolates
+   coherent displacement, rather than simulating spatial wave propagation.
+   **The electric force points toward equilibrium; inertia carries electrons past it.**
+   Field and force reverse after crossing. Without collisions or other damping,
+   the ideal oscillation continues.

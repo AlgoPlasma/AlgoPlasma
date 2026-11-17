@@ -45,6 +45,8 @@ figcaption { flex: 0 0 auto; color: #94aaa6; font-size: 17px; line-height: 1.65;
 .takeaway > p:first-child { font-size: clamp(25px, 2.5vw, 43px); line-height: 1.5; font-weight: 550; margin: 0; letter-spacing: -.5px; }
 .gold { color: var(--gold); }.mint { color: var(--mint); }
 .next-question { font-size: 19px; color: var(--muted); margin: 8px 0 0; }
+.next-question a { color: var(--muted); text-underline-offset: 5px; text-decoration-color: #526e62; }
+.next-question a:hover { color: var(--mint); }
 .mobile-break { display: none; }
 .controls { display: flex; align-items: center; gap: 30px; }
 .progress-group { display: flex; align-items: center; gap: 18px; }

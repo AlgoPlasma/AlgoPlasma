@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>电子为什么会来回运动？ | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css">
+  <script src="wave-restoring.js" defer></script>
+</head>
+<body>
+  <div class="lesson" id="lesson" data-stage="0">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link" aria-label="返回等离子体波课堂">Algo<span>Plasma</span></a>
+      <p class="chapter" id="chapter">02 / 恢复力与惯性</p>
+      <div class="header-actions">
+        <button class="motion" id="motion" hidden type="button" aria-pressed="false">暂停动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言">
+          <button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button>
+          <button type="button" data-language="en" lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="heading">
+        <h1 id="title">电子为什么<span>会来回运动？</span></h1>
+        <p class="narration" id="narration">电子与离子相互抵消，先从平衡开始。</p>
+      </div>
+      <figure class="scene" id="scene">
+        <canvas id="plasma" role="img" aria-label="电子层和固定离子层重合，净电荷为零。">电子层偏移后形成电场。电子受到指向平衡位置的恢复力；回到平衡位置时仍有速度，因此越过原位并往复运动。</canvas>
+        <div class="species" aria-hidden="true"><span><i class="electron-key"></i><span id="electron-name">电子层</span></span><span class="ions"><b>+</b><span id="ion-name">固定离子层</span></span></div>
+        <figcaption id="model-note">平板模型：离子固定，电子层整体移动；省略热运动和碰撞，动画减速。</figcaption>
+      </figure>
+      <div class="takeaway" id="takeaway" hidden>
+        <p id="takeaway-text"><span class="mint">电场把电子拉回，</span><br class="mobile-break"><span class="gold">惯性让它越过原位。</span></p>
+        <p class="next-question"><a id="previous-lesson" href="01_what_moves.html?lang=zh">← 回看第一页：电子运动与波的图样</a></p>
+      </div>
+    </main>
+    <footer class="controls">
+      <div class="progress-group"><div class="progress" id="progress" aria-label="推演步骤"><i class="filled"></i><i></i><i></i><i></i><i></i><i></i></div><span class="stage-count" id="stage-count">1 / 6</span></div>
+      <p class="keyboard-note" id="keyboard-note">点击点阵或按 → 继续 · F 全屏</p>
+      <div class="actions"><button class="back" id="back" type="button" aria-label="上一步" hidden>←</button><button class="advance" id="advance" type="button"><span id="advance-text">把电子层向右移</span><span id="advance-arrow" aria-hidden="true">→</span></button></div>
+    </footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>电子层向右偏移，左侧留下正电、右侧出现负电。电场向右，负电子受力向左。回到平衡位置时，电子仍有速度；越过原位后，电场和恢复力反向。这就是理想模型中的往复振荡。</p><p>Displacing the electron layer to the right exposes positive charge on the left and negative charge on the right. The field points right and the electron force points left. Electrons still have velocity at equilibrium; after crossing it, the restoring force reverses.</p></div></noscript>
+</body>
+</html>
