@@ -33,7 +33,7 @@ def plot(output, figure="all", destination=None):
         fig.savefig(destination / (name + ".png"), dpi=180)
         fig.savefig(destination / (name + ".svg"), metadata={"Date": None})
         p = destination / (name + ".svg")
-        p.write_text("\n".join(line.rstrip() for line in p.read_text().splitlines()) + "\n")
+        p.write_text("\n".join(line.rstrip() for line in p.read_text(encoding="utf-8").splitlines()) + "\n", encoding="utf-8")
         plt.close(fig)
 
     bad = ~a["admissible"].all(axis=0)
@@ -140,7 +140,7 @@ def plot(output, figure="all", destination=None):
             "c": {"x_hz": [0, 3.5e7], "left_per_s": [-5e4, 3e5], "right_per_s": [-5e5, 3e6]},
             "out_of_range": "clipped by fixed axes only; all saved arrays unchanged",
             "uncovered_frequency": "blank; no extrapolation"})
-    (destination / "plot_provenance.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    (destination / "plot_provenance.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     print(f"Saved selection {figure} from unchanged comparison arrays to {destination}.")
 
 

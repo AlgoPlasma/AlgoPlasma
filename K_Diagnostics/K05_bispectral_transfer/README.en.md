@@ -5,7 +5,7 @@
 Follow Brown & Jorns, *Physical Review Letters* **130**, 115101 (2023),
 [doi:10.1103/PhysRevLett.130.115101](https://doi.org/10.1103/PhysRevLett.130.115101),
 from the wave equation to analysis of synchronous ion-current probe records.
-The eight peer pages are:
+The nine peer pages are:
 
 01. [Wave growth and coupling](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 02. [The envelope equation](../../docs/source/rst_files/K_Diagnostics/K05_envelope_coefficients.rst)
@@ -15,6 +15,7 @@ The eight peer pages are:
 06. [Measured records to statistics](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst)
 07. [Measured moments to L and Q](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst)
 08. [Growth and transfer comparison](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst)
+09. [Scripts and reproduction guide](../../docs/source/rst_files/K_Diagnostics/K05_scripts.rst)
 
 ## Reproduction and conventions
 
@@ -42,6 +43,26 @@ wave-variable normalization and a supported dispersion branch. The selected
 1 cm acceleration length and 15 degree tilt are assumptions. Reference panels
 are attributed image-derived redraws, not the authors' original data; see
 [provenance](reference_digitization/README.md).
+
+## Run and check
+
+These are dataset-specific command-line examples with reusable numerical helpers,
+not an installed Python package. Keep the module folder intact. The supported
+SIGLENT layout, array contracts and optional tools are linked from page09.
+From the repository root, install the runtime dependencies and inspect a command:
+
+```bash
+python -m pip install -r K_Diagnostics/K05_bispectral_transfer/requirements.txt
+python K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py --help
+python -m unittest discover -s K_Diagnostics/K05_bispectral_transfer -p 'test_*.py' -v
+```
+
+The colocated `test_*.py` files are deterministic maintainer checks, independent of
+private recordings. They cover readers, Fourier/PSD normalization, coefficient
+recovery, leakage prevention, Kim moments, power budgets and kinetic derivatives.
+The walkthroughs are user examples; saved plot inputs are described in EXPERIMENT.md.
+Runtime checked with Python3.12.3, NumPy2.3.4, SciPy1.16.3 and Matplotlib3.10.7;
+this is not an exhaustive version or operating-system compatibility matrix.
 
 ## Build and maintain
 

@@ -28,7 +28,12 @@ plt.rcParams.update({"font.size": 10, "axes.spines.top": False,
 
 
 def coefficients(x, n):
-    """Nonoverlapping, segment-demeaned periodic-Hann coefficients, exp(+iwt)/N."""
+    """Return (c, w) from a real voltage vector x and segment length n.
+
+    c has shape (len(x)//n, n//2+1), in V; w has shape (n,).
+    Drop an incomplete tail, demean each segment, then apply periodic Hann
+    and exp(+iwt)/n. Callers supply at least one complete segment.
+    """
     count = len(x)//n
     segments = x[:count*n].reshape(count, n)
     centered = segments - segments.mean(axis=1, keepdims=True)
@@ -37,6 +42,11 @@ def coefficients(x, n):
 
 
 def psd_from_coefficients(c, w, fs):
+    """Return a one-sided PSD per segment, with the same shape as c.
+
+    c and w come from coefficients(); fs is the sampling rate in Hz.
+    Output is V**2/Hz for voltage input; average axis 0 for the mean PSD.
+    """
     n = len(w)
     scale = np.full(c.shape[1], 2*n/(fs*np.mean(w*w)))
     scale[0] *= .5
@@ -46,7 +56,15 @@ def psd_from_coefficients(c, w, fs):
 
 
 def bicoherence(c, fs, n, max_hz=5e6):
-    """One unordered positive sum-frequency domain; no DC or negative pairs."""
+    """Return (squared bicoherence, complex B) on positive sum-frequency pairs.
+
+    c has segment and nonnegative-frequency axes; fs/max_hz are in Hz,
+    and n is the FFT length. Matrix axes index the two input bins; only
+    0 < a <= b and a+b <= floor(max_hz*n/fs) are evaluated. B is in V**3
+    for voltage input. Outside this triangle values are NaN; an evaluated
+    zero-power denominator currently returns bicoherence 0, not evidence
+    of a measured absence of coupling.
+    """
     kmax = min(int(max_hz/(fs/n)), c.shape[1]-1)
     result = np.full((kmax+1, kmax+1), np.nan)
     bispectrum = np.full(result.shape, complex(np.nan, np.nan))

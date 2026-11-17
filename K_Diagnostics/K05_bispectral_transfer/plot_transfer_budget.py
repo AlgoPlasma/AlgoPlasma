@@ -17,7 +17,7 @@ def plot(output):
         for ext in ['svg','png']:
             fig.savefig(output/f'k05-budget-{name}.{ext}',dpi=160,metadata={'Date':None} if ext=='svg' else None)
         svg = output/f'k05-budget-{name}.svg'
-        svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
+        svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding="utf-8").splitlines())+'\n', encoding="utf-8")
         plt.close(fig)
     def spread(ax,v,label,c):
         ax.plot(f,v.mean(axis=0),color=c,label=label)
@@ -79,7 +79,7 @@ def plot(output):
     sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
     (output/'plot_provenance.json').write_text(json.dumps(dict(
         arrays_sha256=sha(output/'transfer_arrays.npz'),plot_source_sha256=sha(Path(__file__)),
-        figures={p.name:sha(p) for p in output.glob('k05-budget-*')}),indent=2)+'\n')
+        figures={p.name:sha(p) for p in output.glob('k05-budget-*')}),indent=2)+'\n', encoding="utf-8")
 
 
 if __name__=='__main__':

@@ -50,7 +50,7 @@ def save(fig, output, name):
     fig.savefig(output / (name + ".png"), dpi=160, bbox_inches="tight")
     p = output / (name + ".svg")
     p.write_bytes(("\n".join(line.rstrip() for line in
-                            p.read_text().splitlines()) + "\n").encode())
+                            p.read_text(encoding="utf-8").splitlines()) + "\n").encode())
     plt.close(fig)
 
 
@@ -225,12 +225,12 @@ def main():
     args = p.parse_args()
     if args.output.exists() and any(args.output.iterdir()):
         raise FileExistsError("Use a new empty output directory")
-    metadata = json.loads(args.metadata.read_text())
+    metadata = json.loads(args.metadata.read_text(encoding="utf-8"))
     if (metadata["capture_ids"] != list(CAPTURES) or metadata["channels"] != [1,3]
             or not metadata["synchronized_pairs"] or not metadata["same_operating_condition"]):
         raise ValueError("Requires the four confirmed synchronized C1/C3 captures")
-    vs = json.loads((args.validation/"validation_summary.json").read_text())
-    ts = json.loads((args.budget/"transfer_summary.json").read_text())
+    vs = json.loads((args.validation/"validation_summary.json").read_text(encoding="utf-8"))
+    ts = json.loads((args.budget/"transfer_summary.json").read_text(encoding="utf-8"))
     if (vs["main_configuration"] != "n2048_b5" or ts["config"]["nperseg"] != N
             or ts["config"]["input_max_mhz"] != 5):
         raise ValueError("Unexpected parent configurations")

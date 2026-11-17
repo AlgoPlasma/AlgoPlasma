@@ -11,7 +11,7 @@ from analyze_paper_comparison import ColdIonEDI
 
 class PhysicalScenarioTests(unittest.TestCase):
     def setUp(self):
-        self.cfg=json.loads(Path(__file__).with_name('physical_scenario_config.json').read_text())
+        self.cfg=json.loads(Path(__file__).with_name('physical_scenario_config.json').read_text(encoding="utf-8"))
         self.m=MovingColdIonEDI(self.cfg)
 
     def test_energy_wavelength_and_vector_drift(self):

@@ -1,11 +1,15 @@
 # Reproduce the experimental spectral walkthrough
 
-## Current eight-page workflow (2026-11-17)
+## Current analysis workflow (2026-11-17)
 
-The public K05 sequence ends at page08. The commands below close the data
-pipeline without requiring the removed supplement pages. Numerical scripts and
+The analysis sequence ends at page08; [page09](../../docs/source/rst_files/K_Diagnostics/K05_scripts.rst)
+connects the scripts to those explanations, input/output contracts and tests.
+The commands below close the data pipeline without requiring the removed supplement pages. Numerical scripts and
 previous results are retained; the later sections document their settings.
-Run from the repository root with NumPy, SciPy and Matplotlib available.
+Run from the repository root after installing this module's `requirements.txt`
+(NumPy, SciPy and Matplotlib). Run `python -m unittest discover -s
+K_Diagnostics/K05_bispectral_transfer -p "test_*.py" -v` for the private-data-free
+numerical checks; see the README for a copyable single-line command.
 Replace each `/path/to/...` with a real path; use a new output directory per run.
 
 ```bash

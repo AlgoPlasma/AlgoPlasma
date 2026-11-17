@@ -1,4 +1,7 @@
-"""Reproduce page 08 from audited coefficients and held-out Fourier moments.
+"""Earlier 5 MHz rate walkthrough from saved coefficients and held-out moments.
+
+For the current page 08, use analyze_extended_comparison.py,
+analyze_physical_scenario.py and plot_physical_comparison.py.
 
 The saved kinetic branch supplies an explicit scenario, not a measured velocity.
 No raw inputs or parent results are modified. See EXPERIMENT.md.

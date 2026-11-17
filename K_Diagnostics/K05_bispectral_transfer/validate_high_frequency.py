@@ -1,4 +1,6 @@
-"""Dense 5--20 MHz counterpart of page 07 Figure 2, holding out capture 2.
+"""Optional dense 5--20 MHz prediction check, holding out capture 2.
+
+The current page 08 uses analyze_extended_comparison.py for four holdouts.
 
 Uses the original training-only scaling/SVD, with a fixed quadratic input
 limit of 20 MHz. Generates one two-panel spectrum/residual figure only.

@@ -1,0 +1,5 @@
+# Runtime and numerical-test dependencies for the K05 Python scripts.
+# Sphinx/Doxygen are only needed to rebuild documentation.
+numpy
+scipy
+matplotlib

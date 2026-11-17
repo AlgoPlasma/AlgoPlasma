@@ -1,4 +1,4 @@
-"""Stationary Kim moments and exact held-out power budgets for K05 page 09.
+"""Stationary Kim moments and exact held-out budgets; parent fits for page 07.
 
 Measured-voltage coefficients only. No response correction or group velocity
 is silently supplied. See --help and EXPERIMENT.md for the assumptions.
@@ -104,7 +104,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     if (args.output/'transfer_arrays.npz').exists():
         raise FileExistsError("Choose a new output directory to preserve prior numerical results")
-    metadata = json.loads(args.metadata.read_text())
+    metadata = json.loads(args.metadata.read_text(encoding="utf-8"))
     fs, all_groups, audit, files = load_coefficients(args.data, metadata)
     groups = all_groups[2048]
     del all_groups
@@ -172,7 +172,7 @@ def main():
             common_fraction_min=float(np.nanmin(a['powers'][j,:,2]/np.minimum(a['powers'][j,:,0],a['powers'][j,:,1]))),
             common_fraction_max=float(np.nanmax(a['powers'][j,:,2]/np.minimum(a['powers'][j,:,0],a['powers'][j,:,1]))))
             for j,g in enumerate(CAPTURES)])
-    (args.output/'transfer_summary.json').write_text(json.dumps(summary,indent=2,ensure_ascii=False)+'\n')
+    (args.output/'transfer_summary.json').write_text(json.dumps(summary,indent=2,ensure_ascii=False)+'\n', encoding="utf-8")
     print(json.dumps(summary['audit']),flush=True)
 
 

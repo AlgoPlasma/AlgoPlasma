@@ -55,7 +55,7 @@ def plot(extended,comparison,physical,output):
     old=np.load(comparison/'comparison_arrays.npz')
     f=a['frequency_hz']; fm=f/1e6
     p=np.load(physical/'physical_arrays.npz')
-    report=json.loads((physical/'physical_summary.json').read_text())
+    report=json.loads((physical/'physical_summary.json').read_text(encoding="utf-8"))
     cfg=report['config'];separation=cfg['separation_m']
     gamma=p['gamma'].copy()
     # mA/V is exactly 1 for the nominal 1 kohm resistor; apply it explicitly.

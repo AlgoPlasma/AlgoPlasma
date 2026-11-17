@@ -169,7 +169,7 @@ def analyze(extended, config, output):
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
         raise FileExistsError('Choose an empty output directory; preserve previous analysis')
-    cfg = json.loads(config.read_text())
+    cfg = json.loads(config.read_text(encoding="utf-8"))
     parent = extended/'extended_arrays.npz'
     parent_hash = sha(parent)
     a = np.load(parent, allow_pickle=False)
@@ -223,7 +223,7 @@ def analyze(extended, config, output):
         normalization='Same nominal 1/R for both probes; no DC, RMS, or peak normalization',
         group_velocity='partial omega_r / partial ky at fixed ks,kparallel; not the oblique path slope',
         limitations='Local Maxwellian proxy, cold ions, prescribed obliquity/signs, acceleration length estimate; no experimental root identification, response calibration or exhaustive kinetic root enumeration.')
-    (output/'physical_summary.json').write_text(json.dumps(report,indent=2)+'\n')
+    (output/'physical_summary.json').write_text(json.dumps(report,indent=2)+'\n', encoding="utf-8")
 
 
 if __name__ == '__main__':

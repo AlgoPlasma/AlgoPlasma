@@ -4,7 +4,7 @@
 
 以Brown与Jorns（2023）的研究为线索，从波动方程走到同步双探针记录的分析。
 文献：[doi:10.1103/PhysRevLett.130.115101](https://doi.org/10.1103/PhysRevLett.130.115101)。
-八篇正文同级，按以下顺序阅读：
+九篇正文同级，按以下顺序阅读：
 
 01. [波增长与耦合](../../docs/source/rst_files/K_Diagnostics/K05_wave_growth.rst)
 02. [包络方程与系数来源](../../docs/source/rst_files/K_Diagnostics/K05_envelope_coefficients.rst)
@@ -14,6 +14,7 @@
 06. [实测记录到统计量](../../docs/source/rst_files/K_Diagnostics/K05_experimental_signals.rst)
 07. [实测统计量到L与Q](../../docs/source/rst_files/K_Diagnostics/K05_experimental_coefficients.rst)
 08. [增长与转移的文献对照](../../docs/source/rst_files/K_Diagnostics/K05_growth_transfer.rst)
+09. [脚本与复现指南](../../docs/source/rst_files/K_Diagnostics/K05_scripts.rst)
 
 ## 复现与约定
 
@@ -35,6 +36,22 @@ K05使用正指数／除以N的Fourier系数与`<Y conj(X)>`互谱，使用K01�
 给定输入波对且矩阵可辨识时，统计模型闭合。物理速率还依赖测量响应标定、传播方向、
 波变量归一化和有依据的色散分支。1 cm有效加速长度与15°倾斜均为选定假设。
 文献面板是注明来源的图像近似重绘，不是作者原始数据，见[来源说明](reference_digitization/README.md)。
+
+## 运行与测试
+
+这些程序是针对当前数据的命令行示例，包含可复用的数值函数；并非已安装的Python包。
+请保留整个模块目录。第09页说明读取器支持范围、数组接口与可选工具。在仓库根目录运行：
+
+```bash
+python -m pip install -r K_Diagnostics/K05_bispectral_transfer/requirements.txt
+python K_Diagnostics/K05_bispectral_transfer/analyze_spectral_walkthrough.py --help
+python -m unittest discover -s K_Diagnostics/K05_bispectral_transfer -p 'test_*.py' -v
+```
+
+同目录的`test_*.py`是独立于未公开记录的确定性测试，覆盖读取器、Fourier/PSD归一化、
+系数恢复、训练／测试隔离、Kim统计矩、功率收支和动理学导数。walkthrough脚本是面向使用者的示例；
+保存数组的依赖见EXPERIMENT.md。已检查环境为Python3.12.3、NumPy2.3.4、SciPy1.16.3、
+Matplotlib3.10.7；并不表示已验证所有版本与操作系统组合。
 
 ## 构建与维护
 

@@ -55,6 +55,8 @@ K05 · Bispectral transfer
          calculate 0.5–20 MHz counterparts of Figures 2 and 3, compare attributed
          redraws with the measured-voltage results, and check their limits.
 
+      9. :ref:`Scripts and reproduction guide <k05-scripts-en>` — connect explanations to programs, inputs, outputs and numerical checks.
+
       Follow the main text first; open the calculation notes when needed.
 
    .. raw:: html
@@ -117,6 +119,8 @@ K05 · Bispectral transfer
       8. :ref:`逐项对照文献中的增长与转移 <k05-rates-zh>` ——
          先讲计算，再将文献近似重绘与0.5–20 MHz电压诊断结果一一对照，检查解释条件。
 
+      9. :ref:`脚本与复现指南 <k05-scripts-zh>` —— 对照讲解查找脚本，明确输入、输出、运行顺序和测试入口。
+
       可以先顺着正文读，需要时再展开计算细节。
 
    .. raw:: html
@@ -161,3 +165,4 @@ K05 · Bispectral transfer
    K05_experimental_signals
    K05_experimental_coefficients
    K05_growth_transfer
+   K05_scripts

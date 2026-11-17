@@ -11,7 +11,7 @@ from analyze_paper_comparison import ColdIonEDI, convert_rates, map_frequency, s
 
 class ComparisonTests(unittest.TestCase):
     def setUp(self):
-        self.config = json.loads(Path(__file__).with_name("paper_comparison_config.json").read_text())
+        self.config = json.loads(Path(__file__).with_name("paper_comparison_config.json").read_text(encoding="utf-8"))
         self.model = ColdIonEDI(self.config)
 
     def test_gordeev_matches_independent_orbit_integral(self):

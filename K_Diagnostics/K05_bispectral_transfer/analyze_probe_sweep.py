@@ -1,4 +1,4 @@
-"""Mean swept-probe I–V analysis for K05 page 08; raw inputs are read-only.
+"""Optional mean swept-probe I–V analysis; raw inputs are read-only.
 
 The original median workflow remains in analyze_probe_response.py for comparison.
 This estimates slopes of averaged characteristics, not an independently calibrated
@@ -178,7 +178,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--config', type=Path, default=Path(__file__).with_name('probe_sweep_config.json'))
     args = parser.parse_args(); args.output.mkdir(parents=True, exist_ok=True)
-    config = json.loads(args.config.read_text())
+    config = json.loads(args.config.read_text(encoding="utf-8"))
     if config['example_record'] != 15:
         raise ValueError('This page uses the preselected record 0015 as its worked example')
     reports, arrays = [], {}
@@ -189,7 +189,7 @@ def main():
         reports.append(report); arrays[ident] = a
     primary = next(r for r in reports if r['file'] == '10140015.WDF')
     a = arrays[15]; v, i = a['bins'][:,:2].T
-    legacy_config = json.loads(Path(__file__).with_name('probe_response_config.json').read_text())
+    legacy_config = json.loads(Path(__file__).with_name('probe_response_config.json').read_text(encoding="utf-8"))
     old, old_a = legacy_record(args.data/'10140015.WDF', legacy_config)
     old_v, old_i = old_a['curve'][:,:2].T
     old_window = [old['floating_v']-5,old['floating_v']+10]
@@ -211,7 +211,7 @@ def main():
             ('analyze_probe_sweep.py','plot_probe_sweep.py','yokogawa_wdf.py','analyze_probe_response.py','probe_response_config.json')})
     np.savez_compressed(args.output/'probe_sweep_arrays.npz',**{
         f'r{key}_{name}':val for key,a in arrays.items() for name,val in a.items()})
-    (args.output/'probe_sweep_summary.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
+    (args.output/'probe_sweep_summary.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n', encoding="utf-8")
     from plot_probe_sweep import make_plots
     make_plots(summary,arrays,args.output)
     for r in reports:

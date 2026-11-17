@@ -55,7 +55,7 @@ def save(fig, output, name, description):
                 "Description": description}, facecolor="white")
     fig.savefig(output / f"{name}.png", dpi=160, facecolor="white")
     svg = output/f'{name}.svg'
-    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding="utf-8").splitlines())+'\n', encoding="utf-8")
     plt.close(fig)
 
 

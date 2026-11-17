@@ -20,7 +20,7 @@ def make_plots(summary, arrays, output):
         fig.savefig(output/f'k05-sweep-{name}.svg',metadata={'Date':None})
         fig.savefig(output/f'k05-sweep-{name}.png',dpi=160)
         svg = output/f'k05-sweep-{name}.svg'
-        svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
+        svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding="utf-8").splitlines())+'\n', encoding="utf-8")
         plt.close(fig)
 
     fig,ax=plt.subplots(2,1,figsize=(9,5.1),sharex=True,layout='constrained')

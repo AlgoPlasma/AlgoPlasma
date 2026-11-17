@@ -34,7 +34,12 @@ def signed_pairs(target, maximum):
 
 
 def design_matrix(c, target, pairs):
-    """c holds positive-exponent Fourier coefficients; negative bins are conjugates."""
+    """Build D[M,J+1] = [X, Z1, ...] from complex coefficients c[M,F].
+
+    target and pairs[J,2] are integer Fourier-bin indices; c includes DC.
+    Negative indices use conjugates. The first column is in V and product
+    columns in V**2 for voltage input. Supply unique pairs from signed_pairs.
+    """
     def signed(k):
         v = c[:, abs(k)]
         return v if k > 0 else v.conj()
@@ -42,7 +47,13 @@ def design_matrix(c, target, pairs):
 
 
 def fit_scaled(design, target):
-    """No intercept; RMS scaling and SVD use only the supplied training rows."""
+    """Fit target[M] to complex design[M,P] without an intercept.
+
+    Supply finite, nonempty training rows only. Return coefficients[P],
+    RMS scales[P], singular values, rank, condition and reliability flag.
+    Scaling is undone in coef: for [X,Z1,...] it gives dimensionless L
+    and Q in V**-1. The fixed rank cutoff is RCOND.
+    """
     if len(design) != len(target) or len(target) == 0:
         raise ValueError("Training rows are empty or mismatched")
     if not np.all(np.isfinite(design)) or not np.all(np.isfinite(target)):
