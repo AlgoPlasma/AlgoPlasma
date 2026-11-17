@@ -52,8 +52,8 @@
       }
       ctx.stroke(); ctx.setLineDash([]);
     }
-    function grid(waves, t, left, right, top, bottom, length = 2.5) {
-      const columns = s.width < 650 ? 35 : 81, rows = s.width < 650 ? 4 : 5;
+    function grid(waves, t, left, right, top, bottom, length = 2.5, sampling = {}) {
+      const columns = sampling.columns || (s.width < 650 ? 35 : 81), rows = sampling.rows || (s.width < 650 ? 4 : 5);
       const scale = (right - left) / length;
       ctx.save(); ctx.beginPath(); ctx.rect(left - 1, top - 10, right - left + 2, bottom - top + 20); ctx.clip();
       for (let row = 0; row < rows; row++) for (let col = -5; col <= columns + 5; col++) {
@@ -121,9 +121,8 @@
     }
     function frame(now) {
       const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, .05); lastTime = now;
-      if (!document.hidden) {
-        if (!s.paused && config.running(s)) s.time += dt * (config.rate?.(s) || .15);
-        draw();
+      if (!document.hidden && !s.paused && config.running(s)) {
+        s.time += dt * (config.rate?.(s) || .15); draw();
       }
       requestAnimationFrame(frame);
     }

@@ -85,6 +85,21 @@ Plasma Waves
       <p><a class="reference external" href="../../_static/plasma_waves/04_phase.html?lang=zh"
       style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">进入第四页 →</a></p>
 
+   .. rubric:: 第 5 页 · 两列波相遇，会发生什么？
+
+   从 ``δn = δn₁ + δn₂`` 出发，调相位观察增强和相消，再比较近频波的拍，
+   最后观察同频等幅相向波形成的驻波。只叠加密度扰动，背景密度不重复相加。
+   两选预测题配有反馈：密度节点处始终为零的是密度扰动，电子仍可穿过节点。
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/05_superposition.html?lang=zh"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">进入第五页 →</a></p>
+
+   不播放动画时：同频等幅波同相时增强，反相时相消；拍频为两频率之差的绝对值。
+   等频等幅相向波可以形成 ``δn = 2A cos(kx) cos(ωt)``，密度节点的位置固定。
+   这些是线性叠加的给定波形示意，不是非线性相互作用或等离子体模拟结果。
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Plasma waves: start with observation
@@ -173,3 +188,23 @@ Plasma Waves
 
       <p><a class="reference external" href="../../_static/plasma_waves/04_phase.html?lang=en"
       style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">Open page 4 →</a></p>
+
+   .. rubric:: Page 5 · What happens when two waves meet?
+
+   Start from ``δn = δn₁ + δn₂``. Adjust relative phase to explore reinforcement
+   and cancellation, compare nearby frequencies to reveal beats, then reverse
+   one equal-frequency, equal-amplitude wave to form a standing wave. Add density
+   perturbations; do not add the background twice. An optional two-choice
+   prediction distinguishes fixed density nodes from stationary electrons.
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/05_superposition.html?lang=en"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">Open page 5 →</a></p>
+
+   Text alternative: equal-frequency, equal-amplitude waves reinforce in phase
+   and cancel in opposite phase. Beat frequency is the absolute frequency
+   difference. Equal counterpropagating waves can form
+   ``δn = 2A cos(kx) cos(ωt)`` with stationary density nodes. Electrons can still
+   cross those nodes. These are prescribed illustrations of linear superposition,
+   not nonlinear interactions or plasma-simulation results.

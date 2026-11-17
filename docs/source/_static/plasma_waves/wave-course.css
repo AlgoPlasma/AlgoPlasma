@@ -15,6 +15,7 @@
 .quiz-options button { padding: 9px 20px; background: transparent; border: 1px solid #526e62; border-radius: 5px; font-size: 20px; }
 .quiz-options button[aria-pressed="true"] { color: var(--mint); border-color: var(--mint); background: #21372d; }
 .feedback { color: var(--gold); font-size: 20px; margin: 9px 0 0; }
+.course-lesson[data-topic="superposition"][data-stage="4"] .scene { min-height: 190px; }
 @media (max-height: 780px) and (min-width: 701px) {
   .course-lesson h1 { font-size: 44px; }
   .course-lesson .narration { font-size: 24px; }

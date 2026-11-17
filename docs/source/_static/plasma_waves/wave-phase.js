@@ -12,7 +12,7 @@
       equations: ['', '', 'Δφ = kΔx　 k = 2π / λ <small>k：波数，单位距离积累的相位</small>', 'ω = 2π / T = 2πf <small>ω：角频率；固定 x 时 Δφ = −ωΔt</small>', 'δn(x,t) = A cos(kx − ωt + φ₀)<small>δn = nₑ − n₀；A：密度扰动幅值；φ₀：初相位</small>'],
       descriptions: ['同一电子密度波在不同空间位置的起伏并不总是同步。', '蓝色探针 A 固定，金色探针 B 的位置由滑块选择。下面两条曲线分别是两处密度随时间变化。相隔四分之一波长，相位差为 π/2；相隔半波长则反相；相隔一波长重新同相。', '在同一时刻比较相位的空间变化：Δφ=kΔx，波数 k=2π/λ。动画仍播放，但两个探针始终比较同一瞬间；滑块可检验半波长和一波长的情况。', '只观察固定探针 A 的时间变化。向右行进的余弦波取相位 kx−ωt+φ0，每经过 T，相位减少 2π；角频率 ω=2π/T。', '密度扰动为 δn=A cos(kx−ωt+φ0)，总电子密度为 n0+δn。A 是扰动幅值，k 是波数，ω 是角频率，φ0 是初相位。保持同一相位，x 随 t 增大，因此正 k、正 ω 时该波向右传播，相速度为 ω/k。'],
       takeaway: '<span class="mint">同相位点向右移动：</span> <span class="gold">v<sub>ph</sub> = ω/k。</span>',
-      previous: '← 第三页：测量一列波', next: '返回课程目录 →',
+      previous: '← 第三页：测量一列波', next: '第五页：两列波相遇，会怎样？ →',
       separation: '探针间距', phase: '相位差', density: '密度 nₑ', perturbation: '扰动 δn = nₑ − n₀', time: '时间 t', space: '位置 x',
       initial: '从不同位置的起伏，读出“相位”', temporal: '固定探针 A', same: '同相', opposite: '反相', offset: '错开',
     },
@@ -26,13 +26,13 @@
       equations: ['', '', 'Δφ = kΔx　 k = 2π / λ <small>k: wavenumber, phase per unit distance</small>', 'ω = 2π / T = 2πf <small>ω: angular frequency; at fixed x, Δφ = −ωΔt</small>', 'δn(x,t) = A cos(kx − ωt + φ₀)<small>δn = nₑ − n₀; A: density amplitude; φ₀: initial phase</small>'],
       descriptions: ['Different positions in the same electron-density wave need not reach maximum density together.', 'Probe A is fixed; the slider chooses the position of probe B. Two traces show density versus time. A quarter-wavelength separation gives π/2 phase difference, half a wavelength gives opposite phase, and a full wavelength returns to the same phase.', 'Compare two positions at the same instant: Δφ=kΔx, where wavenumber k=2π/λ. The animation continues, but both probes always compare the same instant. Use the slider to check half and full wavelengths.', 'Observe time variation at fixed probe A. With phase kx−ωt+φ0 for a right-moving wave, one period T decreases phase by 2π. Angular frequency is ω=2π/T.', 'The density perturbation is δn=A cos(kx−ωt+φ0), and total density is n0+δn. A is its amplitude, k the wavenumber, ω the angular frequency and φ0 the initial phase. Keeping phase constant makes x increase with t for positive k and ω, so the pattern moves right at ω/k.'],
       takeaway: '<span class="mint">Equal-phase points move right:</span> <span class="gold">v<sub>ph</sub> = ω/k.</span>',
-      previous: '← Page 3: measuring a wave', next: 'Return to course →',
+      previous: '← Page 3: measuring a wave', next: 'Page 5: what happens when waves meet? →',
       separation: 'Probe separation', phase: 'Phase difference', density: 'Density nₑ', perturbation: 'Perturbation δn = nₑ − n₀', time: 'Time t', space: 'Position x',
       initial: 'Read phase from density at different positions', temporal: 'Fixed probe A', same: 'Same phase', opposite: 'Opposite phase', offset: 'Shifted',
     }
   };
   PlasmaLesson.start({
-    translations, previous: '03_measuring_a_wave.html', next: '../../learning/plasma_waves/index.html', running: () => true,
+    translations, previous: '03_measuring_a_wave.html', next: '05_superposition.html', running: () => true,
     setup(a) {
       a.s.data.separation = .25;
       a.$('separation').addEventListener('input', e => { a.s.data.separation = Number(e.target.value); a.render(); });
@@ -71,6 +71,7 @@
         label(a.language === 'en' ? 'kx − ωt + φ₀ = constant' : 'kx − ωt + φ₀ = 常数', w / 2, 19, c.gold, small ? 18 : 25);
       }
       line(left, y, right, y);
+      if (s.stage < 4) label('n₀', left - 4, y, c.muted, small ? 14 : 17, 'right');
       label(s.stage === 4 ? t.perturbation : t.density, left, y - amp - 20, c.muted, small ? 16 : 20, 'left');
       if (s.stage === 1 || s.stage === 3) {
         const xmax = 2.2, tx = v => left + v / xmax * (right - left), current = mod(s.time, 2);

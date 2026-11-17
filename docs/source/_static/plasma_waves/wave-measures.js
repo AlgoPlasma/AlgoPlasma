@@ -52,7 +52,7 @@
       if (s.stage === 1) {
         const probe = .5, probeX = px(probe), xmax = 2.2, tx = v => left + v / xmax * (right - left);
         line(probeX, top - 10, probeX, bottom + 13, c.gold, 2);
-        label(t.probe, probeX + 10, bottom + 28, c.gold, small ? 16 : 21, 'left');
+        label(t.probe, probeX + 10, bottom + (small ? 18 : 28), c.gold, small ? 16 : 21, 'left');
         line(left, y, right, y); curve(u => (density(probe, u * xmax, waves) - 1) / .28, left, right, y, amp);
         const current = mod(time, 2), cx = tx(current), cy = y - amp * (density(probe, time, waves) - 1) / .28;
         line(cx, y - amp - 5, cx, y + amp + 5, '#f4c58355', 1); dot(cx, cy, 5, c.gold);
@@ -76,6 +76,7 @@
         }
         label(t.space, right, h - 13, c.muted, small ? 17 : 21, 'right');
       }
+      label('n₀', left - 4, y, c.muted, small ? 14 : 17, 'right');
     }
   });
 })();
