@@ -28,6 +28,13 @@ AlgoPlasma
     ./examples/index
 
 .. toctree::
+    :caption: Learning
+    :maxdepth: 1
+    :hidden:
+
+    ./learning/plasma_waves/index
+
+.. toctree::
     :caption: Reference
     :maxdepth: 1
     :hidden:
@@ -69,6 +76,7 @@ AlgoPlasma
          </p>
          <div class="ap-home-actions">
            <a class="ap-home-action ap-home-action-primary" href="developer_onboarding.html">快速入门</a>
+           <a class="ap-home-action" href="learning/plasma_waves/index.html">等离子体波课堂</a>
            <a class="ap-home-action" href="examples/index.html">查看示例</a>
            <a class="ap-home-action" href="tests/index.html">查看测试</a>
            <a class="ap-home-action" href="glossary.html">术语表</a>
@@ -144,6 +152,7 @@ AlgoPlasma
          </p>
          <div class="ap-home-actions">
            <a class="ap-home-action ap-home-action-primary" href="developer_onboarding.html">Quick Start</a>
+           <a class="ap-home-action" href="learning/plasma_waves/index.html">Plasma Waves</a>
            <a class="ap-home-action" href="examples/index.html">View Examples</a>
            <a class="ap-home-action" href="tests/index.html">View Tests</a>
            <a class="ap-home-action" href="glossary.html">Glossary</a>
