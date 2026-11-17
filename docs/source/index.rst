@@ -44,6 +44,7 @@ AlgoPlasma
     :hidden:
 
     ./community/contributors
+    Citation <./community/citation>
 
 .. image:: images/algoplasma-logo-transparent.png
    :class: ap-home-preload
