@@ -1,4 +1,4 @@
-/* Shared presentation controls and prescribed-density kinematics for pages 3–5.
+/* Shared presentation controls and prescribed-density kinematics for the course.
  * Not a plasma solver. See docs/author_notes/plasma_waves_measurements.md. */
 (() => {
   'use strict';

@@ -69,7 +69,7 @@ displaying 0.25 lambda is a relative distance, not 0.25 m. Values in the phase
 sliders are in pi radians, and their visible and accessible outputs include rad.
 
 `wave-course.js` shares presentation controls and exact density-to-dot mapping
-among pages 3–5; the first two lessons retain their existing independent models.
+among pages 3–6; the first two lessons retain their existing independent models.
 `wave-measures.js` supplies this page's bilingual content and diagram. The course
 entry and page 2 link here. Verify both language views, forward/back, pause,
 reduced motion, frozen snapshot, period/wavelength annotations and navigation.

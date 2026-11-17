@@ -1,0 +1,20 @@
+/* Page 6: keep the complex plane beside the plasma; stack them on small screens. */
+.complex-lesson .equation { font-size: clamp(26px, 2.35vw, 38px); }
+.complex-lesson .equation sup { font-size: .62em; }
+.complex-lesson .equation small { font-size: .64em; }
+@media (max-height: 780px) and (min-width: 901px) {
+  .complex-lesson .equation { font-size: 29px; }
+  .complex-lesson .scene { min-height: 270px; }
+}
+@media (max-width: 900px) {
+  .complex-lesson { height: auto; min-height: 100svh; }
+  .complex-lesson .scene { flex: 0 0 auto; display: grid; grid-template-rows: 540px auto; min-height: 0; }
+  .complex-lesson .scene canvas { height: 540px; min-height: 540px; }
+  .complex-lesson[data-stage="0"] .scene { grid-template-rows: 300px auto; }
+  .complex-lesson[data-stage="0"] .scene canvas { height: 300px; min-height: 300px; }
+  .complex-lesson .chapter { display: none; }
+}
+@media (max-width: 700px) {
+  .complex-lesson .equation { font-size: 24px; }
+  .complex-lesson .equation small { font-size: 18px; }
+}

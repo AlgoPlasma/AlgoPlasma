@@ -100,9 +100,28 @@ Plasma Waves
    等频等幅相向波可以形成 ``δn = 2A cos(kx) cos(ωt)``，密度节点的位置固定。
    这些是线性叠加的给定波形示意，不是非线性相互作用或等离子体模拟结果。
 
+   .. rubric:: 第 6 页 · 波为什么要用复数表示？
+
+   从固定探针的实数密度信号出发，把它和复平面箭头的实轴投影连接起来。
+   依次学习欧拉公式、复振幅、同频同波数的复振幅相加，以及平面波的微分。
+   用初相位滑块改变波形，用相位差滑块预测增强与相消。
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/06_complex_waves.html?lang=zh"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">进入第六页 →</a></p>
+
+   不播放动画时：令 ``ñ = n̂ exp[i(kx−ωt)]``、``n̂ = A exp(iφ₀)``，
+   取 ``δn = Re{ñ}`` 恢复密度扰动，总密度为 ``n₀ + δn``。
+   复平面两轴、复振幅和密度扰动均用 m⁻³，不是空间方向。
+   固定探针处相位随时间减小，因此箭头顺时针转动。
+   同一 k、ω 的波可以先相加常复振幅；相消为零时合成相位未定义。
+   对这个常复振幅平面波，``∂ₜñ = −iωñ``、``∂ₓñ = ikñ``。
+   图中用导数除以 ω 或 k 后的量比较相位，因而三种箭头单位一致。
+
    .. rubric:: 符号与单位
 
-   .. list-table:: 前五页采用的 SI 单位
+   .. list-table:: 前六页采用的 SI 单位
       :header-rows: 1
       :widths: 45 30 25
 
@@ -130,9 +149,15 @@ Plasma Waves
       * - 角频率
         - ω
         - rad/s
-      * - 数密度、密度扰动、密度幅值
-        - nₑ, n₀, δn, A
+      * - 数密度、密度扰动、实/复幅值
+        - nₑ, n₀, δn, A, n̂, ñ
         - m⁻³
+      * - 密度扰动的时间导数、空间导数
+        - ∂ₜñ, ∂ₓñ
+        - m⁻³/s；m⁻⁴
+      * - 虚数单位、复指数
+        - i, exp[i(kx−ωt)]
+        - 1（无量纲）
       * - 电场、电子受力
         - E, F
         - V/m；N
@@ -252,9 +277,30 @@ Plasma Waves
    cross those nodes. These are prescribed illustrations of linear superposition,
    not nonlinear interactions or plasma-simulation results.
 
+   .. rubric:: Page 6 · Why write waves as complex numbers?
+
+   Connect the real density signal at a fixed probe to the real-axis projection
+   of a rotating complex arrow. Reveal Euler's identity, complex amplitude,
+   same-mode amplitude addition, then differentiation of a plane wave. Adjust
+   initial phase and predict reinforcement or cancellation with one phase slider.
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/06_complex_waves.html?lang=en"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">Open page 6 →</a></p>
+
+   Text alternative: write ``ñ = n̂ exp[i(kx−ωt)]`` and ``n̂ = A exp(iφ₀)``;
+   recover the physical density perturbation as ``δn = Re{ñ}``, with total
+   density ``n₀ + δn``. Both complex axes, the complex amplitude and density
+   perturbation use m⁻³; they are not spatial directions. At a fixed probe,
+   phase decreases with time, so the arrow rotates clockwise. Constant amplitudes
+   can be added for a common k and ω; zero resultant amplitude has undefined phase.
+   For this constant-amplitude plane wave, ``∂ₜñ = −iωñ`` and ``∂ₓñ = ikñ``.
+   The plot divides derivatives by ω or k to compare phase with consistent units.
+
    .. rubric:: Symbols and units
 
-   .. list-table:: SI units in the first five pages
+   .. list-table:: SI units in the first six pages
       :header-rows: 1
       :widths: 45 30 25
 
@@ -282,9 +328,15 @@ Plasma Waves
       * - Angular frequency
         - ω
         - rad/s
-      * - Number density, density perturbation and density amplitude
-        - nₑ, n₀, δn, A
+      * - Number density, perturbation, real/complex amplitude
+        - nₑ, n₀, δn, A, n̂, ñ
         - m⁻³
+      * - Temporal and spatial density derivatives
+        - ∂ₜñ, ∂ₓñ
+        - m⁻³/s; m⁻⁴
+      * - Imaginary unit and complex exponential
+        - i, exp[i(kx−ωt)]
+        - 1 (dimensionless)
       * - Electric field and electron force
         - E, F
         - V/m; N

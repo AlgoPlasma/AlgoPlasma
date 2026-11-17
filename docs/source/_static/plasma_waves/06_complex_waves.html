@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>波为什么要用复数表示？ | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css"><link rel="stylesheet" href="wave-complex.css">
+  <script src="wave-course.js" defer></script><script src="wave-complex.js" defer></script>
+</head>
+<body>
+  <div class="lesson course-lesson complex-lesson" id="lesson" data-stage="0">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <p class="chapter" id="chapter">06 / 波的复数表达</p>
+      <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="false">暂停动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
+      </div>
+    </header>
+    <main>
+      <div class="heading"><h1 id="title">波，为什么<span>用复数表示？</span></h1><p class="narration" id="narration">探针测到实数的密度起伏。复数能帮我们做什么？</p><p class="equation" id="equation" hidden></p></div>
+      <figure class="scene" id="scene">
+        <canvas id="plasma" role="img" aria-label="电子密度波和固定探针">复密度扰动的实部给出可测量的密度扰动；复平面的坐标轴不是空间坐标。</canvas>
+        <p id="canvas-fallback" hidden>δn = Re{n̂ exp[i(kx−ωt)]}，n̂ = A exp(iφ₀)。复振幅的单位为 m⁻³。 / Recover the real density perturbation as Re{n̂ exp[i(kx−ωt)]}, with n̂ = A exp(iφ₀) in m⁻³.</p>
+        <figcaption id="model-note"></figcaption>
+      </figure>
+      <div class="interaction range-control" id="interaction" hidden><label for="complex-phase" id="complex-phase-label">初相位 φ₀</label><input id="complex-phase" type="range" min="0" max="2" step="0.05" value="0"><output id="complex-phase-output" for="complex-phase"></output></div>
+      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p><p class="next-question lesson-links"><a id="previous-lesson" href="05_superposition.html?lang=zh">← 第五页：干涉、拍频与驻波</a><a id="next-lesson" href="../../learning/plasma_waves/index.html?lang=zh">返回课程目录 →</a></p></div>
+    </main>
+    <footer class="controls"><div class="progress-group"><div class="progress" id="progress"></div><span class="stage-count" id="stage-count">1 / 5</span></div><p class="keyboard-note" id="keyboard-note"></p><div class="actions"><button class="back" id="back" type="button" hidden>←</button><button class="advance" id="advance" type="button"><span id="advance-text">让起伏变成旋转</span><span id="advance-arrow" aria-hidden="true">→</span></button></div></footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p><p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>i²=−1；Ae^{iθ}=Acosθ+iAsinθ。密度扰动 δn=Re{ñ}，其中 ñ=n̂e^{i(kx−ωt)}，n̂=Ae^{iφ₀}。A、n̂、ñ 和 δn 均用 m⁻³；φ₀ 用 rad，k 用 rad/m，ω 用 rad/s。复平面两轴是密度扰动的实部和虚部，不是空间方向。同 k、同 ω 的波可直接叠加常复振幅。对这一平面波，∂ₜñ=−iωñ、∂ₓñ=ikñ，单位分别为 m⁻³/s 和 m⁻⁴。图中用导数除以 ω 或 k 后的量比较相位；实际总密度为 n₀+δn。</p><p>With i²=−1, Ae^{iθ}=Acosθ+iAsinθ. Recover density perturbation as δn=Re{ñ}, where ñ=n̂e^{i(kx−ωt)} and n̂=Ae^{iφ₀}. A, n̂, ñ and δn use m⁻³; φ₀ uses rad, k rad/m and ω rad/s. The complex axes describe real and imaginary density components, not spatial directions. Add constant complex amplitudes for waves with the same k and ω. For this plane wave, ∂ₜñ=−iωñ and ∂ₓñ=ikñ, in m⁻³/s and m⁻⁴. Plotted derivatives are divided by ω or k to compare phase. Total density is n₀+δn.</p></div></noscript>
+</body>
+</html>
