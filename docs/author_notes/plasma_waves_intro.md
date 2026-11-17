@@ -16,7 +16,10 @@
   without another permanent control. Initial state is static. Reduced-motion
   preference keeps the animation paused unless the reader explicitly plays it.
 - Language: the Sphinx entry follows the site's bilingual containers; its two
-  launch links select `?lang=zh` or `?lang=en`. The slide adds no language controls.
+  launch links select `?lang=zh` or `?lang=en`. A compact Chinese/EN switch on the
+  slide updates all text and canvas annotations without resetting the lesson
+  step, phase or pause state. It shares the site's `ap-doc-language` preference;
+  an explicit URL language takes precedence. Storage/history failures are nonfatal.
 
 ## Illustration model and limits
 

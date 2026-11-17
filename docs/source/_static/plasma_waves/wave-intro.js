@@ -3,8 +3,7 @@
 (() => {
   'use strict';
   const $ = (id) => document.getElementById(id);
-  const english = new URLSearchParams(location.search).get('lang') === 'en';
-  const text = english ? {
+  const translations = { en: {
     title: 'A wave passes. <span>Where do the electrons go?</span>',
     documentTitle: 'A wave passes. Where do the electrons go? | AlgoPlasma',
     chapter: '01 / Wave basics', back: 'Previous step', returnLabel: 'Return to the plasma waves course',
@@ -31,7 +30,7 @@
     ],
     fullscreenFailed: 'Fullscreen is unavailable here. Open the lesson in a separate browser tab.',
     canvasFailed: 'The electron oscillates locally while the density pattern travels to the right. This browser cannot draw the animation.'
-  } : {
+  }, zh: {
     title: '波来了，<span>电子去哪儿了？</span>', documentTitle: '波来了，电子去哪儿了？ | AlgoPlasma',
     chapter: '01 / 波的基础', back: '上一步', returnLabel: '返回等离子体波课堂',
     electron: '电子', ion: '离子背景', pause: '暂停动画', play: '播放动画',
@@ -51,21 +50,37 @@
     ],
     fullscreenFailed: '当前预览不允许全屏，请在独立浏览器窗口中打开。',
     canvasFailed: '电子在局部往复，疏密图样向右移动。当前浏览器无法绘制动画。'
-  };
-
-  document.documentElement.lang = english ? 'en' : 'zh-CN';
-  document.title = text.documentTitle;
-  $('title').innerHTML = text.title;
-  $('chapter').textContent = text.chapter;
-  $('return-link').setAttribute('aria-label', text.returnLabel);
-  $('back').setAttribute('aria-label', text.back);
-  $('electron-name').textContent = text.electron;
-  $('ion-name').textContent = text.ion;
-  $('model-note').textContent = text.model;
-  $('scene-prompt').textContent = text.prompt;
-  $('keyboard-note').textContent = text.keyboard;
-  $('takeaway-text').innerHTML = text.takeaway;
-  $('next-question').textContent = text.next;
+  }};
+  let language, text;
+  function initialLanguage() {
+    const requested = new URLSearchParams(location.search).get('lang');
+    if (requested === 'zh' || requested === 'en') return requested;
+    try { if (localStorage.getItem('ap-doc-language') === 'en') return 'en'; } catch (_) { /* Offline storage can be disabled. */ }
+    return 'zh';
+  }
+  function setLanguage(value) {
+    language = value === 'en' ? 'en' : 'zh';
+    text = translations[language];
+    document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
+    document.title = text.documentTitle;
+    $('title').innerHTML = text.title;
+    $('chapter').textContent = text.chapter;
+    $('return-link').setAttribute('aria-label', text.returnLabel);
+    $('back').setAttribute('aria-label', text.back);
+    $('electron-name').textContent = text.electron;
+    $('ion-name').textContent = text.ion;
+    $('model-note').textContent = text.model;
+    $('scene-prompt').textContent = ctx ? text.prompt : text.canvasFailed;
+    $('keyboard-note').textContent = text.keyboard;
+    $('takeaway-text').innerHTML = text.takeaway;
+    $('next-question').textContent = text.next;
+    $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
+    document.querySelectorAll('[data-language]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === language)));
+    try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* Optional preference only. */ }
+    try { const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url); } catch (_) { /* file:// can restrict history. */ }
+    $('toast').hidden = true;
+    renderStage(false);
+  }
 
   const canvas = $('plasma');
   const ctx = canvas.getContext('2d');
@@ -93,11 +108,14 @@
       state.track = state.stage >= 2 ? 1 : 0;
       state.band = state.stage >= 3 ? 1 : 0;
     }
+    renderStage();
+  }
+
+  function renderStage(animate = true) {
     $('lesson').dataset.stage = String(state.stage);
     $('narration').textContent = text.steps[state.stage];
     $('narration').classList.remove('changed');
-    void $('narration').offsetWidth;
-    $('narration').classList.add('changed');
+    if (animate) { void $('narration').offsetWidth; $('narration').classList.add('changed'); }
     $('advance-text').textContent = text.actions[state.stage];
     $('advance-arrow').textContent = state.stage === 4 ? '↺' : '→';
     $('back').hidden = state.stage === 0;
@@ -106,6 +124,7 @@
     $('progress').setAttribute('aria-label', `${text.progress} ${state.stage + 1} / 5`);
     [...$('progress').children].forEach((dot, i) => dot.classList.toggle('filled', i <= state.stage));
     canvas.setAttribute('aria-label', text.descriptions[state.stage]);
+    canvas.textContent = text.descriptions[state.stage];
     $('status').textContent = `${text.steps[state.stage]} ${text.descriptions[state.stage]}`;
     updateMotion();
     fitCanvas();
@@ -127,6 +146,7 @@
   $('back').addEventListener('click', back);
   canvas.addEventListener('click', advance);
   $('motion').addEventListener('click', toggleMotion);
+  document.querySelectorAll('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
 
   let toastTimer;
   async function fullscreen() {
@@ -268,7 +288,7 @@
   new ResizeObserver(fitCanvas).observe(canvas);
   window.addEventListener('resize', fitCanvas);
   document.addEventListener('visibilitychange', () => { state.lastTime = null; });
-  if (!ctx) { $('scene-prompt').textContent = text.canvasFailed; canvas.hidden = true; }
-  setStage(0);
+  if (!ctx) canvas.hidden = true;
+  setLanguage(initialLanguage());
   requestAnimationFrame(frame);
 })();

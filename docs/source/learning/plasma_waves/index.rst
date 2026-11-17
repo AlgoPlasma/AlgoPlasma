@@ -30,6 +30,7 @@ Plasma Waves
    页面从均匀点阵开始。点击画面或右下角按钮，依次观察电子运动、追踪单个电子、
    标出密集区域，最后比较两种运动。方向键左右可前进或返回，空格继续，
    ``F`` 切换全屏，``P`` 暂停或播放。最后一步可重新播放整页。
+   幻灯片右上角可随时切换中文或英文，保留当前讲解步骤与动画状态。
 
    绿色点代表电子，蓝色加号代表固定离子背景。图中省略热运动，
    点阵不代表晶格；这是减速的集体位移示意，不是粒子模拟结果。
@@ -68,6 +69,8 @@ Plasma Waves
    to set electrons moving, follow one electron, highlight a dense region and
    compare the two motions. Left/right arrows go back/forward, Space continues,
    ``F`` toggles fullscreen and ``P`` pauses/plays. The last step offers a replay.
+   Use the Chinese/EN switch at the top right to change language without resetting
+   the current explanation step or animation state.
 
    Green dots represent electrons; blue plus signs represent fixed ions.
    Thermal motion is omitted, and the array is not a crystal lattice.

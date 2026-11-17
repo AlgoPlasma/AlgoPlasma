@@ -19,8 +19,12 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-
 .brand { font-size: 24px; font-weight: 650; letter-spacing: -.7px; color: #eef4f0; text-decoration: none; }
 .brand span { color: var(--mint); }
 .chapter { font-size: 18px; letter-spacing: 1px; color: var(--muted); margin: 0; border-left: 1px solid var(--line); padding-left: 32px; }
-.motion { margin-left: auto; padding: 10px 0 10px 22px; border: 0; background: transparent; font-size: 18px; color: var(--muted); }
+.header-actions { margin-left: auto; display: flex; align-items: center; gap: 24px; }
+.motion { padding: 10px 0; border: 0; background: transparent; font-size: 18px; color: var(--muted); }
 .motion:hover { color: var(--mint); }
+.language-switch { display: flex; align-items: center; gap: 10px; padding-left: 22px; border-left: 1px solid var(--line); }
+.language-switch button { padding: 9px 3px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font-size: 17px; }
+.language-switch button[aria-pressed="true"] { color: var(--mint); border-bottom-color: var(--mint); }
 main { min-height: 0; display: flex; flex-direction: column; padding-top: clamp(16px, 3vh, 38px); }
 .heading { flex: 0 0 auto; }
 h1 { font-size: clamp(42px, 4.4vw, 82px); font-weight: 560; line-height: 1.25; letter-spacing: -2px; margin: 0; }
@@ -84,8 +88,11 @@ figcaption { flex: 0 0 auto; color: #94aaa6; font-size: 17px; line-height: 1.65;
   .lesson { padding: 0 24px; height: auto; min-height: 100svh; grid-template-rows: 74px minmax(0, 1fr) 94px; }
   .masthead { gap: 14px; }
   .brand { font-size: 20px; }
-  .chapter { font-size: 14px; padding-left: 14px; letter-spacing: 0; }
-  .motion { font-size: 16px; padding: 10px 0 10px 8px; }
+  .chapter { display: none; }
+  .header-actions { gap: 12px; }
+  .language-switch { padding-left: 12px; gap: 6px; }
+  .language-switch button { font-size: 15px; }
+  .motion { font-size: 14px; padding: 10px 0; }
   main { padding-top: 16px; }
   h1 { font-size: clamp(35px, 7.2vw, 47px); letter-spacing: -1.1px; line-height: 1.35; }
   h1 span { display: block; }
