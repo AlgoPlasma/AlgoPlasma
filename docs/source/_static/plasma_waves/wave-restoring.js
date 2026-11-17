@@ -88,6 +88,8 @@
     $('takeaway-text').innerHTML = text.takeaway;
     $('previous-lesson').textContent = text.previous;
     $('previous-lesson').href = `01_what_moves.html?lang=${language}`;
+    $('next-lesson').textContent = language === 'en' ? 'Page 3: how do we measure a wave? →' : '第三页：怎样测量一列波？ →';
+    $('next-lesson').href = `03_measuring_a_wave.html?lang=${language}`;
     $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
     document.querySelectorAll('[data-language]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === language)));
     try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* file:// may restrict storage. */ }

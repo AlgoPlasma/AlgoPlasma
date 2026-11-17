@@ -58,6 +58,21 @@ Plasma Waves
    **电场力指向平衡位置；惯性使电子越过平衡位置。**
    电子越过原位后，电场和恢复力反向。未计碰撞等阻尼时，模型中的振荡持续存在。
 
+   .. rubric:: 第 3 页 · 怎样测量一列波？
+
+   用同一列电子密度波完成三次测量：固定位置读周期，冻结时刻读波长，
+   追踪同一个密度峰读相速度。由此连接 ``f = 1/T`` 和 ``v_ph = λ/T = λf``。
+   探针测局部电子密度，图样的相速度与单个电子的速度分开讨论。
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/03_measuring_a_wave.html?lang=zh"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">进入第三页 →</a></p>
+
+   不播放动画时：周期描述“多久重复”，波长描述“多远重复”。
+   同一密度峰在一个周期内前进一个波长，因此相速度为波长除以周期。
+   这里给定正弦密度波来说明运动学关系，不求解等离子体色散关系。
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Plasma waves: start with observation
@@ -116,3 +131,20 @@ Plasma Waves
    **The electric force points toward equilibrium; inertia carries electrons past it.**
    Field and force reverse after crossing. Without collisions or other damping,
    the ideal oscillation continues.
+
+   .. rubric:: Page 3 · How do we measure a wave?
+
+   Measure the same density wave three ways: period at a fixed position,
+   wavelength at a frozen instant, and phase speed by following the same crest.
+   Connect ``f = 1/T`` with ``v_ph = λ/T = λf``. The probe measures local electron
+   density, and pattern motion is distinguished from individual electron motion.
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/03_measuring_a_wave.html?lang=en"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">Open page 3 →</a></p>
+
+   Text alternative: period describes repetition in time; wavelength describes
+   repetition in space. The same crest advances one wavelength per period, giving
+   phase speed wavelength/period. This prescribed sinusoidal density wave teaches
+   kinematics; it does not solve a plasma dispersion relation.
