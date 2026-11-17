@@ -73,6 +73,18 @@ Plasma Waves
    同一密度峰在一个周期内前进一个波长，因此相速度为波长除以周期。
    这里给定正弦密度波来说明运动学关系，不求解等离子体色散关系。
 
+   .. rubric:: 第 4 页 · 不同位置，为什么不同时起伏？
+
+   移动第二个探针，比较两处电子密度的时间曲线：相隔半波长反相，
+   相隔一波长重新同相。把空间相位差与时间相位变化分别连接到波数
+   ``k = 2π/λ`` 和角频率 ``ω = 2π/T``，再组成密度扰动的表达式
+   ``δn = A cos(kx − ωt + φ₀)``。同相位点向右以 ``ω/k`` 移动。
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/04_phase.html?lang=zh"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">进入第四页 →</a></p>
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Plasma waves: start with observation
@@ -148,3 +160,16 @@ Plasma Waves
    repetition in space. The same crest advances one wavelength per period, giving
    phase speed wavelength/period. This prescribed sinusoidal density wave teaches
    kinematics; it does not solve a plasma dispersion relation.
+
+   .. rubric:: Page 4 · Different positions, different phases
+
+   Move a second probe and compare two local density traces. Half a wavelength
+   gives opposite phase; a full wavelength gives the same phase again. Connect
+   spatial and temporal phase changes to wavenumber ``k = 2π/λ`` and angular
+   frequency ``ω = 2π/T``. Combine them as ``δn = A cos(kx − ωt + φ₀)``;
+   equal-phase points move right at ``ω/k``.
+
+   .. raw:: html
+
+      <p><a class="reference external" href="../../_static/plasma_waves/04_phase.html?lang=en"
+      style="display:inline-block;padding:14px 24px;background:#214e3a;color:#fff;border-radius:5px;font-size:20px;text-decoration:none;">Open page 4 →</a></p>
