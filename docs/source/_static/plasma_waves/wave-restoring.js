@@ -19,7 +19,7 @@
         '回到原位时仍有速度，电子会越过平衡位置。'
       ],
       actions: ['把电子层向右移', '观察两侧电荷', '电场指向哪里？', '电子受到什么力？', '释放电子层', '重新看一遍'],
-      field: '电场 E', fieldZero: '电场 E = 0', force: '电子受力', forceZero: '电子受力 = 0',
+      field: '电场 E [V/m]', fieldZero: '电场 E = 0 V/m', force: '电子受力 F [N]', forceZero: '电子受力 F = 0 N',
       positive: '正电', negative: '负电', displaced: '电子层右移', equilibrium: '平衡位置',
       takeaway: '<span class="mint">电场把电子拉回，</span><br class="mobile-break"><span class="gold">惯性让它越过原位。</span>',
       previous: '← 回看第一页：电子运动与波的图样', progress: '推演步骤',
@@ -49,7 +49,7 @@
         'At equilibrium they still have velocity, so they move past it.'
       ],
       actions: ['Shift the electrons', 'Inspect the charges', 'Which way is the field?', 'Find the electron force', 'Release the electrons', 'Watch again'],
-      field: 'Electric field E', fieldZero: 'Electric field E = 0', force: 'Electron force', forceZero: 'Electron force = 0',
+      field: 'Electric field E [V/m]', fieldZero: 'Electric field E = 0 V/m', force: 'Electron force F [N]', forceZero: 'Electron force F = 0 N',
       positive: 'Positive', negative: 'Negative', displaced: 'Electron displacement', equilibrium: 'Equilibrium',
       takeaway: '<span class="mint">The field pulls electrons back.</span><br class="mobile-break"> <span class="gold">Inertia carries them past equilibrium.</span>',
       previous: '← Page 1: electron motion and the wave pattern', progress: 'Explanation step',

@@ -51,6 +51,23 @@ these velocities or derive plasma frequency yet.
 
 ## Implementation and validation
 
+### Unit presentation across the opening lessons
+
+Show SI units beside newly introduced quantities and dimensional axis labels:
+T and t in s; f in Hz; x and lambda in m; phase speed in m/s; k in rad/m;
+omega in rad/s; phase in rad; electron number density, its perturbation and its
+amplitude in m^-3. Page 2's electric field is in V/m and electron force in N.
+Keep the explicit radian symbol to distinguish phase from a cycle count. In SI
+the radian has dimension one, so k and omega have dimensions m^-1 and s^-1.
+See the [BIPM SI Brochure](https://www.bipm.org/en/publications/si-brochure).
+
+The plotted physical quantities have symbolic reference scales lambda, T and n0
+(lambda1 and T1 for the two-wave examples). No numerical SI calibration is
+assigned. The caption makes this explicit: the animation's wall-clock duration
+is not a physical period. Slider values DeltaX/lambda are dimensionless ratios;
+displaying 0.25 lambda is a relative distance, not 0.25 m. Values in the phase
+sliders are in pi radians, and their visible and accessible outputs include rad.
+
 `wave-course.js` shares presentation controls and exact density-to-dot mapping
 among pages 3–5; the first two lessons retain their existing independent models.
 `wave-measures.js` supplies this page's bilingual content and diagram. The course

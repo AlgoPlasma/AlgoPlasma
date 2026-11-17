@@ -100,6 +100,49 @@ Plasma Waves
    等频等幅相向波可以形成 ``δn = 2A cos(kx) cos(ωt)``，密度节点的位置固定。
    这些是线性叠加的给定波形示意，不是非线性相互作用或等离子体模拟结果。
 
+   .. rubric:: 符号与单位
+
+   .. list-table:: 前五页采用的 SI 单位
+      :header-rows: 1
+      :widths: 45 30 25
+
+      * - 物理量
+        - 符号
+        - 单位
+      * - 时间、周期
+        - t, T, T₁
+        - s
+      * - 频率、拍频
+        - f, f₁, f₂, f_beat
+        - Hz
+      * - 位置、位移、波长
+        - x, Δx, λ
+        - m
+      * - 相速度、电子速度
+        - v_ph, v_e
+        - m/s
+      * - 相位、相位差、初相位
+        - φ, Δφ, φ₀
+        - rad
+      * - 波数
+        - k
+        - rad/m
+      * - 角频率
+        - ω
+        - rad/s
+      * - 数密度、密度扰动、密度幅值
+        - nₑ, n₀, δn, A
+        - m⁻³
+      * - 电场、电子受力
+        - E, F
+        - V/m；N
+
+   rad 在 SI 中量纲为一；保留 rad 是为了明确相位意义，区别 Hz 与 rad/s。
+   指数或三角函数中的相位必须无量纲，因此 kx、ωt 和 φ₀ 应一致。
+   本模块的 A 是密度扰动幅值，单位随被描述的物理量而定，不能一律写成 m。
+   图以 λ、T、n₀ 为参考尺度（双波例使用 λ₁、T₁），未指定绝对 SI 数值；
+   播放所用的秒数不等于物理周期。0.25λ 表示相对距离，不是 0.25 m。
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Plasma waves: start with observation
@@ -208,3 +251,48 @@ Plasma Waves
    ``δn = 2A cos(kx) cos(ωt)`` with stationary density nodes. Electrons can still
    cross those nodes. These are prescribed illustrations of linear superposition,
    not nonlinear interactions or plasma-simulation results.
+
+   .. rubric:: Symbols and units
+
+   .. list-table:: SI units in the first five pages
+      :header-rows: 1
+      :widths: 45 30 25
+
+      * - Quantity
+        - Symbol
+        - Unit
+      * - Time and period
+        - t, T, T₁
+        - s
+      * - Frequency and beat frequency
+        - f, f₁, f₂, f_beat
+        - Hz
+      * - Position, displacement and wavelength
+        - x, Δx, λ
+        - m
+      * - Phase speed and electron velocity
+        - v_ph, v_e
+        - m/s
+      * - Phase, phase difference and initial phase
+        - φ, Δφ, φ₀
+        - rad
+      * - Wavenumber
+        - k
+        - rad/m
+      * - Angular frequency
+        - ω
+        - rad/s
+      * - Number density, density perturbation and density amplitude
+        - nₑ, n₀, δn, A
+        - m⁻³
+      * - Electric field and electron force
+        - E, F
+        - V/m; N
+
+   The radian has dimension one in SI. We retain rad to make phase explicit and
+   distinguish Hz from rad/s. An exponential or trigonometric argument must be
+   dimensionless, so kx, ωt and φ₀ must be consistent. Here A is a density
+   amplitude; amplitude inherits the units of the quantity being described.
+   The plots use λ, T and n₀ as reference scales (λ₁ and T₁ in the two-wave
+   examples), with no assigned absolute SI values. Playback seconds are not
+   physical periods. A distance of 0.25λ does not mean 0.25 m.
