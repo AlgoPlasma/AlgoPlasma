@@ -1,3 +1,12 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-10-28 16:37 +08:00 | Yinjian Zhao | git 288e21275be3
+   2026-10-29 13:23 +08:00 | Yinjian Zhao | git 5604a5bb51cc
+   2026-11-06 08:58 +08:00 | Yinjian Zhao | git 8ea987892b7b
+   2026-11-10 10:13 +08:00 | Yinjian Zhao | git b760bab91ff8
+   2026-11-10 11:18 +08:00 | Yinjian Zhao | git 2960c1dc97d1
+   2026-11-17 11:41 +08:00 | Yinjian Zhao | git f851bf1cd4a0
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 06 · From probe records to spectral statistics
 ================================================================
 

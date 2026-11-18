@@ -1,3 +1,9 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-13 13:10 +08:00 | Yinjian Zhao | git dfd0f9af0503
+# 2026-11-16 12:10 +08:00 | Yinjian Zhao | git 14e5fad1530d
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Replot page08 with moving cold ions, true group velocity and masked Kim results."""
 from pathlib import Path
 import argparse

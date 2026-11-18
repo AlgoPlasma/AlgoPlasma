@@ -1,3 +1,8 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-16 12:10 +08:00 | Yinjian Zhao | git 14e5fad1530d
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Cold-ion, moving-beam scenario for page 08; reuse, never refit, saved moments.
 
 Coordinates: axial x, azimuthal y, radial r. eb is along B; es is perpendicular

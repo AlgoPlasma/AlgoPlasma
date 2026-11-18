@@ -1,3 +1,12 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-11-12 10:09 +08:00 | Yinjian Zhao | git ca62b318155e
+   2026-11-13 09:43 +08:00 | Yinjian Zhao | git d2c9c54b51f0
+   2026-11-13 13:10 +08:00 | Yinjian Zhao | git dfd0f9af0503
+   2026-11-16 12:10 +08:00 | Yinjian Zhao | git 14e5fad1530d
+   2026-11-16 15:37 +08:00 | Yinjian Zhao | git 5efc16596ad6
+   2026-11-17 11:41 +08:00 | Yinjian Zhao | git f851bf1cd4a0
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 08 · Comparing growth and transfer with the reference
 ==========================================================
 

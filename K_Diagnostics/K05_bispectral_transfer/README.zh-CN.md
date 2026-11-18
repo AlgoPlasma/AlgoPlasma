@@ -1,3 +1,25 @@
+<!-- K05 contribution history (Git author dates; edit times include timezone).
+2026-10-23 16:13 +08:00 | Yinjian Zhao | git 482110a190d6
+2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+2026-10-28 16:37 +08:00 | Yinjian Zhao | git 288e21275be3
+2026-10-29 13:23 +08:00 | Yinjian Zhao | git 5604a5bb51cc
+2026-10-30 11:25 +08:00 | Yinjian Zhao | git 303832d65c08
+2026-11-02 13:56 +08:00 | Yinjian Zhao | git 1a1e390d6d38
+2026-11-03 09:08 +08:00 | Yinjian Zhao | git 52f1bfb880ab
+2026-11-03 13:13 +08:00 | Yinjian Zhao | git c78fafbf8e0b
+2026-11-03 18:50 +08:00 | Yinjian Zhao | git 950991764e7f
+2026-11-04 08:15 +08:00 | Yinjian Zhao | git 6e01f53a6565
+2026-11-04 15:31 +08:00 | Yinjian Zhao | git 2d7ac25f8e67
+2026-11-06 08:58 +08:00 | Yinjian Zhao | git 8ea987892b7b
+2026-11-10 11:18 +08:00 | Yinjian Zhao | git 2960c1dc97d1
+2026-11-12 10:09 +08:00 | Yinjian Zhao | git ca62b318155e
+2026-11-13 13:10 +08:00 | Yinjian Zhao | git dfd0f9af0503
+2026-11-16 12:10 +08:00 | Yinjian Zhao | git 14e5fad1530d
+2026-11-17 11:41 +08:00 | Yinjian Zhao | git f851bf1cd4a0
+2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->
+
 # K05 · 双谱转移分析
 
 [English](README.md) | [模块入口](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
@@ -68,3 +90,5 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 互动图资源保存在`docs/source/_static/K_Diagnostics`；波包、邻近波带和双探针示意使用示意参数。
 
 保留的JSON及用途见[数据文件说明](DATA_FILES.md)。
+
+文件级贡献记录、时区约定与生成图／数据文件的署名见[贡献记录](CONTRIBUTIONS.md)。

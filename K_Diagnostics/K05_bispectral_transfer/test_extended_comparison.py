@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-13 13:10 +08:00 | Yinjian Zhao | git dfd0f9af0503
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Check compressed fits against full training rows, including degeneracy."""
 import unittest
 import numpy as np

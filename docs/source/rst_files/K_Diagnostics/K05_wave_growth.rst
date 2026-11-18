@@ -1,3 +1,9 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-10-23 16:13 +08:00 | Yinjian Zhao | git 482110a190d6
+   2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+   2026-11-03 09:08 +08:00 | Yinjian Zhao | git 52f1bfb880ab
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 .. _k05-wave-growth-and-coupling:
 
 01 · Wave growth and coupling

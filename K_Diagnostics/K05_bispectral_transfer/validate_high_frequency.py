@@ -1,3 +1,8 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-29 13:23 +08:00 | Yinjian Zhao | git 5604a5bb51cc
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Optional dense 5--20 MHz prediction check, holding out capture 2.
 
 The current page 08 uses analyze_extended_comparison.py for four holdouts.

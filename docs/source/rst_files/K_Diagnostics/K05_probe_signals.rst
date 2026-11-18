@@ -1,3 +1,11 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+   2026-11-03 09:08 +08:00 | Yinjian Zhao | git 52f1bfb880ab
+   2026-11-03 18:50 +08:00 | Yinjian Zhao | git 950991764e7f
+   2026-11-12 10:09 +08:00 | Yinjian Zhao | git ca62b318155e
+   2026-11-17 11:41 +08:00 | Yinjian Zhao | git f851bf1cd4a0
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 03 · From waves to probe records
 =================================
 

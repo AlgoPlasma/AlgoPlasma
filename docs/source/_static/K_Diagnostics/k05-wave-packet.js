@@ -1,3 +1,8 @@
+/* K05 contribution history (Git author dates; edit times include timezone).
+ * 2026-10-23 16:13 +08:00 | Yinjian Zhao | git 482110a190d6
+ * 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
+
 /* An illustrative solution of (d_t + vg d_y) A = gamma A.
  * Arbitrary units; no experimental or EDI parameters. No external dependencies.
  * h = exp(gamma*t) exp(-(y-y0-vg*t)^2/(2*sigma^2)); u = h cos(k*y-omega*t).
@@ -29,6 +34,7 @@
 
   function initialize(host, index) {
     var w = words[host.getAttribute("data-k05-wave")] || words.en;
+    var chart = words.en; // Figure labels are shared; controls remain localized.
     var prefix = "k05-wave-" + index;
     var ui = document.createElement("div");
     ui.innerHTML = '<p class="k05-wave-title">' + w.title + '</p>' +
@@ -38,15 +44,15 @@
       '<clipPath id="' + prefix + '-cos-clip"><rect x="50" y="310" width="650" height="80"/></clipPath></defs>' +
       '<path d="M50 25V235H700 M50 130H700 M50 310V390H700 M50 350H700" stroke="#b3c1cd" fill="none"/>' +
       '<g fill="#485d6d" font-family="sans-serif" font-size="13">' +
-      '<text x="50" y="16">' + w.voltage + '</text>' +
-      '<text x="375" y="425" text-anchor="middle">' + w.position + '</text>' +
+      '<text x="50" y="16">' + chart.voltage + '</text>' +
+      '<text x="375" y="425" text-anchor="middle">' + chart.position + '</text>' +
       '<text x="50" y="252" text-anchor="middle">−8</text>' +
       '<text x="375" y="252" text-anchor="middle">0</text>' +
       '<text x="700" y="252" text-anchor="middle">8</text>' +
       '<text x="40" y="134" text-anchor="end">0</text>' +
       '<text x="40" y="46" text-anchor="end">2</text>' +
       '<text x="40" y="222" text-anchor="end">−2</text>' +
-      '<text x="50" y="292" fill="#237344">' + w.factor + '</text>' +
+      '<text x="50" y="292" fill="#237344">' + chart.factor + '</text>' +
       '<text x="40" y="322" text-anchor="end">1</text>' +
       '<text x="40" y="354" text-anchor="end">0</text>' +
       '<text x="40" y="386" text-anchor="end">−1</text>' +

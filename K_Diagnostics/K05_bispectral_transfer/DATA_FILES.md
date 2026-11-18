@@ -1,3 +1,7 @@
+<!-- K05 contribution history (Git author dates; edit times include timezone).
+2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->
+
 # K05 tracked data files / 保留数据文件说明
 
 JSON is a storage format, not a reason to keep or remove a file. These files are

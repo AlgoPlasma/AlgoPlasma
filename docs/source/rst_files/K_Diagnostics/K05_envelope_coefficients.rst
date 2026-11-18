@@ -1,3 +1,10 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+   2026-11-03 09:08 +08:00 | Yinjian Zhao | git 52f1bfb880ab
+   2026-11-03 13:13 +08:00 | Yinjian Zhao | git c78fafbf8e0b
+   2026-11-03 13:48 +08:00 | Yinjian Zhao | git d720dd65bc61
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 02 · Envelope equation
 ========================
 

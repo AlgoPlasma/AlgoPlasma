@@ -1,3 +1,8 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-10 11:18 +08:00 | Yinjian Zhao | git 2960c1dc97d1
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Build K05's measured-statistics-to-coefficients worked example.
 
 Reuses the complete four-fold LS/Kim results, checks their provenance against the

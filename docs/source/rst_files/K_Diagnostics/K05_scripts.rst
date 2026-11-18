@@ -1,3 +1,7 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 09 · Scripts and reproduction guide
 ====================================
 

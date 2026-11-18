@@ -1,3 +1,8 @@
+/* K05 contribution history (Git author dates; edit times include timezone).
+ * 2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+ * 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
+
 /* Preserve bookmarks from the original K05 article entry page. */
 (() => {
   "use strict";

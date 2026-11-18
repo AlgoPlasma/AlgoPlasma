@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-12 10:09 +08:00 | Yinjian Zhao | git ca62b318155e
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Independent analytical teaching diagrams inspired by Brown & Jorns (2023).
 
 No source image, digitized curve, or paper measurement is used. The dimensionless

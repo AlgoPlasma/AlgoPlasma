@@ -1,3 +1,9 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-12 10:09 +08:00 | Yinjian Zhao | git ca62b318155e
+# 2026-11-13 09:43 +08:00 | Yinjian Zhao | git d2c9c54b51f0
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Earlier 5 MHz rate walkthrough from saved coefficients and held-out moments.
 
 For the current page 08, use analyze_extended_comparison.py,
