@@ -2,6 +2,20 @@
 .complex-lesson .equation { font-size: clamp(26px, 2.35vw, 38px); }
 .complex-lesson .equation sup { font-size: .62em; }
 .complex-lesson .equation small { font-size: .64em; }
+.complex-lesson .blue { color: #8eadd9; }
+.complex-lesson.is-deriving { height: auto; min-height: 100svh; }
+.derivation { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px 44px; margin-top: 24px; }
+.derivation h2 { margin: 0 0 12px; color: var(--mint); font-size: 24px; font-weight: 550; }
+.derivation-check { border-left: 1px solid var(--line); padding-left: 36px; }
+.derivation-explanation { margin: 10px 0; font-size: 21px; line-height: 1.55; color: #c0ceca; }
+.derivation-math { margin: 12px 0; font-size: clamp(25px, 2.2vw, 34px); line-height: 1.6; }
+.derivation-math sup { font-size: .65em; }
+.math-group { white-space: nowrap; }
+.derivation-result { padding-left: 1.8em; }
+.derivation-unit { margin: 10px 0 0; font-size: 21px; color: var(--muted); }
+.derivation-unit strong { color: #eef4f0; font-weight: 500; }
+.derivation-limit { grid-column: 1 / -1; margin: 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 18px; line-height: 1.55; color: var(--muted); }
+.complex-lesson.is-deriving .takeaway > p:first-child { font-size: 26px; }
 @media (max-height: 780px) and (min-width: 901px) {
   .complex-lesson .equation { font-size: 29px; }
   .complex-lesson .scene { min-height: 270px; }
@@ -13,8 +27,15 @@
   .complex-lesson[data-stage="0"] .scene { grid-template-rows: 300px auto; }
   .complex-lesson[data-stage="0"] .scene canvas { height: 300px; min-height: 300px; }
   .complex-lesson .chapter { display: none; }
+  .derivation { grid-template-columns: 1fr; gap: 22px; }
+  .derivation-check { border-left: 0; border-top: 1px solid var(--line); padding: 20px 0 0; }
 }
 @media (max-width: 700px) {
   .complex-lesson .equation { font-size: 24px; }
   .complex-lesson .equation small { font-size: 18px; }
+  .derivation h2 { font-size: 22px; }
+  .derivation-explanation, .derivation-unit { font-size: 20px; }
+  .derivation-math { font-size: 25px; }
+  .complex-lesson.is-deriving .takeaway > p:first-child { font-size: 23px; }
+  .complex-lesson .progress { flex-wrap: wrap; max-width: 80px; row-gap: 5px; }
 }

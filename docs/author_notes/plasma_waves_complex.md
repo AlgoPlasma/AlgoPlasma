@@ -3,16 +3,18 @@
 - Reader: knows period, wavelength, phase, density perturbation and superposition
   from pages 3–5. Introduce only the needed complex-number facts: i^2=-1, real and
   imaginary components, and Euler's identity. No prior phasor course is assumed.
-  The final reveal assumes basic differentiation and names the temporal and
-  spatial derivative symbols explicitly.
+  The final two reveals assume basic differentiation and explain what each
+  partial derivative holds fixed, followed by the chain rule.
 - Destination: recover a real density signal from its complex representation;
   interpret complex amplitude as magnitude plus initial phase; add amplitudes
   for a common mode; explain the derivative multipliers and their signs/units.
 - Sequence: real plasma signal -> rotating complex density and its real-axis
   projection -> constant amplitude times the traveling exponential -> head-to-tail
-  amplitude addition -> derivatives as scaled, rotated complex quantities.
-  Four reveals connect the pictures to the calculation, rather than introducing
-  a second independent physical motion.
+  amplitude addition -> derivatives as scaled, rotated complex quantities ->
+  time partial derivative at fixed x -> space partial derivative at fixed t.
+  Seven stages connect the pictures to the calculation. The last two replace
+  the animation with readable algebra; the same advance/back controls reveal
+  them, with no additional buttons. Real-part checks explain the opposite signs.
 - Checks: change initial phase while watching the same probe; predict cancellation
   at relative phase pi; observe that zero total amplitude has undefined phase;
   compare the derivative's zero crossings with density extrema.
@@ -62,8 +64,17 @@ density, the real part of the complex field and particle spacing agree.
 
 For constant n_hat and a single plane-wave component:
 
+    d_t [i(k*x - omega*t)] = -i*omega   (hold x fixed)
+    d_x [i(k*x - omega*t)] =  i*k       (hold t fixed)
+    d_v exp(g) = exp(g) d_v g          (chain rule, v = t or x)
     d_t n_tilde = -i*omega*n_tilde       [m^-3/s]
     d_x n_tilde =  i*k*n_tilde          [m^-4]
+
+With theta=k*x-omega*t+phi0, the real-part check gives
+d_t delta_n=A*omega*sin(theta) and d_x delta_n=-A*k*sin(theta).
+The cosine derivative supplies one minus sign; d_t theta supplies a second,
+whereas d_x theta=k does not. Both derivations display the constant-amplitude
+condition, original wave, chain-rule intermediate expression and result units.
 
 Take real parts to obtain the corresponding physical derivatives. These simple
 substitutions are not the derivative of an arbitrary time/space-varying envelope;
@@ -88,3 +99,5 @@ addition and cancellation; phase/projection correspondence; language/slider/paus
 state; replay, reduced motion, keyboard controls, page 5–6 navigation and Sphinx.
 Inspect desktop and stacked narrow-screen layouts. Functional checks do not
 establish educational effectiveness; learner interpretation remains to evaluate.
+For the two algebra stages, also check forward/backward/replay, language switching,
+hidden animation controls, complete text alternatives and formula wrapping.
