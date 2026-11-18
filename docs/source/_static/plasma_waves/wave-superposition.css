@@ -1,0 +1,16 @@
+/* Keep the standing-wave algebra readable, using the existing reveal controls. */
+.lesson[data-topic="superposition"].is-deriving { height: auto; min-height: 100svh; }
+.standing-derivation { margin-top: 18px; }
+.standing-assumptions, .standing-units { margin: 0; font-size: 19px; line-height: 1.55; color: var(--muted); }
+.standing-component { margin-top: 20px; }
+.standing-component h2 { margin: 0 0 8px; font-size: 22px; font-weight: 500; color: #c0ceca; }
+.standing-math { margin: 0; font-size: clamp(25px, 2.25vw, 34px); line-height: 1.6; }
+.standing-math .math-part { display: inline-block; }
+.standing-explanation { margin: 18px 0 12px; font-size: 22px; line-height: 1.5; color: #c0ceca; }
+.standing-result { border-top: 1px solid var(--line); padding-top: 12px; margin-bottom: 10px; }
+.standing-nodes { margin: 14px 0 0; font-size: 21px; line-height: 1.55; color: #c0ceca; }
+@media (max-width: 700px) {
+  .standing-math { font-size: 25px; }
+  .standing-component h2, .standing-explanation, .standing-nodes { font-size: 20px; }
+  .standing-assumptions, .standing-units { font-size: 18px; }
+}

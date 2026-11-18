@@ -6,8 +6,10 @@
   predict beat frequency, identify stationary density nodes and distinguish them
   from stationary particles.
 - Sequence: one density wave -> add an equal co-propagating wave and adjust phase
-  -> use nearby frequencies -> reverse one of two equal-frequency waves -> a
-  short prediction about what vanishes at a density node.
+  -> use nearby frequencies -> reverse one of two equal-frequency waves ->
+  expand and add the two cosines -> a short prediction about what vanishes at
+  a density node. Six stages; the algebra replaces the animation in stage 4,
+  and the optional prediction is stage 5 (zero-based).
 - Independence: page 4 is linked as a prerequisite; each case visibly states its
   conditions and uses a self-contained analytic model. No Hall-thruster context.
 - Feedback: the phase slider continuously updates resultant amplitude. The final
@@ -52,6 +54,13 @@ kinematic; particle displacements are NOT simply added as nonlinear solutions.
    they need not be velocity nodes. The gold electron has fixed label q=0.75
    and oscillates across the spatial density node at X=0.75.
 
+The derivation states positive k and omega, equal amplitudes and wavenumber
+magnitudes, and zero initial phases. Expand cos(kx-omega*t) and
+cos(kx+omega*t) separately: the sine products cancel while the cosine products
+add. A is each traveling wave's density amplitude in m^-3; the local resultant
+amplitude is 2A*abs(cos(kx)), reaching 2A at antinodes. The fixed-node statement
+requires cos(kx)=0 for every time, not a momentary zero of cos(omega*t).
+
 The normal clock advances 0.15 T1 per display second, and the beat case uses 0.6
 to show an envelope cycle without a long wait. Every stage starts at tau=0;
 language changes and slider inputs preserve time and pause state. The visible
@@ -63,6 +72,8 @@ inferred from wall-clock playback.
 Verify exact reinforcement/cancellation, the beat envelope period (absolute
 amplitude), stationary density nodes and gold-electron motion through a node.
 Check translated quiz feedback, slider state across language changes, replay,
-keyboard interaction, reduced motion, all five pages' navigation and the Sphinx
+keyboard interaction, reduced motion, adjacent-page navigation and the Sphinx
 build. Inspect desktop and mobile renderings. Educational effectiveness is a
 future learner evaluation, not a conclusion of these functional checks.
+Check the inserted algebra stage in both languages, returning to the standing
+animation, optional quiz feedback and replay, and the static text alternative.
