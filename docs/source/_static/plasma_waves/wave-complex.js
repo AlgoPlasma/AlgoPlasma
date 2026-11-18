@@ -30,6 +30,7 @@
     </div>
     <div class="derivation-check">
       <h2>${text.realCheck}</h2>
+      <p class="derivation-math"><span class="math-group">ñ = A e<sup>iθ</sup></span> <span class="math-group">= A cosθ + iA sinθ</span></p>
       <p class="derivation-explanation">δn = A cosθ<br>θ = kx−ωt+φ₀</p>
       <p class="derivation-math">∂${subscript}δn = <span class="math-group">Re{${factor}ñ}</span><br><span class="derivation-result ${color}">= ${realFactor} sinθ</span></p>
       <p class="derivation-explanation">${copy.sign}</p>

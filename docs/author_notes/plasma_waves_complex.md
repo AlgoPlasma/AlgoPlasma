@@ -75,6 +75,8 @@ d_t delta_n=A*omega*sin(theta) and d_x delta_n=-A*k*sin(theta).
 The cosine derivative supplies one minus sign; d_t theta supplies a second,
 whereas d_x theta=k does not. Both derivations display the constant-amplitude
 condition, original wave, chain-rule intermediate expression and result units.
+Both also repeat n_tilde=A*exp(i*theta)=A*cos(theta)+i*A*sin(theta) beside
+the real-part calculation, so the projection can be checked without backtracking.
 
 Take real parts to obtain the corresponding physical derivatives. These simple
 substitutions are not the derivative of an arbitrary time/space-varying envelope;
