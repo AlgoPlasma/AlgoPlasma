@@ -12,6 +12,7 @@
 | K02 | [`K02_beall`](K02_beall/README.zh-CN.md) | 探针对互相位、平均自功率、频率与间距；折叠阶计算另需已知投影波数 | 折叠波数、Beall 谱 `S(k, f)` 与混叠折叠关系 |
 | K03 | [`K03_mle_k2d`](K03_mle_k2d/README.zh-CN.md) | 多构型的间距向量、相位统计量与搜索网格 | 联合对数似然与每频点的二维波矢估计 `(K_x, K_y)` |
 | K04 | [`K04_breathing_waveform`](K04_breathing_waveform/README.zh-CN.md) | 同一空间点、采样率一致、工况可比较的多条电压记录 | 留出记录的相位重复波形 `C` 与残差 `R = X - C` |
+| K05 | [`K05_bispectral_transfer`](K05_bispectral_transfer/README.zh-CN.md) | 四组同步双探针记录与显式物理情景 | 谱统计量、线性／二次系数、留出预测与条件性增长／转移对照 |
 
 K01 的 FFT、功率谱、相干度与互相位可用于不同来源的时间序列；`pair_power` 提供 Beall 流程使用的权重，`phase_mode_statistics` 采用该探针反演流程约定的众数格中心和方差定义。使用时仍需检查各函数的输入与统计约定。
 
@@ -21,6 +22,13 @@ K01 的 FFT、功率谱、相干度与互相位可用于不同来源的时间序
 人工示例、本地测试、画图和清理脚本统一位于
 [`tests/011_K04_breathing_waveform`](../tests/011_K04_breathing_waveform/README.zh-CN.md)，该目录 README 给出运行命令。
 K04 从单空间点的重复记录学习相位重复波形，可为后续谱分析提供残差。
+
+## 双谱增长与转移：K05
+
+[K05](K05_bispectral_transfer/README.zh-CN.md) 按波动方程、谱统计量、系数估计与实测图形对照组织九篇同级页面。
+[脚本指南](../docs/source/rst_files/K_Diagnostics/K05_scripts.rst) 给出运行顺序、输入输出和独立数值测试。
+K05采用正指数/N的Fourier系数和`<Y conj(X)>`互谱；与K01–K03交换结果前须统一约定。
+其命令行示例负责文件读写和绘图，数值函数可在明确的数组／单位条件下复用。
 
 ## 探针波动诊断专题：K01–K03
 
@@ -65,7 +73,7 @@ grid = fun_K03_wavenumber_grid(k_range_rad_m=3300.0, n_grid=301)
 result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, grid), grid, grid)
 ```
 
-计算函数依赖 NumPy，画图另需 Matplotlib。各单元的计算函数都**不做文件读写**；数据读取和结果落盘由调用方负责，示例与测试调度计算。
+上述K01–K03计算函数依赖 NumPy，画图另需 Matplotlib。这些计算函数都**不做文件读写**；数据读取和结果落盘由调用方负责，示例与测试调度计算。
 
 ## 测试
 

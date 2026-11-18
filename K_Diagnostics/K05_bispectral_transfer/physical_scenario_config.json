@@ -1,0 +1,33 @@
+{
+  "temperature_ev": 9.168901410487,
+  "density_m3": 2.2e16,
+  "ion_mass_u": 131.293,
+  "ion_temperature_ev": 0.0,
+  "magnetic_radial_gauss": 39.48,
+  "magnetic_axial_gauss": 80.34,
+  "discharge_voltage_v": 200.0,
+  "ion_energy_fraction": 0.5,
+  "acceleration_length_m": 0.01,
+  "sensitivity_lengths_m": [0.005, 0.02],
+  "parallel_wavelength_m": 0.01,
+  "perpendicular_obliquity_deg": 15.0,
+  "sensitivity_angles_deg": [0.0, 30.0],
+  "ky_min_per_m": 10.0,
+  "ky_max_per_m": 100000.0,
+  "ky_count": 2001,
+  "separation_m": 0.0037,
+  "resistance_ohm": 1000.0,
+  "root_tolerance": 1e-9,
+  "provenance": {
+    "temperature_ev": "Reported slow scan value, fixed by data owner; local Maxwellian proxy.",
+    "density_m3": "Data-owner prescribed density, 2026-11-16; not inferred from these waveforms.",
+    "ion_energy": "Cold singly charged xenon, negligible injection energy; half of 200 eV gained at the sampling location, per data owner.",
+    "acceleration_length": "Data-owner accepted estimate: 100 V over 1 cm, with 0.5 and 2 cm sensitivity; average field used as a local-field proxy, not measured.",
+    "parallel_wavelength": "Data-owner prescribed 1 cm, k_parallel=2*pi/wavelength (not 1/wavelength).",
+    "geometry": "Field magnitudes used with positive axial/radial model components. Wave vector in field coordinates: ky*ey + tan(angle)*ky*es + k_parallel*eb; es lies in the axial-radial plane perpendicular to B. The 15 degree perpendicular-plane tilt is an explicit unmeasured closure, not the paper's axial angle. 0 and 30 degrees are separate sensitivity scenarios.",
+    "electron_drift": "Magnitude E_axial*B_radial/|B|^2; +y is chosen along ExB. Its identification with C1-to-C3 remains assumed. No parallel electron bulk drift or pressure-gradient drift included.",
+    "ions": "Axial beam response uses omega-k_axial*u_i; no ion temperature broadening.",
+    "branch": "Continue the positive ion-frame acoustic root; opposite ion-frame branch also audited. Not an exhaustive enumeration of all kinetic roots.",
+    "normalization": "Same nominal resistor conversion for both probes; no per-probe RMS or peak matching, no unverified DC normalization. Current units are nominal MHz response only. Source Q/T absolute normalization unresolved."
+  }
+}

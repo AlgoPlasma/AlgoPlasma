@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "temperature_ev": 9.168901410487,
+  "density_m3": 1e17,
+  "magnetic_radial_gauss": 39.48,
+  "magnetic_axial_gauss": 80.34,
+  "ion_mass_u": 131.293,
+  "electron_drift_m_per_s": 100000.0,
+  "k_parallel_debye": 0.03,
+  "separation_m": 0.0037,
+  "ky_min_per_m": 100.0,
+  "ky_max_per_m": 50000.0,
+  "ky_count": 1001,
+  "root_tolerance": 1e-9,
+  "provenance": {
+    "temperature_ev": "Effective mean-I-V slope from the main repeated slow scan on page08; used as a Maxwellian temperature proxy, not a simultaneous bulk-temperature calibration.",
+    "magnetic_field": "Reported local radial/axial component magnitudes at C1; their vector magnitude sets the electron gyrofrequency.",
+    "density_m3": "Provisional order-of-magnitude value; not inferred by fitting the fluctuation spectra.",
+    "ion_mass_u": "Assumed singly ionized xenon; replace if a different working gas is confirmed.",
+    "electron_drift_m_per_s": "Provisional +100 km/s along model +y; not derived from the discharge voltage or measured cross phase.",
+    "k_parallel_debye": "Illustrative finite-parallel-wave-number choice, also used in Brown and Jorns (2023); not a measured value for these captures.",
+    "wave_vector": "Field-aligned slab: k_perp=ky, other perpendicular component zero, fixed k_parallel. The measured field is tilted; parallel is not identified with laboratory radial.",
+    "ion_doppler": "Assume k dot u_i=0 in this illustrative cold-ion branch; this does not assert that the actual ion beam is stationary.",
+    "direction": "Assume model +y and positive group velocity point from C1 to C3; propagation direction remains unmeasured.",
+    "response": "No gain/delay correction, plasma-potential conversion, or inverse circuit filter.",
+    "scope": "Single illustrative kinetic branch, not fitted mode identification or exhaustive root enumeration."
+  }
+}

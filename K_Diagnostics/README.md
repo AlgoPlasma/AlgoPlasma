@@ -16,6 +16,7 @@ and extraction of breathing-cycle waveforms from repeated records at one spatial
 | K02 | [`K02_beall`](K02_beall/) | Pair cross phase, mean auto-power, frequency and separation; fold-order calculation also needs a known projected wavenumber | Folded wavenumber, Beall spectrum `S(k, f)` and aliasing relations |
 | K03 | [`K03_mle_k2d`](K03_mle_k2d/) | Separation vectors, phase statistics and a search grid for multiple configurations | Joint log likelihood and a two-dimensional wavevector estimate `(K_x, K_y)` per frequency |
 | K04 | [`K04_breathing_waveform`](K04_breathing_waveform/) | Repeated voltage records at one spatial point, with the same sampling rate and comparable conditions | Phase-repeatable waveform `C` and residual `R = X - C` for a held-out record |
+| K05 | [`K05_bispectral_transfer`](K05_bispectral_transfer/) | Four synchronous two-probe captures and an explicit physical scenario | Spectral statistics, linear/quadratic coefficients, held-out predictions and conditional growth/transfer comparisons |
 
 K01's FFT, power spectrum, coherence and cross phase can process time series from
 different sources. `pair_power` supplies the weight used by the Beall workflow;
@@ -29,6 +30,16 @@ the [routine README](K04_breathing_waveform/README.md) describes the Python inte
 Artificial examples, local tests, plotting and cleanup live in
 [`tests/011_K04_breathing_waveform`](../tests/011_K04_breathing_waveform/README.md), with running instructions.
 K04 learns a phase-repeatable waveform from repeated single-point records and supplies residuals for later spectral analysis.
+
+## Bispectral growth and transfer: K05
+
+[K05](K05_bispectral_transfer/) provides nine peer pages connecting wave equations,
+spectral moments, coefficient estimates and measured/reference plots. The
+[script guide](../docs/source/rst_files/K_Diagnostics/K05_scripts.rst) documents
+inputs, outputs, execution order and independent numerical tests. K05 uses
+positive-exponent/N Fourier coefficients and `<Y conj(X)>` cross power; reconcile
+conventions before exchanging results with K01–K03. Its command-line examples
+perform file I/O and plotting around reusable numerical functions.
 
 ## Probe Wave Diagnostics: K01–K03
 
@@ -80,7 +91,7 @@ grid = fun_K03_wavenumber_grid(k_range_rad_m=3300.0, n_grid=301)
 result = fun_K03_peak_wavevector(fun_K03_joint_log_likelihood(configs, grid, grid), grid, grid)
 ```
 
-NumPy is the only dependency.  None of the numerical routines performs **any file
+For the K01–K03 functions above, NumPy is the only dependency. None performs **any file
 I/O** — reading raw data and writing results are the caller's responsibility,
 while examples and tests orchestrate the calculations. Plotting also needs Matplotlib.
 

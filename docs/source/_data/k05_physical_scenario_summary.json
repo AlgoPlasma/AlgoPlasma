@@ -1,0 +1,426 @@
+{
+  "config": {
+    "temperature_ev": 9.168901410487,
+    "density_m3": 2.2e+16,
+    "ion_mass_u": 131.293,
+    "ion_temperature_ev": 0.0,
+    "magnetic_radial_gauss": 39.48,
+    "magnetic_axial_gauss": 80.34,
+    "discharge_voltage_v": 200.0,
+    "ion_energy_fraction": 0.5,
+    "acceleration_length_m": 0.01,
+    "sensitivity_lengths_m": [
+      0.005,
+      0.02
+    ],
+    "parallel_wavelength_m": 0.01,
+    "perpendicular_obliquity_deg": 15.0,
+    "sensitivity_angles_deg": [
+      0.0,
+      30.0
+    ],
+    "ky_min_per_m": 10.0,
+    "ky_max_per_m": 100000.0,
+    "ky_count": 2001,
+    "separation_m": 0.0037,
+    "resistance_ohm": 1000.0,
+    "root_tolerance": 1e-09,
+    "provenance": {
+      "temperature_ev": "Reported slow scan value, fixed by data owner; local Maxwellian proxy.",
+      "density_m3": "Data-owner prescribed density, 2026-11-16; not inferred from these waveforms.",
+      "ion_energy": "Cold singly charged xenon, negligible injection energy; half of 200 eV gained at the sampling location, per data owner.",
+      "acceleration_length": "Data-owner accepted estimate: 100 V over 1 cm, with 0.5 and 2 cm sensitivity; average field used as a local-field proxy, not measured.",
+      "parallel_wavelength": "Data-owner prescribed 1 cm, k_parallel=2*pi/wavelength (not 1/wavelength).",
+      "geometry": "Field magnitudes used with positive axial/radial model components. Wave vector in field coordinates: ky*ey + tan(angle)*ky*es + k_parallel*eb; es lies in the axial-radial plane perpendicular to B. The 15 degree perpendicular-plane tilt is an explicit unmeasured closure, not the paper's axial angle. 0 and 30 degrees are separate sensitivity scenarios.",
+      "electron_drift": "Magnitude E_axial*B_radial/|B|^2; +y is chosen along ExB. Its identification with C1-to-C3 remains assumed. No parallel electron bulk drift or pressure-gradient drift included.",
+      "ions": "Axial beam response uses omega-k_axial*u_i; no ion temperature broadening.",
+      "branch": "Continue the positive ion-frame acoustic root; opposite ion-frame branch also audited. Not an exhaustive enumeration of all kinetic roots.",
+      "normalization": "Same nominal resistor conversion for both probes; no per-probe RMS or peak matching, no unverified DC normalization. Current units are nominal MHz response only. Source Q/T absolute normalization unresolved."
+    }
+  },
+  "scenarios": {
+    "main": {
+      "config": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "ion_mass_u": 131.293,
+        "ion_temperature_ev": 0.0,
+        "magnetic_radial_gauss": 39.48,
+        "magnetic_axial_gauss": 80.34,
+        "discharge_voltage_v": 200.0,
+        "ion_energy_fraction": 0.5,
+        "acceleration_length_m": 0.01,
+        "sensitivity_lengths_m": [
+          0.005,
+          0.02
+        ],
+        "parallel_wavelength_m": 0.01,
+        "perpendicular_obliquity_deg": 15.0,
+        "sensitivity_angles_deg": [
+          0.0,
+          30.0
+        ],
+        "ky_min_per_m": 10.0,
+        "ky_max_per_m": 100000.0,
+        "ky_count": 2001,
+        "separation_m": 0.0037,
+        "resistance_ohm": 1000.0,
+        "root_tolerance": 1e-09,
+        "provenance": {
+          "temperature_ev": "Reported slow scan value, fixed by data owner; local Maxwellian proxy.",
+          "density_m3": "Data-owner prescribed density, 2026-11-16; not inferred from these waveforms.",
+          "ion_energy": "Cold singly charged xenon, negligible injection energy; half of 200 eV gained at the sampling location, per data owner.",
+          "acceleration_length": "Data-owner accepted estimate: 100 V over 1 cm, with 0.5 and 2 cm sensitivity; average field used as a local-field proxy, not measured.",
+          "parallel_wavelength": "Data-owner prescribed 1 cm, k_parallel=2*pi/wavelength (not 1/wavelength).",
+          "geometry": "Field magnitudes used with positive axial/radial model components. Wave vector in field coordinates: ky*ey + tan(angle)*ky*es + k_parallel*eb; es lies in the axial-radial plane perpendicular to B. The 15 degree perpendicular-plane tilt is an explicit unmeasured closure, not the paper's axial angle. 0 and 30 degrees are separate sensitivity scenarios.",
+          "electron_drift": "Magnitude E_axial*B_radial/|B|^2; +y is chosen along ExB. Its identification with C1-to-C3 remains assumed. No parallel electron bulk drift or pressure-gradient drift included.",
+          "ions": "Axial beam response uses omega-k_axial*u_i; no ion temperature broadening.",
+          "branch": "Continue the positive ion-frame acoustic root; opposite ion-frame branch also audited. Not an exhaustive enumeration of all kinetic roots.",
+          "normalization": "Same nominal resistor conversion for both probes; no per-probe RMS or peak matching, no unverified DC normalization. Current units are nominal MHz response only. Source Q/T absolute normalization unresolved."
+        }
+      },
+      "scales": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "magnetic_gauss": 89.51640073193292,
+        "debye_m": 0.00015176320140012148,
+        "sound_speed_m_per_s": 2595.783773884786,
+        "fpi_hz": 2722213.389017028,
+        "fce_hz": 250578693.74853766,
+        "parallel_wave_number_per_m": 628.3185307179587,
+        "parallel_debye": 0.09535563172077798,
+        "ion_energy_ev": 100.0,
+        "ion_speed_m_per_s": 12123.411868787995,
+        "axial_field_v_per_m": 10000.0,
+        "electron_drift_m_per_s": 492687.92712411773
+      },
+      "frequency_mhz": [
+        1.3487829421053685,
+        26.607483580905136
+      ],
+      "vg_m_per_s": [
+        0.21440354978721363,
+        2126.482181794851
+      ],
+      "gamma_per_s": [
+        -4483.522743037353,
+        1546770.181262723
+      ],
+      "monotone": true,
+      "max_residual": 7.673872167367458e-13,
+      "max_harmonic_change": 2.842170943040401e-14,
+      "max_derivative_change": 6.852530600554019e-05,
+      "max_intrinsic_step_over_wpi": 0.006807161535443872
+    },
+    "length_0": {
+      "config": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "ion_mass_u": 131.293,
+        "ion_temperature_ev": 0.0,
+        "magnetic_radial_gauss": 39.48,
+        "magnetic_axial_gauss": 80.34,
+        "discharge_voltage_v": 200.0,
+        "ion_energy_fraction": 0.5,
+        "acceleration_length_m": 0.005,
+        "sensitivity_lengths_m": [
+          0.005,
+          0.02
+        ],
+        "parallel_wavelength_m": 0.01,
+        "perpendicular_obliquity_deg": 15.0,
+        "sensitivity_angles_deg": [
+          0.0,
+          30.0
+        ],
+        "ky_min_per_m": 10.0,
+        "ky_max_per_m": 100000.0,
+        "ky_count": 2001,
+        "separation_m": 0.0037,
+        "resistance_ohm": 1000.0,
+        "root_tolerance": 1e-09,
+        "provenance": {
+          "temperature_ev": "Reported slow scan value, fixed by data owner; local Maxwellian proxy.",
+          "density_m3": "Data-owner prescribed density, 2026-11-16; not inferred from these waveforms.",
+          "ion_energy": "Cold singly charged xenon, negligible injection energy; half of 200 eV gained at the sampling location, per data owner.",
+          "acceleration_length": "Data-owner accepted estimate: 100 V over 1 cm, with 0.5 and 2 cm sensitivity; average field used as a local-field proxy, not measured.",
+          "parallel_wavelength": "Data-owner prescribed 1 cm, k_parallel=2*pi/wavelength (not 1/wavelength).",
+          "geometry": "Field magnitudes used with positive axial/radial model components. Wave vector in field coordinates: ky*ey + tan(angle)*ky*es + k_parallel*eb; es lies in the axial-radial plane perpendicular to B. The 15 degree perpendicular-plane tilt is an explicit unmeasured closure, not the paper's axial angle. 0 and 30 degrees are separate sensitivity scenarios.",
+          "electron_drift": "Magnitude E_axial*B_radial/|B|^2; +y is chosen along ExB. Its identification with C1-to-C3 remains assumed. No parallel electron bulk drift or pressure-gradient drift included.",
+          "ions": "Axial beam response uses omega-k_axial*u_i; no ion temperature broadening.",
+          "branch": "Continue the positive ion-frame acoustic root; opposite ion-frame branch also audited. Not an exhaustive enumeration of all kinetic roots.",
+          "normalization": "Same nominal resistor conversion for both probes; no per-probe RMS or peak matching, no unverified DC normalization. Current units are nominal MHz response only. Source Q/T absolute normalization unresolved."
+        }
+      },
+      "scales": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "magnetic_gauss": 89.51640073193292,
+        "debye_m": 0.00015176320140012148,
+        "sound_speed_m_per_s": 2595.783773884786,
+        "fpi_hz": 2722213.389017028,
+        "fce_hz": 250578693.74853766,
+        "parallel_wave_number_per_m": 628.3185307179587,
+        "parallel_debye": 0.09535563172077798,
+        "ion_energy_ev": 100.0,
+        "ion_speed_m_per_s": 12123.411868787995,
+        "axial_field_v_per_m": 20000.0,
+        "electron_drift_m_per_s": 985375.8542482355
+      },
+      "frequency_mhz": [
+        1.3487845542648604,
+        26.609286108982392
+      ],
+      "vg_m_per_s": [
+        -1.8732809815858344,
+        2291.2609172421066
+      ],
+      "gamma_per_s": [
+        1742.8437297787825,
+        3169170.774371362
+      ],
+      "monotone": true,
+      "max_residual": 7.673971491552892e-13,
+      "max_harmonic_change": 1.4211288389453755e-14,
+      "max_derivative_change": 8.33270128168806e-05,
+      "max_intrinsic_step_over_wpi": 0.007575300743679858
+    },
+    "length_1": {
+      "config": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "ion_mass_u": 131.293,
+        "ion_temperature_ev": 0.0,
+        "magnetic_radial_gauss": 39.48,
+        "magnetic_axial_gauss": 80.34,
+        "discharge_voltage_v": 200.0,
+        "ion_energy_fraction": 0.5,
+        "acceleration_length_m": 0.02,
+        "sensitivity_lengths_m": [
+          0.005,
+          0.02
+        ],
+        "parallel_wavelength_m": 0.01,
+        "perpendicular_obliquity_deg": 15.0,
+        "sensitivity_angles_deg": [
+          0.0,
+          30.0
+        ],
+        "ky_min_per_m": 10.0,
+        "ky_max_per_m": 100000.0,
+        "ky_count": 2001,
+        "separation_m": 0.0037,
+        "resistance_ohm": 1000.0,
+        "root_tolerance": 1e-09,
+        "provenance": {
+          "temperature_ev": "Reported slow scan value, fixed by data owner; local Maxwellian proxy.",
+          "density_m3": "Data-owner prescribed density, 2026-11-16; not inferred from these waveforms.",
+          "ion_energy": "Cold singly charged xenon, negligible injection energy; half of 200 eV gained at the sampling location, per data owner.",
+          "acceleration_length": "Data-owner accepted estimate: 100 V over 1 cm, with 0.5 and 2 cm sensitivity; average field used as a local-field proxy, not measured.",
+          "parallel_wavelength": "Data-owner prescribed 1 cm, k_parallel=2*pi/wavelength (not 1/wavelength).",
+          "geometry": "Field magnitudes used with positive axial/radial model components. Wave vector in field coordinates: ky*ey + tan(angle)*ky*es + k_parallel*eb; es lies in the axial-radial plane perpendicular to B. The 15 degree perpendicular-plane tilt is an explicit unmeasured closure, not the paper's axial angle. 0 and 30 degrees are separate sensitivity scenarios.",
+          "electron_drift": "Magnitude E_axial*B_radial/|B|^2; +y is chosen along ExB. Its identification with C1-to-C3 remains assumed. No parallel electron bulk drift or pressure-gradient drift included.",
+          "ions": "Axial beam response uses omega-k_axial*u_i; no ion temperature broadening.",
+          "branch": "Continue the positive ion-frame acoustic root; opposite ion-frame branch also audited. Not an exhaustive enumeration of all kinetic roots.",
+          "normalization": "Same nominal resistor conversion for both probes; no per-probe RMS or peak matching, no unverified DC normalization. Current units are nominal MHz response only. Source Q/T absolute normalization unresolved."
+        }
+      },
+      "scales": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "magnetic_gauss": 89.51640073193292,
+        "debye_m": 0.00015176320140012148,
+        "sound_speed_m_per_s": 2595.783773884786,
+        "fpi_hz": 2722213.389017028,
+        "fce_hz": 250578693.74853766,
+        "parallel_wave_number_per_m": 628.3185307179587,
+        "parallel_debye": 0.09535563172077798,
+        "ion_energy_ev": 100.0,
+        "ion_speed_m_per_s": 12123.411868787995,
+        "axial_field_v_per_m": 5000.0,
+        "electron_drift_m_per_s": 246343.96356205887
+      },
+      "frequency_mhz": [
+        1.3487815229225888,
+        26.606911837315472
+      ],
+      "vg_m_per_s": [
+        0.5280230442065647,
+        2123.7415767748953
+      ],
+      "gamma_per_s": [
+        -7596.697982072554,
+        752238.7390315653
+      ],
+      "monotone": true,
+      "max_residual": 7.105437381043016e-13,
+      "max_harmonic_change": 3.552822097363439e-15,
+      "max_derivative_change": 6.45078582692804e-05,
+      "max_intrinsic_step_over_wpi": 0.006680890010323828
+    },
+    "angle_0": {
+      "config": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "ion_mass_u": 131.293,
+        "ion_temperature_ev": 0.0,
+        "magnetic_radial_gauss": 39.48,
+        "magnetic_axial_gauss": 80.34,
+        "discharge_voltage_v": 200.0,
+        "ion_energy_fraction": 0.5,
+        "acceleration_length_m": 0.01,
+        "sensitivity_lengths_m": [
+          0.005,
+          0.02
+        ],
+        "parallel_wavelength_m": 0.01,
+        "perpendicular_obliquity_deg": 0.0,
+        "sensitivity_angles_deg": [
+          0.0,
+          30.0
+        ],
+        "ky_min_per_m": 10.0,
+        "ky_max_per_m": 100000.0,
+        "ky_count": 2001,
+        "separation_m": 0.0037,
+        "resistance_ohm": 1000.0,
+        "root_tolerance": 1e-09,
+        "provenance": {
+          "temperature_ev": "Reported slow scan value, fixed by data owner; local Maxwellian proxy.",
+          "density_m3": "Data-owner prescribed density, 2026-11-16; not inferred from these waveforms.",
+          "ion_energy": "Cold singly charged xenon, negligible injection energy; half of 200 eV gained at the sampling location, per data owner.",
+          "acceleration_length": "Data-owner accepted estimate: 100 V over 1 cm, with 0.5 and 2 cm sensitivity; average field used as a local-field proxy, not measured.",
+          "parallel_wavelength": "Data-owner prescribed 1 cm, k_parallel=2*pi/wavelength (not 1/wavelength).",
+          "geometry": "Field magnitudes used with positive axial/radial model components. Wave vector in field coordinates: ky*ey + tan(angle)*ky*es + k_parallel*eb; es lies in the axial-radial plane perpendicular to B. The 15 degree perpendicular-plane tilt is an explicit unmeasured closure, not the paper's axial angle. 0 and 30 degrees are separate sensitivity scenarios.",
+          "electron_drift": "Magnitude E_axial*B_radial/|B|^2; +y is chosen along ExB. Its identification with C1-to-C3 remains assumed. No parallel electron bulk drift or pressure-gradient drift included.",
+          "ions": "Axial beam response uses omega-k_axial*u_i; no ion temperature broadening.",
+          "branch": "Continue the positive ion-frame acoustic root; opposite ion-frame branch also audited. Not an exhaustive enumeration of all kinetic roots.",
+          "normalization": "Same nominal resistor conversion for both probes; no per-probe RMS or peak matching, no unverified DC normalization. Current units are nominal MHz response only. Source Q/T absolute normalization unresolved."
+        }
+      },
+      "scales": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "magnetic_gauss": 89.51640073193292,
+        "debye_m": 0.00015176320140012148,
+        "sound_speed_m_per_s": 2595.783773884786,
+        "fpi_hz": 2722213.389017028,
+        "fce_hz": 250578693.74853766,
+        "parallel_wave_number_per_m": 628.3185307179587,
+        "parallel_debye": 0.09535563172077798,
+        "ion_energy_ev": 100.0,
+        "ion_speed_m_per_s": 12123.411868787995,
+        "axial_field_v_per_m": 10000.0,
+        "electron_drift_m_per_s": 492687.92712411773
+      },
+      "frequency_mhz": [
+        1.3465004259980284,
+        3.8052555710118994
+      ],
+      "vg_m_per_s": [
+        0.2511424131710433,
+        2199.5425250166873
+      ],
+      "gamma_per_s": [
+        -4465.3770076214,
+        1602002.1711840373
+      ],
+      "monotone": true,
+      "max_residual": 1.4211766499978484e-13,
+      "max_harmonic_change": 2.842170943040401e-14,
+      "max_derivative_change": 7.069902744660794e-05,
+      "max_intrinsic_step_over_wpi": 0.006591025217000284
+    },
+    "angle_1": {
+      "config": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "ion_mass_u": 131.293,
+        "ion_temperature_ev": 0.0,
+        "magnetic_radial_gauss": 39.48,
+        "magnetic_axial_gauss": 80.34,
+        "discharge_voltage_v": 200.0,
+        "ion_energy_fraction": 0.5,
+        "acceleration_length_m": 0.01,
+        "sensitivity_lengths_m": [
+          0.005,
+          0.02
+        ],
+        "parallel_wavelength_m": 0.01,
+        "perpendicular_obliquity_deg": 30.0,
+        "sensitivity_angles_deg": [
+          0.0,
+          30.0
+        ],
+        "ky_min_per_m": 10.0,
+        "ky_max_per_m": 100000.0,
+        "ky_count": 2001,
+        "separation_m": 0.0037,
+        "resistance_ohm": 1000.0,
+        "root_tolerance": 1e-09,
+        "provenance": {
+          "temperature_ev": "Reported slow scan value, fixed by data owner; local Maxwellian proxy.",
+          "density_m3": "Data-owner prescribed density, 2026-11-16; not inferred from these waveforms.",
+          "ion_energy": "Cold singly charged xenon, negligible injection energy; half of 200 eV gained at the sampling location, per data owner.",
+          "acceleration_length": "Data-owner accepted estimate: 100 V over 1 cm, with 0.5 and 2 cm sensitivity; average field used as a local-field proxy, not measured.",
+          "parallel_wavelength": "Data-owner prescribed 1 cm, k_parallel=2*pi/wavelength (not 1/wavelength).",
+          "geometry": "Field magnitudes used with positive axial/radial model components. Wave vector in field coordinates: ky*ey + tan(angle)*ky*es + k_parallel*eb; es lies in the axial-radial plane perpendicular to B. The 15 degree perpendicular-plane tilt is an explicit unmeasured closure, not the paper's axial angle. 0 and 30 degrees are separate sensitivity scenarios.",
+          "electron_drift": "Magnitude E_axial*B_radial/|B|^2; +y is chosen along ExB. Its identification with C1-to-C3 remains assumed. No parallel electron bulk drift or pressure-gradient drift included.",
+          "ions": "Axial beam response uses omega-k_axial*u_i; no ion temperature broadening.",
+          "branch": "Continue the positive ion-frame acoustic root; opposite ion-frame branch also audited. Not an exhaustive enumeration of all kinetic roots.",
+          "normalization": "Same nominal resistor conversion for both probes; no per-probe RMS or peak matching, no unverified DC normalization. Current units are nominal MHz response only. Source Q/T absolute normalization unresolved."
+        }
+      },
+      "scales": {
+        "temperature_ev": 9.168901410487,
+        "density_m3": 2.2e+16,
+        "magnetic_gauss": 89.51640073193292,
+        "debye_m": 0.00015176320140012148,
+        "sound_speed_m_per_s": 2595.783773884786,
+        "fpi_hz": 2722213.389017028,
+        "fce_hz": 250578693.74853766,
+        "parallel_wave_number_per_m": 628.3185307179587,
+        "parallel_debye": 0.09535563172077798,
+        "ion_energy_ev": 100.0,
+        "ion_speed_m_per_s": 12123.411868787995,
+        "axial_field_v_per_m": 10000.0,
+        "electron_drift_m_per_s": 492687.92712411773
+      },
+      "frequency_mhz": [
+        1.3514243572069404,
+        52.93771012112228
+      ],
+      "vg_m_per_s": [
+        0.12727319429353226,
+        1912.177746227746
+      ],
+      "gamma_per_s": [
+        -4504.57609637514,
+        1388942.83367198
+      ],
+      "monotone": true,
+      "max_residual": 1.7621464472196243e-12,
+      "max_harmonic_change": 1.4210963135005665e-14,
+      "max_derivative_change": 6.166128878248855e-05,
+      "max_intrinsic_step_over_wpi": 0.007550103232517085
+    }
+  },
+  "inputs_sha256": {
+    "extended_arrays.npz": "0c72206670850d84dfd789552dbd9b411b75e1c2a8ddeddc84509debea4c7595",
+    "physical_scenario_config.json": "4d68ef2282277092a6437cc018ef35c8b5d428eb036451f5e395dda2b9fbf375"
+  },
+  "source_sha256": {
+    "analyze_physical_scenario.py": "4e77dfd3ea5b226b75a7ce5a2cd3648194001df44abc47a29fa8b95f295c933f"
+  },
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.3.4",
+    "scipy": "1.16.3"
+  },
+  "targets": 399,
+  "supported_targets": 382,
+  "kim_all_fold_pass": 199,
+  "normalization": "Same nominal 1/R for both probes; no DC, RMS, or peak normalization",
+  "group_velocity": "partial omega_r / partial ky at fixed ks,kparallel; not the oblique path slope",
+  "limitations": "Local Maxwellian proxy, cold ions, prescribed obliquity/signs, acceleration length estimate; no experimental root identification, response calibration or exhaustive kinetic root enumeration."
+}
