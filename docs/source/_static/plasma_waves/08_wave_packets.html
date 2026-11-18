@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>波包、相速度与群速度 | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css"><link rel="stylesheet" href="wave-presentation.css"><link rel="stylesheet" href="wave-packet.css">
+  <script src="wave-navigation.js" defer></script><script src="wave-text.js" defer></script><script src="wave-course.js" defer></script><script src="wave-packet-model.js" defer></script><script src="wave-packet.js" defer></script>
+</head>
+<body>
+  <div class="lesson course-lesson packet-lesson" id="lesson" data-page="8" data-stage="0">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <p class="chapter sr-only" id="chapter">08 / 波包、相速度与群速度</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="07_dispersion.html?lang=zh">← 上一页</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">目录 · 8 / 8</a>
+        <a id="next-lesson" rel="next" aria-disabled="true" tabindex="-1">下一页 →</a>
+      </nav>
+      <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="true">播放动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
+      </div>
+    </header>
+    <main>
+      <div class="heading"><h1 id="title">一群波，<span>谁在向前走？</span></h1><p class="narration" id="narration">相近波数的分量叠加，让密度扰动集中在一段空间：波包。</p><p class="equation" id="equation" hidden></p></div>
+      <div class="time-controls range-control" id="time-controls" hidden><label for="packet-time" id="time-label">观察时间 t</label><input id="packet-time" type="range" min="0" max="20" step="0.1" value="0"><output for="packet-time" id="time-output" aria-live="off">0.00 × 10⁻⁷ s</output></div>
+      <label class="comparison" id="comparison" hidden><input type="checkbox" id="linear-branch"><span id="comparison-label">无色散对照：ω = Vk</span></label>
+      <div class="packet-legend" id="packet-legend" hidden><span class="phase-key" id="phase-key"></span><span class="group-key" id="group-key"></span></div>
+      <figure class="scene">
+        <div class="packet-panels">
+          <div id="slope-pane" hidden><h2 id="slope-heading">两种斜率</h2><svg id="slope-chart" role="img" aria-label="原点连线与切线"></svg></div>
+          <div><canvas id="plasma" role="img" aria-label="由相近波数组成的电子密度波包">相近波数的密度波叠加形成波包。</canvas><p id="canvas-fallback" hidden>波峰：vph=ωc/kc；窄带包络：vg≈包络速度。 / Phase: vph=ωc/kc; narrow-band envelope speed ≈ vg.</p></div>
+        </div>
+        <figcaption id="model-note"></figcaption>
+      </figure>
+      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p></div>
+      <details id="group-derivation" hidden><summary id="derivation-summary">为什么群速度是 dω/dk？</summary><div id="derivation-content"></div></details>
+      <details id="packet-details" hidden><summary id="packet-summary">波包怎样生成？近似在哪里？</summary><div id="packet-description"></div></details>
+    </main>
+    <footer class="controls"><div class="progress-group"><div class="progress" id="progress"></div><span class="stage-count" id="stage-count">1 / 6</span></div><p class="keyboard-note" id="keyboard-note"></p><div class="actions"><button class="back" id="back" type="button" hidden>←</button><button class="advance" id="advance" type="button"><span id="advance-text">画出包络</span><span id="advance-arrow" aria-hidden="true">→</span></button></div></footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p><p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>相近波数的分量可以叠成波包。相速度 vph=ωc/kc [m/s] 描述中心分量的等相位面；窄带、弱失真条件下，包络速度近似为群速度 vg=(dω/dk)c [m/s]。本例 ω²=ω₀²+u²k²，ω₀=10⁸ rad/s，u=10⁶ m/s，kc=60 rad/m，得到 vph≈1.944×10⁶ m/s，vg≈0.514×10⁶ m/s。原点连线给相速度，切线给群速度。无色散对照 ω=Vk 中，两者均为 V。它们都不是单个电子的运动速度。</p><p>Nearby wavenumbers can form a packet. Phase speed vph=ωc/kc [m/s] follows a constant phase of the central component. For a narrow band with little distortion, the envelope speed is approximately vg=(dω/dk)c [m/s]. Our fluid example uses ω²=ω₀²+u²k², ω₀=10⁸ rad/s, u=10⁶ m/s and kc=60 rad/m: vph≈1.944×10⁶m/s and vg≈0.514×10⁶m/s. Read phase speed from the origin-to-point slope and group speed from the tangent. For the nondispersive comparison ω=Vk, both equal V. Neither is an individual electron velocity.</p></div></noscript>
+</body>
+</html>

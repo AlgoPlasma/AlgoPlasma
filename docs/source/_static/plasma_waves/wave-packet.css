@@ -1,0 +1,42 @@
+/* A real-space packet first; the dispersion geometry appears later. */
+.lesson.packet-lesson .scene { display: block; }
+.packet-panels { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+.packet-lesson[data-stage="4"] .packet-panels,
+.packet-lesson[data-stage="5"] .packet-panels { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+.lesson.packet-lesson .scene canvas { height: 480px; min-height: 480px; }
+.packet-lesson #slope-pane { min-width: 0; }
+.packet-lesson #slope-heading { font-size: var(--annotation-size); margin: 0 0 12px; font-weight: 650; }
+.packet-lesson #slope-chart { display: block; width: 100%; height: 390px; overflow: visible; }
+.packet-lesson #slope-chart text { fill: #e0ebe6; font: 600 26px "Segoe UI","Microsoft YaHei",sans-serif; }
+.packet-axis { stroke: #e0ebe6; stroke-width: 2; }
+.packet-guide { stroke: #526e62; stroke-dasharray: 4 6; }
+.packet-branch { fill: none; stroke: #b5efcf; stroke-width: 3; }
+.packet-ray { stroke: #f4c583; stroke-width: 5; }
+.packet-tangent { stroke: #b4cefa; stroke-width: 3; stroke-dasharray: 10 6; }
+.packet-lesson .packet-legend { display: flex; flex-wrap: wrap; gap: 12px 30px; margin: 10px 0 12px; font-size: var(--annotation-size); }
+.packet-lesson .phase-key { color: #f4c583; }
+.packet-lesson .group-key { color: #b4cefa; }
+.packet-lesson .phase-key::before { content: "● "; }
+.packet-lesson .group-key::before { content: "○ "; }
+.packet-lesson[data-stage="1"] .group-key::before,
+.packet-lesson[data-stage="2"] .group-key::before { content: "╌ "; }
+.packet-lesson .time-controls { margin: 12px 0; }
+.packet-lesson .time-controls input { width: min(360px, 40vw); }
+.packet-lesson .comparison { display: flex; align-items: center; gap: 12px; font-size: var(--annotation-size); margin: 10px 0 20px; cursor: pointer; }
+.packet-lesson .comparison input { width: 26px; height: 26px; accent-color: var(--mint); flex-shrink: 0; }
+.packet-lesson details { font-size: var(--annotation-size); line-height: 1.55; margin-top: 18px; }
+.packet-lesson summary { color: var(--mint); cursor: pointer; }
+.packet-lesson summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 5px; }
+.packet-lesson details p { margin: 14px 0; }
+.packet-lesson details .math { color: var(--mint); font-size: clamp(27px, 2.2vw, 34px); overflow-wrap: anywhere; }
+.packet-lesson details a { color: var(--mint); }
+.packet-lesson .speed-term { display: inline-block; margin-right: 24px; }
+@media (max-width: 1000px) {
+  .packet-lesson[data-stage="4"] .packet-panels,
+  .packet-lesson[data-stage="5"] .packet-panels { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
+  .packet-lesson #slope-chart { height: 340px; }
+  .packet-lesson #slope-chart text { font-size: 22px; }
+  .packet-lesson .time-controls input { width: 100%; }
+}
