@@ -7,7 +7,8 @@
     ['03_measuring_a_wave.html', '周期、波长与相速度', 'Period, wavelength and phase speed'],
     ['04_phase.html', '相位与波的表达式', 'Phase and the wave expression'],
     ['05_superposition.html', '干涉、拍频与驻波', 'Interference, beats and standing waves'],
-    ['06_complex_waves.html', '波的复数表达', 'Complex wave representation']
+    ['06_complex_waves.html', '波的复数表达', 'Complex wave representation'],
+    ['07_dispersion.html', '色散关系与读图', 'Reading a dispersion relation']
   ];
   const $ = id => document.getElementById(id);
   const current = Number($('lesson').dataset.page) - 1;

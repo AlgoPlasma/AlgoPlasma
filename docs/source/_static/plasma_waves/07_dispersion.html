@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>色散关系：波长与频率怎样搭配？ | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css"><link rel="stylesheet" href="wave-presentation.css"><link rel="stylesheet" href="wave-dispersion.css">
+  <script src="wave-navigation.js" defer></script><script src="wave-text.js" defer></script><script src="wave-course.js" defer></script><script src="wave-dispersion.js" defer></script>
+</head>
+<body>
+  <div class="lesson course-lesson dispersion-lesson" id="lesson" data-page="7" data-stage="0">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <p class="chapter sr-only" id="chapter">07 / 色散关系与读图</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="06_complex_waves.html?lang=zh">← 上一页</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">目录 · 7 / 7</a>
+        <a id="next-lesson" rel="next" aria-disabled="true" tabindex="-1">下一页 →</a>
+      </nav>
+      <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="false">暂停动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
+      </div>
+    </header>
+    <main>
+      <div class="heading"><h1 id="title">波长变了，<span>频率怎样变？</span></h1><p class="narration" id="narration">同一种等离子体波，波长和频率可以任意搭配吗？</p><p class="equation" id="equation" hidden></p></div>
+      <div class="interaction" id="interaction" hidden><div class="range-control"><label for="wavenumber" id="wavenumber-label">选择波数 k</label><input id="wavenumber" type="range" min="20" max="80" step="1" value="40"><output for="wavenumber" id="wavenumber-output">40 rad/m</output></div><p id="comparison-note"></p></div>
+      <figure class="scene" id="scene">
+        <div class="dispersion-panels">
+          <div id="chart-pane" hidden><h2 id="chart-heading">色散图 · 参数之间的关系</h2><svg id="dispersion-chart" role="img" aria-label="波数和角频率的关系"></svg></div>
+          <div class="wave-pane"><canvas id="plasma" role="img" aria-label="向右传播的电子密度波">绿色点阵表示电子密度波。色散曲线决定波数和角频率的配对。</canvas><p id="canvas-fallback" hidden>λ=2π/k，T=2π/ω，vph=ω/k。可用滑块与读数探索。 / Use the slider and readouts: λ=2π/k, T=2π/ω, vph=ω/k.</p></div>
+        </div>
+        <figcaption id="model-note"></figcaption>
+      </figure>
+      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p></div>
+      <details id="model-details" hidden><summary id="model-summary">这条示例曲线采用什么模型？</summary><div id="model-description"></div></details>
+    </main>
+    <footer class="controls"><div class="progress-group"><div class="progress" id="progress"></div><span class="stage-count" id="stage-count">1 / 5</span></div><p class="keyboard-note" id="keyboard-note"></p><div class="actions"><button class="back" id="back" type="button" hidden>←</button><button class="advance" id="advance" type="button"><span id="advance-text">画出参数坐标</span><span id="advance-arrow" aria-hidden="true">→</span></button></div></footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p><p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>色散图横轴是波数 k [rad/m]，纵轴是角频率 ω [rad/s]。曲线表示某个模型允许的自由波分量；它不是运动轨迹。本例给定 ω²=ω₀²+u²k²，ω₀=10⁸ rad/s、u=10⁶ m/s。它是均匀、无磁场、固定离子的温电子流体模型，忽略碰撞与动理学阻尼。u 是压强项的速度参数，不是电子速度。</p><p>选 k=40 rad/m，得 ω≈1.077×10⁸ rad/s。由 λ=2π/k 得 λ≈0.157 m；由 T=2π/ω 得 T≈5.83×10⁻⁸ s。原点到这个点的连线斜率为相速度 ω/k≈2.693×10⁶ m/s，不是曲线在该点的切线斜率，也不是电子速度。</p><p>A dispersion plot uses horizontal k [rad/m] and vertical ω [rad/s]. Its curve represents free-wave components permitted by a model, not a trajectory. This warm-electron fluid example uses ω²=ω₀²+u²k² with ω₀=10⁸ rad/s and u=10⁶ m/s: uniform, unmagnetized, fixed ions, no collisions or kinetic damping. The pressure parameter u is not particle velocity. At k=40 rad/m, ω≈1.077×10⁸ rad/s, λ=2π/k≈0.157m and T=2π/ω≈5.83×10⁻⁸s. The origin-to-point slope gives phase speed ω/k≈2.693×10⁶m/s, not the tangent slope or electron velocity.</p></div></noscript>
+</body>
+</html>
