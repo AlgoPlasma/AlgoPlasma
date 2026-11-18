@@ -154,7 +154,7 @@
   }
   function dot(x, y, radius, color) { ctx.beginPath(); ctx.fillStyle = color; ctx.arc(x, y, radius, 0, 2 * Math.PI); ctx.fill(); }
   function label(value, x, y, color, size, align = 'center') {
-    ctx.font = `${size}px "Segoe UI","Microsoft YaHei","PingFang SC",sans-serif`; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(value, x, y);
+    PlasmaText.label(ctx, value, x, y, color, size, align);
   }
   function arrow(x1, y, x2, color) {
     line(x1, y, x2, y, color, 2); const direction = Math.sign(x2 - x1);

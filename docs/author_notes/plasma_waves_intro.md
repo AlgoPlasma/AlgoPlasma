@@ -28,6 +28,14 @@
   boundaries are disabled, and language is carried by the links. The shared
   `wave-navigation.js` catalog owns page order and adjacent-page labels; each
   HTML page also includes usable Chinese navigation without JavaScript.
+- Presentation readability: `wave-presentation.css` loads last on all six pages.
+  Desktop captions are at least 28 px, unit/explanatory text at least 26 px,
+  with weight 600 and near-white text. Phone captions remain 24 px and notes
+  22 px. Parentheses distinguish figure notes without reducing their prominence.
+  `wave-text.js` applies semibold canvas labels (minimum 26 px desktop, 20 px
+  phone), wraps long labels and keeps their bounds inside the canvas. Page height
+  may grow on dense or narrow views so text and diagrams do not overlap; do not
+  shrink the teaching text to force every layout into one viewport.
 
 ## Illustration model and limits
 

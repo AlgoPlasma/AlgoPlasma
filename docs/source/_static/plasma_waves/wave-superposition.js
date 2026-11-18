@@ -114,7 +114,7 @@
         label(t.tracked, left, h - 15, c.gold, small ? 17 : 23, 'left');
         return;
       }
-      const top = 49, bottom = Math.max(top + 42, h * .31);
+      const top = small && s.stage === 3 ? 78 : 49, bottom = Math.max(top + 42, h * .31);
       grid(waves, s.time, s.stage === 1 ? left + (small ? 35 : 55) : left, right, top, bottom);
       if (s.stage === 1) {
         const phase = s.data.phase, amplitude = 2 * Math.abs(Math.cos(phase * Math.PI / 2));
@@ -149,7 +149,7 @@
           line(px(node), top - 10, px(node), y + amp + 10, '#8eadd966', 1.2, [4, 5]); dot(px(node), y, 4, c.blue);
         }
         label(t.node, px(.75), 20, c.blue, small ? 17 : fs);
-        label(t.antinode, px(1.5), 20, c.gold, small ? 17 : fs);
+        label(t.antinode, px(1.5), small ? 48 : 20, c.gold, small ? 17 : fs);
         curve(u => Math.cos(TAU * u * length), left, right, y, amp, '#a6b8b53b', 1.2, [4, 5]);
         curve(u => -Math.cos(TAU * u * length), left, right, y, amp, '#a6b8b53b', 1.2, [4, 5]);
         curve(u => (density(u * length, s.time, waves) - 1) / (2 * A), left, right, y, amp);

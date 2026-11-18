@@ -3,7 +3,7 @@
 (() => {
   'use strict';
   const TAU = 2 * Math.PI;
-  const colors = { mint: '#b5efcf', gold: '#f4c583', blue: '#8eadd9', muted: '#a6b8b5', line: '#30413f' };
+  const colors = { mint: '#b5efcf', gold: '#f4c583', blue: '#b4cefa', muted: '#e0ebe6', line: '#30413f' };
   const mod = (x, n) => ((x % n) + n) % n;
   // q = x + sum(a/k sin(kx - wt + phi)). Then dq/dx = n/n0 exactly.
   // Inverting this monotone map makes dot spacing agree with the Eulerian curve.
@@ -32,8 +32,7 @@
       ctx.beginPath(); ctx.fillStyle = color; ctx.arc(x, y, r, 0, TAU); ctx.fill();
     }
     function label(value, x, y, color = colors.muted, size = 23, align = 'center') {
-      ctx.font = `${size}px "Segoe UI","Microsoft YaHei","PingFang SC",sans-serif`;
-      ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(value, x, y);
+      PlasmaText.label(ctx, value, x, y, color, size, align);
     }
     function arrow(x1, y, x2, color = colors.gold) {
       line(x1, y, x2, y, color, 2);

@@ -177,9 +177,9 @@
         label(t.probe, left + 12, h * .72 + 37, c.gold, fs, 'left');
         arrow(w * .48, h - 24, w * .63, c.mint); return;
       }
-      const planeBottom = stacked ? 256 : h;
+      const planeBottom = stacked ? 360 : h;
       const cx = stacked ? w / 2 : w * .19;
-      const cy = planeBottom * .43;
+      const cy = Math.max(164, planeBottom * .43);
       const radius = Math.min(stacked ? w * .23 : w * .115, 104, (planeBottom - 100) / 2);
       const scale = radius / REFERENCE;
       const point = value => ({ x: cx + value.re * scale, y: cy - value.im * scale });
@@ -208,15 +208,15 @@
         vector(sum, c.mint); dot(point(sum).x, point(sum).y, 4, c.mint);
         const magnitude = Math.hypot(sum.re, sum.im), ratio = magnitude / (REFERENCE / 2);
         const phase = Math.atan2(sum.im, sum.re) / Math.PI, phaseLabel = (Math.abs(phase) < 1e-12 ? 0 : phase).toFixed(2);
-        label(`${t.amplitude} = ${ratio.toFixed(2)}`, cx, planeBottom - 43, c.mint, small ? 20 : 25);
-        label(magnitude < 1e-12 ? t.undefinedPhase : `${t.phase} = ${phaseLabel} π rad`, cx, planeBottom - 16, c.gold, small ? 16 : 21);
+        label(`${t.amplitude} = ${ratio.toFixed(2)}`, cx, planeBottom - 60, c.mint, small ? 20 : 25);
+        label(magnitude < 1e-12 ? t.undefinedPhase : `${t.phase} = ${phaseLabel} π rad`, cx, planeBottom - 22, c.gold, small ? 16 : 21);
         // Color labels avoid making the complex axes look like spatial axes.
         label('n̂₁', 24, 52, c.blue, small ? 18 : 23, 'left');
         label('n̂₂', 70, 52, c.gold, small ? 18 : 23, 'left');
       } else if (s.stage === 4) {
         vector(z, c.mint); vector({ re: z.im, im: -z.re }, c.gold); vector({ re: -z.im, im: z.re }, c.blue);
-        label('−i ñ = (∂ₜñ)/ω', cx, planeBottom - 43, c.gold, small ? 18 : 23);
-        label('+i ñ = (∂ₓñ)/k', cx, planeBottom - 16, c.blue, small ? 18 : 23);
+        label('−i ñ = (∂ₜñ)/ω', cx, planeBottom - 60, c.gold, small ? 18 : 23);
+        label('+i ñ = (∂ₓñ)/k', cx, planeBottom - 22, c.blue, small ? 18 : 23);
       } else {
         if (s.stage === 2) vector(valueAt(waves, 0), '#8eadd988', { x: cx, y: cy }, [4, 4]);
         const end = vector(z, c.mint), projection = { x: end.x, y: cy };
@@ -227,11 +227,11 @@
         }
         line(end.x, end.y, projection.x, projection.y, '#f4c58399', 1.5, [4, 5]);
         line(cx, cy, projection.x, cy, c.gold, 3); dot(projection.x, projection.y, 5, c.gold); dot(end.x, end.y, 4, c.mint);
-        label(`Re{ñ}/A = ${(z.re / REFERENCE).toFixed(2)}`, cx, planeBottom - 43, c.gold, small ? 20 : 25);
-        label(s.stage === 2 ? t.initialArrow : t.realProjection, cx, planeBottom - 16, s.stage === 2 ? c.blue : c.muted, small ? 16 : 21);
+        label(`Re{ñ}/A = ${(z.re / REFERENCE).toFixed(2)}`, cx, planeBottom - 60, c.gold, small ? 20 : 25);
+        label(s.stage === 2 ? t.initialArrow : t.realProjection, cx, planeBottom - 22, s.stage === 2 ? c.blue : c.muted, small ? 16 : 21);
       }
       const plotLeft = stacked ? left : w * .46, plotRight = right;
-      const panelTop = stacked ? 280 : 0, panelHeight = stacked ? h - panelTop : h;
+      const panelTop = stacked ? 386 : 0, panelHeight = stacked ? h - panelTop : h;
       if (!stacked) line(w * .405, 24, w * .405, h - 18, c.line);
       else line(left, panelTop - 14, right, panelTop - 14, c.line);
       const top = panelTop + 47, bottom = panelTop + Math.max(90, panelHeight * .34);

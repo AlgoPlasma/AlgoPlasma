@@ -20,7 +20,7 @@
     const indexURL = `../../learning/plasma_waves/index.html?lang=${lang}`;
     $('lesson-index').href = indexURL; $('return-link').href = indexURL;
     for (const [id, offset, label] of [
-      ['previous-lesson', -1, en ? '← Previous' : '← 上一页'],
+      ['previous-lesson', -1, en ? '← Prev' : '← 上一页'],
       ['next-lesson', 1, en ? 'Next →' : '下一页 →']
     ]) {
       const link = $(id), target = lessons[current + offset];

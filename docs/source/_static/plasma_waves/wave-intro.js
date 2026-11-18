@@ -191,8 +191,7 @@
     ctx.beginPath(); ctx.fillStyle = color; ctx.arc(x, y, radius, 0, TWO_PI); ctx.fill();
   }
   function label(value, x, y, color, size, align = 'left') {
-    ctx.font = `${size}px "Segoe UI","Microsoft YaHei","PingFang SC",sans-serif`;
-    ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(value, x, y);
+    PlasmaText.label(ctx, value, x, y, color, size, align);
   }
   function arrow(x1, y, x2, color) {
     line(x1, y, x2, y, color, 1.7);
@@ -206,7 +205,7 @@
     ctx.clearRect(0, 0, w, h);
     const small = w < 650;
     const left = small ? 9 : 22, right = w - left, span = right - left;
-    const gridTop = small ? 95 : 88, gridBottom = Math.max(gridTop + 75, h - (small ? 71 : 94));
+    const gridTop = small ? 148 : 116, gridBottom = Math.max(gridTop + 75, h - (small ? 71 : 94));
     const rows = small ? 5 : 7, columns = Math.max(19, Math.min(49, Math.round(span / 25)));
     const rowSpacing = (gridBottom - gridTop) / (rows - 1);
     const spacing = span / columns, a = RELATIVE_AMPLITUDE * span * state.amplitude;
