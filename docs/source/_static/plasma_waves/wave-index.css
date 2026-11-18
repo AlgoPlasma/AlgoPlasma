@@ -1,0 +1,13 @@
+/* A compact directory; explanations and units live in the linked lessons. */
+.wave-directory dl { margin: 0; }
+.wave-directory dt { padding-top: 18px; font-size: 21px; line-height: 1.45; font-weight: 600; }
+.wave-directory dd { margin-left: 0 !important; padding: 5px 0 17px; border-bottom: 1px solid #dde5e1; }
+.wave-directory dd p { margin-bottom: 0 !important; font-size: 17px; line-height: 1.65; }
+.wave-directory a { text-decoration: none; }
+.wave-directory a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.wave-directory a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.wave-directory dl > dt:first-child { padding-top: 0; }
+@media (max-width: 700px) {
+  .wave-directory dt { font-size: 20px; }
+  .wave-directory dd p { font-size: 16px; }
+}

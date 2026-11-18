@@ -4,13 +4,18 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
   <title>两列波相遇会发生什么？ | AlgoPlasma</title>
   <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css">
-  <script src="wave-course.js" defer></script><script src="wave-superposition.js" defer></script>
+  <script src="wave-navigation.js" defer></script><script src="wave-course.js" defer></script><script src="wave-superposition.js" defer></script>
 </head>
 <body>
-  <div class="lesson course-lesson" id="lesson" data-stage="0" data-topic="superposition">
+  <div class="lesson course-lesson" id="lesson" data-page="5" data-stage="0" data-topic="superposition">
     <header class="masthead">
       <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
-      <p class="chapter" id="chapter">05 / 干涉、拍频与驻波</p>
+      <p class="chapter sr-only" id="chapter">05 / 干涉、拍频与驻波</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="04_phase.html?lang=zh">← 上一页</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">目录 · 5 / 6</a>
+        <a id="next-lesson" rel="next" href="06_complex_waves.html?lang=zh">下一页 →</a>
+      </nav>
       <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="false">暂停动画</button>
         <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
       </div>
@@ -19,7 +24,7 @@
       <div class="heading"><h1 id="title">两列波相遇，<span>会发生什么？</span></h1><p class="narration" id="narration">先看一列电子密度波，再让另一列加入。</p><p class="equation" id="equation" hidden></p></div>
       <figure class="scene" id="scene"><canvas id="plasma" role="img" aria-label="向右传播的电子密度波">密度扰动相加可形成干涉、拍与驻波；密度节点固定不代表电子静止。</canvas><p id="canvas-fallback" hidden>δn = δn₁ + δn₂；相位决定增强或相消，差频形成拍，相向同频等幅可形成驻波。 / Add density perturbations: phase controls interference, a frequency difference gives beats, and equal counterpropagating waves form a standing wave.</p><figcaption id="model-note"></figcaption></figure>
       <div class="interaction" id="interaction" hidden><div class="range-control" id="phase-control"><label id="relative-phase-label" for="relative-phase">两列波的相位差</label><input id="relative-phase" type="range" min="0" max="2" step="0.05" value="0"><output id="relative-phase-output" for="relative-phase"></output></div><div id="quiz" hidden><div class="quiz-options" role="group" aria-labelledby="narration"><button id="density-answer" type="button" aria-pressed="false">密度扰动 δn</button><button id="velocity-answer" type="button" aria-pressed="false">电子速度</button></div><p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p></div></div>
-      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p><p class="next-question lesson-links"><a id="previous-lesson" href="04_phase.html?lang=zh">← 第四页</a><a id="next-lesson" href="06_complex_waves.html?lang=zh">第六页：波为什么要用复数？ →</a></p></div>
+      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p></div>
     </main>
     <footer class="controls"><div class="progress-group"><div class="progress" id="progress"></div><span class="stage-count" id="stage-count">1 / 5</span></div><p class="keyboard-note" id="keyboard-note"></p><div class="actions"><button class="back" id="back" type="button" hidden>←</button><button class="advance" id="advance" type="button"><span id="advance-text">加入第二列波</span><span id="advance-arrow" aria-hidden="true">→</span></button></div></footer>
   </div>

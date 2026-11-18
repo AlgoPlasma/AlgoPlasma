@@ -53,6 +53,6 @@ picture; quantitative derivation is deliberately deferred to a later page.
 
 ## Integration
 
-The Sphinx course entry links to both pages. The first slide's conclusion links
-forward, and this slide's conclusion links back, preserving the chosen language.
+The Sphinx course directory links to every lesson. Persistent header links allow
+forward/backward reading from any reveal step, preserving the chosen language.
 Source assets live in `docs/source/_static/plasma_waves/`; build outputs are not edited.

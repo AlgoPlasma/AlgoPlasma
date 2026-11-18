@@ -46,7 +46,7 @@
         '图中导数分别除以 ω 或 k，三种箭头和曲线均为 m⁻³；ω [rad/s]，k [rad/m]。此处复振幅为常量。'
       ],
       takeaway: '<span class="mint">实部还原物理量，</span><span class="gold">复数把幅值和相位放在一起。</span>',
-      previous: '← 第五页：干涉、拍频与驻波', next: '返回课程目录 →',
+
       initialPhase: '初相位 φ₀', relativePhase: '两波相位差 Δφ', probe: '固定探针 x = 0',
       plane: '复平面 [m⁻³]', amplitudePlane: '复振幅 [m⁻³]', initialArrow: '虚线：初始复振幅 n̂',
       realProjection: '实轴投影 = δn', amplitude: '|n̂| / A', undefinedPhase: '幅值为零，相位未定义', phase: '合成初相位',
@@ -82,7 +82,7 @@
         'Derivatives are divided by ω or k so all plotted arrows and traces use m⁻³. Here ω [rad/s], k [rad/m], and the complex amplitude is constant.'
       ],
       takeaway: '<span class="mint">Recover the real signal.</span> <span class="gold">Keep amplitude and phase together.</span>',
-      previous: '← Page 5: interference and standing waves', next: 'Return to course →',
+
       initialPhase: 'Initial phase φ₀', relativePhase: 'Relative phase Δφ', probe: 'Fixed probe x = 0',
       plane: 'Complex plane [m⁻³]', amplitudePlane: 'Amplitudes [m⁻³]', initialArrow: 'Dashed: initial amplitude n̂',
       realProjection: 'Real projection = δn', amplitude: '|n̂| / A', undefinedPhase: 'Zero amplitude; phase undefined', phase: 'Initial phase',
@@ -91,7 +91,7 @@
     }
   };
   PlasmaLesson.start({
-    translations, previous: '05_superposition.html', next: '../../learning/plasma_waves/index.html', running: () => true,
+    translations, running: () => true,
     setup(a) {
       a.s.data.initialPhase = 0; a.s.data.relativePhase = .5;
       a.$('complex-phase').addEventListener('input', e => {

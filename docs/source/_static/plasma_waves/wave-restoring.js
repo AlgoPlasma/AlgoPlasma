@@ -22,7 +22,7 @@
       field: '电场 E [V/m]', fieldZero: '电场 E = 0 V/m', force: '电子受力 F [N]', forceZero: '电子受力 F = 0 N',
       positive: '正电', negative: '负电', displaced: '电子层右移', equilibrium: '平衡位置',
       takeaway: '<span class="mint">电场把电子拉回，</span><br class="mobile-break"><span class="gold">惯性让它越过原位。</span>',
-      previous: '← 回看第一页：电子运动与波的图样', progress: '推演步骤',
+      progress: '推演步骤',
       descriptions: [
         '电子层和固定离子层重合，总电荷为零。',
         '电子层整体向右偏移，固定离子层仍在原位。这是人为准备的初始位移。',
@@ -52,7 +52,7 @@
       field: 'Electric field E [V/m]', fieldZero: 'Electric field E = 0 V/m', force: 'Electron force F [N]', forceZero: 'Electron force F = 0 N',
       positive: 'Positive', negative: 'Negative', displaced: 'Electron displacement', equilibrium: 'Equilibrium',
       takeaway: '<span class="mint">The field pulls electrons back.</span><br class="mobile-break"> <span class="gold">Inertia carries them past equilibrium.</span>',
-      previous: '← Page 1: electron motion and the wave pattern', progress: 'Explanation step',
+      progress: 'Explanation step',
       descriptions: [
         'The electron layer overlaps a fixed ion layer. Their charges cancel.',
         'The electron layer is displaced to the right while ions stay fixed. This imposed displacement prepares the initial condition.',
@@ -86,10 +86,7 @@
     $('electron-name').textContent = text.electron; $('ion-name').textContent = text.ion;
     $('model-note').textContent = text.model; $('keyboard-note').textContent = text.keyboard;
     $('takeaway-text').innerHTML = text.takeaway;
-    $('previous-lesson').textContent = text.previous;
-    $('previous-lesson').href = `01_what_moves.html?lang=${language}`;
-    $('next-lesson').textContent = language === 'en' ? 'Page 3: how do we measure a wave? →' : '第三页：怎样测量一列波？ →';
-    $('next-lesson').href = `03_measuring_a_wave.html?lang=${language}`;
+    window.PlasmaNavigation?.setLanguage(language);
     $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
     document.querySelectorAll('[data-language]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === language)));
     try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* file:// may restrict storage. */ }

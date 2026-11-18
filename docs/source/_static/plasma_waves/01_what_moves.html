@@ -6,13 +6,18 @@
   <meta name="color-scheme" content="dark">
   <title>波来了，电子去哪儿了？ | AlgoPlasma</title>
   <link rel="stylesheet" href="wave-intro.css">
-  <script src="wave-intro.js" defer></script>
+  <script src="wave-navigation.js" defer></script><script src="wave-intro.js" defer></script>
 </head>
 <body>
-  <div class="lesson" id="lesson" data-stage="0">
+  <div class="lesson" id="lesson" data-page="1" data-stage="0">
     <header class="masthead">
       <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link" aria-label="返回等离子体波课堂">Algo<span>Plasma</span></a>
-      <p class="chapter" id="chapter">01 / 波的基础</p>
+      <p class="chapter sr-only" id="chapter">01 / 波的基础</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" aria-disabled="true" tabindex="-1">← 上一页</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">目录 · 1 / 6</a>
+        <a id="next-lesson" rel="next" href="02_why_oscillates.html?lang=zh">下一页 →</a>
+      </nav>
       <div class="header-actions">
         <button class="motion" id="motion" hidden type="button" aria-pressed="false">暂停动画</button>
         <div class="language-switch" id="language-switch" role="group" aria-label="选择语言">
@@ -37,7 +42,6 @@
 
       <div class="takeaway" id="takeaway" hidden>
         <p id="takeaway-text"><span class="gold">电子在局部往复，</span><br class="mobile-break"><span class="mint">疏密图样向前移动。</span></p>
-        <p class="next-question"><a id="next-question" href="02_why_oscillates.html?lang=zh">进入第二页：电子为什么会往复运动？ →</a></p>
       </div>
     </main>
 

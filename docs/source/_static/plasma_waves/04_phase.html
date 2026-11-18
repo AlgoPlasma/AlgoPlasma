@@ -4,13 +4,18 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
   <title>为什么不同位置不同时起伏？ | AlgoPlasma</title>
   <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css">
-  <script src="wave-course.js" defer></script><script src="wave-phase.js" defer></script>
+  <script src="wave-navigation.js" defer></script><script src="wave-course.js" defer></script><script src="wave-phase.js" defer></script>
 </head>
 <body>
-  <div class="lesson course-lesson" id="lesson" data-stage="0">
+  <div class="lesson course-lesson" id="lesson" data-page="4" data-stage="0">
     <header class="masthead">
       <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
-      <p class="chapter" id="chapter">04 / 相位与波的表达式</p>
+      <p class="chapter sr-only" id="chapter">04 / 相位与波的表达式</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="03_measuring_a_wave.html?lang=zh">← 上一页</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">目录 · 4 / 6</a>
+        <a id="next-lesson" rel="next" href="05_superposition.html?lang=zh">下一页 →</a>
+      </nav>
       <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="false">暂停动画</button>
         <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
       </div>
@@ -19,7 +24,7 @@
       <div class="heading"><h1 id="title">不同位置，<span>为什么不同时起伏？</span></h1><p class="narration" id="narration">各处都在周期性起伏，却不一定同时达到密度最高。</p><p class="equation" id="equation" hidden></p></div>
       <figure class="scene" id="scene"><canvas id="plasma" role="img" aria-label="向右传播的电子密度波">两处密度起伏由相位差联系。δn=A cos(kx−ωt+φ₀)。</canvas><p id="canvas-fallback" hidden>相位差 Δφ=kΔx；k=2π/λ，ω=2π/T。 / Phase difference Δφ=kΔx; k=2π/λ and ω=2π/T.</p><figcaption id="model-note"></figcaption></figure>
       <div class="interaction range-control" id="interaction" hidden><label id="separation-label" for="separation">探针间距</label><input id="separation" type="range" min="0" max="1" step="0.05" value="0.25"><output id="separation-output" for="separation"></output><span id="phase-output" class="sr-only"></span></div>
-      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p><p class="next-question lesson-links"><a id="previous-lesson" href="03_measuring_a_wave.html?lang=zh">← 第三页</a><a id="next-lesson" href="05_superposition.html?lang=zh">第五页：两列波相遇，会怎样？ →</a></p></div>
+      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p></div>
     </main>
     <footer class="controls"><div class="progress-group"><div class="progress" id="progress"></div><span class="stage-count" id="stage-count">1 / 5</span></div><p class="keyboard-note" id="keyboard-note"></p><div class="actions"><button class="back" id="back" type="button" hidden>←</button><button class="advance" id="advance" type="button"><span id="advance-text">比较两个位置</span><span id="advance-arrow" aria-hidden="true">→</span></button></div></footer>
   </div>

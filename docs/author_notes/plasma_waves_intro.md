@@ -20,6 +20,14 @@
   slide updates all text and canvas annotations without resetting the lesson
   step, phase or pause state. It shares the site's `ap-doc-language` preference;
   an explicit URL language takes precedence. Storage/history failures are nonfatal.
+- Navigation: the Sphinx entry is a directory with one linked title and one short
+  summary per lesson. Explanations, units and text alternatives remain inside
+  the lessons. All six pages have persistent header links for previous page,
+  contents with page count, and next page, independent of reveal progress.
+  The lower advance/back controls still operate within a lesson. First/last
+  boundaries are disabled, and language is carried by the links. The shared
+  `wave-navigation.js` catalog owns page order and adjacent-page labels; each
+  HTML page also includes usable Chinese navigation without JavaScript.
 
 ## Illustration model and limits
 

@@ -6,13 +6,18 @@
   <meta name="color-scheme" content="dark">
   <title>电子为什么会来回运动？ | AlgoPlasma</title>
   <link rel="stylesheet" href="wave-intro.css">
-  <script src="wave-restoring.js" defer></script>
+  <script src="wave-navigation.js" defer></script><script src="wave-restoring.js" defer></script>
 </head>
 <body>
-  <div class="lesson" id="lesson" data-stage="0">
+  <div class="lesson" id="lesson" data-page="2" data-stage="0">
     <header class="masthead">
       <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link" aria-label="返回等离子体波课堂">Algo<span>Plasma</span></a>
-      <p class="chapter" id="chapter">02 / 恢复力与惯性</p>
+      <p class="chapter sr-only" id="chapter">02 / 恢复力与惯性</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="01_what_moves.html?lang=zh">← 上一页</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">目录 · 2 / 6</a>
+        <a id="next-lesson" rel="next" href="03_measuring_a_wave.html?lang=zh">下一页 →</a>
+      </nav>
       <div class="header-actions">
         <button class="motion" id="motion" hidden type="button" aria-pressed="false">暂停动画</button>
         <div class="language-switch" id="language-switch" role="group" aria-label="选择语言">
@@ -33,8 +38,6 @@
       </figure>
       <div class="takeaway" id="takeaway" hidden>
         <p id="takeaway-text"><span class="mint">电场把电子拉回，</span><br class="mobile-break"><span class="gold">惯性让它越过原位。</span></p>
-        <p class="next-question"><a id="previous-lesson" href="01_what_moves.html?lang=zh">← 回看第一页：电子运动与波的图样</a></p>
-        <p class="next-question"><a id="next-lesson" href="03_measuring_a_wave.html?lang=zh">第三页：怎样测量一列波？ →</a></p>
       </div>
     </main>
     <footer class="controls">

@@ -12,7 +12,7 @@
       equations: ['', 'f = 1 / T <small>T：周期 [s]　f：频率 [Hz]</small>', 'λ <small>波长 [m]：同一时刻，相邻同相位点的间距</small>', 'v<sub>ph</sub> = λ / T = λf <small>相速度 [m/s]：密度图样的传播速度</small>'],
       descriptions: ['电子局部往复运动，密集区域向右移动。', '金色线是固定空间位置的虚拟探针；下方曲线是该处电子密度随时间的变化。相邻峰值间隔为 T，频率为 1/T。', '动画冻结；下方曲线改为这一时刻的电子密度空间分布。相邻密度峰间距为波长 λ。', '空心圆标记初始密度峰，实心圆追踪同一个峰。一个周期 T 后，它移动了 λ，故相速度为 λ/T。这不代表电子运动速度，也不自动等于能量传播速度。'],
       takeaway: '<span class="mint">周期：多久重复。</span> <span class="gold">波长：多远重复。</span>',
-      previous: '← 第二页：恢复力与惯性', next: '第四页：不同位置，如何联系？ →',
+
       probe: '固定探针', electron: '电子密度波', timeView: '看时间 · 固定位置', spaceView: '看空间 · 固定时刻', follow: '追踪同一个密度峰',
       time: '时间 t [s]', space: '位置 x [m]', density: 'nₑ [m⁻³]', frozen: '画面已冻结', elapsed: '经过', start: '起点', end: '一个周期后',
     },
@@ -26,13 +26,13 @@
       equations: ['', 'f = 1 / T <small>T: period [s]　f: frequency [Hz]</small>', 'λ <small>Wavelength [m]: adjacent equal-phase points at one instant</small>', 'v<sub>ph</sub> = λ / T = λf <small>Phase speed [m/s]: motion of the density pattern</small>'],
       descriptions: ['Electrons oscillate locally while dense regions move right.', 'The gold line marks a probe at a fixed spatial position. The lower curve is electron density there versus time. Consecutive maxima are a period T apart; frequency is 1/T.', 'Time is frozen. The lower curve now shows electron density versus position at that instant. Adjacent density peaks are one wavelength apart.', 'An open circle marks the initial crest position and a filled circle follows that same crest. In one period T it advances λ, so phase speed is λ/T, not the speed of an electron or necessarily the speed of energy transport.'],
       takeaway: '<span class="mint">Period: repeat in time.</span> <span class="gold">Wavelength: repeat in space.</span>',
-      previous: '← Page 2: restoring force', next: 'Page 4: connect different positions →',
+
       probe: 'Fixed probe', electron: 'Electron density wave', timeView: 'Time view · fixed position', spaceView: 'Space view · fixed time', follow: 'Follow the same density peak',
       time: 'Time t [s]', space: 'Position x [m]', density: 'nₑ [m⁻³]', frozen: 'Time is frozen', elapsed: 'Elapsed', start: 'Start', end: 'One period later',
     }
   };
   PlasmaLesson.start({
-    translations, previous: '02_why_oscillates.html', next: '04_phase.html',
+    translations,
     running: s => s.stage !== 2,
     onStage(s, old) { if (s.stage === 0 || s.stage === 3 || (old === 3 && s.stage === 2)) s.time = 0; },
     draw(a) {

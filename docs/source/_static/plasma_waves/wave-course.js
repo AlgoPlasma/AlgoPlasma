@@ -74,8 +74,7 @@
       $('chapter').textContent = text.chapter; $('model-note').textContent = text.model;
       $('return-link').setAttribute('aria-label', text.returnLabel); $('back').setAttribute('aria-label', text.back);
       $('keyboard-note').textContent = text.keyboard;
-      $('previous-lesson').textContent = text.previous; $('previous-lesson').href = `${config.previous}?lang=${language}`;
-      $('next-lesson').textContent = text.next; $('next-lesson').href = `${config.next}?lang=${language}`;
+      window.PlasmaNavigation?.setLanguage(language);
       $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
       document.querySelectorAll('[data-language]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.language === language)));
       try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* Optional preference. */ }
