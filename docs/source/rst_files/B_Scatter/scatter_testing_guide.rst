@@ -1,6 +1,5 @@
-=====================
 Scatter Testing Guide
-=====================
+==============================
 
 .. raw:: html
 
@@ -9,256 +8,102 @@ Scatter Testing Guide
      <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
    </div>
 
-.. container:: ap-lang ap-lang-zh
+.. container:: ap-lang ap-lang-zh ap-b04-doc
 
-   .. rubric:: 1. 范围
+   .. rubric:: 按算法查找验证依据
 
-   本指南概述 AlgoPlasma 中 ``B_Scatter`` 模块的验证方式、测试算例所在位置、
-   推荐运行顺序和结果解读。如果只想看目录式测试入口，可先看
-   :doc:`/tests/004_scatter/index`。
+   **测试说明应同时给出比较对象、判据和对应实现。** 本页提供各算法的验证入口；算例设置、运行命令及已有结果保留在各测试页面中。
 
-   当前覆盖：
+   .. list-table::
+      :header-rows: 1
+      :widths: 18 48 34
 
-   - **B01** ``sub_B01_scatter_3Dxyz`` / ``_v`` / ``_T``：3D Cartesian 三线性
-     CIC 沉积，分别处理密度、速度矩和温度（方差）。
-   - **B02** ``B02_deposit_3d_cyl``：3D 柱坐标 ``(r,\phi,z)`` 电荷/电流
-     deposition，验证均匀物理密度场景下 ``rho``、``Jr``、``Jphi``、``Jz``
-     与连续性方程的自洽性。
+      * - 算法
+        - 检查内容
+        - 详细入口
+      * - B01
+        - 单／多粒子 CIC 分配、粒子分量、单元方差及 OpenMP 对照
+        - :doc:`B01 综合测试 </tests/004_scatter/B01_scatter_3Dxyz>`
+      * - B02
+        - 柱坐标电荷／电流沉积，两种粒子采样与权重设置下的密度及连续性残差
+        - :doc:`004_scatter 中的 B02 测试说明 </tests/004_scatter/index>`
+      * - B03
+        - 一阶对 B01、总量、一阶矩及分批累加
+        - :doc:`B03 测试 </tests/004_scatter/B03_scatter_3Dxyz_bspline>`
+      * - B04
+        - 八节点分配、有效体积、均匀密度恢复、轴点加权平均、单元平均及 B02 对照
+        - :doc:`B04 测试与结果 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
-   除非各 case 的 README 明确说明，这些测试 **不** 覆盖：
+   .. rubric:: B04 的已有测试怎样对应算法？
 
-   - CPML / 吸收边界
-   - 粒子推进、场求解和滤波
-   - GPU 后端
+   - **沉积分配与几何归一化：** 单粒子手算检查八项贡献；四组网格用确定性积分贡献检查有效体积与均匀物理密度恢复。
+   - **后续处理：** 非均匀角网格检查轴点加权均值及总量；解析线性场检查单元体积平均。
+   - **实现与接口：** 均匀网格直接调用 B02 公开电荷沉积例程作对照；参数及浮点范围检查核对返回状态和数组保留。
 
-   .. rubric:: 2. 测试矩阵
+   当前测试在单、双精度各自的 debug 和 release 四种配置下各执行 140 项断言。
+   输入、误差定义、阈值、运行结果摘要与插图集中在 :doc:`B04 测试页 </tests/004_scatter/B04_scatter_3Draz_nonuniform>`。
 
-   - ``tests/004_scatter/B01_scatter_3Dxyz``
-     B01 的综合测试，按 case 01-11 顺序验证三个子程序的所有典型场景。
-     Cases 01-04 为单 / 多粒子的几何沉积，case 05-06 为 OMP 正确性 + 性能基准，
-     case 07-09 为速度矩沉积，case 10-11 为温度沉积。
-     输出在 ``build/output_case*.dat``，绘图在 ``build/result_many.png``。
-     详见 :doc:`B01 综合测试 </tests/004_scatter/B01_scatter_3Dxyz>`。
+   .. rubric:: 怎样理解比较量？
 
-   - ``tests/kunpeng_compare/B01_scatter_3Dxyz_omp``
-     B01 OMP 扩展性的跨平台对比测试。在 AMD服务器和鲲鹏服务器上分别跑
-     ``np`` × ``nthread`` 二维扫描，比较 ``sub_B01_scatter_3Dxyz`` 的
-     ``firstprivate`` + ``reduction`` 设计在两台机器上的开销差异。
-     详见 :doc:`B01 鲲鹏对比 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`。
+   **首先确定数组的物理含义，再选择总量或误差公式。** 从零开始的 B01／B03 粒子数沉积，数组总和对应 ``np*w``；
+   B02／B04 的密度需要乘配套有效体积后求和。粒子分量沉积检查相应分量总和，方差统计则与所在单元的方差参考值比较。
 
-   - ``tests/004_scatter/B02_deposit_3d_cyl/test1``
-     B02 在柱坐标体积均匀采样（``r = R_max * \sqrt{U}``）+ 粒子权重均匀
-     场景下的沉积验证。输出 ``*.dat`` 和 ``*.png``。
+   各测试使用与比较量和精度相符的判据。B04 使用由机器精度定义的阈值，并分别记录节点误差、带符号总量误差及单元平均误差；具体定义见其测试页。
+   密度分配的总量检查与电荷／电流的离散连续性检查各有对应的物理量和接口，应按所用算法阅读。
 
-   - ``tests/004_scatter/B02_deposit_3d_cyl/test2``
-     B02 在 ``r`` 均匀采样 + 非均匀宏粒子权重（``w_p = 2r/R_max \cdot w_0``）
-     场景下的沉积一致性验证。
+   .. rubric:: 使用示例与性能数据
 
-   .. rubric:: 3. 快速运行命令
+   学习调用顺序可先阅读 :doc:`B04 调用示例 </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage>`；
+   研究运行成本可查阅 :doc:`B01 平台比较 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>` 中对应配置的计时结果。
 
-   B01 综合测试：
+   返回 :doc:`学习入口 <scatter_learning_path>` · :doc:`使用指南 <scatter_usage_cookbook>` · :doc:`全部沉积测试 </tests/004_scatter/index>`。
 
-   .. code-block:: bash
+.. container:: ap-lang ap-lang-en ap-b04-doc
 
-      cd tests/004_scatter/B01_scatter_3Dxyz
-      bash clean.sh && bash make.sh && bash run.sh && bash plot.sh
+   .. rubric:: Find verification evidence by algorithm
 
-   B01 鲲鹏对比（在 AMD服务器 / Kunpeng 各跑一次）：
+   **A test description identifies the reference, criterion and implementation under test.** This page links to the available checks. Individual test pages retain configurations, commands and saved results.
 
-   .. code-block:: bash
+   .. list-table::
+      :header-rows: 1
+      :widths: 18 48 34
 
-      cd tests/kunpeng_compare/B01_scatter_3Dxyz_omp
-      bash run_AMD.sh        # 在 AMD服务器上
-      bash run_kunpeng.sh    # 在鲲鹏上
-      bash plot.sh           # 两边 log 都到位后
+      * - Algorithm
+        - Checks
+        - Details
+      * - B01
+        - Single/multiple-particle CIC, particle components, cell variance and OpenMP comparisons
+        - :doc:`B01 tests </tests/004_scatter/B01_scatter_3Dxyz>`
+      * - B02
+        - Cylindrical charge/current deposition, densities and continuity residuals with two sampling/weighting conventions
+        - :doc:`B02 description in 004_scatter </tests/004_scatter/index>`
+      * - B03
+        - Degree-one comparison with B01, totals, first moments and batched accumulation
+        - :doc:`B03 tests </tests/004_scatter/B03_scatter_3Dxyz_bspline>`
+      * - B04
+        - Eight-node distribution, effective volumes, uniform-density recovery, weighted axis averages, cell averages and B02 comparison
+        - :doc:`B04 tests and results </tests/004_scatter/B04_scatter_3Draz_nonuniform>`
 
-   B02 子测试：
+   .. rubric:: How B04 checks relate to the algorithm
 
-   .. code-block:: bash
+   - **Deposition and geometric normalization:** a hand calculation checks eight contributions; deterministic quadrature contributions on four grids check effective volumes and uniform physical density.
+   - **Subsequent operations:** nonuniform angular grids check weighted axis means and totals; an analytic linear field checks cell-volume averages.
+   - **Implementation and interfaces:** a uniform-grid comparison calls the public B02 charge routine; invalid-input and floating-point-range checks inspect return status and preserved arrays.
 
-      cd tests/004_scatter/B02_deposit_3d_cyl/test1
-      bash clean.sh && bash make.sh && bash run.sh 1000
+   The current test executes 140 assertions in each of four configurations: single and double precision, each in debug and release mode.
+   Inputs, error definitions, tolerances, result summaries and figures are collected on the :doc:`B04 test page </tests/004_scatter/B04_scatter_3Draz_nonuniform>`.
 
-      cd ../test2
-      bash clean.sh && bash make.sh && bash run.sh 1000
+   .. rubric:: Interpret the compared quantity
 
-   ``B02`` 的 ``run.sh`` 接受粒子数参数；README 默认数值偏大，
-   smoke test 时建议显式给一个较小数值。
+   **Identify the array's physical meaning before selecting a total or error formula.** For zero-initialized B01/B03 number deposition, the array sum corresponds to ``np*w``.
+   B02/B04 densities require multiplication by matching effective nodal volumes before summation. Component deposition checks the component total; variance is compared with a cell-variance reference.
 
-   .. rubric:: 4. 建议验证顺序
+   Each test uses criteria appropriate to its quantity and precision. B04 defines tolerances from machine precision and reports nodal, signed-total and cell-average errors separately; its test page supplies the definitions.
+   Density-total checks and discrete charge/current continuity checks refer to their respective physical quantities and interfaces.
 
-   首次接触建议按以下顺序排查：
+   .. rubric:: Usage examples and performance data
 
-   1. **B01 case 01-03** （单粒子 / 多粒子基础沉积）
-      验证三线性权重和 ``sum(den) = np * w`` 守恒。
-   2. **B01 case 04** （hollow-square / H / cross 几何图案）
-      验证多粒子结构化沉积的形状和切片可视化。
-   3. **B01 case 05-06** （OMP 正确性 + 单机性能基准）
-      验证串行 / 并行节点一致，给出单机 speedup 参考。
-   4. **B01 case 07-09** （速度矩 ``_v`` 子程序）
-      验证带符号速度量和守恒性。
-   5. **B01 case 10-11** （温度 ``_T`` 子程序）
-      验证基于最近格子法的 ``<(v-<v>)²>`` 实现。
-   6. **B02 test1 / test2** （柱坐标沉积）
-      在两种采样 / 权重组合下验证 ``rho``、``J`` 和连续性残差。
-   7. **B01 鲲鹏对比** （仅当需要做跨平台性能调优时）
-      在两台目标机器上跑完后做对比，定位 OMP 扩展瓶颈。
+   Read the :doc:`B04 calling example </rst_files/B_Scatter/B04_scatter_3Draz_nonuniform/usage>` to learn the calling sequence.
+   For runtime costs, consult the configurations and measurements in the :doc:`B01 platform comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`.
 
-   .. rubric:: 5. 结果解读
-
-   - **守恒检查** （B01 / B02 都有）：单步沉积后 ``sum(den)`` 应等于
-     ``sum(w_p)``，浮点误差应在 ``1e-4`` 量级以内。这条不过等于沉积彻底坏了。
-   - **节点权重精度** （B01 case 01-04）：单粒子分配到 8 节点的权重应等于
-     三线性公式的解析值，逐节点误差应在浮点机器精度量级。
-   - **OMP 一致性** （B01 case 05）：``maxval(|den_serial - den_parallel|)``
-     应小于 ``1e-10``。注意 ``reduction(+:)`` 的浮点求和顺序不固定，
-     完全位级一致不保证；保留打印的 NOTE 状态用于人工判断。
-   - **B01 鲲鹏对比** ：实测 speedup 距 ``ideal = N`` 的差距 = OMP 开销代价；
-     曲线 **跌破 1** 即真负扩展。详细分析见
-     :doc:`B01_scatter_3Dxyz_omp 对比 </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`。
-   - **B02 连续性残差**：``∂ρ/∂t + ∇·J`` 在 macro-particle 步进后的离散值，
-     用来判断电流沉积和电荷沉积是否互相自洽。
-
-   .. rubric:: 6. 说明
-
-   - B01 主 case（01-11）的输出对照 ``source_f90/sub_case*.f90`` 中的解析期望值，
-     程序自身打印 ``PASS/FAIL``；外部脚本不会复算，把 stdout 留着就够了。
-   - B01 鲲鹏对比是 **性能 benchmark**，不验证数值正确性。如果想同时跑数值校验，
-     需要先确认 ``tests/004_scatter/B01_scatter_3Dxyz`` 主 case 全部通过。
-   - 改 ``sub_B01_scatter_3Dxyz`` 的 OMP 设计（去掉 ``default(firstprivate)``、
-     改用 shared par + 原子加 / 局部累加）之后，B01 鲲鹏对比的图会立刻反映
-     效果——是最方便的回归基准。
-
-.. container:: ap-lang ap-lang-en
-
-   .. rubric:: 1. Scope
-
-   This guide summarizes how ``B_Scatter`` modules are validated in AlgoPlasma,
-   where the test cases live, the recommended run order, and how to read the
-   results. For the directory-oriented test entry, see
-   :doc:`/tests/004_scatter/index`.
-
-   Currently covered:
-
-   - **B01** ``sub_B01_scatter_3Dxyz`` / ``_v`` / ``_T``: 3D Cartesian
-     trilinear (CIC) scatter for density, velocity moment, and temperature
-     (variance).
-   - **B02** ``B02_deposit_3d_cyl``: 3D cylindrical ``(r,\phi,z)`` charge
-     and current deposition, checking self-consistency of ``rho``, ``Jr``,
-     ``Jphi``, ``Jz``, and the continuity equation under uniform physical
-     density.
-
-   Unless individual READMEs state otherwise, these suites do **not** cover
-   CPML, particle pushes, field solves, filters, or GPU backends.
-
-   .. rubric:: 2. Test Matrix
-
-   - ``tests/004_scatter/B01_scatter_3Dxyz``
-     B01 main suite. Cases 01-11 sequentially validate all three subroutines.
-     Cases 01-04 are geometric scatter on single / multi-particle layouts;
-     05-06 are OMP correctness + single-node performance; 07-09 cover the
-     velocity moment subroutine; 10-11 cover temperature. Outputs land under
-     ``build/output_case*.dat`` and ``build/result_many.png``. See
-     :doc:`B01 main suite </tests/004_scatter/B01_scatter_3Dxyz>`.
-
-   - ``tests/kunpeng_compare/B01_scatter_3Dxyz_omp``
-     Cross-platform OMP scalability comparison for B01: a joint
-     ``np`` × ``nthread`` sweep run on both the AMD server and the Kunpeng
-     server, highlighting the cost of ``sub_B01_scatter_3Dxyz``'s
-     ``firstprivate + reduction`` design on each machine. See
-     :doc:`B01 Kunpeng comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`.
-
-   - ``tests/004_scatter/B02_deposit_3d_cyl/test1``
-     B02 with uniform cylindrical-volume sampling
-     (``r = R_max * \sqrt{U}``) and uniform particle weights.
-
-   - ``tests/004_scatter/B02_deposit_3d_cyl/test2``
-     B02 with uniform ``r`` sampling and non-uniform macro-particle weights
-     (``w_p = 2r/R_max \cdot w_0``).
-
-   .. rubric:: 3. Quick Run Commands
-
-   B01 main suite:
-
-   .. code-block:: bash
-
-      cd tests/004_scatter/B01_scatter_3Dxyz
-      bash clean.sh && bash make.sh && bash run.sh && bash plot.sh
-
-   B01 Kunpeng comparison (one run per platform):
-
-   .. code-block:: bash
-
-      cd tests/kunpeng_compare/B01_scatter_3Dxyz_omp
-      bash run_AMD.sh        # on the AMD server
-      bash run_kunpeng.sh    # on the Kunpeng server
-      bash plot.sh           # after both logs are in place
-
-   B02 subtests:
-
-   .. code-block:: bash
-
-      cd tests/004_scatter/B02_deposit_3d_cyl/test1
-      bash clean.sh && bash make.sh && bash run.sh 1000
-
-      cd ../test2
-      bash clean.sh && bash make.sh && bash run.sh 1000
-
-   The ``run.sh`` argument for B02 is the particle count; the README default
-   is intentionally large, so pass a smaller value for a quick smoke test.
-
-   .. rubric:: 4. Suggested Validation Order
-
-   For first-time validation, work through the cases in this order:
-
-   1. **B01 cases 01-03** (single / multi-particle basic scatter) — verify
-      trilinear weights and ``sum(den) = np * w`` conservation.
-   2. **B01 case 04** (hollow-square / H / cross patterns) — verify
-      structured multi-particle deposition shape and slice visualization.
-   3. **B01 cases 05-06** (OMP correctness + single-node benchmark) — verify
-      serial / parallel node-by-node consistency and capture per-machine
-      speedup.
-   4. **B01 cases 07-09** (velocity-moment ``_v`` subroutine) — verify signed
-      velocity quantities and conservation.
-   5. **B01 cases 10-11** (temperature ``_T`` subroutine) — verify the
-      nearest-cell ``<(v-<v>)²>`` implementation.
-   6. **B02 test1 / test2** (cylindrical deposition) — verify ``rho``, ``J``,
-      and the continuity residual under two sampling / weighting choices.
-   7. **B01 Kunpeng comparison** (only when cross-platform tuning is needed) —
-      run on both target machines and compare to locate OMP scaling bottlenecks.
-
-   .. rubric:: 5. Result Interpretation
-
-   - **Conservation** (B01 and B02): after one scatter step, ``sum(den)``
-     must equal ``sum(w_p)`` to within about ``1e-4``. **Failing this means
-     scatter is fundamentally broken.**
-   - **Node-weight accuracy** (B01 cases 01-04): single-particle weight at
-     each of the 8 surrounding nodes must match the analytical trilinear
-     formula to within floating-point precision.
-   - **OMP consistency** (B01 case 05):
-     ``maxval(|den_serial - den_parallel|)`` should be below ``1e-10``.
-     ``reduction(+:)`` does not pin the floating-point summation order, so
-     bit-exact equality is not guaranteed; the program prints a NOTE status
-     for human inspection.
-   - **B01 Kunpeng comparison**: vertical gap between the measured speedup
-     curve and the ``ideal = N`` line is the OMP overhead cost. Curves
-     **falling below 1** indicate true negative scaling. Full reading is in
-     :doc:`B01_scatter_3Dxyz_omp comparison </tests/kunpeng_compare/B01_scatter_3Dxyz_omp>`.
-   - **B02 continuity residual**: discrete ``∂ρ/∂t + ∇·J`` after a
-     macro-particle step; used to verify current and charge deposition are
-     consistent.
-
-   .. rubric:: 6. Notes
-
-   - B01 main cases (01-11) compare their output against analytical
-     expectations baked into ``source_f90/sub_case*.f90``; the program
-     itself prints ``PASS/FAIL``. No external script recomputes anything —
-     keeping stdout is enough.
-   - The B01 Kunpeng comparison is a **performance benchmark** and does not
-     re-verify numerical correctness. Confirm the main B01 suite under
-     ``tests/004_scatter/B01_scatter_3Dxyz`` passes before relying on the
-     comparison numbers.
-   - After changes to ``sub_B01_scatter_3Dxyz``'s OMP design (drop
-     ``default(firstprivate)``, switch to shared ``par`` with atomic adds or
-     local accumulation), the B01 Kunpeng comparison plots are the most
-     convenient regression view to confirm the effect.
+   Return to the :doc:`learning path <scatter_learning_path>` · :doc:`usage guide <scatter_usage_cookbook>` · :doc:`scatter test index </tests/004_scatter/index>`.

@@ -129,7 +129,7 @@ Complete Calculation
 调用 ``sub_J02_solve_transport``，同时提供下端入流、入口区间、壁面速度分布和求解选项。
 对于本例，它的内部顺序是：
 
-1. 检查基础对象和入口表示，发现整面壁面或部分面区间后启用反射迭代。
+1. 使用已初始化的基础对象，发现整面壁面或部分面区间后启用反射迭代；入口检查交给扫描过程。
 2. 调用 ``sub_J02_solve_source_iteration``；
    每轮由上一轮出射分布计算壁面入流，调用 ``sub_J02_sweep`` 求新分布。
 3. 只有求解成功，才调用 ``sub_J02_reconstruct_cell_moments``。

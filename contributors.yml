@@ -226,6 +226,7 @@ contributors:
     academic_status:
       zh: 博士在读
       en: PhD Student
+    avatar: docs/source/_static/contributors/zhongping-zhao.jpg
     research_interests:
       zh: 霍尔推力器不稳定性实验及模拟
       en: Experiments and simulations of instabilities in Hall thrusters

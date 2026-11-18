@@ -1,5 +1,7 @@
 # 003_F_IO — Single-Case F_IO Round-Trip Regression Test (MPI + HDF5)
 
+[简体中文](README.zh-CN.md)
+
 This directory keeps the original small round-trip regression test for the `F_IO`
 I/O routines in AlgoPlasma. It validates:
 
@@ -43,3 +45,4 @@ Quick checks:
 which mpirun
 which h5pfc
 h5pfc -show
+```

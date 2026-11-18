@@ -107,29 +107,13 @@ OPEN 从给定的外部入流取值，WALL 从壁面反射关系取值。
   本过程不修改 ``boundary``；得到比例后，还需调用 geometry 文件中的
   ``sub_J02_configure_zlo_partial_inlet_boundary`` 更新面类型。
 
-.. rubric:: 4. 边界检查与读取过程
-
-``fun_J02_boundary_is_valid`` —— 检查四个面类型数组。
-
-- 输入 ``mesh``、``boundary``；输出逻辑值。
-- 检查四数组是否已分配、是否都为 ``(nr,nz)``。
-  它不检查每个类型值是否合法，也不检查相邻单元是否存在；
-  这部分由扫描过程在进入方向循环前检查。
+.. rubric:: 4. 边界读取过程
 
 ``fun_J02_face_type`` —— 读取指定面的整数类型。
 
 - 输入 ``boundary``、``face_id``、``i``、``k``；返回该面的类型。
 - 未知面编号返回 :math:`-1`。单元索引必须由调用者保证有效，
   不能把它作为数组越界检查器。
-
-``fun_J02_reflection_inputs_valid`` —— 检查反射所需数组的尺寸与取值。
-
-- 输入 ``mesh``、``quadrature``、``boundary``、
-  ``wall_shape(n_dir)``、``psi_old(3,nr,nz,n_dir)``。
-- 可选输入 ``zlo_source_xi_lo(nr)`` 与 ``zlo_source_xi_hi(nr)``：
-  两者必须同时出现，端点满足 :math:`-1\leq\xi_L\leq\xi_H\leq1`。
-- 返回逻辑值。检查边界尺寸、壁面速度分布非负、上一轮分布的数组尺寸及区间条件；
-  不检查迭代是否收敛，也不替代求积规则的完整验证。
 
 ``fun_J02_has_reflecting_faces`` —— 判断有效单元是否有整面壁面标记。
 

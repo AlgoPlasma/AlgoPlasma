@@ -26,7 +26,6 @@
     subroutine sub_J02_sweep(mesh, geometry, quadrature, sigma_t, boundary, psi, ierr, &
         boundary_inflow, zlo_inflow, psi_old, wall_shape, diffuse_fraction, &
         zlo_source_xi_lo, zlo_source_xi_hi, failed_direction, failed_i, failed_k, progress_interval, partition)
-        use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
         type(sn_mesh_2drz_type), intent(in) :: mesh
         type(sn_geometry_2drz_type), intent(in) :: geometry
         type(sn_quadrature_type), intent(in) :: quadrature
@@ -45,133 +44,24 @@
 #endif
         type(sn_sweep_halo_type) :: halo
         real, allocatable :: wall(:), diffuse(:,:,:)
-        integer :: m, i, k, progress_every, fd, fi, fk
+        integer :: m, progress_every, fd, fi, fk
         integer, allocatable :: direction_status(:), direction_i(:), direction_k(:), nodes(:)
-        integer :: face, kind, ni, nk
-        integer, parameter :: ni_offset(4) = [-1,1,0,0], nk_offset(4) = [0,0,-1,1]
         real :: fraction
-        logical :: partial, reflecting
 
+        if (present(failed_direction)) failed_direction=0
+        if (present(failed_i)) failed_i=0
+        if (present(failed_k)) failed_k=0
+        fd=0
+        fi=0
+        fk=0
 #ifndef J02_USE_MPI
         if (present(partition)) then
             ierr=SN_ERR_MPI_DISABLED
-            if (present(failed_direction)) failed_direction=0
-            if (present(failed_i)) failed_i=0
-            if (present(failed_k)) failed_k=0
             return
         end if
 #endif
-        progress_every=0
-        validation: block
-            ierr = SN_SUCCESS
-            fd = 0
-            fi = 0
-            fk = 0
-            if (.not. fun_J02_quadrature_is_valid(quadrature)) then
-                ierr = SN_ERR_QUADRATURE_LAYOUT
-                exit validation
-            end if
-            if (.not. fun_J02_geometry_is_valid(mesh, geometry)) then
-                ierr = SN_ERR_SWEEP_GEOMETRY_SHAPE
-                exit validation
-            end if
-            if (.not. fun_J02_boundary_is_valid(mesh, boundary)) then
-                ierr = SN_ERR_BOUNDARY_SHAPE
-                exit validation
-            end if
-            if (size(sigma_t,1) /= mesh%nr .or. size(sigma_t,2) /= mesh%nz .or. &
-                size(sigma_t,3) /= quadrature%n_dir) then
-                ierr = SN_ERR_SWEEP_SIGMA_SHAPE
-                exit validation
-            end if
-            if (any(sigma_t < 0.0)) then
-                ierr = SN_ERR_SWEEP_NEGATIVE_SIGMA
-                exit validation
-            end if
-            ierr = SN_ERR_REFLECTION_INPUT
-            if (present(boundary_inflow) .eqv. present(zlo_inflow)) exit validation
-            if (present(zlo_source_xi_lo) .neqv. present(zlo_source_xi_hi)) exit validation
-            if (present(boundary_inflow)) then
-                ierr = SN_ERR_SWEEP_BOUNDARY_SHAPE
-                if (size(boundary_inflow,1) /= SN_N_FACES .or. &
-                    size(boundary_inflow,2) /= mesh%nr .or. size(boundary_inflow,3) /= mesh%nz .or. &
-                    size(boundary_inflow,4) /= quadrature%n_dir) exit validation
-            end if
-            ierr = SN_ERR_REFLECTION_INPUT
-            if (present(zlo_inflow)) then
-                if (size(zlo_inflow) /= quadrature%n_dir) exit validation
-            end if
-            progress_every = 0
-            if (present(progress_interval)) progress_every = progress_interval
-            fraction = 0.0
-            if (present(diffuse_fraction)) fraction = diffuse_fraction
-            if (.not.ieee_is_finite(fraction)) exit validation
-            if (fraction < 0.0 .or. fraction > 1.0 .or. progress_every < 0) exit validation
-            partial = present(zlo_source_xi_lo)
-            if (present(partition)) then
-                if (partial .and. partition%first(2)/=1) then
-                    ierr=SN_ERR_MPI_INPUT
-                    exit validation
-                end if
-            end if
-            reflecting = fun_J02_has_reflecting_faces(mesh, boundary) .or. partial
-            if (reflecting) then
-                if (.not. present(psi_old)) exit validation
-                if (fraction > 0.0 .and. .not. present(wall_shape)) exit validation
-                allocate(wall(quadrature%n_dir))
-                wall = 0.0
-                if (present(wall_shape)) wall = wall_shape
-                if (.not. fun_J02_reflection_inputs_valid(mesh, quadrature, boundary, wall, &
-                    psi_old, zlo_source_xi_lo, zlo_source_xi_hi)) exit validation
-                if (fraction > 0.0) then
-                    call sub_J02_compute_diffuse_wall_constants(mesh, geometry, quadrature, boundary, &
-                        wall, psi_old, diffuse, ierr, zlo_source_xi_lo, zlo_source_xi_hi)
-                    if (ierr /= SN_SUCCESS) exit validation
-                else
-                    allocate(diffuse(SN_N_FACES,mesh%nr,mesh%nz))
-                    diffuse = 0.0
-                end if
-            end if
-
-            ! Check face types and neighbour indices once, not inside every direction.
-            do k = 1, mesh%nz
-                do i = 1, mesh%nr
-                    if (.not. mesh%active(i,k)) cycle
-                    do face = 1, SN_N_FACES
-                        kind = fun_J02_face_type(boundary,face,i,k)
-                        ierr = SN_ERR_SWEEP_FACE_TOPOLOGY
-                        fi = i
-                        fk = k
-                        if (kind < SN_FACE_INTERIOR .or. kind > SN_FACE_REMOTE) exit validation
-                        if (kind == SN_FACE_REMOTE) then
-                            if (.not.present(partition)) exit validation
-                            select case(face)
-                            case(SN_R_LO)
-                                if (i/=1) exit validation
-                                if (partition%coords(1)==0) exit validation
-                            case(SN_R_HI)
-                                if (i/=mesh%nr) exit validation
-                                if (partition%coords(1)==partition%dims(1)-1) exit validation
-                            case(SN_Z_LO)
-                                if (k/=1) exit validation
-                                if (partition%coords(2)==0) exit validation
-                            case(SN_Z_HI)
-                                if (k/=mesh%nz) exit validation
-                                if (partition%coords(2)==partition%dims(2)-1) exit validation
-                            end select
-                        end if
-                        if (kind /= SN_FACE_INTERIOR) cycle
-                        ni = i+ni_offset(face)
-                        nk = k+nk_offset(face)
-                        if (ni < 1 .or. ni > mesh%nr .or. nk < 1 .or. nk > mesh%nz) exit validation
-                        if (.not. mesh%active(ni,nk)) exit validation
-                    end do
-                end do
-            end do
-            ierr = SN_SUCCESS
-            fi = 0
-            fk = 0
-        end block validation
+        ! Prepare and validate local inputs before entering the collective sweep.
+        call prepare_sweep()
 #ifdef J02_USE_MPI
         call sub_J02_sync_status(partition,ierr,fd,fi,fk)
 #endif
@@ -179,17 +69,15 @@
         if (present(failed_i)) failed_i=fi
         if (present(failed_k)) failed_k=fk
         if (ierr/=SN_SUCCESS) return
-        if (present(partition)) then
 #ifdef J02_USE_MPI
+        if (present(partition)) then
             checked_boundary=boundary
             call sub_J02_connect_partition_faces(mesh,checked_boundary,partition,ierr,validate_only=.true.)
-#endif
             if (ierr/=SN_SUCCESS) return
-#ifdef J02_USE_MPI
             call sub_J02_partition_quadrature(partition,quadrature,ierr)
-#endif
             if (ierr/=SN_SUCCESS) return
         end if
+#endif
         allocate(psi(3,mesh%nr,mesh%nz,quadrature%n_dir))
         allocate(direction_status(quadrature%n_dir), direction_i(quadrature%n_dir), &
             direction_k(quadrature%n_dir))
@@ -224,6 +112,74 @@
         if (present(failed_direction)) failed_direction=fd
         if (present(failed_i)) failed_i=fi
         if (present(failed_k)) failed_k=fk
+    contains
+        ! Initialized objects and field shapes are caller contracts. Check only
+        ! new physical input, boundary choices, and data needed for safe MPI grouping.
+        subroutine prepare_sweep()
+            use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+            integer :: i, k, face_types(SN_N_FACES)
+            logical :: partial, reflecting
+
+            ierr = SN_ERR_QUADRATURE_LAYOUT
+            ! NaN directions cannot be assigned to a sweep quadrant consistently across ranks.
+            if (.not.all(ieee_is_finite(quadrature%mu)) .or. .not.all(ieee_is_finite(quadrature%eta))) return
+            ierr = SN_ERR_SWEEP_NEGATIVE_SIGMA
+            if (any(sigma_t < 0.0)) return
+            ierr = SN_ERR_REFLECTION_INPUT
+            if (present(boundary_inflow) .eqv. present(zlo_inflow)) return
+            if (present(zlo_source_xi_lo) .neqv. present(zlo_source_xi_hi)) return
+            progress_every = 0
+            if (present(progress_interval)) progress_every = progress_interval
+            fraction = 0.0
+            if (present(diffuse_fraction)) fraction = diffuse_fraction
+            if (.not.ieee_is_finite(fraction)) return
+            if (fraction < 0.0 .or. fraction > 1.0 .or. progress_every < 0) return
+            partial = present(zlo_source_xi_lo)
+            if (partial) then
+                if (any(zlo_source_xi_lo < -1.0) .or. any(zlo_source_xi_hi > 1.0) .or. &
+                    any(zlo_source_xi_lo > zlo_source_xi_hi)) return
+                if (present(partition)) then
+                    ierr = SN_ERR_MPI_INPUT
+                    if (partition%first(2) /= 1) return
+                end if
+            end if
+            ierr = SN_ERR_REFLECTION_INPUT
+            reflecting = fun_J02_has_reflecting_faces(mesh, boundary) .or. partial
+            if (reflecting) then
+                if (.not. present(psi_old)) return
+                if (fraction > 0.0 .and. .not. present(wall_shape)) return
+                allocate(wall(quadrature%n_dir))
+                wall = 0.0
+                if (present(wall_shape)) wall = wall_shape
+                if (any(wall < 0.0)) return
+                if (fraction > 0.0) then
+                    call sub_J02_compute_diffuse_wall_constants(mesh, geometry, quadrature, boundary, &
+                        wall, psi_old, diffuse, ierr, zlo_source_xi_lo, zlo_source_xi_hi)
+                    if (ierr /= SN_SUCCESS) return
+                else
+                    allocate(diffuse(SN_N_FACES,mesh%nr,mesh%nz))
+                    diffuse = 0.0
+                end if
+            end if
+
+            ! Interior neighbor topology comes from initialize_boundary_types.
+            ! Physical face choices may be edited; REMOTE faces require a partition.
+            do k = 1, mesh%nz
+                do i = 1, mesh%nr
+                    if (.not. mesh%active(i,k)) cycle
+                    face_types = [boundary%face_r_lo(i,k),boundary%face_r_hi(i,k), &
+                        boundary%face_z_lo(i,k),boundary%face_z_hi(i,k)]
+                    if (any(face_types < SN_FACE_INTERIOR) .or. any(face_types > SN_FACE_REMOTE) .or. &
+                        (any(face_types == SN_FACE_REMOTE) .and. .not.present(partition))) then
+                        ierr = SN_ERR_SWEEP_FACE_TOPOLOGY
+                        fi = i
+                        fk = k
+                        return
+                    end if
+                end do
+            end do
+            ierr = SN_SUCCESS
+        end subroutine prepare_sweep
     end subroutine sub_J02_sweep
 
 
@@ -328,7 +284,7 @@
             k1 = 1
             dk = -1
         end if
-        do i = i0, i1, di
+        cells: do i = i0, i1, di
             do k = k0, k1, dk
                 if (.not. mesh%active(i, k)) cycle
                 rc = geometry%rc(i)
@@ -339,31 +295,26 @@
                 ! between reflected directions within the current sweep.
                 a = 0.0
                 rhs = 0.0
+                ! Initialized topology supplies the upwind neighbor indices.
                 call add_face(SN_R_LO, -mu, i-1, k)
-                if (ierr /= SN_SUCCESS) exit
                 call add_face(SN_R_HI, mu, i+1, k)
-                if (ierr /= SN_SUCCESS) exit
                 call add_face(SN_Z_LO, -eta, i, k-1)
-                if (ierr /= SN_SUCCESS) exit
                 call add_face(SN_Z_HI, eta, i, k+1)
-                if (ierr /= SN_SUCCESS) exit
                 call sub_J02_add_volume_matrix(a, mu, eta, rc, hr, hz)
                 call sub_J02_add_absorption_matrix(a, sigma(i, k), rc, hr, hz)
                 call sub_J02_solve_local_3x3(a, rhs, coeff, solve_ierr)
                 if (solve_ierr /= SN_SUCCESS) then
                     ierr = SN_ERR_SWEEP_LOCAL_SOLVE
-                    exit
+                    exit cells
                 end if
                 call sub_J02_enforce_local_positivity(a, rhs, coeff, ierr)
-                if (ierr /= SN_SUCCESS) exit
+                if (ierr /= SN_SUCCESS) exit cells
                 psi_direction(:, i, k) = coeff
             end do
-            if (ierr /= SN_SUCCESS) exit
-        end do
+        end do cells
         if (ierr /= SN_SUCCESS) then
             failed_i = i
             failed_k = k
-            return
         end if
     contains
         subroutine add_face(face_id, outward_dot, neighbor_i, neighbor_k)
@@ -373,8 +324,6 @@
             real :: s, nr, nz, spec(3), diff(3)
             if (outward_dot > 0.0) then
                 call sub_J02_add_self_face_matrix(a, face_id, outward_dot, rc, hr, hz)
-                return
-            else if (outward_dot >= 0.0) then
                 return
             end if
             s = -outward_dot
@@ -404,7 +353,7 @@
                         fun_boundary_value(face_id, i, k, m), rc, hr, hz)
                 end if
             else if (kind == SN_FACE_WALL) then
-                call fun_face_normal(face_id, nr, nz)
+                call sub_J02_face_normal(face_id, nr, nz)
                 q = fun_J02_reflected_direction_index(quadrature, m, nr, nz)
                 spec = 0.0
                 diff = 0.0
@@ -412,8 +361,6 @@
                 call sub_J02_add_constant_rhs(diff, face_id, s, &
                     diffuse(face_id, i, k)*wall(m), rc, hr, hz)
                 rhs = rhs+(1.0-fraction)*spec+fraction*diff
-            else
-                ierr = SN_ERR_SWEEP_FACE_TOPOLOGY
             end if
         end subroutine add_face
 

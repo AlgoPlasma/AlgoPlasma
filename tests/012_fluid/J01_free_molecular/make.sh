@@ -8,11 +8,11 @@ FC="${FC:-gfortran}"
 mkdir -p "$BUILD"
 FLAGS=(-cpp -O0 -g -fdefault-real-8 -fcheck=all -fbacktrace
   -finit-real=snan -ffpe-trap=invalid,zero,overflow -Wall -Wextra)
-for unit in J01_continuity_freeflow J01_neutral_free_molecular_2Drz; do
-  "$FC" "${FLAGS[@]}" -I"$SOURCE" -J"$BUILD" -c "$SOURCE/mod_${unit}.f90" -o "$BUILD/mod_${unit}.o"
-done
+MODULE_OBJECT="$BUILD/mod_J01_neutral_free_molecular_2Drz.o"
+"$FC" "${FLAGS[@]}" -I"$SOURCE" -J"$BUILD" \
+  -c "$SOURCE/mod_J01_neutral_free_molecular_2Drz.f90" -o "$MODULE_OBJECT"
 for source in "$HERE"/source_f90/test_*.f90; do
   name="$(basename "$source" .f90)"
-  "$FC" "${FLAGS[@]}" -I"$BUILD" "$source" "$BUILD"/mod_*.o -o "$BUILD/${name}.out"
+  "$FC" "${FLAGS[@]}" -I"$BUILD" "$source" "$MODULE_OBJECT" -o "$BUILD/${name}.out"
   echo "Build complete: $BUILD/${name}.out"
 done

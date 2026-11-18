@@ -1,21 +1,25 @@
 # B02_deposit_3d_cyl
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-三维柱坐标 `(r, phi, z)` PIC 电荷密度与电流密度沉积工具。实现包含柱坐标
-节点体积归一化、`phi` 周期处理、`r=0` 轴线平均，以及跨单元轨迹切分。
+3D cylindrical `(r, phi, z)` PIC charge-density and current-density deposition
+utilities. The implementation covers cylindrical node-volume normalization,
+periodic `phi` handling, `r=0` axis averaging, and trajectory splitting across
+cell boundaries.
 
-## 文件
+## Files
 
-- `mod_B02_deposit_charge_3d_cyl.f90`: 电荷沉积模块入口。
-- `sub_B02_deposit_charge_3d_cyl.f90`: 将单个粒子电荷沉积到八个相邻节点。
-- `mod_B02_deposit_current_3d_cyl.f90`: 电流沉积模块入口。
-- `sub_B02_deposit_current_3d_cyl.f90`: 按扫掠体积沉积 `Jr`、`Jphi` 和 `Jz`。
-- `mod_B02_average_axis_3d_cyl.f90`: 轴线平均工具模块入口。
-- `sub_B02_average_axis_charge_3d_cyl.f90`: 平均 `rho(0,:,k)`。
-- `sub_B02_average_axis_jz_3d_cyl.f90`: 平均 `jz(0,:,k)`。
+- `mod_B02_deposit_charge_3d_cyl.f90`: Module entry point for charge deposition.
+- `sub_B02_deposit_charge_3d_cyl.f90`: Deposits one particle charge to eight
+  neighboring nodes.
+- `mod_B02_deposit_current_3d_cyl.f90`: Module entry point for current deposition.
+- `sub_B02_deposit_current_3d_cyl.f90`: Deposits `Jr`, `Jphi`, and `Jz` with
+  swept-volume formulas.
+- `mod_B02_average_axis_3d_cyl.f90`: Module entry point for axis averaging.
+- `sub_B02_average_axis_charge_3d_cyl.f90`: Averages `rho(0,:,k)`.
+- `sub_B02_average_axis_jz_3d_cyl.f90`: Averages `jz(0,:,k)`.
 
-## 主要接口
+## Public Interfaces
 
 ```fortran
 call sub_B02_deposit_charge_3d_cyl(rp, phip, zp, qp, wp, dr, dphi, dz, &
@@ -28,11 +32,13 @@ call sub_B02_average_axis_charge_3d_cyl(nr, nphi, nz, rho)
 call sub_B02_average_axis_jz_3d_cyl(nr, nphi, nz, jz)
 ```
 
-`rho`、`jr`、`jphi`、`jz` 均按 `(0:nr,0:nphi,0:nz)` 声明。粒子循环结束后
-应对轴线电荷密度和轴向电流密度做方位向平均。
+`rho`, `jr`, `jphi`, and `jz` are declared as `(0:nr,0:nphi,0:nz)`. After the
+particle loop, average axis charge density and axial current density over
+`phi`.
 
-## 编译与参考
+## Compile Notes And Reference
 
-源码使用默认 `real`；双精度默认实数需统一编译选项，例如 `-fdefault-real-8`
-或 `-real-size 64`。算法细节和公式见 Sphinx 文档
-`docs/source/rst_files/B_Scatter/B02_deposit_3d_cyl.rst`。
+The sources use default `real`; use consistent compiler options such as
+`-fdefault-real-8` or `-real-size 64` when double-precision default reals are
+required. Algorithm details and formulas live in the Sphinx page
+`docs/source/rst_files/B_Scatter/B02_deposit_3d_cyl.rst`.

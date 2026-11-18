@@ -1,4 +1,6 @@
-!> Cell moments and internal face fluxes reconstructed from the angular field.
+!> Cell moments and face fluxes from a completed sweep (or a compatible supplied field).
+!> Inputs retain the mesh/quadrature shapes and paired inlet bounds used by that sweep.
+!> ierr is retained for source compatibility; reconstruction has no failure status.
 
     subroutine sub_J02_reconstruct_cell_moments(mesh, geometry, quadrature, psi, &
         density, velocity_r, velocity_z, ierr)
@@ -12,11 +14,6 @@
         real :: psi_mean, momentum_r, momentum_z
 
         ierr = SN_SUCCESS
-        if (size(psi, 1) /= 3 .or. size(psi, 2) /= mesh%nr .or. &
-            size(psi, 3) /= mesh%nz .or. size(psi, 4) /= quadrature%n_dir) then
-            ierr = SN_ERR_RECONSTRUCTION_PSI_SHAPE
-            return
-        end if
         allocate(density(mesh%nr, mesh%nz), velocity_r(mesh%nr, mesh%nz), &
             velocity_z(mesh%nr, mesh%nz))
         density = 0.0
@@ -55,13 +52,8 @@
         real :: trace
 
         ierr = SN_SUCCESS
-        if (size(psi, 1) /= 3 .or. size(psi, 2) /= mesh%nr .or. &
-            size(psi, 3) /= mesh%nz .or. size(psi, 4) /= quadrature%n_dir) then
-            ierr = SN_ERR_RECONSTRUCTION_PSI_SHAPE
-            return
-        end if
-        allocate(flux_r(max(mesh%nr-1, 0), mesh%nz))
-        allocate(flux_z(mesh%nr, max(mesh%nz-1, 0)))
+        allocate(flux_r(mesh%nr-1, mesh%nz))
+        allocate(flux_z(mesh%nr, mesh%nz-1))
         flux_r = 0.0
         flux_z = 0.0
 
@@ -97,14 +89,14 @@
     end subroutine sub_J02_reconstruct_internal_face_fluxes
 
     subroutine sub_J02_reconstruct_open_boundary_fluxes(mesh, geometry, boundary, &
-        quadrature, psi, prescribed_inflow, inflow_flux, outflow_flux, ierr, &
+        quadrature, psi, boundary_inflow, inflow_flux, outflow_flux, ierr, &
         zlo_source_xi_lo, zlo_source_xi_hi, zlo_inflow)
         type(sn_mesh_2drz_type), intent(in) :: mesh
         type(sn_geometry_2drz_type), intent(in) :: geometry
         type(sn_boundary_2drz_type), intent(in) :: boundary
         type(sn_quadrature_type), intent(in) :: quadrature
         real, intent(in) :: psi(:, :, :, :)
-        real, intent(in), optional :: prescribed_inflow(:, :, :, :), zlo_inflow(:)
+        real, intent(in), optional :: boundary_inflow(:, :, :, :), zlo_inflow(:)
         real, allocatable, intent(out) :: inflow_flux(:, :, :), outflow_flux(:, :, :)
         integer, intent(out) :: ierr
         real, intent(in), optional :: zlo_source_xi_lo(:), zlo_source_xi_hi(:)
@@ -113,43 +105,8 @@
         logical :: partial
 
         ierr = SN_SUCCESS
-        if (size(psi, 1) /= 3 .or. size(psi, 2) /= mesh%nr .or. &
-            size(psi, 3) /= mesh%nz .or. size(psi, 4) /= quadrature%n_dir) then
-            ierr = SN_ERR_RECONSTRUCTION_PSI_SHAPE
-            return
-        end if
-        if (present(prescribed_inflow)) then
-            if (size(prescribed_inflow, 1) /= SN_N_FACES .or. &
-                size(prescribed_inflow, 2) /= mesh%nr .or. &
-                size(prescribed_inflow, 3) /= mesh%nz .or. &
-                size(prescribed_inflow, 4) /= quadrature%n_dir) then
-                ierr = SN_ERR_RECONSTRUCTION_BOUNDARY_SHAPE
-                return
-            end if
-        end if
-        if (present(zlo_inflow)) then
-            if (size(zlo_inflow) /= quadrature%n_dir) then
-                ierr = SN_ERR_RECONSTRUCTION_BOUNDARY_SHAPE
-                return
-            end if
-        end if
-        if (.not. fun_J02_boundary_is_valid(mesh, boundary)) then
-            ierr = SN_ERR_BOUNDARY_SHAPE
-            return
-        end if
-        partial = present(zlo_source_xi_lo) .and. present(zlo_source_xi_hi)
-        if (present(zlo_source_xi_lo).neqv.present(zlo_source_xi_hi)) then
-            ierr = SN_ERR_PARTIAL_INLET
-            return
-        end if
-        if (partial) then
-            if (size(zlo_source_xi_lo) /= mesh%nr .or. size(zlo_source_xi_hi) /= mesh%nr .or. &
-                any(zlo_source_xi_lo < -1.0) .or. any(zlo_source_xi_hi > 1.0) .or. &
-                any(zlo_source_xi_lo > zlo_source_xi_hi)) then
-                ierr = SN_ERR_PARTIAL_INLET
-                return
-            end if
-        end if
+        partial = present(zlo_source_xi_lo)
+
         allocate(inflow_flux(SN_N_FACES, mesh%nr, mesh%nz), &
             outflow_flux(SN_N_FACES, mesh%nr, mesh%nz))
         inflow_flux = 0.0
@@ -204,8 +161,8 @@
         real function fun_prescribed_value(face_id, cell_i, cell_k, direction)
             integer, intent(in) :: face_id, cell_i, cell_k, direction
             fun_prescribed_value = 0.0
-            if (present(prescribed_inflow)) then
-                fun_prescribed_value = prescribed_inflow(face_id, cell_i, cell_k, direction)
+            if (present(boundary_inflow)) then
+                fun_prescribed_value = boundary_inflow(face_id, cell_i, cell_k, direction)
             else if (present(zlo_inflow) .and. face_id == SN_Z_LO .and. cell_k == 1) then
                 fun_prescribed_value = zlo_inflow(direction)
             end if

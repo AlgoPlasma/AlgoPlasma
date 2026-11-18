@@ -1,6 +1,6 @@
 # G02_MCC_network：C++ 碰撞网络
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 G02 是独立的 C++20 MCC 核心。主程序提供粒子、背景和时间步，G02 按反应网络抽样碰撞，返回粒子更新、反应计数以及背景的动量和能量收支。G02 不调用 `G01_MCC`；两个模块分别实现自己的碰撞算法。
 
@@ -54,7 +54,7 @@ for (std::uint64_t step = 0; step < steps; ++step) {
 
 ## 截面与模型文件
 
-仓库不提供截面数据文件或空白表格。用户按[CSV 格式说明](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst)创建模型目录；文档列出所有表头、关联关系、单位、默认值和完整的内联最小示例。
+[电子群基准算例输入包](../../tests/009_collision/G02_MCC_network/examples/swarm_benchmark/swarm_inputs.zip)附有该算例使用的初始电子、模型文件和截面表。建立自定义模型时，请自行准备适合所选反应和能量范围的截面数据，并按[CSV 格式说明](../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst)创建模型目录；文档列出所有表头、关联关系、单位、默认值和完整的内联最小示例。
 
 二体截面以相对能量 eV 为横轴、m2 为纵轴；二体/三体温度速率系数分别用 m3/s 和 m6/s。读取器检查单位但不做换算。表格检查通过不等于反应数据或物理近似适用于研究对象。
 

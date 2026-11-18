@@ -1,20 +1,21 @@
 # I_Initializer
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`I_Initializer` 放置 AlgoPlasma 的粒子初始化工具。
+`I_Initializer` contains AlgoPlasma particle-initialization utilities.
 
-## 子目录
+## Subdirectories
 
-- `I01_par_distribute`: 在 Fortran 内存中生成规则粒子初值，当前包括每格均匀位置和 Maxwellian 速度初始化。
-- `I02_par_init_and_load`: 用 Python 离线生成二进制粒子文件，并在 MPI Fortran 程序中载入到本地子域。
+- `I01_par_distribute`: Fortran-side regular particle initialization, currently covering uniform in-cell positions and Maxwellian velocities.
+- `I02_par_init_and_load`: Offline Python binary particle generation plus MPI Fortran loading into local subdomains.
 
-## 数据约定
+## Data Conventions
 
-- 粒子数组使用 `par(1:6,...)`，其中 `1:3` 为 `x,y,z`，`4:6` 为 `vx,vy,vz`。
-- I01 假设归一化网格间距 `dx=dy=dz=1`。
-- I02 的二进制文件位于 `output_init_particles_bin/`，每个粒子记录为 6 个 `float64` 值。
+- Particle arrays use `par(1:6,...)`: `1:3` are `x,y,z` and `4:6` are `vx,vy,vz`.
+- I01 assumes normalized mesh spacing `dx=dy=dz=1`.
+- I02 binary files live under `output_init_particles_bin/`, with six `float64` values per particle record.
 
-## 文档
+## Documentation
 
-详细的初始化流程、坐标约定和 API 说明见 Sphinx 的 `I_Initializer` 页面。
+Detailed initialization workflows, coordinate conventions, and API notes live in
+the Sphinx `I_Initializer` pages.

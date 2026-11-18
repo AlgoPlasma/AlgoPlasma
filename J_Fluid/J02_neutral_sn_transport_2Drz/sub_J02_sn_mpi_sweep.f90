@@ -70,7 +70,7 @@
 
     ! Both owners reconstruct the same upwind flux, in the same m order.
     ! Keep partition flux separate from physical open-boundary inflow/outflow.
-    subroutine sub_J02_reconstruct_partition_fluxes(mesh,geometry,quadrature,boundary,psi,partition,flux,ierr)
+    subroutine sub_J02_reconstruct_partition_fluxes(mesh,geometry,quadrature,boundary,psi,partition,flux)
         use mpi
         type(sn_mesh_2drz_type), intent(in) :: mesh
         type(sn_geometry_2drz_type), intent(in) :: geometry
@@ -79,7 +79,6 @@
         type(sn_partition_type), intent(in) :: partition
         real, intent(in) :: psi(:,:,:,:)
         real, allocatable, intent(out) :: flux(:,:,:)
-        integer, intent(out) :: ierr
         real, allocatable :: low(:,:,:),high(:,:,:),from_low(:,:,:),from_high(:,:,:)
         real :: coefficient(3),trace,component
         integer :: axis,n,t,m,ec,i,k,face,j
@@ -138,5 +137,4 @@
             end do
             deallocate(low,high,from_low,from_high)
         end do
-        ierr=SN_SUCCESS
     end subroutine sub_J02_reconstruct_partition_fluxes

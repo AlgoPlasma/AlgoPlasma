@@ -1,6 +1,6 @@
 # K05 · 双谱转移分析
 
-[English](README.en.md) | [模块入口](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
+[English](README.md) | [模块入口](../../docs/source/rst_files/K_Diagnostics/K05_bispectral_transfer.rst)
 
 以Brown与Jorns（2023）的研究为线索，从波动方程走到同步双探针记录的分析。
 文献：[doi:10.1103/PhysRevLett.130.115101](https://doi.org/10.1103/PhysRevLett.130.115101)。
@@ -29,7 +29,7 @@
 | `analyze_physical_scenario.py` | 选定的流动冷离子情景及条件性群速度 |
 | `plot_physical_comparison.py` | 文献近似重绘与本实验逐项对照 |
 
-读取器、验证与功率收支脚本仍是计算依赖；旧讲解页删除不代表这些工具应删除。
+读取器、验证与功率收支脚本提供后续计算所需的输入；依赖顺序见复现说明。
 第07页用5 MHz输入，第08页重新拟合20 MHz输入，不能拼接两套系数。
 K05使用正指数／除以N的Fourier系数与`<Y conj(X)>`互谱，使用K01输出时需明确对齐约定。
 
@@ -66,3 +66,5 @@ python -m http.server 8055 --bind 127.0.0.1 --directory docs/build/html
 编辑`docs/source/rst_files/K_Diagnostics/K05_*.rst`，不直接修改生成的HTML。
 英文视图保持纯英文，中文可括注英文术语。连续双语编号和稳定语义ID见[EQUATIONS.md](EQUATIONS.md)。
 互动图资源保存在`docs/source/_static/K_Diagnostics`；波包、邻近波带和双探针示意使用示意参数。
+
+保留的JSON及用途见[数据文件说明](DATA_FILES.md)。

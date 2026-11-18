@@ -1,6 +1,6 @@
 # K01_signal_spectra
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 `K01_signal_spectra` 是诊断链的前端：把两路探针原始波形化为后续单元需要的谱量。分段方式与相位符号约定在这里定义一次，K02 与 K03 共用。
 
@@ -75,7 +75,7 @@ mean_phase, variance = fun_K01_phase_mode_statistics(phase[:, mode_bins])
 
 ## 测试
 
-- [基础数值测试](../../tests/010_diagnostics/case_basic_checks/)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
-- [宽带测试](../../tests/010_diagnostics/case_broadband_dispersion/)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
+- [基础数值测试](../../tests/010_diagnostics/case_basic_checks/README.zh-CN.md)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
+- [宽带测试](../../tests/010_diagnostics/case_broadband_dispersion/README.zh-CN.md)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
 
 宽带页面的图、数值表、逐频点 CSV 和源码哈希来自同次运行。阈值是这个合成案例的工程验收要求，不代表普适精度保证。

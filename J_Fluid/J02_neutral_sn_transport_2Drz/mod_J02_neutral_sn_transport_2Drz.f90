@@ -6,8 +6,16 @@
 !> Reduced two-velocity r-z transport, not full axisymmetric 2D3V kinetics.
 !> Speed and one in-plane angle supply vr/vz; v_theta is not represented.
 module mod_J02_neutral_sn_transport_2Drz
+    ! Contract: initialize mesh, geometry, quadrature, boundary and reaction tables
+    ! successfully before use; keep their dimensions/topology consistent thereafter.
+    ! Field arrays follow the documented shapes. Ordinary arithmetic assumes finite,
+    ! representable physical data; downstream kernels do not revalidate built objects.
     implicit none
     private :: sub_J02_sweep_velocity, sub_J02_sweep_batch, sn_sweep_halo_type
+    private :: sub_J02_combine_phase_quadrature
+    private :: fun_J02_validate_inflow_input
+    private :: sub_J02_reaction_energy_factor, sub_J02_reaction_kernel_at_speed
+    private :: fun_J02_reaction_energy_allowed, fun_J02_interpolate_cross_section
 #ifdef J02_USE_MPI
     private :: sub_J02_mpi_sweep, sub_J02_connect_partition_faces, sub_J02_sync_status
     private :: sub_J02_partition_check, sub_J02_partition_real_reduce, sub_J02_partition_any
@@ -34,11 +42,12 @@ module mod_J02_neutral_sn_transport_2Drz
     integer, parameter :: SN_ERR_MESH_AXIAL_ORDER = 105
     integer, parameter :: SN_ERR_GEOMETRY_MESH = 201
     integer, parameter :: SN_ERR_GEOMETRY_THETA_SPAN = 202
-    integer, parameter :: SN_ERR_BOUNDARY_SHAPE = 203
     integer, parameter :: SN_ERR_ANGLE_COUNT = 301
     integer, parameter :: SN_ERR_ANGLE_SCHEME = 302
     integer, parameter :: SN_ERR_SPEED_COUNT = 311
     integer, parameter :: SN_ERR_SPEED_MAX = 312
+    integer, parameter :: SN_ERR_SPEED_EDGES = 313
+    integer, parameter :: SN_ERR_SPEED_RANGE = 314
     integer, parameter :: SN_ERR_QUADRATURE_LAYOUT = 321
     integer, parameter :: SN_ERR_SIGMA_FREQUENCY_SHAPE = 322
     integer, parameter :: SN_ERR_SIGMA_NEGATIVE_FREQUENCY = 323
@@ -53,9 +62,6 @@ module mod_J02_neutral_sn_transport_2Drz
     integer, parameter :: SN_ERR_SOURCE_OUTGOING_DATA = 409
     integer, parameter :: SN_ERR_LOCAL_SINGULAR = 501
     integer, parameter :: SN_ERR_LOCAL_POSITIVITY = 502
-    integer, parameter :: SN_ERR_SWEEP_SIGMA_SHAPE = 601
-    integer, parameter :: SN_ERR_SWEEP_BOUNDARY_SHAPE = 602
-    integer, parameter :: SN_ERR_SWEEP_GEOMETRY_SHAPE = 603
     integer, parameter :: SN_ERR_SWEEP_AXIS_DIRECTION = 608
     integer, parameter :: SN_ERR_SWEEP_LOCAL_SOLVE = 609
     integer, parameter :: SN_ERR_SWEEP_NEGATIVE_SIGMA = 610
@@ -65,13 +71,32 @@ module mod_J02_neutral_sn_transport_2Drz
     integer, parameter :: SN_ERR_SOURCE_ITERATION_NOT_CONVERGED = 615
     integer, parameter :: SN_ERR_WALL_NORMALIZATION = 617
     integer, parameter :: SN_ERR_PARTIAL_INLET = 616
-    integer, parameter :: SN_ERR_RECONSTRUCTION_PSI_SHAPE = 701
-    integer, parameter :: SN_ERR_RECONSTRUCTION_BOUNDARY_SHAPE = 702
 
     integer, parameter :: SN_ERR_MPI_DISABLED = 801
     integer, parameter :: SN_ERR_MPI_LAYOUT = 802
     integer, parameter :: SN_ERR_MPI_INPUT = 803
     integer, parameter :: SN_ERR_MPI_THREAD = 804
+
+    integer, parameter :: SN_ERR_REACTION_TABLE = 901
+    integer, parameter :: SN_ERR_REACTION_POLICY = 902
+    integer, parameter :: SN_ERR_REACTION_ENERGY_BASIS = 903
+    integer, parameter :: SN_ERR_REACTION_MASS = 904
+    integer, parameter :: SN_ERR_REACTION_INPUT = 905
+    integer, parameter :: SN_ERR_REACTION_ENERGY_RANGE = 906
+    integer, parameter :: SN_ERR_NUMERIC_RANGE = 907
+    integer, parameter :: SN_ERR_CEX_BACKGROUND = 908
+    integer, parameter :: SN_ERR_CEX_BACKGROUND_SHAPE = 909
+    integer, parameter :: SN_ERR_CEX_NORMALIZATION = 910
+
+    integer, parameter :: SN_REACTION_ENERGY_CM = 1, SN_REACTION_ENERGY_PROJECTILE_LAB = 2
+    integer, parameter :: SN_REACTION_RANGE_ERROR = 1, SN_REACTION_RANGE_CLAMP = 2
+    ! Explicit units: energy in eV, microscopic cross section in m^2.
+    ! Private components prevent a caller from invalidating a validated table.
+    type :: sn_reaction_table_type
+        private
+        integer :: energy_basis = 0, range_policy = 0
+        real, allocatable :: energy_ev(:), cross_section_m2(:)
+    end type sn_reaction_table_type
 
     ! Borrowed nonperiodic 2D Cartesian communicator. MPI lifetime belongs to the caller.
     ! first/count describe owned cells (global one-based indices); public fields have no ghosts.
@@ -149,11 +174,15 @@ module mod_J02_neutral_sn_transport_2Drz
 contains
 
 #   include "sub_J02_sn_error.f90"
+#   include "sub_J02_sn_validation.f90"
 #ifdef J02_USE_MPI
 #   include "sub_J02_sn_partition.f90"
 #endif
 #   include "sub_J02_sn_geometry.f90"
 #   include "sub_J02_sn_quadrature.f90"
+#   include "sub_J02_sn_relative_speed.f90"
+#   include "sub_J02_sn_reaction_kernel.f90"
+#   include "sub_J02_sn_cex.f90"
 #   include "sub_J02_sn_inflow.f90"
 #   include "sub_J02_sn_source.f90"
 #   include "sub_J02_sn_loss.f90"

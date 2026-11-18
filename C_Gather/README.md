@@ -1,23 +1,30 @@
 # C_Gather
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`C_Gather` 收集 PIC 粒子循环中常用的“网格到粒子”插值例程，用于把网格上的场量或形函数权重计算到粒子位置。
+`C_Gather` contains grid-to-particle interpolation routines used in PIC-style
+particle loops. These routines evaluate grid-based field quantities or shape
+function weights at particle positions.
 
-## 组件
+## Components
 
-| 目录 | 作用 |
+| Directory | Role |
 | --- | --- |
-| `C01_gather_3Dxyz` | 三维直角坐标电磁场的三线性 gather，以及 gather 与 push 融合的粒子循环内核。 |
-| `C02_gather_3Dxyz_bspline` | 三维直角坐标电磁场的直接 B-spline gather。 |
-| `C03_gather_3Draz_nonuniform` | 非均匀三维柱坐标静电交错 E / 节点 B 的单粒子 gather，使用物理坐标。 |
+| `C01_gather_3Dxyz` | Trilinear gather of 3D Cartesian electric and magnetic fields, plus a fused gather-and-push kernel. |
+| `C02_gather_3Dxyz_bspline` | Direct B-spline gather of 3D Cartesian electric and magnetic fields. |
+| `C03_gather_3Draz_nonuniform` | Single-particle gather of nonuniform cylindrical staggered electrostatic E and nodal B, using physical coordinates. |
 
-## 使用说明
+## Usage Notes
 
-这些例程以源码级 Fortran module 组织。调用程序通常先包含对应的 `mod_*.f90` 入口文件，再 `use` 该 module。由于 module 文件使用 `#include` 收集子程序源文件，编译时通常需要开启 C 预处理。
+The routines are organized as source-level Fortran modules. A caller normally
+includes the corresponding `mod_*.f90` entry file and uses the exported module.
+Compilation usually requires C preprocessing because module files include the
+subroutine sources with `#include`.
 
 ```bash
 gfortran -cpp -O2 demo_gather.f90
 ```
 
-源码使用默认 `real` 精度。如需双精度，可在编译时选择相应选项，例如 `gfortran` 的 `-fdefault-real-8` 或 Intel Fortran 的 `-real-size 64`。
+The source uses default `real`. If double precision is required, choose the
+compiler option at build time, for example `-fdefault-real-8` for `gfortran` or
+`-real-size 64` for Intel Fortran.

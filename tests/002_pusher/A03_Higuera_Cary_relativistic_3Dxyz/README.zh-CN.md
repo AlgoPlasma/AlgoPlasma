@@ -1,6 +1,6 @@
 # A03_Higuera_Cary_relativistic_3Dxyz 测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录提供 `A_Pusher/A03_Higuera_Cary_relativistic_3Dxyz` 的独立测试，用于验证三维直角坐标中的相对论 Higuera-Cary 粒子速度推进器。测试程序会编译一个小型 Fortran 驱动，运行相对论回旋和高 Lorentz 因子 `E x B` 漂移算例，并与解析解或参考容差对比。
 
@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | `build/case01_gyro.dat` | 相对论纯磁场回旋运动 | 初速度为 `0.9c`，使用相对论修正后的回旋频率对比解析轨道和速度。 |
 | `build/case02_exb_drift.dat` | `gamma = 20` 的力自由 `E x B` 漂移 | 设置 `E = -v_y B_z` 使 Lorentz 力抵消，检查粒子是否保持 `x = 0` 并沿漂移方向匀速运动。 |
-| `build/case03_warpx_exb_drift.dat` | WarpX 参考 `E x B` 漂移测试 | 使用正电子荷质比和 WarpX 参考设置，检查最终 `|x| < 0.001` 的容差。 |
+| `build/case03_warpx_exb_drift.dat` | WarpX 参考 `E x B` 漂移测试 | 使用正电子荷质比和 WarpX 参考设置，检查最终 `abs(x) < 0.001` 的容差。 |
 
 运行程序时，每个算例会在终端输出最大速度误差和最大位置误差。第三个算例还会输出 WarpX 参考容差的 `PASS` 或 `FAIL`。
 

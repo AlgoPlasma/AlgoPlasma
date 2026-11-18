@@ -1,10 +1,11 @@
-009_collision
-=============
+009_collision Tests
+===================
 
 .. toctree::
    :maxdepth: 1
 
    G02_collision_box
+   G03_DSMC Validation <G03_DSMC>
 
 .. raw:: html
 
@@ -81,6 +82,17 @@
    算例将 CSV 和图片写入其已忽略的 ``results/`` 目录。数据仅供软件验证，
    不得用于科研结论；参数与判据见 :ref:`零维碰撞盒教程 <g02-collision-box-zh>`。
 
+   .. rubric:: G03 DSMC 回归测试与碰撞弛豫
+
+   ``tests/009_collision/G03_DSMC`` 按当前柱坐标接口执行八个核心检查组，
+   并对三种模型与两种调度分别运行 200 微秒的弛豫回归，检查后期时间均值的相对平衡误差。
+   :doc:`G03_DSMC Validation <G03_DSMC>` 展示代表性弛豫图，说明读图方法、通过条件与检查范围。
+   默认将六组时间序列、汇总表、图片和日志保存在测试目录的 ``results/`` 中。
+
+   .. code-block:: bash
+
+      bash tests/009_collision/G03_DSMC/run.sh
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: G01 MCC Cross-Section Loader Regression Test
@@ -153,3 +165,16 @@
    The example writes CSV files and plots to its ignored ``results/`` directory.
    Its data are for software validation only, not scientific conclusions; see
    the :ref:`collision-box tutorial <g02-collision-box-en>` for parameters and pass criteria.
+
+   .. rubric:: G03 DSMC Regression Tests and Collision Relaxation
+
+   ``tests/009_collision/G03_DSMC`` runs eight core groups through the current cylindrical
+   interface and six 200-microsecond relaxation checks covering three models and two schedules.
+   The relaxation checks compare late-time means with equilibrium targets using a 1% relative tolerance.
+   :doc:`G03_DSMC Validation <G03_DSMC>` shows measured plots and explains analytic
+   references, statistical tolerances and CSV columns. Time series, a summary,
+   figures and the run log are saved in the test directory's ``results/`` folder.
+
+   .. code-block:: bash
+
+      bash tests/009_collision/G03_DSMC/run.sh
