@@ -3,10 +3,12 @@
 - Reader: knows k, omega, wavelength, period, phase speed, linear superposition
   and the complex plane-wave expression from pages 1–6.
 - Capabilities: read a k–omega pair from a dispersion curve; compute wavelength
-  and period; distinguish the origin-to-point slope from a tangent slope.
+  and period; distinguish the origin-to-point slope from a tangent slope;
+  distinguish allowed components from the amplitudes/phases actually excited.
 - Sequence: familiar density wave -> parameter axes and one point -> allowed
   branch with a k selector -> linked wavelength/period -> phase-speed secant.
-  Five reveals; reuse the shared large typography and progressive controls.
+  A sixth reveal selects three points and links their density sum to one dot
+  population. Reuse the shared large typography and progressive controls.
 - A point denotes a wave component, not particle position or a time-history
   sample. The chosen branch is a specified fluid example, not a universal plasma
   dispersion law. The next lesson can introduce wave packets and tangent slope.
@@ -60,6 +62,29 @@ The SVG uses physical k/omega, with real origins and numeric ticks. The final
 gold line connects (0,0) and (k,omega); it is not a tangent or group velocity.
 Negative k, additional branches, propagation cutoffs and growth rates are deferred.
 
+## Three components on the same branch
+
+The last reveal uses k_j = 20, 50, 80 rad/m with omega_j = frequency(k_j).
+For each selected term, A_j/n0 = 0.06 and phi_j = 0 rad. Unchecking sets that
+term to zero without renormalizing the others or resetting time. Numbered
+colored points, a matching dash legend and dashed density curves identify the
+same components. The white curve is their pointwise sum at one physical time.
+The dot population is obtained by inverting the shared mass-coordinate map
+with all selected components together, not by adding particle positions.
+The fixed spatial domain and time scaling are unchanged; the vertical plot
+spans relative perturbations -0.18 to +0.18. Total density remains at least
+0.82 n0, so the map is monotone even when all three terms are selected.
+
+The density sum follows linear theory. Its exact density-to-dot kinematics do
+not constitute a nonlinear fluid solution or a self-consistent particle solver.
+The visible takeaway distinguishes allowed pairs from excited amplitudes and
+initial phases. Optional details explain continuous k in an infinite uniform
+medium and possible discrete k imposed by finite boundaries. These points use
+the Morin reference above, especially its plane-wave and superposition discussion.
+
+Opening 07_dispersion.html#superposition goes directly to this example. Replay
+restores the clean opening, all three selections and the original single k=40.
+
 ## Validation
 
 Check coordinate projections, mode selection by plot and keyboard slider,
@@ -77,3 +102,14 @@ brackets, probe phase after multiple periods, and crest speed. Plot/keyboard
 selection, replay, language-state preservation, reduced motion, no-JavaScript
 and no-canvas fallbacks, and all seven page-navigation links passed.
 Sphinx completed without warnings.
+
+Three-component extension verified on 2026-11-18: all eight selection masks
+at four times, including long elapsed times. The plotted sum matched the
+individual traces and dimensional analytical density within 3e-15;
+mass-coordinate inversion residual stayed below 8e-15. Finite-difference
+particle velocity agreed with the mass-map derivative within 4e-10. The
+empty selection gave uniform density and the single-selection cases retained
+the prescribed amplitude. All six stages passed layout checks in both
+languages at 320, 768, 1280, 1440 and 1920 px widths. Checkbox keyboard input,
+phase/pause preservation, replay, previous-step controls, direct example URL,
+expanded details, no-canvas and no-JavaScript fallbacks were checked.

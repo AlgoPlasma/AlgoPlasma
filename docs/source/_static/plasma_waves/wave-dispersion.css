@@ -15,7 +15,7 @@
 .selected-mode { fill: #f4c583; stroke: #10181c; stroke-width: 2; }
 .phase-ray { stroke: #f4c583; stroke-width: 3; }
 .dispersion-lesson svg .point-name { fill: #f4c583; }
-.dispersion-lesson:not([data-stage="0"]):not([data-stage="1"]) svg { cursor: crosshair; }
+.dispersion-lesson:not([data-stage="0"]):not([data-stage="1"]):not([data-stage="5"]) svg { cursor: crosshair; }
 .dispersion-lesson #comparison-note { margin: 8px 0 0; font-size: var(--annotation-size); color: var(--muted); }
 .dispersion-lesson details { margin-top: 20px; font-size: var(--annotation-size); line-height: 1.6; }
 .dispersion-lesson summary { cursor: pointer; color: var(--mint); }
@@ -37,3 +37,15 @@
 .dispersion-lesson .range-control input { width: min(260px, 30vw); }
 .dispersion-lesson .range-control output { font-size: var(--annotation-size); }
 @media (max-width: 700px) { .dispersion-lesson .range-control input { width: 100%; } }
+
+.lesson.dispersion-lesson[data-stage="5"] .scene canvas { height: 550px; min-height: 550px; }
+.dispersion-lesson[data-stage="5"] svg { height: 320px; }
+.dispersion-lesson #component-controls { margin: 12px 0 0; padding: 0; border: 0; min-width: 0; }
+.dispersion-lesson #component-controls legend { font-size: var(--annotation-size); margin-bottom: 8px; font-weight: 650; }
+.dispersion-lesson .component-option { display: flex; align-items: center; gap: 14px; padding: 9px 0; cursor: pointer; color: var(--mode-color); font-size: var(--annotation-size); font-weight: 600; line-height: 1.4; }
+.dispersion-lesson .component-option input { flex: 0 0 26px; width: 26px; height: 26px; margin: 0; accent-color: var(--mode-color); }
+.dispersion-lesson .component-option input:focus-visible { outline: 3px solid var(--mode-color); outline-offset: 4px; }
+.dispersion-lesson .component-option span span { display: block; }
+.dispersion-lesson #component-hint { margin: 12px 0 0; font-size: var(--annotation-size); line-height: 1.5; color: var(--muted); }
+
+.dispersion-lesson .component-swatch { display: inline-block; width: 34px; height: 3px; vertical-align: middle; margin-right: 8px; background: repeating-linear-gradient(to right, currentColor 0 var(--dash), transparent var(--dash) var(--period)); }

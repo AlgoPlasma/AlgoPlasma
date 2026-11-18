@@ -37,7 +37,7 @@ Plasma Waves
           连接旋转与实部投影，用复振幅处理波的叠加和微分。
 
       `07 · 色散关系与读图 → <../../_static/plasma_waves/07_dispersion.html?lang=zh>`_
-          从曲线上的一个点读出波长、周期与相速度，并与电子密度波对应。
+          读出波长、周期与相速度，观察曲线上三个波分量叠加后的电子密度。
 
 .. container:: ap-lang ap-lang-en
 
@@ -66,4 +66,4 @@ Plasma Waves
           Connect rotation to real-part projection and use complex amplitudes for superposition and differentiation.
 
       `07 · Reading a dispersion relation → <../../_static/plasma_waves/07_dispersion.html?lang=en>`_
-          Connect a point on the curve to wavelength, period, phase speed and the matching density wave.
+          Read wavelength, period and phase speed, then combine three points into one density pattern.
