@@ -1,13 +1,51 @@
-/* A compact directory; explanations and units live in the linked lessons. */
-.wave-directory dl { margin: 0; }
-.wave-directory dt { padding-top: 18px; font-size: 21px; line-height: 1.45; font-weight: 600; }
-.wave-directory dd { margin-left: 0 !important; padding: 5px 0 17px; border-bottom: 1px solid #dde5e1; }
-.wave-directory dd p { margin-bottom: 0 !important; font-size: 17px; line-height: 1.65; }
-.wave-directory a { text-decoration: none; }
-.wave-directory a:hover { text-decoration: underline; text-underline-offset: 4px; }
-.wave-directory a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
-.wave-directory dl > dt:first-child { padding-top: 0; }
-@media (max-width: 700px) {
-  .wave-directory dt { font-size: 20px; }
-  .wave-directory dd p { font-size: 16px; }
+.wave-overview {
+  margin: 0 0 1.5rem;
+  padding: .9rem 1.25rem;
+  border-left: 3px solid #35769a;
+  background: #f3f7fa;
+  color: #233a49;
+}
+.wave-overview p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+.wave-overview p + p { margin-top: .5rem; }
+
+/* Size columns to the reading area available beside the Sphinx sidebar. */
+.wave-directory { container-type: inline-size; }
+.rst-content .wave-directory > ul {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 2.25rem;
+  margin: 0;
+  padding: 0;
+}
+.rst-content .wave-directory > ul > li {
+  list-style: none;
+  margin: 0;
+  padding: .85rem 0 .95rem;
+  border-top: 1px solid #d5e1e8;
+}
+.wave-directory li > p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.wave-directory li > p + p {
+  margin-top: .3rem;
+  color: #384b57;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.wave-directory a {
+  font-size: 1.18rem;
+  font-weight: 650;
+  line-height: 1.4;
+  text-decoration: none;
+}
+.wave-directory a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.wave-directory a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+@container (min-width: 38rem) {
+  .rst-content .wave-directory > ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
