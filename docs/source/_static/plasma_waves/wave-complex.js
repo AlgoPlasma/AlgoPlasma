@@ -28,7 +28,7 @@
       <p class="derivation-explanation">${text.exponentialRule.replaceAll('{v}', subscript)}</p>
       <p class="derivation-math">∂${subscript}ñ = <span class="math-group">n̂ e<sup>i(kx−ωt)</sup></span> <span class="math-group ${color}">· (${factor})</span><br><span class="derivation-result ${color}">= ${factor}ñ</span></p>
     </div>
-    <div class="derivation-check">
+    <div class="derivation-check" data-reveal-part="1" hidden>
       <h2>${text.realCheck}</h2>
       <p class="derivation-math"><span class="math-group">ñ = A e<sup>iθ</sup></span> <span class="math-group">= A cosθ + iA sinθ</span></p>
       <p class="derivation-explanation">δn = A cosθ<br>θ = kx−ωt+φ₀</p>
@@ -36,13 +36,13 @@
       <p class="derivation-explanation">${copy.sign}</p>
       <p class="derivation-unit">${text.derivativeUnit} <strong>${units}</strong></p>
     </div>
-    <p class="derivation-limit">${text.constantAmplitude}</p>`;
+    <p class="derivation-limit" data-reveal-part="1" hidden>${text.constantAmplitude}</p>`;
   }
   const translations = {
     zh: {
       documentTitle: '波为什么要用复数表示？', title: '波，为什么<span>用复数表示？</span>', chapter: '06 / 波的复数表达',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
-      keyboard: '点击画面或按 → 继续 · F 全屏', fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
+      fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '给定密度波示意：离子固定，无热运动，动画减速。图按 λ、T、n₀ 缩放，未设绝对 SI 数值。',
       steps: ['探针测到实数的密度起伏。复数能帮我们做什么？', '固定位置：箭头顺时针旋转，实轴投影给出密度扰动。', '复振幅 n̂ 记录幅值和初相位；乘指数后，再取实部。', '转动第二个复振幅：合成箭头决定合成波的幅值与初相位。', '时间导数 ∂ₜ、空间导数 ∂ₓ：对这列波，分别乘 −iω 和 ik。', '固定位置 x，对时间 t 求偏导：负号来自相位中的 −ωt。', '固定时刻 t，对位置 x 求偏导：相位中的 kx 给出正号。'],
       actions: ['让起伏变成旋转', '写出整列波', '用复振幅做叠加', '为什么方便计算？', '推导时间偏导', '再推导空间偏导', '重新看一遍'],
@@ -73,7 +73,7 @@
       ],
       takeaway: '<span class="mint">实部还原物理量，</span><span class="gold">复数把幅值和相位放在一起。</span>',
       timeTitle: '时间偏导，<span>为什么乘 −iω？</span>', spaceTitle: '空间偏导，<span>为什么乘 ik？</span>',
-      derivationKeyboard: '按 → 继续 · F 全屏',
+
       chainRule: '从指数到整列波', realCheck: '取实部，核对正负号', derivativeUnit: '导数单位：',
       exponentialRule: '链式法则：∂{v}(eᵍ) = eᵍ ∂{v}g，其中 g = i(kx−ωt)。',
       constantAmplitude: '这里 ∂ₜn̂ = ∂ₓn̂ = 0。若复振幅随 x 或 t 变化，还要用乘积法则加入它的导数。',
@@ -88,7 +88,7 @@
     en: {
       documentTitle: 'Why write waves as complex numbers?', title: 'Why use <span>complex waves?</span>', chapter: '06 / Complex wave representation',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
-      keyboard: 'Click the picture or press → · F fullscreen', fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
+      fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Prescribed density wave; fixed ions, no thermal motion, slowed playback. Reference scales λ, T, n₀; no absolute SI values.',
       steps: ['The probe measures a real density signal. What can complex numbers add?', 'At a fixed point, clockwise rotation projects onto the real density signal.', 'The complex amplitude n̂ stores amplitude and initial phase. Take the real part.', 'Rotate the second amplitude: the sum sets the resulting amplitude and phase.', 'Time derivative ∂ₜ: multiply by −iω. Space derivative ∂ₓ: multiply by ik.', 'Hold x fixed and differentiate in t. The minus sign comes from −ωt.', 'Hold t fixed and differentiate in x. The kx term gives a positive sign.'],
       actions: ['Turn oscillation into rotation', 'Write the whole wave', 'Add complex amplitudes', 'Why is calculation easier?', 'Derive the time derivative', 'Derive the space derivative', 'Watch again'],
@@ -119,7 +119,7 @@
       ],
       takeaway: '<span class="mint">Recover the real signal.</span> <span class="gold">Keep amplitude and phase together.</span>',
       timeTitle: 'Time derivative: <span>why −iω?</span>', spaceTitle: 'Space derivative: <span>why ik?</span>',
-      derivationKeyboard: 'Press → to continue · F fullscreen',
+
       chainRule: 'From exponent to wave', realCheck: 'Take real parts; check the sign', derivativeUnit: 'Derivative units:',
       exponentialRule: 'Chain rule: ∂{v}(eᵍ) = eᵍ ∂{v}g, with g = i(kx−ωt).',
       constantAmplitude: 'Here ∂ₜn̂ = ∂ₓn̂ = 0. If the amplitude varies with x or t, include its derivative using the product rule.',
@@ -160,9 +160,11 @@
       $('lesson').classList.toggle('is-deriving', deriving);
       $('scene').hidden = deriving;
       $('derivation').hidden = !deriving;
-      $('derivation').innerHTML = deriving ? derivationHTML(s.stage === 6, t) : '';
-      $('title').innerHTML = deriving ? (s.stage === 6 ? t.spaceTitle : t.timeTitle) : t.title;
-      $('keyboard-note').textContent = deriving ? t.derivationKeyboard : t.keyboard;
+      const panel = $('derivation'), key = a.language + '-' + s.stage;
+      if (deriving && panel.dataset.content !== key) {
+        panel.innerHTML = derivationHTML(s.stage === 6, t);
+        panel.dataset.content = key;
+      }
     },
     draw(a) {
       const { s, ctx, text: t, colors: c, label, line, dot, grid, curve, arrow, mod } = a;

@@ -16,26 +16,26 @@
   const current = Number($('lesson').dataset.page) - 1;
   function setLanguage(language) {
     const en = language === 'en', lang = en ? 'en' : 'zh';
-    const contents = en ? 'Contents' : '目录';
-    $('page-navigation').setAttribute('aria-label', en ? 'Course page navigation' : '课程页面导航');
-    $('lesson-index').textContent = `${contents} · ${current + 1} / ${lessons.length}`;
-    $('lesson-index').setAttribute('aria-label', en ? `Course contents; page ${current + 1} of ${lessons.length}` : `课程目录，当前第 ${current + 1} 页，共 ${lessons.length} 页`);
+    const contents = en ? 'Contents' : '课程目录';
+    $('page-navigation').setAttribute('aria-label', en ? 'Course page navigation' : '课程导航');
+    $('lesson-index').textContent = contents;
+    $('lesson-index').setAttribute('aria-label', en ? `Course contents, lesson ${current + 1} of ${lessons.length}` : `课程目录，当前第 ${current + 1} 课，共 ${lessons.length} 课`);
     const indexURL = `../../learning/plasma_waves/index.html?lang=${lang}`;
     $('lesson-index').href = indexURL; $('return-link').href = indexURL;
     for (const [id, offset, label] of [
-      ['previous-lesson', -1, en ? '← Prev' : '← 上一页'],
-      ['next-lesson', 1, en ? 'Next →' : '下一页 →']
+      ['previous-lesson', -1, en ? 'Prev lesson' : '上一课'],
+      ['next-lesson', 1, en ? 'Next lesson' : '下一课']
     ]) {
       const link = $(id), target = lessons[current + offset];
       link.textContent = label;
       if (target) {
         link.href = `${target[0]}?lang=${lang}`;
-        const title = `${offset < 0 ? (en ? 'Previous page' : '上一页') : (en ? 'Next page' : '下一页')}：${target[en ? 2 : 1]}`;
+        const title = `${offset < 0 ? (en ? 'Previous lesson' : '上一课') : (en ? 'Next lesson' : '下一课')}：${target[en ? 2 : 1]}`;
         link.title = title; link.setAttribute('aria-label', title);
         link.removeAttribute('aria-disabled'); link.removeAttribute('tabindex');
       } else {
         link.removeAttribute('href'); link.setAttribute('aria-disabled', 'true'); link.setAttribute('tabindex', '-1');
-        link.title = offset < 0 ? (en ? 'This is the first page' : '已是第一页') : (en ? 'This is the last page' : '已是最后一页');
+        link.title = offset < 0 ? (en ? 'This is the first lesson' : '已是第一课') : (en ? 'This is the last lesson' : '已是最后一课');
         link.setAttribute('aria-label', link.title);
       }
     }

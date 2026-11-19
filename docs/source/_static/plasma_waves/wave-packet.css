@@ -12,7 +12,6 @@
 .packet-lesson .build-block + .build-block { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line); }
 .packet-lesson .build-block p { margin: 0 0 10px; }
 .packet-lesson .build-block p:last-child { margin-bottom: 0; }
-.packet-lesson .build-block.just-revealed { animation: reveal-block .7s ease both; border-left-color: var(--mint); }
 .packet-lesson .math { margin: 12px 0; color: var(--mint); text-align: center; font-size: clamp(28px, 2.05vw, 36px); line-height: 1.5; overflow-wrap: anywhere; }
 .packet-lesson .eq-frac { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle; text-align: center; line-height: 1.3; margin: 0 .12em; white-space: nowrap; }
 .packet-lesson .eq-frac > span:not(.sr-only) { padding: .02em .12em; }
@@ -59,9 +58,6 @@
 .packet-lesson .advance { display: block; text-align: left; min-width: 280px; max-width: 520px; padding: 12px 22px; font-size: 23px; line-height: 1.35; }
 .packet-lesson #advance-kind { display: block; font-size: 20px; margin-bottom: 4px; }
 .packet-lesson #advance-text { display: block; }
-.slide-enter { animation: slide-enter .32s ease both; }
-@keyframes slide-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-@keyframes reveal-block { from { opacity: 0; transform: translateY(12px); background: #20362d; } to { opacity: 1; transform: none; background: transparent; } }
 @media (max-width: 1100px) {
   .packet-lesson .controls { flex-wrap: wrap; }
   .packet-lesson .actions { width: 100%; margin-left: 0; justify-content: flex-end; }

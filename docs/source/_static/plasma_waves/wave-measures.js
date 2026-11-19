@@ -5,7 +5,7 @@
     zh: {
       documentTitle: '怎样测量一列波？', title: '一列波，<span>怎样测量？</span>', chapter: '03 / 周期、波长与相速度',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
-      keyboard: '点击点阵或按 → 继续 · F 全屏', fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
+      fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '正弦密度波示意：固定离子，无热运动，动画减速。探针固定；图按 λ、T、n₀ 缩放，未设绝对数值。',
       steps: ['看同一列电子疏密波，从时间和空间分别测量。', '固定一个位置：两次密度最高之间，隔了多久？', '冻结同一时刻：两个相邻密度峰之间，隔了多远？', '追踪同一密度峰：经过一个周期，前进一个波长。'],
       actions: ['固定一个位置', '冻结这一刻', '跟随一个密度峰', '重新测量'],
@@ -19,7 +19,7 @@
     en: {
       documentTitle: 'How do we measure a wave?', title: 'One wave. <span>How do we measure it?</span>', chapter: '03 / Period, wavelength and phase speed',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
-      keyboard: 'Click the dots or press → · F fullscreen', fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
+      fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Prescribed density wave; fixed ions, no thermal motion, slowed playback. Fixed probe. Plots scale with λ, T and n₀; no absolute values are assigned.',
       steps: ['Measure the same electron-density wave in time and in space.', 'Fix a position: how long between two density maxima?', 'Freeze time: how far between adjacent density peaks?', 'Follow one density peak: it travels one wavelength in one period.'],
       actions: ['Fix a position', 'Freeze this instant', 'Follow a density peak', 'Measure again'],

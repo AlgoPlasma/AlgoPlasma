@@ -9,7 +9,7 @@
     chapter: '01 / Wave basics', back: 'Previous step', returnLabel: 'Return to the plasma waves course',
     electron: 'Electrons', ion: 'Ion background', pause: 'Pause', play: 'Play',
     model: 'Collective-motion illustration: fixed ions, no thermal motion. Dots are not a crystal lattice; motion is slowed.',
-    prompt: 'Start by observing.', keyboard: 'Click the dots or press → to continue · F fullscreen',
+    prompt: 'Start by observing.',
     steps: [
       'Begin with a uniformly distributed plasma.',
       'Watch regions become denser and more sparse.',
@@ -35,8 +35,7 @@
     chapter: '01 / 波的基础', back: '上一步', returnLabel: '返回等离子体波课堂',
     electron: '电子', ion: '离子背景', pause: '暂停动画', play: '播放动画',
     model: '集体运动示意：离子固定，省略热运动；点阵不代表晶格，动画已减速。',
-    prompt: '从这里，开始观察。', keyboard: '点击点阵或按 → 继续 · F 全屏',
-    steps: ['先看一片均匀的等离子体。', '出现了疏密相间的变化。', '这个电子，会跟着波一直向右走吗？', '再盯住一处密集的区域：它在向哪里移动？', '同一幅图里，有两种不同的运动。'],
+    prompt: '从这里，开始观察。', steps: ['先看一片均匀的等离子体。', '出现了疏密相间的变化。', '这个电子，会跟着波一直向右走吗？', '再盯住一处密集的区域：它在向哪里移动？', '同一幅图里，有两种不同的运动。'],
     actions: ['让电子动起来', '追踪一个电子', '再看疏密图样', '揭示这一页的结论', '重新看一遍'],
     particlePrompt: '追踪这一个电子', particleLabel: '这一个电子：局部往复', patternLabel: '疏密图样 →',
     takeaway: '<span class="gold">电子在局部往复，</span><br class="mobile-break"><span class="mint">疏密图样向前移动。</span>',
@@ -58,12 +57,11 @@
     try { if (localStorage.getItem('ap-doc-language') === 'en') return 'en'; } catch (_) { /* Offline storage can be disabled. */ }
     return 'zh';
   }
-  function setLanguage(value) {
+  function setLanguage(value, initial = false) {
     language = value === 'en' ? 'en' : 'zh';
     text = translations[language];
     document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
     document.title = text.documentTitle;
-    $('title').innerHTML = text.title;
     $('chapter').textContent = text.chapter;
     $('return-link').setAttribute('aria-label', text.returnLabel);
     $('back').setAttribute('aria-label', text.back);
@@ -71,7 +69,6 @@
     $('ion-name').textContent = text.ion;
     $('model-note').textContent = text.model;
     $('scene-prompt').textContent = ctx ? text.prompt : text.canvasFailed;
-    $('keyboard-note').textContent = text.keyboard;
     $('takeaway-text').innerHTML = text.takeaway;
     window.PlasmaNavigation?.setLanguage(language);
     $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
@@ -79,7 +76,8 @@
     try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* Optional preference only. */ }
     try { const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url); } catch (_) { /* file:// can restrict history. */ }
     $('toast').hidden = true;
-    renderStage(false);
+    if (initial) setStage(deck.initialStage, true);
+    else renderStage();
   }
 
   const canvas = $('plasma');
@@ -97,7 +95,11 @@
     $('motion').hidden = state.stage === 0;
   }
 
-  function setStage(stage) {
+  function setStage(stage, reset = false) {
+    if (reset) {
+      state.phase = 0; state.lastTime = null; state.paused = motionPreference.matches;
+      state.amplitude = stage > 0 ? 1 : 0; state.track = stage >= 2 ? 1 : 0; state.band = stage >= 3 ? 1 : 0;
+    }
     state.stage = Math.max(0, Math.min(4, stage));
     if (state.stage === 0) {
       state.phase = 0; state.amplitude = 0; state.track = 0; state.band = 0;
@@ -111,27 +113,16 @@
     renderStage();
   }
 
-  function renderStage(animate = true) {
+  function renderStage() {
     $('lesson').dataset.stage = String(state.stage);
-    $('narration').textContent = text.steps[state.stage];
-    $('narration').classList.remove('changed');
-    if (animate) { void $('narration').offsetWidth; $('narration').classList.add('changed'); }
-    $('advance-text').textContent = text.actions[state.stage];
-    $('advance-arrow').textContent = state.stage === 4 ? '↺' : '→';
-    $('back').hidden = state.stage === 0;
     $('takeaway').hidden = state.stage !== 4;
-    $('stage-count').textContent = `${state.stage + 1} / 5`;
-    $('progress').setAttribute('aria-label', `${text.progress} ${state.stage + 1} / 5`);
-    [...$('progress').children].forEach((dot, i) => dot.classList.toggle('filled', i <= state.stage));
+    deck.render(text, language);
     canvas.setAttribute('aria-label', text.descriptions[state.stage]);
     canvas.textContent = text.descriptions[state.stage];
-    $('status').textContent = `${text.steps[state.stage]} ${text.descriptions[state.stage]}`;
     updateMotion();
     fitCanvas();
   }
 
-  function advance() { setStage(state.stage === 4 ? 0 : state.stage + 1); }
-  function back() { if (state.stage > 0) setStage(state.stage - 1); }
   function toggleMotion() {
     if (state.stage === 0) return;
     state.paused = !state.paused;
@@ -142,9 +133,7 @@
     }
     updateMotion(); draw();
   }
-  $('advance').addEventListener('click', advance);
-  $('back').addEventListener('click', back);
-  canvas.addEventListener('click', advance);
+
   $('motion').addEventListener('click', toggleMotion);
   document.querySelectorAll('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
 
@@ -163,8 +152,6 @@
   document.addEventListener('keydown', (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.repeat || event.target.closest('input,textarea,select,[contenteditable]')) return;
     if (event.key === ' ' && event.target.closest('button,a')) return;
-    if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); advance(); }
-    if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); back(); }
     if (event.key.toLowerCase() === 'f') { event.preventDefault(); fullscreen(); }
     if (event.key.toLowerCase() === 'p') { event.preventDefault(); toggleMotion(); }
   });
@@ -179,7 +166,9 @@
     if (rect.width <= 0 || rect.height <= 0) return;
     state.width = rect.width; state.height = rect.height;
     const dpr = Math.min(devicePixelRatio || 1, 2);
-    canvas.width = Math.round(rect.width * dpr); canvas.height = Math.round(rect.height * dpr);
+    const width = Math.round(rect.width * dpr), height = Math.round(rect.height * dpr);
+    if (canvas.width !== width) canvas.width = width;
+    if (canvas.height !== height) canvas.height = height;
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     draw();
   }
@@ -288,6 +277,7 @@
   window.addEventListener('resize', fitCanvas);
   document.addEventListener('visibilitychange', () => { state.lastTime = null; });
   if (!ctx) canvas.hidden = true;
-  setLanguage(initialLanguage());
+  const deck = WaveSlides.create(setStage);
+  setLanguage(initialLanguage(), true);
   requestAnimationFrame(frame);
 })();

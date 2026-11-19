@@ -6,14 +6,14 @@
   time, and derive phase speed by following the same crest through one period.
 - Sequence: clean moving dot field -> fixed virtual density probe and time trace
   -> frozen density snapshot and wavelength -> a crest advances lambda in T.
-  Three clicks connect the related quantities without separate definition slides.
+  Three slides keep the time measurement, spatial measurement and crest tracking distinct.
 - Prediction: ask the learner what must be held fixed for each measurement, and
   how far a crest will move in one period before revealing the final animation.
 - Interpretation: the probe measures Eulerian local density, not displacement
   of a marked electron. The trace and dots use exactly the same density field.
 - Independence: page 2 explains a restoring mechanism, but its rigid slab is not
   reused as a propagating-wave model. Page 3 prescribes a wave to teach kinematics.
-- Interaction: click/keyboard reveal, pause, back, replay, language switching;
+- Interaction: explicit advance/back, slide and lesson restart, pause and language switching;
   reduced-motion starts paused and allows explicit play. A textual alternative
   and per-stage accessible descriptions carry the meaning without animation.
 

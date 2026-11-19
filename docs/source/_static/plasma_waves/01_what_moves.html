@@ -6,18 +6,19 @@
   <meta name="color-scheme" content="dark">
   <title>波来了，电子去哪儿了？ | AlgoPlasma</title>
   <link rel="stylesheet" href="wave-intro.css">
-  <script src="wave-navigation.js" defer></script><script src="wave-text.js" defer></script><script src="wave-intro.js" defer></script>
+  <script src="wave-navigation.js" defer></script><script src="wave-slides.js" defer></script><script src="wave-text.js" defer></script><script src="wave-intro.js" defer></script>
   <link rel="stylesheet" href="wave-presentation.css">
+  <link rel="stylesheet" href="wave-slides.css">
 </head>
 <body>
-  <div class="lesson" id="lesson" data-page="1" data-stage="0">
+  <div class="lesson staged-lesson" id="lesson" data-page="1" data-stage="0">
     <header class="masthead">
       <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link" aria-label="返回等离子体波课堂">Algo<span>Plasma</span></a>
       <p class="chapter sr-only" id="chapter">01 / 波的基础</p>
       <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
-        <a id="previous-lesson" rel="prev" aria-disabled="true" tabindex="-1">← 上一页</a>
-        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">目录 · 1 / 8</a>
-        <a id="next-lesson" rel="next" href="02_why_oscillates.html?lang=zh">下一页 →</a>
+        <a id="previous-lesson" rel="prev" aria-disabled="true" tabindex="-1">上一课</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">课程目录</a>
+        <a id="next-lesson" rel="next" href="02_why_oscillates.html?lang=zh">下一课</a>
       </nav>
       <div class="header-actions">
         <button class="motion" id="motion" hidden type="button" aria-pressed="false">暂停动画</button>
@@ -29,27 +30,33 @@
     </header>
 
     <main>
-      <div class="heading">
-        <h1 id="title">波来了，<span>电子去哪儿了？</span></h1>
-        <p class="narration" id="narration">先看一片均匀的等离子体。</p>
-      </div>
-
-      <figure class="scene" id="scene">
+      <header class="heading"><p class="slide-label" id="slide-label"></p><h1 id="title">波来了，<span>电子去哪儿了？</span></h1></header>
+      <div class="reading-layout">
+        <figure class="scene" id="scene">
         <canvas id="plasma" role="img" aria-label="均匀排列的绿色点代表电子，蓝色加号代表固定离子背景；点阵只用于示意集体运动。">绿色点代表电子。电子在平衡位置附近往复运动时，可以形成向右移动的疏密图样。</canvas>
         <div class="species" aria-hidden="true"><span><i class="electron-key"></i><span id="electron-name">电子</span></span><span class="ions"><b>+</b><span id="ion-name">离子背景</span></span></div>
         <div class="scene-prompt" id="scene-prompt" aria-hidden="true">从这里，开始观察。</div>
         <figcaption id="model-note">集体运动示意：离子固定，省略热运动；点阵不代表晶格，动画已减速。</figcaption>
       </figure>
+        <div class="reading-panel">
+          <div class="narration" id="narration">先看一片均匀的等离子体。</div>
 
-      <div class="takeaway" id="takeaway" hidden>
+          <div class="takeaway" id="takeaway" hidden>
         <p id="takeaway-text"><span class="gold">电子在局部往复，</span><br class="mobile-break"><span class="mint">疏密图样向前移动。</span></p>
+      </div>
+        </div>
       </div>
     </main>
 
     <footer class="controls">
-      <div class="progress-group"><div class="progress" id="progress" aria-label="观察步骤"><i class="filled"></i><i></i><i></i><i></i><i></i></div><span class="stage-count" id="stage-count">1 / 5</span></div>
-      <p class="keyboard-note" id="keyboard-note">点击点阵或按 → 继续 · F 全屏</p>
-      <div class="actions"><button class="back" id="back" type="button" aria-label="上一步" hidden>←</button><button class="advance" id="advance" type="button"><span id="advance-text">让电子动起来</span><span id="advance-arrow" aria-hidden="true">→</span></button></div>
+      <div class="progress-group"><span id="stage-count"></span><span id="build-count"></span></div>
+      <button class="restart" id="restart-lesson" type="button">本课起始</button>
+      <p class="keyboard-note" id="keyboard-note">P 播放 · F 全屏</p>
+      <div class="actions">
+        <button class="back" id="back" type="button" hidden>上一步</button>
+        <button class="restart" id="restart-slide" type="button">本页起始</button>
+        <button class="advance" id="advance" type="button"><span id="advance-kind">下一步</span><span id="advance-text"></span></button>
+      </div>
     </footer>
   </div>
   <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p>

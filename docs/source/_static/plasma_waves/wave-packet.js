@@ -75,7 +75,7 @@
       title: ['算出本例的两种速度', 'Calculate the two speeds'],
       lead: ['沿用 07 的温电子流体模型，电子温度通过压强项体现。', 'Use the warm-electron fluid model from lesson 07; temperature enters through pressure.'],
       blocks: [
-        block(eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s，　u = 10⁶ m/s') + p('ω₀：k → 0 时的角频率；u：压强项的速度参数。背景均匀、无磁场、离子固定，忽略碰撞与 Landau 阻尼。'), eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s,　u = 10⁶ m/s') + p('ω₀ is the k → 0 angular frequency; u is the pressure speed parameter. Uniform background, no magnetic field, fixed ions, no collisions or Landau damping.'), '', ''),
+        block(eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s，　u = 10⁶ m/s') + p('ω₀：k → 0 时的角频率；u：压强项的速度参数。背景均匀、无磁场、离子固定。'), eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s,　u = 10⁶ m/s') + p('ω₀ is the k → 0 angular frequency; u is the pressure speed parameter. Uniform background, no magnetic field, fixed ions.'), '', ''),
         block(p('对 k 求导，并在 k<sub>c</sub> = 60 rad/m 处取值：') + eq('2ω ' + derivative + ' = 2u²k') + eq('v<sub>g</sub> = ' + frac('u²k<sub>c</sub>', 'ω<sub>c</sub>') + ' ≈ 0.514 × 10⁶ m/s') + p('ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s；v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub> ≈ 1.944 × 10⁶ m/s。'), p('Differentiate with respect to k, then evaluate at k<sub>c</sub> = 60 rad/m:') + eq('2ω ' + derivative + ' = 2u²k') + eq('v<sub>g</sub> = ' + frac('u²k<sub>c</sub>', 'ω<sub>c</sub>') + ' ≈ 0.514 × 10⁶ m/s') + p('ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s; v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub> ≈ 1.944 × 10⁶ m/s.'), '代入模型求导', 'Differentiate the model')
       ]
     },
@@ -215,6 +215,7 @@
     $('motion').textContent = s.paused ? text().play : text().pause;
     $('motion').setAttribute('aria-pressed', String(s.paused));
   }
+  let renderedSlide, renderedLanguage, renderedVisual;
   function render(reason = 'state') {
     const slide = current(), t = text(), options = packetOptions(), visual = currentVisual();
     $('lesson').dataset.visual = visual;
@@ -223,23 +224,29 @@
     $('chapter').textContent = t.chapter;
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
     document.title = translated(slide.title) + ' · ' + t.title + ' | AlgoPlasma';
-    $('title').textContent = translated(slide.title);
-    $('narration').textContent = translated(slide.lead);
+    const changedSlide = renderedSlide !== slide.id || renderedLanguage !== lang;
+    const animate = renderedSlide !== undefined && !reduced.matches;
+    for (const [id, value] of [['title', translated(slide.title)], ['narration', translated(slide.lead)]]) {
+      if ($(id).textContent !== value) {
+        $(id).textContent = value;
+        if (animate) WaveSlides.fade($(id));
+      }
+    }
+    const newlyVisible = ['packet-legend', 'phase-key', 'group-key', 'time-controls', 'comparison']
+      .filter(id => $(id).hidden);
     $('slide-label').textContent = t.chapter;
     // Replacing the content removes all previous-slide prose and open controls.
-    if (['page', 'language', 'initial'].includes(reason)) {
+    if (changedSlide) {
       $('slide-content').replaceChildren(...slide.blocks.map((b, i) => {
         const section = document.createElement('section');
         section.className = 'build-block'; section.dataset.build = String(i);
-        section.innerHTML = b[lang]; section.hidden = i > s.build; return section;
+        section.innerHTML = b[lang]; section.hidden = true; return section;
       }));
     }
     $('slide-content').querySelectorAll('.build-block').forEach((node, i) => {
+      const wasHidden = node.hidden;
       node.hidden = slide.sequence ? i !== s.build : i > s.build;
-      node.classList.remove('just-revealed');
-      if (reason === 'reveal' && i === s.build) {
-        void node.offsetWidth; node.classList.add('just-revealed');
-      }
+      if (animate && wasHidden && !node.hidden) WaveSlides.fade(node);
     });
     $('slide-layout').dataset.visual = visual;
     $('visual-pane').hidden = visual === 'none';
@@ -287,12 +294,19 @@
     if (visual === 'repetition') canvas.setAttribute('aria-label', lang === 'zh' ? '宽视野显示间距约5.24米的三个波包。金色区域为原观察窗，下图在同一时刻将它放大。两图横轴x以米计，纵轴相对密度扰动无量纲，蓝色虚线是包络。' : 'Three packets repeat about every 5.24 m in the wide view. Gold marks the original window, enlarged below at the same time. Both axes: x in meters and dimensionless relative density; blue dashes show the envelope.');
     canvas.textContent = canvas.getAttribute('aria-label');
     $('status').textContent += '. ' + $('slide-content').children[s.build].textContent;
-    if (reason === 'page' || (slide.sequence && ['reveal', 'back'].includes(reason))) {
-      $('slide-main').classList.remove('slide-enter'); void $('slide-main').offsetWidth;
-      $('slide-main').classList.add('slide-enter');
-      window.scrollTo({ top: 0, behavior: 'instant' });
+    if (animate) {
+      if (renderedVisual !== visual && visual !== 'none') {
+        WaveSlides.fade($(hasPacket() ? 'packet-figure' : 'chart-figure'));
+      }
+      newlyVisible.filter(id => !$(id).hidden).forEach(id => WaveSlides.fade($(id)));
+    }
+    if (reason === 'page' && changedSlide) {
+      window.scrollTo(0, 0);
       $('title').focus({ preventScroll: true });
     }
+    renderedSlide = slide.id;
+    renderedLanguage = lang;
+    renderedVisual = visual;
     writePosition(); syncTime(); motion(); fit(); drawChart();
     if (reason === 'reveal' && !(slide.sequence && hasPacket())) {
       const fresh = $('slide-content').children[s.build];
@@ -344,7 +358,9 @@
     const rect = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
     if (!rect.width || !rect.height) return;
     s.width = rect.width; s.height = rect.height;
-    canvas.width = Math.round(rect.width * dpr); canvas.height = Math.round(rect.height * dpr);
+    const width = Math.round(rect.width * dpr), height = Math.round(rect.height * dpr);
+    if (canvas.width !== width) canvas.width = width;
+    if (canvas.height !== height) canvas.height = height;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw();
   }
   function draw() {

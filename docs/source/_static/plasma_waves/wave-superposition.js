@@ -5,26 +5,26 @@
     return `<p class="standing-assumptions">${t.standingAssumptions}</p>
       <div class="standing-component"><h2>${t.rightward}</h2>
         <p class="standing-math"><span class="math-part">δn₁ = A cos(kx−ωt)</span> <span class="math-part">= A cos(kx) cos(ωt)</span> <span class="math-part gold">+ A sin(kx) sin(ωt)</span></p></div>
-      <div class="standing-component"><h2>${t.leftward}</h2>
+      <div class="standing-component" data-reveal-part="1" hidden><h2>${t.leftward}</h2>
         <p class="standing-math"><span class="math-part">δn₂ = A cos(kx+ωt)</span> <span class="math-part">= A cos(kx) cos(ωt)</span> <span class="math-part gold">− A sin(kx) sin(ωt)</span></p></div>
-      <p class="standing-explanation">${t.cancelTerms}</p>
-      <p class="standing-math standing-result"><span class="math-part">δn = δn₁ + δn₂</span> <span class="math-part mint">= 2A cos(kx) cos(ωt)</span></p>
+      <p class="standing-explanation" data-reveal-part="2" hidden>${t.cancelTerms}</p>
+      <p class="standing-math standing-result" data-reveal-part="2" hidden><span class="math-part">δn = δn₁ + δn₂</span> <span class="math-part mint">= 2A cos(kx) cos(ωt)</span></p>
       <p class="standing-units">${t.standingUnits}</p>
-      <p class="standing-nodes">${t.fixedNodes}</p>`;
+      <p class="standing-nodes" data-reveal-part="2" hidden>${t.fixedNodes}</p>`;
   }
   const translations = {
     zh: {
       documentTitle: '两列波相遇会发生什么？', title: '两列波相遇，<span>会发生什么？</span>', chapter: '05 / 干涉、拍频与驻波',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
-      keyboard: '点击点阵或按 → 继续 · F 全屏', fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
+      fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '线性密度扰动示意，幅度放大；离子固定，无热运动。按 λ₁、T₁、n₀ 缩放，未设绝对值；播放速度经过调整。',
-      steps: ['先看一列电子密度波，再让另一列加入。', '同向、同频、等幅：相位决定增强，还是相消。', '频率略有差别：固定位置的起伏时强时弱，形成“拍”。', '同频、等幅、相向传播：形成密度节点位置固定的驻波。', '是相加得到的。用余弦和差公式展开，就能看到哪些项抵消。', '预测一下：密度节点处，哪一个量始终为零？'],
+      steps: ['先看一列电子密度波，再让另一列加入。', '同向、同频、等幅：相位决定增强，还是相消。', '频率略有差别：固定位置的起伏时强时弱，形成“拍”。', '同频、等幅、相向传播：形成密度节点位置固定的驻波。', '分别展开两列行波的余弦。相加时，哪些项会抵消？', '预测一下：密度节点处，哪一个量始终为零？'],
       actions: ['加入第二列波', '让频率略有不同', '让两列波相向传播', '推导这个公式', '试一个判断', '重新看叠加'],
       equations: ['', 'δn = δn₁ + δn₂ <small>密度扰动 [m⁻³]；总密度 nₑ = n₀ + δn</small>', 'f<sub>beat</sub> = |f₂ − f₁| = 0.2 f₁ <small>频率均用 Hz；本例 f₂ = 1.2 f₁</small>', 'δn = 2A cos(kx) cos(ωt) <small>A：每列行波的密度幅值 [m⁻³]；空间形状 × 时间振荡</small>', '', ''],
       descriptions: ['先单独观察一个给定的电子密度波。', '两列同向、同频、等幅的密度扰动相加。滑块调节相位差：零相位差时合成幅值为 2A，π 时完全相消，2π 时恢复同相。三条曲线分别显示扰动一、扰动二和总扰动；总电子密度只含一个背景 n0。', '两列同向波频率为 f1 和 1.2 f1，波数也以相同比例变化。本页在固定位置测总密度扰动。慢包络描述起伏幅度的变化，拍频为 0.2 f1，拍周期为 5T1。虚线包络不是第三列独立的波。', '等频等幅的两个相向波相加，得到 2A cos(kx) cos(ωt)。密度节点满足 cos(kx)=0，位置固定，那里 δn 始终为零。波腹的密度起伏最强。节点说的是密度扰动，不是某个电子固定不动。', '取k>0、ω>0，两个初相位为零的相向行波分别是δn₁=Acos(kx−ωt)和δn₂=Acos(kx+ωt)。用余弦差角与和角公式展开，两式中的Asin(kx)sin(ωt)项符号相反、相加抵消，余下两项Acos(kx)cos(ωt)相同，因此δn=δn₁+δn₂=2Acos(kx)cos(ωt)。A是每列行波的密度幅值，单位m⁻³；合成局部幅值为2A|cos(kx)|。cos(kx)=0的位置不随时间改变，那里δn始终为零。', '固定的蓝色虚线标记密度节点。金色电子在节点附近来回运动，并可以穿过节点。预测始终为零的是密度扰动还是电子速度；选择后获得反馈，答题不阻止导航。'],
       takeaway: '<span class="mint">密度节点固定，</span><span class="gold">电子仍可运动。</span>',
 
-      derivationTitle: '两列行波，<span>直接相加。</span>', derivationKeyboard: '按 → 继续 · F 全屏',
+      derivationTitle: '两列行波，<span>直接相加。</span>',
       standingAssumptions: '线性叠加；两波同 A、同 |k|、同 ω。取 k > 0、ω > 0，初相位均为 0。',
       rightward: '① 向右（+x）：展开 cos(kx−ωt)', leftward: '② 向左（−x）：展开 cos(kx+ωt)',
       cancelTerms: '相加时，金色的正弦乘积项一正一负，恰好抵消；两个余弦乘积项相同。',
@@ -39,15 +39,15 @@
     en: {
       documentTitle: 'What happens when two waves meet?', title: 'Two waves meet. <span>What happens?</span>', chapter: '05 / Interference, beats and standing waves',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
-      keyboard: 'Click the dots or press → · F fullscreen', fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
+      fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Linear density perturbations, enlarged; fixed ions, no thermal motion. Scales: λ₁, T₁, n₀; no absolute values. Playback speed varies.',
-      steps: ['Start with one electron-density wave, then add another.', 'Same direction, frequency and amplitude: phase sets reinforcement or cancellation.', 'Slightly different frequencies: density oscillations grow and fade in beats.', 'Equal frequency and amplitude, opposite directions: density nodes stay fixed.', 'Yes: add the perturbations. Expand the cosines to see which terms cancel.', 'Predict: at a density node, which quantity is always zero?'],
+      steps: ['Start with one electron-density wave, then add another.', 'Same direction, frequency and amplitude: phase sets reinforcement or cancellation.', 'Slightly different frequencies: density oscillations grow and fade in beats.', 'Equal frequency and amplitude, opposite directions: density nodes stay fixed.', 'Expand the cosine of each traveling wave. Which terms cancel when you add the waves?', 'Predict: at a density node, which quantity is always zero?'],
       actions: ['Add a second wave', 'Change one frequency', 'Send waves toward each other', 'Derive this formula', 'Try a prediction', 'Explore again'],
       equations: ['', 'δn = δn₁ + δn₂ <small>Density perturbations [m⁻³]; total density nₑ = n₀ + δn</small>', 'f<sub>beat</sub> = |f₂ − f₁| = 0.2 f₁ <small>Frequencies in Hz; here f₂ = 1.2 f₁</small>', 'δn = 2A cos(kx) cos(ωt) <small>A: amplitude of each traveling wave [m⁻³]; space × time</small>', '', ''],
       descriptions: ['Begin with a single prescribed electron-density wave.', 'Two density perturbations have equal amplitude and frequency and travel in the same direction. Adjust their relative phase: zero gives amplitude 2A, π cancels the perturbation, and 2π restores reinforcement. Three curves show the two components and their sum. Total density includes the background n0 only once.', 'Two waves travel in the same direction at frequencies f1 and 1.2 f1, with wavenumbers in the same ratio. At a fixed probe their summed density signal has a slowly varying envelope. Beat frequency is 0.2 f1 and beat period is 5T1. The dashed envelope is not a third independent wave.', 'Two equal-amplitude, equal-frequency waves moving in opposite directions sum to 2A cos(kx) cos(ωt). Density nodes satisfy cos(kx)=0, stay in place and have δn=0 at all times. Antinodes have the largest density oscillations. Nodes concern density, not stationary electrons.', 'Take k>0 and ω>0, with zero initial phases. The opposite traveling waves are δn₁=Acos(kx−ωt) and δn₂=Acos(kx+ωt). Expand each using the cosine difference and sum identities. The Asin(kx)sin(ωt) terms have opposite signs and cancel; the identical Acos(kx)cos(ωt) terms add. Thus δn=δn₁+δn₂=2Acos(kx)cos(ωt). A is the density amplitude of each traveling wave, in m⁻³; the local resultant amplitude is 2A|cos(kx)|. Positions where cos(kx)=0 stay fixed and have δn=0 at every time.', 'Blue dashed lines mark fixed density nodes. A gold electron oscillates near a node and can pass through it. Predict whether density perturbation or electron velocity is always zero there. Feedback is optional and does not block navigation.'],
       takeaway: '<span class="mint">Density nodes stay fixed.</span> <span class="gold">Electrons can still move.</span>',
 
-      derivationTitle: 'Two traveling waves. <span>Add them.</span>', derivationKeyboard: 'Press → to continue · F fullscreen',
+      derivationTitle: 'Two traveling waves. <span>Add them.</span>',
       standingAssumptions: 'Linear superposition; equal A, |k| and ω. Choose k > 0, ω > 0 and both initial phases zero.',
       rightward: '① Rightward (+x): expand cos(kx−ωt)', leftward: '② Leftward (−x): expand cos(kx+ωt)',
       cancelTerms: 'The gold sine products have opposite signs and cancel. The two cosine products are identical and add.',
@@ -86,9 +86,11 @@
       $('lesson').classList.toggle('is-deriving', deriving);
       $('scene').hidden = deriving;
       $('standing-derivation').hidden = !deriving;
-      $('standing-derivation').innerHTML = deriving ? standingDerivation(t) : '';
-      $('title').innerHTML = deriving ? t.derivationTitle : t.title;
-      $('keyboard-note').textContent = deriving ? t.derivationKeyboard : t.keyboard;
+      const panel = $('standing-derivation'), key = a.language + '-' + s.stage;
+      if (deriving && panel.dataset.content !== key) {
+        panel.innerHTML = standingDerivation(t);
+        panel.dataset.content = key;
+      }
     },
     draw(a) {
       const { s, text: t, colors: c, TAU, mod, density, position, line, dot, label, bracket, curve, grid, arrow } = a;

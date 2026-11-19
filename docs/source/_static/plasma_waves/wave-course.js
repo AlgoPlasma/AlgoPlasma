@@ -21,9 +21,9 @@
     const canvas = $('plasma'), ctx = canvas.getContext('2d');
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     const s = { stage: 0, time: 0, paused: preference.matches, width: 0, height: 0, data: {} };
-    let language = 'zh', text, lastTime = null, toastTimer;
+    let language = 'zh', text, lastTime = null, toastTimer, previousStage, previousLanguage;
     const api = { $, s, ctx, colors, TAU, mod, density, position, line, dot, label, arrow, bracket, curve, grid,
-      get text() { return text; }, get language() { return language; }, render, draw };
+      get reading() { return deck.reading; }, get text() { return text; }, get language() { return language; }, render, draw };
     function line(x1, y1, x2, y2, color = colors.line, width = 1, dash = []) {
       ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
       ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]);
@@ -62,47 +62,51 @@
       ctx.restore();
     }
     function motion() {
-      $('motion').hidden = !config.running(s);
+      $('motion').hidden = !config.running(s) || $('scene').hidden || !ctx;
       $('motion').textContent = s.paused ? text.play : text.pause;
       $('motion').setAttribute('aria-pressed', String(s.paused));
     }
     function setLanguage(value) {
       language = value === 'en' ? 'en' : 'zh'; text = config.translations[language];
       document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
-      document.title = `${text.documentTitle} | AlgoPlasma`; $('title').innerHTML = text.title;
+      document.title = `${text.documentTitle} | AlgoPlasma`;
       $('chapter').textContent = text.chapter; $('model-note').textContent = text.model;
       $('return-link').setAttribute('aria-label', text.returnLabel); $('back').setAttribute('aria-label', text.back);
-      $('keyboard-note').textContent = text.keyboard;
       window.PlasmaNavigation?.setLanguage(language);
       $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
       document.querySelectorAll('[data-language]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.language === language)));
       try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* Optional preference. */ }
       try { const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url); } catch (_) { /* file preview. */ }
-      $('toast').hidden = true; render(false);
+      $('toast').hidden = true; render();
     }
-    function render(animate = false) {
-      const final = s.stage === text.steps.length - 1;
-      $('lesson').dataset.stage = String(s.stage); $('narration').textContent = text.steps[s.stage];
-      $('narration').classList.remove('changed');
-      if (animate) { void $('narration').offsetWidth; $('narration').classList.add('changed'); }
-      $('equation').innerHTML = text.equations[s.stage] || ''; $('equation').hidden = !text.equations[s.stage];
-      $('advance-text').textContent = text.actions[s.stage]; $('advance-arrow').textContent = final ? '↺' : '→';
-      $('back').hidden = s.stage === 0; $('takeaway').hidden = !final;
-      $('takeaway-text').innerHTML = text.takeaway;
-      $('stage-count').textContent = `${s.stage + 1} / ${text.steps.length}`;
-      $('progress').setAttribute('aria-label', `${text.progress} ${s.stage + 1} / ${text.steps.length}`);
-      $('progress').replaceChildren(...text.steps.map((_, i) => { const node = document.createElement('i'); if (i <= s.stage) node.className = 'filled'; return node; }));
+    function render() {
+      const equation = $('equation'), previousEquation = equation.innerHTML;
+      const newContent = previousStage !== s.stage || previousLanguage !== language;
+      const interactionWasHidden = $('interaction')?.hidden;
+      $('lesson').dataset.stage = String(s.stage);
+      if (newContent) equation.innerHTML = text.equations[s.stage] || '';
+      equation.hidden = !text.equations[s.stage];
+      $('takeaway').hidden = s.stage !== text.steps.length - 1 || !deck.finalBuild;
+      if ($('takeaway-text').innerHTML !== text.takeaway) $('takeaway-text').innerHTML = text.takeaway;
       canvas.setAttribute('aria-label', text.descriptions[s.stage]); canvas.textContent = text.descriptions[s.stage];
-      $('status').textContent = text.descriptions[s.stage];
-      config.update?.(api); motion(); fit();
+      config.update?.(api);
+      deck.render(text, language);
+      if (newContent && equation.innerHTML !== previousEquation && !equation.hidden) WaveSlides.fade(equation);
+      if (interactionWasHidden && !$('interaction').hidden) WaveSlides.fade($('interaction'));
+      previousStage = s.stage; previousLanguage = language;
+      motion(); fit();
     }
-    function setStage(value) {
-      const old = s.stage; s.stage = Math.max(0, Math.min(text.steps.length - 1, value));
-      config.onStage?.(s, old); render(true);
+    function setStage(value, reset = false) {
+      const old = s.stage;
+      s.stage = value;
+      if (reset) {
+        s.data = structuredClone(defaults);
+        s.time = 0; s.paused = preference.matches; lastTime = null;
+      }
+      if (reset || old !== value) config.onStage?.(s, old);
+      render();
     }
-    function next() { setStage(s.stage === text.steps.length - 1 ? 0 : s.stage + 1); }
-    function back() { if (s.stage) setStage(s.stage - 1); }
-    function toggle() { if (config.running(s)) { s.paused = !s.paused; motion(); } }
+    function toggle() { if (!$('motion').hidden) { s.paused = !s.paused; motion(); } }
     async function fullscreen() {
       try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }
       catch (_) { $('toast').textContent = text.fullscreenFailed; $('toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('toast').hidden = true; }, 4000); }
@@ -110,7 +114,10 @@
     function fit() {
       const rect = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
       if (!rect.width || !rect.height) return;
-      s.width = rect.width; s.height = rect.height; canvas.width = Math.round(rect.width * dpr); canvas.height = Math.round(rect.height * dpr);
+      s.width = rect.width; s.height = rect.height;
+      const width = Math.round(rect.width * dpr), height = Math.round(rect.height * dpr);
+      if (canvas.width !== width) canvas.width = width;
+      if (canvas.height !== height) canvas.height = height;
       ctx?.setTransform(dpr, 0, 0, dpr, 0, 0); draw();
     }
     function draw() {
@@ -119,20 +126,19 @@
     }
     function frame(now) {
       const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, .05); lastTime = now;
-      if (!document.hidden && !s.paused && config.running(s)) {
+      if (!document.hidden && !s.paused && !$('scene').hidden && config.running(s)) {
         s.time += dt * (config.rate?.(s) || .15); draw();
       }
       requestAnimationFrame(frame);
     }
     config.setup?.(api);
-    $('advance').addEventListener('click', next); $('back').addEventListener('click', back);
-    canvas.addEventListener('click', next); $('motion').addEventListener('click', toggle);
+    const defaults = structuredClone(s.data);
+    const deck = WaveSlides.create(setStage);
+    $('motion').addEventListener('click', toggle);
     document.querySelectorAll('[data-language]').forEach(b => b.addEventListener('click', () => setLanguage(b.dataset.language)));
     document.addEventListener('keydown', e => {
       if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat || e.target.closest('input,textarea,select,[contenteditable]')) return;
       if (e.key === ' ' && e.target.closest('button,a')) return;
-      if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
-      if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); back(); }
       if (e.key.toLowerCase() === 'p') { e.preventDefault(); toggle(); }
       if (e.key.toLowerCase() === 'f') { e.preventDefault(); fullscreen(); }
     });
@@ -142,6 +148,8 @@
     let initial = new URLSearchParams(location.search).get('lang');
     if (!['zh', 'en'].includes(initial)) { try { initial = localStorage.getItem('ap-doc-language'); } catch (_) { /* Optional preference. */ } }
     if (!ctx) { canvas.hidden = true; $('canvas-fallback').hidden = false; }
+    s.stage = deck.initialStage;
+    config.onStage?.(s, -1);
     setLanguage(initial); requestAnimationFrame(frame);
   }
   window.PlasmaLesson = { start, density, position };

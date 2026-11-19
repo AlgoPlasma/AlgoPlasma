@@ -7,15 +7,15 @@
   distinguish allowed components from the amplitudes/phases actually excited.
 - Sequence: familiar density wave -> parameter axes and one point -> allowed
   branch with a k selector -> linked wavelength/period -> phase-speed secant.
-  A sixth reveal selects three points and links their density sum to one dot
-  population. Reuse the shared large typography and progressive controls.
+  The three-component slide links the selected points to one dot population.
+  The model parameters and interpretation of the density sum each have a separate slide.
 - A point denotes a wave component, not particle position or a time-history
   sample. The chosen branch is a specified fluid example, not a universal plasma
   dispersion law. The next lesson can introduce wave packets and tangent slope.
 - Interaction: one keyboard-accessible range input; clicking the plot projects
   the selected horizontal coordinate onto the branch. Changing k compares modes
   and resets phase to zero, preserving pause state. Language changes preserve
-  k, time, stage, pause and the model disclosure state.
+  k, time, selected components, pause state, slide and step.
 - Check: predict how lambda and T change when k increases. The fixed spatial
   and temporal plotting windows make the change observable, rather than hiding
   it through autoscaling. No forced quiz or additional navigation controls.
@@ -31,8 +31,7 @@ This is the unmagnetized, immobile-ion warm-electron fluid branch with a 1D
 pressure closure U^2=3*k_B*T_e/m_e. W0 is the electron plasma frequency; the
 numerical parameters are illustrative. The model omits collisions and kinetic
 Landau damping. Do not present the curve as a full kinetic result, especially at
-shorter wavelengths. Visible captions state the fluid approximation and omitted
-damping; a large-text disclosure specifies the equation and all model parameters.
+shorter wavelengths. The caption identifies the fluid model. Its own slide gives the equation and model parameters.
 Random thermal motion is not drawn: temperature enters via the pressure term.
 
 References: [MIT Introduction to Plasma Physics](https://silas.psfc.mit.edu/introplasma/master.pdf),
@@ -64,7 +63,7 @@ Negative k, additional branches, propagation cutoffs and growth rates are deferr
 
 ## Three components on the same branch
 
-The last reveal uses k_j = 20, 50, 80 rad/m with omega_j = frequency(k_j).
+The interactive superposition uses k_j = 20, 50, 80 rad/m with omega_j = frequency(k_j).
 For each selected term, A_j/n0 = 0.06 and phi_j = 0 rad. Unchecking sets that
 term to zero without renormalizing the others or resetting time. Numbered
 colored points, a matching dash legend and dashed density curves identify the
@@ -78,7 +77,7 @@ spans relative perturbations -0.18 to +0.18. Total density remains at least
 The density sum follows linear theory. Its exact density-to-dot kinematics do
 not constitute a nonlinear fluid solution or a self-consistent particle solver.
 The visible takeaway distinguishes allowed pairs from excited amplitudes and
-initial phases. Optional details explain continuous k in an infinite uniform
+initial phases. The closing slide explains continuous k in an infinite uniform
 medium and possible discrete k imposed by finite boundaries. These points use
 the Morin reference above, especially its plane-wave and superposition discussion.
 
@@ -89,8 +88,8 @@ restores the clean opening, all three selections and the original single k=40.
 
 Check coordinate projections, mode selection by plot and keyboard slider,
 readouts, lambda and period against the drawn wave, the density-map inversion,
-and vph=lambda/T. Check all five reveals, replay, language/state preservation,
-reduced motion, text alternative, disclosure, page 6–7 links, directory and build.
+and vph=lambda/T. Check each slide and step, both restart actions, language and state preservation,
+reduced motion, text alternatives, lesson links, contents and build.
 Inspect large-screen and stacked mobile diagrams, units, and label clipping.
 These checks establish functional consistency, not measured learning effectiveness.
 

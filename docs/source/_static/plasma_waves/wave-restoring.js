@@ -9,7 +9,6 @@
       chapter: '02 / 恢复力与惯性', back: '上一步', returnLabel: '返回等离子体波课堂',
       electron: '电子层', ion: '固定离子层', pause: '暂停动画', play: '播放动画',
       model: '平板模型：离子固定，电子层整体移动；省略热运动和碰撞，动画减速。',
-      keyboard: '点击点阵或按 → 继续 · F 全屏',
       steps: [
         '电子与离子的电荷相互抵消，先从平衡开始。',
         '先将整个电子层，向右移开一点。',
@@ -39,7 +38,6 @@
       chapter: '02 / Restoring force and inertia', back: 'Previous step', returnLabel: 'Return to the plasma waves course',
       electron: 'Electrons', ion: 'Fixed ions', pause: 'Pause', play: 'Play',
       model: 'Slab model: fixed ions, coherent electron displacement, no thermal motion or collisions. Motion is slowed.',
-      keyboard: 'Click the dots or press → to continue · F fullscreen',
       steps: [
         'Electron and ion charges balance. Begin at equilibrium.',
         'Shift the entire electron layer slightly to the right.',
@@ -78,13 +76,13 @@
     try { if (localStorage.getItem('ap-doc-language') === 'en') return 'en'; } catch (_) { /* Optional preference. */ }
     return 'zh';
   }
-  function setLanguage(value) {
+  function setLanguage(value, initial = false) {
     language = value === 'en' ? 'en' : 'zh'; text = translations[language];
     document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN'; document.title = text.documentTitle;
-    $('title').innerHTML = text.title; $('chapter').textContent = text.chapter;
+    $('chapter').textContent = text.chapter;
     $('return-link').setAttribute('aria-label', text.returnLabel); $('back').setAttribute('aria-label', text.back);
     $('electron-name').textContent = text.electron; $('ion-name').textContent = text.ion;
-    $('model-note').textContent = text.model; $('keyboard-note').textContent = text.keyboard;
+    $('model-note').textContent = text.model;
     $('takeaway-text').innerHTML = text.takeaway;
     window.PlasmaNavigation?.setLanguage(language);
     $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
@@ -92,29 +90,26 @@
     try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* file:// may restrict storage. */ }
     try { const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url); } catch (_) { /* file:// may restrict history. */ }
     $('toast').hidden = true;
-    render(false);
+    if (initial) setStage(deck.initialStage, true);
+    else render();
   }
   function updateMotion() {
     $('motion').hidden = state.stage !== 5;
     $('motion').textContent = state.paused ? text.play : text.pause;
     $('motion').setAttribute('aria-pressed', String(state.paused));
   }
-  function render(animate = true) {
+  function render() {
     $('lesson').dataset.stage = String(state.stage);
-    $('narration').textContent = text.steps[state.stage];
-    $('narration').classList.remove('changed');
-    if (animate) { void $('narration').offsetWidth; $('narration').classList.add('changed'); }
-    $('advance-text').textContent = text.actions[state.stage];
-    $('advance-arrow').textContent = state.stage === 5 ? '↺' : '→';
-    $('back').hidden = state.stage === 0; $('takeaway').hidden = state.stage !== 5;
-    $('stage-count').textContent = `${state.stage + 1} / 6`;
-    $('progress').setAttribute('aria-label', `${text.progress} ${state.stage + 1} / 6`);
-    [...$('progress').children].forEach((dot, i) => dot.classList.toggle('filled', i <= state.stage));
+    $('takeaway').hidden = state.stage !== 5;
+    deck.render(text, language);
     canvas.setAttribute('aria-label', text.descriptions[state.stage]); canvas.textContent = text.descriptions[state.stage];
-    $('status').textContent = text.descriptions[state.stage];
     updateMotion(); fitCanvas();
   }
-  function setStage(value) {
+  function setStage(value, reset = false) {
+    if (reset) {
+      state.phase = 0; state.lastTime = null; state.paused = preference.matches;
+      state.shift = value > 0 ? 1 : 0;
+    }
     const oldStage = state.stage;
     state.stage = Math.max(0, Math.min(5, value));
     if (state.stage === 0) { state.shift = 0; state.phase = 0; state.paused = preference.matches; }
@@ -123,11 +118,8 @@
     if (preference.matches && state.stage > 0 && state.stage < 5) state.shift = 1;
     render();
   }
-  function next() { setStage(state.stage === 5 ? 0 : state.stage + 1); }
-  function back() { if (state.stage > 0) setStage(state.stage - 1); }
   function toggleMotion() { if (state.stage === 5) { state.paused = !state.paused; updateMotion(); } }
-  $('advance').addEventListener('click', next); $('back').addEventListener('click', back);
-  canvas.addEventListener('click', next); $('motion').addEventListener('click', toggleMotion);
+  $('motion').addEventListener('click', toggleMotion);
   document.querySelectorAll('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
   async function fullscreen() {
     try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }
@@ -136,8 +128,6 @@
   document.addEventListener('keydown', event => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.repeat || event.target.closest('input,textarea,select,[contenteditable]')) return;
     if (event.key === ' ' && event.target.closest('button,a')) return;
-    if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); next(); }
-    if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); back(); }
     if (event.key.toLowerCase() === 'f') { event.preventDefault(); fullscreen(); }
     if (event.key.toLowerCase() === 'p') { event.preventDefault(); toggleMotion(); }
   });
@@ -146,7 +136,10 @@
   function fitCanvas() {
     const rect = canvas.getBoundingClientRect(); if (rect.width <= 0 || rect.height <= 0) return;
     state.width = rect.width; state.height = rect.height;
-    const dpr = Math.min(devicePixelRatio || 1, 2); canvas.width = Math.round(rect.width * dpr); canvas.height = Math.round(rect.height * dpr);
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const width = Math.round(rect.width * dpr), height = Math.round(rect.height * dpr);
+    if (canvas.width !== width) canvas.width = width;
+    if (canvas.height !== height) canvas.height = height;
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw();
   }
   function line(x1, y1, x2, y2, color, width = 1, dash = []) {
@@ -224,5 +217,7 @@
   window.addEventListener('resize', fitCanvas);
   document.addEventListener('visibilitychange', () => { state.lastTime = null; });
   if (!ctx) canvas.hidden = true;
-  setLanguage(initialLanguage()); requestAnimationFrame(frame);
+  const deck = WaveSlides.create(setStage);
+  setLanguage(initialLanguage(), true);
+  requestAnimationFrame(frame);
 })();

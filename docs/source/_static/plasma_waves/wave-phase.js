@@ -5,7 +5,7 @@
     zh: {
       documentTitle: '为什么不同位置不同时起伏？', title: '不同位置，<span>为什么不同时起伏？</span>', chapter: '04 / 相位与波的表达式',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
-      keyboard: '点击点阵或按 → 继续 · F 全屏', fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
+      fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '正弦密度波示意：离子固定，无热运动，动画减速。按 λ、T、n₀ 缩放；相位用 rad，一整圈为 2π rad。',
       steps: ['各处都在周期性起伏，却不一定同时达到密度最高。', '放两个固定探针。移动 B，比较两条密度曲线。', '同一时刻，相隔一个波长，相位就相差一整圈。', '固定一个位置：每过一个周期，相位减少一整圈。', '把空间、时间和起点，写进同一个相位。'],
       actions: ['比较两个位置', '给空间差一个量', '再看时间的变化', '合成波的表达式', '重新看一遍'],
@@ -19,7 +19,7 @@
     en: {
       documentTitle: 'Different positions, different phases', title: 'Different positions. <span>Different phases.</span>', chapter: '04 / Phase and the wave expression',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
-      keyboard: 'Click the dots or press → · F fullscreen', fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
+      fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Prescribed density wave; fixed ions, no thermal motion, slowed playback. Scales: λ, T, n₀. Phase in radians: one full turn is 2π rad.',
       steps: ['Density varies periodically everywhere, but maxima need not occur together.', 'Place two fixed probes. Move B and compare their density traces.', 'At the same instant, one wavelength spans one full turn of phase.', 'At a fixed position, phase decreases by one full turn each period.', 'Combine space, time and the starting point into a single phase.'],
       actions: ['Compare two positions', 'Measure spatial phase', 'Now look at time', 'Build the wave expression', 'Watch again'],

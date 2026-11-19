@@ -97,8 +97,8 @@
     zh: {
       documentTitle: '色散关系：波长与频率怎样搭配？', title: '波长变了，<span>频率怎样变？</span>', chapter: '07 / 色散关系与读图',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
-      keyboard: '点击点阵或按 → 继续 · F 全屏', fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
-      model: '温电子流体波示例；无磁场、离子固定，忽略阻尼。点阵按 n₀ 缩放，幅值放大，时间统一减速。',
+      fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
+      model: '温电子流体波示例；无磁场、离子固定。点阵按 n₀ 缩放，幅值放大，时间统一减速。',
       steps: [
         '同一种等离子体波，波长和频率可以任意搭配吗？',
         '横轴是波数，纵轴是角频率。一个点，对应一组 k 和 ω。',
@@ -125,20 +125,28 @@
       enabled: '参与叠加', disabled: '幅值为零',
       componentLegend: '参与叠加的分量', componentHint: '先只留一个，再逐个加入。彩色虚线：各分量；白色实线 Σ：总扰动。',
       sumTitle: '同一位置，把扰动相加', sumDots: '同一组电子：合成密度', uniformDots: '没有激发：密度均匀',
-      superpositionDetails: '<p>连续曲线并不表示所有分量都已激发。这里以均匀、无限延展介质的平面波为例，k 可以连续取值；有限系统的边界条件可能只允许离散的 k；直线色散关系同样可以对应连续的 k。曲线上不同点是同一分支的不同波分量，不等于不同种类的波。</p><p>线性近似下，δn(x,t) = ∑ⱼ Aⱼ cos[kⱼx − ω(kⱼ)t + φⱼ]。j 是分量编号；δn、Aⱼ 和背景密度 n₀ 的单位为 m⁻³，kⱼ [rad/m]，ωⱼ [rad/s]，x [m]，t [s]，φⱼ [rad]。本例取三个分量，选中时 Aⱼ/n₀ = 0.06，初相位 φⱼ = 0 rad；取消勾选时 Aⱼ = 0，其余分量保持原幅值。因此每个时空点 n/n₀ ≥ 0.82。</p><p>点阵代表同一组电子对合成密度的响应。叠加的是密度扰动，不是三组电子的位置；它是给定密度波的运动学示意，没有求解粒子受力或随机热运动。色散关系给出 ω(k)，各分量是否激发、幅值与初相位则由初始条件或驱动补充。</p>',
+      superpositionDetails: [
+        "<p>连续曲线并不表示所有分量都已激发。这里以均匀、无限延展介质的平面波为例，k 可以连续取值；有限系统的边界条件可能只允许离散的 k；直线色散关系同样可以对应连续的 k。曲线上不同点是同一分支的不同波分量，不等于不同种类的波。</p>",
+        "<p>在线性近似下，各分量的密度扰动直接相加。</p><p class=\"model-equation\">δn(x,t) = ∑ⱼ Aⱼ cos[kⱼx − ω(kⱼ)t + φⱼ]</p><p>j 是分量编号；δn、Aⱼ 和背景密度 n₀ 的单位为 m⁻³，kⱼ [rad/m]，ωⱼ [rad/s]，x [m]，t [s]，φⱼ [rad]。本例取三个分量，选中时 Aⱼ/n₀ = 0.06，初相位 φⱼ = 0 rad；取消勾选时 Aⱼ = 0，其余分量保持原幅值。因此每个时空点 n/n₀ ≥ 0.82。</p>",
+        "<p>点阵代表同一组电子对合成密度的响应。叠加的是密度扰动，不是三组电子的位置；它是给定密度波的运动学示意，没有求解粒子受力或随机热运动。色散关系给出 ω(k)，各分量是否激发、幅值与初相位则由初始条件或驱动补充。</p>"
+      ],
       chartTitle: '色散图 · 参数之间的关系', chartDescription: '色散图：横轴k [rad/m]，纵轴ω [rad/s]。金色点是当前所选的波。',
       waveTitle: '电子密度波 · 向右传播', probe: '固定探针 x = 0', normalizedDensity: 'δn / n₀',
       selection: '选择波数 k',
       slopeNote: '原点连线的斜率；它不是曲线在该点的切线斜率',
       compare: '拖动是在比较不同的波；它不是一个波随时间改变 k。',
       detailsTitle: '这条示例曲线采用什么模型？',
-      details: '<p>本页先给定一条温电子流体波曲线，练习读图，推导留到后续页面。</p><p class="model-equation">ω² = ω₀² + u²k²</p><p>ω₀ = 10⁸ rad/s，是 k → 0 时的电子振荡角频率；u = 10⁶ m/s，是电子压强项对应的速度参数，并不是单个电子的速度。</p><p>模型采用一维电子压强闭合：u² = 3k<sub>B</sub>Tₑ/mₑ；k<sub>B</sub> 是玻尔兹曼常量 [J/K]，Tₑ 是电子温度 [K]，mₑ 是电子质量 [kg]。均匀、无磁场、固定离子背景；只画 k ≥ 0、ω > 0 的分支。</p><p>这是给定参数的线性流体示例，不是实验数据或完整动理学计算；忽略碰撞与 Landau 阻尼。点阵不绘制随机热运动，温度通过曲线中的压强项体现。显示的相对密度扰动 |δn/n₀| 不超过 0.18；动画每秒对应 3×10⁻⁸ s，所有 k 使用相同减速比例。</p><p>模型参考：<a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>。相速度读图：<a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">Harvard · Dispersion</a>。</p>'
+      details: [
+        "<p>均匀、无磁场的等离子体中，离子固定。取正波数、正角频率，曲线满足</p><p class=\"model-equation\">ω² = ω₀² + u²k²</p><p>ω₀ = 10⁸ rad/s，是 k 趋近零时的电子振荡角频率。</p>",
+        "<p>电子温度通过压强进入模型。这里取速度参数 u = 10⁶ m/s，采用一维压强关系</p><p class=\"model-equation\">u² = 3k<sub>B</sub>Tₑ / mₑ</p><p>k<sub>B</sub> 是玻尔兹曼常量 [J/K]，Tₑ 是电子温度 [K]，mₑ 是电子质量 [kg]。</p>",
+        "<p>点阵显示集体疏密，省略随机热运动。相对密度扰动 |δn/n₀| ≤ 0.18，动画每秒对应 3 × 10⁻⁸ s。不同波数都用这个时间比例。</p><p>模型参考：<a href=\"https://silas.psfc.mit.edu/introplasma/master.pdf\" target=\"_blank\" rel=\"noopener\">MIT · Introduction to Plasma Physics</a>。相速度读图：<a href=\"https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf\" target=\"_blank\" rel=\"noopener\">Harvard · Dispersion</a>。</p>"
+      ]
     },
     en: {
       documentTitle: 'Dispersion: how do wavelength and frequency pair?', title: 'Change wavelength. <span>What happens to frequency?</span>', chapter: '07 / Reading a dispersion relation',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
-      keyboard: 'Click the dots or press → · F fullscreen', fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
-      model: 'Warm-electron fluid example; no magnetic field, fixed ions, no damping. Dots scaled by n₀; amplitude enlarged; time uniformly slowed.',
+      fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
+      model: 'Warm-electron fluid example; no magnetic field, fixed ions. Dots scaled by n₀; amplitude enlarged; time uniformly slowed.',
       steps: ['For one type of plasma wave, can wavelength and frequency be chosen independently?',
         'Wavenumber on the horizontal axis; angular frequency on the vertical. One point is one pair.',
         'The curve gives the pairs allowed by this model. Slide k, or click the curve.',
@@ -163,14 +171,22 @@
       enabled: 'included', disabled: 'zero amplitude',
       componentLegend: 'Components in the sum', componentHint: 'Keep one, then add the others. Colored dashed curves: components; white solid Σ: total perturbation.',
       sumTitle: 'Add at the same position', sumDots: 'Same electrons: total density', uniformDots: 'No excitation: uniform density',
-      superpositionDetails: '<p>A continuous curve does not mean that all its components are excited. In this uniform, infinite-medium plane-wave model, k is continuous. Boundary conditions in a finite system can restrict k to discrete values; a straight dispersion branch can also have continuous k. Different points on this branch are different wave components, not different types of wave.</p><p>In the linear approximation, δn(x,t) = ∑ⱼ Aⱼ cos[kⱼx − ω(kⱼ)t + φⱼ]. Here j labels a component; δn, Aⱼ and background density n₀ are in m⁻³, kⱼ in rad/m, ωⱼ in rad/s, x in m, t in s, and φⱼ in rad. Each of the three selected components has Aⱼ/n₀ = 0.06 and initial phase φⱼ = 0 rad. Unchecking sets Aⱼ = 0 and leaves other amplitudes unchanged, so n/n₀ ≥ 0.82 everywhere.</p><p>The dots represent one electron population with the combined density. We sum density perturbations, not the positions of three separate electron populations. This is a kinematic depiction of prescribed density waves; particle forces and random thermal motion are not solved. The dispersion relation supplies ω(k), while initial conditions or driving supply the excited amplitudes and phases.</p>',
+      superpositionDetails: [
+        "<p>A continuous curve does not mean that all its components are excited. In this uniform, infinite-medium plane-wave model, k is continuous. Boundary conditions in a finite system can restrict k to discrete values; a straight dispersion branch can also have continuous k. Different points on this branch are different wave components, not different types of wave.</p>",
+        "<p>In the linear approximation, add the density perturbations of the selected components.</p><p class=\"model-equation\">δn(x,t) = ∑ⱼ Aⱼ cos[kⱼx − ω(kⱼ)t + φⱼ]</p><p>Here j labels a component; δn, Aⱼ and background density n₀ are in m⁻³, kⱼ in rad/m, ωⱼ in rad/s, x in m, t in s, and φⱼ in rad. Each of the three selected components has Aⱼ/n₀ = 0.06 and initial phase φⱼ = 0 rad. Unchecking sets Aⱼ = 0 and leaves other amplitudes unchanged, so n/n₀ ≥ 0.82 everywhere.</p>",
+        "<p>The dots represent one electron population with the combined density. We sum density perturbations, not the positions of three separate electron populations. This is a kinematic depiction of prescribed density waves; particle forces and random thermal motion are not solved. The dispersion relation supplies ω(k), while initial conditions or driving supply the excited amplitudes and phases.</p>"
+      ],
       chartTitle: 'Dispersion · parameter space', chartDescription: 'Dispersion plot: horizontal k [rad/m], vertical ω [rad/s]. The gold point is the selected wave.',
       waveTitle: 'Electron density wave · rightward', probe: 'Fixed probe x = 0', normalizedDensity: 'δn / n₀',
       selection: 'Select wavenumber k',
       slopeNote: 'The origin-to-point slope, not the tangent slope at that point',
       compare: 'Sliding compares different waves; it does not show one wave changing k over time.',
       detailsTitle: 'Which model supplies this example curve?',
-      details: '<p>We prescribe a warm-electron fluid branch to practice reading a dispersion plot. Its derivation comes later.</p><p class="model-equation">ω² = ω₀² + u²k²</p><p>ω₀ = 10⁸ rad/s is the electron oscillation frequency as k → 0. The pressure speed parameter u = 10⁶ m/s is not the speed of an individual electron.</p><p>The one-dimensional pressure closure uses u² = 3k<sub>B</sub>Tₑ/mₑ, where k<sub>B</sub> is Boltzmann’s constant [J/K], Tₑ electron temperature [K], and mₑ electron mass [kg]. The background is uniform and unmagnetized, with fixed ions. Only k ≥ 0 and ω > 0 are plotted.</p><p>This specified linear fluid example is not experimental data or a full kinetic calculation. Collisions and Landau damping are omitted. Random thermal particle motion is not drawn; pressure enters through the curve. The displayed relative perturbation |δn/n₀| never exceeds 0.18. Each playback second represents 3×10⁻⁸s, using the same time scale for every k.</p><p>Model reference: <a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>. Phase-speed geometry: <a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">Harvard · Dispersion</a>.</p>'
+      details: [
+        "<p>In a uniform, unmagnetized plasma with fixed ions, the branch at positive wavenumber and positive angular frequency satisfies</p><p class=\"model-equation\">ω² = ω₀² + u²k²</p><p>As k approaches zero, the electron oscillation approaches ω₀ = 10⁸ rad/s.</p>",
+        "<p>Electron temperature enters through pressure. Here the speed parameter is u = 10⁶ m/s. The one-dimensional pressure relation gives</p><p class=\"model-equation\">u² = 3k<sub>B</sub>Tₑ / mₑ</p><p>k<sub>B</sub> is the Boltzmann constant [J/K], Tₑ is electron temperature [K], and mₑ is electron mass [kg].</p>",
+        "<p>The dots show collective motion, with random thermal motion omitted. The relative density perturbation satisfies |δn/n₀| ≤ 0.18. Each display second represents 3 × 10⁻⁸ s at every wavenumber.</p><p>Model reference: <a href=\"https://silas.psfc.mit.edu/introplasma/master.pdf\" target=\"_blank\" rel=\"noopener\">MIT · Introduction to Plasma Physics</a>. Phase-speed geometry: <a href=\"https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf\" target=\"_blank\" rel=\"noopener\">Harvard · Dispersion</a>.</p>"
+      ]
     }
   };
   PlasmaLesson.start({
@@ -178,7 +194,6 @@
     setup(a) {
       a.s.data.k = 40;
       a.s.data.active = [true, true, true];
-      if (location.hash === '#superposition') a.s.stage = 5;
       components.forEach((_, i) => a.$(`component-${i}`).addEventListener('change', e => {
         a.s.data.active[i] = e.target.checked; a.render();
       }));
@@ -217,11 +232,21 @@
       if (s.stage === 1) $('equation').innerHTML = `k = ${v.k} rad/m　 ω = ${(v.omega / W0).toFixed(3)} × 10⁸ rad/s`;
       if (s.stage === 3) $('equation').innerHTML = `<span class="reading-formula">λ = 2π/k = ${v.wavelength.toFixed(3)} m</span> <span class="reading-formula">T = 2π/ω = ${(v.period * 1e8).toFixed(2)} × 10⁻⁸ s</span>`;
       if (s.stage === 4) $('equation').innerHTML = `v<sub>ph</sub> = ω/k = ${(v.phaseSpeed / 1e6).toFixed(3)} × 10⁶ m/s <small>${t.slopeNote}</small>`;
-      $('model-details').hidden = s.stage < 2;
-      $('model-summary').textContent = t.detailsTitle;
-      $('model-description').innerHTML = t.details;
-      if (s.stage === 5) $('model-description').insertAdjacentHTML('beforeend', t.superpositionDetails);
-      if (s.stage === 0) $('model-details').open = false;
+      const reading = a.reading, panel = $('model-description');
+      $('lesson').classList.toggle('is-deriving', !!reading);
+      $('scene').hidden = !!reading;
+      if (reading) {
+        $('interaction').hidden = true;
+        $('equation').hidden = true;
+      }
+      panel.hidden = !reading;
+      const key = a.language + '-' + reading;
+      if (reading && panel.dataset.content !== key) {
+        panel.innerHTML = (reading === 'model' ? t.details : t.superpositionDetails)
+          .map((part, i) => '<section data-reveal-part="' + i + '" hidden>' + part + '</section>').join('');
+        panel.dataset.content = key;
+      }
+      if (s.stage === 5) $('takeaway').hidden ||= reading !== 'sum';
       renderChart(a);
     },
     draw(a) {
