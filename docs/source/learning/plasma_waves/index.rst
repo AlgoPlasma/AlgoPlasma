@@ -42,6 +42,9 @@ Plasma Waves
       `08 · 波包、相速度与群速度 → <../../_static/plasma_waves/08_wave_packets.html?lang=zh>`_
           用 14 张幻灯片追踪波峰和包络，推导群速度，比较色散与无色散。
 
+      `09 · 第一条色散关系怎样推出来？ → <../../_static/plasma_waves/09_deriving_dispersion.html?lang=zh>`_
+          从连续性、动量与泊松方程推导冷电子色散关系，再加入压强接回温电子模型。
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Part 1 · Wave basics
@@ -73,3 +76,6 @@ Plasma Waves
 
       `08 · Wave packets, phase and group velocities → <../../_static/plasma_waves/08_wave_packets.html?lang=en>`_
           A 14-slide sequence: track phase and envelope, derive group speed, and compare dispersive and nondispersive waves.
+
+      `09 · Deriving the first dispersion relation → <../../_static/plasma_waves/09_deriving_dispersion.html?lang=en>`_
+          Derive the cold-electron relation from continuity, momentum and Poisson, then add pressure to recover the warm model.

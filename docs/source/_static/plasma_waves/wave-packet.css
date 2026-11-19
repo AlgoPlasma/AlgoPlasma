@@ -103,7 +103,7 @@
 
 /* The unavailable next lesson is not a slide control. */
 .packet-lesson #next-lesson[aria-disabled="true"] { display: none; }
-.packet-lesson .page-navigation { grid-template-columns: auto auto; justify-content: start; gap: 30px; width: auto; }
+.packet-lesson .page-navigation { grid-template-columns: repeat(3, auto); justify-content: start; gap: 30px; width: auto; }
 .packet-lesson .slide-content { scroll-margin-bottom: 180px; }
 @media (max-width: 900px) { .packet-lesson .page-navigation { width: 100%; } }
 
@@ -118,3 +118,7 @@
 .packet-lesson[data-slide="animation"] .packet-legend .group-key::before { content: "╌ "; }
 
 .packet-lesson[data-visual="repetition"] .slide-layout { margin-top: 12px; }
+
+@media (max-width: 700px) {
+  .packet-lesson .page-navigation { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; white-space: normal; }
+}

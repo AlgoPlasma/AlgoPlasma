@@ -9,7 +9,8 @@
     ['05_superposition.html', '干涉、拍频与驻波', 'Interference, beats and standing waves'],
     ['06_complex_waves.html', '波的复数表达', 'Complex wave representation'],
     ['07_dispersion.html', '色散关系与读图', 'Reading a dispersion relation'],
-    ['08_wave_packets.html', '波包、相速度与群速度', 'Wave packets, phase and group velocities']
+    ['08_wave_packets.html', '波包、相速度与群速度', 'Wave packets, phase and group velocities'],
+    ['09_deriving_dispersion.html', '第一条色散关系怎样推出来？', 'Deriving the first dispersion relation']
   ];
   const $ = id => document.getElementById(id);
   const current = Number($('lesson').dataset.page) - 1;
