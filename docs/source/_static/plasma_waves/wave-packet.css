@@ -1,4 +1,4 @@
-/* Independent slides for lesson 08. No shared course/reveal behavior is changed. */
+/* Independent slides for lesson 06. No shared course/reveal behavior is changed. */
 .lesson.packet-lesson { grid-template-rows: minmax(78px, auto) 1fr auto; }
 .packet-lesson main { padding: 12px 0 12px; }
 .packet-lesson h1 { font-size: clamp(38px, 3.25vw, 62px); line-height: 1.3; letter-spacing: -.8px; }

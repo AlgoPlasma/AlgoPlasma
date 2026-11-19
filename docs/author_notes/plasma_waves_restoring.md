@@ -1,4 +1,4 @@
-# Plasma waves: restoring force and inertia
+# Lesson 01, slides 3–5: restoring force and inertia
 
 - Reader: the opening slide's newcomer, now able to distinguish electron motion
   from density-pattern motion. Positive/negative electric charge is the only new
@@ -11,9 +11,9 @@
   on a negative electron -> release, overshoot, reversal and repeated motion.
 - Prediction: the advance labels ask for field direction, then electron-force
   direction before revealing the corresponding arrows. No additional quiz controls.
-- Connection: page 1's spatial wave pattern is replaced with a simpler coherent
+- Connection: the preceding spatial wave pattern is replaced with a simpler coherent
   slab displacement to isolate the restoring mechanism. Do not portray this as a
-  simulation of the formation or propagation of page 1's wave.
+  simulation of the formation or propagation of the opening wave.
 - Presentation: static incremental sketches until release; a pause/play control
   appears only for the final oscillation. Both language views, backward steps,
   replay, reduced motion and keyboard controls follow the opening slide.

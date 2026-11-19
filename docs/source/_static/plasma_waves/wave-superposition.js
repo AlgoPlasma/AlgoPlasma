@@ -14,7 +14,7 @@
   }
   const translations = {
     zh: {
-      documentTitle: '两列波相遇会发生什么？', title: '两列波相遇，<span>会发生什么？</span>', chapter: '05 / 干涉、拍频与驻波',
+      documentTitle: '两列波相遇会发生什么？', title: '两列波相遇，<span>会发生什么？</span>', chapter: '03 / 干涉、拍频与驻波',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
       fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '线性密度扰动示意，幅度放大；离子固定，无热运动。按 λ₁、T₁、n₀ 缩放，未设绝对值；播放速度经过调整。',
@@ -37,7 +37,7 @@
       incorrect: '再看金色电子：它会穿过节点。始终为零的是 δn。',
     },
     en: {
-      documentTitle: 'What happens when two waves meet?', title: 'Two waves meet. <span>What happens?</span>', chapter: '05 / Interference, beats and standing waves',
+      documentTitle: 'What happens when two waves meet?', title: 'Two waves meet. <span>What happens?</span>', chapter: '03 / Interference, beats and standing waves',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
       fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Linear density perturbations, enlarged; fixed ions, no thermal motion. Scales: λ₁, T₁, n₀; no absolute values. Playback speed varies.',
@@ -60,7 +60,7 @@
       incorrect: 'Watch the gold electron cross the node. It is δn that stays zero.',
     }
   };
-  PlasmaLesson.start({
+  PlasmaLesson.register('superposition', {
     translations, running: s => s.stage !== 4,
     rate: s => s.stage === 2 ? .6 : .15,
     setup(a) {

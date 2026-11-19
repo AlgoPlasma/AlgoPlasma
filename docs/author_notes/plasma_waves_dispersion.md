@@ -1,7 +1,7 @@
-# Plasma waves: reading a dispersion relation (page 7)
+# Plasma waves: reading a dispersion relation (lesson 05)
 
 - Reader: knows k, omega, wavelength, period, phase speed, linear superposition
-  and the complex plane-wave expression from pages 1–6.
+  and the complex plane-wave expression from lessons 01–04.
 - Capabilities: read a k–omega pair from a dispersion curve; compute wavelength
   and period; distinguish the origin-to-point slope from a tangent slope;
   distinguish allowed components from the amplitudes/phases actually excited.
@@ -81,7 +81,7 @@ initial phases. The closing slide explains continuous k in an infinite uniform
 medium and possible discrete k imposed by finite boundaries. These points use
 the Morin reference above, especially its plane-wave and superposition discussion.
 
-Opening 07_dispersion.html#superposition goes directly to this example. Replay
+Opening 05_dispersion.html#superposition goes directly to this example. Replay
 restores the clean opening, all three selections and the original single k=40.
 
 ## Validation

@@ -1,7 +1,7 @@
-# Plasma waves: measuring a wave (page 3)
+# Plasma waves: measuring a wave (lesson 02, slides 1–3)
 
 - Audience: newcomers who can distinguish electron motion from density-pattern
-  motion and recognize restoring force and inertia from pages 1–2.
+  motion and recognize restoring force and inertia from lesson 01.
 - Capability: measure a period at a fixed spatial point, a wavelength at a fixed
   time, and derive phase speed by following the same crest through one period.
 - Sequence: clean moving dot field -> fixed virtual density probe and time trace
@@ -11,8 +11,8 @@
   how far a crest will move in one period before revealing the final animation.
 - Interpretation: the probe measures Eulerian local density, not displacement
   of a marked electron. The trace and dots use exactly the same density field.
-- Independence: page 2 explains a restoring mechanism, but its rigid slab is not
-  reused as a propagating-wave model. Page 3 prescribes a wave to teach kinematics.
+- Independence: lesson 01 explains a restoring mechanism, but its rigid slab is not
+  reused as a propagating-wave model. Lesson 02 prescribes a wave to teach kinematics.
 - Interaction: explicit advance/back, slide and lesson restart, pause and language switching;
   reduced-motion starts paused and allows explicit play. A textual alternative
   and per-stage accessible descriptions carry the meaning without animation.
@@ -56,7 +56,7 @@ these velocities or derive plasma frequency yet.
 Show SI units beside newly introduced quantities and dimensional axis labels:
 T and t in s; f in Hz; x and lambda in m; phase speed in m/s; k in rad/m;
 omega in rad/s; phase in rad; electron number density, its perturbation and its
-amplitude in m^-3. Page 2's electric field is in V/m and electron force in N.
+amplitude in m^-3. Lesson 01's electric field is in V/m and electron force in N.
 Keep the explicit radian symbol to distinguish phase from a cycle count. In SI
 the radian has dimension one, so k and omega have dimensions m^-1 and s^-1.
 See the [BIPM SI Brochure](https://www.bipm.org/en/publications/si-brochure).
@@ -69,9 +69,9 @@ displaying 0.25 lambda is a relative distance, not 0.25 m. Values in the phase
 sliders are in pi radians, and their visible and accessible outputs include rad.
 
 `wave-course.js` shares presentation controls and exact density-to-dot mapping
-among pages 3–6; the first two lessons retain their existing independent models.
+across the introductory lessons. The motion and restoring-force sections use distinct physical models.
 `wave-measures.js` supplies this page's bilingual content and diagram. The course
-entry and page 2 link here. Verify both language views, forward/back, pause,
+directory links to the measurement slides, followed by the phase slides in the same deck. Verify both language views, forward/back, pause,
 reduced motion, frozen snapshot, period/wavelength annotations and navigation.
 Build the Sphinx documentation; inspect desktop and narrow-screen renderings.
 These are functional checks, not evidence of measured learning effectiveness.

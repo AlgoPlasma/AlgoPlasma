@@ -16,7 +16,9 @@
     }
     return x;
   }
-  function start(config) {
+  const models = new Map();
+  function register(name, model) { models.set(name, model); }
+  function start() {
     const $ = id => document.getElementById(id);
     const canvas = $('plasma'), ctx = canvas.getContext('2d');
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
@@ -24,6 +26,8 @@
     let language = 'zh', text, lastTime = null, toastTimer, previousStage, previousLanguage;
     const api = { $, s, ctx, colors, TAU, mod, density, position, line, dot, label, arrow, bracket, curve, grid,
       get reading() { return deck.reading; }, get text() { return text; }, get language() { return language; }, render, draw };
+    const deck = WaveSlides.create(setStage);
+    let config = models.get(deck.model);
     function line(x1, y1, x2, y2, color = colors.line, width = 1, dash = []) {
       ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
       ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]);
@@ -66,11 +70,21 @@
       $('motion').textContent = s.paused ? text.play : text.pause;
       $('motion').setAttribute('aria-pressed', String(s.paused));
     }
+    function translateModel() {
+      text = config.translations[language];
+      document.title = text.chapter + ' | AlgoPlasma';
+      $('chapter').textContent = text.chapter;
+      $('model-note').textContent = text.model;
+      if ($('electron-name')) {
+        $('electron-name').textContent = text.electron;
+        $('ion-name').textContent = text.ion;
+        $('scene-prompt').textContent = text.prompt || '';
+      }
+    }
     function setLanguage(value) {
-      language = value === 'en' ? 'en' : 'zh'; text = config.translations[language];
+      language = value === 'en' ? 'en' : 'zh';
+      translateModel();
       document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
-      document.title = `${text.documentTitle} | AlgoPlasma`;
-      $('chapter').textContent = text.chapter; $('model-note').textContent = text.model;
       $('return-link').setAttribute('aria-label', text.returnLabel); $('back').setAttribute('aria-label', text.back);
       window.PlasmaNavigation?.setLanguage(language);
       $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
@@ -81,14 +95,16 @@
     }
     function render() {
       const equation = $('equation'), previousEquation = equation.innerHTML;
+      const formula = text.equations?.[s.stage] || '';
       const newContent = previousStage !== s.stage || previousLanguage !== language;
       const interactionWasHidden = $('interaction')?.hidden;
       $('lesson').dataset.stage = String(s.stage);
-      if (newContent) equation.innerHTML = text.equations[s.stage] || '';
-      equation.hidden = !text.equations[s.stage];
+      if (newContent) equation.innerHTML = formula;
+      equation.hidden = !formula;
       $('takeaway').hidden = s.stage !== text.steps.length - 1 || !deck.finalBuild;
       if ($('takeaway-text').innerHTML !== text.takeaway) $('takeaway-text').innerHTML = text.takeaway;
       canvas.setAttribute('aria-label', text.descriptions[s.stage]); canvas.textContent = text.descriptions[s.stage];
+      if (!ctx) $('canvas-fallback').textContent = text.descriptions[s.stage];
       config.update?.(api);
       deck.render(text, language);
       if (newContent && equation.innerHTML !== previousEquation && !equation.hidden) WaveSlides.fade(equation);
@@ -98,12 +114,20 @@
     }
     function setStage(value, reset = false) {
       const old = s.stage;
+      const nextModel = models.get(deck.model);
+      const changedModel = config !== nextModel;
+      config = nextModel;
       s.stage = value;
-      if (reset) {
+      if (changedModel) {
+        previousStage = undefined;
+        translateModel();
+        if ($('interaction')) $('interaction').hidden = true;
+      }
+      if (reset || changedModel) {
         s.data = structuredClone(defaults);
         s.time = 0; s.paused = preference.matches; lastTime = null;
       }
-      if (reset || old !== value) config.onStage?.(s, old);
+      if (reset || changedModel || old !== value) config.onStage?.(s, changedModel ? -1 : old, reset || changedModel);
       render();
     }
     function toggle() { if (!$('motion').hidden) { s.paused = !s.paused; motion(); } }
@@ -126,14 +150,16 @@
     }
     function frame(now) {
       const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, .05); lastTime = now;
-      if (!document.hidden && !s.paused && !$('scene').hidden && config.running(s)) {
+      if (!document.hidden && config.frame) {
+        config.frame(s, dt);
+        draw();
+      } else if (!document.hidden && !s.paused && !$('scene').hidden && config.running(s)) {
         s.time += dt * (config.rate?.(s) || .15); draw();
       }
       requestAnimationFrame(frame);
     }
-    config.setup?.(api);
+    for (const model of models.values()) model.setup?.(api);
     const defaults = structuredClone(s.data);
-    const deck = WaveSlides.create(setStage);
     $('motion').addEventListener('click', toggle);
     document.querySelectorAll('[data-language]').forEach(b => b.addEventListener('click', () => setLanguage(b.dataset.language)));
     document.addEventListener('keydown', e => {
@@ -149,8 +175,9 @@
     if (!['zh', 'en'].includes(initial)) { try { initial = localStorage.getItem('ap-doc-language'); } catch (_) { /* Optional preference. */ } }
     if (!ctx) { canvas.hidden = true; $('canvas-fallback').hidden = false; }
     s.stage = deck.initialStage;
-    config.onStage?.(s, -1);
+    config.onStage?.(s, -1, true);
     setLanguage(initial); requestAnimationFrame(frame);
   }
-  window.PlasmaLesson = { start, density, position };
+  window.PlasmaLesson = { register, density, position };
+  document.addEventListener('DOMContentLoaded', start, { once: true });
 })();

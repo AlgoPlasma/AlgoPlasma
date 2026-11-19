@@ -1,10 +1,10 @@
-# Lesson 09: deriving the first dispersion relation
+# Lesson 07: deriving the first dispersion relation
 
 ## Teaching chain
 
 - Reader: knows the continuity equation, density perturbations, k and omega with
-  units, complex amplitudes, derivative substitutions from lesson 06, and the
-  dispersion plots in 07–08.
+  units, complex amplitudes, derivative substitutions from lesson 04, and the
+  dispersion plots in 05–06.
 - Destination: derive the cold-electron relation from a specified physical model,
   explain why a nonzero mode imposes a compatibility condition, and recover the
   earlier warm-fluid example after explicitly adding a pressure closure.
@@ -58,7 +58,7 @@ the pressure perturbation and is second order. Specify a local closure:
 
 No universal temperature coefficient is asserted. Relating u to temperature
 requires a particular pressure closure and its applicability assumptions.
-The example omega_pe=1e8 rad/s and u=1e6 m/s reconnects to 07–08. This fluid
+The example omega_pe=1e8 rad/s and u=1e6 m/s reconnects to 05–06. This fluid
 model excludes collisions and Landau damping. The plotted intercept denotes
 the long-wavelength limit k→0, since amplitude elimination used k>0.
 
@@ -98,13 +98,13 @@ at the currently selected density, not at a different background density.
 
 Chinese and English are synchronized. Language switching preserves slide,
 build, time, pause and parameter state. Links retain language and deep links
-identify the slide/build. Lesson 08 links forward to 09; the course directory
+identify the slide/build. The wave-packet lesson links here; the course directory
 has a short bilingual summary. Restart slide resets the current slide to its
 first build and entry defaults. Restart lesson returns to slide 1 while
 preserving language. Only explicit buttons advance/backtrack; images and global
 arrow/PageUp/PageDown/Space keys do not advance. Native button activation remains.
 
-Large, semibold text and high-contrast annotations follow the lesson 08 shell.
+Large, semibold text and high-contrast annotations follow the lesson 06 shell.
 Reduced motion disables transition effects. A no-canvas message and a bilingual
 no-JavaScript derivation provide alternatives. The SVG chart remains available
 without canvas support. No external script, rendering service or math CDN is used.

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>波的测量与相位 | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css">
+  <script src="wave-navigation.js" defer></script><script src="wave-slides.js" defer></script><script src="wave-text.js" defer></script><script src="wave-course.js" defer></script><script src="wave-measures.js" defer></script><script src="wave-phase.js" defer></script>
+  <link rel="stylesheet" href="wave-presentation.css">
+  <link rel="stylesheet" href="wave-slides.css">
+</head>
+<body>
+  <div class="lesson staged-lesson course-lesson" id="lesson" data-page="2" data-stage="0">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <p class="chapter sr-only" id="chapter">02 / 波的测量与相位</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="01_what_moves.html?lang=zh">上一课</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">课程目录</a>
+        <a id="next-lesson" rel="next" href="03_superposition.html?lang=zh">下一课</a>
+      </nav>
+      <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="false">暂停动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
+      </div>
+    </header>
+    <main>
+      <header class="heading"><p class="slide-label" id="slide-label"></p><h1 id="title">一列波，<span>怎样测量？</span></h1></header>
+      <div class="reading-layout">
+        <figure class="scene" id="scene"><canvas id="plasma" role="img" aria-label="向右传播的电子密度波">固定位置测周期，固定时刻测波长。同一密度峰在一个周期内前进一个波长。</canvas><p id="canvas-fallback" hidden>固定位置测周期 T，固定时刻测波长 λ，相速度 v = λ/T。 / Measure T at a fixed point and λ at a fixed time; phase speed is λ/T.</p><figcaption id="model-note"></figcaption></figure>
+        <div class="reading-panel">
+          <div class="narration" id="narration">看同一列电子疏密波，从时间和空间分别测量。</div>
+          <p class="equation" id="equation" hidden></p>
+          <div class="interaction range-control" id="interaction" hidden><label id="separation-label" for="separation">探针间距</label><input id="separation" type="range" min="0" max="1" step="0.05" value="0.25"><output id="separation-output" for="separation"></output><span id="phase-output" class="sr-only"></span></div>
+          <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p></div>
+        </div>
+      </div>
+    </main>
+    <footer class="controls">
+      <div class="progress-group"><span id="stage-count"></span><span id="build-count"></span></div>
+      <button class="restart" id="restart-lesson" type="button">本课起始</button>
+      <p class="keyboard-note" id="keyboard-note">P 播放 · F 全屏</p>
+      <div class="actions">
+        <button class="back" id="back" type="button" hidden>上一步</button>
+        <button class="restart" id="restart-slide" type="button">本页起始</button>
+        <button class="advance" id="advance" type="button"><span id="advance-kind">下一步</span><span id="advance-text"></span></button>
+      </div>
+    </footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p><p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>在固定位置测量电子密度，相邻两个密度峰经过的时间间隔是周期 T，频率 f=1/T。冻结同一时刻，相邻两个密度峰的空间间隔是波长 λ。同一波峰在 T 内前进 λ，因此相速度 v=λ/T=λf；它不是单个电子的速度。</p><p>At a fixed position, successive density maxima are separated by a period T; f=1/T. At a fixed time, adjacent maxima are a wavelength λ apart. A crest advances λ in T, giving phase speed λ/T=λf, not the speed of an electron.</p><p>同一时刻，Δφ=kΔx，k=2π/λ。固定位置，Δφ=−ωΔt，ω=2π/T。半波长处反相，一波长处同相。δn=A cos(kx−ωt+φ₀) 描述相对于背景 n₀ 的密度扰动；同相位点向右以 ω/k 移动。</p><p>At the same instant, Δφ=kΔx with k=2π/λ. At a fixed position, Δφ=−ωΔt with ω=2π/T. A half-wavelength separation gives opposite phase; one wavelength gives the same phase. The density perturbation δn=A cos(kx−ωt+φ₀) moves right at phase speed ω/k.</p></div></noscript>
+</body>
+</html>

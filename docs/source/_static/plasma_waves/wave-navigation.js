@@ -2,18 +2,16 @@
 (() => {
   'use strict';
   const lessons = [
-    ['01_what_moves.html', '波与电子运动', 'Waves and electron motion'],
-    ['02_why_oscillates.html', '恢复力与惯性', 'Restoring force and inertia'],
-    ['03_measuring_a_wave.html', '周期、波长与相速度', 'Period, wavelength and phase speed'],
-    ['04_phase.html', '相位与波的表达式', 'Phase and the wave expression'],
-    ['05_superposition.html', '干涉、拍频与驻波', 'Interference, beats and standing waves'],
-    ['06_complex_waves.html', '波的复数表达', 'Complex wave representation'],
-    ['07_dispersion.html', '色散关系与读图', 'Reading a dispersion relation'],
-    ['08_wave_packets.html', '波包、相速度与群速度', 'Wave packets, phase and group velocities'],
-    ['09_deriving_dispersion.html', '第一条色散关系怎样推出来？', 'Deriving the first dispersion relation'],
-    ['10_warm_langmuir.html', '温度怎样改变波？', 'How does temperature change the wave?'],
-    ['11_complex_frequency.html', '波为什么增长或衰减？', 'Why do waves grow or damp?'],
-    ['12_reading_spectra.html', '如何看模拟中的 ω–k 谱图？', 'How do we read an ω–k spectrum?']
+    ['01_what_moves.html', '电子运动与等离子体振荡', 'Electron motion and plasma oscillations'],
+    ['02_measuring_a_wave.html', '波的测量与相位', 'Wave measurements and phase'],
+    ['03_superposition.html', '干涉、拍频与驻波', 'Interference, beats and standing waves'],
+    ['04_complex_waves.html', '波的复数表达', 'Complex wave representation'],
+    ['05_dispersion.html', '色散关系与读图', 'Reading a dispersion relation'],
+    ['06_wave_packets.html', '波包、相速度与群速度', 'Wave packets, phase and group velocities'],
+    ['07_deriving_dispersion.html', '第一条色散关系怎样推出来？', 'Deriving the first dispersion relation'],
+    ['08_warm_langmuir.html', '温度怎样改变波？', 'How does temperature change the wave?'],
+    ['09_complex_frequency.html', '波为什么增长或衰减？', 'Why do waves grow or damp?'],
+    ['10_reading_spectra.html', '如何看模拟中的 ω–k 谱图？', 'How do we read an ω–k spectrum?']
   ];
   const $ = id => document.getElementById(id);
   const current = Number($('lesson').dataset.page) - 1;

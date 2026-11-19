@@ -1,4 +1,4 @@
-/* Lesson 09 uses the established slide-deck shell. */
+/* Lesson 07 uses the established slide-deck shell. */
 .derivation-lesson .slide-content { max-width: 100%; }
 .derivation-lesson .figure-note, .derivation-lesson #parameter-note { font-size: var(--annotation-size); line-height: 1.5; color: #e0ebe6; margin: 12px 0 0; }
 .lesson.derivation-lesson[data-slide="cold-result"] .scene canvas { height: 210px; min-height: 210px; }

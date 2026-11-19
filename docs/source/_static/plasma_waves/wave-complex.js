@@ -40,7 +40,7 @@
   }
   const translations = {
     zh: {
-      documentTitle: '波为什么要用复数表示？', title: '波，为什么<span>用复数表示？</span>', chapter: '06 / 波的复数表达',
+      documentTitle: '波为什么要用复数表示？', title: '波，为什么<span>用复数表示？</span>', chapter: '04 / 波的复数表达',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
       fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '给定密度波示意：离子固定，无热运动，动画减速。图按 λ、T、n₀ 缩放，未设绝对 SI 数值。',
@@ -86,7 +86,7 @@
       complexUnits: 'Re [m⁻³]', imaginaryUnits: 'Im', electronWave: '电子密度波',
     },
     en: {
-      documentTitle: 'Why write waves as complex numbers?', title: 'Why use <span>complex waves?</span>', chapter: '06 / Complex wave representation',
+      documentTitle: 'Why write waves as complex numbers?', title: 'Why use <span>complex waves?</span>', chapter: '04 / Complex wave representation',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
       fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Prescribed density wave; fixed ions, no thermal motion, slowed playback. Reference scales λ, T, n₀; no absolute SI values.',
@@ -132,7 +132,7 @@
       complexUnits: 'Re [m⁻³]', imaginaryUnits: 'Im', electronWave: 'Electron density wave',
     }
   };
-  PlasmaLesson.start({
+  PlasmaLesson.register('complex', {
     translations, running: s => s.stage < 5,
     setup(a) {
       a.s.data.initialPhase = 0; a.s.data.relativePhase = .5;

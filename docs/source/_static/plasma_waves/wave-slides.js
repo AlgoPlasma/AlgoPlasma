@@ -3,27 +3,27 @@
 (() => {
   'use strict';
   const slide = (zh, en, stages, cues = []) => ({ title: { zh, en }, stages, cues });
-  const lessons = {
-    1: [
+  const sections = {
+    motion: [
       slide('波来了，电子去哪儿了？', 'Where do the electrons go?', [0, 1]),
       slide('跟踪一个电子，再跟踪一处密集区', 'Follow an electron, then a dense region', [2, 3, 4])
     ],
-    2: [
+    restoring: [
       slide('移开电子层，哪里会带电？', 'Where does charge appear?', [0, 1, 2]),
       slide('什么力把电子拉回来？', 'What pulls the electrons back?', [3, 4]),
       slide('回到平衡位置时，电子会停下吗？', 'Do electrons stop at equilibrium?', [5])
     ],
-    3: [
+    measures: [
       slide('固定一个位置，测周期', 'Measure the period at one position', [0, 1]),
       slide('冻结一个时刻，测波长', 'Measure wavelength in a snapshot', [2]),
       slide('跟随同一个波峰，测相速度', 'Follow a crest to measure phase speed', [3])
     ],
-    4: [
+    phase: [
       slide('两个探针看到的起伏一样吗？', 'What do two probes see?', [0, 1]),
       slide('相位怎样随空间和时间改变？', 'How does phase vary in space and time?', [2, 3]),
       slide('把相位写进密度波', 'Write the density wave using its phase', [4])
     ],
-    5: [
+    superposition: [
       slide('两列波相遇，会发生什么？', 'What happens when two waves meet?', [0, 1]),
       slide('频率略有不同，探针看到什么？', 'What does a probe see at two close frequencies?', [2]),
       slide('为什么有些位置的密度始终不变？', 'Where does the density stay constant?', [3]),
@@ -31,14 +31,14 @@
         [['展开左行波', 'Expand the left-going wave'], ['相加并约去正弦项', 'Add and cancel the sine terms']]),
       slide('在密度节点，哪个量为零？', 'What vanishes at a density node?', [5])
     ],
-    6: [
+    complex: [
       slide('用旋转的箭头读出密度', 'Read density from a rotating arrow', [0, 1]),
       slide('用复振幅表示和叠加波', 'Represent and add waves with complex amplitudes', [2, 3]),
       slide('求导怎样变成乘法？', 'How does differentiation become multiplication?', [4]),
       slide('固定位置，求时间偏导', 'Differentiate in time at fixed position', [5, 5], [['用实部核对结果', 'Check the real part']]),
       slide('固定时刻，求空间偏导', 'Differentiate in space at fixed time', [6, 6], [['用实部核对结果', 'Check the real part']])
     ],
-    7: [
+    dispersion: [
       slide('波长和频率怎样搭配？', 'Which wavelengths and frequencies go together?', [0, 1]),
       slide('沿曲线选一个允许的分量', 'Select an allowed component on the curve', [2]),
       { ...slide('这条色散曲线由什么决定？', 'What sets the shape of this curve?', [2, 2, 2],
@@ -49,6 +49,13 @@
         [['写出合成密度', 'Write the combined density'], ['读出点阵的含义', 'Interpret the dots']]), reading: 'sum' }
     ]
   };
+  const lessons = {
+    1: ['motion', 'restoring'],
+    2: ['measures', 'phase'],
+    3: ['superposition'],
+    4: ['complex'],
+    5: ['dispersion']
+  };
   const $ = id => document.getElementById(id);
   function fade(node) {
     node.classList.remove('lesson-fade');
@@ -56,11 +63,12 @@
     node.classList.add('lesson-fade');
   }
   function create(enter) {
-    const lesson = Number($('lesson').dataset.page), slides = lessons[lesson];
+    const lesson = Number($('lesson').dataset.page);
+    const slides = lessons[lesson].flatMap(model => sections[model].map(item => ({ ...item, model })));
     let page = 0, step = 0, renderedPage, renderedStep, renderedLanguage, firstNewBlock;
     function readPosition() {
       const match = /^#slide-(\d+)-step-(\d+)$/.exec(location.hash);
-      page = lesson === 7 && location.hash === '#superposition' ? slides.findIndex(item => item.stages[0] === 5) : 0;
+      page = lesson === 5 && location.hash === '#superposition' ? slides.findIndex(item => item.stages[0] === 5) : 0;
       step = 0;
       if (!match) return;
       page = Math.max(0, Math.min(slides.length - 1, Number(match[1]) - 1));
@@ -155,6 +163,7 @@
     }
     return {
       render,
+      get model() { return slides[page].model; },
       initialStage: slides[page].stages[step],
       get reading() { return slides[page].reading; },
       get finalBuild() { return step + 1 === slides[page].stages.length; }

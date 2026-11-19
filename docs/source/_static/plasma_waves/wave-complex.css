@@ -1,4 +1,4 @@
-/* Page 6: keep the complex plane beside the plasma; stack them on small screens. */
+/* Keep the complex plane beside the plasma; stack them on small screens. */
 .complex-lesson .equation { font-size: clamp(26px, 2.35vw, 38px); }
 .complex-lesson .equation sup { font-size: .62em; }
 .complex-lesson .equation small { font-size: .64em; }

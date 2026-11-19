@@ -3,7 +3,7 @@
   'use strict';
   const translations = {
     zh: {
-      documentTitle: '怎样测量一列波？', title: '一列波，<span>怎样测量？</span>', chapter: '03 / 周期、波长与相速度',
+      documentTitle: '怎样测量一列波？', title: '一列波，<span>怎样测量？</span>', chapter: '02 / 波的测量与相位',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
       fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '正弦密度波示意：固定离子，无热运动，动画减速。探针固定；图按 λ、T、n₀ 缩放，未设绝对数值。',
@@ -17,7 +17,7 @@
       time: '时间 t [s]', space: '位置 x [m]', density: 'nₑ [m⁻³]', frozen: '画面已冻结', elapsed: '经过', start: '起点', end: '一个周期后',
     },
     en: {
-      documentTitle: 'How do we measure a wave?', title: 'One wave. <span>How do we measure it?</span>', chapter: '03 / Period, wavelength and phase speed',
+      documentTitle: 'How do we measure a wave?', title: 'One wave. <span>How do we measure it?</span>', chapter: '02 / Wave measurements and phase',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
       fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Prescribed density wave; fixed ions, no thermal motion, slowed playback. Fixed probe. Plots scale with λ, T and n₀; no absolute values are assigned.',
@@ -31,7 +31,7 @@
       time: 'Time t [s]', space: 'Position x [m]', density: 'nₑ [m⁻³]', frozen: 'Time is frozen', elapsed: 'Elapsed', start: 'Start', end: 'One period later',
     }
   };
-  PlasmaLesson.start({
+  PlasmaLesson.register('measures', {
     translations,
     running: s => s.stage !== 2,
     onStage(s, old) { if (s.stage === 0 || s.stage === 3 || (old === 3 && s.stage === 2)) s.time = 0; },

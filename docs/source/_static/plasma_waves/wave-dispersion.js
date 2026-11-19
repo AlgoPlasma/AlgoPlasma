@@ -95,7 +95,7 @@
   }
   const translations = {
     zh: {
-      documentTitle: '色散关系：波长与频率怎样搭配？', title: '波长变了，<span>频率怎样变？</span>', chapter: '07 / 色散关系与读图',
+      documentTitle: '色散关系：波长与频率怎样搭配？', title: '波长变了，<span>频率怎样变？</span>', chapter: '05 / 色散关系与读图',
       pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
       fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
       model: '温电子流体波示例；无磁场、离子固定。点阵按 n₀ 缩放，幅值放大，时间统一减速。',
@@ -143,7 +143,7 @@
       ]
     },
     en: {
-      documentTitle: 'Dispersion: how do wavelength and frequency pair?', title: 'Change wavelength. <span>What happens to frequency?</span>', chapter: '07 / Reading a dispersion relation',
+      documentTitle: 'Dispersion: how do wavelength and frequency pair?', title: 'Change wavelength. <span>What happens to frequency?</span>', chapter: '05 / Reading a dispersion relation',
       pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
       fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
       model: 'Warm-electron fluid example; no magnetic field, fixed ions. Dots scaled by n₀; amplitude enlarged; time uniformly slowed.',
@@ -189,7 +189,7 @@
       ]
     }
   };
-  PlasmaLesson.start({
+  PlasmaLesson.register('dispersion', {
     translations, running: () => true, rate: () => 3,
     setup(a) {
       a.s.data.k = 40;

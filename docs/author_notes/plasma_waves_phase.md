@@ -1,6 +1,6 @@
-# Plasma waves: phase and the wave expression (page 4)
+# Plasma waves: phase and the wave expression (lesson 02, slides 4–6)
 
-- Audience/prerequisites: page 3's period, wavelength and phase speed; a cosine
+- Audience/prerequisites: the period, wavelength and phase speed from the preceding measurement slides; a cosine
   curve and one turn of an angle (2*pi radians). No dispersion relation required.
 - Capability: predict relative timing at separated probes, compute k and omega
   from lambda and T, and interpret each term of a right-moving sinusoidal wave.
@@ -11,11 +11,11 @@
   traces before reading the same/opposite-phase feedback. Slider arrow keys
   adjust its value rather than advancing the slide. No additional mode buttons.
 - Final connection: constant kx-omega*t+phi0 implies dx/dt=omega/k, linking the
-  expression directly to the phase speed measured on page 3.
+  expression directly to the phase speed measured in the first half of the lesson.
 
 ## Model and interpretation
 
-The density and dot mapping are the same as page 3: a=0.28, k=omega=2*pi in
+The density and dot mapping are the same as in the measurement slides: a=0.28, k=omega=2*pi in
 normalized internal reference units. The two probes are at X_A=0.5 and
 X_B=X_A+DeltaX, where DeltaX ranges from 0 to one wavelength in 0.05 increments.
 At each instant DeltaPhi=phi_B-phi_A=k*DeltaX. At a fixed position the adopted

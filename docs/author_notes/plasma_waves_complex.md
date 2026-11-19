@@ -1,7 +1,7 @@
-# Plasma waves: complex representation (page 6)
+# Plasma waves: complex representation (lesson 04)
 
 - Reader: knows period, wavelength, phase, density perturbation and superposition
-  from pages 3–5. Introduce only the needed complex-number facts: i^2=-1, real and
+  from lessons 02–03. Introduce only the needed complex-number facts: i^2=-1, real and
   imaginary components, and Euler's identity. No prior phasor course is assumed.
   The final two reveals assume basic differentiation and explain what each
   partial derivative holds fixed, followed by the chain rule.
@@ -25,7 +25,7 @@
 
 ## Convention, quantities and units
 
-Use the convention from page 4 throughout:
+Use the convention from lesson 02 throughout:
 
     n_tilde(x,t) = n_hat exp(i(k*x - omega*t))
     n_hat = A exp(i*phi0)
@@ -56,7 +56,7 @@ left are stationary; the real physical wave on the right still evolves in time.
 The second arrow is translated head-to-tail without rotating it. At phase pi the
 sum vanishes (within numerical tolerance); no resultant phase is assigned.
 
-The density uses the shared mass-coordinate inversion from page 3, with exactly
+The density uses the shared mass-coordinate inversion from lesson 02, with exactly
 the same wave coefficients as the complex arrows and probe curves. Thus the
 density, the real part of the complex field and particle spacing agree.
 
@@ -98,7 +98,7 @@ Reference for the complex/real-part convention:
 Check the real-part identity against the actual density function; the signs of
 both derivative multipliers using finite differences; same-mode amplitude
 addition and cancellation; phase/projection correspondence; language/slider/pause
-state; replay, reduced motion, keyboard controls, page 5–6 navigation and Sphinx.
+state; replay, reduced motion, keyboard controls, lessons 03–04 navigation and Sphinx.
 Inspect desktop and stacked narrow-screen layouts. Functional checks do not
 establish educational effectiveness; learner interpretation remains to evaluate.
 For the two algebra stages, also check forward/backward/replay, language switching,

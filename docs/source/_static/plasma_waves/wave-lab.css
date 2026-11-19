@@ -1,4 +1,4 @@
-/* Shared additions for lessons 10–12. The masthead and footer use the lesson 09 shell. */
+/* Shared additions for lessons 08–10. The masthead and footer use the lesson 07 shell. */
 html[lang="zh-CN"] .en, html[lang="en"] .zh { display:none; }
 .lab-lesson .slide-layout { grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); }
 .lab-lesson .slide-layout[data-visual="none"] { max-width:1240px; }

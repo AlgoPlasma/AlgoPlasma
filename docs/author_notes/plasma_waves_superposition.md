@@ -1,6 +1,6 @@
-# Plasma waves: interference, beats and standing waves (page 5)
+# Plasma waves: interference, beats and standing waves (lesson 03)
 
-- Audience: page 4's reader, familiar with density perturbation, phase, k and
+- Audience: lesson 02's reader, familiar with density perturbation, phase, k and
   omega. Prerequisites are addition of signed perturbations and cosine behavior.
 - Capability: use linear superposition to explain reinforcement/cancellation,
   predict beat frequency, identify stationary density nodes and distinguish them
@@ -10,7 +10,7 @@
   expand and add the two cosines -> a short prediction about what vanishes at
   a density node. Six stages; the algebra replaces the animation in stage 4,
   and the optional prediction is stage 5 (zero-based).
-- Independence: page 4 is linked as a prerequisite; each case visibly states its
+- Independence: lesson 02 is linked as a prerequisite; each case visibly states its
   conditions and uses a self-contained analytic model. No Hall-thruster context.
 - Feedback: the phase slider continuously updates resultant amplitude. The final
   two-choice prediction explains both answers and never blocks navigation. The

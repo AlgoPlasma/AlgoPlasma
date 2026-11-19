@@ -1,4 +1,4 @@
-# Plasma waves: opening slide author brief
+# Lesson 01, slides 1–2: electron and density-pattern motion
 
 - Reader: a newcomer who knows that a plasma contains electrons and ions. No
   oscillator analogy, wave equation, Fourier analysis or dispersion relation is required.

@@ -1,9 +1,9 @@
-# Page 08: wave packets, phase and group velocities
+# Lesson 06: wave packets, phase and group velocities
 
 ## Teaching chain
 
 - Reader: understands density waves, k/omega and units, linear superposition,
-  complex amplitudes, and the page 07 origin-to-point phase-speed construction.
+  complex amplitudes, and the lesson 05 origin-to-point phase-speed construction.
 - Destination: distinguish inner phase from the packet envelope; match their
   motions to origin-ray and tangent slopes; recognize the narrow-band condition.
 - Fourteen independent slides, each with two to four builds. Forward navigation
@@ -22,7 +22,7 @@
 
 ## Specified physical model
 
-The base branch is the page 07 unmagnetized warm-electron fluid approximation,
+The base branch is the lesson 05 unmagnetized warm-electron fluid approximation,
 with fixed ions and no collisional/kinetic damping:
 
     omega(k) = sqrt(W0^2 + U^2 k^2)
@@ -72,7 +72,7 @@ self-consistent nonlinear particle/fluid solution.
 [David Morin, Dispersion, section 6.3](https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf)
 supports phase/group geometry and the two-component derivation.
 [MIT Introduction to Plasma Physics](https://silas.psfc.mit.edu/introplasma/master.pdf)
-provides the warm-electron fluid background used on page 07. The finite spectrum,
+provides the warm-electron fluid background used on lesson 05. The finite spectrum,
 playback parameters and slide sequence are local teaching choices.
 
 Group speed is not equated universally with electron, energy or information

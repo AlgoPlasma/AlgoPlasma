@@ -1,4 +1,4 @@
-/* Lesson 09: from a fluid model to a dispersion relation. */
+/* Lesson 07: from a fluid model to a dispersion relation. */
 (() => {
   'use strict';
   const M = PlasmaDerivationModel, $ = id => document.getElementById(id);
@@ -63,8 +63,8 @@
       '共同的 k、ω 不表示三个量同相；相位差可以放在复振幅里。','A shared k and ω does not require equal phases; the complex amplitudes carry phase differences.',[
       B(eq('ñ₁ = N e<sup>i(kx − ωt)</sup>')+eq('ṽ₁ = V e<sup>i(kx − ωt)</sup>，　Ẽ₁ = ℰ e<sup>i(kx − ωt)</sup>')+p('物理量取实部。N [m⁻³]、V [m/s]、ℰ [V/m] 是常数复振幅；k [rad/m]、ω [rad/s]。以下取 k > 0。'),
         eq('ñ₁ = N e<sup>i(kx − ωt)</sup>')+eq('ṽ₁ = V e<sup>i(kx − ωt)</sup>,　Ẽ₁ = ℰ e<sup>i(kx − ωt)</sup>')+p('Physical fields are the real parts. N [m⁻³], V [m/s] and ℰ [V/m] are constant complex amplitudes; k [rad/m], ω [rad/s]. Take k > 0 below.')),
-      B(p('由 06 课的指数微分规则：')+eq('∂<sub>t</sub> → −iω，　∂<sub>x</sub> → ik')+p('代入后约去共同的非零指数因子：')+eq('−iωN + ikn₀V = 0')+eq('−iωm<sub>e</sub>V = −eℰ')+eq('ikℰ = −'+f('eN','ε₀')),
-        p('Use the exponential derivative rules from lesson 06:')+eq('∂<sub>t</sub> → −iω,　∂<sub>x</sub> → ik')+p('Substitute and cancel the shared nonzero exponential:')+eq('−iωN + ikn₀V = 0')+eq('−iωm<sub>e</sub>V = −eℰ')+eq('ikℰ = −'+f('eN','ε₀')),'代入并约去指数','Substitute and cancel the exponential')
+      B(p('由 04 课的指数微分规则：')+eq('∂<sub>t</sub> → −iω，　∂<sub>x</sub> → ik')+p('代入后约去共同的非零指数因子：')+eq('−iωN + ikn₀V = 0')+eq('−iωm<sub>e</sub>V = −eℰ')+eq('ikℰ = −'+f('eN','ε₀')),
+        p('Use the exponential derivative rules from lesson 04:')+eq('∂<sub>t</sub> → −iω,　∂<sub>x</sub> → ik')+p('Substitute and cancel the shared nonzero exponential:')+eq('−iωN + ikn₀V = 0')+eq('−iωm<sub>e</sub>V = −eℰ')+eq('ikℰ = −'+f('eN','ε₀')),'代入并约去指数','Substitute and cancel the exponential')
     ]),
     S('eliminate','none','消去速度和电场振幅','Eliminate velocity and field amplitudes',
       '先用连续性和泊松方程，把 V、ℰ 都写成 N 的倍数。','Use continuity and Poisson to express both V and ℰ in terms of N.',[
@@ -79,8 +79,8 @@
       '这次 ω 是从三个方程的相容条件中得到的。','Now ω comes from compatibility of the three equations.',[
       B(eq('ω = ±'+wp+'，　'+wp+' = √('+f('n₀e²','m<sub>e</sub>ε₀')+')')+p('以下取 ω = +ω<sub>pe</sub>。ω<sub>pe</sub> [rad/s] 是电子等离子体角频率；f<sub>pe</sub> = ω<sub>pe</sub>/(2π) [Hz]。')+p('本例 n₀ ≈ 3.14 × 10¹² m⁻³，ω<sub>pe</sub> = 10⁸ rad/s。'),
         eq('ω = ±'+wp+',　'+wp+' = √('+f('n₀e²','m<sub>e</sub>ε₀')+')')+p('Use ω = +ω<sub>pe</sub> below. ω<sub>pe</sub> [rad/s] is the electron plasma angular frequency; f<sub>pe</sub> = ω<sub>pe</sub>/(2π) [Hz].')+p('Here n₀ ≈ 3.14 × 10¹² m⁻³ and ω<sub>pe</sub> = 10⁸ rad/s.')),
-      B(p('把波数加倍：波长减半，但冷模型中的振荡频率保持不变。播放动画，对比两列波。')+eq('ω(k) = '+wp)+p('它的 ω–k 图是水平线：v<sub>ph</sub> = ω<sub>pe</sub>/k，v<sub>g</sub> = 0。它不是 08 课的无色散对照 ω = Vk；这里相速度仍随 k 改变。'),
-        p('Double k: the wavelength halves, but the cold-model frequency stays the same. Play to compare the two waves.')+eq('ω(k) = '+wp)+p('Its ω–k plot is horizontal: v<sub>ph</sub> = ω<sub>pe</sub>/k and v<sub>g</sub> = 0. This differs from the nondispersive ω = Vk comparison in lesson 08: phase speed here still depends on k.'),'比较两种波长','Compare two wavelengths')
+      B(p('把波数加倍：波长减半，但冷模型中的振荡频率保持不变。播放动画，对比两列波。')+eq('ω(k) = '+wp)+p('它的 ω–k 图是水平线：v<sub>ph</sub> = ω<sub>pe</sub>/k，v<sub>g</sub> = 0。它不是 06 课的无色散对照 ω = Vk；这里相速度仍随 k 改变。'),
+        p('Double k: the wavelength halves, but the cold-model frequency stays the same. Play to compare the two waves.')+eq('ω(k) = '+wp)+p('Its ω–k plot is horizontal: v<sub>ph</sub> = ω<sub>pe</sub>/k and v<sub>g</sub> = 0. This differs from the nondispersive ω = Vk comparison in lesson 06: phase speed here still depends on k.'),'比较两种波长','Compare two wavelengths')
     ]),
     S('restoring','none','用另一条路检查正负号','Check the sign another way',
       '消去速度和电场，直接看密度是否受到恢复作用。','Eliminate velocity and field directly to check the restoring response.',[
@@ -102,8 +102,8 @@
         eq('−iωV = −'+f('e','m<sub>e</sub>')+'ℰ − ik'+f('u²','n₀')+'N')+p('Reuse V = ωN/(kn₀) and ℰ = ieN/(kε₀):')+eq('−iω '+f('ωN','kn₀')+' = −'+f('ie²N','m<sub>e</sub>kε₀')+' − '+f('iku²N','n₀'))),
       B(p('两边同乘 kn₀/(−i)，并要求 N ≠ 0：')+eq('ω²N = ('+f('n₀e²','m<sub>e</sub>ε₀')+' + u²k²)N')+eq('<span class="group-key">ω² = '+wpsq+' + u²k²</span>')+p('第一项来自电场恢复力，第二项来自压强响应。两项单位都是 s⁻²（弧度视为无量纲）。'),
         p('Multiply both sides by kn₀/(−i), and require N ≠ 0:')+eq('ω²N = ('+f('n₀e²','m<sub>e</sub>ε₀')+' + u²k²)N')+eq('<span class="group-key">ω² = '+wpsq+' + u²k²</span>')+p('The first term comes from electric restoring force; the second from pressure. Both have units s⁻², with radians dimensionless.'),'保留压强项，得到新关系','Retain pressure to obtain the relation'),
-      B(p('现在接回 07、08 课使用的形式：')+eq('ω(k) = √(ω₀² + u²k²)，　ω₀ = '+wp)+p('取 ω₀ = 10⁸ rad/s、u = 10⁶ m/s，就得到前两课的示例。u → 0 时恢复冷电子结果。'),
-        p('This recovers the form used in lessons 07 and 08:')+eq('ω(k) = √(ω₀² + u²k²),　ω₀ = '+wp)+p('Choose ω₀ = 10⁸ rad/s and u = 10⁶ m/s for the earlier example. The limit u → 0 returns the cold result.'),'接回前两课的曲线','Connect to the earlier curve')
+      B(p('现在接回 05、06 课使用的形式：')+eq('ω(k) = √(ω₀² + u²k²)，　ω₀ = '+wp)+p('取 ω₀ = 10⁸ rad/s、u = 10⁶ m/s，就得到前两课的示例。u → 0 时恢复冷电子结果。'),
+        p('This recovers the form used in lessons 05 and 06:')+eq('ω(k) = √(ω₀² + u²k²),　ω₀ = '+wp)+p('Choose ω₀ = 10⁸ rad/s and u = 10⁶ m/s for the earlier example. The limit u → 0 returns the cold result.'),'接回前两课的曲线','Connect to the earlier curve')
     ]),
     S('explore','dispersion','先预测，再改变模型参数','Predict before changing parameters',
       '只改变背景密度，或只打开压强项，观察曲线怎样变化。','Change background density or enable pressure, and observe the curve.',[
@@ -131,8 +131,8 @@
   };
 
   const ui={
-    zh:{title:'第一条色散关系怎样推出来？',chapter:'09 · 第一条色散关系怎样推出来？',next:'下一步',page:'下一页',back:'上一步',prev:'上一页',restart:'本页起始',restartLesson:'本课起始',replay:'从头回顾',slide:'幻灯片',build:'本页',play:'播放动画',pause:'暂停动画',time:'观察时间 t',density:'背景密度倍数',warm:'加入压强：u = 10⁶ m/s',fallback:'图像不可用，可继续阅读公式与说明。冷模型中两种波长具有相同的振荡频率；加入压强后，频率随波数升高。'},
-    en:{title:'Deriving the first dispersion relation',chapter:'09 · Deriving the first dispersion relation',next:'Next step',page:'Next slide',back:'Back a step',prev:'Previous slide',restart:'Restart slide',restartLesson:'Restart lesson',replay:'Start again',slide:'Slide',build:'Build',play:'Play',pause:'Pause',time:'Observe time t',density:'Background density factor',warm:'Include pressure: u = 10⁶ m/s',fallback:'The figure is unavailable; continue with the equations. The cold model gives the same oscillation frequency at both wavelengths. Pressure makes frequency rise with wavenumber.'}
+    zh:{title:'第一条色散关系怎样推出来？',chapter:'07 · 第一条色散关系怎样推出来？',next:'下一步',page:'下一页',back:'上一步',prev:'上一页',restart:'本页起始',restartLesson:'本课起始',replay:'从头回顾',slide:'幻灯片',build:'本页',play:'播放动画',pause:'暂停动画',time:'观察时间 t',density:'背景密度倍数',warm:'加入压强：u = 10⁶ m/s',fallback:'图像不可用，可继续阅读公式与说明。冷模型中两种波长具有相同的振荡频率；加入压强后，频率随波数升高。'},
+    en:{title:'Deriving the first dispersion relation',chapter:'07 · Deriving the first dispersion relation',next:'Next step',page:'Next slide',back:'Back a step',prev:'Previous slide',restart:'Restart slide',restartLesson:'Restart lesson',replay:'Start again',slide:'Slide',build:'Build',play:'Play',pause:'Pause',time:'Observe time t',density:'Background density factor',warm:'Include pressure: u = 10⁶ m/s',fallback:'The figure is unavailable; continue with the equations. The cold model gives the same oscillation frequency at both wavelengths. Pressure makes frequency rise with wavenumber.'}
   };
   const canvas=$('plasma'),ctx=canvas.getContext('2d');
   const comparison=$('comparison-plasma'),comparisonCtx=comparison.getContext('2d');

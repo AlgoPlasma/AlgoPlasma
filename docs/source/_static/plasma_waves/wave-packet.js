@@ -1,4 +1,4 @@
-/* Lesson 08 is a slide deck: a new slide clears the previous explanation.
+/* Lesson 06 is a slide deck: a new slide clears the previous explanation.
  * All wave physics stays in wave-packet-model.js. */
 (() => {
   'use strict';
@@ -73,7 +73,7 @@
     {
       id: 'model', visual: 'none',
       title: ['算出本例的两种速度', 'Calculate the two speeds'],
-      lead: ['沿用 07 的温电子流体模型，电子温度通过压强项体现。', 'Use the warm-electron fluid model from lesson 07; temperature enters through pressure.'],
+      lead: ['沿用 05 的温电子流体模型，电子温度通过压强项体现。', 'Use the warm-electron fluid model from lesson 05; temperature enters through pressure.'],
       blocks: [
         block(eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s，　u = 10⁶ m/s') + p('ω₀：k → 0 时的角频率；u：压强项的速度参数。背景均匀、无磁场、离子固定。'), eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s,　u = 10⁶ m/s') + p('ω₀ is the k → 0 angular frequency; u is the pressure speed parameter. Uniform background, no magnetic field, fixed ions.'), '', ''),
         block(p('对 k 求导，并在 k<sub>c</sub> = 60 rad/m 处取值：') + eq('2ω ' + derivative + ' = 2u²k') + eq('v<sub>g</sub> = ' + frac('u²k<sub>c</sub>', 'ω<sub>c</sub>') + ' ≈ 0.514 × 10⁶ m/s') + p('ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s；v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub> ≈ 1.944 × 10⁶ m/s。'), p('Differentiate with respect to k, then evaluate at k<sub>c</sub> = 60 rad/m:') + eq('2ω ' + derivative + ' = 2u²k') + eq('v<sub>g</sub> = ' + frac('u²k<sub>c</sub>', 'ω<sub>c</sub>') + ' ≈ 0.514 × 10⁶ m/s') + p('ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s; v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub> ≈ 1.944 × 10⁶ m/s.'), '代入模型求导', 'Differentiate the model')
@@ -152,14 +152,14 @@
   ];
 
   const texts = {
-    zh: { title: '波包、相速度与群速度', chapter: '08 · 波包、相速度与群速度', play: '播放动画', pause: '暂停动画',
+    zh: { title: '波包、相速度与群速度', chapter: '06 · 波包、相速度与群速度', play: '播放动画', pause: '暂停动画',
       next: '下一步', page: '下一页', replay: '从头回顾', back: '上一步', prev: '上一页', restart: '本页起始', restartLesson: '本课起始', slide: '幻灯片', step: '本页',
       keyboard: 'P 播放 · F 全屏', time: '观察时间 t', compare: '无色散对照：ω = Vk',
       phase: '金点：相位', group: '蓝圈：包络', envelope: '蓝色虚线：包络', dots: '电子密度点阵',
       model: '温电子流体示例；离子固定、无磁场、忽略阻尼。', slowed: '时间减速并循环；点阵表示密度。',
       mathModel: '数学对照 ω = Vk；相同的波数、幅值和初相位。', noCanvas: '图像无法显示；可继续阅读公式与说明。白线表示密度扰动，蓝色包络表示振荡强弱，金点跟踪相位。',
       fullError: '当前预览不允许全屏，请在独立浏览器中打开。' },
-    en: { title: 'Wave packets, phase and group velocities', chapter: '08 · Wave packets, phase and group velocities', play: 'Play', pause: 'Pause',
+    en: { title: 'Wave packets, phase and group velocities', chapter: '06 · Wave packets, phase and group velocities', play: 'Play', pause: 'Pause',
       next: 'Next step', page: 'Next slide', replay: 'Start again', back: 'Back a step', prev: 'Previous slide', restart: 'Restart slide', restartLesson: 'Restart lesson', slide: 'Slide', step: 'Build',
       keyboard: 'P play · F fullscreen', time: 'Observe time t', compare: 'No-dispersion comparison: ω = Vk',
       phase: 'Gold dot: phase', group: 'Blue ring: envelope', envelope: 'Blue dashes: envelope', dots: 'Electron density dots',

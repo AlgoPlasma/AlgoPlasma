@@ -2,11 +2,10 @@
  * docs/author_notes/plasma_waves_intro.md. No particle solver is used here. */
 (() => {
   'use strict';
-  const $ = (id) => document.getElementById(id);
   const translations = { en: {
     title: 'A wave passes. <span>Where do the electrons go?</span>',
     documentTitle: 'A wave passes. Where do the electrons go? | AlgoPlasma',
-    chapter: '01 / Wave basics', back: 'Previous step', returnLabel: 'Return to the plasma waves course',
+    chapter: '01 / Electron motion and plasma oscillations', back: 'Previous step', returnLabel: 'Return to the plasma waves course',
     electron: 'Electrons', ion: 'Ion background', pause: 'Pause', play: 'Play',
     model: 'Collective-motion illustration: fixed ions, no thermal motion. Dots are not a crystal lattice; motion is slowed.',
     prompt: 'Start by observing.',
@@ -32,7 +31,7 @@
     canvasFailed: 'The electron oscillates locally while the density pattern travels to the right. This browser cannot draw the animation.'
   }, zh: {
     title: '波来了，<span>电子去哪儿了？</span>', documentTitle: '波来了，电子去哪儿了？ | AlgoPlasma',
-    chapter: '01 / 波的基础', back: '上一步', returnLabel: '返回等离子体波课堂',
+    chapter: '01 / 电子运动与等离子体振荡', back: '上一步', returnLabel: '返回等离子体波课堂',
     electron: '电子', ion: '离子背景', pause: '暂停动画', play: '播放动画',
     model: '集体运动示意：离子固定，省略热运动；点阵不代表晶格，动画已减速。',
     prompt: '从这里，开始观察。', steps: ['先看一片均匀的等离子体。', '出现了疏密相间的变化。', '这个电子，会跟着波一直向右走吗？', '再盯住一处密集的区域：它在向哪里移动？', '同一幅图里，有两种不同的运动。'],
@@ -50,161 +49,26 @@
     fullscreenFailed: '当前预览不允许全屏，请在独立浏览器窗口中打开。',
     canvasFailed: '电子在局部往复，疏密图样向右移动。当前浏览器无法绘制动画。'
   }};
-  let language, text;
-  function initialLanguage() {
-    const requested = new URLSearchParams(location.search).get('lang');
-    if (requested === 'zh' || requested === 'en') return requested;
-    try { if (localStorage.getItem('ap-doc-language') === 'en') return 'en'; } catch (_) { /* Offline storage can be disabled. */ }
-    return 'zh';
-  }
-  function setLanguage(value, initial = false) {
-    language = value === 'en' ? 'en' : 'zh';
-    text = translations[language];
-    document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
-    document.title = text.documentTitle;
-    $('chapter').textContent = text.chapter;
-    $('return-link').setAttribute('aria-label', text.returnLabel);
-    $('back').setAttribute('aria-label', text.back);
-    $('electron-name').textContent = text.electron;
-    $('ion-name').textContent = text.ion;
-    $('model-note').textContent = text.model;
-    $('scene-prompt').textContent = ctx ? text.prompt : text.canvasFailed;
-    $('takeaway-text').innerHTML = text.takeaway;
-    window.PlasmaNavigation?.setLanguage(language);
-    $('language-switch').setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
-    document.querySelectorAll('[data-language]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === language)));
-    try { localStorage.setItem('ap-doc-language', language); } catch (_) { /* Optional preference only. */ }
-    try { const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url); } catch (_) { /* file:// can restrict history. */ }
-    $('toast').hidden = true;
-    if (initial) setStage(deck.initialStage, true);
-    else renderStage();
-  }
-
-  const canvas = $('plasma');
-  const ctx = canvas.getContext('2d');
-  const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
-  const state = { stage: 0, phase: 0, amplitude: 0, track: 0, band: 0, paused: motionPreference.matches, lastTime: null, width: 0, height: 0 };
   const TWO_PI = 2 * Math.PI;
   const M = 2; // Two spatial periods in the displayed periodic interval.
   const RELATIVE_AMPLITUDE = 0.028; // max |d(displacement)/dq| = 0.352 < 1: no crossing.
   const PHASE_RATE = 1.12; // radians per display second, not a physical frequency.
 
-  function updateMotion() {
-    $('motion').textContent = state.paused ? text.play : text.pause;
-    $('motion').setAttribute('aria-pressed', String(state.paused));
-    $('motion').hidden = state.stage === 0;
-  }
-
-  function setStage(stage, reset = false) {
-    if (reset) {
-      state.phase = 0; state.lastTime = null; state.paused = motionPreference.matches;
-      state.amplitude = stage > 0 ? 1 : 0; state.track = stage >= 2 ? 1 : 0; state.band = stage >= 3 ? 1 : 0;
-    }
-    state.stage = Math.max(0, Math.min(4, stage));
-    if (state.stage === 0) {
-      state.phase = 0; state.amplitude = 0; state.track = 0; state.band = 0;
-      state.paused = motionPreference.matches;
-    }
-    if (motionPreference.matches || state.paused) {
-      state.amplitude = state.stage > 0 ? 1 : 0;
-      state.track = state.stage >= 2 ? 1 : 0;
-      state.band = state.stage >= 3 ? 1 : 0;
-    }
-    renderStage();
-  }
-
-  function renderStage() {
-    $('lesson').dataset.stage = String(state.stage);
-    $('takeaway').hidden = state.stage !== 4;
-    deck.render(text, language);
-    canvas.setAttribute('aria-label', text.descriptions[state.stage]);
-    canvas.textContent = text.descriptions[state.stage];
-    updateMotion();
-    fitCanvas();
-  }
-
-  function toggleMotion() {
-    if (state.stage === 0) return;
-    state.paused = !state.paused;
-    if (state.paused) {
-      state.amplitude = 1;
-      state.track = state.stage >= 2 ? 1 : 0;
-      state.band = state.stage >= 3 ? 1 : 0;
-    }
-    updateMotion(); draw();
-  }
-
-  $('motion').addEventListener('click', toggleMotion);
-  document.querySelectorAll('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
-
-  let toastTimer;
-  async function fullscreen() {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
-    } catch (_) {
-      $('toast').textContent = text.fullscreenFailed;
-      $('toast').hidden = false;
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => { $('toast').hidden = true; }, 4000);
-    }
-  }
-  document.addEventListener('keydown', (event) => {
-    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.repeat || event.target.closest('input,textarea,select,[contenteditable]')) return;
-    if (event.key === ' ' && event.target.closest('button,a')) return;
-    if (event.key.toLowerCase() === 'f') { event.preventDefault(); fullscreen(); }
-    if (event.key.toLowerCase() === 'p') { event.preventDefault(); toggleMotion(); }
-  });
-  motionPreference.addEventListener('change', (event) => {
-    state.paused = event.matches;
-    if (event.matches) { state.amplitude = state.stage > 0 ? 1 : 0; state.track = state.stage >= 2 ? 1 : 0; state.band = state.stage >= 3 ? 1 : 0; }
-    updateMotion(); draw();
-  });
-
-  function fitCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    if (rect.width <= 0 || rect.height <= 0) return;
-    state.width = rect.width; state.height = rect.height;
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    const width = Math.round(rect.width * dpr), height = Math.round(rect.height * dpr);
-    if (canvas.width !== width) canvas.width = width;
-    if (canvas.height !== height) canvas.height = height;
-    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw();
-  }
-  function line(x1, y1, x2, y2, color, width = 1, dash = []) {
-    ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
-    ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]);
-  }
-  function dot(x, y, radius, color) {
-    ctx.beginPath(); ctx.fillStyle = color; ctx.arc(x, y, radius, 0, TWO_PI); ctx.fill();
-  }
-  function label(value, x, y, color, size, align = 'left') {
-    PlasmaText.label(ctx, value, x, y, color, size, align);
-  }
-  function arrow(x1, y, x2, color) {
-    line(x1, y, x2, y, color, 1.7);
-    const direction = Math.sign(x2 - x1);
-    line(x2 - direction * 7, y - 4, x2, y, color, 1.7);
-    line(x2 - direction * 7, y + 4, x2, y, color, 1.7);
-  }
-  function draw() {
-    if (!ctx || !state.width || !state.height) return;
-    const w = state.width, h = state.height;
-    ctx.clearRect(0, 0, w, h);
+  function draw({ s, ctx, text, line, dot, arrow, label }) {
+    const w = s.width, h = s.height;
     const small = w < 650;
     const left = small ? 9 : 22, right = w - left, span = right - left;
     const gridTop = small ? 148 : 116, gridBottom = Math.max(gridTop + 75, h - (small ? 71 : 94));
     const rows = small ? 5 : 7, columns = Math.max(19, Math.min(49, Math.round(span / 25)));
     const rowSpacing = (gridBottom - gridTop) / (rows - 1);
-    const spacing = span / columns, a = RELATIVE_AMPLITUDE * span * state.amplitude;
+    const spacing = span / columns, a = RELATIVE_AMPLITUDE * span * s.data.amplitude;
     const k = TWO_PI * M / span;
     const trackedColumn = Math.floor(columns * .36), trackedRow = rows - 1;
     const qTracked = (trackedColumn + .5) * spacing;
-    const xTracked = left + qTracked + a * Math.sin(k * qTracked - state.phase);
-    const alpha = Math.max(0, Math.min(1, state.band));
+    const xTracked = left + qTracked + a * Math.sin(k * qTracked - s.data.phase);
+    const alpha = Math.max(0, Math.min(1, s.data.band));
     // A density maximum has k*q - phase = pi. At that phase displacement is zero.
-    const peak = ((state.phase + Math.PI) / k % span + span) % span;
+    const peak = ((s.data.phase + Math.PI) / k % span + span) % span;
     const bandWidth = span * .045;
 
     ctx.save(); ctx.beginPath(); ctx.rect(left - 7, gridTop - 15, span + 14, gridBottom - gridTop + 30); ctx.clip();
@@ -225,29 +89,29 @@
         const qx = left + q;
         line(qx - 2.8, y, qx + 2.8, y, '#7799b266', 1.1);
         line(qx, y - 2.8, qx, y + 2.8, '#7799b266', 1.1);
-        const shifted = q + a * Math.sin(k * q - state.phase);
+        const shifted = q + a * Math.sin(k * q - s.data.phase);
         const x = left + ((shifted % span + span) % span);
-        const tracked = row === trackedRow && col === trackedColumn && state.track > .001;
+        const tracked = row === trackedRow && col === trackedColumn && s.data.track > .001;
         if (tracked) {
           const glow = ctx.createRadialGradient(x, y, 0, x, y, 19);
-          glow.addColorStop(0, `rgba(244,197,131,${state.track * .32})`); glow.addColorStop(1, 'rgba(244,197,131,0)');
+          glow.addColorStop(0, `rgba(244,197,131,${s.data.track * .32})`); glow.addColorStop(1, 'rgba(244,197,131,0)');
           ctx.fillStyle = glow; ctx.fillRect(x - 19, y - 19, 38, 38);
           dot(x, y, small ? 5.5 : 7, '#f4c583');
-          ctx.beginPath(); ctx.strokeStyle = `rgba(244,197,131,${state.track * .65})`; ctx.lineWidth = 1.3; ctx.arc(x, y, small ? 11 : 14, 0, TWO_PI); ctx.stroke();
+          ctx.beginPath(); ctx.strokeStyle = `rgba(244,197,131,${s.data.track * .65})`; ctx.lineWidth = 1.3; ctx.arc(x, y, small ? 11 : 14, 0, TWO_PI); ctx.stroke();
         } else dot(x, y, small ? 3 : 4, '#b5efcf');
       }
     }
     ctx.restore();
 
-    if (state.track > .001) {
-      ctx.save(); ctx.globalAlpha = state.track;
+    if (s.data.track > .001) {
+      ctx.save(); ctx.globalAlpha = s.data.track;
       const origin = left + qTracked, trackY = gridBottom + 26;
       line(origin, gridBottom - 15, origin, trackY + 5, '#f4c58366', 1, [3, 4]);
       arrow(origin, trackY, origin - RELATIVE_AMPLITUDE * span, '#f4c583');
       arrow(origin, trackY, origin + RELATIVE_AMPLITUDE * span, '#f4c583');
       line(xTracked, gridBottom + 9, xTracked, trackY, '#f4c58388', 1);
       // Keep callout text inside the canvas even on narrow displays.
-      label(state.stage === 2 ? text.particlePrompt : text.particleLabel, small ? w / 2 : origin, gridBottom + 57, '#f4c583', small ? 17 : 23, 'center');
+      label(s.stage === 2 ? text.particlePrompt : text.particleLabel, small ? w / 2 : origin, gridBottom + 57, '#f4c583', small ? 17 : 23, 'center');
       ctx.restore();
     }
     if (alpha > .001) {
@@ -260,24 +124,24 @@
     }
   }
 
-  function frame(now) {
-    const dt = state.lastTime === null ? 0 : Math.min((now - state.lastTime) / 1000, .05);
-    state.lastTime = now;
-    if (!document.hidden) {
-      const blend = 1 - Math.exp(-dt * 6);
-      state.amplitude += ((state.stage > 0 ? 1 : 0) - state.amplitude) * blend;
-      state.track += ((state.stage >= 2 ? 1 : 0) - state.track) * blend;
-      state.band += ((state.stage >= 3 ? 1 : 0) - state.band) * blend;
-      if (state.stage > 0 && !state.paused) state.phase = (state.phase + dt * PHASE_RATE) % (TWO_PI * M);
-      draw();
+  PlasmaLesson.register('motion', {
+    translations, draw,
+    running: s => s.stage > 0,
+    setup({ s }) { Object.assign(s.data, { phase: 0, amplitude: 0, track: 0, band: 0 }); },
+    onStage(s, old, reset) {
+      if (reset || s.stage === 0) s.data.phase = 0;
+      if (reset || s.paused || s.stage === 0) {
+        s.data.amplitude = Number(s.stage > 0);
+        s.data.track = Number(s.stage >= 2);
+        s.data.band = Number(s.stage >= 3);
+      }
+    },
+    frame(s, dt) {
+      const blend = s.paused ? 1 : 1 - Math.exp(-dt * 6);
+      s.data.amplitude += (Number(s.stage > 0) - s.data.amplitude) * blend;
+      s.data.track += (Number(s.stage >= 2) - s.data.track) * blend;
+      s.data.band += (Number(s.stage >= 3) - s.data.band) * blend;
+      if (s.stage > 0 && !s.paused) s.data.phase = (s.data.phase + dt * PHASE_RATE) % (TWO_PI * M);
     }
-    requestAnimationFrame(frame);
-  }
-  new ResizeObserver(fitCanvas).observe(canvas);
-  window.addEventListener('resize', fitCanvas);
-  document.addEventListener('visibilitychange', () => { state.lastTime = null; });
-  if (!ctx) canvas.hidden = true;
-  const deck = WaveSlides.create(setStage);
-  setLanguage(initialLanguage(), true);
-  requestAnimationFrame(frame);
+  });
 })();
