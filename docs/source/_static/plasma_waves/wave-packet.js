@@ -147,15 +147,15 @@
 
   const texts = {
     zh: { title: '波包、相速度与群速度', chapter: '08 · 波包、相速度与群速度', play: '播放动画', pause: '暂停动画',
-      next: '下一步', page: '下一页', replay: '从头回顾', back: '上一步', prev: '上一页', slide: '幻灯片', step: '本页',
-      keyboard: '方向键翻阅 · P 播放 · F 全屏', time: '观察时间 t', compare: '无色散对照：ω = Vk',
+      next: '下一步', page: '下一页', replay: '从头回顾', back: '上一步', prev: '上一页', restart: '本页起始', slide: '幻灯片', step: '本页',
+      keyboard: 'P 播放 · F 全屏', time: '观察时间 t', compare: '无色散对照：ω = Vk',
       phase: '金点：相位', group: '蓝圈：包络', envelope: '蓝色虚线：包络', dots: '电子密度点阵',
       model: '温电子流体示例；离子固定、无磁场、忽略阻尼。', slowed: '时间减速并循环；点阵表示密度。',
       mathModel: '数学对照 ω = Vk；相同的波数、幅值和初相位。', noCanvas: '图像无法显示；可继续阅读公式与说明。白线表示密度扰动，蓝色包络表示振荡强弱，金点跟踪相位。',
       fullError: '当前预览不允许全屏，请在独立浏览器中打开。' },
     en: { title: 'Wave packets, phase and group velocities', chapter: '08 · Wave packets, phase and group velocities', play: 'Play', pause: 'Pause',
-      next: 'Next step', page: 'Next slide', replay: 'Start again', back: 'Back a step', prev: 'Previous slide', slide: 'Slide', step: 'Build',
-      keyboard: 'Arrow keys · P play · F fullscreen', time: 'Observe time t', compare: 'No-dispersion comparison: ω = Vk',
+      next: 'Next step', page: 'Next slide', replay: 'Start again', back: 'Back a step', prev: 'Previous slide', restart: 'Restart slide', slide: 'Slide', step: 'Build',
+      keyboard: 'P play · F fullscreen', time: 'Observe time t', compare: 'No-dispersion comparison: ω = Vk',
       phase: 'Gold dot: phase', group: 'Blue ring: envelope', envelope: 'Blue dashes: envelope', dots: 'Electron density dots',
       model: 'Warm-electron fluid example; fixed ions, no field or damping.', slowed: 'Time is slowed and looped; dots represent density.',
       mathModel: 'Mathematical comparison ω = Vk; same wavenumbers, amplitudes and initial phases.', noCanvas: 'The figure is unavailable. Continue with the equations and explanation. White denotes the density perturbation, blue the envelope, and gold the central phase.',
@@ -252,6 +252,7 @@
     $('advance').dataset.action = finalBuild ? (finalSlide ? 'replay' : 'page') : 'reveal';
     $('back').hidden = s.slide === 0 && s.build === 0;
     $('back').textContent = s.build > 0 ? t.back : t.prev;
+    $('restart-slide').textContent = t.restart;
     $('stage-count').textContent = t.slide + ' ' + (s.slide + 1) + ' / ' + slides.length;
     $('build-count').textContent = t.step + ' ' + (s.build + 1) + ' / ' + slide.blocks.length;
     $('progress').replaceChildren(...slide.blocks.map((_, i) => {
@@ -291,6 +292,9 @@
   function back() {
     if (s.build > 0) { s.build--; render('back'); }
     else if (s.slide > 0) { s.slide--; s.build = current().blocks.length - 1; resetScene(); render('page'); }
+  }
+  function restartSlide() {
+    s.build = 0; resetScene(); render('page');
   }
   function toggle() { if (canPlay()) { s.paused = !s.paused; lastTime = null; motion(); } }
   function setLanguage(value) {
@@ -418,16 +422,16 @@
     requestAnimationFrame(frame);
   }
   $('advance').addEventListener('click', next); $('back').addEventListener('click', back);
-  canvas.addEventListener('click', next); $('motion').addEventListener('click', toggle);
+  $('restart-slide').addEventListener('click', restartSlide);
+  $('motion').addEventListener('click', toggle);
   $('packet-time').addEventListener('input', e => { s.time = Number(e.target.value); s.paused = true; syncTime(); motion(); draw(); });
   $('linear-branch').addEventListener('change', e => { s.linear = e.target.checked; render(); });
   document.querySelectorAll('[data-language]').forEach(b => b.addEventListener('click', () => setLanguage(b.dataset.language)));
   document.addEventListener('keydown', e => {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat || e.target.closest('input,textarea,select,[contenteditable]')) return;
     if (e.key === ' ' && e.target.closest('button,a')) return;
-    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); back(); }
-    else if (e.key.toLowerCase() === 'p') { e.preventDefault(); toggle(); }
+    // Navigation is button-only; native Enter/Space on focused buttons still works.
+    if (e.key.toLowerCase() === 'p') { e.preventDefault(); toggle(); }
     else if (e.key.toLowerCase() === 'f') { e.preventDefault(); fullscreen(); }
   });
   reduced.addEventListener('change', e => { if (e.matches) { s.paused = true; motion(); } });

@@ -149,3 +149,13 @@ entry, scrubbing, playback wrap, language-state preservation, deep links,
 reduced-motion and animated builds, and no-canvas/no-JavaScript fallbacks.
 The original dependency-free packet physics test passed. Sphinx completed
 without warnings. Browser checks verify implementation, not learning outcomes.
+
+Navigation refinement, 2026-11-19: advancing and backing up now use explicit
+buttons only. Canvas clicks and global arrow/PageUp/PageDown/Space shortcuts
+do not change the slide or build; native keyboard activation of focused buttons
+is retained. The bilingual Restart slide button restores the current slide
+to build 0 and its entry time/comparison defaults, pauses playback, and scrolls
+to its opening. Canvas uses the default cursor. Checked image/plot clicks,
+non-button keys, button activation, running-state reset, all 14 slide restarts
+in both languages, and 72 footer layouts at 320–1920 px without overlap or
+horizontal overflow. Sphinx built without warnings.
