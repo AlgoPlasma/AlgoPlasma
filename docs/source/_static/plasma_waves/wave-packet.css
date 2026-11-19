@@ -1,48 +1,104 @@
-/* A real-space packet first; the dispersion geometry appears later. */
-.lesson.packet-lesson .scene { display: block; }
-.packet-panels { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
-.packet-lesson[data-stage="4"] .packet-panels,
-.packet-lesson[data-stage="5"] .packet-panels { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
-.lesson.packet-lesson .scene canvas { height: 480px; min-height: 480px; }
-.packet-lesson #slope-pane { min-width: 0; }
-.packet-lesson #slope-heading { font-size: var(--annotation-size); margin: 0 0 12px; font-weight: 650; }
-.packet-lesson #slope-chart { display: block; width: 100%; height: 390px; overflow: visible; }
-.packet-lesson #slope-chart text { fill: #e0ebe6; font: 600 26px "Segoe UI","Microsoft YaHei",sans-serif; }
+/* Independent slides for lesson 08. No shared course/reveal behavior is changed. */
+.lesson.packet-lesson { grid-template-rows: minmax(78px, auto) 1fr auto; }
+.packet-lesson main { padding: 12px 0 12px; }
+.packet-lesson h1 { font-size: clamp(38px, 3.25vw, 62px); line-height: 1.3; letter-spacing: -.8px; }
+.packet-lesson h1:focus { outline: none; }
+.packet-lesson .slide-label { margin: 0 0 12px; font-size: 22px; color: var(--mint); }
+.packet-lesson .narration { font-size: clamp(26px, 1.9vw, 34px); margin: 14px 0 0; min-height: 0; }
+.packet-lesson .slide-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: start; gap: 34px; margin-top: 24px; }
+.packet-lesson .slide-layout[data-visual="none"] { display: block; max-width: 1400px; width: 100%; margin: 24px auto 0; }
+.packet-lesson .slide-content { min-width: 0; font-size: var(--explanation-size); line-height: 1.5; }
+.packet-lesson .build-block { padding: 0 0 0 16px; border-left: 3px solid transparent; }
+.packet-lesson .build-block + .build-block { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line); }
+.packet-lesson .build-block p { margin: 0 0 10px; }
+.packet-lesson .build-block p:last-child { margin-bottom: 0; }
+.packet-lesson .build-block.just-revealed { animation: reveal-block .7s ease both; border-left-color: var(--mint); }
+.packet-lesson .math { margin: 12px 0; color: var(--mint); text-align: center; font-size: clamp(28px, 2.05vw, 36px); line-height: 1.5; overflow-wrap: anywhere; }
+.packet-lesson .eq-frac { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle; text-align: center; line-height: 1.3; margin: 0 .12em; white-space: nowrap; }
+.packet-lesson .eq-frac > span:not(.sr-only) { padding: .02em .12em; }
+.packet-lesson .eq-frac .eq-den { border-top: 2px solid currentColor; }
+.packet-lesson a { color: var(--mint); text-underline-offset: 5px; }
+.packet-lesson .phase-key { color: #f4c583; }
+.packet-lesson .group-key { color: #b4cefa; }
+.packet-lesson .white-key { color: #eef4f0; }
+.lesson.packet-lesson .scene { display: block; margin: 0; min-height: 0; height: auto; }
+.lesson.packet-lesson .scene canvas { height: 350px; min-height: 350px; width: 100%; }
+.packet-lesson .packet-legend { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: var(--annotation-size); margin-bottom: 6px; }
+.packet-legend .phase-key::before { content: "● "; }
+.packet-legend .group-key::before { content: "○ "; }
+.packet-lesson[data-slide="packet"] .packet-legend .group-key::before,
+.packet-lesson[data-slide="phase"] .packet-legend .group-key::before { content: "╌ "; }
+.packet-lesson figcaption { font-size: var(--annotation-size); padding-top: 14px; line-height: 1.5; }
+.packet-lesson #lesson-chart { display: block; width: 100%; height: 420px; }
+.packet-lesson #lesson-chart text { fill: #eef4f0; font: 600 25px "Segoe UI","Microsoft YaHei",sans-serif; }
 .packet-axis { stroke: #e0ebe6; stroke-width: 2; }
 .packet-guide { stroke: #526e62; stroke-dasharray: 4 6; }
 .packet-branch { fill: none; stroke: #b5efcf; stroke-width: 3; }
-.packet-ray { stroke: #f4c583; stroke-width: 5; }
+.packet-ray { stroke: #f4c583; stroke-width: 4; }
 .packet-tangent { stroke: #b4cefa; stroke-width: 3; stroke-dasharray: 10 6; }
-.packet-lesson .packet-legend { display: flex; flex-wrap: wrap; gap: 12px 30px; margin: 10px 0 12px; font-size: var(--annotation-size); }
-.packet-lesson .phase-key { color: #f4c583; }
-.packet-lesson .group-key { color: #b4cefa; }
-.packet-lesson .phase-key::before { content: "● "; }
-.packet-lesson .group-key::before { content: "○ "; }
-.packet-lesson[data-stage="1"] .group-key::before,
-.packet-lesson[data-stage="2"] .group-key::before { content: "╌ "; }
-.packet-lesson .time-controls { margin: 12px 0; }
-.packet-lesson .time-controls input { width: min(360px, 40vw); }
-.packet-lesson .comparison { display: flex; align-items: center; gap: 12px; font-size: var(--annotation-size); margin: 10px 0 20px; cursor: pointer; }
+.spectrum-line { stroke: #b5efcf; stroke-width: 2.5; }
+.packet-lesson .animation-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: 10px; }
+.packet-lesson .motion { padding: 8px 18px; border: 1px solid var(--mint); border-radius: 5px; color: var(--mint); font-size: 24px; flex-shrink: 0; }
+.packet-lesson .time-controls { flex: 1 1 250px; font-size: 22px; gap: 8px 16px; }
+.packet-lesson .time-controls input { flex: 1 1 100%; width: 100%; order: 3; height: 26px; }
+.packet-lesson .time-controls output { margin-left: auto; min-width: 0; }
+.packet-lesson .comparison { display: flex; align-items: center; gap: 12px; font-size: var(--annotation-size); margin: 16px 0 0; cursor: pointer; }
 .packet-lesson .comparison input { width: 26px; height: 26px; accent-color: var(--mint); flex-shrink: 0; }
-.packet-lesson details { font-size: var(--annotation-size); line-height: 1.75; margin-top: 24px; }
-.packet-lesson summary { color: var(--mint); cursor: pointer; }
-.packet-lesson summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 5px; }
-.packet-lesson details > div { max-width: 1160px; margin: 30px auto 24px; }
-.packet-lesson .explanation-section + .explanation-section { margin-top: 48px; padding-top: 30px; border-top: 1px solid var(--line); }
-.packet-lesson .explanation-section h3 { margin: 0 0 20px; color: #eef4f0; font-size: clamp(28px, 2vw, 34px); line-height: 1.5; font-weight: 650; }
-.packet-lesson details p { margin: 20px 0; }
-.packet-lesson details .math { margin: 28px 0; padding: 6px 0; color: var(--mint); text-align: center; font-size: clamp(27px, 2.2vw, 34px); line-height: 1.9; overflow-wrap: normal; }
-.packet-lesson .eq-frac { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle; text-align: center; line-height: 1.3; margin: 0 .14em; white-space: nowrap; }
-.packet-lesson .eq-frac > span:not(.sr-only) { padding: .05em .15em; }
-.packet-lesson .eq-frac .eq-den { border-top: 2px solid currentColor; }
-.packet-lesson details a { color: var(--mint); }
-.packet-lesson .speed-term { display: inline-block; margin-right: 24px; }
-@media (max-width: 1000px) {
-  .packet-lesson[data-stage="4"] .packet-panels,
-  .packet-lesson[data-stage="5"] .packet-panels { grid-template-columns: minmax(0, 1fr); }
+.packet-lesson .controls { position: sticky; bottom: 0; z-index: 2; padding: 16px 0; border-top: 1px solid var(--line); background: #10181c; }
+.packet-lesson .progress-group { display: block; }
+.packet-lesson .stage-count { white-space: nowrap; font-size: 22px; }
+.packet-lesson .build-progress { display: flex; align-items: center; gap: 14px; margin-top: 6px; color: #e0ebe6; font-size: 20px; white-space: nowrap; }
+.packet-lesson .progress { gap: 5px; }
+.packet-lesson .progress i { width: 20px; height: 4px; }
+.packet-lesson .keyboard-note { font-size: 20px; max-width: 180px; line-height: 1.5; }
+.packet-lesson .back { width: auto; height: auto; padding: 12px; font-size: 22px; white-space: nowrap; }
+.packet-lesson .advance { display: block; text-align: left; min-width: 280px; max-width: 520px; padding: 12px 22px; font-size: 23px; line-height: 1.35; }
+.packet-lesson #advance-kind { display: block; font-size: 20px; margin-bottom: 4px; }
+.packet-lesson #advance-text { display: block; }
+.slide-enter { animation: slide-enter .32s ease both; }
+@keyframes slide-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes reveal-block { from { opacity: 0; transform: translateY(12px); background: #20362d; } to { opacity: 1; transform: none; background: transparent; } }
+@media (max-width: 1100px) {
+  .packet-lesson .slide-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .packet-lesson #visual-pane { max-width: 800px; width: 100%; margin: 0 auto; }
+  .packet-lesson .slide-content { max-width: 100%; }
+  .packet-lesson .keyboard-note { display: none; }
+}
+@media (max-width: 900px) {
+  .lesson.packet-lesson { grid-template-rows: minmax(130px, auto) 1fr auto; }
 }
 @media (max-width: 700px) {
-  .packet-lesson #slope-chart { height: 340px; }
-  .packet-lesson #slope-chart text { font-size: 22px; }
-  .packet-lesson .time-controls input { width: 100%; }
+  .packet-lesson h1 { font-size: clamp(32px, 6.8vw, 42px); }
+  .packet-lesson .slide-label { font-size: 20px; }
+  .packet-lesson .narration { font-size: 25px; line-height: 1.5; }
+  .packet-lesson .slide-content { font-size: 24px; }
+  .packet-lesson .slide-layout { margin-top: 22px; }
+  .packet-lesson .build-block { padding-left: 8px; }
+  .packet-lesson .math { font-size: 27px; }
+  .packet-lesson .scene canvas { height: 350px; min-height: 350px; }
+  .packet-lesson #lesson-chart { height: 350px; }
+  .packet-lesson #lesson-chart text { font-size: 22px; }
+  .packet-lesson .time-controls { flex-basis: 100%; }
+  .packet-lesson .controls { flex-wrap: wrap; gap: 12px; }
+  .packet-lesson .progress-group { display: flex; justify-content: space-between; width: 100%; gap: 10px; }
+  .packet-lesson .build-progress { margin: 0; font-size: 20px; }
+  .packet-lesson .stage-count { margin: 0; font-size: 20px; }
+  .packet-lesson .progress { display: none; }
+  .packet-lesson .actions { width: 100%; margin-left: 0; gap: 10px; justify-content: space-between; }
+  .packet-lesson .advance { min-width: 0; flex: 1; max-width: 100%; font-size: 22px; padding: 10px 14px; }
+  .packet-lesson .back { padding: 10px 2px; font-size: 20px; }
 }
+@media print {
+  .packet-lesson .controls, .packet-lesson .animation-controls { display: none; }
+  .packet-lesson .build-block[hidden] { display: block !important; }
+}
+
+/* The unavailable next lesson is not a slide control. */
+.packet-lesson #next-lesson[aria-disabled="true"] { display: none; }
+.packet-lesson .page-navigation { grid-template-columns: auto auto; justify-content: start; gap: 30px; width: auto; }
+.packet-lesson .slide-content { scroll-margin-bottom: 180px; }
+@media (max-width: 900px) { .packet-lesson .page-navigation { width: 100%; } }
+
+.packet-lesson .build-block { scroll-margin-top: 20px; }
+
+.packet-lesson .math-term { display: inline-block; white-space: nowrap; }

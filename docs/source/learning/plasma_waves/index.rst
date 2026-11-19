@@ -40,7 +40,7 @@ Plasma Waves
           读出波长、周期与相速度，观察曲线上三个波分量叠加后的电子密度。
 
       `08 · 波包、相速度与群速度 → <../../_static/plasma_waves/08_wave_packets.html?lang=zh>`_
-          追踪波包中的波峰和包络，用两种斜率区分相速度与群速度。
+          用 14 张幻灯片追踪波峰和包络，推导群速度，比较色散与无色散。
 
 .. container:: ap-lang ap-lang-en
 
@@ -72,4 +72,4 @@ Plasma Waves
           Read wavelength, period and phase speed, then combine three points into one density pattern.
 
       `08 · Wave packets, phase and group velocities → <../../_static/plasma_waves/08_wave_packets.html?lang=en>`_
-          Track the inner phase and envelope, and connect their speeds to two slopes on the dispersion plot.
+          A 14-slide sequence: track phase and envelope, derive group speed, and compare dispersive and nondispersive waves.

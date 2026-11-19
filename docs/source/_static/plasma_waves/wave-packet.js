@@ -1,373 +1,440 @@
+/* Lesson 08 is a slide deck: a new slide clears the previous explanation.
+ * All wave physics stays in wave-packet-model.js. */
 (() => {
   'use strict';
-  const M = PlasmaPacketModel, gold = '#f4c583', blue = '#b4cefa';
-  const speed = value => `${(value / 1e6).toFixed(3)} × 10⁶ m/s`;
-  const texts = {
-    zh: {
-      documentTitle: '波包、相速度与群速度', title: '一群波，<span>谁在向前走？</span>', chapter: '08 / 波包、相速度与群速度',
-      pause: '暂停动画', play: '播放动画', back: '上一步', returnLabel: '返回等离子体波课堂', progress: '讲解步骤',
-      keyboard: '点击点阵或按 → 继续 · F 全屏', fullscreenFailed: '当前预览不允许全屏，请在独立浏览器中打开。',
-      model: '窄带温电子流体示例；无磁场、离子固定，忽略阻尼。点阵示意合成密度，时间减速并循环。',
-      comparisonModel: '数学对照 ω = Vk；保留相同波数、幅值和初相位。时间减速并循环。',
-      steps: [
-        '相近波数的分量叠加，让密度扰动集中在一段空间：波包。',
-        '蓝色虚线勾勒波包的包络：它告诉我们哪里振荡强、哪里振荡弱。',
-        '金点跟踪中心分量的一个等相位位置。相速度描述内部波峰的推进。',
-        '蓝圈跟踪包络最强处。窄带、弱失真时，它的速度近似为群速度。',
-        '在中心波数处：原点连线给相速度，切线给群速度。两种斜率对应两种运动。',
-        '切换对照：当 ω 与 k 成正比，包络与内部波峰会一起移动。'
-      ],
-      actions: ['画出包络', '跟踪内部波峰', '跟踪包络中心', '回到色散图', '比较无色散情况', '重新读一遍'],
-      equations: ['',
-        'δn = ∑ⱼ Aⱼ cos(kⱼx − ωⱼt)<small>31 个相近分量；中心波数 k<sub>c</sub> = 60 rad/m；δn、Aⱼ [m⁻³]</small>',
-        'v<sub>ph</sub> = ω<sub>c</sub> / k<sub>c</sub>',
-        'v<sub>g</sub> = (dω/dk)<sub>c</sub>',
-        'v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub>　v<sub>g</sub> = (dω/dk)<sub>c</sub>',
-        'ω = Vk　⇒　v<sub>ph</sub> = v<sub>g</sub> = V'],
-      descriptions: [
-        '31个相近波数的电子密度波叠加成一个局部增强的波包。上方曲线是相对密度扰动δn/n₀，下方是同一组电子的密度点阵。横轴x为米，观察窗为−0.5到0.9m。初始暂停；可以播放动画。',
-        '在总密度波外画出正负包络。蓝色虚线的高度来自同一复数叠加的模，刻画振荡强弱；它不是另一组电子或另一种密度。',
-        '金点位于中心分量的恒定相位k_c x−ω_c t=0，随x=vph t移动。它近似跟随波包中的一个波峰；它不是被标记的电子。可播放或拖动时间比较位置。',
-        '蓝圈定位实际计算的包络最大值；金点仍跟踪中心分量相位。此窄带例子中蓝圈移动更慢，内部波峰穿过包络并逐渐减弱。群速度是中心波数处dω/dk，近似包络速度，不是电子速度。',
-        '色散图横轴k [rad/m]、纵轴ω [rad/s]，淡色带表示所取分量42至78 rad/m。中心点k_c=60 rad/m。金色原点连线斜率是相速度；蓝色虚线是切线，其斜率是群速度。右侧仍用各分量的实际色散频率计算波包。',
-        '无色散对照采用过原点的直线ω=Vk，V取原模型中心相速度。保持同一组波数、幅值和初相位，所有分量以V传播，波包形状精确平移，金点与蓝圈同步。取消对照即可在同一时刻比较温电子流体分支。'
-      ],
-      takeaway: '<span class="gold">相速度：跟相位。</span> <span style="color:#b4cefa">群速度：窄带包络。</span> 两者都不是电子速度。',
-      envelopeKey: '蓝色虚线：包络', phaseKey: '金点：中心分量相位', groupKey: '蓝圈：包络中心',
-      dotsTitle: '同一组电子', slopeTitle: '原点连线与切线', timeLabel: '观察时间 t',
-      compare: '无色散对照：ω = Vk', chartDescription: '色散图，横轴k [rad/m]，纵轴ω [rad/s]。金色原点连线给相速度，蓝色切线给群速度。',
-      groupNote: '邻近分量：Δω/Δk → dω/dk；窄带包络速度 ≈ v<sub>g</sub>',
-      phaseNote: 'k<sub>c</sub> = 60 rad/m；ω<sub>c</sub> = 1.166 × 10⁸ rad/s；金点不是电子',
-      derivationTitle: '为什么群速度是 dω/dk？',
-      derivation: `
-<section class="explanation-section">
-<h3>先把两个邻近分量写清楚</h3>
-<p>取两个等幅的密度波。A 是密度幅值 [m⁻³]，x 是位置 [m]，t 是时间 [s]：</p><p class="math">δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)</p><p>定义它们的差值和平均值：</p><p class="math">Δk = k₂ − k₁　[rad/m]</p><p class="math">Δω = ω₂ − ω₁　[rad/s]</p><p class="math">k̄ = <span class="eq-frac"><span>k₁ + k₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/m]</p><p class="math">ω̄ = <span class="eq-frac"><span>ω₁ + ω₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/s]</p>
-</section>
-<section class="explanation-section">
-<h3>用和差化积识别包络</h3>
-<p>把两项相加，改写成缓慢调制与内部快速振荡的乘积：</p><p class="math">δn = 2A cos[<span class="eq-frac"><span>Δk x − Δω t</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>] · cos(k̄x − ω̄t)</p><p>当两个波数、频率足够接近时，第一项随空间和时间变化较慢，形成拍包络；第二项描述包络内部的振荡。</p>
-</section>
-<section class="explanation-section">
-<h3>跟踪缓慢调制的同一相位</h3>
-<p>要跟踪包络上的同一位置，就保持慢变量的相位不变：</p><p class="math">Δk x − Δω t = 常数</p><p>对时间求导。Δk 和 Δω 对这两个给定分量是常数，所以：</p><p class="math">Δk <span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> − Δω = 0</p><p class="math"><span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> = <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span>　[m/s]</p><p>这就是两个邻近点之间的割线斜率。</p>
-</section>
-<section class="explanation-section">
-<h3>从割线到切线</h3>
-<p>两个波数趋近中心 k<sub>c</sub> 时，割线斜率趋于切线斜率，得到群速度：</p><p class="math">v<sub>g</sub> = lim<sub>Δk→0</sub> <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span></p><p class="math">v<sub>g</sub> = (<span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span>)<sub>c</sub>　[m/s]</p><p>如果跟踪的是内部快速振荡，则保持 k̄x − ω̄t 不变，得到相速度：</p><p class="math">v<sub>ph</sub> = <span class="eq-frac"><span>ω̄</span><span class="sr-only"> / </span><span class="eq-den">k̄</span></span> → <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span>　[m/s]</p><p>两个分量形成周期性的拍包络；许多邻近分量适当加权，才形成本页观察到的局部波包。</p>
-</section>
-      `,
-      detailsTitle: '波包怎样生成？近似在哪里？',
-      details: `
-<section class="explanation-section">
-<h3>采用哪条色散关系？</h3>
-<p>沿用 07 页的温电子流体模型。背景均匀、无磁场、离子固定，忽略碰撞与 Landau 阻尼；电子温度通过压强项进入模型。</p>
-<p class="math">ω(k) = √(ω₀² + u²k²)</p>
-<p class="math">ω₀ = 10⁸ rad/s</p>
-<p class="math">u = 10⁶ m/s</p>
-<p>ω₀ 是 k → 0 时的振荡角频率，u 是压强项的速度参数。要计算群速度，先把关系写成 ω² = ω₀² + u²k²，再对 k 求导：</p>
-<p class="math">2ω <span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span> = 2u²k</p>
-<p>在中心波数 k<sub>c</sub> 处取值，记 ω<sub>c</sub> = ω(k<sub>c</sub>)，于是：</p>
-<p class="math">v<sub>g</sub> = <span class="eq-frac"><span>u²k<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">ω<sub>c</sub></span></span></p>
-<p>k<sub>c</sub> 的单位是 rad/m，ω<sub>c</sub> 的单位是 rad/s，得到的 v<sub>g</sub> 单位是 m/s。</p>
-</section>
-<section class="explanation-section">
-<h3>怎样选出组成波包的分量？</h3>
-<p>取 31 个等间隔波数。j 只是分量编号，依次为 0、1、…、30：</p>
-<p class="math">kⱼ = (42 + 1.2j) rad/m</p>
-<p>它们围绕中心波数分布。靠近中心的分量权重大，离中心越远，权重越小：</p>
-<p class="math">k<sub>c</sub> = 60 rad/m，　σₖ = 6 rad/m</p>
-<p class="math">wⱼ = exp [−<span class="eq-frac"><span>(kⱼ − k<sub>c</sub>)²</span><span class="sr-only"> / </span><span class="eq-den">2σₖ²</span></span>]</p>
-<p>σₖ 描述波数权重分布的宽度，wⱼ 是无量纲权重。用这些权重分配密度幅值，并让初相位都为零：</p>
-<p class="math"><span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = 0.18 <span class="eq-frac"><span>wⱼ</span><span class="sr-only"> / </span><span class="eq-den">∑ₗ wₗ</span></span></p>
-<p class="math">φⱼ = 0 rad</p>
-<p>这里 l 与 j 都遍历这 31 个分量；分母是全部权重之和。n₀ 是背景密度，Aⱼ 是各分量的密度幅值，两者单位均为 m⁻³。在初始中心 x = 0、t = 0，各分量同相增强；在当前观察窗内，离开中心后相互抵消增多，形成局部增强的波包。</p>
-<p>总密度为 n = n₀ + δn。这样的归一化使总扰动受控，密度始终为正：</p>
-<p class="math"><span class="eq-frac"><span>|δn|</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≤ 0.18，　<span class="eq-frac"><span>n</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≥ 0.82</p>
-<p>离散谱在空间上会重复，间距约为 5.24 m。本页只观察 −0.5 m 到 0.9 m，窗口内显示一个波包。</p>
-</section>
-<section class="explanation-section">
-<h3>白线、蓝色包络与两个标记是什么？</h3>
-<p>每个分量按自己的实际角频率 ωⱼ = ω(kⱼ) 演化。先把同一位置、同一时刻的密度扰动相加，得到白线：</p>
-<p class="math"><span class="eq-frac"><span>δn(x,t)</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> cos(kⱼx − ωⱼt)</p>
-<p>x 的单位为 m，t 为 s；因此每个相位 kⱼx − ωⱼt 都是无量纲角度。也可以把相同的叠加写成复数形式，记作 Z：</p>
-<p class="math">Z(x,t) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼx − ωⱼt)]</p>
-<p>白线取 Z 的实部；蓝色包络取它的模。用 B 表示相对密度包络，Z 与 B 都无量纲：</p>
-<p class="math"><span class="eq-frac"><span>δn</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = Re Z，　B(x,t) = |Z(x,t)|</p>
-<p><strong class="group-key">蓝圈</strong>定位计算得到的 B 的最大值。它跟踪振荡最强的位置，不是另一组电子。</p>
-<p><strong class="phase-key">金点</strong>跟踪中心分量的固定相位：</p>
-<p class="math">k<sub>c</sub>x − ω<sub>c</sub>t = 0</p>
-<p class="math">x<sub>phase</sub>(t) = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> t = v<sub>ph</sub>t</p>
-<p>窄带时，金点近似跟随波包内的一个波峰；随着它穿过包络，这个波峰会增强再减弱。金点也不是某个电子的位置。</p>
-</section>
-<section class="explanation-section">
-<h3>“包络以群速度移动”近似在哪里？</h3>
-<p>关键是分量集中在中心波数附近。对色散关系只保留一阶展开：</p>
-<p class="math">ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)</p>
-<p>代回复数叠加式，可以把中心分量的快速相位提出，剩余部分记作 F：</p>
-<p class="math">Z(x,t) ≈ exp[i(k<sub>c</sub>x − ω<sub>c</sub>t)] · F(x − v<sub>g</sub>t)</p>
-<p class="math">F(ξ) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼ − k<sub>c</sub>)ξ]</p>
-<p>ξ 的单位为 m，F 无量纲。前面的指数因子模长为 1，所以包络近似只依赖 x − v<sub>g</sub>t：</p>
-<p class="math">B(x,t) ≈ |F(x − v<sub>g</sub>t)|</p>
-<p>保持 x − v<sub>g</sub>t 不变，就在跟踪包络上的同一位置；这说明它以 v<sub>g</sub> 移动。</p>
-<p>动画仍使用完整的 ω(kⱼ)，没有把包络强制平移，因此保留了轻微失真。更宽的频带或更长的传播时间会使高阶项变得重要，可能出现展宽；此时不能继续把包络视为刚性形状。</p>
-<p>本例 v<sub>g</sub> &lt; v<sub>ph</sub>，但其他色散关系未必如此。这里讨论的是窄带包络，也不把群速度无条件等同于能量或信息传播速度。</p>
-</section>
-<section class="explanation-section">
-<h3>无色散对照改变了什么？</h3>
-<p><strong>色散是指不同频率的波分量具有不同的相速度。</strong>无色散时，各分量的相速度相同。</p><p>本页把色散关系改成经过原点的直线：</p><p class="math">ω = Vk</p><p>令 V 等于原模型的中心相速度：</p>
-<p class="math">V = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> ≈ 1.944 × 10⁶ m/s</p>
-<p>波数、幅值、初相位、空间窗和播放时间比例保持不变。这时所有分量都以同一速度 V 传播，整个波包保持形状平移：</p>
-<p class="math">v<sub>ph</sub> = v<sub>g</sub> = V</p>
-<p>金点与蓝圈因此同步。这是用于比较的数学模型，不是另一条等离子体色散分支。</p>
-</section>
-<section class="explanation-section">
-<h3>怎样理解动画时间与电子点阵？</h3>
-<p>每播放 1 s，对应物理时间 3 × 10⁻⁸ s。动画在下面的时间区间循环回放，拖动时间条会暂停：</p>
-<p class="math">0 ≤ t ≤ 2 × 10⁻⁷ s</p>
-<p>点阵根据合成密度作守恒的运动学映射，让点的疏密与白线对应。它没有求解粒子受力，也没有绘制随机热运动；相速度和群速度都不是单个电子的运动速度。</p>
-<p>读图与群速度推导：<a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion，§6.3</a>。</p>
-<p>温电子流体背景：<a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>。</p>
-</section>
-      `
+  const M = PlasmaPacketModel, $ = id => document.getElementById(id);
+  const frac = (a, b) => '<span class="eq-frac"><span>' + a + '</span><span class="sr-only"> / </span><span class="eq-den">' + b + '</span></span>';
+  const eq = text => '<p class="math">' + text + '</p>';
+  const p = text => '<p>' + text + '</p>';
+  const block = (zh, en, cueZh, cueEn) => ({ zh, en, cue: { zh: cueZh, en: cueEn } });
+  const vp = frac('ω<sub>c</sub>', 'k<sub>c</sub>'), derivative = frac('dω', 'dk');
+  const groupDerivative = '<span class="math-term">(' + derivative + ')<sub>c</sub></span>';
+  // Each block is one deliberate reveal. Only this slide's blocks enter the DOM.
+  const slides = [
+    {
+      id: 'packet', visual: 'packet',
+      title: ['一群波，形成一个波包', 'Many waves form one packet'],
+      lead: ['相近波数的分量叠加，让密度扰动集中在一段空间。', 'Nearby wavenumbers add up to a disturbance concentrated in space.'],
+      blocks: [
+        block(p('白线是相对密度扰动 <strong>δn/n₀</strong>。下方点阵显示同一密度的疏密变化。'), p('The white curve is the relative density perturbation <strong>δn/n₀</strong>. The electron spacing depicts the same density.'), '', ''),
+        block(p('<span class="group-key">蓝色虚线：包络。</span>它勾勒哪里振荡强、哪里振荡弱。'), p('<span class="group-key">Blue dashes: the envelope.</span> It shows where the oscillations are strong or weak.'), '画出包络', 'Show the envelope')
+      ]
     },
-    en: {
-      documentTitle: 'Wave packets, phase and group velocities', title: 'A group of waves. <span>What moves forward?</span>', chapter: '08 / Wave packets, phase and group velocities',
-      pause: 'Pause', play: 'Play', back: 'Previous step', returnLabel: 'Return to the plasma waves course', progress: 'Explanation step',
-      keyboard: 'Click the dots or press → · F fullscreen', fullscreenFailed: 'Fullscreen is unavailable here. Open a separate browser tab.',
-      model: 'Narrow-band warm-electron fluid example; no magnetic field, fixed ions, no damping. Dots depict total density; time is slowed and looped.',
-      comparisonModel: 'Mathematical comparison ω = Vk; same wavenumbers, amplitudes and initial phases. Time is slowed and looped.',
-      steps: [
-        'Nearby wavenumbers add up to a density disturbance concentrated in space: a wave packet.',
-        'The blue dashed envelope shows where the oscillations are strong and where they are weak.',
-        'The gold dot follows a constant phase of the central component. Phase speed tracks the inner crests.',
-        'The blue ring follows the strongest part of the envelope. For a narrow band with little distortion, its speed is approximately the group speed.',
-        'At the central wavenumber: the origin-to-point slope gives phase speed; the tangent gives group speed.',
-        'Switch the comparison: when ω is proportional to k, the envelope and inner crests travel together.'
-      ],
-      actions: ['Show the envelope', 'Track an inner crest', 'Track the envelope', 'Read the dispersion plot', 'Compare no dispersion', 'Read it again'],
-      equations: ['',
-        'δn = ∑ⱼ Aⱼ cos(kⱼx − ωⱼt)<small>31 nearby components; central k<sub>c</sub> = 60 rad/m; δn, Aⱼ [m⁻³]</small>',
-        'v<sub>ph</sub> = ω<sub>c</sub> / k<sub>c</sub>', 'v<sub>g</sub> = (dω/dk)<sub>c</sub>',
-        'v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub>　v<sub>g</sub> = (dω/dk)<sub>c</sub>',
-        'ω = Vk　⇒　v<sub>ph</sub> = v<sub>g</sub> = V'],
-      descriptions: [
-        '31 nearby wavenumbers form a localized electron-density packet. The upper curve is relative perturbation δn/n₀; below is one shared electron population. Horizontal x is in meters, from −0.5 to 0.9m. The animation starts paused and can be played.',
-        'Blue dashed upper and lower envelopes surround the total density wave. Their magnitude comes from the modulus of the same complex superposition. The envelope is not another electron population or another density.',
-        'The gold dot follows k_c x−ω_c t=0 at x=vph t. It approximately follows an inner crest of the narrow-band packet. It does not mark an electron. Play or scrub time to compare positions.',
-        'The blue ring marks the computed envelope maximum while the gold dot follows the central phase. Here the ring travels more slowly; the inner crest passes through the envelope and fades. The derivative dω/dk at the central k is the group speed, approximately the envelope speed, not an electron velocity.',
-        'The dispersion axes are k [rad/m] and ω [rad/s]. The shaded band spans the selected 42–78 rad/m; the central point is k_c=60 rad/m. The gold origin ray gives phase speed; the blue dashed tangent gives group speed. The packet still uses each component’s actual dispersion frequency.',
-        'The nondispersive comparison uses a line through the origin, ω=Vk, with V equal to the original central phase speed. The same wavenumbers, amplitudes and initial phases now translate exactly at V. The gold dot and blue ring travel together. Uncheck to compare the warm-electron branch at the same time.'
-      ],
-      takeaway: '<span class="gold">Phase speed: follow phase.</span> <span style="color:#b4cefa">Group speed: the narrow-band envelope.</span> Neither is an electron velocity.',
-      envelopeKey: 'Blue dashes: envelope', phaseKey: 'Gold dot: central phase', groupKey: 'Blue ring: envelope center',
-      dotsTitle: 'Same electrons', slopeTitle: 'Origin ray and tangent', timeLabel: 'Observe time t',
-      compare: 'No-dispersion comparison: ω = Vk', chartDescription: 'Dispersion axes: k [rad/m], ω [rad/s]. Gold origin ray: phase speed. Blue tangent: group speed.',
-      groupNote: 'Nearby components: Δω/Δk → dω/dk; narrow-band envelope speed ≈ v<sub>g</sub>',
-      phaseNote: 'k<sub>c</sub> = 60 rad/m; ω<sub>c</sub> = 1.166 × 10⁸ rad/s; the gold dot is not an electron',
-      derivationTitle: 'Why is group speed dω/dk?',
-      derivation: `
-<section class="explanation-section">
-<h3>Start with two nearby components</h3>
-<p>Take two equal-amplitude density waves. A is the density amplitude [m⁻³], x the position [m], and t the time [s]:</p><p class="math">δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)</p><p>Define their differences and averages:</p><p class="math">Δk = k₂ − k₁　[rad/m]</p><p class="math">Δω = ω₂ − ω₁　[rad/s]</p><p class="math">k̄ = <span class="eq-frac"><span>k₁ + k₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/m]</p><p class="math">ω̄ = <span class="eq-frac"><span>ω₁ + ω₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/s]</p>
-</section>
-<section class="explanation-section">
-<h3>Separate modulation from the inner oscillation</h3>
-<p>Apply the sum-to-product identity to express the sum as a product:</p><p class="math">δn = 2A cos[<span class="eq-frac"><span>Δk x − Δω t</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>] · cos(k̄x − ω̄t)</p><p>When the two wavenumbers and frequencies are close, the first factor varies slowly in space and time and gives the beat envelope. The second factor describes the faster inner oscillation.</p>
-</section>
-<section class="explanation-section">
-<h3>Follow a fixed modulation phase</h3>
-<p>Follow the same location on the envelope by holding the slow phase constant:</p><p class="math">Δk x − Δω t = constant</p><p>Differentiate with respect to time. Δk and Δω are constants for these two specified components:</p><p class="math">Δk <span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> − Δω = 0</p><p class="math"><span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> = <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span>　[m/s]</p><p>This is the secant slope between the two nearby points.</p>
-</section>
-<section class="explanation-section">
-<h3>Take the tangent limit</h3>
-<p>As the wavenumbers approach the center k<sub>c</sub>, the secant slope approaches the tangent slope. This gives group speed:</p><p class="math">v<sub>g</sub> = lim<sub>Δk→0</sub> <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span></p><p class="math">v<sub>g</sub> = (<span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span>)<sub>c</sub>　[m/s]</p><p>Following the faster inner oscillation instead holds k̄x − ω̄t constant, giving phase speed:</p><p class="math">v<sub>ph</sub> = <span class="eq-frac"><span>ω̄</span><span class="sr-only"> / </span><span class="eq-den">k̄</span></span> → <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span>　[m/s]</p><p>Two components give a periodic beat envelope. Many nearby, appropriately weighted components form the localized packet seen in this window.</p>
-</section>
-      `,
-      detailsTitle: 'How is the packet built? What is approximate?',
-      details: `
-<section class="explanation-section">
-<h3>Which dispersion relation is used?</h3>
-<p>We retain the warm-electron fluid model from page 07: a uniform, unmagnetized background with fixed ions. Collisions and Landau damping are omitted; electron temperature enters through pressure.</p>
-<p class="math">ω(k) = √(ω₀² + u²k²)</p>
-<p class="math">ω₀ = 10⁸ rad/s</p>
-<p class="math">u = 10⁶ m/s</p>
-<p>ω₀ is the oscillation angular frequency as k → 0; u is the pressure speed parameter. To calculate group speed, write ω² = ω₀² + u²k² and differentiate with respect to k:</p>
-<p class="math">2ω <span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span> = 2u²k</p>
-<p>Evaluate at the central wavenumber k<sub>c</sub>, with ω<sub>c</sub> = ω(k<sub>c</sub>):</p>
-<p class="math">v<sub>g</sub> = <span class="eq-frac"><span>u²k<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">ω<sub>c</sub></span></span></p>
-<p>k<sub>c</sub> is in rad/m and ω<sub>c</sub> in rad/s, giving v<sub>g</sub> in m/s.</p>
-</section>
-<section class="explanation-section">
-<h3>How are the packet components chosen?</h3>
-<p>Take 31 equally spaced wavenumbers. The index j labels the components, from 0 through 30:</p>
-<p class="math">kⱼ = (42 + 1.2j) rad/m</p>
-<p>Components nearer the central wavenumber have larger weights; those farther away have smaller weights:</p>
-<p class="math">k<sub>c</sub> = 60 rad/m,　σₖ = 6 rad/m</p>
-<p class="math">wⱼ = exp [−<span class="eq-frac"><span>(kⱼ − k<sub>c</sub>)²</span><span class="sr-only"> / </span><span class="eq-den">2σₖ²</span></span>]</p>
-<p>σₖ describes the width of the wavenumber weight distribution, and wⱼ is dimensionless. Use the weights to set the density amplitudes, with zero initial phases:</p>
-<p class="math"><span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = 0.18 <span class="eq-frac"><span>wⱼ</span><span class="sr-only"> / </span><span class="eq-den">∑ₗ wₗ</span></span></p>
-<p class="math">φⱼ = 0 rad</p>
-<p>Both l and j run over the 31 components; the denominator sums all weights. The background density n₀ and amplitudes Aⱼ are in m⁻³. At x = 0, t = 0, the components reinforce in phase. Away from that center within this window, cancellation increases, producing a localized packet.</p>
-<p>The total density is n = n₀ + δn. The normalization bounds the perturbation and keeps density positive:</p>
-<p class="math"><span class="eq-frac"><span>|δn|</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≤ 0.18,　<span class="eq-frac"><span>n</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≥ 0.82</p>
-<p>The discrete spectrum repeats in space every 5.24 m. The viewing window, −0.5 m to 0.9 m, shows one packet.</p>
-</section>
-<section class="explanation-section">
-<h3>What do the curves and markers represent?</h3>
-<p>Each component evolves with its actual angular frequency ωⱼ = ω(kⱼ). Add their density perturbations at the same position and time to obtain the white curve:</p>
-<p class="math"><span class="eq-frac"><span>δn(x,t)</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> cos(kⱼx − ωⱼt)</p>
-<p>x is in m and t in s, so each phase kⱼx − ωⱼt is a dimensionless angle. Write the same superposition in complex form and call it Z:</p>
-<p class="math">Z(x,t) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼx − ωⱼt)]</p>
-<p>The white curve is the real part of Z. The blue envelope is its modulus, denoted B. Both Z and this relative-density envelope B are dimensionless:</p>
-<p class="math"><span class="eq-frac"><span>δn</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = Re Z,　B(x,t) = |Z(x,t)|</p>
-<p>The <strong class="group-key">blue ring</strong> locates the computed maximum of B, where the oscillations are strongest. It does not represent another electron population.</p>
-<p>The <strong class="phase-key">gold dot</strong> follows a fixed phase of the central component:</p>
-<p class="math">k<sub>c</sub>x − ω<sub>c</sub>t = 0</p>
-<p class="math">x<sub>phase</sub>(t) = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> t = v<sub>ph</sub>t</p>
-<p>For a narrow band, this approximately follows an inner crest. The crest grows and fades as it crosses the envelope. The gold dot does not mark an individual electron either.</p>
-</section>
-<section class="explanation-section">
-<h3>Where does the group-speed approximation enter?</h3>
-<p>The components are concentrated near the central wavenumber. Keep only the first-order expansion of the dispersion relation:</p>
-<p class="math">ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)</p>
-<p>Substitute this into the complex sum. Factor out the fast central phase and call the remaining function F:</p>
-<p class="math">Z(x,t) ≈ exp[i(k<sub>c</sub>x − ω<sub>c</sub>t)] · F(x − v<sub>g</sub>t)</p>
-<p class="math">F(ξ) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼ − k<sub>c</sub>)ξ]</p>
-<p>ξ is in m and F is dimensionless. The exponential prefactor has unit modulus, so the envelope approximately depends only on x − v<sub>g</sub>t:</p>
-<p class="math">B(x,t) ≈ |F(x − v<sub>g</sub>t)|</p>
-<p>Holding x − v<sub>g</sub>t constant follows the same location on the envelope. Its speed is therefore v<sub>g</sub>.</p>
-<p>The animation uses the full ω(kⱼ), retaining slight distortion rather than forcing the envelope to translate rigidly. A broader band or longer propagation makes higher-order terms important and can produce spreading.</p>
-<p>This example has v<sub>g</sub> &lt; v<sub>ph</sub>; other dispersion relations need not. We are describing a narrow-band envelope, not identifying group speed unconditionally with energy or information speed.</p>
-</section>
-<section class="explanation-section">
-<h3>What changes in the nondispersive comparison?</h3>
-<p><strong>Dispersion means that components of different frequencies have different phase speeds.</strong>In the nondispersive case, all components have the same phase speed.</p><p>Our comparison uses a straight line through the origin:</p><p class="math">ω = Vk</p><p>Choose V to match the original central phase speed:</p>
-<p class="math">V = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> ≈ 1.944 × 10⁶ m/s</p>
-<p>Keep the wavenumbers, amplitudes, initial phases, spatial window and playback scale unchanged. Every component now travels at V, so the whole packet translates without changing shape:</p>
-<p class="math">v<sub>ph</sub> = v<sub>g</sub> = V</p>
-<p>The gold dot and blue ring travel together. This is a mathematical comparison, not an additional plasma dispersion branch.</p>
-</section>
-<section class="explanation-section">
-<h3>How should the time and electron dots be read?</h3>
-<p>Each playback second represents 3 × 10⁻⁸ s of physical time. The animation loops over the interval below; scrubbing time pauses it:</p>
-<p class="math">0 ≤ t ≤ 2 × 10⁻⁷ s</p>
-<p>The dots use a conservative kinematic map of the combined density, so their spacing follows the white curve. Particle forces and random thermal motion are not solved. Neither phase nor group speed is an individual electron velocity.</p>
-<p>Geometry and group-speed derivation: <a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion, §6.3</a>.</p>
-<p>Warm-electron background: <a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>.</p>
-</section>
-      `
+    {
+      id: 'phase', visual: 'packet',
+      title: ['跟住内部的一个波峰', 'Follow an inner crest'],
+      lead: ['金点跟踪中心分量的同一相位；它不是某个电子。', 'The gold dot follows one phase of the central component, not an electron.'],
+      blocks: [
+        block(eq('k<sub>c</sub>x − ω<sub>c</sub>t = 0') + p('k<sub>c</sub> = 60 rad/m<br>ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s'), eq('k<sub>c</sub>x − ω<sub>c</sub>t = 0') + p('k<sub>c</sub> = 60 rad/m<br>ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s'), '', ''),
+        block(eq('x = ' + vp + ' t') + eq('<span class="phase-key">v<sub>ph</sub> = ' + vp + '</span>'), eq('x = ' + vp + ' t') + eq('<span class="phase-key">v<sub>ph</sub> = ' + vp + '</span>'), '由相位求速度', 'Find the phase speed'),
+        block(p('<span class="phase-key">v<sub>ph</sub> ≈ 1.944 × 10⁶ m/s。</span>播放或拖动时间，观察金点穿过包络。窄带时，它近似跟随一个内部波峰。'), p('<span class="phase-key">v<sub>ph</sub> ≈ 1.944 × 10⁶ m/s.</span> Play or scrub time: the dot approximately follows an inner crest through the narrow-band envelope.'), '观察它的移动', 'Watch it move')
+      ]
+    },
+    {
+      id: 'group', visual: 'packet',
+      title: ['再跟住整个包络', 'Now follow the envelope'],
+      lead: ['蓝圈定位包络最强处。先预测：它会与金点一起走吗？', 'The blue ring marks the envelope maximum. Predict: will it keep up with the gold dot?'],
+      blocks: [
+        block(p('播放或拖动时间，比较蓝圈和金点的位置。'), p('Play or scrub time and compare the two markers.'), '', ''),
+        block(eq('<span class="group-key">v<sub>g</sub> = ' + groupDerivative + '</span>') + p('窄带、弱失真时，包络速度近似为 v<sub>g</sub>。本例约为 <strong>0.514 × 10⁶ m/s</strong>，比内部相位移动慢。'), eq('<span class="group-key">v<sub>g</sub> = ' + groupDerivative + '</span>') + p('For a narrow band with little distortion, the envelope speed is approximately v<sub>g</sub>. Here it is about <strong>0.514 × 10⁶ m/s</strong>, slower than the inner phase.'), '给这种速度命名', 'Name this speed')
+      ]
+    },
+    {
+      id: 'beats', visual: 'none',
+      title: ['先用两个波看清拍包络', 'Start with a two-wave beat'],
+      lead: ['把两个邻近、等幅的密度波相加，再用和差化积。', 'Add two nearby, equal-amplitude density waves, then use the sum-to-product identity.'],
+      blocks: [
+        block(eq('δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)') + p('A [m⁻³]；x [m]；t [s]。定义差值 Δk = k₂ − k₁ [rad/m]、Δω = ω₂ − ω₁ [rad/s]。') + eq('k̄ = ' + frac('k₁ + k₂', '2') + '，　ω̄ = ' + frac('ω₁ + ω₂', '2')), eq('δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)') + p('A [m⁻³]; x [m]; t [s]. Define Δk = k₂ − k₁ [rad/m] and Δω = ω₂ − ω₁ [rad/s].') + eq('k̄ = ' + frac('k₁ + k₂', '2') + ',　ω̄ = ' + frac('ω₁ + ω₂', '2')), '', ''),
+        block(eq('δn = <span class="group-key">2A cos(' + frac('Δk x − Δω t', '2') + ')</span><wbr> · <span class="phase-key">cos(k̄x − ω̄t)</span>') + p('<span class="group-key">慢调制</span> × <span class="phase-key">内部快振荡</span>。两个分量产生周期性的拍；许多分量适当加权，才能得到局部波包。'), eq('δn = <span class="group-key">2A cos(' + frac('Δk x − Δω t', '2') + ')</span><wbr> · <span class="phase-key">cos(k̄x − ω̄t)</span>') + p('<span class="group-key">Slow modulation</span> × <span class="phase-key">fast inner oscillation</span>. Two components produce periodic beats; many weighted components can form a localized packet.'), '把相加改写为相乘', 'Rewrite the sum as a product')
+      ]
+    },
+    {
+      id: 'derivative', visual: 'none',
+      title: ['为什么群速度是 dω/dk？', 'Why is group speed dω/dk?'],
+      lead: ['沿着慢调制的同一相位走，让它的相位保持不变。', 'Follow a fixed phase of the slow modulation.'],
+      blocks: [
+        block(eq('Δk x − Δω t = 常数'), eq('Δk x − Δω t = constant'), '', ''),
+        block(p('对时间求导；这两个给定分量的 Δk、Δω 都是常数：') + eq('Δk ' + frac('dx', 'dt') + ' − Δω = 0') + eq(frac('dx', 'dt') + ' = ' + frac('Δω', 'Δk') + '　[m/s]'), p('Differentiate in time. For these two fixed components, Δk and Δω are constants:') + eq('Δk ' + frac('dx', 'dt') + ' − Δω = 0') + eq(frac('dx', 'dt') + ' = ' + frac('Δω', 'Δk') + '　[m/s]'), '对时间求导', 'Differentiate in time'),
+        block(p('两个波数一起趋近 k<sub>c</sub>，割线斜率变成切线斜率：') + eq('<span class="group-key">v<sub>g</sub> = lim<sub>Δk→0</sub> ' + frac('Δω', 'Δk') + ' = ' + groupDerivative + '　[m/s]</span>'), p('As both wavenumbers approach k<sub>c</sub>, the secant slope becomes the tangent slope:') + eq('<span class="group-key">v<sub>g</sub> = lim<sub>Δk→0</sub> ' + frac('Δω', 'Δk') + ' = ' + groupDerivative + '　[m/s]</span>'), '让两个波数趋近', 'Bring the wavenumbers together')
+      ]
+    },
+    {
+      id: 'slopes', visual: 'slopes',
+      title: ['同一个点，两种斜率', 'One point, two slopes'],
+      lead: ['回到 ω–k 图。在中心点 P 附近读出两种速度。', 'Return to the ω–k plot and read both speeds at the central point P.'],
+      blocks: [
+        block(p('横轴 k [rad/m]，纵轴 ω [rad/s]。<br>P = (k<sub>c</sub>, ω<sub>c</sub>)。'), p('Horizontal: k [rad/m]. Vertical: ω [rad/s].<br>P = (k<sub>c</sub>, ω<sub>c</sub>).'), '', ''),
+        block(p('<span class="phase-key">从原点连到 P：读出相速度。</span>') + eq('v<sub>ph</sub> = ' + vp), p('<span class="phase-key">Join the origin to P: phase speed.</span>') + eq('v<sub>ph</sub> = ' + vp), '连到原点', 'Draw the origin ray'),
+        block(p('<span class="group-key">在 P 点作切线：读出群速度。</span>') + eq('v<sub>g</sub> = ' + groupDerivative + ''), p('<span class="group-key">Draw the tangent at P: group speed.</span>') + eq('v<sub>g</sub> = ' + groupDerivative + ''), '在 P 点作切线', 'Draw the tangent at P')
+      ]
+    },
+    {
+      id: 'model', visual: 'none',
+      title: ['算出本例的两种速度', 'Calculate the two speeds'],
+      lead: ['沿用 07 的温电子流体模型，电子温度通过压强项体现。', 'Use the warm-electron fluid model from lesson 07; temperature enters through pressure.'],
+      blocks: [
+        block(eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s，　u = 10⁶ m/s') + p('ω₀：k → 0 时的角频率；u：压强项的速度参数。背景均匀、无磁场、离子固定，忽略碰撞与 Landau 阻尼。'), eq('ω² = ω₀² + u²k²') + eq('ω₀ = 10⁸ rad/s,　u = 10⁶ m/s') + p('ω₀ is the k → 0 angular frequency; u is the pressure speed parameter. Uniform background, no magnetic field, fixed ions, no collisions or Landau damping.'), '', ''),
+        block(p('对 k 求导，并在 k<sub>c</sub> = 60 rad/m 处取值：') + eq('2ω ' + derivative + ' = 2u²k') + eq('v<sub>g</sub> = ' + frac('u²k<sub>c</sub>', 'ω<sub>c</sub>') + ' ≈ 0.514 × 10⁶ m/s') + p('ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s；v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub> ≈ 1.944 × 10⁶ m/s。'), p('Differentiate with respect to k, then evaluate at k<sub>c</sub> = 60 rad/m:') + eq('2ω ' + derivative + ' = 2u²k') + eq('v<sub>g</sub> = ' + frac('u²k<sub>c</sub>', 'ω<sub>c</sub>') + ' ≈ 0.514 × 10⁶ m/s') + p('ω<sub>c</sub> ≈ 1.166 × 10⁸ rad/s; v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub> ≈ 1.944 × 10⁶ m/s.'), '代入模型求导', 'Differentiate the model')
+      ]
+    },
+    {
+      id: 'spectrum', visual: 'spectrum',
+      title: ['选哪些分量来组成波包？', 'Choose the packet components'],
+      lead: ['取中心附近的 31 个波数；离中心越远，幅值越小。', 'Take 31 wavenumbers near the center, with smaller amplitudes farther away.'],
+      blocks: [
+        block(eq('kⱼ = (42 + 1.2j) rad/m') + p('j = 0, …, 30；k<sub>c</sub> = 60 rad/m。每根谱线代表一个密度波分量。'), eq('kⱼ = (42 + 1.2j) rad/m') + p('j = 0, …, 30; k<sub>c</sub> = 60 rad/m. Each spectral line represents one density-wave component.'), '', ''),
+        block(eq('wⱼ = exp[−' + frac('(kⱼ − k<sub>c</sub>)²', '2σₖ²') + ']') + eq(frac('Aⱼ', 'n₀') + ' = 0.18 ' + frac('wⱼ', '∑ₗ wₗ')) + p('σₖ = 6 rad/m；wⱼ 无量纲。n₀、Aⱼ [m⁻³]；分母对全部分量求和。'), eq('wⱼ = exp[−' + frac('(kⱼ − k<sub>c</sub>)²', '2σₖ²') + ']') + eq(frac('Aⱼ', 'n₀') + ' = 0.18 ' + frac('wⱼ', '∑ₗ wₗ')) + p('σₖ = 6 rad/m; wⱼ is dimensionless. n₀, Aⱼ [m⁻³]; the denominator sums all components.'), '给各分量分配幅值', 'Assign the amplitudes')
+      ]
+    },
+    {
+      id: 'complex', visual: 'none',
+      title: ['从叠加式得到白线和包络', 'From the sum to the envelope'],
+      lead: ['所有初相位为 0；每个分量按自己的 ωⱼ = ω(kⱼ) 演化。', 'All initial phases are zero; each component evolves with its own ωⱼ = ω(kⱼ).'],
+      blocks: [
+        block(eq(frac('δn(x,t)', 'n₀') + ' = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' cos(kⱼx − ωⱼt)') + p('x [m]，t [s]。在 x = 0、t = 0，各分量同相增强；离开中心后相互抵消增多。'), eq(frac('δn(x,t)', 'n₀') + ' = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' cos(kⱼx − ωⱼt)') + p('x [m], t [s]. At x = 0, t = 0 the components add in phase; away from the center more cancellation occurs.'), '', ''),
+        block(p('把同一组分量写成复数和 Z：') + eq('Z(x,t) = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' exp[i(kⱼx − ωⱼt)]'), p('Write the same components as a complex sum Z:') + eq('Z(x,t) = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' exp[i(kⱼx − ωⱼt)]'), '写成复数叠加', 'Write the complex sum'),
+        block(eq('<span class="white-key">δn/n₀ = Re Z</span>，　<span class="group-key">B(x,t) = |Z(x,t)|</span>') + p('白线取实部，蓝色包络取模。Z、B 均无量纲；蓝圈定位实际计算的 B 的最大值。'), eq('<span class="white-key">δn/n₀ = Re Z</span>,　<span class="group-key">B(x,t) = |Z(x,t)|</span>') + p('The white curve is the real part; the blue envelope is the modulus. Z and B are dimensionless. The ring marks the computed maximum of B.'), '分别取实部和模', 'Take the real part and modulus')
+      ]
+    },
+    {
+      id: 'approximation', visual: 'none',
+      title: ['近似发生在这一步', 'Here is the approximation'],
+      lead: ['分量集中在 k꜀ 附近，才可以用局部切线近似色散曲线。', 'For components concentrated near k꜀, approximate the dispersion curve by its local tangent.'],
+      blocks: [
+        block(eq('ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)') + p('这是在 k<sub>c</sub> 附近的一阶展开。动画实际使用完整的 ω(k)，没有采用这个近似来强制平移包络。'), eq('ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)') + p('This is a first-order expansion near k<sub>c</sub>. The animation uses the full ω(k); it does not force the envelope to translate rigidly.'), '', ''),
+        block(p('代入每个分量的相位，把中心相位分离出来：') + eq('kⱼx − ωⱼt ≈ <span class="phase-key">(k<sub>c</sub>x − ω<sub>c</sub>t)</span><wbr> + <span class="group-key">(kⱼ − k<sub>c</sub>)(x − v<sub>g</sub>t)</span>') + p('下一页把所有分量相加，看这个拆分怎样给出移动的包络。'), p('Substitute into each component phase and separate the central phase:') + eq('kⱼx − ωⱼt ≈ <span class="phase-key">(k<sub>c</sub>x − ω<sub>c</sub>t)</span><wbr> + <span class="group-key">(kⱼ − k<sub>c</sub>)(x − v<sub>g</sub>t)</span>') + p('Next, add all components to see how this split gives a moving envelope.'), '代入并拆开相位', 'Substitute and split the phase')
+      ]
+    },
+    {
+      id: 'envelope', visual: 'none',
+      title: ['包络为什么以群速度移动？', 'Why does the envelope move at group speed?'],
+      lead: ['把共同的中心相位提出求和号，剩余部分记作 F。', 'Factor the common central phase out of the sum, and call the remaining part F.'],
+      blocks: [
+        block(eq('Z(x,t) ≈ <span class="phase-key">exp[i(k<sub>c</sub>x − ω<sub>c</sub>t)]</span><wbr> · <span class="group-key">F(x − v<sub>g</sub>t)</span>') + eq('F(ξ) = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' exp[i(kⱼ − k<sub>c</sub>)ξ]') + p('ξ = x − v<sub>g</sub>t [m]；F 无量纲。'), eq('Z(x,t) ≈ <span class="phase-key">exp[i(k<sub>c</sub>x − ω<sub>c</sub>t)]</span><wbr> · <span class="group-key">F(x − v<sub>g</sub>t)</span>') + eq('F(ξ) = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' exp[i(kⱼ − k<sub>c</sub>)ξ]') + p('ξ = x − v<sub>g</sub>t [m]; F is dimensionless.'), '', ''),
+        block(p('中心相位因子的模为 1，因此：') + eq('<span class="group-key">B(x,t) ≈ |F(x − v<sub>g</sub>t)|</span>') + p('保持 x − v<sub>g</sub>t 不变，就是以 v<sub>g</sub> 跟随包络上的同一位置。'), p('The central phase factor has modulus 1, so:') + eq('<span class="group-key">B(x,t) ≈ |F(x − v<sub>g</sub>t)|</span>') + p('Keeping x − v<sub>g</sub>t fixed follows the same envelope position at speed v<sub>g</sub>.'), '取模，读出包络速度', 'Take the modulus and read the speed'),
+        block(p('<strong>适用条件：窄带、弱失真。</strong>频带更宽或传播更久时，高阶项可能导致展宽，不能把包络一直当作刚性形状。'), p('<strong>Condition: a narrow band with little distortion.</strong> A wider band or longer propagation can make higher-order terms important and cause spreading.'), '指出近似的边界', 'State the limit of the approximation')
+      ]
+    },
+    {
+      id: 'nondispersive', visual: 'packet',
+      title: ['如果所有分量一样快呢？', 'What if all components travel equally fast?'],
+      lead: ['色散是指不同频率的波分量具有不同的相速度。', 'Dispersion means that components of different frequencies have different phase velocities.'],
+      blocks: [
+        block(eq('ω = Vk') + p('无色散对照：各分量的相速度都等于 V。采用过原点的直线；V = 1.944 × 10⁶ m/s。'), eq('ω = Vk') + p('All components have phase speed V = 1.944 × 10⁶ m/s. This line passes through the origin.'), '', ''),
+        block(p('保持波数、幅值和初相位不变，播放动画。金点与蓝圈一起移动，波包保持形状平移。'), p('Play: the markers move together and the packet keeps its shape. Wavenumbers, amplitudes and initial phases are unchanged.'), '观察两种速度是否相同', 'Compare the two motions'),
+        block(eq('v<sub>ph</sub> = v<sub>g</sub> = V') + p('可切回原模型，在同一时刻比较。这是数学对照，不是新增的等离子体色散分支。'), eq('v<sub>ph</sub> = v<sub>g</sub> = V') + p('Switch back at the same time to compare. This is a mathematical comparison, not another plasma branch.'), '解释为什么同步', 'Explain why they stay together')
+      ]
+    },
+    {
+      id: 'animation', visual: 'none',
+      title: ['动画中的点，代表什么？', 'What do the animated dots mean?'],
+      lead: ['点的疏密对应总密度；两种波速都不是单个电子的速度。', 'Dot spacing represents total density. Neither wave speed is an individual electron velocity.'],
+      blocks: [
+        block(p('点阵使用守恒的运动学映射。它没有求解粒子受力，也没有绘制随机热运动。') + eq('n = n₀ + δn，　' + frac('|δn|', 'n₀') + ' ≤ 0.18') + p('全部幅值之和为 0.18 n₀，因此 n ≥ 0.82 n₀，密度始终为正。n₀、δn、n 的单位为 m⁻³。'), p('The dots use a conservative kinematic map. Particle forces and random thermal motion are not simulated.') + eq('n = n₀ + δn,　' + frac('|δn|', 'n₀') + ' ≤ 0.18') + p('The amplitudes sum to 0.18 n₀, so n ≥ 0.82 n₀ and density stays positive. n₀, δn and n are in m⁻³.'), '', ''),
+        block(p('每播放 1 s，对应物理时间 3 × 10⁻⁸ s。动画循环区间为：') + eq('0 ≤ t ≤ 2 × 10⁻⁷ s') + p('离散谱的空间重复间距约为 5.24 m；当前只显示 −0.5 m 至 0.9 m，窗口内是一个波包。'), p('Each playback second represents 3 × 10⁻⁸ s of physical time. The animation loops over:') + eq('0 ≤ t ≤ 2 × 10⁻⁷ s') + p('The discrete spectrum repeats in space about every 5.24 m. The window from −0.5 m to 0.9 m shows one packet.'), '说明时间和观察窗口', 'Read the time and viewing window')
+      ]
+    },
+    {
+      id: 'summary', visual: 'none',
+      title: ['最后，用两种斜率判断', 'Finish with the two slopes'],
+      lead: ['若某点的切线比原点连线更陡，哪一种速度更大？', 'If the tangent is steeper than the origin ray, which speed is greater?'],
+      blocks: [
+        block(eq('<span class="phase-key">v<sub>ph</sub> = ' + vp + '</span>，　<span class="group-key">v<sub>g</sub> = ' + groupDerivative + '</span>') + p('先用图上的斜率解释，再看答案。'), eq('<span class="phase-key">v<sub>ph</sub> = ' + vp + '</span>,　<span class="group-key">v<sub>g</sub> = ' + groupDerivative + '</span>') + p('Explain using the slopes before revealing the answer.'), '', ''),
+        block(p('<strong>群速度更大。</strong>本例 v<sub>g</sub> &lt; v<sub>ph</sub> 只是当前色散关系的结果，并非普遍规律。') + p('相速度跟踪相位；群速度对应窄带包络。不能把群速度无条件等同于能量或信息速度。') + p('推导参考：<a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion, §6.3</a><br>模型参考：<a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>'), p('<strong>The group speed is greater.</strong> The result v<sub>g</sub> &lt; v<sub>ph</sub> in our example is specific to its dispersion relation, not universal.') + p('Phase speed follows phase; group speed describes a narrow-band envelope. Group speed is not unconditionally the energy or information speed.') + p('Derivation: <a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion, §6.3</a><br>Model: <a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>'), '查看答案与理由', 'Reveal the answer and reasoning')
+      ]
     }
+  ];
+
+  const texts = {
+    zh: { title: '波包、相速度与群速度', chapter: '08 · 波包、相速度与群速度', play: '播放动画', pause: '暂停动画',
+      next: '下一步', page: '下一页', replay: '从头回顾', back: '上一步', prev: '上一页', slide: '幻灯片', step: '本页',
+      keyboard: '方向键翻阅 · P 播放 · F 全屏', time: '观察时间 t', compare: '无色散对照：ω = Vk',
+      phase: '金点：相位', group: '蓝圈：包络', envelope: '蓝色虚线：包络', dots: '电子密度点阵',
+      model: '温电子流体示例；离子固定、无磁场、忽略阻尼。', slowed: '时间减速并循环；点阵表示密度。',
+      mathModel: '数学对照 ω = Vk；相同的波数、幅值和初相位。', noCanvas: '图像无法显示；可继续阅读公式与说明。白线表示密度扰动，蓝色包络表示振荡强弱，金点跟踪相位。',
+      fullError: '当前预览不允许全屏，请在独立浏览器中打开。' },
+    en: { title: 'Wave packets, phase and group velocities', chapter: '08 · Wave packets, phase and group velocities', play: 'Play', pause: 'Pause',
+      next: 'Next step', page: 'Next slide', replay: 'Start again', back: 'Back a step', prev: 'Previous slide', slide: 'Slide', step: 'Build',
+      keyboard: 'Arrow keys · P play · F fullscreen', time: 'Observe time t', compare: 'No-dispersion comparison: ω = Vk',
+      phase: 'Gold dot: phase', group: 'Blue ring: envelope', envelope: 'Blue dashes: envelope', dots: 'Electron density dots',
+      model: 'Warm-electron fluid example; fixed ions, no field or damping.', slowed: 'Time is slowed and looped; dots represent density.',
+      mathModel: 'Mathematical comparison ω = Vk; same wavenumbers, amplitudes and initial phases.', noCanvas: 'The figure is unavailable. Continue with the equations and explanation. White denotes the density perturbation, blue the envelope, and gold the central phase.',
+      fullError: 'Fullscreen is unavailable here. Open a separate browser tab.' }
   };
-  function chart(a) {
-    if (!a.text || a.s.stage < 4) return;
-    const svg = a.$('slope-chart'), w = svg.clientWidth, h = svg.clientHeight;
+  const canvas = $('plasma'), ctx = canvas.getContext('2d');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const s = { slide: 0, build: 0, time: 0, paused: true, linear: false, width: 0, height: 0 };
+  let lang = 'zh', lastTime = null, toastTimer;
+  const current = () => slides[s.slide], text = () => texts[lang];
+  const translated = values => values[lang === 'en' ? 1 : 0];
+  function readPosition() {
+    const match = location.hash.match(/^#slide-(\d+)(?:-step-(\d+))?$/);
+    s.slide = match ? Math.max(0, Math.min(slides.length - 1, Number(match[1]) - 1)) : 0;
+    s.build = match ? Math.max(0, Math.min(current().blocks.length - 1, Number(match[2] || 1) - 1)) : 0;
+    resetScene();
+  }
+  function resetScene() {
+    s.paused = true; s.linear = current().id === 'nondispersive';
+    s.time = ['phase', 'group', 'nondispersive'].includes(current().id) ? 8 : 0;
+    lastTime = null;
+  }
+  function writePosition() {
+    try {
+      const url = new URL(location.href); url.searchParams.set('lang', lang);
+      url.hash = 'slide-' + (s.slide + 1) + '-step-' + (s.build + 1);
+      history.replaceState(null, '', url);
+    } catch (_) { /* Optional in restricted file previews. */ }
+  }
+  function packetOptions() {
+    const id = current().id;
+    return { envelope: id !== 'packet' || s.build >= 1,
+      phase: ['phase', 'group', 'nondispersive'].includes(id),
+      group: ['group', 'nondispersive'].includes(id) };
+  }
+  function syncTime() {
+    const value = (s.time / 10).toFixed(2) + ' × 10⁻⁷ s';
+    $('packet-time').value = String(s.time); $('time-output').textContent = value;
+    $('packet-time').setAttribute('aria-valuetext', value);
+  }
+  function canPlay() {
+    return !!ctx && current().visual === 'packet' && (current().id !== 'nondispersive' || s.build >= 1);
+  }
+  function motion() {
+    $('motion').hidden = !canPlay();
+    $('motion').textContent = s.paused ? text().play : text().pause;
+    $('motion').setAttribute('aria-pressed', String(s.paused));
+  }
+  function render(reason = 'state') {
+    const slide = current(), t = text(), options = packetOptions();
+    $('lesson').dataset.slide = slide.id; $('lesson').dataset.build = String(s.build);
+    $('chapter').textContent = t.chapter;
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.title = translated(slide.title) + ' · ' + t.title + ' | AlgoPlasma';
+    $('title').textContent = translated(slide.title);
+    $('narration').textContent = translated(slide.lead);
+    $('slide-label').textContent = t.chapter;
+    // Replacing the content removes all previous-slide prose and open controls.
+    if (['page', 'language', 'initial'].includes(reason)) {
+      $('slide-content').replaceChildren(...slide.blocks.map((b, i) => {
+        const section = document.createElement('section');
+        section.className = 'build-block'; section.dataset.build = String(i);
+        section.innerHTML = b[lang]; section.hidden = i > s.build; return section;
+      }));
+    }
+    $('slide-content').querySelectorAll('.build-block').forEach((node, i) => {
+      node.hidden = i > s.build;
+      node.classList.remove('just-revealed');
+      if (reason === 'reveal' && i === s.build) {
+        void node.offsetWidth; node.classList.add('just-revealed');
+      }
+    });
+    $('slide-layout').dataset.visual = slide.visual;
+    $('visual-pane').hidden = slide.visual === 'none';
+    $('packet-figure').hidden = slide.visual !== 'packet';
+    $('chart-figure').hidden = !['slopes', 'spectrum'].includes(slide.visual);
+    $('canvas-fallback').hidden = !!ctx; $('canvas-fallback').textContent = t.noCanvas;
+    canvas.hidden = !ctx;
+    $('packet-legend').hidden = slide.visual !== 'packet' || !options.envelope;
+    $('phase-key').hidden = !options.phase; $('phase-key').textContent = t.phase;
+    $('group-key').hidden = !options.envelope; $('group-key').textContent = options.group ? t.group : t.envelope;
+    $('time-controls').hidden = !canPlay() || slide.id === 'packet';
+    $('time-label').textContent = t.time;
+    $('comparison').hidden = slide.id !== 'nondispersive' || s.build < 2;
+    $('comparison-label').textContent = t.compare; $('linear-branch').checked = s.linear;
+    $('model-note').textContent = s.linear ? (lang === 'zh' ? '数学对照；时间减速并循环。' : 'Mathematical comparison; slowed, looped time.') : (slide.id === 'packet' ? t.model : t.slowed);
+    $('model-note').hidden = slide.visual !== 'packet';
+    $('chart-note').textContent = slide.visual === 'slopes'
+      ? 'ω(k) = √(ω₀² + u²k²) · ω₀ = 10⁸ rad/s · u = 10⁶ m/s'
+      : (lang === 'zh' ? '纵轴 Aⱼ/n₀ 无量纲；初相位均为 0 rad。' : 'Vertical Aⱼ/n₀ is dimensionless; all initial phases are 0 rad.');
+    const finalBuild = s.build === slide.blocks.length - 1, finalSlide = s.slide === slides.length - 1;
+    $('advance-kind').textContent = finalBuild ? (finalSlide ? t.replay : t.page) : t.next;
+    $('advance-text').textContent = finalBuild ? (finalSlide ? t.title : translated(slides[s.slide + 1].title)) : slide.blocks[s.build + 1].cue[lang];
+    $('advance').dataset.action = finalBuild ? (finalSlide ? 'replay' : 'page') : 'reveal';
+    $('back').hidden = s.slide === 0 && s.build === 0;
+    $('back').textContent = s.build > 0 ? t.back : t.prev;
+    $('stage-count').textContent = t.slide + ' ' + (s.slide + 1) + ' / ' + slides.length;
+    $('build-count').textContent = t.step + ' ' + (s.build + 1) + ' / ' + slide.blocks.length;
+    $('progress').replaceChildren(...slide.blocks.map((_, i) => {
+      const mark = document.createElement('i'); mark.className = i <= s.build ? 'filled' : ''; return mark;
+    }));
+    $('keyboard-note').textContent = t.keyboard;
+    $('language-switch').setAttribute('aria-label', lang === 'zh' ? '选择语言' : 'Choose language');
+    document.querySelectorAll('[data-language]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.language === lang)));
+    window.PlasmaNavigation?.setLanguage(lang);
+    // Distinguish course navigation from the deck's slide navigation.
+    $('previous-lesson').textContent = lang === 'zh' ? '上一课' : 'Prev lesson';
+    $('next-lesson').textContent = lang === 'zh' ? '下一课' : 'Next lesson';
+    $('lesson-index').textContent = lang === 'zh' ? '课程目录' : 'Contents';
+    $('return-link').setAttribute('aria-label', lang === 'zh' ? '返回等离子体波课堂' : 'Return to the plasma waves course');
+    $('status').textContent = $('stage-count').textContent + ', ' + $('build-count').textContent + '. ' + translated(slide.title);
+    canvas.setAttribute('aria-label', translated(slide.lead) + ' δn/n₀ [1], x [m]. ' + (options.envelope ? t.envelope + '. ' : '') + (options.phase ? t.phase + '. ' : '') + (options.group ? t.group : ''));
+    canvas.textContent = canvas.getAttribute('aria-label');
+    $('status').textContent += '. ' + $('slide-content').children[s.build].textContent;
+    if (reason === 'page') {
+      $('slide-main').classList.remove('slide-enter'); void $('slide-main').offsetWidth;
+      $('slide-main').classList.add('slide-enter');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      $('title').focus({ preventScroll: true });
+    }
+    writePosition(); syncTime(); motion(); fit(); drawChart();
+    if (reason === 'reveal') {
+      const fresh = $('slide-content').children[s.build];
+      const limit = innerHeight - document.querySelector('.controls').offsetHeight - 16;
+      const rect = fresh.getBoundingClientRect();
+      if (rect.bottom > limit) fresh.scrollIntoView({ block: rect.height > limit - 24 ? 'start' : 'center', behavior: 'instant' });
+    }
+  }
+  function next() {
+    if (s.build < current().blocks.length - 1) { s.build++; render('reveal'); }
+    else { s.slide = (s.slide + 1) % slides.length; s.build = 0; resetScene(); render('page'); }
+  }
+  function back() {
+    if (s.build > 0) { s.build--; render('back'); }
+    else if (s.slide > 0) { s.slide--; s.build = current().blocks.length - 1; resetScene(); render('page'); }
+  }
+  function toggle() { if (canPlay()) { s.paused = !s.paused; lastTime = null; motion(); } }
+  function setLanguage(value) {
+    lang = value === 'en' ? 'en' : 'zh';
+    try { localStorage.setItem('ap-doc-language', lang); } catch (_) { /* Optional preference. */ }
+    render('language');
+  }
+  async function fullscreen() {
+    try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }
+    catch (_) {
+      $('toast').textContent = text().fullError; $('toast').hidden = false;
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('toast').hidden = true; }, 4000);
+    }
+  }
+  const gold = '#f4c583', blue = '#b4cefa', mint = '#b5efcf', white = '#eef4f0';
+  function line(x1, y1, x2, y2, color = '#30413f', width = 1, dash = []) {
+    ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
+    ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]);
+  }
+  function label(value, x, y, color = white, size = 23, align = 'center') {
+    PlasmaText.label(ctx, value, x, y, color, size, align);
+  }
+  function dot(x, y, radius, color = mint) {
+    ctx.beginPath(); ctx.fillStyle = color; ctx.arc(x, y, radius, 0, 2 * Math.PI); ctx.fill();
+  }
+  function fit() {
+    if (!ctx || current().visual !== 'packet') return;
+    const rect = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+    if (!rect.width || !rect.height) return;
+    s.width = rect.width; s.height = rect.height;
+    canvas.width = Math.round(rect.width * dpr); canvas.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw();
+  }
+  function draw() {
+    if (!ctx || current().visual !== 'packet' || !s.width) return;
+    ctx.clearRect(0, 0, s.width, s.height); ctx.save(); ctx.scale(1, s.height / 350);
+    const options = packetOptions(), time = s.time / M.W0, modes = M.modes(s.linear);
+    const left = 66, right = s.width - 20, width = right - left, mid = 115, scale = 60 / M.AMPLITUDE;
+    const px = x => left + (x - M.XMIN) / (M.XMAX - M.XMIN) * width;
+    label('δn / n₀ [1]', 8, 28, white, 26, 'left');
+    for (const value of [-.18, 0, .18]) {
+      line(left, mid - scale * value, right, mid - scale * value);
+      label(value === 0 ? '0' : value.toFixed(2), left - 10, mid - scale * value, white, 22, 'right');
+    }
+    const samples = Array.from({ length: 361 }, (_, i) => M.sample(M.XMIN + i / 360 * (M.XMAX - M.XMIN), time, modes));
+    function trace(fn, color, dash = []) {
+      ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.setLineDash(dash);
+      samples.forEach((v, i) => { const x = left + i / 360 * width, y = mid - scale * fn(v); if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y); });
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    if (options.envelope) { trace(v => v.envelope, blue, [9, 6]); trace(v => -v.envelope, blue, [9, 6]); }
+    trace(v => v.re, white);
+    if (options.group) {
+      const x = M.peak(time, s.linear), y = mid - scale * M.sample(x, time, modes).envelope;
+      line(px(x), 64, px(x), 193, blue, 1.5, [6, 5]);
+      ctx.beginPath(); ctx.strokeStyle = blue; ctx.lineWidth = 3; ctx.arc(px(x), y, 10, 0, 2 * Math.PI); ctx.stroke();
+    }
+    if (options.phase) {
+      const x = M.VP * time, y = mid - scale * M.sample(x, time, modes).re;
+      line(px(x), 65, px(x), 193, gold, 1.5); dot(px(x), y, 5, gold);
+    }
+    label('−0.5', left, 211, white, 22);
+    if (s.width >= 500) label('0', px(0), 211, white, 22);
+    label('0.9', right, 211, white, 22, 'right'); label('x [m]', right, 247, white, 24, 'right');
+    label(text().dots, 8, 280, mint, 26, 'left');
+    const columns = Math.max(64, Math.floor(width / 9)), radius = Math.min(3.5, width / columns * .30);
+    ctx.save(); ctx.beginPath(); ctx.rect(left, 298, width, 50); ctx.clip();
+    for (let j = -2; j <= columns + 2; j++) {
+      const q = M.XMIN + j / columns * (M.XMAX - M.XMIN), x = px(M.position(q, time, modes));
+      for (let row = 0; row < 4; row++) dot(x, 305 + row * 13, radius, mint);
+    }
+    ctx.restore(); ctx.restore();
+  }
+  function drawChart() {
+    const visual = current().visual;
+    if (!['slopes', 'spectrum'].includes(visual)) return;
+    const svg = $('lesson-chart'), w = svg.clientWidth, h = svg.clientHeight;
     if (!w || !h) return;
-    const left = w < 400 ? 57 : 80, right = w - 24, top = 65, bottom = h - 72;
-    const x = k => left + k / 100 * (right - left), y = omega => bottom - omega / 2.1e8 * (bottom - top);
-    const add = (tag, attrs, text) => {
+    const left = w < 400 ? 64 : 82, right = w - 22, top = 58, bottom = h - 74;
+    const add = (tag, attrs, value) => {
       const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
-      for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, String(value));
-      if (text !== undefined) node.textContent = text;
+      for (const [key, val] of Object.entries(attrs)) node.setAttribute(key, String(val));
+      if (value !== undefined) node.textContent = value;
       svg.append(node); return node;
     };
-    const line = (x1, y1, x2, y2, cls) => add('line', { x1, y1, x2, y2, class: cls });
-    const label = (text, px, py, anchor = 'middle') => add('text', { x: px, y: py, 'text-anchor': anchor }, text);
-    svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.replaceChildren();
-    add('rect', { x: x(42), y: top, width: x(78) - x(42), height: bottom - top, fill: '#b5efcf', opacity: .09 });
-    line(left, bottom, right + 8, bottom, 'packet-axis'); line(left, bottom, left, top - 10, 'packet-axis');
-    label('ω [rad/s]', left, 27, 'start'); label('k [rad/m]', right, h - 10, 'end');
-    for (const k of [0, 60, 100]) { line(x(k), bottom, x(k), bottom + 7, 'packet-axis'); label(k, x(k), bottom + 32, k === 100 ? 'end' : 'middle'); }
-    line(left, y(1e8), right, y(1e8), 'packet-guide'); label('10⁸', left - 12, y(1e8) + 8, 'end');
-    const linear = a.s.data.linear, vg = M.groupSpeed(M.KC, linear);
-    add('polyline', { points: Array.from({ length: 101 }, (_, k) => `${x(k)},${y(M.frequency(k, linear))}`).join(' '), class: 'packet-branch' });
-    line(left, bottom, x(M.KC), y(M.WC), 'packet-ray');
-    line(x(0), y(M.WC - vg * M.KC), x(100), y(M.WC + vg * (100 - M.KC)), 'packet-tangent');
-    add('circle', { cx: x(M.KC), cy: y(M.WC), r: 7, fill: '#edf5f1', stroke: '#10181c', 'stroke-width': 2 });
-    label('P', x(M.KC) + 14, y(M.WC) - 18, 'start');
-    svg.setAttribute('aria-label', `${a.text.chartDescription} vph = ${speed(M.VP)}; vg = ${speed(vg)}.`);
-  }
-  function syncTime(a) {
-    a.$('packet-time').value = String(a.s.time);
-    const text = `${(a.s.time / 10).toFixed(2)} × 10⁻⁷ s`;
-    a.$('time-output').textContent = text;
-    a.$('packet-time').setAttribute('aria-valuetext', text);
-  }
-  PlasmaLesson.start({
-    translations: texts, running: s => !s.data.noCanvas, rate: () => 3,
-    setup(a) {
-      a.s.paused = true; a.s.data.linear = false; a.s.data.noCanvas = !a.ctx;
-      a.$('packet-time').addEventListener('input', e => { a.s.time = Number(e.target.value); a.s.paused = true; a.render(); });
-      a.$('linear-branch').addEventListener('change', e => { a.s.data.linear = e.target.checked; a.render(); });
-      new ResizeObserver(() => chart(a)).observe(a.$('slope-chart'));
-    },
-    onStage(s, old) {
-      if (s.stage === 0) { s.time = 0; s.paused = true; }
-      if (s.stage !== 5) s.data.linear = false;
-      if (s.stage === 2 && s.time === 0) s.time = 8;
-      if (s.stage === 5 && old !== 5) { s.data.linear = true; s.time = 8; }
-    },
-    update(a) {
-      const { s, text: t, $ } = a;
-      $('slope-pane').hidden = s.stage < 4; $('slope-heading').textContent = t.slopeTitle;
-      $('time-controls').hidden = s.stage < 2; $('time-label').textContent = t.timeLabel;
-      $('comparison').hidden = s.stage !== 5; $('comparison-label').textContent = t.compare;
-      $('linear-branch').checked = s.data.linear;
-      $('packet-legend').hidden = s.stage < 1; $('phase-key').hidden = s.stage < 2;
-      $('phase-key').textContent = t.phaseKey; $('group-key').textContent = s.stage >= 3 ? t.groupKey : t.envelopeKey;
-      $('model-note').textContent = s.data.linear ? t.comparisonModel : t.model;
-      const vg = M.groupSpeed(M.KC, s.data.linear);
-      if (s.stage === 2) $('equation').innerHTML = `v<sub>ph</sub> = ω<sub>c</sub>/k<sub>c</sub> = ${speed(M.VP)}<small>${t.phaseNote}</small>`;
-      if (s.stage === 3) $('equation').innerHTML = `v<sub>g</sub> = (dω/dk)<sub>c</sub> = ${speed(vg)}<small>${t.groupNote}</small>`;
-      if (s.stage >= 4) $('equation').innerHTML = `${s.data.linear ? 'ω = Vk<small>' : '<small>'}<span class="speed-term phase-key">v<sub>ph</sub> = ${speed(M.VP)}</span><span class="speed-term group-key">v<sub>g</sub> = ${speed(vg)}</span></small>`;
-      $('group-derivation').hidden = s.stage < 3; $('derivation-summary').textContent = t.derivationTitle;
-      $('derivation-content').innerHTML = t.derivation;
-      $('packet-details').hidden = s.stage < 1; $('packet-summary').textContent = t.detailsTitle;
-      $('packet-description').innerHTML = t.details;
-      if (s.stage === 0) { $('group-derivation').open = false; $('packet-details').open = false; }
-      syncTime(a); chart(a);
-    },
-    draw(a) {
-      const { s, text: t, ctx, line, label, dot } = a;
-      if (s.time > M.TMAX * M.W0) s.time %= M.TMAX * M.W0;
-      syncTime(a);
-      const time = s.time / M.W0, modes = M.modes(s.data.linear);
-      const left = 66, right = s.width - 18, width = right - left, mid = 170, scale = 90 / M.AMPLITUDE;
-      const px = x => left + (x - M.XMIN) / (M.XMAX - M.XMIN) * width;
-      label('δn / n₀ [1]', 24, 28, '#edf5f1', 26, 'left');
-      for (const value of [-.18, 0, .18]) {
-        line(left, mid - scale * value, right, mid - scale * value);
-        label(value === 0 ? '0' : value.toFixed(2), left - 10, mid - scale * value, '#e0ebe6', 22, 'right');
+    const ln = (x1, y1, x2, y2, cls) => add('line', { x1, y1, x2, y2, class: cls });
+    const txt = (value, x, y, anchor = 'middle') => add('text', { x, y, 'text-anchor': anchor }, value);
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h); svg.replaceChildren();
+    ln(left, bottom, right + 6, bottom, 'packet-axis'); ln(left, bottom, left, top - 8, 'packet-axis');
+    txt('k [rad/m]', right, h - 8, 'end');
+    if (visual === 'slopes') {
+      const x = k => left + k / 100 * (right - left), y = v => bottom - v / 2.1e8 * (bottom - top);
+      txt('ω [rad/s]', left, 27, 'start');
+      for (const k of [0, 60, 100]) {
+        ln(x(k), bottom, x(k), bottom + 7, 'packet-axis');
+        txt(k, x(k), bottom + 32, k === 100 ? 'end' : 'middle');
       }
-      const samples = Array.from({ length: 361 }, (_, i) => M.sample(M.XMIN + i / 360 * (M.XMAX - M.XMIN), time, modes));
-      function trace(fn, color, dash = [], thick = 2.5) {
-        ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = thick; ctx.setLineDash(dash);
-        samples.forEach((v, i) => { const x = left + i / 360 * width, y = mid - scale * fn(v); if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y); });
-        ctx.stroke(); ctx.setLineDash([]);
+      ln(left, y(1e8), right, y(1e8), 'packet-guide'); txt('10⁸', left - 12, y(1e8) + 8, 'end');
+      add('polyline', { points: Array.from({ length: 101 }, (_, k) => x(k) + ',' + y(M.frequency(k))).join(' '), class: 'packet-branch' });
+      if (s.build >= 1) ln(left, bottom, x(M.KC), y(M.WC), 'packet-ray');
+      if (s.build >= 2) ln(x(0), y(M.WC - M.VG * M.KC), x(100), y(M.WC + M.VG * (100 - M.KC)), 'packet-tangent');
+      add('circle', { cx: x(M.KC), cy: y(M.WC), r: 7, fill: white });
+      txt('P', x(M.KC) + 14, y(M.WC) - 18, 'start');
+      svg.setAttribute('aria-label', lang === 'zh' ? 'ω–k 色散图。金色原点连线给相速度，蓝色虚线切线给群速度。' : 'ω–k dispersion plot. Gold origin ray: phase speed. Blue dashed tangent: group speed.');
+    } else {
+      const x = k => left + (k - 40) / 40 * (right - left), y = v => bottom - v / .016 * (bottom - top);
+      txt('Aⱼ/n₀ [1]', left, 27, 'start');
+      for (const k of [42, 60, 78]) {
+        ln(x(k), bottom, x(k), bottom + 7, 'packet-axis'); txt(k, x(k), bottom + 32);
       }
-      if (s.stage >= 1) { trace(v => v.envelope, blue, [9, 6]); trace(v => -v.envelope, blue, [9, 6]); }
-      trace(v => v.re, '#edf5f1');
-      if (s.stage >= 3) {
-        const x = M.peak(time, s.data.linear), y = mid - scale * M.sample(x, time, modes).envelope;
-        line(px(x), 64, px(x), 274, blue, 1.5, [6, 5]);
-        ctx.beginPath(); ctx.strokeStyle = blue; ctx.lineWidth = 3; ctx.arc(px(x), y, 10, 0, a.TAU); ctx.stroke();
+      txt('0', left - 10, bottom + 7, 'end'); txt('0.01', left - 10, y(.01) + 7, 'end');
+      ln(left, y(.01), right, y(.01), 'packet-guide');
+      for (const mode of M.modes(false)) {
+        ln(x(mode.k), bottom, x(mode.k), y(mode.a), 'spectrum-line');
+        add('circle', { cx: x(mode.k), cy: y(mode.a), r: 3, fill: mint });
       }
-      if (s.stage >= 2) {
-        const x = M.VP * time, y = mid - scale * M.sample(x, time, modes).re;
-        line(px(x), 65, px(x), 274, gold, 1.5); dot(px(x), y, 5, gold);
-      }
-      label('−0.5', left, 292, '#e0ebe6', 22);
-      if (s.width >= 500) label('0', px(0), 292, '#e0ebe6', 22);
-      label('0.9', right, 292, '#e0ebe6', 22, 'right'); label('x [m]', right, 327, '#e0ebe6', 24, 'right');
-      label(t.dotsTitle, 24, 368, '#b5efcf', 26, 'left');
-      const columns = Math.max(64, Math.floor(width / 9)), radius = Math.min(3.5, width / columns * .30);
-      // Solve each particle once, then reuse its x coordinate in the schematic rows.
-      ctx.save(); ctx.beginPath(); ctx.rect(left, 400, width, 75); ctx.clip();
-      for (let j = -2; j <= columns + 2; j++) {
-        const q = M.XMIN + j / columns * (M.XMAX - M.XMIN), x = px(M.position(q, time, modes));
-        for (let row = 0; row < 4; row++) dot(x, 412 + row * 17, radius, '#b5efcf');
-      }
-      ctx.restore();
+      svg.setAttribute('aria-label', lang === 'zh' ? '31个分量的幅值谱，横轴k为rad/m，纵轴Aⱼ/n₀无量纲。中心60 rad/m，宽度6 rad/m。' : 'Amplitude spectrum of 31 components. k in rad/m; Aⱼ/n₀ dimensionless. Center 60 rad/m, width 6 rad/m.');
     }
+  }
+  function frame(now) {
+    const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, .05); lastTime = now;
+    if (!document.hidden && !s.paused && canPlay()) {
+      s.time = (s.time + dt * 3) % (M.TMAX * M.W0); syncTime(); draw();
+    }
+    requestAnimationFrame(frame);
+  }
+  $('advance').addEventListener('click', next); $('back').addEventListener('click', back);
+  canvas.addEventListener('click', next); $('motion').addEventListener('click', toggle);
+  $('packet-time').addEventListener('input', e => { s.time = Number(e.target.value); s.paused = true; syncTime(); motion(); draw(); });
+  $('linear-branch').addEventListener('change', e => { s.linear = e.target.checked; render(); });
+  document.querySelectorAll('[data-language]').forEach(b => b.addEventListener('click', () => setLanguage(b.dataset.language)));
+  document.addEventListener('keydown', e => {
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat || e.target.closest('input,textarea,select,[contenteditable]')) return;
+    if (e.key === ' ' && e.target.closest('button,a')) return;
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); back(); }
+    else if (e.key.toLowerCase() === 'p') { e.preventDefault(); toggle(); }
+    else if (e.key.toLowerCase() === 'f') { e.preventDefault(); fullscreen(); }
   });
+  reduced.addEventListener('change', e => { if (e.matches) { s.paused = true; motion(); } });
+  document.addEventListener('visibilitychange', () => { lastTime = null; });
+  window.addEventListener('hashchange', () => { readPosition(); render('page'); });
+  new ResizeObserver(fit).observe(canvas); new ResizeObserver(drawChart).observe($('lesson-chart'));
+  let initial = new URLSearchParams(location.search).get('lang');
+  if (!['zh', 'en'].includes(initial)) { try { initial = localStorage.getItem('ap-doc-language'); } catch (_) { /* Optional preference. */ } }
+  lang = initial === 'en' ? 'en' : 'zh'; readPosition(); render('initial'); requestAnimationFrame(frame);
 })();

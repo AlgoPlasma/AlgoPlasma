@@ -6,13 +6,14 @@
   complex amplitudes, and the page 07 origin-to-point phase-speed construction.
 - Destination: distinguish inner phase from the packet envelope; match their
   motions to origin-ray and tangent slopes; recognize the narrow-band condition.
-- Six reveals: packet -> envelope -> central phase -> envelope center -> two
-  dispersion slopes -> nondispersive comparison. The opening remains clean.
+- Fourteen independent slides, each with two or three builds. Forward navigation
+  reveals one block within a slide, then clears the explanation for the next slide.
+  Course navigation and slide navigation are labeled separately.
 - Reasoning task: compare whether the two markers stay together when the branch
   is changed to omega=V*k, then explain the slopes using one checkbox.
   The time scrubber pauses the animation. Playback starts paused; users can
   also inspect every state without playing or dragging.
-- The two-wave derivation is available from the group-speed reveal. It gives
+- The two-wave derivation occupies its own slides after the group-speed view. It gives
   the sum-to-product identity, modulation-phase condition, difference quotient
   and derivative limit, with symbol definitions and units. It explicitly
   distinguishes a periodic two-wave beat envelope from a localized packet.
@@ -39,7 +40,7 @@ thermal motion is not drawn; pressure enters the dispersion law.
 
 The physical viewing window is -0.5 ... 0.9 m. The discrete k spacing gives a
 spatial repetition period 2*pi/1.2 = 5.236 m, well outside the one-packet view.
-The public details disclose this repetition and all weights. Each component
+The spectrum and animation slides disclose all weights and this repetition. Each component
 uses the full dispersion frequency, not a manually translated Gaussian.
 
 The central phase marker follows x=(omega_c/kc)*t exactly. It approximately
@@ -72,7 +73,7 @@ self-consistent nonlinear particle/fluid solution.
 supports phase/group geometry and the two-component derivation.
 [MIT Introduction to Plasma Physics](https://silas.psfc.mit.edu/introplasma/master.pdf)
 provides the warm-electron fluid background used on page 07. The finite spectrum,
-playback parameters and six-reveal design are local teaching choices.
+playback parameters and slide sequence are local teaching choices.
 
 Group speed is not equated universally with electron, energy or information
 speed. The base example has vg<vph; other dispersion laws need not. Broader
@@ -109,3 +110,42 @@ Checked both expanded panels at 320, 768, 1440 and 1920 px in both languages:
 no horizontal overflow, centered equations, readable wrapping, and preserved
 time, pause/comparison and disclosure state on language switching. Sphinx
 completed without warnings.
+
+## Slide-deck revision, 2026-11-19
+
+The previous cumulative scene and repeated long disclosures made new content
+hard to distinguish. Lesson 08 now has a dedicated deck controller; shared
+lesson controls and the physics model are unchanged. Its 14 slides cover:
+
+1. Packet and envelope.
+2. Central phase and phase speed.
+3. Envelope motion and group speed.
+4. Two-wave sum-to-product identity.
+5. Fixed modulation phase and the derivative limit.
+6. Origin ray and tangent, drawn separately.
+7. Warm-fluid model and the evaluated derivative.
+8. The 31-component spectrum and amplitude weights.
+9. Real and complex sums; envelope modulus.
+10. First-order frequency expansion and phase splitting.
+11. Factoring the carrier and reading envelope translation; approximation limits.
+12. Nondispersive comparison, preserving the requested one-sentence definition.
+13. Density mapping, positivity, physical time and viewing window.
+14. A changed-slope prediction with answer/reason and references.
+
+Each new slide starts paused with only its first block. Previous-slide content
+is removed from the DOM. Within-slide builds fade in with a mint edge; reduced
+motion disables the effect. Separate slide/build counters and action labels
+make the transition explicit. The footer remains reachable on narrow screens,
+and a newly revealed block scrolls into view when needed. Direct links preserve
+slide/build in the hash; language switches preserve slide, build, time, pause
+and comparison state. Backtracking reverses builds and returns to the previous
+slide at its completed state. No repeated disclosure remains.
+
+Verified: all 34 presentation states in Chinese and English at 320, 768,
+1440 and 1920 px widths (272 views); no horizontal or equation overflow,
+no Chinese text leakage into English, and no stale disclosure/content.
+Checked next/back/replay, separate slope reveals, 31 spectral lines, paused
+entry, scrubbing, playback wrap, language-state preservation, deep links,
+reduced-motion and animated builds, and no-canvas/no-JavaScript fallbacks.
+The original dependency-free packet physics test passed. Sphinx completed
+without warnings. Browser checks verify implementation, not learning outcomes.
