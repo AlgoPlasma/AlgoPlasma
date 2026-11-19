@@ -23,6 +23,6 @@ was checked; do not claim that a documentation build proves learning effectivene
 
 When creating or revising the plasma-wave lessons in
 `docs/source/_static/plasma_waves/` or `docs/source/learning/plasma_waves/`,
-also read the [module authoring rules](docs/author_notes/plasma_waves_authoring_rules.md).
+also read the [module authoring rules](docs/source/learning/plasma_waves/AUTHORING_RULES.md).
 These user-confirmed rules guide lesson content, layout, animation, navigation
 and bilingual updates. Keep author-facing instructions in the author documentation.

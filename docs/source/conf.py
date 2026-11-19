@@ -73,7 +73,11 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-exclude_patterns = ["sphinx_rtd_theme"]
+exclude_patterns = [
+    "sphinx_rtd_theme",
+    # Authoring guidance lives beside the lessons but is not a student page.
+    "learning/plasma_waves/AUTHORING_RULES.md",
+]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
