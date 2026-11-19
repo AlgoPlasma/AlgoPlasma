@@ -45,15 +45,17 @@
 .packet-lesson .comparison { display: flex; align-items: center; gap: 12px; font-size: var(--annotation-size); margin: 16px 0 0; cursor: pointer; }
 .packet-lesson .comparison input { width: 26px; height: 26px; accent-color: var(--mint); flex-shrink: 0; }
 .packet-lesson .controls { position: sticky; bottom: 0; z-index: 2; padding: 16px 0; border-top: 1px solid var(--line); background: #10181c; }
-.packet-lesson .progress-group { display: block; }
+.packet-lesson .progress-group { display: grid; grid-template-columns: auto auto; align-items: center; gap: 4px 18px; }
+.packet-lesson .stage-count, .packet-lesson .build-progress { grid-column: 1; }
+.packet-lesson .restart-lesson { grid-column: 2; grid-row: 1 / span 2; }
 .packet-lesson .stage-count { white-space: nowrap; font-size: 22px; }
 .packet-lesson .build-progress { display: flex; align-items: center; gap: 14px; margin-top: 6px; color: #e0ebe6; font-size: 20px; white-space: nowrap; }
 .packet-lesson .progress { gap: 5px; }
 .packet-lesson .progress i { width: 20px; height: 4px; }
 .packet-lesson .keyboard-note { font-size: 20px; max-width: 180px; line-height: 1.5; }
 .packet-lesson .back { width: auto; height: auto; padding: 12px; font-size: 22px; white-space: nowrap; }
-.packet-lesson .restart-slide { padding: 12px 14px; border: 1px solid #526e62; border-radius: 5px; background: transparent; color: #eef4f0; font-size: 22px; font-weight: 600; white-space: nowrap; }
-.packet-lesson .restart-slide:hover { color: var(--mint); border-color: var(--mint); }
+.packet-lesson .restart-lesson, .packet-lesson .restart-slide { padding: 12px 14px; border: 1px solid #526e62; border-radius: 5px; background: transparent; color: #eef4f0; font-size: 22px; font-weight: 600; white-space: nowrap; }
+.packet-lesson .restart-lesson:hover, .packet-lesson .restart-slide:hover { color: var(--mint); border-color: var(--mint); }
 .packet-lesson .advance { display: block; text-align: left; min-width: 280px; max-width: 520px; padding: 12px 22px; font-size: 23px; line-height: 1.35; }
 .packet-lesson #advance-kind { display: block; font-size: 20px; margin-bottom: 4px; }
 .packet-lesson #advance-text { display: block; }
@@ -84,7 +86,8 @@
   .packet-lesson #lesson-chart text { font-size: 22px; }
   .packet-lesson .time-controls { flex-basis: 100%; }
   .packet-lesson .controls { flex-wrap: wrap; gap: 12px; }
-  .packet-lesson .progress-group { display: flex; justify-content: space-between; width: 100%; gap: 10px; }
+  .packet-lesson .progress-group { grid-template-columns: minmax(0, 1fr) auto; width: 100%; gap: 4px 10px; }
+  .packet-lesson .restart-lesson { max-width: 138px; padding: 10px; font-size: 20px; white-space: normal; }
   .packet-lesson .build-progress { margin: 0; font-size: 20px; }
   .packet-lesson .stage-count { margin: 0; font-size: 20px; }
   .packet-lesson .progress { display: none; }

@@ -159,3 +159,10 @@ to its opening. Canvas uses the default cursor. Checked image/plot clicks,
 non-button keys, button activation, running-state reset, all 14 slide restarts
 in both languages, and 72 footer layouts at 320–1920 px without overlap or
 horizontal overflow. Sphinx built without warnings.
+
+Lesson restart, 2026-11-19: added a bilingual Restart lesson button beside
+the slide counter. It restores slide 1/build 1, time zero, the original
+dispersion branch and paused playback while preserving language. Restart slide
+remains separate. Checked restart from the opening, comparison and final slides
+in both languages, including active playback, and 48 footer layouts across
+320–1920 px. Image clicks still do not advance. Sphinx built without warnings.
