@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>波为什么增长或衰减？ | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css">
+  <link rel="stylesheet" href="wave-course.css">
+  <link rel="stylesheet" href="wave-presentation.css">
+  <link rel="stylesheet" href="wave-packet.css">
+  <link rel="stylesheet" href="wave-derivation.css">
+  <link rel="stylesheet" href="wave-lab.css">
+  <script defer src="wave-navigation.js"></script>
+  <script defer src="wave-derivation-model.js"></script>
+  <script defer src="wave-spectrum-model.js"></script>
+  <script defer src="wave-lab-plots.js"></script>
+  <script defer src="wave-lab-deck.js"></script>
+  <noscript><style>.lesson .lab-slide[hidden], .lesson .build-block[hidden],html[lang] .en { display:block !important; } .lab-slide{margin-bottom:3em} .lesson .scene,.lesson .controls,.lesson .lab-settings,.language-switch {display:none!important} .lab-lesson .slide-layout{display:block}</style></noscript>
+</head>
+<body>
+  <div id="lesson" class="lesson course-lesson packet-lesson derivation-lesson lab-lesson" data-page="11">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程导航">
+        <a id="previous-lesson" rel="prev" href="10_warm_langmuir.html?lang=zh"><span class="zh" lang="zh-CN">上一课</span><span class="en" lang="en">Previous lesson</span></a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">课程目录</a>
+        <a id="next-lesson" rel="next" href="12_reading_spectra.html?lang=zh"><span class="zh" lang="zh-CN">下一课</span><span class="en" lang="en">Next lesson</span></a>
+      </nav>
+      <div class="header-actions"><div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div></div>
+    </header>
+    <main>
+      <p class="slide-label" id="slide-label"><span class="zh" lang="zh-CN">11 · 波为什么增长或衰减？</span><span class="en" lang="en">11 · Why do waves grow or damp?</span></p>
+      <section class="lab-slide">
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">看探针记录的峰间距和峰高</span><span class="en" lang="en">Measure the peak spacing and peak height</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">把探针放在 x = 0 m，记录电场 E [V/m]。播放后，沿时间轴观察一列越来越弱的振荡。</span><span class="en" lang="en">Place a probe at x = 0 m and record the electric field E [V/m]. Play the trace and follow an oscillation as it fades.</span></p>
+        <div class="slide-layout" data-visual="damped">
+          <figure class="scene" data-kind="damped">
+            <canvas role="img"></canvas>
+            <p class="canvas-fallback" hidden><span class="zh" lang="zh-CN">图像不可用。可继续阅读本页的解释和数值。</span><span class="en" lang="en">The figure is unavailable. The explanation and values below describe the result.</span></p>
+
+            <figcaption><span class="zh" lang="zh-CN">探针记录。浅绿圆点标出当前读数，金色虚线是 ±A(t)。</span><span class="en" lang="en">Probe record. The green dot marks the current reading and gold dashes show ±A(t).</span></figcaption>
+          </figure>
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">相邻两个同向波峰的时间间隔给出周期。绿色曲线来回振荡，金色虚线勾出振幅随时间变化的边界。</span><span class="en" lang="en">The time between successive positive crests gives the period. The green trace oscillates between the gold dashed envelopes.</span></p>
+            </div>
+            <div class="lab-settings"><button type="button" class="motion" aria-pressed="false"><span class="zh" lang="zh-CN">播放</span><span class="en" lang="en">Play</span></button><label class="lab-control"><span class="zh" lang="zh-CN">观察时间 t</span><span class="en" lang="en">Probe time t</span><output data-value="time"></output><input type="range" data-param="time" min="0" max="4" step="0.01" value="0"></label>
+            <p class="reading"></p></div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">一个周期过去，峰间距依旧，峰高已经减小。我们需要两个数分别描述这两种变化。</span><span class="en" lang="en">One cycle later, the peak spacing is unchanged but the peak is lower. Two numbers can describe these changes separately.</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">允许角频率有一个虚部</span><span class="en" lang="en">Allow an imaginary part in the frequency</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">沿用前几课的相位约定 kx − ωt。设 k 为实数 [rad/m]，x 用 m，t 用 s。</span><span class="en" lang="en">Keep the phase convention kx − ωt. Take a real wavenumber k [rad/m], position x in metres and time t in seconds.</span></p>
+        <div class="slide-layout" data-visual="none">
+
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">取一个实的初始振幅 A₀ [V/m]。复数表达式的实部给出实际电场，其中 i² = −1。</span><span class="en" lang="en">Use a real initial amplitude A₀ [V/m]. The physical field is the real part of the complex expression, with i² = −1.</span></p>
+              <p class="math">E(x,t) = Re{A₀ exp[i(kx − ωt)]}</p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">写成复频率。实部 ωᵣ 是振荡角频率 [rad/s]；虚部 γ 是振幅的增长率 [s⁻¹]。二者乘以时间后都能进入无量纲指数。</span><span class="en" lang="en">Write the complex frequency in terms of the oscillation angular frequency ωᵣ [rad/s] and amplitude growth rate γ [s⁻¹]. Multiplication by time makes each exponent dimensionless.</span></p>
+              <p class="math">ω = ωᵣ + iγ</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">指数里的负号去了哪里？</span><span class="en" lang="en">Follow the signs in the exponent</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">把复频率代回相位，再用外面的 i 乘括号里的每一项。</span><span class="en" lang="en">Substitute the complex frequency, then multiply each term in the parentheses by the outer i.</span></p>
+        <div class="slide-layout" data-visual="none">
+
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">先展开 −ωt。</span><span class="en" lang="en">Expand −ωt first.</span></p>
+              <p class="math">i[kx − (ωᵣ + iγ)t]<br>= i[kx − ωᵣt − iγt]</p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">因为 −i² = +1，含 γ 的项变成实数。指数相加对应指数函数相乘。</span><span class="en" lang="en">Because −i² = +1, the term containing γ is real. A sum in the exponent becomes a product of exponentials.</span></p>
+              <p class="math">i(kx − ωᵣt) + γt<br>exp[i(kx − ωt)] = e<sup>γt</sup> exp[i(kx − ωᵣt)]</p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">取实部。括号外的实因子给出随时间变化的振幅。</span><span class="en" lang="en">Take the real part. The real factor multiplying the cosine sets the amplitude.</span></p>
+              <p class="math">E = A₀ e<sup>γt</sup> cos(kx − ωᵣt)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">只改变振荡快慢</span><span class="en" lang="en">Change the oscillation rate alone</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">让 γ = 0 s⁻¹，包络保持水平。将 ωᵣ 从 4 rad/s 提高到 8 rad/s。</span><span class="en" lang="en">Set γ = 0 s⁻¹ so the envelope is level. Increase ωᵣ from 4 to 8 rad/s.</span></p>
+        <div class="slide-layout" data-visual="frequency">
+          <figure class="scene" data-kind="frequency">
+            <canvas role="img"></canvas>
+            <p class="canvas-fallback" hidden><span class="zh" lang="zh-CN">图像不可用。可继续阅读本页的解释和数值。</span><span class="en" lang="en">The figure is unavailable. The explanation and values below describe the result.</span></p>
+
+            <figcaption><span class="zh" lang="zh-CN">金色包络固定在 ±1 V/m。绿色曲线给出探针电场。</span><span class="en" lang="en">Gold envelopes stay at ±1 V/m. Green shows the probe field.</span></figcaption>
+          </figure>
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">拖动观察时间或播放记录，数一数同一段时间内有多少个周期。</span><span class="en" lang="en">Scrub or play the trace and count cycles in the same time interval.</span></p>
+              <p class="math">T = 2π / ωᵣ</p>
+            </div>
+            <div class="lab-settings"><label class="lab-control"><span class="zh" lang="zh-CN">振荡角频率 ωᵣ</span><span class="en" lang="en">Oscillation rate ωᵣ</span><output data-value="omega"></output><input type="range" data-param="omega" min="4" max="12" step="1" value="4"></label><button type="button" class="motion" aria-pressed="false"><span class="zh" lang="zh-CN">播放</span><span class="en" lang="en">Play</span></button><label class="lab-control"><span class="zh" lang="zh-CN">观察时间 t</span><span class="en" lang="en">Probe time t</span><output data-value="time"></output><input type="range" data-param="time" min="0" max="4" step="0.01" value="0"></label>
+            <p class="reading"></p></div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">角频率加倍，周期从约 1.57 s 缩短到 0.79 s。两个设置下，电场都在 ±1 V/m 之间振荡。</span><span class="en" lang="en">Doubling angular frequency shortens the period from about 1.57 s to 0.79 s. Both traces oscillate between ±1 V/m.</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">只改变振幅的增长或衰减</span><span class="en" lang="en">Change the envelope alone</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">固定 ωᵣ = 8 rad/s，先试负、零、正三种 γ。关注金色包络和相邻过零点。</span><span class="en" lang="en">Keep ωᵣ = 8 rad/s. Try negative, zero and positive γ. Watch the gold envelope and the spacing of successive zero crossings.</span></p>
+        <div class="slide-layout" data-visual="growth">
+          <figure class="scene" data-kind="growth">
+            <canvas role="img"></canvas>
+            <p class="canvas-fallback" hidden><span class="zh" lang="zh-CN">图像不可用。可继续阅读本页的解释和数值。</span><span class="en" lang="en">The figure is unavailable. The explanation and values below describe the result.</span></p>
+
+            <figcaption><span class="zh" lang="zh-CN">绿色是电场，金色是 ±A(t)。比较不同 γ 时，纵轴刻度保持固定。</span><span class="en" lang="en">Green shows the field and gold shows ±A(t). The vertical scale stays fixed as γ changes.</span></figcaption>
+          </figure>
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">γ > 0 时包络张开，γ = 0 时保持水平，γ < 0 时收拢。任意相同时间间隔 Δt [s] 内，振幅都会乘上同一个因子。</span><span class="en" lang="en">For positive γ the envelope opens, at zero it stays level, and for negative γ it narrows. Every equal interval Δt [s] multiplies the amplitude by the same factor.</span></p>
+              <p class="math">A(t + Δt) / A(t) = e<sup>γΔt</sup></p>
+            </div>
+            <div class="lab-settings"><label class="lab-control"><span class="zh" lang="zh-CN">增长率 γ</span><span class="en" lang="en">Growth rate γ</span><output data-value="gamma"></output><input type="range" data-param="gamma" min="-0.3" max="0.3" step="0.05" value="-0.3"></label><button type="button" class="motion" aria-pressed="false"><span class="zh" lang="zh-CN">播放</span><span class="en" lang="en">Play</span></button><label class="lab-control"><span class="zh" lang="zh-CN">观察时间 t</span><span class="en" lang="en">Probe time t</span><output data-value="time"></output><input type="range" data-param="time" min="0" max="4" step="0.01" value="0"></label>
+            <p class="reading"></p></div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">若 γ = −0.30 s⁻¹，约 3.33 s 后振幅降至原来的 1/e。余弦的过零时刻仍由相位决定。</span><span class="en" lang="en">At γ = −0.30 s⁻¹ the amplitude falls to 1/e of its starting value in about 3.33 s. The phase still determines the zero crossings.</span></p>
+              <p class="math">τ = 1 / |γ|</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">能量流向哪里？</span><span class="en" lang="en">Where does the wave energy go?</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">振幅变化意味着有能量交换。复频率记录变化的速度；找出交换的原因还要看等离子体的运动。</span><span class="en" lang="en">A changing amplitude signals an energy exchange. The complex frequency measures the rate. The particle motion explains the exchange.</span></p>
+        <div class="slide-layout" data-visual="none">
+
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">电子与波的电场可以相互做功。若电子平均从波中获得能量，波就衰减；若有定向运动的电子持续把能量交给波，波可以增长。</span><span class="en" lang="en">Electrons and the wave field exchange energy through work. The wave damps when electrons gain energy from it on average. A drifting electron population can instead supply energy and drive wave growth.</span></p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">试读一条记录：同向过零的间隔仍为 1 s，而包络每过 2 s 减半。ωᵣ 和 γ 各是多少？</span><span class="en" lang="en">Read a trace whose same-direction zero crossings are 1 s apart and whose envelope halves every 2 s. What are ωᵣ and γ?</span></p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">用周期求实部，用振幅比求虚部。负号同我们采用的相位约定一致。</span><span class="en" lang="en">Use the period for the real part and the amplitude ratio for the imaginary part. The negative sign is consistent with our phase convention.</span></p>
+              <p class="math">ωᵣ = 2π / (1 s) ≈ 6.28 rad/s<br>γ = ln(1/2) / (2 s) ≈ −0.347 s⁻¹</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="controls">
+      <div class="progress-group"><span class="stage-count" id="stage-count"></span><div class="build-progress"><span id="build-count"></span><div class="progress" id="progress" aria-hidden="true"></div></div><button type="button" id="restart-lesson" class="restart-lesson"><span class="zh" lang="zh-CN">本课起始</span><span class="en" lang="en">Restart lesson</span></button></div>
+      <p class="keyboard-note" id="keyboard-note"><span class="zh" lang="zh-CN">F 全屏</span><span class="en" lang="en">F fullscreen</span></p>
+      <div class="actions"><button type="button" id="back" class="back"><span class="zh" lang="zh-CN">上一步</span><span class="en" lang="en">Back</span></button><button type="button" id="restart-slide" class="restart-slide"><span class="zh" lang="zh-CN">本页起始</span><span class="en" lang="en">Restart slide</span></button><button class="advance" id="advance" type="button"><span id="advance-kind"></span><span id="advance-text"></span></button></div>
+    </footer>
+  </div>
+  <p id="status" role="status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>

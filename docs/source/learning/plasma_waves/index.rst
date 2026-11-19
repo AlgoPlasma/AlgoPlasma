@@ -45,6 +45,15 @@ Plasma Waves
       `09 · 第一条色散关系怎样推出来？ → <../../_static/plasma_waves/09_deriving_dispersion.html?lang=zh>`_
           从连续性、动量与泊松方程推导冷电子色散关系，再加入压强接回温电子模型。
 
+      `10 · 温度怎样改变波？ → <../../_static/plasma_waves/10_warm_langmuir.html?lang=zh>`_
+          从电子压强推出 Langmuir 波的热修正，并在同一密度下比较冷、热色散曲线。
+
+      `11 · 波为什么增长或衰减？ → <../../_static/plasma_waves/11_complex_frequency.html?lang=zh>`_
+          展开复频率的指数，用探针记录区分振荡角频率与振幅增长率。
+
+      `12 · 如何看模拟中的 ω–k 谱图？ → <../../_static/plasma_waves/12_reading_spectra.html?lang=zh>`_
+          从已知电场记录计算二维谱，读出亮点与亮带，再叠加理论色散曲线。
+
 .. container:: ap-lang ap-lang-en
 
    .. rubric:: Part 1 · Wave basics
@@ -79,3 +88,12 @@ Plasma Waves
 
       `09 · Deriving the first dispersion relation → <../../_static/plasma_waves/09_deriving_dispersion.html?lang=en>`_
           Derive the cold-electron relation from continuity, momentum and Poisson, then add pressure to recover the warm model.
+
+      `10 · How does temperature change the wave? → <../../_static/plasma_waves/10_warm_langmuir.html?lang=en>`_
+          Derive the thermal correction from electron pressure and compare cold and warm Langmuir waves at one density.
+
+      `11 · Why do waves grow or damp? → <../../_static/plasma_waves/11_complex_frequency.html?lang=en>`_
+          Expand the complex-frequency exponent and use a probe trace to distinguish oscillation from amplitude growth.
+
+      `12 · How do we read an ω–k spectrum? → <../../_static/plasma_waves/12_reading_spectra.html?lang=en>`_
+          Transform a known field record, read its spectral peaks and band, and overlay the theoretical dispersion curve.

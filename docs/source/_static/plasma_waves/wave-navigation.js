@@ -10,7 +10,10 @@
     ['06_complex_waves.html', '波的复数表达', 'Complex wave representation'],
     ['07_dispersion.html', '色散关系与读图', 'Reading a dispersion relation'],
     ['08_wave_packets.html', '波包、相速度与群速度', 'Wave packets, phase and group velocities'],
-    ['09_deriving_dispersion.html', '第一条色散关系怎样推出来？', 'Deriving the first dispersion relation']
+    ['09_deriving_dispersion.html', '第一条色散关系怎样推出来？', 'Deriving the first dispersion relation'],
+    ['10_warm_langmuir.html', '温度怎样改变波？', 'How does temperature change the wave?'],
+    ['11_complex_frequency.html', '波为什么增长或衰减？', 'Why do waves grow or damp?'],
+    ['12_reading_spectra.html', '如何看模拟中的 ω–k 谱图？', 'How do we read an ω–k spectrum?']
   ];
   const $ = id => document.getElementById(id);
   const current = Number($('lesson').dataset.page) - 1;
