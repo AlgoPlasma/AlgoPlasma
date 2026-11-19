@@ -1,3 +1,8 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-30 11:25 +08:00 | Yinjian Zhao | git 303832d65c08
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Stationary Kim moments and exact held-out budgets; parent fits for page 07.
 
 Measured-voltage coefficients only. No response correction or group velocity

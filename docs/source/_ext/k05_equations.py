@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-23 16:13 +08:00 | Yinjian Zhao | git 482110a190d6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Stable, module-wide equation numbers shared by K05's language variants."""
 
 import json

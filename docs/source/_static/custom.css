@@ -1,17 +1,45 @@
 /* Wrap long interface names without changing the shared documentation theme. */
-.ap-fluid-doc table.docutils {
+.ap-fluid-doc table.docutils,
+.ap-b04-doc table.docutils {
     width: 100%;
     table-layout: fixed;
 }
 
 .ap-fluid-doc table.docutils th,
-.ap-fluid-doc table.docutils td {
+.ap-fluid-doc table.docutils td,
+.ap-b04-doc table.docutils th,
+.ap-b04-doc table.docutils td {
     white-space: normal;
     overflow-wrap: anywhere;
 }
 
-.ap-fluid-doc table.docutils code {
+.ap-fluid-doc table.docutils code,
+.ap-b04-doc table.docutils code {
     white-space: normal;
+}
+
+/* Keep source API references available without repeating the B04 lesson. */
+.ap-b04-doc details.ap-b04-api {
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d7e1e8;
+  border-radius: 4px;
+  background: #f7fafc;
+}
+
+.ap-b04-doc details.ap-b04-api > summary {
+  color: #245777;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ap-b04-doc details.ap-b04-api > summary:focus-visible {
+  outline: 2px solid #2980b9;
+  outline-offset: 4px;
+}
+
+.ap-b04-doc details.ap-b04-api[open] > summary {
+  margin-bottom: 1rem;
 }
 
 /* Keep RTD pages readable on wide monitors. */

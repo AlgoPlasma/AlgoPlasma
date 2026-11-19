@@ -328,3 +328,11 @@
   let initial=new URLSearchParams(location.search).get('lang');if(!['zh','en'].includes(initial)){try{initial=localStorage.getItem('ap-doc-language');}catch(_){}}
   lang=initial==='en'?'en':'zh';readHash();render('initial');requestAnimationFrame(frame);
 })();
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 11:06 +08:00 | Yinjian Zhao | git 3242c1a909ef
+ * 2026-11-19 11:30 +08:00 | Yinjian Zhao | git 98d8d1aa51e6
+ * 2026-11-19 13:47 +08:00 | Yinjian Zhao | git cec49a30b3bd
+ * 2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

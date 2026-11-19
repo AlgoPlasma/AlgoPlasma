@@ -43,3 +43,15 @@
   }
   window.PlasmaNavigation = { setLanguage };
 })();
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+ * 2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+ * 2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+ * 2026-11-18 16:36 +08:00 | Yinjian Zhao | git 4be5f6b5764f
+ * 2026-11-19 11:06 +08:00 | Yinjian Zhao | git 3242c1a909ef
+ * 2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+ * 2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+ * 2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

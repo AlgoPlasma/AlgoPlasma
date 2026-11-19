@@ -1,5 +1,7 @@
 # Simplified 3D cylindrical deposition package
 
+[简体中文](README.zh-CN.md)
+
 This version removes the fragmented helper utilities from the previous package.
 The source structure is now:
 

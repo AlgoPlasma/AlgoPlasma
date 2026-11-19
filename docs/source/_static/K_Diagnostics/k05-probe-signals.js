@@ -1,3 +1,8 @@
+/* K05 contribution history (Git author dates; edit times include timezone).
+ * 2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+ * 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
+
 /* Ideal potential samples: Phi(y,t)=cos(pi*y-pi*t), arbitrary units.
  * Probe 1 is at y=0; probe 2 is at y=separation. No growth or coupling.
  * The same renderer produces the static bilingual fallback illustrations.
@@ -41,18 +46,19 @@
   }
   function plotSvg(separation, t, language, prefix) {
     var w=words[language] || words.en;
+    var chart = words.en; // Keep visible figure labels English in both views.
     var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 468" role="img" aria-labelledby="'+prefix+'-title">'+
       '<title id="'+prefix+'-title">'+w.alt+'</title><rect width="760" height="468" fill="white"/>'+
-      '<g font-family="sans-serif" font-size="14">'+label(66,25,w.top)+
-      label(66,49,w.one,"start",blue)+label(354,49,w.two,"start",orange)+
-      label(66,274,w.bottom)+
+      '<g font-family="sans-serif" font-size="14">'+label(66,25,chart.top)+
+      label(66,49,chart.one,"start",blue)+label(354,49,chart.two,"start",orange)+
+      label(66,274,chart.bottom)+
       '<path d="M66 65V205H716 M66 135H716 M66 294V416H716 M66 355H716" fill="none" stroke="#cbd5e1"/>';
     [-1,0,1].forEach(function (v) {
       s+=label(54,139-64*v,String(v),"end")+label(54,359-55*v,String(v),"end");
     });
     [-1,0,1,2,3,4].forEach(function (y) { s+=label(66+650*(y+1)/5,225,String(y),"middle"); });
     [0,1,2,3,4,5,6].forEach(function (time) { s+=label(66+650*time/6,436,String(time),"middle"); });
-    s+=label(391,247,w.position,"middle")+label(391,460,w.axisTime,"middle");
+    s+=label(391,247,chart.position,"middle")+label(391,460,chart.axisTime,"middle");
     s+=curve(function (y) {return potentialAt(y,t);},-1,4,135,64,"#657785");
     [0,separation].forEach(function (y,n) {
       var colour=n ? orange : blue, x=66+650*(y+1)/5;

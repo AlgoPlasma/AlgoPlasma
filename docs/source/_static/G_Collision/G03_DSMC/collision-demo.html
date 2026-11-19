@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DSMC 核心过程与碰撞模型</title>
+<link rel="stylesheet" href="collision-demo.css">
+<script defer src="collision-engine.js"></script><script defer src="dsmc-cycle.js"></script><script defer src="collision-demo.js?v=399a9f328632"></script>
+</head>
+<body><main>
+<header><h1>看清一次 DSMC 碰撞</h1></header>
+<nav class="tabs" aria-label="演示视图"><button id="flow-tab" class="active" aria-pressed="true">DSMC 核心过程</button><button id="lab-tab" aria-pressed="false">碰撞模型比较</button></nav>
+<p id="error" role="alert" hidden></p>
+<section id="flow-view">
+<div class="controls">
+<div class="buttons"><button id="play" class="primary">播放</button><button id="next">单步</button><button id="result">下一碰撞 / 步末</button><button id="finish">完成本步</button><button id="reset">重置</button></div>
+<div class="settings">
+<label for="scenario">场景</label><select id="scenario"><option value="mixed">混合粒子配对</option><option value="walls">撞壁与跨胞元</option><option value="ionization">单次电离示例</option></select>
+<label for="wall">壁面</label><select id="wall"><option value="reflect">镜面反射</option><option value="absorb">吸收</option></select>
+<label for="elastic">重粒子弹性</label><select id="elastic"><option>HS</option><option>VHS</option><option selected>VSS</option></select>
+</div>
+<details class="settings-extra"><summary>参数与显示</summary><div class="settings">
+<label for="mass">离子 / 电子质量比</label><select id="mass"><option value="100">100（缩比）</option><option value="72820">72820（近似氩）</option></select>
+<label for="dt">Δt</label><input id="dt" type="number" min="0.005" max="0.4" step="0.005" value="0.06">
+<label for="omega">黏度指数 ω</label><input id="omega" type="number" min="0.5" max="1" step="0.05" value="0.75">
+<label for="alpha">角参数 α</label><input id="alpha" type="number" min="1" max="8" step="0.5" value="3">
+<label for="speed">播放速度</label><select id="speed"><option value="1">正常</option><option value="0.5">慢速</option><option value="3">快速</option></select>
+<label><input id="arrows" type="checkbox" checked> 放大重粒子箭头</label>
+</div></details>
+</div>
+<section class="run-controls panel" aria-label="运行与事件定位">
+<div class="settings"><label for="seed">种子</label><input id="seed" type="number" min="0" max="4294967295" value="2026"><label for="run-steps">有限步数 / 搜索上限</label><input id="run-steps" type="number" min="1" max="500" value="50"><button id="run-batch">从种子运行这些步</button><button id="cancel-run" hidden>停止运行</button></div>
+<div class="settings"><label for="filter-channel">目标通道</label><select id="filter-channel"><option value="">全部真实碰撞</option><option value="ionization">单次电离</option><option value="elastic">弹性</option><option value="excitation">激发</option><option value="cex">电荷交换</option><option value="coulomb">屏蔽散射</option></select><label for="filter-pair">配对</label><select id="filter-pair"><option value="">全部配对</option><option value="AA">A–A 原子–原子</option><option value="AI">A⁺–A 离子–原子</option><option value="Ae">e⁻–A 电子–原子</option><option value="ee">e⁻–e⁻</option><option value="eI">e⁻–A⁺</option><option value="II">A⁺–A⁺</option></select><label for="filter-cell">胞元</label><select id="filter-cell"><option value="">全部</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select><button id="seek-event">寻找下一目标碰撞</button></div>
+<div class="settings"><label for="record-target">已发生的匹配事件</label><select id="record-target"><option value="">暂无记录</option></select><button id="first-match">查看首个匹配</button><button id="return-live" hidden>返回运行现场</button></div>
+<p id="run-status" class="hint" role="status">运行和搜索使用当前物理参数；筛选不改变碰撞过程。</p>
+</section>
+<ol class="phases" aria-label="DSMC 阶段">
+<li data-phase="flight">1 · 飞行与壁面</li><li data-phase="regroup">2 · 胞元分组</li><li data-phase="collision">3 · 选对与碰撞</li><li data-phase="sample">4 · 统计</li>
+</ol>
+<div class="status-strip"><strong id="clock"></strong><span id="population"></span></div>
+<section class="explanation" aria-live="polite"><h2 id="phase-title"></h2><p id="explanation"></p><div id="calculation" class="calculation"></div><div id="stage-data"></div></section>
+<section class="panel step-journal" aria-label="逐步碰撞记录">
+<div class="journal-heading"><h2>每步发生了什么</h2><label for="record-step">查看时间步</label><select id="record-step"><option value="">尚未开始</option></select></div>
+<p id="step-summary" aria-live="polite"></p><p id="step-cells" class="hint"></p>
+<div id="step-events" class="event-list"></div>
+</section>
+<section class="domain" aria-label="碰撞胞元与粒子">
+<svg id="scene" viewBox="0 0 800 560" role="img" aria-label="粒子位置、速度与碰撞配对"></svg>
+<div class="legend"><span class="atom">● A 原子</span><span class="ion">⊕ A⁺ 离子</span><span class="electron">⊖ e⁻ 电子</span><span>实框：壁面 · 虚线：胞元</span></div>
+<p id="arrow-scale" class="hint"></p><p id="focus-info" class="focus-info">点选粒子查看速度与轨迹。</p>
+</section>
+<section id="event-preview" class="panel" hidden><div class="journal-heading"><h2 id="event-title">本次碰撞</h2><button id="back-to-events">返回事件清单</button></div><p id="event-context" class="hint"></p><svg id="event-velocities" viewBox="0 0 800 190" role="img" aria-label="碰撞前后各粒子的速度对照"></svg>
+<div class="table-scroll"><table class="state-comparison"><thead><tr><th>粒子</th><th>碰前：状态 / 速度 / 内能</th><th>碰后：状态 / 速度 / 内能</th><th>改变</th></tr></thead><tbody id="states"></tbody></table></div><p id="collision-budget" class="hint"></p></section>
+<details id="collision-details" class="panel"><summary>随机数与通道权重</summary>
+<div class="two-columns"><section><h3>随机决策</h3><ol id="randoms"></ol></section><section><h3>通道权重</h3><div id="channels"></div></section></div>
+</details>
+<section class="panel"><h2>本次运行：各胞元碰撞统计</h2><p id="run-summary" class="hint"></p><div class="table-scroll"><table class="cell-statistics"><thead><tr><th>胞元</th><th>A–A<br>弹性</th><th>A⁺–A<br>弹性</th><th>e⁻–A<br>弹性</th><th>激发</th><th>电离</th><th>CEX</th><th>屏蔽<br>散射</th><th>真实<br>总数</th><th>空候选</th></tr></thead><tbody id="cell-statistics"></tbody></table></div><p class="hint">累计全部已处理事件，筛选仅影响事件列表。壁面事件与空候选单独计数。</p></section>
+<details class="panel"><summary>配对模型与守恒收支</summary><div id="pair-matrix" class="pair-matrix"></div><p id="conservation"></p><p id="totals"></p></details>
+</section>
+
+<section id="lab-view" hidden>
+<div class="settings lab-controls">
+<label for="lab-pair">粒子对</label><select id="lab-pair"><option value="AA">A–A</option><option value="AI">A⁺–A</option><option value="Ae">e⁻–A</option><option value="ee">e⁻–e⁻</option><option value="eI">e⁻–A⁺</option><option value="II">A⁺–A⁺</option></select>
+<label for="lab-mode">入射条件</label><select id="lab-mode"><option value="population">一群不同速率的粒子</option><option value="fixed">相同初态（固定相对能量）</option></select>
+<label for="lab-model">模型</label><select id="lab-model"><option>HS</option><option>VHS</option><option selected>VSS</option></select>
+<label for="lab-omega">黏度指数 ω</label><input id="lab-omega" type="number" min="0.5" max="1" step="0.05" value="0.75">
+<label for="lab-alpha">角参数 α</label><input id="lab-alpha" type="number" min="1" max="8" step="0.5" value="3">
+</div>
+<div class="settings">
+<label for="lab-energy">相对能量 / eV</label><input id="lab-energy" type="number" min="0.01" max="100" step="0.01" value="2">
+<label for="lab-mass">离子 / 电子质量比</label><select id="lab-mass"><option value="100">100（缩比）</option><option value="72820">72820（近似氩）</option></select>
+<button id="resample">重新抽样</button></div>
+<p id="lab-initial" class="lab-initial" aria-live="polite"></p>
+<p class="hint">速度单位 v₀ = √(1 eV/mₑ)。<a href="../../../rst_files/G_Collision/G03_DSMC.html#g03-demo-guide" target="_blank" rel="noopener">相对能量与四幅图的公式说明</a></p>
+<p id="lab-law" class="callout"></p>
+<div class="lab-grid">
+<section class="panel"><h2 id="rate-title">哪些粒子更容易参与碰撞？</h2><svg id="rate-chart" viewBox="0 0 360 300" role="img" aria-label="入射粒子总体与碰撞事件的相对速率分布"></svg><p id="rate-note" class="hint"></p><div id="rate-summary"></div></section>
+<section class="panel"><h2>碰后相对速度方向</h2><svg id="angular-cloud" viewBox="0 0 360 300" role="img" aria-label="三维单位相对速度方向的 x–y 投影"></svg><p class="hint">每点是一次碰撞的方向投影。右侧为前向，左侧为后向，圆心附近主要指向屏幕内外。各向同性的球面方向投影后在圆周附近更密。</p></section>
+</div>
+<section class="panel"><div id="lab-stats"></div><label for="sample-index">查看一个末态</label><input id="sample-index" type="range" min="1" max="2000" value="1"><p id="lab-sample"></p></section>
+<details class="panel"><summary>角度与单粒子速率直方图</summary><div class="lab-grid">
+<section><h3>偏转角余弦</h3><svg id="angle-hist" viewBox="0 0 360 300" role="img" aria-label="cosχ 的各区间的抽样概率与理论概率"></svg><p class="hint">χ 是相对速度的偏转角：cosχ = +1 为不偏转，−1 为反向。绿色是各区间的样本比例，橙线是该区间的理论概率；所有统计区间的概率之和为 1。</p></section>
+<section><h3>入射粒子的碰后速率</h3><svg id="speed-hist" viewBox="0 0 360 270" role="img" aria-label="实验室系碰后速率分布"></svg><p id="speed-note" class="hint"></p></section>
+</div></details>
+</section>
+
+<details class="panel model-notes"><summary>模型假设与计算细节</summary>
+<p>采用无外力飞行、2D3V、单位厚度和等权重 W = 1；x/y 外边界为镜面反射或吸收，z 周期。速度单位 v₀ = √(1 eV/mₑ)，时间单位 L₀/v₀。以电子质量为单位，中性质量 Mₐ = Mᵢ + 1，忽略结合能质量亏损。A* 表示原子的激发态。</p>
+<p>重粒子弹性核 q = σg = 0.12g（HS）或 0.12g<sup>2−2ω</sup>（VHS/VSS），参考速率为 1。HS/VHS 各向同性；VSS 用 cosχ = 2R<sup>1/α</sup>−1。黏度标度为 η(T)/η(Tref) = (T/Tref)<sup>ω</sup>，ω 为温度指数。本实验固定参考核；拟合实验黏度还需随 α 联合标定。</p>
+<p>固定相对能量实验令 μᵣ = m₁m₂/(m₁+m₂)、Erel = μᵣg₀²/2，靶初始静止，入射粒子沿 +x 运动。每次恢复这组初态并抽一次散射，共 2000 次；样本以已发生碰撞为条件，不经过候选接受筛选。修改 ω 改变碰撞核，样本数量保持 2000。</p>
+<p>速率总体实验使用固定入射库：g 在 [0.25, 4]v₀ 均匀分布，靶静止，各碰撞事件独立地按 f_in(g)q(g) 抽样，f_in 是入射库的相对速率概率密度。速率与角度使用独立随机流，只改 ω 时可逐样本比较方向。这两个比较实验都不让入射库随碰撞弛豫。</p>
+<p>e–A 弹性核为 0.035g；基态激发核为 0.065g(1−11.55/Erel)，阈值 11.55 eV；电离核为 0.12g(1−Eth/Erel)<sup>3/2</sup>，基态 Eth = 15.76 eV，激发态 Eth = 4.21 eV。阈值以下为零。通道范围限于弹性、激发、单次电离、CEX 和下述屏蔽散射；截面采用教学参数，实际氩气预测需经验证的数据。</p>
+<p>单次电离用三体 Jacobi 坐标，余能份额按 Beta(3/2,3/2) 分配，两组相对方向各向同性，以共同末态保持守恒。该分配律是教学假设，实际次级电子能谱需另行建模。新电子与产物离子同位置，可参加当前子步剩余碰撞，从下一步开始飞行。基态 A–A⁺ 的 CEX 核为 0.1g，交换身份后按最终质量守恒重建速度。</p>
+<p>e–e、e–A⁺、A⁺–A⁺ 使用有限屏蔽教学核 Cg/(1+g²)²，C 分别为 0.3、0.4、0.2；角分布 p(cosχ) ∝ (1−cosχ+0.1)<sup>−2</sup>。这一模型用于展示配对与偏转；定量库仑输运需采用适用的库仑碰撞算子。</p>
+<p>电离改变成员数，候选用连续时间时钟：Λ = N(N−1)WM/(2V)，δτ = −ln(1−R)/Λ，选对后以 q/M 接受。每次结果后更新成员、上界与时钟，空候选也消耗时间。上界由胞元质心系动能和非负内部/电离能推得。运输分裂误差仍由物理步长控制，演示中的大步长用于观察事件。</p>
+<p>空间图的箭头标尺在重置时由总能量上界固定，不随单次碰撞自动改变。若勾选放大，重粒子统一乘 √(Mᵢ/mₑ)。前后对照图沿用这一物种倍率，但按本次事件统一局部放大：碰前后共用标尺，不跨事件比较箭头长度。虚线灰箭头表示碰前速度；速度只显示 x–y 投影，真实三维分量在状态表中。</p>
+</details>
+<noscript><p>此演示需要 JavaScript；正文推导可独立阅读。</p></noscript>
+</main></body></html>

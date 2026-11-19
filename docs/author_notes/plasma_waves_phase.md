@@ -49,3 +49,9 @@ new separation changes the observation point rather than the underlying wave.
 Verify the half-wavelength opposition and one-wavelength coincidence, formula
 sign, phase-speed correspondence, language/state preservation and layout, then
 build Sphinx. These checks do not establish student learning outcomes.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 20:14 +08:00 | Yinjian Zhao | git 022513948783
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

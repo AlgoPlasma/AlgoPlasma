@@ -1,3 +1,12 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+   2026-11-03 09:08 +08:00 | Yinjian Zhao | git 52f1bfb880ab
+   2026-11-03 18:50 +08:00 | Yinjian Zhao | git 950991764e7f
+   2026-11-04 15:31 +08:00 | Yinjian Zhao | git 2d7ac25f8e67
+   2026-11-10 11:18 +08:00 | Yinjian Zhao | git 2960c1dc97d1
+   2026-11-17 11:41 +08:00 | Yinjian Zhao | git f851bf1cd4a0
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 05 · From statistics to growth and coupling
 ===========================================
 

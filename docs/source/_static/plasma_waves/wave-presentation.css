@@ -85,3 +85,8 @@ html[lang="en"] .lesson figcaption::after { content: ")"; }
   .lesson .derivation h2, .lesson .standing-component h2 { font-size: 24px; }
 }
 @media print { .lesson { min-height: 0; } }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

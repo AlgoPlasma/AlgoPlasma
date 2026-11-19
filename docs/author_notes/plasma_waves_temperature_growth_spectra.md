@@ -7,3 +7,9 @@ Readers enter from lesson 07 with the cold frequency, the pressure law written w
 - **10.** Compute an actual field record and separable radix-2 DFT, forward in space and positive-exponent in time. L = 2π m, T = 2π/(2.5e5 rad/s), Nx = 128, Nt = 4096. Samples exclude the repeated endpoint. Use a rectangular window. Display the positive-k, positive-ω detail with power |C|² normalized to the largest displayed cell, in dB, clipped at −40 dB. The two calibration modes occupy exact bins. The band uses twenty neighboring integer spatial bins and generally off-grid warm frequencies. The independently drawn curve is evaluated from the model at plot resolution. Switch the overlay on the same record, then interpret dark regions along the line.
 
 Run `node docs/tests/test_wave_spectrum.cjs` to verify bin signs, modal power and the band frequencies. The plots, sampled data and controls run locally without a CDN.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

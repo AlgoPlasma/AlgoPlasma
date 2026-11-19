@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-28 16:37 +08:00 | Yinjian Zhao | git 288e21275be3
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Numerical and binary-format checks independent of the experimental files."""
 import struct
 import tempfile

@@ -1,5 +1,7 @@
 # C03 nonuniform cylindrical gather tests
 
+[简体中文](README.zh-CN.md)
+
 Run from the repository root:
 
 ```bash
@@ -32,4 +34,4 @@ exact-field tolerances are `2e-11`; both smooth refinement orders must be in
 `[1.7,2.3]`. Every invalid input must terminate unsuccessfully with its expected
 C03 error message. Missing, duplicate, unexpected, or nonfinite samples fail.
 
-[完整中文 / English 测试说明](../../../docs/source/tests/007_gather/C03_gather_3Draz_nonuniform.rst)
+[Full bilingual test documentation](../../../docs/source/tests/007_gather/C03_gather_3Draz_nonuniform.rst)

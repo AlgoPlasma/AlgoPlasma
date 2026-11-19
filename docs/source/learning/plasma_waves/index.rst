@@ -117,3 +117,24 @@ Plasma Waves
       * `10 · How do we read an ω–k spectrum? → <../../_static/plasma_waves/10_reading_spectra.html?lang=en>`_
 
         Transform a known field record, read its spectral peaks and band, and overlay the theoretical dispersion curve.
+
+.. Plasma-wave contribution history (Git author dates; edit time includes timezone).
+   2026-11-17 19:33 +08:00 | Yinjian Zhao | git fb1cc989ad32
+   2026-11-17 19:41 +08:00 | Yinjian Zhao | git 7667d669c7ec
+   2026-11-17 19:50 +08:00 | Yinjian Zhao | git 3e022dd90c69
+   2026-11-17 20:09 +08:00 | Yinjian Zhao | git c97a40fba286
+   2026-11-17 20:14 +08:00 | Yinjian Zhao | git 022513948783
+   2026-11-17 20:26 +08:00 | Yinjian Zhao | git 80d9ffd0c710
+   2026-11-17 20:54 +08:00 | Yinjian Zhao | git d334e2e4b253
+   2026-11-17 21:23 +08:00 | Yinjian Zhao | git 789e519340b7
+   2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+   2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+   2026-11-18 16:04 +08:00 | Yinjian Zhao | git 92c692b04920
+   2026-11-18 16:36 +08:00 | Yinjian Zhao | git 4be5f6b5764f
+   2026-11-19 09:27 +08:00 | Yinjian Zhao | git 8e569041c60d
+   2026-11-19 11:06 +08:00 | Yinjian Zhao | git 3242c1a909ef
+   2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+   2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+   2026-11-19 16:12 +08:00 | Yinjian Zhao | git cf0e315a57e8
+   2026-11-19 16:16 +08:00 | Yinjian Zhao | git a23fd84e77e6
+   2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)

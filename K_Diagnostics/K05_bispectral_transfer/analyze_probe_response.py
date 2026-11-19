@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-29 13:23 +08:00 | Yinjian Zhao | git 5604a5bb51cc
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Rebuild swept-probe characteristics and labelled response scenarios for K05.
 
 Examples are conditional diagnostic estimates, not an EDI growth inversion.

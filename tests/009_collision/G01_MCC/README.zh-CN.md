@@ -1,6 +1,6 @@
 # G01 MCC 截面表加载器测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录为 `G_Collision/G01_MCC/sub_G01_load_cross_section.f90` 提供一个聚焦的
 回归测试，用于检查两列截面表加载器的数组边界行为。它不验证 MCC 碰撞物理，

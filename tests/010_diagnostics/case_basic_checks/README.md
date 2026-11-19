@@ -1,77 +1,44 @@
-# basic_numerical tests / 基础数值测试
+# Basic numerical tests
 
-按三组检查诊断程序在已知输入下是否按定义工作。每组按“测试目的 → 输入与操作 → 预期及依据 → 本次核对 → 结论”阅读。
-数值表和通过、失败、未完成的结论均由同次运行记录生成。
+[简体中文](README.zh-CN.md)
 
-| 测试 | 目的与通过条件 |
+Three groups check whether the diagnostic routines behave as defined on known inputs. Each group presents the test purpose, inputs and steps, expected behavior and its basis, recorded checks, and conclusion. The tables and their pass, fail, or not-run conclusions all come from the same run.
+
+| Test | Purpose and passing conditions |
 | --- | --- |
-| 频谱功率与互相位 | 功率符合 Parseval 关系，互相位符合独立直接 DFT 与整周期解析参考。 |
-| 相位统计量 | 两个独立案例（含跨越 ±180°）的众数格中心和样本方差符合手算参考；各案例内部使用相同输入作对照。 |
-| Beall 权重与谱峰 | 权重、逐格谱值和两种权重下的峰位符合手算参考。 |
+| Spectral power and cross phase | Power satisfies the Parseval relation. Cross phase agrees with an independent direct DFT and the analytical reference for a record spanning an integer number of periods. |
+| Phase statistics | The mode-bin center and sample variance agree with hand calculations in two independent cases, one of which crosses ±180°. Each case has its own figure and compares methods on identical observations. |
+| Beall weights and spectral peaks | The weights, spectrum values in each bin, and peak positions under two weighting schemes agree with hand calculations. |
 
-- [基础数值测试](../../../docs/source/tests/010_diagnostics/case_basic_checks.rst)：三组结果表和可展开的附图。
-- [谱泄漏知识点](../../../docs/source/knowledge/spectral_leakage.rst)：保留六面板图与“截取—拼接—频谱”的原理讲述。
-- [Probe Diagnostics Foundations](../../../docs/source/rst_files/K_Diagnostics/diagnostics_foundations.rst)：诊断基础。
+- [Basic numerical tests](../../../docs/source/tests/010_diagnostics/case_basic_checks.rst) presents the three sets of result tables and collapsible figures.
+- The [spectral leakage note](../../../docs/source/knowledge/spectral_leakage.rst) explains truncation, periodic extension, and the resulting spectrum using a six-panel figure. This test directory generates the same figure that the note displays.
+- [Probe Diagnostics Foundations](../../../docs/source/rst_files/K_Diagnostics/diagnostics_foundations.rst) explains the underlying diagnostic methods.
 
-Each group explains its purpose, setup, expected behavior and basis, recorded checks,
-and conclusion. The checks cover power/phase calculations, phase statistics, Beall
-weights/bin values/peaks. Status and conclusions come
-from the same run. Supporting figures are collapsible; the six-panel leakage explanation
-is on the knowledge page. Phase statistics use two independent figures: each compares
-methods on identical observations, rather than comparing two different input sets.
+The page and figures display phases in ° and variances in °², with values, errors, and absolute tolerances converted together. Code and full raw records use radians, and wavenumbers use rad/m. Rounded angle labels are for display only. The tests use the original input values.
 
-页面与图件的相位统一用°、方差用°²；展示时同步换算数值、误差和绝对容差。
-代码和完整原始记录保留弧度，波数仍用 rad/m。输入角度的简写仅用于展示，不改变测试输入。
-Phases and variances are displayed in ° and °², with errors and absolute tolerances
-converted consistently. Code and full raw records retain radians; wavenumbers remain in rad/m.
-Rounded input labels do not change the underlying test data.
-
-Run from the repository root:
+Run this command from the repository root.
 
 ```bash
 bash tests/010_diagnostics/case_basic_checks/run.sh
 ```
 
-The underlying sixteen deterministic regression checks still record inputs,
-measurements, criteria and outcomes in `output/summary.json`, including failures.
-`output/results.rst` contains the full report. `output/checks_zh.rst` and
-`output/checks_en.rst` supply the page tables. Small arrays are in `output/details/`;
-plots read these arrays and the report without rerunning the algorithms.
-Analytic waveform guides illustrate the recorded inputs. These vectorized checks
-use one worker and no production data.
+The 16 underlying deterministic regression checks record inputs, measurements, criteria, and outcomes, including failures, in `output/summary.json`. The full report is in `output/results.rst`. The files `output/checks_zh.rst` and `output/checks_en.rst` supply the page tables. Plotting reads the small arrays in `output/details/` and the report without rerunning the algorithms. Analytical waveform guides illustrate the recorded inputs. These vectorized checks use one worker and require no production data.
 
-- `source_py/test_regressions.py`: inputs and assertions.
-- `source_py/report.py`: numerical report, source hashes and optional documentation publication.
-- `source_py/plot_results.py`: PNG figures from saved results.
-- `clean.sh`: removes only this case's generated `output/`.
+- `source_py/test_regressions.py` defines inputs and assertions.
+- `source_py/report.py` generates the numerical report and source hashes and can publish the documentation.
+- `source_py/plot_results.py` generates PNG figures from saved results.
+- `clean.sh` removes only this case's generated `output/`.
 
-PASS 表示满足该项预期；FAIL 表示数值或行为不符；NOT RUN 表示尚未执行。
-每组必须在所有展示项及其所属测试全部通过后才显示“通过”，失败时指出未满足的预期。
-非整周期记录核对独立 DFT 参考；它相对输入相位差的偏差仅作现象展示，不以“大于5°”判断成功。
-数值容差按 float64 机器精度、计算规模与量纲显式设定，页面说明工程余量的来源；它们不是物理精度指标。
-相位与 Beall 图按需展开。
-波矢恢复、几何约束、网格分块、无效输入等回归检查保留在完整报告中。六面板谱泄漏图仍由本目录生成，知识页直接引用同一图片。
+PASS means the stated expectation was met. FAIL indicates a numerical or behavioral mismatch. NOT RUN means the check was not executed. A group passes only when all displayed checks and their parent tests pass. A failure identifies the unmet expectation.
 
-PASS means the stated expectation is met; FAIL means a numerical or behavioral mismatch;
-NOT RUN means an unexecuted check. Groups pass only when all selected checks and their
-parent tests pass. Off-bin phase bias is an observation, not a minimum-error requirement.
-The page documents explicit float64 rounding margins rather than physical accuracy targets.
+For records spanning a non-integer number of periods, compare the result with an independent direct DFT. The difference from the input phase difference illustrates off-bin bias. A deviation greater than 5° is not a passing condition. Numerical tolerances are set explicitly from float64 machine precision, computation size, and physical units. The page explains these engineering margins for numerical checks. Physical accuracy requires separate evaluation. The phase and Beall figures can be expanded on demand.
 
-To update the documentation snapshot after a successful run:
+Regression checks for wavevector recovery, geometry constraints, grid blocking, and invalid input remain in the full report. The report also includes four checks for unequal phase-variance weights, PSD scaling for odd and even lengths and different sampling rates, comparison against analytical coherence, and invalid Beall baselines. The phase-weighting case uses conflicting observations to verify that the more reliable observation has greater influence. The analytical weighted optimum is `kx` = 0.1 rad/m, and the equal-weight reference is 0.5 rad/m. These are likelihood weights, distinct from the Beall power weights in the third group. The page still presents three groups.
+
+After a successful run, update the documentation snapshot with this command.
 
 ```bash
 bash tests/010_diagnostics/case_basic_checks/run.sh --publish-docs
 ```
 
-This publishes the full report, bilingual page tables, source arrays, PNGs and provenance together to
-`docs/source/tests/010_diagnostics/_generated/case_basic_checks/`.
-The small snapshot is intended for version control; runtime `output/` is not.
-The source hashes identify the tested working tree, including uncommitted changes.
-Sphinx reads the snapshot without running these tests.
-
-完整报告新增四类检查：不等方差下的相位权重、奇偶长度与不同采样率下的 PSD、解析相干度对照、非法 Beall 基线。
-相位权重案例使用冲突观测：可靠观测应有更大影响；解析最优 kx 为 0.1 rad/m，等权对照为 0.5 rad/m。
-这与第三组的 Beall 功率权重用途不同，三组展示结构保持不变。
-The full report also checks unequal phase-variance weights, PSD parity/rate scaling, analytic coherence,
-and invalid baselines. The conflicting-observation case has weighted optimum kx=0.1 rad/m
-and equal-weight optimum 0.5 rad/m; these likelihood weights differ from Beall power weights.
+The command publishes the full report, bilingual page tables, source arrays, PNG figures, and provenance together under `docs/source/tests/010_diagnostics/_generated/case_basic_checks/`. The small snapshot goes into version control. The test generates the runtime `output/` directory. Source hashes identify the tested working tree, including any uncommitted changes. Sphinx reads the snapshot without running these tests.

@@ -74,3 +74,13 @@ from a statement about wave-packet or energy transport.
 - Check all five reveals, backward navigation, replay, pause, keyboard controls,
   fullscreen, reduced motion, both languages and narrow screens in the built site.
 - Browser and build checks establish implementation behavior, not learning effectiveness.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 19:33 +08:00 | Yinjian Zhao | git fb1cc989ad32
+2026-11-17 19:41 +08:00 | Yinjian Zhao | git 7667d669c7ec
+2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

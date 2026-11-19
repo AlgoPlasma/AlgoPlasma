@@ -1,3 +1,7 @@
+.. K05 contribution history (Git author dates; edit times include timezone).
+   2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+   2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 09 · Scripts and reproduction guide
 ====================================
 
@@ -152,6 +156,7 @@
    - :download:`analyze_probe_sweep.py <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_probe_sweep.py>`, :download:`analyze_probe_response.py <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_probe_response.py>` and :download:`yokogawa_wdf.py <../../../../K_Diagnostics/K05_bispectral_transfer/yokogawa_wdf.py>`: optional slow-sweep I–V and response analyses, separate from the fast two-probe pipeline. :download:`plot_probe_sweep.py <../../../../K_Diagnostics/K05_bispectral_transfer/plot_probe_sweep.py>` is a helper imported by the sweep analysis, not a standalone CLI.
    - :download:`plot_reading_schematics.py <../../../../K_Diagnostics/K05_bispectral_transfer/plot_reading_schematics.py>`: earlier analytical illustrations, not measured data. The interactive wave diagrams on :ref:`01 <k05-wave-overview-en>` and :ref:`02 <k05-coefficients-en>` instead run JavaScript under ``docs/source/_static/K_Diagnostics``.
    - :download:`experiment_z5p5_a3p7.json <../../../../K_Diagnostics/K05_bispectral_transfer/experiment_z5p5_a3p7.json>` stores acquisition facts; :download:`physical_scenario_config.json <../../../../K_Diagnostics/K05_bispectral_transfer/physical_scenario_config.json>` stores the selected physical assumptions. The latter is not a calibration file.
+   - :download:`Tracked JSON files / data provenance <../../../../K_Diagnostics/K05_bispectral_transfer/DATA_FILES.md>`; :download:`extended-fit summary <../../_data/k05_extended_comparison_summary.json>` and :download:`physical-scenario summary <../../_data/k05_physical_scenario_summary.json>`.
    - :download:`reference_digitization/README.md <../../../../K_Diagnostics/K05_bispectral_transfer/reference_digitization/README.md>`: provenance of the approximate reference redraws; they are not author-supplied data.
    - :download:`renumber_equations.py <../../../../K_Diagnostics/K05_bispectral_transfer/renumber_equations.py>` and :download:`EQUATIONS.md <../../../../K_Diagnostics/K05_bispectral_transfer/EQUATIONS.md>`: maintain equation numbering and semantic links; they do not process probe measurements.
 
@@ -290,6 +295,7 @@
    - :download:`analyze_probe_sweep.py <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_probe_sweep.py>`、:download:`analyze_probe_response.py <../../../../K_Diagnostics/K05_bispectral_transfer/analyze_probe_response.py>`、:download:`yokogawa_wdf.py <../../../../K_Diagnostics/K05_bispectral_transfer/yokogawa_wdf.py>`：可选的慢扫描I–V及响应分析，与高频双探针流程分开；:download:`plot_probe_sweep.py <../../../../K_Diagnostics/K05_bispectral_transfer/plot_probe_sweep.py>` 是扫描分析导入的绘图函数文件，没有独立命令行入口。
    - :download:`plot_reading_schematics.py <../../../../K_Diagnostics/K05_bispectral_transfer/plot_reading_schematics.py>`：较早的解析示意图，不是实验数据。:ref:`01 <k05-wave-overview-zh>` 与 :ref:`02 <k05-coefficients-zh>` 的互动波形则使用 ``docs/source/_static/K_Diagnostics`` 中的JavaScript。
    - :download:`experiment_z5p5_a3p7.json <../../../../K_Diagnostics/K05_bispectral_transfer/experiment_z5p5_a3p7.json>` 保存采集事实；:download:`physical_scenario_config.json <../../../../K_Diagnostics/K05_bispectral_transfer/physical_scenario_config.json>` 保存所选物理假设，后者不是标定文件。
+   - :download:`保留JSON与用途 <../../../../K_Diagnostics/K05_bispectral_transfer/DATA_FILES.md>`；:download:`扩展拟合来源 <../../_data/k05_extended_comparison_summary.json>` 与 :download:`物理情景来源 <../../_data/k05_physical_scenario_summary.json>`。
    - :download:`reference_digitization/README.md <../../../../K_Diagnostics/K05_bispectral_transfer/reference_digitization/README.md>`：文献近似重绘的来源说明，重绘结果不是作者提供的原始数据。
    - :download:`renumber_equations.py <../../../../K_Diagnostics/K05_bispectral_transfer/renumber_equations.py>` 与 :download:`EQUATIONS.md <../../../../K_Diagnostics/K05_bispectral_transfer/EQUATIONS.md>`：维护公式编号和语义链接，不处理探针记录。
 

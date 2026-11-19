@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-13 13:10 +08:00 | Yinjian Zhao | git dfd0f9af0503
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Paired, attributed reference redraws and conditional probe diagnostics.
 
 Only digitized numbers are read for the reference side; no paper screenshot is

@@ -1,3 +1,8 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-06 08:58 +08:00 | Yinjian Zhao | git 8ea987892b7b
+# 2026-11-10 10:13 +08:00 | Yinjian Zhao | git b760bab91ff8
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """K05 page 06: one consistent Fourier grid from records to complex moments.
 
 Read-only raw inputs; choose a new output directory. Reuses the documented

@@ -1,6 +1,6 @@
 # G02_MCC_network 测试与验证
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 这些测试检查输入能否被正确读取，以及碰撞是否遵守给定模型。初学者先读[零维碰撞盒](examples/collision_box/README.zh-CN.md)，接口主线见[模块说明](../../../G_Collision/G02_MCC_network/README.zh-CN.md)。用户模型的写法见[CSV 数据格式](../../../docs/source/rst_files/G_Collision/G02_MCC_network/csv_format.rst)。
 

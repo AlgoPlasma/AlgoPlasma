@@ -38,3 +38,9 @@ html[lang="zh-CN"] .en, html[lang="en"] .zh { display:none; }
 .lab-lesson figure[data-kind="field"] canvas { height:390px; min-height:390px; }
 .lab-lesson .lab-settings .motion { margin:0; }
 .lab-lesson .lab-settings .lab-control input[type=range] { margin:0; }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+ * 2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

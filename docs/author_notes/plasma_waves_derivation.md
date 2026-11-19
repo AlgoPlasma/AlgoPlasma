@@ -205,3 +205,11 @@ errors, or remaining occurrences of the removed advanced terminology in the
 public lesson. Visually reviewed the pressure explanation and final recap.
 Sphinx built without warnings. Generated assets match source; checked the
 built bilingual recap/restart and the no-JavaScript text alternative.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-19 11:06 +08:00 | Yinjian Zhao | git 3242c1a909ef
+2026-11-19 11:30 +08:00 | Yinjian Zhao | git 98d8d1aa51e6
+2026-11-19 13:47 +08:00 | Yinjian Zhao | git cec49a30b3bd
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

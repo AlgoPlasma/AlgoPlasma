@@ -1,3 +1,9 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-02 13:56 +08:00 | Yinjian Zhao | git 1a1e390d6d38
+# 2026-11-03 09:08 +08:00 | Yinjian Zhao | git 52f1bfb880ab
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Plot saved K05 equivalents of Brown & Jorns (2023) Figures 2 and 3."""
 import argparse
 import json

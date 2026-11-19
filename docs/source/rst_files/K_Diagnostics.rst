@@ -65,10 +65,11 @@ K_Diagnostics
    :doc:`K04 呼吸波形提取 <K_Diagnostics/K04_breathing_waveform>` 是独立的学习入口，
    从人工数据逐步说明怎样从同一空间点、相同条件下的重复记录得到相位重复波形 C 与残差 R。
 
-   :doc:`K05 波增长与耦合 <K_Diagnostics/K05_bispectral_transfer>` 是独立的学习入口：
-   第一页面从简单波形推导 Brown 与 Jorns (2023) 公式 (1)，提供折叠推导和互动波包图。
-   :doc:`第二页面 <K_Diagnostics/K05_envelope_coefficients>` 从等离子体响应推导包络方程及其系数。
-   :doc:`第三页面 <K_Diagnostics/K05_probe_signals>` 用固定探针、时间傅里叶系数和双探针比较连接文献公式 (1) 与 (2)。
+   :doc:`K05 双谱转移 <K_Diagnostics/K05_bispectral_transfer>` 从 Brown 与 Jorns (2023) 的波动方程出发，
+   依次介绍包络、时间傅里叶系数、统计量与双探针系数估计（01–05）。
+   随后用真实记录逐步计算统计量、检验模型，并与文献图逐项比较（06–08）；
+   最后的 :doc:`脚本与复现指南 <K_Diagnostics/K05_scripts>` 对应各步骤的程序、输入与输出。
+   预测检验和条件性速率换算分别说明，保留测量响应与传播假设的限制。
 
    .. rubric:: 相关测试
 
@@ -132,13 +133,13 @@ K_Diagnostics
    Artificial data illustrate how repeated records at one spatial point under the same conditions
    yield a phase-repeatable waveform C and a residual R.
 
-   :doc:`K05 wave growth and coupling <K_Diagnostics/K05_bispectral_transfer>` is a learning route:
-   the first page builds Brown & Jorns (2023) Eq. (1) from a simple wave,
-   with optional derivations and an interactive wave packet. The
-   :doc:`second page <K_Diagnostics/K05_envelope_coefficients>` derives the
-   envelope equation and its coefficients from the plasma response. The
-   :doc:`third page <K_Diagnostics/K05_probe_signals>` connects Eqs. (1) and (2)
-   through fixed probe records, time Fourier coefficients and a two-probe comparison.
+   :doc:`K05 bispectral transfer <K_Diagnostics/K05_bispectral_transfer>` starts from the wave equation
+   of Brown & Jorns (2023), then introduces envelopes, time Fourier coefficients, statistics and
+   two-probe coefficient estimation (01–05). Real records illustrate the statistical calculations,
+   model validation and panel-by-panel comparison with the reference (06–08).
+   The :doc:`script and reproduction guide <K_Diagnostics/K05_scripts>` links each step to its
+   programs, inputs and outputs. Predictive validation is distinguished from conditional rate
+   conversion, with measurement-response and propagation assumptions kept explicit.
 
    .. rubric:: Related Tests
 

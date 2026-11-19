@@ -112,3 +112,11 @@ the prescribed amplitude. All six stages passed layout checks in both
 languages at 320, 768, 1280, 1440 and 1920 px widths. Checkbox keyboard input,
 phase/pause preservation, replay, previous-step controls, direct example URL,
 expanded details, no-canvas and no-JavaScript fallbacks were checked.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+2026-11-18 16:04 +08:00 | Yinjian Zhao | git 92c692b04920
+2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

@@ -259,3 +259,14 @@
     }
   });
 })();
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-17 21:23 +08:00 | Yinjian Zhao | git 789e519340b7
+ * 2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+ * 2026-11-18 09:53 +08:00 | Yinjian Zhao | git 23e47e779735
+ * 2026-11-18 14:00 +08:00 | Yinjian Zhao | git abe90bd9fdab
+ * 2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+ * 2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+ * 2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

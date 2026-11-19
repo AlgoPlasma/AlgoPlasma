@@ -22,3 +22,10 @@
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 11:06 +08:00 | Yinjian Zhao | git 3242c1a909ef
+ * 2026-11-19 11:30 +08:00 | Yinjian Zhao | git 98d8d1aa51e6
+ * 2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

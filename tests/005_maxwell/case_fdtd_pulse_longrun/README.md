@@ -1,5 +1,7 @@
 # FDTD Pulse Long-Run Stability Tests
 
+[简体中文](README.zh-CN.md)
+
 This directory tests stability with a short pulse followed by long no-source propagation.
 It is separate from MMS accuracy tests.
 

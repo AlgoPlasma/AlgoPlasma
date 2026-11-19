@@ -65,3 +65,9 @@ for (const t of [0, 9e-8, M.TMAX]) {
   }
 }
 console.log("Wide-view spatial-period checks passed (L=" + spatialPeriod.toFixed(6) + " m).");
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 16:36 +08:00 | Yinjian Zhao | git 4be5f6b5764f
+ * 2026-11-19 10:36 +08:00 | Yinjian Zhao | git 1bc12dc2a63c
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

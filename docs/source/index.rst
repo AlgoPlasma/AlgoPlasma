@@ -51,6 +51,7 @@ AlgoPlasma
     :hidden:
 
     ./community/contributors
+    Citation <./community/citation>
 
 .. image:: images/algoplasma-logo-transparent.png
    :class: ap-home-preload
@@ -214,3 +215,7 @@ AlgoPlasma
       <p class="ap-home-contact">Initiator: Yinjian ZHAO · contact@algoplasma.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
    </div>
+
+.. Plasma-wave contribution history (Git author dates; edit time includes timezone).
+   2026-11-17 19:33 +08:00 | Yinjian Zhao | git fb1cc989ad32
+   2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)

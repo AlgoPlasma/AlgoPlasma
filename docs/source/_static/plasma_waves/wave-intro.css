@@ -156,3 +156,11 @@ figcaption { flex: 0 0 auto; color: #94aaa6; font-size: 17px; line-height: 1.65;
   .page-navigation #lesson-index { font-size: 14px; }
 }
 @media print { .page-navigation { display: none; } }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-17 19:33 +08:00 | Yinjian Zhao | git fb1cc989ad32
+ * 2026-11-17 19:41 +08:00 | Yinjian Zhao | git 7667d669c7ec
+ * 2026-11-17 19:50 +08:00 | Yinjian Zhao | git 3e022dd90c69
+ * 2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

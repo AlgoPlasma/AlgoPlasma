@@ -1,3 +1,9 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-28 16:37 +08:00 | Yinjian Zhao | git 288e21275be3
+# 2026-10-29 13:23 +08:00 | Yinjian Zhao | git 5604a5bb51cc
+# 2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Compare linear and quadratic probe models by leaving out whole captures.
 
 All coefficients describe measured volts, not calibrated plasma growth or energy.

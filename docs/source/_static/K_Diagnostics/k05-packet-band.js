@@ -1,3 +1,8 @@
+/* K05 contribution history (Git author dates; edit times include timezone).
+ * 2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+ * 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
+
 /* Gaussian amplitude weights and their analytic wave-packet superposition.
  * Arbitrary units: k0=5, omega0=8, vg=0.7, h0=1.
  * omega(k0+q)=omega0+vg*q; sigma_y=1/sigma_k. No growth or spreading.
@@ -51,11 +56,12 @@
   }
   function plotSvg(sigma, t, language, prefix) {
     var w = words[language] || words.en;
+    var chart = words.en; // Keep visible figure labels English in both views.
     var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 605" role="img" aria-labelledby="' + prefix + '-title">' +
       '<title id="' + prefix + '-title">' + w.alt + '</title>' +
       '<rect width="760" height="605" fill="white"/>' +
       '<g font-family="sans-serif" font-size="14">' +
-      label(60, 24, w.spectrum) + label(60, 244, w.components) + label(60, 406, w.sum) +
+      label(60, 24, chart.spectrum) + label(60, 244, chart.components) + label(60, 406, chart.sum) +
       '<path d="M60 44V160H728 M60 260V350H728 M60 305H728 M60 423V547H728 M60 485H728" fill="none" stroke="#cbd5e1"/>' +
       label(49, 164, "0", "end") + label(49, 54, "1", "end") +
       label(49, 271, "1", "end") + label(49, 309, "0", "end") + label(49, 350, "−1", "end") +
@@ -63,12 +69,12 @@
     [3, 4, 5, 6, 7].forEach(function (k) {
       s += label(60 + 668 * (k - 3) / 4, 181, String(k), "middle");
     });
-    s += label(728, 205, w.waveNumber, "end");
+    s += label(728, 205, chart.waveNumber, "end");
     [-12, -6, 0, 6, 12].forEach(function (y) {
       var x = 60 + 668 * (y + 12) / 24;
       s += label(x, 370, String(y), "middle") + label(x, 569, String(y), "middle");
     });
-    s += label(394, 595, w.position, "middle");
+    s += label(394, 595, chart.position, "middle");
     s += curve(path(function (k) { return Math.exp(-0.5 * Math.pow((k-k0)/sigma, 2)); }, 3, 7, 160, 110), "#28658b");
     [-sigma, 0, sigma].forEach(function (q, n) {
       var x = 60 + 668 * (k0 + q - 3) / 4;

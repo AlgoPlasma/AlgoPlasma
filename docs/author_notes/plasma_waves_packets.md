@@ -200,3 +200,14 @@ views), with no horizontal/equation overflow or language leakage. Verified
 replacement panels, next/back, unchanged slide numbering, image-click inactivity,
 time continuity between local/wide views, animated redraw, language state and
 slide/lesson reset. Sphinx built without warnings.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-18 16:36 +08:00 | Yinjian Zhao | git 4be5f6b5764f
+2026-11-19 08:45 +08:00 | Yinjian Zhao | git 035fac395dff
+2026-11-19 09:27 +08:00 | Yinjian Zhao | git 8e569041c60d
+2026-11-19 10:06 +08:00 | Yinjian Zhao | git cc56283b83ee
+2026-11-19 10:12 +08:00 | Yinjian Zhao | git 0b339d2edcfe
+2026-11-19 10:36 +08:00 | Yinjian Zhao | git 1bc12dc2a63c
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

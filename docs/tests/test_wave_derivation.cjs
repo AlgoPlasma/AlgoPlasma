@@ -24,3 +24,8 @@ for(const k of [60,120])for(const t of [0,1.7e-8,2*Math.PI/M.W0]){
   }
 }
 console.log('Electron-fluid checks passed: dispersion, density scaling, continuity, momentum, Poisson and density map.');
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 11:06 +08:00 | Yinjian Zhao | git 3242c1a909ef
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

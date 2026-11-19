@@ -11,3 +11,8 @@
     }
   }, { once: true });
 })();
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

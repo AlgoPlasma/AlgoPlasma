@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-03 13:13 +08:00 | Yinjian Zhao | git c78fafbf8e0b
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Check or regenerate K05's bilingual equation numbers in reading order.
 
 Run from any directory. Only --write changes the registry; semantic IDs and

@@ -56,3 +56,10 @@ picture; quantitative derivation is deliberately deferred to a later page.
 The Sphinx course directory links to every lesson. Persistent header links allow
 forward/backward reading from any reveal step, preserving the chosen language.
 Source assets live in `docs/source/_static/plasma_waves/`; build outputs are not edited.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 19:50 +08:00 | Yinjian Zhao | git 3e022dd90c69
+2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-11-02 13:56 +08:00 | Yinjian Zhao | git 1a1e390d6d38
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Derive K05 paper-style panels from saved moments and an explicit kinetic scenario.
 
 No refitting, gain equalization, or modification of the original captures.

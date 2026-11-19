@@ -22,3 +22,8 @@ const band=M.spectrum(M.sampleField(M.modesFor('band')));
 for (let k=5;k<=24;k++) near(peak(band[k])*M.dw,M.warmOmega(k,4),M.dw/2);
 for (const k of [0,4,25,26]) assert.ok(Math.max(...band[k]) < 1e-22);
 console.log('Thermal branch, FFT signs, peak coordinates, relative power and twenty off-grid modes passed.');
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

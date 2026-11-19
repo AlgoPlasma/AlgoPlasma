@@ -49,3 +49,9 @@
 .dispersion-lesson #component-hint { margin: 12px 0 0; font-size: var(--annotation-size); line-height: 1.5; color: var(--muted); }
 
 .dispersion-lesson .component-swatch { display: inline-block; width: 34px; height: 3px; vertical-align: middle; margin-right: 8px; background: repeating-linear-gradient(to right, currentColor 0 var(--dash), transparent var(--dash) var(--period)); }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+ * 2026-11-18 16:04 +08:00 | Yinjian Zhao | git 92c692b04920
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

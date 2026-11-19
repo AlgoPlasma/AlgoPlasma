@@ -75,3 +75,12 @@ directory links to the measurement slides, followed by the phase slides in the s
 reduced motion, frozen snapshot, period/wavelength annotations and navigation.
 Build the Sphinx documentation; inspect desktop and narrow-screen renderings.
 These are functional checks, not evidence of measured learning effectiveness.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 20:09 +08:00 | Yinjian Zhao | git c97a40fba286
+2026-11-17 20:54 +08:00 | Yinjian Zhao | git d334e2e4b253
+2026-11-17 21:23 +08:00 | Yinjian Zhao | git 789e519340b7
+2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

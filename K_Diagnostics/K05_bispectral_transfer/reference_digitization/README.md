@@ -1,3 +1,8 @@
+<!-- K05 contribution history (Git author dates; edit times include timezone).
+2026-11-13 13:10 +08:00 | Yinjian Zhao | git dfd0f9af0503
+2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->
+
 # Source-derived reference figure readings
 
 Six CSV traces (295 manually selected points) and a 192 x 192 heat-map

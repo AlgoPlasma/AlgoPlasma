@@ -49,3 +49,9 @@
 @container (min-width: 38rem) {
   .rst-content .wave-directory > ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+ * 2026-11-19 16:12 +08:00 | Yinjian Zhao | git cf0e315a57e8
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

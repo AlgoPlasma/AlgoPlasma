@@ -77,3 +77,10 @@ build. Inspect desktop and mobile renderings. Educational effectiveness is a
 future learner evaluation, not a conclusion of these functional checks.
 Check the inserted algebra stage in both languages, returning to the standing
 animation, optional quiz feedback and replay, and the static text alternative.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 20:26 +08:00 | Yinjian Zhao | git 80d9ffd0c710
+2026-11-18 14:57 +08:00 | Yinjian Zhao | git bb02aa7e9638
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

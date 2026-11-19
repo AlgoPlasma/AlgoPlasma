@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-30 11:25 +08:00 | Yinjian Zhao | git 303832d65c08
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Deterministic checks of moments, scaling and the complete power identities."""
 import unittest
 import numpy as np

@@ -17,3 +17,8 @@
   }
   globalThis.PlasmaDerivationModel={E,ME,EPS0,W0,NREF,A,XMAX,plasmaFrequency,omega,sample,position};
 })();
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 11:06 +08:00 | Yinjian Zhao | git 3242c1a909ef
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

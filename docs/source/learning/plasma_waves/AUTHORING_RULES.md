@@ -43,3 +43,10 @@
 18. **中英文同步制作。** 提供语言切换，内容修改同时更新两种语言。
 
 07 当前采用的幻灯片数量、步骤数量、动画时长以及具体配色和字号数值，属于实现参数，不作为这份规则中的固定标准。
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-19 14:03 +08:00 | Yinjian Zhao | git 094e6547a6c3
+2026-11-19 14:21 +08:00 | Yinjian Zhao | git ee4adc3c832f
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

@@ -1,3 +1,7 @@
+# K05 contribution history (Git author dates; edit times include timezone).
+# 2026-10-29 13:23 +08:00 | Yinjian Zhao | git 5604a5bb51cc
+# 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
 """Read the DL350 single-history Trace layout documented in IM DL350-01EN App. 9.
 
 Only the layout used by the K05 sweep records is supported. Unsupported histories,

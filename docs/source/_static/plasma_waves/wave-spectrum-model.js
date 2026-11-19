@@ -83,3 +83,8 @@
   }
   globalThis.WaveLabModel = {warmOmega, modesFor, sampleField, spectrum, nx, nt, dx, dt, dw, binMin, binMax, kMax};
 })();
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
