@@ -18,6 +18,8 @@ Plasma Waves
 
       接下来，从电子运动方程推导色散关系，看看温度如何改变 Langmuir 波的频率，复频率如何描述振幅的增长与衰减。最后，把模拟中的时空电场转换为 ω–k 谱，比较谱峰与理论曲线。
 
+      贡献者：赵隐剑（哈尔滨工业大学）
+
    .. rubric:: 第一部分 · 波的基础
 
    .. container:: wave-directory
@@ -69,6 +71,8 @@ Plasma Waves
       How can a density crest travel while each electron oscillates near its starting point? Use wavelength, period and phase to describe a wave, superpose waves to explain beats and standing waves, then follow a wave packet to distinguish phase velocity from group velocity.
 
       Next, derive a dispersion relation from the electron equations of motion, explore how temperature shifts the Langmuir-wave frequency, and use complex frequency to describe growth and damping. Finally, turn a space–time field record into an ω–k spectrum and compare its peaks with the predicted curve.
+
+      Contributor: Yinjian Zhao (Harbin Institute of Technology)
 
    .. rubric:: Part 1 · Wave basics
 
