@@ -9,7 +9,7 @@
   const block = (zh, en, cueZh, cueEn) => ({ zh, en, cue: { zh: cueZh, en: cueEn } });
   const vp = frac('ω<sub>c</sub>', 'k<sub>c</sub>'), derivative = frac('dω', 'dk');
   const groupDerivative = '<span class="math-term">(' + derivative + ')<sub>c</sub></span>';
-  // Each block is one deliberate reveal. Only this slide's blocks enter the DOM.
+  // Each block is one deliberate step; sequence slides show one working panel.
   const slides = [
     {
       id: 'packet', visual: 'packet',
@@ -40,12 +40,14 @@
       ]
     },
     {
-      id: 'beats', visual: 'none',
+      id: 'beats', visual: 'none', sequence: true,
       title: ['先用两个波看清拍包络', 'Start with a two-wave beat'],
-      lead: ['把两个邻近、等幅的密度波相加，再用和差化积。', 'Add two nearby, equal-amplitude density waves, then use the sum-to-product identity.'],
+      lead: ['把两个邻近、等幅的密度波相加。下面逐步推导和差化积。', 'Add two nearby, equal-amplitude density waves. Derive the sum-to-product identity step by step.'],
       blocks: [
         block(eq('δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)') + p('A [m⁻³]；x [m]；t [s]。定义差值 Δk = k₂ − k₁ [rad/m]、Δω = ω₂ − ω₁ [rad/s]。') + eq('k̄ = ' + frac('k₁ + k₂', '2') + '，　ω̄ = ' + frac('ω₁ + ω₂', '2')), eq('δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)') + p('A [m⁻³]; x [m]; t [s]. Define Δk = k₂ − k₁ [rad/m] and Δω = ω₂ − ω₁ [rad/s].') + eq('k̄ = ' + frac('k₁ + k₂', '2') + ',　ω̄ = ' + frac('ω₁ + ω₂', '2')), '', ''),
-        block(eq('δn = <span class="group-key">2A cos(' + frac('Δk x − Δω t', '2') + ')</span><wbr> · <span class="phase-key">cos(k̄x − ω̄t)</span>') + p('<span class="group-key">慢调制</span> × <span class="phase-key">内部快振荡</span>。两个分量产生周期性的拍；许多分量适当加权，才能得到局部波包。'), eq('δn = <span class="group-key">2A cos(' + frac('Δk x − Δω t', '2') + ')</span><wbr> · <span class="phase-key">cos(k̄x − ω̄t)</span>') + p('<span class="group-key">Slow modulation</span> × <span class="phase-key">fast inner oscillation</span>. Two components produce periodic beats; many weighted components can form a localized packet.'), '把相加改写为相乘', 'Rewrite the sum as a product')
+        block(p('先把两项的相位简写成 φ₁、φ₂ [rad]：') + eq('φ₁ = k₁x − ω₁t，　φ₂ = k₂x − ω₂t') + p('用平均相位 Φ 和半个相位差 ψ 重新表示它们：') + eq('Φ = ' + frac('φ₁ + φ₂', '2') + '，　ψ = ' + frac('φ₂ − φ₁', '2')) + eq('φ₁ = Φ − ψ，　φ₂ = Φ + ψ') + eq(frac('δn', 'A') + ' = cos(Φ − ψ) + cos(Φ + ψ)'), p('Abbreviate the phases as φ₁ and φ₂ [rad]:') + eq('φ₁ = k₁x − ω₁t,　φ₂ = k₂x − ω₂t') + p('Rewrite them using the mean phase Φ and half-difference ψ:') + eq('Φ = ' + frac('φ₁ + φ₂', '2') + ',　ψ = ' + frac('φ₂ − φ₁', '2')) + eq('φ₁ = Φ − ψ,　φ₂ = Φ + ψ') + eq(frac('δn', 'A') + ' = cos(Φ − ψ) + cos(Φ + ψ)'), '把相位写成和与差', 'Rewrite the phases as sum and difference'),
+        block(p('分别使用余弦差角公式与和角公式：') + eq('cos(Φ − ψ) = cosΦ cosψ <span class="phase-key">+ sinΦ sinψ</span>') + eq('cos(Φ + ψ) = cosΦ cosψ <span class="phase-key">− sinΦ sinψ</span>') + p('两式相加，金色的正弦乘积项恰好抵消：') + eq('cosφ₁ + cosφ₂ = 2 cosΦ cosψ') + eq('δn = 2A cosψ cosΦ'), p('Use the cosine difference and sum formulas separately:') + eq('cos(Φ − ψ) = cosΦ cosψ <span class="phase-key">+ sinΦ sinψ</span>') + eq('cos(Φ + ψ) = cosΦ cosψ <span class="phase-key">− sinΦ sinψ</span>') + p('Add the equations. The gold sine-product terms cancel:') + eq('cosφ₁ + cosφ₂ = 2 cosΦ cosψ') + eq('δn = 2A cosψ cosΦ'), '展开余弦，再相加', 'Expand the cosines, then add'),
+        block(p('把平均相位和相位差换回波的变量：') + eq('Φ = k̄x − ω̄t，　ψ = ' + frac('Δk x − Δω t', '2')) + eq('δn = <span class="group-key">2A cos(' + frac('Δk x − Δω t', '2') + ')</span><wbr> · <span class="phase-key">cos(k̄x − ω̄t)</span>') + p('<span class="group-key">慢调制</span> × <span class="phase-key">内部快振荡</span>。两个分量产生周期性的拍；许多分量适当加权，才能得到局部波包。'), p('Substitute the wave variables back into the mean and difference phases:') + eq('Φ = k̄x − ω̄t,　ψ = ' + frac('Δk x − Δω t', '2')) + eq('δn = <span class="group-key">2A cos(' + frac('Δk x − Δω t', '2') + ')</span><wbr> · <span class="phase-key">cos(k̄x − ω̄t)</span>') + p('<span class="group-key">Slow modulation</span> × <span class="phase-key">fast inner oscillation</span>. Two components produce periodic beats; many weighted components can form a localized packet.'), '代回波的变量', 'Substitute the wave variables')
       ]
     },
     {
@@ -97,12 +99,14 @@
       ]
     },
     {
-      id: 'approximation', visual: 'none',
+      id: 'approximation', visual: 'none', sequence: true,
       title: ['近似发生在这一步', 'Here is the approximation'],
-      lead: ['分量集中在 k꜀ 附近，才可以用局部切线近似色散曲线。', 'For components concentrated near k꜀, approximate the dispersion curve by its local tangent.'],
+      lead: ['上一页给出了精确叠加式。现在要解释：为什么包络能近似用一个速度描述？', 'We have the exact sum. Now ask: why can one speed approximately describe the envelope?'],
       blocks: [
-        block(eq('ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)') + p('这是在 k<sub>c</sub> 附近的一阶展开。动画实际使用完整的 ω(k)，没有采用这个近似来强制平移包络。'), eq('ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)') + p('This is a first-order expansion near k<sub>c</sub>. The animation uses the full ω(k); it does not force the envelope to translate rigidly.'), '', ''),
-        block(p('代入每个分量的相位，把中心相位分离出来：') + eq('kⱼx − ωⱼt ≈ <span class="phase-key">(k<sub>c</sub>x − ω<sub>c</sub>t)</span><wbr> + <span class="group-key">(kⱼ − k<sub>c</sub>)(x − v<sub>g</sub>t)</span>') + p('下一页把所有分量相加，看这个拆分怎样给出移动的包络。'), p('Substitute into each component phase and separate the central phase:') + eq('kⱼx − ωⱼt ≈ <span class="phase-key">(k<sub>c</sub>x − ω<sub>c</sub>t)</span><wbr> + <span class="group-key">(kⱼ − k<sub>c</sub>)(x − v<sub>g</sub>t)</span>') + p('Next, add all components to see how this split gives a moving envelope.'), '代入并拆开相位', 'Substitute and split the phase')
+        block(p('逐项计算能画出波包，却还没有直接说明包络怎样移动：') + eq('Z(x,t) = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' exp[i(kⱼx − ωⱼt)]') + p('我们希望从这个式子中分离出“内部快速相位”和依赖 <strong>x − v<sub>g</sub>t</strong> 的包络。') + p('为看清这一结构，对中心波数附近的 ω(k) 作一阶近似。它用于解释群速度；动画仍逐项使用完整的 ω(kⱼ)。'), p('Evaluating each term draws the packet, but does not yet explain its envelope motion:') + eq('Z(x,t) = ∑ⱼ ' + frac('Aⱼ', 'n₀') + ' exp[i(kⱼx − ωⱼt)]') + p('We want to separate the fast inner phase from an envelope depending on <strong>x − v<sub>g</sub>t</strong>.') + p('A first-order approximation of ω(k) near the center reveals that structure. It explains group speed; the animation still uses the full ω(kⱼ).'), '', ''),
+        block(p('先定义第 j 个分量离中心的波数偏差：') + eq('Δkⱼ = kⱼ − k<sub>c</sub>　[rad/m]') + p('在 k<sub>c</sub> 处作 Taylor 展开；ω<sub>c</sub> = ω(k<sub>c</sub>)：') + eq('ωⱼ = ω(k<sub>c</sub> + Δkⱼ)') + eq('ωⱼ = ω<sub>c</sub> + ω′<sub>c</sub> Δkⱼ <wbr>+ ' + frac('1', '2') + ' ω″<sub>c</sub>(Δkⱼ)² + ⋯') + p('ω′<sub>c</sub> = (dω/dk)<sub>c</sub> [m/s]；ω″<sub>c</sub> = (d²ω/dk²)<sub>c</sub> [m²/s]。撇号表示对 k 求导，再在中心取值。'), p('Define the wavenumber offset of component j:') + eq('Δkⱼ = kⱼ − k<sub>c</sub>　[rad/m]') + p('Taylor-expand about k<sub>c</sub>, with ω<sub>c</sub> = ω(k<sub>c</sub>):') + eq('ωⱼ = ω(k<sub>c</sub> + Δkⱼ)') + eq('ωⱼ = ω<sub>c</sub> + ω′<sub>c</sub> Δkⱼ <wbr>+ ' + frac('1', '2') + ' ω″<sub>c</sub>(Δkⱼ)² + ⋯') + p('ω′<sub>c</sub> = (dω/dk)<sub>c</sub> [m/s]; ω″<sub>c</sub> = (d²ω/dk²)<sub>c</sub> [m²/s]. Primes mean derivatives with respect to k, evaluated at the center.'), '先写出 Taylor 展开', 'Write the Taylor expansion'),
+        block(p('窄带且观察时间内高阶项的相位累积很小时，保留常数项和一次项。记 v<sub>g</sub> = ω′<sub>c</sub>：') + eq('<span class="group-key">ωⱼ ≈ ω<sub>c</sub> + v<sub>g</sub>(kⱼ − k<sub>c</sub>)</span>') + p('把上面的 <strong>ωⱼ 近似式</strong>，代入每个分量的相位 θⱼ = kⱼx − ωⱼt [rad]：') + eq('θⱼ ≈ kⱼx − [ω<sub>c</sub> + v<sub>g</sub>(kⱼ − k<sub>c</sub>)]t') + eq('θⱼ ≈ kⱼx − ω<sub>c</sub>t − v<sub>g</sub>(kⱼ − k<sub>c</sub>)t'), p('For a narrow band and times over which higher-order phase corrections stay small, keep the constant and linear terms. Write v<sub>g</sub> = ω′<sub>c</sub>:') + eq('<span class="group-key">ωⱼ ≈ ω<sub>c</sub> + v<sub>g</sub>(kⱼ − k<sub>c</sub>)</span>') + p('Substitute this <strong>approximation for ωⱼ</strong> into the phase of each component, θⱼ = kⱼx − ωⱼt [rad]:') + eq('θⱼ ≈ kⱼx − [ω<sub>c</sub> + v<sub>g</sub>(kⱼ − k<sub>c</sub>)]t') + eq('θⱼ ≈ kⱼx − ω<sub>c</sub>t − v<sub>g</sub>(kⱼ − k<sub>c</sub>)t'), '保留一阶并代入相位', 'Keep first order and substitute into phase'),
+        block(p('加上再减去 k<sub>c</sub>x，把 kⱼx 写成：') + eq('kⱼx = k<sub>c</sub>x + (kⱼ − k<sub>c</sub>)x') + p('代回上一式，再提取公因子 (kⱼ − k<sub>c</sub>)：') + eq('θⱼ ≈ (k<sub>c</sub>x − ω<sub>c</sub>t)<wbr> + (kⱼ − k<sub>c</sub>)x − (kⱼ − k<sub>c</sub>)v<sub>g</sub>t') + eq('θⱼ ≈ <span class="phase-key">(k<sub>c</sub>x − ω<sub>c</sub>t)</span><wbr> + <span class="group-key">(kⱼ − k<sub>c</sub>)(x − v<sub>g</sub>t)</span>') + p('第一项对所有分量相同；第二项只通过 x − v<sub>g</sub>t 依赖位置和时间。下一页把它放回复数和 Z，读出包络速度。'), p('Add and subtract k<sub>c</sub>x to write:') + eq('kⱼx = k<sub>c</sub>x + (kⱼ − k<sub>c</sub>)x') + p('Substitute back, then factor out (kⱼ − k<sub>c</sub>):') + eq('θⱼ ≈ (k<sub>c</sub>x − ω<sub>c</sub>t)<wbr> + (kⱼ − k<sub>c</sub>)x − (kⱼ − k<sub>c</sub>)v<sub>g</sub>t') + eq('θⱼ ≈ <span class="phase-key">(k<sub>c</sub>x − ω<sub>c</sub>t)</span><wbr> + <span class="group-key">(kⱼ − k<sub>c</sub>)(x − v<sub>g</sub>t)</span>') + p('The first term is common to all components; the second depends on position and time through x − v<sub>g</sub>t. Next, put this into the complex sum Z to read the envelope speed.'), '分离中心相位', 'Separate the central phase')
       ]
     },
     {
@@ -126,12 +130,14 @@
       ]
     },
     {
-      id: 'animation', visual: 'none',
-      title: ['动画中的点，代表什么？', 'What do the animated dots mean?'],
-      lead: ['点的疏密对应总密度；两种波速都不是单个电子的速度。', 'Dot spacing represents total density. Neither wave speed is an individual electron velocity.'],
+      id: 'animation', visual: 'repetition', sequence: true,
+      title: ['点阵、时间与观察窗口', 'Dots, time and the viewing window'],
+      lead: ['点的疏密对应总密度。扩大观察窗口，还会看到什么？', 'Dot spacing represents total density. What appears if we widen the viewing window?'],
       blocks: [
-        block(p('点阵使用守恒的运动学映射。它没有求解粒子受力，也没有绘制随机热运动。') + eq('n = n₀ + δn，　' + frac('|δn|', 'n₀') + ' ≤ 0.18') + p('全部幅值之和为 0.18 n₀，因此 n ≥ 0.82 n₀，密度始终为正。n₀、δn、n 的单位为 m⁻³。'), p('The dots use a conservative kinematic map. Particle forces and random thermal motion are not simulated.') + eq('n = n₀ + δn,　' + frac('|δn|', 'n₀') + ' ≤ 0.18') + p('The amplitudes sum to 0.18 n₀, so n ≥ 0.82 n₀ and density stays positive. n₀, δn and n are in m⁻³.'), '', ''),
-        block(p('每播放 1 s，对应物理时间 3 × 10⁻⁸ s。动画循环区间为：') + eq('0 ≤ t ≤ 2 × 10⁻⁷ s') + p('离散谱的空间重复间距约为 5.24 m；当前只显示 −0.5 m 至 0.9 m，窗口内是一个波包。'), p('Each playback second represents 3 × 10⁻⁸ s of physical time. The animation loops over:') + eq('0 ≤ t ≤ 2 × 10⁻⁷ s') + p('The discrete spectrum repeats in space about every 5.24 m. The window from −0.5 m to 0.9 m shows one packet.'), '说明时间和观察窗口', 'Read the time and viewing window')
+        block(p('点阵使用守恒的运动学映射。它没有求解粒子受力，也没有绘制随机热运动；两种波速都不是单个电子的速度。') + eq('n = n₀ + δn，　' + frac('|δn|', 'n₀') + ' ≤ 0.18') + p('全部幅值之和为 0.18 n₀，因此 n ≥ 0.82 n₀，密度始终为正。n₀、δn、n 的单位为 m⁻³。'), p('The dots use a conservative kinematic map. Particle forces and random thermal motion are not simulated; neither wave speed is an electron velocity.') + eq('n = n₀ + δn,　' + frac('|δn|', 'n₀') + ' ≤ 0.18') + p('The amplitudes sum to 0.18 n₀, so n ≥ 0.82 n₀ and density stays positive. n₀, δn and n are in m⁻³.'), '', ''),
+        block(p('先看一直使用的局部窗口：') + eq('−0.5 m ≤ x ≤ 0.9 m') + p('这里显示一个波包。每播放 1 s，对应物理时间 3 × 10⁻⁸ s；循环区间为：') + eq('0 ≤ t ≤ 2 × 10⁻⁷ s') + p('点击下一步扩大视野，查看这个窗口之外的密度波。'), p('Start with the original local window:') + eq('−0.5 m ≤ x ≤ 0.9 m') + p('It shows one packet. Each playback second represents 3 × 10⁻⁸ s of physical time, looping over:') + eq('0 ≤ t ≤ 2 × 10⁻⁷ s') + p('Use the next step to widen the view and see the density wave outside this window.'), '观察原来的局部窗口', 'Inspect the original window'),
+        block(p('上图把视野扩大到 <strong>−6.5 m 至 6.5 m</strong>，能看到三个重复的波包。金色区域是原观察窗，下图把它放大。') + eq('L = ' + frac('2π rad', '1.2 rad/m') + ' ≈ 5.24 m') + p('播放或拖动时间：三个包络以相同方式演化，彼此相隔 L。宽视野中内部波峰很密，可在下图看清。'), p('The upper view spans <strong>−6.5 m to 6.5 m</strong> and shows three repeating packets. Gold marks the original window, enlarged below.') + eq('L = ' + frac('2π rad', '1.2 rad/m') + ' ≈ 5.24 m') + p('Play or scrub time: all three envelopes evolve identically, separated by L. Use the lower view to resolve the densely packed inner crests.'), '扩大视野，看到多个波包', 'Widen the view to see multiple packets'),
+        block(p('为什么重复？本例的波数按同一间隔取样：') + eq('Δk<sub>s</sub> = 1.2 rad/m') + eq('kⱼ = (35 + j)Δk<sub>s</sub>') + p('把位置增加 L = 2π/Δk<sub>s</sub>，每个分量的相位都增加整数个 2π：') + eq('kⱼL = 2π(35 + j)') + eq('δn(x + L,t) = δn(x,t)') + p('所以密度和包络都重复。这来自本例的等间隔离散谱，并非所有物理波包都必须重复。'), p('Why does it repeat? The wavenumbers use a uniform spacing:') + eq('Δk<sub>s</sub> = 1.2 rad/m') + eq('kⱼ = (35 + j)Δk<sub>s</sub>') + p('Increasing x by L = 2π/Δk<sub>s</sub> adds an integer multiple of 2π to every component phase:') + eq('kⱼL = 2π(35 + j)') + eq('δn(x + L,t) = δn(x,t)') + p('Both density and envelope repeat. This follows from this uniformly sampled spectrum; physical packets need not repeat.'), '解释 5.24 m 从哪里来', 'Explain where 5.24 m comes from')
       ]
     },
     {
@@ -185,6 +191,11 @@
       history.replaceState(null, '', url);
     } catch (_) { /* Optional in restricted file previews. */ }
   }
+  function currentVisual() {
+    if (current().id === 'animation') return s.build === 0 ? 'none' : (s.build === 1 ? 'packet' : 'repetition');
+    return current().visual;
+  }
+  function hasPacket() { return ['packet', 'repetition'].includes(currentVisual()); }
   function packetOptions() {
     const id = current().id;
     return { envelope: id !== 'packet' || s.build >= 1,
@@ -197,7 +208,7 @@
     $('packet-time').setAttribute('aria-valuetext', value);
   }
   function canPlay() {
-    return !!ctx && current().visual === 'packet' && (current().id !== 'nondispersive' || s.build >= 1);
+    return !!ctx && hasPacket() && (current().id !== 'nondispersive' || s.build >= 1);
   }
   function motion() {
     $('motion').hidden = !canPlay();
@@ -205,7 +216,9 @@
     $('motion').setAttribute('aria-pressed', String(s.paused));
   }
   function render(reason = 'state') {
-    const slide = current(), t = text(), options = packetOptions();
+    const slide = current(), t = text(), options = packetOptions(), visual = currentVisual();
+    $('lesson').dataset.visual = visual;
+    $('slide-content').dataset.sequence = String(!!slide.sequence);
     $('lesson').dataset.slide = slide.id; $('lesson').dataset.build = String(s.build);
     $('chapter').textContent = t.chapter;
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
@@ -222,19 +235,19 @@
       }));
     }
     $('slide-content').querySelectorAll('.build-block').forEach((node, i) => {
-      node.hidden = i > s.build;
+      node.hidden = slide.sequence ? i !== s.build : i > s.build;
       node.classList.remove('just-revealed');
       if (reason === 'reveal' && i === s.build) {
         void node.offsetWidth; node.classList.add('just-revealed');
       }
     });
-    $('slide-layout').dataset.visual = slide.visual;
-    $('visual-pane').hidden = slide.visual === 'none';
-    $('packet-figure').hidden = slide.visual !== 'packet';
-    $('chart-figure').hidden = !['slopes', 'spectrum'].includes(slide.visual);
+    $('slide-layout').dataset.visual = visual;
+    $('visual-pane').hidden = visual === 'none';
+    $('packet-figure').hidden = !hasPacket();
+    $('chart-figure').hidden = !['slopes', 'spectrum'].includes(visual);
     $('canvas-fallback').hidden = !!ctx; $('canvas-fallback').textContent = t.noCanvas;
     canvas.hidden = !ctx;
-    $('packet-legend').hidden = slide.visual !== 'packet' || !options.envelope;
+    $('packet-legend').hidden = !hasPacket() || !options.envelope;
     $('phase-key').hidden = !options.phase; $('phase-key').textContent = t.phase;
     $('group-key').hidden = !options.envelope; $('group-key').textContent = options.group ? t.group : t.envelope;
     $('time-controls').hidden = !canPlay() || slide.id === 'packet';
@@ -242,8 +255,9 @@
     $('comparison').hidden = slide.id !== 'nondispersive' || s.build < 2;
     $('comparison-label').textContent = t.compare; $('linear-branch').checked = s.linear;
     $('model-note').textContent = s.linear ? (lang === 'zh' ? '数学对照；时间减速并循环。' : 'Mathematical comparison; slowed, looped time.') : (slide.id === 'packet' ? t.model : t.slowed);
-    $('model-note').hidden = slide.visual !== 'packet';
-    $('chart-note').textContent = slide.visual === 'slopes'
+    $('model-note').hidden = !hasPacket();
+    if (visual === 'repetition') $('model-note').textContent = lang === 'zh' ? '同一时刻；使用完整 ω(kⱼ)。' : 'Same time; full ω(kⱼ) in both views.';
+    $('chart-note').textContent = visual === 'slopes'
       ? 'ω(k) = √(ω₀² + u²k²) · ω₀ = 10⁸ rad/s · u = 10⁶ m/s'
       : (lang === 'zh' ? '纵轴 Aⱼ/n₀ 无量纲；初相位均为 0 rad。' : 'Vertical Aⱼ/n₀ is dimensionless; all initial phases are 0 rad.');
     const finalBuild = s.build === slide.blocks.length - 1, finalSlide = s.slide === slides.length - 1;
@@ -270,16 +284,17 @@
     $('return-link').setAttribute('aria-label', lang === 'zh' ? '返回等离子体波课堂' : 'Return to the plasma waves course');
     $('status').textContent = $('stage-count').textContent + ', ' + $('build-count').textContent + '. ' + translated(slide.title);
     canvas.setAttribute('aria-label', translated(slide.lead) + ' δn/n₀ [1], x [m]. ' + (options.envelope ? t.envelope + '. ' : '') + (options.phase ? t.phase + '. ' : '') + (options.group ? t.group : ''));
+    if (visual === 'repetition') canvas.setAttribute('aria-label', lang === 'zh' ? '宽视野显示间距约5.24米的三个波包。金色区域为原观察窗，下图在同一时刻将它放大。两图横轴x以米计，纵轴相对密度扰动无量纲，蓝色虚线是包络。' : 'Three packets repeat about every 5.24 m in the wide view. Gold marks the original window, enlarged below at the same time. Both axes: x in meters and dimensionless relative density; blue dashes show the envelope.');
     canvas.textContent = canvas.getAttribute('aria-label');
     $('status').textContent += '. ' + $('slide-content').children[s.build].textContent;
-    if (reason === 'page') {
+    if (reason === 'page' || (slide.sequence && ['reveal', 'back'].includes(reason))) {
       $('slide-main').classList.remove('slide-enter'); void $('slide-main').offsetWidth;
       $('slide-main').classList.add('slide-enter');
       window.scrollTo({ top: 0, behavior: 'instant' });
       $('title').focus({ preventScroll: true });
     }
     writePosition(); syncTime(); motion(); fit(); drawChart();
-    if (reason === 'reveal') {
+    if (reason === 'reveal' && !(slide.sequence && hasPacket())) {
       const fresh = $('slide-content').children[s.build];
       const limit = innerHeight - document.querySelector('.controls').offsetHeight - 16;
       const rect = fresh.getBoundingClientRect();
@@ -325,7 +340,7 @@
     ctx.beginPath(); ctx.fillStyle = color; ctx.arc(x, y, radius, 0, 2 * Math.PI); ctx.fill();
   }
   function fit() {
-    if (!ctx || current().visual !== 'packet') return;
+    if (!ctx || !hasPacket()) return;
     const rect = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
     if (!rect.width || !rect.height) return;
     s.width = rect.width; s.height = rect.height;
@@ -333,7 +348,8 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw();
   }
   function draw() {
-    if (!ctx || current().visual !== 'packet' || !s.width) return;
+    if (!ctx || !hasPacket() || !s.width) return;
+    if (currentVisual() === 'repetition') { drawRepetition(); return; }
     ctx.clearRect(0, 0, s.width, s.height); ctx.save(); ctx.scale(1, s.height / 350);
     const options = packetOptions(), time = s.time / M.W0, modes = M.modes(s.linear);
     const left = 66, right = s.width - 20, width = right - left, mid = 115, scale = 60 / M.AMPLITUDE;
@@ -371,6 +387,45 @@
       for (let row = 0; row < 4; row++) dot(x, 305 + row * 13, radius, mint);
     }
     ctx.restore(); ctx.restore();
+  }
+  function drawRepetition() {
+    const time = s.time / M.W0, modes = M.modes(false), period = 2 * Math.PI / 1.2;
+    const left = 66, right = s.width - 18, width = right - left;
+    ctx.clearRect(0, 0, s.width, s.height);
+    const panel = (min, max, mid, amplitude, ticks, count) => {
+      const px = x => left + (x - min) / (max - min) * width;
+      for (const v of [-.18, 0, .18]) {
+        const y = mid - amplitude * v / .18;
+        line(left, y, right, y);
+        label(v ? v.toFixed(2) : '0', left - 10, y, white, 22, 'right');
+      }
+      if (min < -1) {
+        ctx.fillStyle = '#f4c58326'; ctx.fillRect(px(M.XMIN), mid - amplitude - 12, px(M.XMAX) - px(M.XMIN), 2 * amplitude + 24);
+        line(px(M.XMIN), mid - amplitude - 12, px(M.XMIN), mid + amplitude + 12, gold);
+        line(px(M.XMAX), mid - amplitude - 12, px(M.XMAX), mid + amplitude + 12, gold);
+      }
+      const samples = Array.from({ length: count + 1 }, (_, i) => M.sample(min + i / count * (max - min), time, modes));
+      for (const [field, sign, color, dash] of [['envelope', 1, blue, [8, 5]], ['envelope', -1, blue, [8, 5]], ['re', 1, white, []]]) {
+        ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = field === 're' ? 1.5 : 2.5; ctx.setLineDash(dash);
+        samples.forEach((v, i) => {
+          const x = left + i / count * width, y = mid - amplitude * sign * v[field] / .18;
+          if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+        });
+        ctx.stroke(); ctx.setLineDash([]);
+      }
+      for (const [x, value] of ticks) label(value, px(x), mid + amplitude + 26, white, 22);
+      label('x [m]', right, mid + amplitude + 58, white, 23, 'right');
+      return px;
+    };
+    label(lang === 'zh' ? '宽视野' : 'Wide view', 8, 20, mint, 24, 'left');
+    label('δn/n₀ [1]', right, 20, white, 22, 'right');
+    const px = panel(-6.5, 6.5, 115, 42, [[-period, '−5.24'], [0, '0'], [period, '5.24']], 2400);
+    const peak = M.peak(time, false), x1 = px(peak - period), x2 = px(peak);
+    line(x1, 54, x2, 54, blue, 2); line(x1, 48, x1, 60, blue, 2); line(x2, 48, x2, 60, blue, 2);
+    label('L', (x1 + x2) / 2, 41, blue, 23);
+    line(8, 230, right, 230);
+    label(lang === 'zh' ? '金色窗口放大' : 'Gold window enlarged', 8, 252, gold, s.width < 400 ? 22 : 26, 'left');
+    panel(M.XMIN, M.XMAX, 322, 45, [[M.XMIN, '−0.5'], ...(s.width >= 500 ? [[0, '0']] : []), [M.XMAX, '0.9']], 360);
   }
   function drawChart() {
     const visual = current().visual;

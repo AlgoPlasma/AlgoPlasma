@@ -6,7 +6,7 @@
   complex amplitudes, and the page 07 origin-to-point phase-speed construction.
 - Destination: distinguish inner phase from the packet envelope; match their
   motions to origin-ray and tangent slopes; recognize the narrow-band condition.
-- Fourteen independent slides, each with two or three builds. Forward navigation
+- Fourteen independent slides, each with two to four builds. Forward navigation
   reveals one block within a slide, then clears the explanation for the next slide.
   Course navigation and slide navigation are labeled separately.
 - Reasoning task: compare whether the two markers stay together when the branch
@@ -166,3 +166,37 @@ dispersion branch and paused playback while preserving language. Restart slide
 remains separate. Checked restart from the opening, comparison and final slides
 in both languages, including active playback, and 48 footer layouts across
 320–1920 px. Image clicks still do not advance. Sphinx built without warnings.
+
+## Derivation and wide-window revision, 2026-11-19
+
+Keep all 14 slide numbers. Slides 4, 10 and 13 now use four working panels
+on the same slide; each panel replaces the previous one to retain large type
+and a clean reading path. Other slides retain cumulative builds.
+
+- Slide 4: define the two phases, express them as mean plus/minus half-difference,
+  expand the cosine sum/difference identities, cancel sine terms, and substitute
+  the wave variables to obtain the beat-envelope product.
+- Slide 10: motivate the approximation from the exact complex sum and the goal
+  of identifying an envelope depending on x-vg*t. Show Taylor terms explicitly,
+  retain first order, substitute the approximation for omega_j into theta_j,
+  then add/subtract kc*x and factor. Full omega_j still drives the animation.
+- Slide 13: retain the dot-density/time explanation, then widen the observation
+  window to [-6.5,6.5] m with the original [-0.5,0.9] m window highlighted and
+  magnified below. Both plots directly sample the same 31 modes at the same
+  time; no copied picture or extra wave populations are introduced.
+
+The spacing is L=2*pi/1.2=5.235987756 m. For this spectrum, k_j=(35+j)*1.2,
+so every complex component gains an integer multiple of 2*pi over L. Both
+the real density and envelope repeat exactly at every time. This is a property
+of this uniformly sampled spectrum, not a requirement for all physical packets.
+The wide plot uses 2401 samples to resolve the model before screen compression;
+the local view resolves the inner crests. Playback retains the original rate
+and time interval, with pause/scrub, language preservation, and both resets.
+
+Validation: physics tests and new spatial-period checks passed for real part,
+imaginary part and envelope at multiple positions/times and shifts +/-L. All
+40 states in both languages at 320, 768, 1440 and 1920 px were checked (320
+views), with no horizontal/equation overflow or language leakage. Verified
+replacement panels, next/back, unchanged slide numbering, image-click inactivity,
+time continuity between local/wide views, animated redraw, language state and
+slide/lesson reset. Sphinx built without warnings.

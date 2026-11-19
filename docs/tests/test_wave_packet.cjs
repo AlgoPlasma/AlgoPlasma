@@ -49,3 +49,19 @@ const measuredGroupSpeed = (M.peak(M.TMAX, false) - M.peak(0, false)) / M.TMAX;
 assert.ok(Math.abs(measuredGroupSpeed / M.VG - 1) < .01, 'narrow-band envelope speed within 1% of group speed');
 assert.ok(M.VP > 3 * measuredGroupSpeed, 'phase marker visibly overtakes the envelope');
 console.log(`Wave-packet physics checks passed. vph=${M.VP.toFixed(1)} m/s; vg=${M.VG.toFixed(1)} m/s; envelope=${measuredGroupSpeed.toFixed(1)} m/s.`);
+
+// The wide view on slide 13 must be the same field, repeating at L in space.
+const spatialPeriod = 2 * Math.PI / 1.2;
+for (const t of [0, 9e-8, M.TMAX]) {
+  const selected = M.modes(false);
+  for (const x of [-.45, 0, .21, .8]) {
+    const original = M.sample(x, t, selected);
+    for (const shift of [-1, 1]) {
+      const repeated = M.sample(x + shift * spatialPeriod, t, selected);
+      for (const field of ["re", "im", "envelope"]) {
+        near(repeated[field], original[field], 1e-13, "spatial repetition of " + field);
+      }
+    }
+  }
+}
+console.log("Wide-view spatial-period checks passed (L=" + spatialPeriod.toFixed(6) + " m).");

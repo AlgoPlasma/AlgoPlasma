@@ -110,3 +110,11 @@
 .packet-lesson .build-block { scroll-margin-top: 20px; }
 
 .packet-lesson .math-term { display: inline-block; white-space: nowrap; }
+
+/* Long derivations advance within their existing slide, one working panel at a time. */
+.packet-lesson .slide-content[data-sequence="true"] .build-block { margin-top: 0; padding-top: 0; border-top: 0; }
+.lesson.packet-lesson[data-visual="repetition"] .scene canvas { height: 440px; min-height: 440px; }
+
+.packet-lesson[data-slide="animation"] .packet-legend .group-key::before { content: "╌ "; }
+
+.packet-lesson[data-visual="repetition"] .slide-layout { margin-top: 12px; }
