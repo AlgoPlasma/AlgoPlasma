@@ -20,9 +20,9 @@
         p('Density sets charge and electric field; the field accelerates electrons; their flow changes density.')+eq('n₁ → E₁ → v₁ → n₁')+p('One wave must satisfy all three links simultaneously. Their compatibility gives the dispersion relation.'),'找出自洽的闭环','Identify the feedback loop')
     ]),
     S('model','none','先说清楚：我们在求哪种波？','Specify the wave and the model',
-      '先从最简单的冷电子、静电、纵向扰动开始。','Begin with a cold-electron, electrostatic, longitudinal disturbance.',[
-      B(p('一维 x 方向；背景均匀、无磁场、无碰撞。离子固定为 nᵢ = n₀；电子可运动。先忽略电子压强。')+p('电场与扰动都沿 x 方向，描述电子的纵向密度振荡。'),
-        p('One spatial direction x; uniform background, no magnetic field or collisions. Ions remain at nᵢ = n₀ while electrons move. First neglect electron pressure.')+p('The field and disturbance are both along x, describing longitudinal electron-density oscillations.')),
+      '先忽略电子压强，从最简单的电子密度振荡开始。','Begin with the simplest electron-density oscillation by neglecting electron pressure.',[
+      B(p('只考虑 x 方向的变化；背景均匀、无磁场。离子固定为 nᵢ = n₀，电子可运动。忽略电子压强的情形称为冷电子模型。')+p('电场与扰动都沿 x 方向，描述电子的纵向密度振荡。'),
+        p('Allow variation only along x, with a uniform background and no magnetic field. Ions remain at nᵢ = n₀ while electrons move. Neglecting electron pressure gives the cold-electron model.')+p('The field and disturbance are both along x, describing longitudinal electron-density oscillations.')),
       B(p('需要三个随位置和时间变化的量：')+eq('n(x,t)　[m⁻³]')+eq('v(x,t)　[m/s]，　E(x,t)　[V/m]')+p('n：电子数密度；v：电子流体的平均速度；E：电场。电子电荷为 −e，其中 e > 0 [C]；m<sub>e</sub> 是电子质量 [kg]，ε₀ 是真空介电常数 [F/m]。'),
         p('We need three fields varying in position and time:')+eq('n(x,t)　[m⁻³]')+eq('v(x,t)　[m/s],　E(x,t)　[V/m]')+p('n: electron number density; v: mean electron-fluid velocity; E: electric field. Electron charge is −e, with e > 0 [C]; m<sub>e</sub> is electron mass [kg], and ε₀ is vacuum permittivity [F/m].'),'认识变量与单位','Identify variables and units')
     ]),
@@ -35,8 +35,8 @@
       '使用牛顿定律，并记住电子带负电。','Use Newton’s law and keep the negative electron charge.',[
       B(eq('m<sub>e</sub>'+f('Dv','Dt')+' = −eE')+p('D/Dt 是跟随流体运动的时间导数。对于一维速度场：')+eq(f('Dv','Dt')+' = '+dt('v')+' + v'+dx('v')),
         eq('m<sub>e</sub>'+f('Dv','Dt')+' = −eE')+p('D/Dt follows the moving fluid. In a one-dimensional velocity field:')+eq(f('Dv','Dt')+' = '+dt('v')+' + v'+dx('v'))),
-      B(eq('m<sub>e</sub>['+dt('v')+' + v'+dx('v')+'] = −eE')+p('左边包含局部速度变化和穿过不均匀速度场的变化；右边是每个电子所受的电场力。')+p('两边单位均为 N。此处尚未加入压强力；它将在冷电子结果之后加入。'),
-        eq('m<sub>e</sub>['+dt('v')+' + v'+dx('v')+'] = −eE')+p('The left side includes local velocity change and change while moving through a nonuniform velocity field. The right side is the electric force per electron.')+p('Both sides have units N. Pressure is introduced after the cold-electron result.'),'写成速度场的方程','Write the field equation')
+      B(eq('m<sub>e</sub>['+dt('v')+' + v'+dx('v')+'] = −eE')+p('左边包含局部速度变化和穿过不均匀速度场的变化；右边是每个电子所受的电场力。')+p('两边单位均为 N。这一步只考虑电场力。'),
+        eq('m<sub>e</sub>['+dt('v')+' + v'+dx('v')+'] = −eE')+p('The left side includes local velocity change and change while moving through a nonuniform velocity field. The right side is the electric force per electron.')+p('Both sides have units N. At this step, only the electric force is included.'),'写成速度场的方程','Write the field equation')
     ]),
     S('poisson','none','第三条：密度怎样产生电场？','Third: how does density produce a field?',
       '背景可以电中性，但扰动中必须允许少量电荷分离。','The background is neutral, but the perturbation must allow a small charge imbalance.',[
@@ -54,8 +54,8 @@
     ]),
     S('linear-system','none','得到三个线性方程','Obtain three linear equations',
       '对动量方程做同样的处理，泊松方程已经是一阶形式。','Apply the same ordering to momentum; Poisson is already first order.',[
-      B(eq('m<sub>e</sub>['+dt('v₁')+' + <span class="phase-key">v₁'+dx('v₁')+'</span>] = −eE₁')+p('金色的对流项含两个一阶扰动，舍去后：')+eq(momentum),
-        eq('m<sub>e</sub>['+dt('v₁')+' + <span class="phase-key">v₁'+dx('v₁')+'</span>] = −eE₁')+p('The gold advective term contains two first-order perturbations. Dropping it gives:')+eq(momentum)),
+      B(eq('m<sub>e</sub>['+dt('v₁')+' + <span class="phase-key">v₁'+dx('v₁')+'</span>] = −eE₁')+p('金色项是速度扰动与其空间导数的乘积，属于二阶，舍去后：')+eq(momentum),
+        eq('m<sub>e</sub>['+dt('v₁')+' + <span class="phase-key">v₁'+dx('v₁')+'</span>] = −eE₁')+p('The gold term multiplies the velocity perturbation by its spatial derivative, making it second order. Dropping it gives:')+eq(momentum)),
       B(eq(continuity)+eq(momentum)+eq(poisson)+p('未知量是 n₁、v₁、E₁。下一步用同一 k、ω 的平面波，把这三个微分方程变成代数方程。'),
         eq(continuity)+eq(momentum)+eq(poisson)+p('The unknowns are n₁, v₁ and E₁. Next, use plane waves with a shared k and ω to turn these differential equations into algebra.'),'把三个方程放在一起','Collect the three equations')
     ]),
@@ -72,13 +72,13 @@
         eq('−iωN + ikn₀V = 0　⇒　V = '+f('ωN','kn₀'))+eq('ikℰ = −'+f('eN','ε₀')+'　⇒　ℰ = '+f('ieN','kε₀'))+p('The second result uses 1/i = −i. The factor i means field and density are not in phase.')),
       B(p('把这两个振幅代入动量方程 −iωm<sub>e</sub>V = −eℰ：')+eq('−iωm<sub>e</sub>'+f('ωN','kn₀')+' = −e '+f('ieN','kε₀'))+p('两边同乘 kn₀/(−im<sub>e</sub>)：')+eq('ω²N = '+f('n₀e²','m<sub>e</sub>ε₀')+' N'),
         p('Insert both amplitudes into momentum, −iωm<sub>e</sub>V = −eℰ:')+eq('−iωm<sub>e</sub>'+f('ωN','kn₀')+' = −e '+f('ieN','kε₀'))+p('Multiply both sides by kn₀/(−im<sub>e</sub>):')+eq('ω²N = '+f('n₀e²','m<sub>e</sub>ε₀')+' N'),'代回动量方程','Substitute into momentum'),
-      B(eq('['+'ω² − '+f('n₀e²','m<sub>e</sub>ε₀')+']N = 0')+p('N = 0 是没有密度波的平凡解。要有非零波幅 N ≠ 0，方括号必须为零：')+eq('<span class="group-key">ω² = '+wpsq+' = '+f('n₀e²','m<sub>e</sub>ε₀')+'</span>'),
-        eq('[ω² − '+f('n₀e²','m<sub>e</sub>ε₀')+']N = 0')+p('N = 0 is the trivial solution with no density wave. A nonzero amplitude N requires the bracket to vanish:')+eq('<span class="group-key">ω² = '+wpsq+' = '+f('n₀e²','m<sub>e</sub>ε₀')+'</span>'),'要求非零波幅','Require a nonzero wave')
+      B(eq('['+'ω² − '+f('n₀e²','m<sub>e</sub>ε₀')+']N = 0')+p('N = 0 表示没有密度波。要有非零波幅 N ≠ 0，方括号必须为零：')+eq('<span class="group-key">ω² = '+wpsq+' = '+f('n₀e²','m<sub>e</sub>ε₀')+'</span>'),
+        eq('[ω² − '+f('n₀e²','m<sub>e</sub>ε₀')+']N = 0')+p('N = 0 means there is no density wave. A nonzero amplitude N requires the bracket to vanish:')+eq('<span class="group-key">ω² = '+wpsq+' = '+f('n₀e²','m<sub>e</sub>ε₀')+'</span>'),'要求非零波幅','Require a nonzero wave')
     ]),
     S('cold-result','density','第一条关系：冷电子振荡','The first relation: cold-electron oscillations',
       '这次 ω 是从三个方程的相容条件中得到的。','Now ω comes from compatibility of the three equations.',[
-      B(eq('ω = ±'+wp+'，　'+wp+' = √('+f('n₀e²','m<sub>e</sub>ε₀')+')')+p('选正频率分支。ω<sub>pe</sub> [rad/s] 是电子等离子体角频率；f<sub>pe</sub> = ω<sub>pe</sub>/(2π) [Hz]。')+p('本例 n₀ ≈ 3.14 × 10¹² m⁻³，ω<sub>pe</sub> = 10⁸ rad/s。'),
-        eq('ω = ±'+wp+',　'+wp+' = √('+f('n₀e²','m<sub>e</sub>ε₀')+')')+p('Choose the positive-frequency branch. ω<sub>pe</sub> [rad/s] is the electron plasma angular frequency; f<sub>pe</sub> = ω<sub>pe</sub>/(2π) [Hz].')+p('Here n₀ ≈ 3.14 × 10¹² m⁻³ and ω<sub>pe</sub> = 10⁸ rad/s.')),
+      B(eq('ω = ±'+wp+'，　'+wp+' = √('+f('n₀e²','m<sub>e</sub>ε₀')+')')+p('以下取 ω = +ω<sub>pe</sub>。ω<sub>pe</sub> [rad/s] 是电子等离子体角频率；f<sub>pe</sub> = ω<sub>pe</sub>/(2π) [Hz]。')+p('本例 n₀ ≈ 3.14 × 10¹² m⁻³，ω<sub>pe</sub> = 10⁸ rad/s。'),
+        eq('ω = ±'+wp+',　'+wp+' = √('+f('n₀e²','m<sub>e</sub>ε₀')+')')+p('Use ω = +ω<sub>pe</sub> below. ω<sub>pe</sub> [rad/s] is the electron plasma angular frequency; f<sub>pe</sub> = ω<sub>pe</sub>/(2π) [Hz].')+p('Here n₀ ≈ 3.14 × 10¹² m⁻³ and ω<sub>pe</sub> = 10⁸ rad/s.')),
       B(p('把波数加倍：波长减半，但冷模型中的振荡频率保持不变。播放动画，对比两列波。')+eq('ω(k) = '+wp)+p('它的 ω–k 图是水平线：v<sub>ph</sub> = ω<sub>pe</sub>/k，v<sub>g</sub> = 0。它不是 08 课的无色散对照 ω = Vk；这里相速度仍随 k 改变。'),
         p('Double k: the wavelength halves, but the cold-model frequency stays the same. Play to compare the two waves.')+eq('ω(k) = '+wp)+p('Its ω–k plot is horizontal: v<sub>ph</sub> = ω<sub>pe</sub>/k and v<sub>g</sub> = 0. This differs from the nondispersive ω = Vk comparison in lesson 08: phase speed here still depends on k.'),'比较两种波长','Compare two wavelengths')
     ]),
@@ -86,15 +86,15 @@
       '消去速度和电场，直接看密度是否受到恢复作用。','Eliminate velocity and field directly to check the restoring response.',[
       B(p('对连续性方程取一次时间导数：')+eq(f('∂²n₁','∂t²')+' + n₀ '+dx('('+dt('v₁')+')')+' = 0')+p('代入 ∂<sub>t</sub>v₁ = −(e/m<sub>e</sub>)E₁：')+eq(f('∂²n₁','∂t²')+' = '+f('n₀e','m<sub>e</sub>')+dx('E₁')),
         p('Differentiate continuity once in time:')+eq(f('∂²n₁','∂t²')+' + n₀ '+dx('('+dt('v₁')+')')+' = 0')+p('Substitute ∂<sub>t</sub>v₁ = −(e/m<sub>e</sub>)E₁:')+eq(f('∂²n₁','∂t²')+' = '+f('n₀e','m<sub>e</sub>')+dx('E₁'))),
-      B(p('再代入泊松方程 ∂<sub>x</sub>E₁ = −en₁/ε₀：')+eq(f('∂²n₁','∂t²')+' = −'+f('n₀e²','m<sub>e</sub>ε₀')+' n₁')+eq(f('∂²n₁','∂t²')+' + '+wpsq+' n₁ = 0')+p('这是简谐振荡方程。密度偏离产生反向恢复作用；若推成指数增长，应先检查电子电荷和泊松方程的负号。'),
-        p('Now substitute Poisson, ∂<sub>x</sub>E₁ = −en₁/ε₀:')+eq(f('∂²n₁','∂t²')+' = −'+f('n₀e²','m<sub>e</sub>ε₀')+' n₁')+eq(f('∂²n₁','∂t²')+' + '+wpsq+' n₁ = 0')+p('This is a harmonic oscillator: the density deviation induces a restoring response. If the derivation predicts exponential growth, check both negative signs.'),'得到密度振荡方程','Obtain the density oscillator')
+      B(p('再代入泊松方程 ∂<sub>x</sub>E₁ = −en₁/ε₀：')+eq(f('∂²n₁','∂t²')+' = −'+f('n₀e²','m<sub>e</sub>ε₀')+' n₁')+eq(f('∂²n₁','∂t²')+' + '+wpsq+' n₁ = 0')+p('这个方程描述角频率为 ω<sub>pe</sub> 的往复振荡。前一行的负号表示：密度偏离后，会产生反向的恢复作用。'),
+        p('Now substitute Poisson, ∂<sub>x</sub>E₁ = −en₁/ε₀:')+eq(f('∂²n₁','∂t²')+' = −'+f('n₀e²','m<sub>e</sub>ε₀')+' n₁')+eq(f('∂²n₁','∂t²')+' + '+wpsq+' n₁ = 0')+p('This equation describes oscillation at angular frequency ω<sub>pe</sub>. The minus sign in the preceding line means that a density deviation induces an opposing, restoring response.'),'得到密度振荡方程','Obtain the density oscillator')
     ]),
     S('pressure','none','加入压强，需要多一个假设','Adding pressure requires one more assumption',
       '热运动可以通过流体压强体现；必须说明压强怎样响应密度。','Thermal effects can enter through fluid pressure; specify how pressure responds to density.',[
-      B(p('每个电子的压强力为 −(1/n)∂<sub>x</sub>p。均匀背景满足 ∂<sub>x</sub>p₀ = 0；分母中的密度扰动与压强扰动相乘为二阶，故线性化后：')+eq('m<sub>e</sub>'+dt('v₁')+' = −eE₁ − '+f('1','n₀')+dx('p₁'))+p('p₁ [Pa] 是压强扰动。现在多了一个未知量，不能只凭“有温度”就直接写出色散关系。'),
-        p('Pressure force per electron is −(1/n)∂<sub>x</sub>p. The uniform background has ∂<sub>x</sub>p₀ = 0. A density perturbation in the denominator multiplies the pressure perturbation and is second order. Thus:')+eq('m<sub>e</sub>'+dt('v₁')+' = −eE₁ − '+f('1','n₀')+dx('p₁'))+p('p₁ [Pa] is the pressure perturbation. There is a new unknown; saying “finite temperature” alone does not close the equations.')),
-      B(p('本课采用局部线性压强响应：')+eq('p₁ = m<sub>e</sub>u²n₁，　u² = '+f('1','m<sub>e</sub>')+'('+f('dp','dn')+')₀')+p('u [m/s] 是压强响应的速度参数，不是流体速度 v。u 与温度的具体对应，需要另行指定压强闭合。')+eq(dt('v₁')+' = −'+f('e','m<sub>e</sub>')+'E₁ − '+f('u²','n₀')+dx('n₁')),
-        p('Adopt a local linear pressure response:')+eq('p₁ = m<sub>e</sub>u²n₁,　u² = '+f('1','m<sub>e</sub>')+'('+f('dp','dn')+')₀')+p('u [m/s] is a pressure-response parameter, not the fluid velocity v. Relating u to temperature requires a specified pressure closure.')+eq(dt('v₁')+' = −'+f('e','m<sub>e</sub>')+'E₁ − '+f('u²','n₀')+dx('n₁')),'给出压强闭合','Specify the pressure closure')
+      B(p('p [Pa] 是电子压强，写作 p = p₀ + p₁。每个电子的压强力为 −(1/n)∂<sub>x</sub>p；均匀背景满足 ∂<sub>x</sub>p₀ = 0。只保留一阶扰动，得到：')+eq('m<sub>e</sub>'+dt('v₁')+' = −eE₁ − '+f('1','n₀')+dx('p₁'))+p('密度扰动与压强扰动的乘积是二阶项，已略去。要消去新增的未知量 p₁，需要给出它与 n₁ 的关系。'),
+        p('Let p [Pa] be electron pressure, with p = p₀ + p₁. The pressure force per electron is −(1/n)∂<sub>x</sub>p. The uniform background has ∂<sub>x</sub>p₀ = 0. Keeping first-order perturbations gives:')+eq('m<sub>e</sub>'+dt('v₁')+' = −eE₁ − '+f('1','n₀')+dx('p₁'))+p('Products of density and pressure perturbations are second order and have been dropped. To eliminate the new unknown p₁, we need its relation to n₁.')),
+      B(p('本例取压强扰动与密度扰动成正比：')+eq('p₁ = m<sub>e</sub>u²n₁，　u² = '+f('1','m<sub>e</sub>')+'('+f('dp','dn')+')₀')+p('u [m/s] 表示压强对密度变化的响应强弱；v 才是电子流体的平均速度。(dp/dn)₀ 是在背景密度 n₀ 处求出的压强随密度变化的斜率。')+eq(dt('v₁')+' = −'+f('e','m<sub>e</sub>')+'E₁ − '+f('u²','n₀')+dx('n₁')),
+        p('In this example, take the pressure perturbation to be proportional to the density perturbation:')+eq('p₁ = m<sub>e</sub>u²n₁,　u² = '+f('1','m<sub>e</sub>')+'('+f('dp','dn')+')₀')+p('u [m/s] measures the pressure response to a density change; v is the mean electron-fluid velocity. (dp/dn)₀ is the slope of pressure versus density evaluated at the background density n₀.')+eq(dt('v₁')+' = −'+f('e','m<sub>e</sub>')+'E₁ − '+f('u²','n₀')+dx('n₁')),'写出压强与密度的关系','Relate pressure to density')
     ]),
     S('warm-result','none','把压强项带回消元过程','Carry pressure through the elimination',
       '连续性和泊松方程没有改变；只替换动量方程。','Continuity and Poisson are unchanged; only momentum gains a term.',[
@@ -102,24 +102,24 @@
         eq('−iωV = −'+f('e','m<sub>e</sub>')+'ℰ − ik'+f('u²','n₀')+'N')+p('Reuse V = ωN/(kn₀) and ℰ = ieN/(kε₀):')+eq('−iω '+f('ωN','kn₀')+' = −'+f('ie²N','m<sub>e</sub>kε₀')+' − '+f('iku²N','n₀'))),
       B(p('两边同乘 kn₀/(−i)，并要求 N ≠ 0：')+eq('ω²N = ('+f('n₀e²','m<sub>e</sub>ε₀')+' + u²k²)N')+eq('<span class="group-key">ω² = '+wpsq+' + u²k²</span>')+p('第一项来自电场恢复力，第二项来自压强响应。两项单位都是 s⁻²（弧度视为无量纲）。'),
         p('Multiply both sides by kn₀/(−i), and require N ≠ 0:')+eq('ω²N = ('+f('n₀e²','m<sub>e</sub>ε₀')+' + u²k²)N')+eq('<span class="group-key">ω² = '+wpsq+' + u²k²</span>')+p('The first term comes from electric restoring force; the second from pressure. Both have units s⁻², with radians dimensionless.'),'保留压强项，得到新关系','Retain pressure to obtain the relation'),
-      B(p('现在接回 07、08 课使用的形式：')+eq('ω(k) = √(ω₀² + u²k²)，　ω₀ = '+wp)+p('取 ω₀ = 10⁸ rad/s、u = 10⁶ m/s，就得到前两课的示例。u → 0 时恢复冷电子结果。')+p('这是线性流体模型；未描述碰撞或 Landau 阻尼。压强闭合的适用范围决定这个温电子近似能用到哪里。'),
-        p('This recovers the form used in lessons 07 and 08:')+eq('ω(k) = √(ω₀² + u²k²),　ω₀ = '+wp)+p('Choose ω₀ = 10⁸ rad/s and u = 10⁶ m/s for the earlier example. The limit u → 0 returns the cold result.')+p('This linear fluid model excludes collisions and Landau damping. Its warm approximation is limited by the pressure closure.'),'接回前两课的曲线','Connect to the earlier curve')
+      B(p('现在接回 07、08 课使用的形式：')+eq('ω(k) = √(ω₀² + u²k²)，　ω₀ = '+wp)+p('取 ω₀ = 10⁸ rad/s、u = 10⁶ m/s，就得到前两课的示例。u → 0 时恢复冷电子结果。'),
+        p('This recovers the form used in lessons 07 and 08:')+eq('ω(k) = √(ω₀² + u²k²),　ω₀ = '+wp)+p('Choose ω₀ = 10⁸ rad/s and u = 10⁶ m/s for the earlier example. The limit u → 0 returns the cold result.'),'接回前两课的曲线','Connect to the earlier curve')
     ]),
     S('explore','dispersion','先预测，再改变模型参数','Predict before changing parameters',
       '只改变背景密度，或只打开压强项，观察曲线怎样变化。','Change background density or enable pressure, and observe the curve.',[
       B(p('先预测：把 n₀ 增大到原来的 4 倍，冷电子频率会变成几倍？然后拖动密度条验证。')+eq(wp+' ∝ √n₀')+p('每次调整表示另一个均匀平衡态；离子背景与电子背景一起改变，仍保持背景电中性。'),
         p('Predict: if n₀ becomes four times larger, what happens to the cold frequency? Then check with the density slider.')+eq(wp+' ∝ √n₀')+p('Each setting is a different uniform equilibrium. The ion and electron backgrounds change together and remain neutral.')),
-      B(p('密度变为 4 倍，ω<sub>pe</sub> 变为 2 倍。再打开压强项：')+eq('ω² = '+wpsq+' + u²k²')+p('u 固定为 10⁶ m/s。压强使高 k 端抬升；提高 n₀ 则改变电场恢复力对应的截距。图中 k = 0 处表示 k → 0 的长波极限。'),
-        p('Four times the density gives twice ω<sub>pe</sub>. Now enable pressure:')+eq('ω² = '+wpsq+' + u²k²')+p('u is fixed at 10⁶ m/s. Pressure raises the high-k part; density changes the intercept associated with electric restoring force. The point k = 0 denotes the long-wavelength limit k → 0.'),'看答案，再比较压强','Reveal the answer and compare pressure')
+      B(p('密度变为 4 倍，ω<sub>pe</sub> 变为 2 倍。再打开压强项：')+eq('ω² = '+wpsq+' + u²k²')+p('u 固定为 10⁶ m/s。压强使高 k 端抬升；提高 n₀ 会提高曲线左端的频率。图中 k = 0 处表示波长越来越长时的极限，此时 ω → ω<sub>pe</sub>。'),
+        p('Four times the density gives twice ω<sub>pe</sub>. Now enable pressure:')+eq('ω² = '+wpsq+' + u²k²')+p('u is fixed at 10⁶ m/s. Pressure raises the high-k part; increasing n₀ raises the frequency at the left end. The point k = 0 represents the limit of increasingly long wavelengths, where ω → ω<sub>pe</sub>.'),'看答案，再比较压强','Reveal the answer and compare pressure')
     ]),
     S('check','none','用相容条件检查一个候选波','Check a candidate wave for compatibility',
       '在同一冷电子背景中，把 k 加倍，再指定 ω = 2ωpe，能得到非零密度波吗？','In the same cold background, double k and prescribe ω = 2ωpe. Is a nonzero density mode possible?',[
       B(p('不要只看正弦函数“画得出来”。把候选频率放进推导得到的条件：')+eq('(ω² − '+wpsq+')N = 0')+p('先判断 N 是否可以非零，再点击下一步。'),
         p('A sinusoid can be drawn without satisfying the physics. Insert the proposed frequency into:')+eq('(ω² − '+wpsq+')N = 0')+p('Decide whether N can be nonzero, then continue.')),
-      B(eq('[(2'+wp+')² − '+wpsq+']N = 3'+wpsq+'N = 0')+p('<strong>不能；只能有 N = 0。</strong>改变 k 不会把冷电子本征频率变成两倍。色散关系筛选的是能满足全部线性方程的非零波模。')+p('推导路线：模型假设 → 小扰动线性化 → 平面波代入 → 消元 → 非零解条件。'),
-        eq('[(2'+wp+')² − '+wpsq+']N = 3'+wpsq+'N = 0')+p('<strong>No: only N = 0 is possible.</strong> Changing k does not double the cold eigenfrequency. A dispersion relation selects nonzero modes satisfying all linearized equations.')+p('Route: model assumptions → linear perturbations → plane-wave substitution → elimination → nonzero-solution condition.'),'查看答案与推导路线','Reveal the answer and the derivation route'),
-      B(p('下一步可以把模型逐项放宽：让离子运动、加入磁场，或用动理学处理共振和阻尼。每次都要重新检查方程与闭合。')+p('参考：<a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>；<a href="https://www.princeton.edu/~idodin/ast553/main.pdf" target="_blank" rel="noopener">Princeton AST 553 · Waves in warm fluid plasma</a>。'),
-        p('Later, relax the model: allow ion motion, add a magnetic field, or use kinetic theory for resonances and damping. Recheck the equations and closure each time.')+p('References: <a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>; <a href="https://www.princeton.edu/~idodin/ast553/main.pdf" target="_blank" rel="noopener">Princeton AST 553 · Waves in warm fluid plasma</a>.'),'模型边界与后续方向','Model limits and next directions')
+      B(eq('[(2'+wp+')² − '+wpsq+']N = 3'+wpsq+'N = 0')+p('<strong>不能；只能有 N = 0。</strong>改变 k 不会把这里的振荡频率 ω<sub>pe</sub> 变成两倍。色散关系筛选的是能满足全部线性方程的非零波模。')+p('推导路线：模型假设 → 小扰动线性化 → 平面波代入 → 消元 → 非零解条件。'),
+        eq('[(2'+wp+')² − '+wpsq+']N = 3'+wpsq+'N = 0')+p('<strong>No: only N = 0 is possible.</strong> Changing k does not double the oscillation frequency ω<sub>pe</sub> in this model. A dispersion relation selects nonzero modes satisfying all linearized equations.')+p('Route: model assumptions → linear perturbations → plane-wave substitution → elimination → nonzero-solution condition.'),'查看答案与推导路线','Reveal the answer and the derivation route'),
+      B(p('忽略电子压强时：')+eq('ω² = '+wpsq)+p('加入本课给定的压强与密度关系后：')+eq('ω² = '+wpsq+' + u²k²')+p('两条关系都来自同一要求：密度、速度和电场的变化必须同时满足三个方程。')+p('参考：<a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>；<a href="https://www.princeton.edu/~idodin/ast553/main.pdf" target="_blank" rel="noopener">Princeton AST 553 · Waves in warm fluid plasma</a>。'),
+        p('Neglecting electron pressure:')+eq('ω² = '+wpsq)+p('Including the pressure–density relation used here:')+eq('ω² = '+wpsq+' + u²k²')+p('Both relations follow from the same requirement: the density, velocity and electric field must satisfy all three equations together.')+p('References: <a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>; <a href="https://www.princeton.edu/~idodin/ast553/main.pdf" target="_blank" rel="noopener">Princeton AST 553 · Waves in warm fluid plasma</a>.'),'回顾两条色散关系','Review both dispersion relations')
     ])
   ];
 
@@ -213,9 +213,9 @@
     $('density-factor').setAttribute('aria-valuetext',s.factor+'; n₀ = '+(s.factor*M.NREF/1e12).toFixed(3)+' × 10¹² m⁻³');
     show($('warm-control'),v==='dispersion'&&s.build>=1,animate);$('warm-branch').checked=s.warm;$('warm-label').textContent=t.warm;
     const noteDensity=lang==='zh'
-      ? 'n₁/n₀ [1]，幅值 0.08；n₀ ≈ 3.14 × 10¹² m⁻³。点阵仅为密度映射。'
-      : 'n₁/n₀ [1], amplitude 0.08; n₀ ≈ 3.14 × 10¹² m⁻³. Dots map density.';
-    $('model-note').textContent=v==='density'?noteDensity:(lang==='zh'?'实线：所选模型；压强打开时，虚线是同密度冷极限。':'Solid: selected model. With pressure enabled, dashes show its cold limit.');
+      ? 'n₁/n₀ [1]，幅值 0.08；n₀ ≈ 3.14 × 10¹² m⁻³。点的疏密表示电子数密度。'
+      : 'n₁/n₀ [1], amplitude 0.08; n₀ ≈ 3.14 × 10¹² m⁻³. Dot spacing represents electron number density.';
+    $('model-note').textContent=v==='density'?noteDensity:(lang==='zh'?'实线：所选模型；压强打开时，虚线表示同一密度下未加入压强的结果。':'Solid: selected model. With pressure enabled, dashes show the result without pressure at the same density.');
     $('time-note').hidden=v!=='density';
     $('time-note').textContent=lang==='zh'?'播放 1 s 对应 3 × 10⁻⁸ s；按 6.28 × 10⁻⁸ s 周期循环。':'1 s of playback = 3 × 10⁻⁸ s; loops with a 6.28 × 10⁻⁸ s period.';
     if(slide.id==='cold-result'&&s.build===1)$('time-note').textContent+=(lang==='zh'?' 两图分别比较，未作叠加。':' The plots are separate cases, not a sum.');

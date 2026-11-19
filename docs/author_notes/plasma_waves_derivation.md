@@ -177,3 +177,31 @@ period wrap, language/parameter state, both resets, and reduced motion.
 All 30 bilingual slide-reset cases, panel backtracking and no-canvas/no-script
 alternatives passed. Sphinx built without warnings; generated assets match
 the source and the built bilingual model slide preserves both revealed blocks.
+
+## Concept-order and audience revision, 2026-11-19
+
+Reviewed all lesson text against the reader prerequisites. Removed mentions of
+collisions, Landau damping, kinetic theory, resonance and future model extensions
+from both language versions and the no-JavaScript alternative. The physical
+model and its assumptions remain documented above for maintainers; the public
+explanation stays with the equations and forces actually used in this lesson.
+
+The opening defines cold electrons by neglecting pressure instead of listing
+several new model labels. Replaced closure, eigenfrequency, trivial solution and
+other unnecessary terminology with their concrete meanings in this derivation.
+The pressure step introduces p and its units, then explains the proportional
+pressure–density relation and the slope evaluated at n0. No temperature-closure
+caveat or growth/damping detour interrupts the argument. Diagram captions say
+what the dot spacing and dashed curve show.
+
+The final build now reviews the two derived dispersion relations and their
+shared compatibility requirement, followed by references. It contains no
+author-facing development roadmap. Slide/build numbers, equations in the
+derivation, numerical model and incremental-reveal behavior are unchanged.
+
+Checked all 32 states in both languages at 320, 768, 1440 and 1920 px (256
+views): no horizontal/equation overflow, Chinese prose in English, runtime
+errors, or remaining occurrences of the removed advanced terminology in the
+public lesson. Visually reviewed the pressure explanation and final recap.
+Sphinx built without warnings. Generated assets match source; checked the
+built bilingual recap/restart and the no-JavaScript text alternative.
