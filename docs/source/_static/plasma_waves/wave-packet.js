@@ -39,9 +39,97 @@
       groupNote: '邻近分量：Δω/Δk → dω/dk；窄带包络速度 ≈ v<sub>g</sub>',
       phaseNote: 'k<sub>c</sub> = 60 rad/m；ω<sub>c</sub> = 1.166 × 10⁸ rad/s；金点不是电子',
       derivationTitle: '为什么群速度是 dω/dk？',
-      derivation: '<p>先用两个等幅、相近波数的分量说明。令 Δk = k₂ − k₁ [rad/m]，Δω = ω₂ − ω₁ [rad/s]；k̄ = (k₁+k₂)/2，ω̄ = (ω₁+ω₂)/2。</p><p class="math">δn = A cos(k₁x−ω₁t) + A cos(k₂x−ω₂t)</p><p>用和差化积，把快速振荡与缓慢调制分开：</p><p class="math">δn = 2A cos[(Δk x−Δω t)/2] cos(k̄x−ω̄t)</p><p>A [m⁻³]；x [m]；t [s]。第一项是缓慢变化的调制，第二项是内部快速振荡。跟踪调制的固定相位：</p><p class="math">Δk x − Δω t = 常数<br>Δk dx/dt − Δω = 0<br>dx/dt = Δω/Δk</p><p>两个波数趋近中心 k<sub>c</sub>，割线斜率趋于切线斜率：</p><p class="math">v<sub>g</sub> = lim<sub>Δk→0</sub> Δω/Δk = (dω/dk)<sub>c</sub> [m/s]</p><p>两个分量形成周期性的拍包络；许多邻近分量适当加权，才形成本页这样的局部波包。相速度则由 k̄x−ω̄t = 常数得到 ω̄/k̄，在窄带极限趋于 ω<sub>c</sub>/k<sub>c</sub>。</p>',
+      derivation: `
+<section class="explanation-section">
+<h3>先把两个邻近分量写清楚</h3>
+<p>取两个等幅的密度波。A 是密度幅值 [m⁻³]，x 是位置 [m]，t 是时间 [s]：</p><p class="math">δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)</p><p>定义它们的差值和平均值：</p><p class="math">Δk = k₂ − k₁　[rad/m]</p><p class="math">Δω = ω₂ − ω₁　[rad/s]</p><p class="math">k̄ = <span class="eq-frac"><span>k₁ + k₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/m]</p><p class="math">ω̄ = <span class="eq-frac"><span>ω₁ + ω₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/s]</p>
+</section>
+<section class="explanation-section">
+<h3>用和差化积识别包络</h3>
+<p>把两项相加，改写成缓慢调制与内部快速振荡的乘积：</p><p class="math">δn = 2A cos[<span class="eq-frac"><span>Δk x − Δω t</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>] · cos(k̄x − ω̄t)</p><p>当两个波数、频率足够接近时，第一项随空间和时间变化较慢，形成拍包络；第二项描述包络内部的振荡。</p>
+</section>
+<section class="explanation-section">
+<h3>跟踪缓慢调制的同一相位</h3>
+<p>要跟踪包络上的同一位置，就保持慢变量的相位不变：</p><p class="math">Δk x − Δω t = 常数</p><p>对时间求导。Δk 和 Δω 对这两个给定分量是常数，所以：</p><p class="math">Δk <span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> − Δω = 0</p><p class="math"><span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> = <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span>　[m/s]</p><p>这就是两个邻近点之间的割线斜率。</p>
+</section>
+<section class="explanation-section">
+<h3>从割线到切线</h3>
+<p>两个波数趋近中心 k<sub>c</sub> 时，割线斜率趋于切线斜率，得到群速度：</p><p class="math">v<sub>g</sub> = lim<sub>Δk→0</sub> <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span></p><p class="math">v<sub>g</sub> = (<span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span>)<sub>c</sub>　[m/s]</p><p>如果跟踪的是内部快速振荡，则保持 k̄x − ω̄t 不变，得到相速度：</p><p class="math">v<sub>ph</sub> = <span class="eq-frac"><span>ω̄</span><span class="sr-only"> / </span><span class="eq-den">k̄</span></span> → <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span>　[m/s]</p><p>两个分量形成周期性的拍包络；许多邻近分量适当加权，才形成本页观察到的局部波包。</p>
+</section>
+      `,
       detailsTitle: '波包怎样生成？近似在哪里？',
-      details: '<p>沿用 07 页的温电子流体模型：ω(k) = √(ω₀²+u²k²)，ω₀=10⁸ rad/s，u=10⁶ m/s。均匀、无磁场、离子固定，忽略碰撞和 Landau 阻尼；温度通过电子压强项体现。</p><p class="math">2ω dω/dk = 2u²k<br>v<sub>g</sub> = u²k<sub>c</sub>/ω<sub>c</sub></p><p>取31个波数 kⱼ=42+1.2j rad/m（j=0,…,30），以 k<sub>c</sub>=60 rad/m 为中心。权重 wⱼ=exp[−(kⱼ−k<sub>c</sub>)²/(2σₖ²)]，σₖ=6 rad/m；Aⱼ/n₀=0.18 wⱼ/∑wⱼ，初相位均为0 rad。n₀、Aⱼ、δn 的单位为 m⁻³，因此 |δn/n₀|≤0.18，密度始终为正。离散谱的空间重复间距约5.24 m，本页观察窗中只显示一个波包。</p><p>每个分量使用实际的 ω(kⱼ) 演化。白线是 ∑(Aⱼ/n₀)cos(kⱼx−ωⱼt)，蓝色包络是复数和 ∑(Aⱼ/n₀)exp[i(kⱼx−ωⱼt)] 的模。蓝圈定位这个包络的实际最大值；金点跟踪中心分量的相位 x=(ω<sub>c</sub>/k<sub>c</sub>)t。窄带下金点近似跟随一个内部波峰。</p><p>对中心附近作一阶展开，ω(k)≈ω<sub>c</sub>+v<sub>g</sub>(k−k<sub>c</sub>)，可得“以 v<sub>g</sub> 移动的缓慢包络 × 内部载波”。本页直接叠加完整频率，保留轻微失真；包络速度与 (dω/dk)꜀ 的对应是窄带近似。更宽频带或更长传播时间可能出现展宽，不能套用刚性包络。本例 v<sub>g</sub>&lt;vph，不代表所有色散关系都如此；这里也不将群速度无条件等同于能量或信息速度。</p><p>无色散对照改用 ω=Vk，V=ω<sub>c</sub>/k<sub>c</sub>≈1.944×10⁶ m/s。这是数学对照，不是另一条等离子体模型。频带、幅值、初相位、空间窗和时间比例保持不变。</p><p>动画每秒对应3×10⁻⁸ s；从0到2×10⁻⁷ s循环回放。拖动时间会暂停。点阵根据合成密度作守恒的运动学映射，不求解粒子受力，也不绘制随机热运动。</p><p>读图与群速度推导参考：<a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion，§6.3</a>。温电子流体背景：<a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>。</p>'
+      details: `
+<section class="explanation-section">
+<h3>采用哪条色散关系？</h3>
+<p>沿用 07 页的温电子流体模型。背景均匀、无磁场、离子固定，忽略碰撞与 Landau 阻尼；电子温度通过压强项进入模型。</p>
+<p class="math">ω(k) = √(ω₀² + u²k²)</p>
+<p class="math">ω₀ = 10⁸ rad/s</p>
+<p class="math">u = 10⁶ m/s</p>
+<p>ω₀ 是 k → 0 时的振荡角频率，u 是压强项的速度参数。要计算群速度，先把关系写成 ω² = ω₀² + u²k²，再对 k 求导：</p>
+<p class="math">2ω <span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span> = 2u²k</p>
+<p>在中心波数 k<sub>c</sub> 处取值，记 ω<sub>c</sub> = ω(k<sub>c</sub>)，于是：</p>
+<p class="math">v<sub>g</sub> = <span class="eq-frac"><span>u²k<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">ω<sub>c</sub></span></span></p>
+<p>k<sub>c</sub> 的单位是 rad/m，ω<sub>c</sub> 的单位是 rad/s，得到的 v<sub>g</sub> 单位是 m/s。</p>
+</section>
+<section class="explanation-section">
+<h3>怎样选出组成波包的分量？</h3>
+<p>取 31 个等间隔波数。j 只是分量编号，依次为 0、1、…、30：</p>
+<p class="math">kⱼ = (42 + 1.2j) rad/m</p>
+<p>它们围绕中心波数分布。靠近中心的分量权重大，离中心越远，权重越小：</p>
+<p class="math">k<sub>c</sub> = 60 rad/m，　σₖ = 6 rad/m</p>
+<p class="math">wⱼ = exp [−<span class="eq-frac"><span>(kⱼ − k<sub>c</sub>)²</span><span class="sr-only"> / </span><span class="eq-den">2σₖ²</span></span>]</p>
+<p>σₖ 描述波数权重分布的宽度，wⱼ 是无量纲权重。用这些权重分配密度幅值，并让初相位都为零：</p>
+<p class="math"><span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = 0.18 <span class="eq-frac"><span>wⱼ</span><span class="sr-only"> / </span><span class="eq-den">∑ₗ wₗ</span></span></p>
+<p class="math">φⱼ = 0 rad</p>
+<p>这里 l 与 j 都遍历这 31 个分量；分母是全部权重之和。n₀ 是背景密度，Aⱼ 是各分量的密度幅值，两者单位均为 m⁻³。在初始中心 x = 0、t = 0，各分量同相增强；在当前观察窗内，离开中心后相互抵消增多，形成局部增强的波包。</p>
+<p>总密度为 n = n₀ + δn。这样的归一化使总扰动受控，密度始终为正：</p>
+<p class="math"><span class="eq-frac"><span>|δn|</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≤ 0.18，　<span class="eq-frac"><span>n</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≥ 0.82</p>
+<p>离散谱在空间上会重复，间距约为 5.24 m。本页只观察 −0.5 m 到 0.9 m，窗口内显示一个波包。</p>
+</section>
+<section class="explanation-section">
+<h3>白线、蓝色包络与两个标记是什么？</h3>
+<p>每个分量按自己的实际角频率 ωⱼ = ω(kⱼ) 演化。先把同一位置、同一时刻的密度扰动相加，得到白线：</p>
+<p class="math"><span class="eq-frac"><span>δn(x,t)</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> cos(kⱼx − ωⱼt)</p>
+<p>x 的单位为 m，t 为 s；因此每个相位 kⱼx − ωⱼt 都是无量纲角度。也可以把相同的叠加写成复数形式，记作 Z：</p>
+<p class="math">Z(x,t) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼx − ωⱼt)]</p>
+<p>白线取 Z 的实部；蓝色包络取它的模。用 B 表示相对密度包络，Z 与 B 都无量纲：</p>
+<p class="math"><span class="eq-frac"><span>δn</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = Re Z，　B(x,t) = |Z(x,t)|</p>
+<p><strong class="group-key">蓝圈</strong>定位计算得到的 B 的最大值。它跟踪振荡最强的位置，不是另一组电子。</p>
+<p><strong class="phase-key">金点</strong>跟踪中心分量的固定相位：</p>
+<p class="math">k<sub>c</sub>x − ω<sub>c</sub>t = 0</p>
+<p class="math">x<sub>phase</sub>(t) = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> t = v<sub>ph</sub>t</p>
+<p>窄带时，金点近似跟随波包内的一个波峰；随着它穿过包络，这个波峰会增强再减弱。金点也不是某个电子的位置。</p>
+</section>
+<section class="explanation-section">
+<h3>“包络以群速度移动”近似在哪里？</h3>
+<p>关键是分量集中在中心波数附近。对色散关系只保留一阶展开：</p>
+<p class="math">ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)</p>
+<p>代回复数叠加式，可以把中心分量的快速相位提出，剩余部分记作 F：</p>
+<p class="math">Z(x,t) ≈ exp[i(k<sub>c</sub>x − ω<sub>c</sub>t)] · F(x − v<sub>g</sub>t)</p>
+<p class="math">F(ξ) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼ − k<sub>c</sub>)ξ]</p>
+<p>ξ 的单位为 m，F 无量纲。前面的指数因子模长为 1，所以包络近似只依赖 x − v<sub>g</sub>t：</p>
+<p class="math">B(x,t) ≈ |F(x − v<sub>g</sub>t)|</p>
+<p>保持 x − v<sub>g</sub>t 不变，就在跟踪包络上的同一位置；这说明它以 v<sub>g</sub> 移动。</p>
+<p>动画仍使用完整的 ω(kⱼ)，没有把包络强制平移，因此保留了轻微失真。更宽的频带或更长的传播时间会使高阶项变得重要，可能出现展宽；此时不能继续把包络视为刚性形状。</p>
+<p>本例 v<sub>g</sub> &lt; v<sub>ph</sub>，但其他色散关系未必如此。这里讨论的是窄带包络，也不把群速度无条件等同于能量或信息传播速度。</p>
+</section>
+<section class="explanation-section">
+<h3>无色散对照改变了什么？</h3>
+<p><strong>色散是指不同频率的波分量具有不同的相速度。</strong>无色散时，各分量的相速度相同。</p><p>本页把色散关系改成经过原点的直线：</p><p class="math">ω = Vk</p><p>令 V 等于原模型的中心相速度：</p>
+<p class="math">V = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> ≈ 1.944 × 10⁶ m/s</p>
+<p>波数、幅值、初相位、空间窗和播放时间比例保持不变。这时所有分量都以同一速度 V 传播，整个波包保持形状平移：</p>
+<p class="math">v<sub>ph</sub> = v<sub>g</sub> = V</p>
+<p>金点与蓝圈因此同步。这是用于比较的数学模型，不是另一条等离子体色散分支。</p>
+</section>
+<section class="explanation-section">
+<h3>怎样理解动画时间与电子点阵？</h3>
+<p>每播放 1 s，对应物理时间 3 × 10⁻⁸ s。动画在下面的时间区间循环回放，拖动时间条会暂停：</p>
+<p class="math">0 ≤ t ≤ 2 × 10⁻⁷ s</p>
+<p>点阵根据合成密度作守恒的运动学映射，让点的疏密与白线对应。它没有求解粒子受力，也没有绘制随机热运动；相速度和群速度都不是单个电子的运动速度。</p>
+<p>读图与群速度推导：<a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion，§6.3</a>。</p>
+<p>温电子流体背景：<a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>。</p>
+</section>
+      `
     },
     en: {
       documentTitle: 'Wave packets, phase and group velocities', title: 'A group of waves. <span>What moves forward?</span>', chapter: '08 / Wave packets, phase and group velocities',
@@ -78,9 +166,97 @@
       groupNote: 'Nearby components: Δω/Δk → dω/dk; narrow-band envelope speed ≈ v<sub>g</sub>',
       phaseNote: 'k<sub>c</sub> = 60 rad/m; ω<sub>c</sub> = 1.166 × 10⁸ rad/s; the gold dot is not an electron',
       derivationTitle: 'Why is group speed dω/dk?',
-      derivation: '<p>Start with two equal-amplitude waves at nearby wavenumbers. Define Δk=k₂−k₁ [rad/m], Δω=ω₂−ω₁ [rad/s], k̄=(k₁+k₂)/2 and ω̄=(ω₁+ω₂)/2.</p><p class="math">δn = A cos(k₁x−ω₁t) + A cos(k₂x−ω₂t)</p><p>The sum-to-product identity separates fast oscillation and slow modulation:</p><p class="math">δn = 2A cos[(Δk x−Δω t)/2] cos(k̄x−ω̄t)</p><p>A [m⁻³], x [m], t [s]. The first factor is the slow modulation; the second is the inner oscillation. Track a fixed modulation phase:</p><p class="math">Δk x − Δω t = constant<br>Δk dx/dt − Δω = 0<br>dx/dt = Δω/Δk</p><p>As the wavenumbers approach k<sub>c</sub>, the secant slope approaches the tangent slope:</p><p class="math">v<sub>g</sub> = lim<sub>Δk→0</sub> Δω/Δk = (dω/dk)<sub>c</sub> [m/s]</p><p>Two components give a periodic beat envelope. Many nearby, appropriately weighted components form a localized packet. Following k̄x−ω̄t=constant instead gives the phase speed ω̄/k̄, tending to ω<sub>c</sub>/k<sub>c</sub> in the narrow-band limit.</p>',
+      derivation: `
+<section class="explanation-section">
+<h3>Start with two nearby components</h3>
+<p>Take two equal-amplitude density waves. A is the density amplitude [m⁻³], x the position [m], and t the time [s]:</p><p class="math">δn = A cos(k₁x − ω₁t) + A cos(k₂x − ω₂t)</p><p>Define their differences and averages:</p><p class="math">Δk = k₂ − k₁　[rad/m]</p><p class="math">Δω = ω₂ − ω₁　[rad/s]</p><p class="math">k̄ = <span class="eq-frac"><span>k₁ + k₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/m]</p><p class="math">ω̄ = <span class="eq-frac"><span>ω₁ + ω₂</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>　[rad/s]</p>
+</section>
+<section class="explanation-section">
+<h3>Separate modulation from the inner oscillation</h3>
+<p>Apply the sum-to-product identity to express the sum as a product:</p><p class="math">δn = 2A cos[<span class="eq-frac"><span>Δk x − Δω t</span><span class="sr-only"> / </span><span class="eq-den">2</span></span>] · cos(k̄x − ω̄t)</p><p>When the two wavenumbers and frequencies are close, the first factor varies slowly in space and time and gives the beat envelope. The second factor describes the faster inner oscillation.</p>
+</section>
+<section class="explanation-section">
+<h3>Follow a fixed modulation phase</h3>
+<p>Follow the same location on the envelope by holding the slow phase constant:</p><p class="math">Δk x − Δω t = constant</p><p>Differentiate with respect to time. Δk and Δω are constants for these two specified components:</p><p class="math">Δk <span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> − Δω = 0</p><p class="math"><span class="eq-frac"><span>dx</span><span class="sr-only"> / </span><span class="eq-den">dt</span></span> = <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span>　[m/s]</p><p>This is the secant slope between the two nearby points.</p>
+</section>
+<section class="explanation-section">
+<h3>Take the tangent limit</h3>
+<p>As the wavenumbers approach the center k<sub>c</sub>, the secant slope approaches the tangent slope. This gives group speed:</p><p class="math">v<sub>g</sub> = lim<sub>Δk→0</sub> <span class="eq-frac"><span>Δω</span><span class="sr-only"> / </span><span class="eq-den">Δk</span></span></p><p class="math">v<sub>g</sub> = (<span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span>)<sub>c</sub>　[m/s]</p><p>Following the faster inner oscillation instead holds k̄x − ω̄t constant, giving phase speed:</p><p class="math">v<sub>ph</sub> = <span class="eq-frac"><span>ω̄</span><span class="sr-only"> / </span><span class="eq-den">k̄</span></span> → <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span>　[m/s]</p><p>Two components give a periodic beat envelope. Many nearby, appropriately weighted components form the localized packet seen in this window.</p>
+</section>
+      `,
       detailsTitle: 'How is the packet built? What is approximate?',
-      details: '<p>Use the page 07 warm-electron fluid branch: ω(k)=√(ω₀²+u²k²), ω₀=10⁸ rad/s, u=10⁶ m/s. Uniform, unmagnetized, fixed ions; collisions and Landau damping are omitted. Temperature enters through electron pressure.</p><p class="math">2ω dω/dk = 2u²k<br>v<sub>g</sub> = u²k<sub>c</sub>/ω<sub>c</sub></p><p>Take 31 wavenumbers kⱼ=42+1.2j rad/m (j=0,…,30), centered on k<sub>c</sub>=60 rad/m. Weights are wⱼ=exp[−(kⱼ−k<sub>c</sub>)²/(2σₖ²)] with σₖ=6 rad/m. Set Aⱼ/n₀=0.18 wⱼ/∑wⱼ and all initial phases to 0 rad. The units of n₀, Aⱼ and δn are m⁻³. Thus |δn/n₀|≤0.18 and density remains positive. The discrete spectrum repeats in space every 5.24m; this window shows one packet.</p><p>Every component evolves with its actual ω(kⱼ). The white curve is ∑(Aⱼ/n₀)cos(kⱼx−ωⱼt); the envelope is the modulus of the complex sum ∑(Aⱼ/n₀)exp[i(kⱼx−ωⱼt)]. The blue ring locates its computed maximum. The gold dot follows the central phase x=(ω<sub>c</sub>/k<sub>c</sub>)t, approximately an inner crest for this narrow band.</p><p>The first-order expansion ω(k)≈ω<sub>c</sub>+v<sub>g</sub>(k−k<sub>c</sub>) gives a slow envelope moving at v<sub>g</sub> times an inner carrier. We use the full frequencies, retaining slight distortion; the match between envelope speed and (dω/dk)꜀ is a narrow-band approximation. A broader band or longer propagation can cause spreading. This example has v<sub>g</sub>&lt;vph; other branches need not. Group speed is not unconditionally an energy or information speed.</p><p>The nondispersive comparison uses ω=Vk, V=ω<sub>c</sub>/k<sub>c</sub>≈1.944×10⁶m/s. This is a mathematical comparison, not another plasma model. The wavenumber band, amplitudes, initial phases, spatial window and playback time scale stay fixed.</p><p>Each playback second represents 3×10⁻⁸s. The animation loops from 0 to 2×10⁻⁷s; scrubbing time pauses it. Dots use a conservative kinematic map of the total density, without solving particle forces or random thermal motion.</p><p>Geometry and group-speed derivation: <a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion, §6.3</a>. Warm-electron background: <a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>.</p>'
+      details: `
+<section class="explanation-section">
+<h3>Which dispersion relation is used?</h3>
+<p>We retain the warm-electron fluid model from page 07: a uniform, unmagnetized background with fixed ions. Collisions and Landau damping are omitted; electron temperature enters through pressure.</p>
+<p class="math">ω(k) = √(ω₀² + u²k²)</p>
+<p class="math">ω₀ = 10⁸ rad/s</p>
+<p class="math">u = 10⁶ m/s</p>
+<p>ω₀ is the oscillation angular frequency as k → 0; u is the pressure speed parameter. To calculate group speed, write ω² = ω₀² + u²k² and differentiate with respect to k:</p>
+<p class="math">2ω <span class="eq-frac"><span>dω</span><span class="sr-only"> / </span><span class="eq-den">dk</span></span> = 2u²k</p>
+<p>Evaluate at the central wavenumber k<sub>c</sub>, with ω<sub>c</sub> = ω(k<sub>c</sub>):</p>
+<p class="math">v<sub>g</sub> = <span class="eq-frac"><span>u²k<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">ω<sub>c</sub></span></span></p>
+<p>k<sub>c</sub> is in rad/m and ω<sub>c</sub> in rad/s, giving v<sub>g</sub> in m/s.</p>
+</section>
+<section class="explanation-section">
+<h3>How are the packet components chosen?</h3>
+<p>Take 31 equally spaced wavenumbers. The index j labels the components, from 0 through 30:</p>
+<p class="math">kⱼ = (42 + 1.2j) rad/m</p>
+<p>Components nearer the central wavenumber have larger weights; those farther away have smaller weights:</p>
+<p class="math">k<sub>c</sub> = 60 rad/m,　σₖ = 6 rad/m</p>
+<p class="math">wⱼ = exp [−<span class="eq-frac"><span>(kⱼ − k<sub>c</sub>)²</span><span class="sr-only"> / </span><span class="eq-den">2σₖ²</span></span>]</p>
+<p>σₖ describes the width of the wavenumber weight distribution, and wⱼ is dimensionless. Use the weights to set the density amplitudes, with zero initial phases:</p>
+<p class="math"><span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = 0.18 <span class="eq-frac"><span>wⱼ</span><span class="sr-only"> / </span><span class="eq-den">∑ₗ wₗ</span></span></p>
+<p class="math">φⱼ = 0 rad</p>
+<p>Both l and j run over the 31 components; the denominator sums all weights. The background density n₀ and amplitudes Aⱼ are in m⁻³. At x = 0, t = 0, the components reinforce in phase. Away from that center within this window, cancellation increases, producing a localized packet.</p>
+<p>The total density is n = n₀ + δn. The normalization bounds the perturbation and keeps density positive:</p>
+<p class="math"><span class="eq-frac"><span>|δn|</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≤ 0.18,　<span class="eq-frac"><span>n</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> ≥ 0.82</p>
+<p>The discrete spectrum repeats in space every 5.24 m. The viewing window, −0.5 m to 0.9 m, shows one packet.</p>
+</section>
+<section class="explanation-section">
+<h3>What do the curves and markers represent?</h3>
+<p>Each component evolves with its actual angular frequency ωⱼ = ω(kⱼ). Add their density perturbations at the same position and time to obtain the white curve:</p>
+<p class="math"><span class="eq-frac"><span>δn(x,t)</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> cos(kⱼx − ωⱼt)</p>
+<p>x is in m and t in s, so each phase kⱼx − ωⱼt is a dimensionless angle. Write the same superposition in complex form and call it Z:</p>
+<p class="math">Z(x,t) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼx − ωⱼt)]</p>
+<p>The white curve is the real part of Z. The blue envelope is its modulus, denoted B. Both Z and this relative-density envelope B are dimensionless:</p>
+<p class="math"><span class="eq-frac"><span>δn</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> = Re Z,　B(x,t) = |Z(x,t)|</p>
+<p>The <strong class="group-key">blue ring</strong> locates the computed maximum of B, where the oscillations are strongest. It does not represent another electron population.</p>
+<p>The <strong class="phase-key">gold dot</strong> follows a fixed phase of the central component:</p>
+<p class="math">k<sub>c</sub>x − ω<sub>c</sub>t = 0</p>
+<p class="math">x<sub>phase</sub>(t) = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> t = v<sub>ph</sub>t</p>
+<p>For a narrow band, this approximately follows an inner crest. The crest grows and fades as it crosses the envelope. The gold dot does not mark an individual electron either.</p>
+</section>
+<section class="explanation-section">
+<h3>Where does the group-speed approximation enter?</h3>
+<p>The components are concentrated near the central wavenumber. Keep only the first-order expansion of the dispersion relation:</p>
+<p class="math">ω(k) ≈ ω<sub>c</sub> + v<sub>g</sub>(k − k<sub>c</sub>)</p>
+<p>Substitute this into the complex sum. Factor out the fast central phase and call the remaining function F:</p>
+<p class="math">Z(x,t) ≈ exp[i(k<sub>c</sub>x − ω<sub>c</sub>t)] · F(x − v<sub>g</sub>t)</p>
+<p class="math">F(ξ) = ∑ⱼ <span class="eq-frac"><span>Aⱼ</span><span class="sr-only"> / </span><span class="eq-den">n₀</span></span> exp[i(kⱼ − k<sub>c</sub>)ξ]</p>
+<p>ξ is in m and F is dimensionless. The exponential prefactor has unit modulus, so the envelope approximately depends only on x − v<sub>g</sub>t:</p>
+<p class="math">B(x,t) ≈ |F(x − v<sub>g</sub>t)|</p>
+<p>Holding x − v<sub>g</sub>t constant follows the same location on the envelope. Its speed is therefore v<sub>g</sub>.</p>
+<p>The animation uses the full ω(kⱼ), retaining slight distortion rather than forcing the envelope to translate rigidly. A broader band or longer propagation makes higher-order terms important and can produce spreading.</p>
+<p>This example has v<sub>g</sub> &lt; v<sub>ph</sub>; other dispersion relations need not. We are describing a narrow-band envelope, not identifying group speed unconditionally with energy or information speed.</p>
+</section>
+<section class="explanation-section">
+<h3>What changes in the nondispersive comparison?</h3>
+<p><strong>Dispersion means that components of different frequencies have different phase speeds.</strong>In the nondispersive case, all components have the same phase speed.</p><p>Our comparison uses a straight line through the origin:</p><p class="math">ω = Vk</p><p>Choose V to match the original central phase speed:</p>
+<p class="math">V = <span class="eq-frac"><span>ω<sub>c</sub></span><span class="sr-only"> / </span><span class="eq-den">k<sub>c</sub></span></span> ≈ 1.944 × 10⁶ m/s</p>
+<p>Keep the wavenumbers, amplitudes, initial phases, spatial window and playback scale unchanged. Every component now travels at V, so the whole packet translates without changing shape:</p>
+<p class="math">v<sub>ph</sub> = v<sub>g</sub> = V</p>
+<p>The gold dot and blue ring travel together. This is a mathematical comparison, not an additional plasma dispersion branch.</p>
+</section>
+<section class="explanation-section">
+<h3>How should the time and electron dots be read?</h3>
+<p>Each playback second represents 3 × 10⁻⁸ s of physical time. The animation loops over the interval below; scrubbing time pauses it:</p>
+<p class="math">0 ≤ t ≤ 2 × 10⁻⁷ s</p>
+<p>The dots use a conservative kinematic map of the combined density, so their spacing follows the white curve. Particle forces and random thermal motion are not solved. Neither phase nor group speed is an individual electron velocity.</p>
+<p>Geometry and group-speed derivation: <a href="https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/0/550/files/2023/11/waves_dispersion.pdf" target="_blank" rel="noopener">David Morin · Dispersion, §6.3</a>.</p>
+<p>Warm-electron background: <a href="https://silas.psfc.mit.edu/introplasma/master.pdf" target="_blank" rel="noopener">MIT · Introduction to Plasma Physics</a>.</p>
+</section>
+      `
     }
   };
   function chart(a) {

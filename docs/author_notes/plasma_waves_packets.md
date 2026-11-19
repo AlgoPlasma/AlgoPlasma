@@ -98,3 +98,14 @@ Screen marker coordinates and SVG slopes were checked at three times on both
 branches. Playback wrap, time scrubbing, keyboard controls, language-state
 preservation, replay, all eight-page navigation links, bilingual directory and
 no-canvas/no-JavaScript fallbacks passed. Sphinx completed without warnings.
+
+Readability revision on 2026-11-19: reorganized both bilingual disclosures into
+short explanatory sections. Main equations now occupy centered blocks; ratios
+use stacked fractions with an accessible slash. Added the complex-sum
+factorization to explain the existing narrow-band approximation. The
+nondispersive comparison opens with the concise phase-speed definition of
+dispersion requested by the user. Animation/model code is unchanged.
+Checked both expanded panels at 320, 768, 1440 and 1920 px in both languages:
+no horizontal overflow, centered equations, readable wrapping, and preserved
+time, pause/comparison and disclosure state on language switching. Sphinx
+completed without warnings.

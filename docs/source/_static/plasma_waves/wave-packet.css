@@ -24,11 +24,17 @@
 .packet-lesson .time-controls input { width: min(360px, 40vw); }
 .packet-lesson .comparison { display: flex; align-items: center; gap: 12px; font-size: var(--annotation-size); margin: 10px 0 20px; cursor: pointer; }
 .packet-lesson .comparison input { width: 26px; height: 26px; accent-color: var(--mint); flex-shrink: 0; }
-.packet-lesson details { font-size: var(--annotation-size); line-height: 1.55; margin-top: 18px; }
+.packet-lesson details { font-size: var(--annotation-size); line-height: 1.75; margin-top: 24px; }
 .packet-lesson summary { color: var(--mint); cursor: pointer; }
 .packet-lesson summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 5px; }
-.packet-lesson details p { margin: 14px 0; }
-.packet-lesson details .math { color: var(--mint); font-size: clamp(27px, 2.2vw, 34px); overflow-wrap: anywhere; }
+.packet-lesson details > div { max-width: 1160px; margin: 30px auto 24px; }
+.packet-lesson .explanation-section + .explanation-section { margin-top: 48px; padding-top: 30px; border-top: 1px solid var(--line); }
+.packet-lesson .explanation-section h3 { margin: 0 0 20px; color: #eef4f0; font-size: clamp(28px, 2vw, 34px); line-height: 1.5; font-weight: 650; }
+.packet-lesson details p { margin: 20px 0; }
+.packet-lesson details .math { margin: 28px 0; padding: 6px 0; color: var(--mint); text-align: center; font-size: clamp(27px, 2.2vw, 34px); line-height: 1.9; overflow-wrap: normal; }
+.packet-lesson .eq-frac { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle; text-align: center; line-height: 1.3; margin: 0 .14em; white-space: nowrap; }
+.packet-lesson .eq-frac > span:not(.sr-only) { padding: .05em .15em; }
+.packet-lesson .eq-frac .eq-den { border-top: 2px solid currentColor; }
 .packet-lesson details a { color: var(--mint); }
 .packet-lesson .speed-term { display: inline-block; margin-right: 24px; }
 @media (max-width: 1000px) {
