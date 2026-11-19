@@ -2,13 +2,15 @@
 
 ## Teaching chain
 
-- Reader: knows density perturbations, k and omega with units, complex amplitudes,
-  derivative substitutions from lesson 06, and the dispersion plots in 07–08.
+- Reader: knows the continuity equation, density perturbations, k and omega with
+  units, complex amplitudes, derivative substitutions from lesson 06, and the
+  dispersion plots in 07–08.
 - Destination: derive the cold-electron relation from a specified physical model,
   explain why a nonzero mode imposes a compatibility condition, and recover the
   earlier warm-fluid example after explicitly adding a pressure closure.
-- Fifteen independent slides, 33 builds. Each build replaces its working panel;
-  each new slide starts clean and paused. Equations occupy centered blocks with
+- Fifteen independent slides, 32 builds. Short explanations accumulate in the
+  same working panel; longer sequences are divided into explicit panel groups.
+  Each new slide starts clean and paused. Equations occupy centered blocks with
   stacked fractions. Intermediate substitutions and cancellations are written out.
 - Route: question → model → continuity → momentum → Poisson → linearization →
   plane waves → elimination → cold result → restoring-sign check → pressure
@@ -135,3 +137,43 @@ teaching effectiveness.
 Final integration: Sphinx built without warnings. Both language variants of
 all nine lessons passed previous/next link checks; both directory entries open
 09 in the selected language.
+
+## Reader-facing pacing revision, 2026-11-19
+
+Removed the aside about needing no Hall-thruster background. The model description
+now addresses the wave itself in both languages. Continuity is an assumed
+prerequisite: slide 3 states the equation, units and its place in the system,
+without the control-volume/flux-difference derivation. Other slide numbers remain
+stable; an old slide-3-step-2 link resolves to its single equation step.
+
+Slides now retain short context and append the next block below it, including
+model assumptions plus variable definitions, plane-wave substitution, and the
+pressure closure. The linear-system summary uses a new panel; elimination, the
+warm result and the final question keep their first two blocks together and
+use a separate panel for the concluding block. This avoids both unnecessary
+clearing and accumulating the entire lesson on one screen.
+
+The renderer keeps unchanged block nodes, heading text and diagram nodes. Only
+new or replaced content fades in over 850 ms with a 6 px rise; there is no
+whole-main animation. Within-slide reveals keep the scroll position when the
+new block is visible, scrolling to the new material only when necessary.
+Reduced motion disables these effects. The live announcement reports the
+current step rather than rereading all retained content.
+
+The two-wavelength comparison uses separate canvases. The k=60 rad/m plot has
+the same dimensions and coordinates in both builds; only the k=120 rad/m plot
+is appended and animated. Both use the original physical model and shared time.
+Parameter changes and step reveals preserve the existing dispersion chart when
+its data have not changed. No model or numerical parameters were changed.
+
+Verification: all 32 states in both languages at 320, 768, 1440 and 1920 px
+(256 views) passed horizontal/equation overflow and language checks. Across
+34 bilingual transitions, retained blocks and unchanged title/narration nodes
+stayed identical, while animation targets were limited to new/replaced content.
+The first comparison canvas remained pixel-identical and at the same position
+after adding the second; the unchanged SVG branch retained its node. Checked
+button-only navigation, native Enter, both canvases during playback and scrubbing,
+period wrap, language/parameter state, both resets, and reduced motion.
+All 30 bilingual slide-reset cases, panel backtracking and no-canvas/no-script
+alternatives passed. Sphinx built without warnings; generated assets match
+the source and the built bilingual model slide preserves both revealed blocks.

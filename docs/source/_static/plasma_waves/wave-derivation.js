@@ -21,17 +21,15 @@
     ]),
     S('model','none','先说清楚：我们在求哪种波？','Specify the wave and the model',
       '先从最简单的冷电子、静电、纵向扰动开始。','Begin with a cold-electron, electrostatic, longitudinal disturbance.',[
-      B(p('一维 x 方向；背景均匀、无磁场、无碰撞。离子固定为 nᵢ = n₀；电子可运动。先忽略电子压强。')+p('电场沿 x 方向。这是电子密度振荡，不是光波，也不需要霍尔推力器背景。'),
-        p('One spatial direction x; uniform background, no magnetic field or collisions. Ions remain at nᵢ = n₀ while electrons move. First neglect electron pressure.')+p('The electric field is along x. We study electron-density oscillations, not an electromagnetic light wave.')),
+      B(p('一维 x 方向；背景均匀、无磁场、无碰撞。离子固定为 nᵢ = n₀；电子可运动。先忽略电子压强。')+p('电场与扰动都沿 x 方向，描述电子的纵向密度振荡。'),
+        p('One spatial direction x; uniform background, no magnetic field or collisions. Ions remain at nᵢ = n₀ while electrons move. First neglect electron pressure.')+p('The field and disturbance are both along x, describing longitudinal electron-density oscillations.')),
       B(p('需要三个随位置和时间变化的量：')+eq('n(x,t)　[m⁻³]')+eq('v(x,t)　[m/s]，　E(x,t)　[V/m]')+p('n：电子数密度；v：电子流体的平均速度；E：电场。电子电荷为 −e，其中 e > 0 [C]；m<sub>e</sub> 是电子质量 [kg]，ε₀ 是真空介电常数 [F/m]。'),
         p('We need three fields varying in position and time:')+eq('n(x,t)　[m⁻³]')+eq('v(x,t)　[m/s],　E(x,t)　[V/m]')+p('n: electron number density; v: mean electron-fluid velocity; E: electric field. Electron charge is −e, with e > 0 [C]; m<sub>e</sub> is electron mass [kg], and ε₀ is vacuum permittivity [F/m].'),'认识变量与单位','Identify variables and units')
     ]),
-    S('continuity','none','第一条：电子不会凭空消失','First: conserve the electrons',
-      '一个小区间内，流入比流出多，密度就会增加。','Density rises when more electrons enter a small interval than leave it.',[
-      B(p('数通量 Γ 表示单位面积、单位时间通过的电子数：')+eq('Γ = nv　[m⁻² s⁻¹]')+p('在单位横截面积、宽度 Δx 的小区间里：')+eq(f('∂(n Δx)','∂t')+' ≈ Γ(x) − Γ(x + Δx)'),
-        p('Number flux Γ counts electrons crossing unit area per unit time:')+eq('Γ = nv　[m⁻² s⁻¹]')+p('For unit cross-sectional area and a small interval of width Δx:')+eq(f('∂(n Δx)','∂t')+' ≈ Γ(x) − Γ(x + Δx)')),
-      B(p('除以 Δx，再令 Δx → 0：')+eq(dt('n')+' = −'+dx('Γ'))+eq(dt('n')+' + '+dx('(nv)')+' = 0')+p('这就是连续性方程。若沿 x 方向通量越来越大，流出更多，局部密度就下降。两项单位都是 m⁻³ s⁻¹。'),
-        p('Divide by Δx and take Δx → 0:')+eq(dt('n')+' = −'+dx('Γ'))+eq(dt('n')+' + '+dx('(nv)')+' = 0')+p('This is continuity. If flux increases along x, more electrons leave and the local density falls. Both terms have units m⁻³ s⁻¹.'),'从流量差到导数','Turn the flux difference into a derivative')
+    S('continuity','none','使用连续性方程','Use the continuity equation',
+      '从电子数守恒的连续性方程出发。','Start from the continuity equation for electron number.',[
+      B(eq(dt('n')+' + '+dx('(nv)')+' = 0')+p('n [m⁻³] 是电子数密度，v [m/s] 是电子流体速度。两项单位均为 m⁻³ s⁻¹。')+p('它将密度 n 与速度 v 联系起来；另外两个关系来自动量方程和泊松方程。'),
+        eq(dt('n')+' + '+dx('(nv)')+' = 0')+p('n [m⁻³] is electron number density and v [m/s] is electron-fluid velocity. Both terms have units m⁻³ s⁻¹.')+p('This relates density n to velocity v. Momentum and Poisson provide the other two relations.'))
     ]),
     S('momentum','none','第二条：电场怎样推动电子？','Second: how does the field move electrons?',
       '使用牛顿定律，并记住电子带负电。','Use Newton’s law and keep the negative electron charge.',[
@@ -125,13 +123,22 @@
     ])
   ];
 
+  // Short explanations accumulate; long derivations move to another working panel.
+  // Each number identifies a panel within the same slide. Slide numbers stay stable.
+  const buildGroups = {
+    'linear-system':[0,1], 'eliminate':[0,0,1],
+    'warm-result':[0,0,1], 'check':[0,0,1]
+  };
+
   const ui={
     zh:{title:'第一条色散关系怎样推出来？',chapter:'09 · 第一条色散关系怎样推出来？',next:'下一步',page:'下一页',back:'上一步',prev:'上一页',restart:'本页起始',restartLesson:'本课起始',replay:'从头回顾',slide:'幻灯片',build:'本页',play:'播放动画',pause:'暂停动画',time:'观察时间 t',density:'背景密度倍数',warm:'加入压强：u = 10⁶ m/s',fallback:'图像不可用，可继续阅读公式与说明。冷模型中两种波长具有相同的振荡频率；加入压强后，频率随波数升高。'},
     en:{title:'Deriving the first dispersion relation',chapter:'09 · Deriving the first dispersion relation',next:'Next step',page:'Next slide',back:'Back a step',prev:'Previous slide',restart:'Restart slide',restartLesson:'Restart lesson',replay:'Start again',slide:'Slide',build:'Build',play:'Play',pause:'Pause',time:'Observe time t',density:'Background density factor',warm:'Include pressure: u = 10⁶ m/s',fallback:'The figure is unavailable; continue with the equations. The cold model gives the same oscillation frequency at both wavelengths. Pressure makes frequency rise with wavenumber.'}
   };
-  const canvas=$('plasma'),ctx=canvas.getContext('2d'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const canvas=$('plasma'),ctx=canvas.getContext('2d');
+  const comparison=$('comparison-plasma'),comparisonCtx=comparison.getContext('2d');
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const s={slide:0,build:0,time:0,paused:true,factor:1,warm:false,width:0,height:0};
-  let lang='zh',last=null;
+  let lang='zh',last=null,renderedSlide=null,chartKey='';
   const current=()=>slides[s.slide],tr=a=>a[lang==='en'?1:0],text=()=>ui[lang];
   const running=()=>!!ctx&&current().visual==='density';
   const reset=()=>{s.time=0;s.paused=true;s.factor=1;s.warm=false;last=null;};
@@ -149,27 +156,62 @@
     $('time-output').textContent=t;$('packet-time').setAttribute('aria-valuetext',t);
     $('motion').textContent=s.paused?text().play:text().pause;$('motion').setAttribute('aria-pressed',String(s.paused));
   }
+  function fadeIn(node) {
+    if(reduced.matches)return;
+    node.classList.remove('content-enter');void node.offsetWidth;
+    node.classList.add('content-enter');
+  }
+  function setText(id,value,animate=false) {
+    const node=$(id);
+    if(node.textContent===value)return;
+    node.textContent=value;if(animate)fadeIn(node);
+  }
+  function show(node,visible,animate=false) {
+    const wasHidden=node.hasAttribute('hidden');
+    node.toggleAttribute('hidden',!visible);
+    if(visible&&wasHidden&&animate)fadeIn(node);
+  }
+  function renderBlocks(animate) {
+    const slide=current(),groups=buildGroups[slide.id]||slide.blocks.map(()=>0);
+    const wanted=slide.blocks.map((block,i)=>({block,i,key:slide.id+':'+i}))
+      .filter(({i})=>i<=s.build&&groups[i]===groups[s.build]);
+    const content=$('slide-content'),keys=new Set(wanted.map(item=>item.key));
+    for(const node of [...content.children])if(!keys.has(node.dataset.key))node.remove();
+    let newest=null;
+    for(const {block,i,key} of wanted){
+      let node=[...content.children].find(n=>n.dataset.key===key);
+      if(!node){
+        node=document.createElement('section');node.className='build-block';
+        node.dataset.key=key;node.dataset.language=lang;node.innerHTML=block[lang];
+        content.append(node);if(animate)fadeIn(node);newest=node;
+      }else if(node.dataset.language!==lang){
+        node.dataset.language=lang;node.innerHTML=block[lang];if(animate)fadeIn(node);
+      }
+      if(i===s.build)$('status').textContent=text().slide+' '+(s.slide+1)+', '+text().build+' '+(s.build+1)+'. '+node.textContent;
+    }
+    return newest;
+  }
   function render(reason='state'){
     const slide=current(),t=text(),v=slide.visual;
+    const animate=['page','reveal','back'].includes(reason),changedSlide=renderedSlide!==slide.id;
+    const double=slide.id==='cold-result'&&s.build===1;
     document.documentElement.lang=lang==='zh'?'zh-CN':'en';document.title=tr(slide.title)+' | AlgoPlasma';
     $('lesson').dataset.slide=slide.id;$('lesson').dataset.build=String(s.build);$('lesson').dataset.visual=v;
-    $('lesson').dataset.double=String(slide.id==='cold-result'&&s.build===1);
-    $('title').textContent=tr(slide.title);$('narration').textContent=tr(slide.lead);
-    $('chapter').textContent=t.chapter;$('slide-label').textContent=t.chapter;
-    $('slide-content').innerHTML='<section class="build-block">'+slide.blocks[s.build][lang]+'</section>';
-    if(['page','reveal','back'].includes(reason)){
-      $('slide-main').classList.remove('slide-enter');void $('slide-main').offsetWidth;$('slide-main').classList.add('slide-enter');
-      window.scrollTo({top:0,behavior:'instant'});$('title').focus({preventScroll:true});
-    }
-    $('slide-layout').dataset.visual=v;$('visual-pane').hidden=v==='none';
-    canvas.hidden=v!=='density'||!ctx;$('lesson-chart').toggleAttribute('hidden',v!=='dispersion');
+    $('lesson').dataset.double=String(double);
+    setText('title',tr(slide.title),animate);setText('narration',tr(slide.lead),animate);
+    setText('chapter',t.chapter);setText('slide-label',t.chapter);
+    const newest=renderBlocks(animate);
+    $('slide-layout').dataset.visual=v;show($('visual-pane'),v!=='none');
+    show(canvas,v==='density'&&!!ctx,animate);
+    show(comparison,double&&!!ctx&&!!comparisonCtx,animate);
+    show($('lesson-chart'),v==='dispersion',animate);
     $('canvas-fallback').hidden=v!=='density'||!!ctx;$('canvas-fallback').textContent=t.fallback;
     $('animation-controls').hidden=!running();$('time-label').textContent=t.time;
     $('parameter-controls').hidden=v!=='dispersion';
     $('density-label').textContent=t.density;$('density-factor').value=String(s.factor);
     $('density-output').textContent=s.factor.toFixed(0)+' × n₀,ref';
     $('density-factor').setAttribute('aria-valuetext',s.factor+'; n₀ = '+(s.factor*M.NREF/1e12).toFixed(3)+' × 10¹² m⁻³');
-    $('warm-control').hidden=s.build<1;$('warm-branch').checked=s.warm;$('warm-label').textContent=t.warm;
+    show($('warm-control'),v==='dispersion'&&s.build>=1,animate);$('warm-branch').checked=s.warm;$('warm-label').textContent=t.warm;
     const noteDensity=lang==='zh'
       ? 'n₁/n₀ [1]，幅值 0.08；n₀ ≈ 3.14 × 10¹² m⁻³。点阵仅为密度映射。'
       : 'n₁/n₀ [1], amplitude 0.08; n₀ ≈ 3.14 × 10¹² m⁻³. Dots map density.';
@@ -193,9 +235,19 @@
     window.PlasmaNavigation?.setLanguage(lang);
     $('previous-lesson').textContent=lang==='zh'?'上一课':'Prev lesson';$('next-lesson').textContent=lang==='zh'?'下一课':'Next lesson';$('lesson-index').textContent=lang==='zh'?'课程目录':'Contents';
     $('return-link').setAttribute('aria-label',lang==='zh'?'返回等离子体波课堂':'Return to the plasma waves course');
-    $('status').textContent=$('stage-count').textContent+', '+$('build-count').textContent+'. '+tr(slide.title)+'. '+$('slide-content').textContent;
     canvas.setAttribute('aria-label',tr(slide.lead)+' '+noteDensity+' '+(lang==='zh'?'曲线表示密度扰动；下方点阵显示相同的密度变化。':'The curve shows the density perturbation; the dots below display the same density variation.'));canvas.textContent=canvas.getAttribute('aria-label');
+    comparison.setAttribute('aria-label',lang==='zh'?'第二种波长：k = 120 rad/m，与上图具有相同的冷电子振荡频率。':'Second wavelength: k = 120 rad/m, with the same cold oscillation frequency as the plot above.');
     save();sync();fit();chart();
+    if(animate){
+      if(changedSlide||reason==='page'){
+        window.scrollTo({top:0,behavior:'instant'});$('title').focus({preventScroll:true});
+      }else if(newest){
+        const rect=newest.getBoundingClientRect(),bottom=document.querySelector('.controls').getBoundingClientRect().top;
+        if(rect.top<0||rect.top+Math.min(rect.height,160)>bottom)
+          newest.scrollIntoView({block:'start',behavior:'instant'});
+      }
+    }
+    renderedSlide=slide.id;
   }
   function next(){if(s.build<current().blocks.length-1){s.build++;render('reveal');}else{s.slide=(s.slide+1)%slides.length;s.build=0;reset();render('page');}}
   function back(){if(s.build){s.build--;render('back');}else if(s.slide){s.slide--;s.build=current().blocks.length-1;reset();render('page');}}
@@ -203,33 +255,45 @@
   function toggle(){if(running()){s.paused=!s.paused;last=null;sync();}}
   function setLanguage(value){lang=value==='en'?'en':'zh';try{localStorage.setItem('ap-doc-language',lang);}catch(_){}render('language');}
   const mint='#b5efcf',gold='#f4c583',blue='#b4cefa',white='#eef4f0';
-  function line(x1,y1,x2,y2,color='#30413f',width=1){ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
-  function label(value,x,y,color=white,size=23,align='left'){PlasmaText.label(ctx,value,x,y,color,size,align);}
   function fit(){
-    if(!running())return;const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);if(!r.width||!r.height)return;
-    s.width=r.width;s.height=r.height;canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();
+    if(!running())return;
+    const dpr=Math.min(devicePixelRatio||1,2);
+    for(const [surface,c] of [[canvas,ctx],[comparison,comparisonCtx]]){
+      if(surface.hidden||!c)continue;
+      const r=surface.getBoundingClientRect();if(!r.width||!r.height)continue;
+      const w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);
+      if(surface.width!==w||surface.height!==h){surface.width=w;surface.height=h;}
+      c.setTransform(dpr,0,0,dpr,0,0);
+    }
+    draw();
   }
   function draw(){
-    if(!running()||!s.width)return;ctx.clearRect(0,0,s.width,s.height);
-    const double=current().id==='cold-result'&&s.build===1,time=s.time/M.W0;
-    function panel(k,offset,compact){
-      const left=68,right=s.width-20,width=right-left,mid=offset+(compact?72:110),amp=compact?28:47;
-      label('k = '+k+' rad/m',8,offset+24,mint,24);
-      if(s.width>460)label('λ = '+(2*Math.PI/k).toFixed(3)+' m',right,offset+24,white,22,'right');
+    if(!running())return;
+    const time=s.time/M.W0,compact=current().id==='cold-result';
+    function panel(surface,c,k){
+      if(surface.hidden||!c)return;
+      const width=surface.clientWidth,height=surface.clientHeight;if(!width||!height)return;
+      c.clearRect(0,0,width,height);
+      const line=(x1,y1,x2,y2)=>{c.beginPath();c.strokeStyle='#30413f';c.lineWidth=1;c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();};
+      const label=(value,x,y,color=white,size=23,align='left')=>PlasmaText.label(c,value,x,y,color,size,align);
+      const left=68,right=width-20,span=right-left,mid=compact?72:110,amp=compact?28:47;
+      label('k = '+k+' rad/m',8,24,mint,24);
+      if(width>460)label('λ = '+(2*Math.PI/k).toFixed(3)+' m',right,24,white,22,'right');
       for(const value of [-.08,0,.08]){line(left,mid-amp*value/.08,right,mid-amp*value/.08);label(value?value.toFixed(2):'0',left-10,mid-amp*value/.08,white,22,'right');}
-      ctx.beginPath();ctx.strokeStyle=mint;ctx.lineWidth=2.5;
-      for(let i=0;i<=400;i++){const x=M.XMAX*i/400,y=mid-amp*M.sample(x,time,k).n1/(M.NREF*M.A);if(i)ctx.lineTo(left+i/400*width,y);else ctx.moveTo(left,y);}ctx.stroke();
+      c.beginPath();c.strokeStyle=mint;c.lineWidth=2.5;
+      for(let i=0;i<=400;i++){const x=M.XMAX*i/400,y=mid-amp*M.sample(x,time,k).n1/(M.NREF*M.A);if(i)c.lineTo(left+i/400*span,y);else c.moveTo(left,y);}c.stroke();
       label('0',left,mid+amp+25,white,22,'center');label('0.24',right,mid+amp+25,white,22,'right');
       label('x [m]',right,mid+amp+54,white,22,'right');
-      const top=offset+(compact?170:290),cols=Math.max(38,Math.floor(width/9));
+      const top=compact?170:290,cols=Math.max(38,Math.floor(span/9));
       if(!compact)label(lang==='zh'?'电子密度点阵':'Electron density dots',8,260,mint,25);
-      ctx.save();ctx.beginPath();ctx.rect(left,top-5,width,40);ctx.clip();
-      for(let j=-3;j<=cols+3;j++){const q=j/cols*M.XMAX,x=left+M.position(q,time,k)/M.XMAX*width;for(let r=0;r<3;r++){ctx.beginPath();ctx.fillStyle=mint;ctx.arc(x,top+r*13,Math.min(3.3,width/cols*.3),0,2*Math.PI);ctx.fill();}}ctx.restore();
+      c.save();c.beginPath();c.rect(left,top-5,span,40);c.clip();
+      for(let j=-3;j<=cols+3;j++){const q=j/cols*M.XMAX,x=left+M.position(q,time,k)/M.XMAX*span;for(let r=0;r<3;r++){c.beginPath();c.fillStyle=mint;c.arc(x,top+r*13,Math.min(3.3,span/cols*.3),0,2*Math.PI);c.fill();}}c.restore();
     }
-    panel(60,0,double);if(double){line(8,207,s.width-20,207);panel(120,210,true);}
+    panel(canvas,ctx,60);panel(comparison,comparisonCtx,120);
   }
   function chart(){
     if(current().visual!=='dispersion')return;const svg=$('lesson-chart'),w=svg.clientWidth,h=svg.clientHeight;if(!w||!h)return;
+    const key=[w,h,s.factor,s.warm,lang].join(':');if(key===chartKey)return;chartKey=key;
     const l=w<400?78:90,r=w-25,t=60,b=h-75,x=k=>l+k/120*(r-l),y=omega=>b-omega/2.6e8*(b-t);
     const add=(tag,attrs,value)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(value!==undefined)n.textContent=value;svg.append(n);return n;};
     const ln=(x1,y1,x2,y2,cls)=>add('line',{x1,y1,x2,y2,class:cls});
@@ -259,7 +323,8 @@
   reduced.addEventListener('change',e=>{if(e.matches){s.paused=true;sync();}});
   document.addEventListener('visibilitychange',()=>{last=null;});
   window.addEventListener('hashchange',()=>{readHash();render('page');});
-  new ResizeObserver(fit).observe(canvas);new ResizeObserver(chart).observe($('lesson-chart'));
+  document.addEventListener('animationend',e=>{if(e.animationName==='derivation-appear')e.target.classList.remove('content-enter');});
+  new ResizeObserver(fit).observe(canvas);new ResizeObserver(fit).observe(comparison);new ResizeObserver(chart).observe($('lesson-chart'));
   let initial=new URLSearchParams(location.search).get('lang');if(!['zh','en'].includes(initial)){try{initial=localStorage.getItem('ap-doc-language');}catch(_){}}
   lang=initial==='en'?'en':'zh';readHash();render('initial');requestAnimationFrame(frame);
 })();

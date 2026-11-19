@@ -1,7 +1,8 @@
 /* Lesson 09 uses the established slide-deck shell. */
 .derivation-lesson .slide-content { max-width: 100%; }
 .derivation-lesson .figure-note, .derivation-lesson #parameter-note { font-size: var(--annotation-size); line-height: 1.5; color: #e0ebe6; margin: 12px 0 0; }
-.lesson.derivation-lesson[data-double="true"] .scene canvas { height: 420px; min-height: 420px; }
+.lesson.derivation-lesson[data-slide="cold-result"] .scene canvas { height: 210px; min-height: 210px; }
+.derivation-lesson #comparison-plasma { border-top: 1px solid var(--line); }
 .derivation-lesson #parameter-controls { margin-top: 22px; }
 .derivation-lesson #parameter-controls .range-control { font-size: var(--annotation-size); }
 .derivation-lesson #density-factor { width: 100%; flex: 1 1 100%; }
@@ -13,3 +14,11 @@
 .derivation-lesson #lesson-chart { height: 350px; }
 .derivation-lesson #density-factor { order: 3; }
 .derivation-lesson #parameter-controls output { min-width: 0; margin-left: auto; }
+
+/* Preserve the existing reading context; only new/replaced content fades in. */
+.derivation-lesson .content-enter { animation: derivation-appear .85s ease-out both; }
+.derivation-lesson .build-block { scroll-margin-top: 24px; }
+@keyframes derivation-appear {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
