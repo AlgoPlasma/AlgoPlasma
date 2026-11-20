@@ -61,7 +61,7 @@ figcaption { flex: 0 0 auto; color: #94aaa6; font-size: 17px; line-height: 1.65;
 #advance-arrow { font-size: 28px; font-weight: 400; }
 .back { width: 48px; height: 56px; padding: 0; border: 0; border-radius: 5px; background: transparent; color: #a9bdb5; font-size: 29px; }
 .back:hover { color: var(--mint); background: #1c2a2c; }
-.toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); padding: 15px 24px; border: 1px solid var(--mint); background: #21372d; color: #eef4f0; border-radius: 6px; max-width: calc(100% - 30px); z-index: 5; font-size: 18px; }
+#toast.toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); padding: 15px 24px; border: 1px solid var(--mint); background: #21372d; color: #eef4f0; border-radius: 6px; max-width: calc(100% - 30px); z-index: 5; font-size: 18px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .no-script { margin: 30px; padding: 24px; border: 1px solid var(--mint); font-size: 22px; line-height: 1.8; }
 @keyframes narration-in { from { opacity: .15; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
@@ -163,4 +163,5 @@ figcaption { flex: 0 0 auto; color: #94aaa6; font-size: 17px; line-height: 1.65;
  * 2026-11-17 19:50 +08:00 | Yinjian Zhao | git 3e022dd90c69
  * 2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
  * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ * 2026-11-20 21:40 +08:00 | Zhongping Zhao | edit (Codex-assisted)
  */
