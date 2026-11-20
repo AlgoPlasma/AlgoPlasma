@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[English](README.md) | [在线文档](https://algoplasma.readthedocs.io/en/latest/index.html)
+[English](README.md) | [在线文档](https://algoplasma.readthedocs.io/en/develop/)
 
 AlgoPlasma 曾用名为 PMSL，致力于把等离子体建模中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的算法库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。AlgoPlasma 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
 
@@ -87,7 +87,7 @@ bash run.sh
 
 ## 文档
 
-在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/latest/index.html)。
+在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/develop/)。
 
 项目文档基于 Sphinx、Doxygen 和 Breathe 构建：
 
@@ -127,7 +127,7 @@ Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for 
 }
 ```
 
-AlgoPlasma v1.0.1 已存档于 Zenodo：[https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612)。完整引用说明与相关应用论文见[引用页面](https://algoplasma.readthedocs.io/en/latest/community/citation.html)。
+AlgoPlasma v1.0.1 已存档于 Zenodo：[https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612)。完整引用说明与相关应用论文见[引用页面](https://algoplasma.readthedocs.io/en/develop/community/citation.html)。
 
 ## 贡献建议
 
@@ -157,3 +157,7 @@ AlgoPlasma 的原创内容采用 [Apache License 2.0](LICENSE) 开源许可证�
 - 赵隐剑 / Yinjian Zhao
 - Email: contact@algoplasma.com
 - Homepage: <https://homepage.hit.edu.cn/zhaoyinjian>
+
+<!-- Contribution history (edit times include timezone).
+2026-11-20 10:25 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+-->

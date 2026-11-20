@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[简体中文](README.zh-CN.md) | [Online documentation](https://algoplasma.readthedocs.io/en/latest/index.html)
+[简体中文](README.zh-CN.md) | [Online documentation](https://algoplasma.readthedocs.io/en/develop/)
 
 AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma modeling into an open, reusable, tested, and explainable algorithm library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, AlgoPlasma aims to build a shared algorithmic foundation so that others can build upon it instead of starting from scratch.
 
@@ -87,7 +87,7 @@ After changing an algorithm, start with the most local tests for that algorithm,
 
 ## Documentation
 
-Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/latest/index.html) online on Read the Docs.
+Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/develop/) online on Read the Docs.
 
 The documentation is built with Sphinx, Doxygen, and Breathe:
 
@@ -127,7 +127,7 @@ Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for 
 }
 ```
 
-AlgoPlasma v1.0.1 is archived on Zenodo: [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612). See the [Citation page](https://algoplasma.readthedocs.io/en/latest/community/citation.html) for details and related application papers.
+AlgoPlasma v1.0.1 is archived on Zenodo: [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612). See the [Citation page](https://algoplasma.readthedocs.io/en/develop/community/citation.html) for details and related application papers.
 
 ## Contributing
 
@@ -157,3 +157,7 @@ Per-file license headers are not yet uniform across the source tree. Original pr
 - Yinjian Zhao / 赵隐剑
 - Email: contact@algoplasma.com
 - Homepage: <https://homepage.hit.edu.cn/zhaoyinjian>
+
+<!-- Contribution history (edit times include timezone).
+2026-11-20 10:25 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+-->
