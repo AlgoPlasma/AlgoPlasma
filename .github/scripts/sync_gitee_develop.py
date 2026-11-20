@@ -79,7 +79,7 @@ def entries(repo: Path, ref: str) -> dict[str, tuple[str, str, str]]:
 
 
 def replace_once(text: str, pattern: str, replacement: str, label: str) -> str:
-    updated, count = re.subn(pattern, lambda _: replacement, text, flags=re.S)
+    updated, count = re.subn(pattern, replacement, text, flags=re.S)
     if count != 1:
         raise SyncError(f"{label}: expected one match, found {count}; update the main controller first")
     return updated
@@ -99,8 +99,12 @@ def generated_tree(repo: Path, source: str) -> str:
         if path == JS_PATH:
             text = replace_once(text, r'var storageKey = "ap-doc-language(?:-github)?";',
                                 'var storageKey = "ap-doc-language-github";', path + " storage key")
-            text = replace_once(text, r'readStoredLanguage\(\) \|\| "(?:zh|en)"',
-                                'readStoredLanguage() || "en"', path + " default")
+            default = (
+                r'(?m)^([ \t]*var initialLanguage\s*=\s*readStoredLanguage\(\)\s*\|\|\s*'
+                r'(?:\(pagePreference\s*&&\s*pagePreference\.getAttribute\("data-ap-default-lang"\)\)'
+                r'\s*\|\|\s*)?)"(?:zh|en)"(?=\s*;)'
+            )
+            text = replace_once(text, default, r'\g<1>"en"', path + " default")
         else:
             pair = r"(?m)^\.ap-lang-zh\s*\{\s*display:\s*none;\s*\}\s*^\.ap-lang-en\s*\{\s*display:\s*block;\s*\}"
             hidden_english = r"(?m)^\.ap-lang-en\s*\{\s*display:\s*none;\s*\}"
@@ -223,3 +227,6 @@ if __name__ == "__main__":
     except (SyncError, subprocess.TimeoutExpired, UnicodeError) as error:
         print("Synchronization stopped: " + str(error), file=sys.stderr)
         sys.exit(1)
+
+# Contribution history (edit times include timezone).
+# 2026-11-20 11:32 +08:00 | Zhongping Zhao | edit (Codex-assisted)
