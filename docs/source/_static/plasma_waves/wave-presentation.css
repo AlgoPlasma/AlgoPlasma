@@ -1,5 +1,5 @@
 /* Shared last-loaded presentation typography: readable from a classroom seat. */
-.no-script, .toast { font-size: 28px; font-weight: 600; }
+.no-script, #toast.toast { font-size: 28px; font-weight: 600; }
 .lesson {
   --muted: #e0ebe6;
   --explanation-size: clamp(28px, 1.85vw, 34px);
@@ -65,7 +65,7 @@ html[lang="en"] .lesson figcaption::after { content: ")"; }
   .lesson .derivation { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 700px) {
-  .no-script, .toast { font-size: 24px; }
+  .no-script, #toast.toast { font-size: 24px; }
   .lesson { --explanation-size: 24px; --annotation-size: 22px; }
   .lesson .narration { font-size: 25px; }
   .lesson .scene-prompt { top: 96px; }
@@ -89,4 +89,5 @@ html[lang="en"] .lesson figcaption::after { content: ")"; }
 /* Plasma-wave contribution history (Git author dates; edit time includes timezone).
  * 2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
  * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ * 2026-11-20 21:40 +08:00 | Zhongping Zhao | edit (Codex-assisted)
  */
