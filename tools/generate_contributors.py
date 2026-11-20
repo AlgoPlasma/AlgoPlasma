@@ -173,12 +173,12 @@ RTD_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
 README_OUTRO = {
     "zh": (
         "项目负责人及现任维护者："
-        '<a href="https://algoplasma.readthedocs.io/en/latest/community/'
+        '<a href="https://algoplasma.readthedocs.io/en/develop/community/'
         'contributors.html">Read the Docs</a>'
     ),
     "en": (
         "Project lead and current maintainers: "
-        '<a href="https://algoplasma.readthedocs.io/en/latest/community/'
+        '<a href="https://algoplasma.readthedocs.io/en/develop/community/'
         'contributors.html">Read the Docs</a>'
     ),
 }
@@ -1022,3 +1022,6 @@ def main(argv=None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+# Contribution history (edit times include timezone).
+# 2026-11-20 10:25 +08:00 | Zhongping Zhao | edit (Codex-assisted)

@@ -9,6 +9,7 @@ K_Diagnostics
     K_Diagnostics/K02_beall
     K_Diagnostics/K03_mle_k2d
     K_Diagnostics/K04_breathing_waveform
+    K_Diagnostics/K05_bispectral_transfer
 
 .. raw:: html
 
@@ -63,6 +64,12 @@ K_Diagnostics
 
    :doc:`K04 呼吸波形提取 <K_Diagnostics/K04_breathing_waveform>` 是独立的学习入口，
    从人工数据逐步说明怎样从同一空间点、相同条件下的重复记录得到相位重复波形 C 与残差 R。
+
+   :doc:`K05 双谱转移 <K_Diagnostics/K05_bispectral_transfer>` 从 Brown 与 Jorns (2023) 的波动方程出发，
+   依次介绍包络、时间傅里叶系数、统计量与双探针系数估计（01–05）。
+   随后用真实记录逐步计算统计量、检验模型，并与文献图逐项比较（06–08）；
+   最后的 :doc:`脚本与复现指南 <K_Diagnostics/K05_scripts>` 对应各步骤的程序、输入与输出。
+   预测检验和条件性速率换算分别说明，保留测量响应与传播假设的限制。
 
    .. rubric:: 相关测试
 
@@ -125,6 +132,14 @@ K_Diagnostics
    :doc:`K04 breathing waveform extraction <K_Diagnostics/K04_breathing_waveform>` provides a separate learning route.
    Artificial data illustrate how repeated records at one spatial point under the same conditions
    yield a phase-repeatable waveform C and a residual R.
+
+   :doc:`K05 bispectral transfer <K_Diagnostics/K05_bispectral_transfer>` starts from the wave equation
+   of Brown & Jorns (2023), then introduces envelopes, time Fourier coefficients, statistics and
+   two-probe coefficient estimation (01–05). Real records illustrate the statistical calculations,
+   model validation and panel-by-panel comparison with the reference (06–08).
+   The :doc:`script and reproduction guide <K_Diagnostics/K05_scripts>` links each step to its
+   programs, inputs and outputs. Predictive validation is distinguished from conditional rate
+   conversion, with measurement-response and propagation assumptions kept explicit.
 
    .. rubric:: Related Tests
 

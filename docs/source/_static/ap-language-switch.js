@@ -106,7 +106,9 @@
   document.addEventListener("DOMContentLoaded", function () {
     var buttons = document.querySelectorAll("[data-ap-set-lang]");
     // Shared navigation also needs the stored language on single-language pages.
-    var initialLanguage = readStoredLanguage() || "en";
+    var pagePreference = document.querySelector("[data-ap-default-lang]");
+    var initialLanguage = readStoredLanguage() ||
+      (pagePreference && pagePreference.getAttribute("data-ap-default-lang")) || "en";
     setLanguage(initialLanguage);
 
     Array.prototype.forEach.call(buttons, function (button) {

@@ -9,6 +9,15 @@ The goal is to keep repository browsing friendly while avoiding duplicated
 long-form content and preventing Chinese/English content from leaking into the
 wrong language view.
 
+## Teaching Explanatory Material
+
+For conceptual explanations, derivations, worked examples, figures and
+interactive demonstrations, also follow [Teaching Design](TEACHING_GUIDE.md).
+It covers prerequisite order, readable equation transitions, figure-to-symbol
+mapping, useful interactions, optional details and checks of understanding,
+with research references and their limits. Apply it to the requested module;
+keep reference/API pages concise and retain the documentation layers below.
+
 ## Current Documentation Philosophy
 
 AlgoPlasma documentation is module-first. Each subroutine group should remain useful

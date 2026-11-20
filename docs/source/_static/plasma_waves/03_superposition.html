@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>两列波相遇会发生什么？ | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css"><link rel="stylesheet" href="wave-superposition.css">
+  <script src="wave-navigation.js" defer></script><script src="wave-slides.js" defer></script><script src="wave-text.js" defer></script><script src="wave-course.js" defer></script><script src="wave-superposition.js" defer></script>
+  <link rel="stylesheet" href="wave-presentation.css">
+  <link rel="stylesheet" href="wave-slides.css">
+</head>
+<body>
+  <div class="lesson staged-lesson course-lesson" id="lesson" data-page="3" data-stage="0" data-topic="superposition">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <p class="chapter sr-only" id="chapter">03 / 干涉、拍频与驻波</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="02_measuring_a_wave.html?lang=zh">上一课</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">课程目录</a>
+        <a id="next-lesson" rel="next" href="04_complex_waves.html?lang=zh">下一课</a>
+      </nav>
+      <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="false">暂停动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
+      </div>
+    </header>
+    <main>
+      <header class="heading"><p class="slide-label" id="slide-label"></p><h1 id="title">两列波相遇，<span>会发生什么？</span></h1></header>
+      <div class="reading-layout">
+        <figure class="scene" id="scene"><canvas id="plasma" role="img" aria-label="向右传播的电子密度波">密度扰动相加可形成干涉、拍与驻波；密度节点固定不代表电子静止。</canvas><p id="canvas-fallback" hidden>δn = δn₁ + δn₂；相位决定增强或相消，差频形成拍，相向同频等幅可形成驻波。 / Add density perturbations: phase controls interference, a frequency difference gives beats, and equal counterpropagating waves form a standing wave.</p><figcaption id="model-note"></figcaption></figure>
+        <div class="reading-panel">
+          <div class="narration" id="narration">先看一列电子密度波，再让另一列加入。</div>
+          <p class="equation" id="equation" hidden></p>
+          <div class="interaction" id="interaction" hidden><div class="range-control" id="phase-control"><label id="relative-phase-label" for="relative-phase">两列波的相位差</label><input id="relative-phase" type="range" min="0" max="2" step="0.05" value="0"><output id="relative-phase-output" for="relative-phase"></output></div><div id="quiz" hidden><div class="quiz-options" role="group" aria-labelledby="narration"><button id="density-answer" type="button" aria-pressed="false">密度扰动 δn</button><button id="velocity-answer" type="button" aria-pressed="false">电子速度</button></div><p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p></div></div>
+      <section class="standing-derivation" id="standing-derivation" aria-labelledby="title" hidden></section>
+      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p></div>
+        </div>
+      </div>
+    </main>
+    <footer class="controls">
+      <div class="progress-group"><span id="stage-count"></span><span id="build-count"></span></div>
+      <button class="restart" id="restart-lesson" type="button">本课起始</button>
+      <p class="keyboard-note" id="keyboard-note">P 播放 · F 全屏</p>
+      <div class="actions">
+        <button class="back" id="back" type="button" hidden>上一步</button>
+        <button class="restart" id="restart-slide" type="button">本页起始</button>
+        <button class="advance" id="advance" type="button"><span id="advance-kind">下一步</span><span id="advance-text"></span></button>
+      </div>
+    </footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p><p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>在线性近似下，δn=δn₁+δn₂，而总密度 nₑ=n₀+δn。同向同频等幅波的合成幅值为 2A|cos(Δφ/2)|。近频波在固定位置产生拍，拍频等于频率之差的绝对值。等频等幅相向波形成驻波 δn=2A cos(kx)cos(ωt)。密度节点处 δn 始终为零，但电子仍可运动。</p><p>In the linear approximation, add perturbations: δn=δn₁+δn₂; total density is n₀+δn. Equal co-propagating waves give amplitude 2A|cos(Δφ/2)|. Nearby frequencies produce beats at |f₂−f₁|. Equal counterpropagating waves form δn=2A cos(kx)cos(ωt). At density nodes δn stays zero, but electrons can still move.</p><p>推导：取 k>0、ω>0，初相位均为零。向右波 δn₁=Acos(kx−ωt)=Acos(kx)cos(ωt)+Asin(kx)sin(ωt)；向左波 δn₂=Acos(kx+ωt)=Acos(kx)cos(ωt)−Asin(kx)sin(ωt)。相加时两个正弦乘积项抵消，因此 δn=δn₁+δn₂=2Acos(kx)cos(ωt)。A 是每列行波的幅值 [m⁻³]；k [rad/m]，ω [rad/s]，x [m]，t [s]。合成局部幅值是 2A|cos(kx)|；cos(kx)=0 的固定位置在所有时刻都有 δn=0。</p><p>Derivation: take k>0, ω>0 and zero initial phases. The rightward wave is δn₁=Acos(kx−ωt)=Acos(kx)cos(ωt)+Asin(kx)sin(ωt). The leftward wave is δn₂=Acos(kx+ωt)=Acos(kx)cos(ωt)−Asin(kx)sin(ωt). The sine products cancel in the sum, leaving δn=δn₁+δn₂=2Acos(kx)cos(ωt). A is each traveling wave amplitude [m⁻³]; k [rad/m], ω [rad/s], x [m], t [s]. The local resultant amplitude is 2A|cos(kx)|. At fixed positions where cos(kx)=0, δn=0 at every time.</p></div></noscript>
+</body>
+</html>
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 20:26 +08:00 | Yinjian Zhao | git 80d9ffd0c710
+2026-11-17 21:23 +08:00 | Yinjian Zhao | git 789e519340b7
+2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+2026-11-18 14:57 +08:00 | Yinjian Zhao | git bb02aa7e9638
+2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+2026-11-18 16:36 +08:00 | Yinjian Zhao | git 4be5f6b5764f
+2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

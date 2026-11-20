@@ -1,0 +1,166 @@
+:root {
+  color-scheme: dark;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #eef4f0;
+  background: #10181c;
+  --mint: #b5efcf;
+  --gold: #f4c583;
+  --muted: #a6b8b5;
+  --line: #30413f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { font: inherit; cursor: pointer; color: inherit; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 6px; }
+[hidden] { display: none !important; }
+.lesson { max-width: 1920px; min-height: 700px; height: 100svh; padding: 0 clamp(26px, 5.3vw, 108px); margin: auto; display: grid; grid-template-rows: 88px minmax(0, 1fr) 106px; }
+.masthead { display: flex; align-items: center; gap: 34px; }
+.brand { font-size: 24px; font-weight: 650; letter-spacing: -.7px; color: #eef4f0; text-decoration: none; }
+.brand span { color: var(--mint); }
+.chapter { font-size: 18px; letter-spacing: 1px; color: var(--muted); margin: 0; border-left: 1px solid var(--line); padding-left: 32px; }
+.header-actions { margin-left: auto; display: flex; align-items: center; gap: 24px; }
+.motion { padding: 10px 0; border: 0; background: transparent; font-size: 18px; color: var(--muted); }
+.motion:hover { color: var(--mint); }
+.language-switch { display: flex; align-items: center; gap: 10px; padding-left: 22px; border-left: 1px solid var(--line); }
+.language-switch button { padding: 9px 3px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font-size: 17px; }
+.language-switch button[aria-pressed="true"] { color: var(--mint); border-bottom-color: var(--mint); }
+main { min-height: 0; display: flex; flex-direction: column; padding-top: clamp(16px, 3vh, 38px); }
+.heading { flex: 0 0 auto; }
+h1 { font-size: clamp(42px, 4.4vw, 82px); font-weight: 560; line-height: 1.25; letter-spacing: -2px; margin: 0; }
+h1 span { color: var(--mint); }
+.narration { font-size: clamp(24px, 2.05vw, 36px); line-height: 1.6; color: #c0ceca; min-height: 1.6em; margin: 18px 0 0; }
+.narration.changed { animation: narration-in .4s ease; }
+.scene { margin: 22px 0 0; flex: 1 1 auto; position: relative; min-height: 245px; display: flex; flex-direction: column; }
+canvas { flex: 1 1 auto; min-height: 0; width: 100%; display: block; cursor: pointer; border-radius: 5px; }
+.species { position: absolute; left: 0; top: 9px; display: flex; align-items: center; gap: 30px; font-size: 19px; color: #adc0b8; pointer-events: none; }
+.species > span { display: flex; align-items: center; gap: 10px; }
+.electron-key { display: block; height: 8px; width: 8px; border-radius: 50%; background: var(--mint); }
+.species .ions { color: #849dac; }
+.species b { font: 24px "Segoe UI", sans-serif; }
+.scene-prompt { position: absolute; left: 0; right: 0; bottom: 65px; text-align: center; color: #a6b8b5; font-size: 23px; pointer-events: none; transition: opacity .5s; }
+.lesson:not([data-stage="0"]) .scene-prompt { opacity: 0; }
+figcaption { flex: 0 0 auto; color: #94aaa6; font-size: 17px; line-height: 1.65; padding: 8px 0 0; margin: 0; }
+.takeaway { flex: 0 0 auto; margin-top: 18px; padding: 18px 0 0; border-top: 1px solid var(--line); animation: conclusion-in .5s ease; }
+.takeaway > p:first-child { font-size: clamp(25px, 2.5vw, 43px); line-height: 1.5; font-weight: 550; margin: 0; letter-spacing: -.5px; }
+.gold { color: var(--gold); }.mint { color: var(--mint); }
+.next-question { font-size: 19px; color: var(--muted); margin: 8px 0 0; }
+.next-question a { color: var(--muted); text-underline-offset: 5px; text-decoration-color: #526e62; }
+.next-question a:hover { color: var(--mint); }
+.mobile-break { display: none; }
+.controls { display: flex; align-items: center; gap: 30px; }
+.progress-group { display: flex; align-items: center; gap: 18px; }
+.progress { display: flex; gap: 7px; }
+.progress i { width: 23px; height: 3px; background: var(--line); transition: background .3s; }
+.progress i.filled { background: var(--mint); }
+.stage-count { font-size: 16px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.keyboard-note { margin: 0; font-size: 17px; color: #8fa59e; }
+.actions { margin-left: auto; display: flex; align-items: center; gap: 15px; }
+.advance { display: flex; align-items: center; justify-content: space-between; gap: 40px; min-width: 236px; min-height: 60px; padding: 15px 25px; border: 1px solid var(--mint); border-radius: 6px; font-size: 22px; font-weight: 550; background: var(--mint); color: #172e23; transition: background .2s; }
+.advance:hover { background: #d0f7e0; }
+#advance-arrow { font-size: 28px; font-weight: 400; }
+.back { width: 48px; height: 56px; padding: 0; border: 0; border-radius: 5px; background: transparent; color: #a9bdb5; font-size: 29px; }
+.back:hover { color: var(--mint); background: #1c2a2c; }
+.toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); padding: 15px 24px; border: 1px solid var(--mint); background: #21372d; color: #eef4f0; border-radius: 6px; max-width: calc(100% - 30px); z-index: 5; font-size: 18px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.no-script { margin: 30px; padding: 24px; border: 1px solid var(--mint); font-size: 22px; line-height: 1.8; }
+@keyframes narration-in { from { opacity: .15; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes conclusion-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 1400px) and (min-height: 900px) {
+  .lesson { grid-template-rows: 100px minmax(0, 1fr) 120px; }
+  .scene { margin-top: 34px; }
+}
+@media (max-width: 1100px) {
+  .lesson { padding: 0 36px; }
+  .keyboard-note { display: none; }
+  h1 { font-size: 48px; }
+  .narration { font-size: 26px; }
+}
+@media (max-height: 780px) and (min-width: 701px) {
+  .lesson { grid-template-rows: 70px minmax(0, 1fr) 90px; }
+  main { padding-top: 10px; }
+  h1 { font-size: clamp(38px, 4.2vw, 58px); }
+  .narration { font-size: 25px; margin-top: 12px; }
+  .scene { margin-top: 16px; }
+  .takeaway { padding-top: 12px; margin-top: 10px; }
+  .takeaway > p:first-child { font-size: 29px; }
+  .next-question { font-size: 17px; margin-top: 5px; }
+}
+@media (max-width: 700px) {
+  .lesson { padding: 0 24px; height: auto; min-height: 100svh; grid-template-rows: 74px minmax(0, 1fr) 94px; }
+  .masthead { gap: 14px; }
+  .brand { font-size: 20px; }
+  .chapter { display: none; }
+  .header-actions { gap: 12px; }
+  .language-switch { padding-left: 12px; gap: 6px; }
+  .language-switch button { font-size: 15px; }
+  .motion { font-size: 14px; padding: 10px 0; }
+  main { padding-top: 16px; }
+  h1 { font-size: clamp(35px, 7.2vw, 47px); letter-spacing: -1.1px; line-height: 1.35; }
+  h1 span { display: block; }
+  .narration { font-size: 22px; line-height: 1.55; margin-top: 17px; min-height: 3.1em; }
+  .scene { min-height: 0; height: auto; flex: 0 0 auto; margin-top: 8px; display: grid; grid-template-rows: 260px auto; }
+  .scene canvas { height: 260px; min-height: 260px; }
+  .species { font-size: 16px; gap: 21px; }
+  .scene-prompt { font-size: 20px; bottom: 100px; }
+  figcaption { font-size: 14px; line-height: 1.7; padding-top: 8px; }
+  .controls { gap: 12px; }
+  .progress-group { display: block; }
+  .stage-count { display: block; margin-top: 8px; font-size: 14px; }
+  .progress { gap: 4px; }.progress i { width: 12px; }
+  .actions { gap: 7px; }
+  .advance { font-size: 18px; min-width: 0; min-height: 54px; padding: 12px 17px; gap: 17px; }
+  #advance-arrow { font-size: 24px; }
+  .back { width: 34px; font-size: 25px; }
+  .takeaway { padding-top: 16px; margin-top: 19px; }
+  .takeaway > p:first-child { font-size: 27px; line-height: 1.6; }
+  .mobile-break { display: block; }
+  .next-question { font-size: 18px; line-height: 1.7; }
+  .lesson[data-stage="4"] .scene { min-height: 0; flex-basis: auto; }
+}
+@media (max-width: 380px) {
+  .lesson { padding: 0 18px; }
+  .chapter { font-size: 12px; padding-left: 10px; }
+  .masthead { gap: 10px; }.brand { font-size: 18px; }
+  .motion { font-size: 14px; }
+  h1 { font-size: 34px; }
+  .advance { padding: 12px; gap: 10px; font-size: 17px; }
+  .progress i { width: 9px; }.back { width: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@media print {
+  .lesson { height: auto; min-height: 0; display: block; }
+  .controls, .motion { display: none !important; }
+  .takeaway[hidden] { display: block !important; }
+  .scene { height: 350px; }
+}
+
+/* Keep page-to-page links available from the first reveal onward. */
+.page-navigation { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px; width: 340px; font-size: 18px; white-space: nowrap; }
+.page-navigation a { padding: 10px 2px; line-height: 24px; text-decoration: none; color: var(--muted); }
+.page-navigation a:first-child { justify-self: start; }
+.page-navigation a:last-child { justify-self: end; }
+.page-navigation #lesson-index { color: var(--mint); font-size: 16px; font-variant-numeric: tabular-nums; }
+.page-navigation a:hover { color: var(--mint); text-decoration: underline; text-underline-offset: 5px; }
+.page-navigation a[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+@media (max-width: 900px) {
+  .lesson { grid-template-rows: 124px minmax(0, 1fr) 106px; }
+  .masthead { flex-wrap: wrap; align-content: center; gap: 4px 18px; }
+  .page-navigation { order: 3; flex: 0 0 100%; width: 100%; border-top: 1px solid var(--line); margin-top: 4px; padding-top: 3px; }
+}
+@media (max-width: 700px) {
+  .lesson { grid-template-rows: 124px minmax(0, 1fr) 94px; }
+  .page-navigation { font-size: 16px; gap: 10px; }
+  .page-navigation #lesson-index { font-size: 14px; }
+}
+@media print { .page-navigation { display: none; } }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-17 19:33 +08:00 | Yinjian Zhao | git fb1cc989ad32
+ * 2026-11-17 19:41 +08:00 | Yinjian Zhao | git 7667d669c7ec
+ * 2026-11-17 19:50 +08:00 | Yinjian Zhao | git 3e022dd90c69
+ * 2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

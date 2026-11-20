@@ -1,0 +1,297 @@
+{
+  "config": {
+    "nperseg": 2048,
+    "fs_hz": 100000000.0,
+    "example_bin": 41,
+    "example_frequency_hz": 2001953.125,
+    "training_captures": [
+      3,
+      4,
+      5
+    ],
+    "heldout_capture": 2,
+    "training_segments": 14646,
+    "test_segments": 4882,
+    "max_input_bin": 102,
+    "small_pairs": [
+      [
+        10,
+        31
+      ],
+      [
+        -10,
+        51
+      ]
+    ],
+    "convention": "positive exponent / N; segment demean; periodic Hann; no overlap",
+    "coefficients": "raw voltage: L dimensionless, Q inverse V; unordered unique signed pairs"
+  },
+  "metadata": {
+    "data_id": "z5p5_a3p7",
+    "instrument": "SIGLENT SDS814X HD",
+    "channels": [
+      1,
+      3
+    ],
+    "capture_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "synchronized_pairs": true,
+    "same_operating_condition": true,
+    "diagnostic": "ion saturation current",
+    "axial_distance_mm": 5.5,
+    "azimuthal_separation_mm": 3.7,
+    "c1_to_c3_physical_direction": "Left fixed probe C1 to right probe C3 in the supplied front-view diagram; not an inferred wave-propagation direction.",
+    "voltage_to_current_a_per_v": 0.001,
+    "relative_channel_gain_calibration": null,
+    "relative_channel_delay_s": null,
+    "discharge_parameters": {
+      "log_time": "19:12",
+      "voltage_v": 200,
+      "recorded_current_a": 2.814,
+      "source": "20261014_zzp.xlsx, sheet 1014, row 9 (E9/F9); data-owner mapping on 2026-10-28",
+      "usage": "Experiment context only; not used to set FFT axes or infer local plasma parameters"
+    },
+    "group_velocity_m_per_s": null,
+    "dc_offset_sign_verified": null,
+    "voltage_display_reference": "Each record mean is removed; no DC-offset sign is assumed",
+    "supplementary_evidence": {
+      "lab_reader": "tool02_readbin.py subtracts header vertical offset and cites a DC calibration not included in this dataset",
+      "scope_photo": "Post-experiment photo: 100 MSa/s, 10 Mpts, 10 ms/div, C1/C3 2 V/div, 1X, DC1M, FULL; not a screenshot of these stored waveforms",
+      "operating_log": "20261014_zzp.xlsx, sheet 1014, row 9 at 19:12, selected by data owner; row note says first acquisition had two groups, while supplied data have four numbered captures"
+    },
+    "provenance": {
+      "geometry": "Data-owner note supplied with captures",
+      "synchronization_condition_diagnostic": "Data-owner confirmation, 2026-10-28",
+      "sampling_voltage_scales": "Read separately from each binary header",
+      "c1_c3_mapping": "Data-owner confirmation, 2026-10-29: C1 is left fixed probe.",
+      "circuit_geometry_field": "Supplementary circuit and field diagram supplied 2026-10-29; nominal resistor conversion, no dynamic calibration."
+    },
+    "voltage_to_current_status": "Nominal 1 kohm resistor conversion for current toward the resistor return; not a calibrated MHz transimpedance.",
+    "probe_response_assumptions_config": "probe_response_config.json",
+    "probe_geometry": {
+      "c1": "left fixed probe",
+      "c3": "right probe",
+      "exposed_diameter_mm": 0.5,
+      "exposed_length_mm": 2.5
+    },
+    "reported_magnetic_field_at_c1": {
+      "br_magnitude_gauss": 39.48,
+      "bz_magnitude_gauss": 80.34,
+      "radial_direction": "inner to outer radius",
+      "exb_direction": "counterclockwise in supplied front view"
+    }
+  },
+  "metadata_sha256": "45dcb9a38f15adb8dc8d0e1089a14960f1b980f56bb5a4eae2783e341c2b595c",
+  "inputs": [
+    {
+      "name": "SDS814X_HD_Binary_C1_2.bin",
+      "sha256": "d059f9e598401c983def1a90c331c4cc71ba7cea769dbc1f4e1ba764cf325288",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_2.bin",
+      "sha256": "7c469d72ffa384d64ca0d6586ae4da99de5062f9f6d9a694218dc45a50dcf07b",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_3.bin",
+      "sha256": "2802f7a85e03a8b76389d8c965910b3c011d88738bf112d6ca2ed8655e93c641",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_3.bin",
+      "sha256": "53d6ff8c617914e368cc776038cfb7e2728626f5a1e92d416367ad10d4fd91f6",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_4.bin",
+      "sha256": "7d853b336e2cb28e11d17d718ca475e12a0cdc9f6c5b5bcf1f716bc3cbb68aca",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_4.bin",
+      "sha256": "cff7ca9da1b1a09d621e98b6f18f1181ed5275e5bd1cf02ccdda4f9b1a716937",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C1_5.bin",
+      "sha256": "0efc70887e6b4981d82b86cd888d2acfd9bf231f0ab5b44fac3c58146d558c88",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    },
+    {
+      "name": "SDS814X_HD_Binary_C3_5.bin",
+      "sha256": "c1168bf28e045dff046b6a922dc972c1bca56ee5e0303dda58b78c0ee16504cf",
+      "samples": 10000000,
+      "segments": 4882,
+      "omitted_samples": 1664
+    }
+  ],
+  "parents": {
+    "validation_arrays.npz": "1be19f6bf3dee8e2affa38edad94f57c80e3570b30e63063f66d7251cc4843fa",
+    "validation_summary.json": "d149772998b84c4cfc9bd1ac82813b976bfdd55b5b9f0b9a5f2ef0a6f83139b3",
+    "transfer_arrays.npz": "5e033617ce763f8d2e218c6404fd4d5790dea4003dd70afea3cae97e7a090c2e",
+    "transfer_summary.json": "1e5e35ef3842b314ae769d2e72fb5f304d0000881d2efcd697d32a25af4688d8"
+  },
+  "source_sha256": {
+    "analyze_coefficient_walkthrough.py": "5c162d852d7496b0de1ea6459f5a60746558ec24af11e58c0efa2a95e702401a",
+    "validate_experiment.py": "112ba1ce4353e7890b82060e2e12a7d6fbd95bf55a67c4733c1b3630f8e42e89",
+    "analyze_transfer_budget.py": "fe4fe76f3d8fbdc902e0babb5e1a02e5a0e43e6361f43b8cf517ad6b1f7bc252",
+    "analyze_experiment.py": "7a9230aa230d705bc81a2ec5746973feff27ccbe97715e2d7e83813b802a15a0",
+    "siglent_v4.py": "ff510edb09198793afb74a39faa4fd6dc3c59bfcf2b615666cb74f2503b4dd18"
+  },
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.3.4",
+    "matplotlib": "3.10.7"
+  },
+  "example": {
+    "px": 8.27538020844573e-05,
+    "py": 6.374666595854078e-05,
+    "g": {
+      "real": 6.83756475431717e-05,
+      "imag": -2.3886676850361564e-05
+    },
+    "linear_only": {
+      "real": 0.826253849622384,
+      "imag": -0.2886474850543204
+    },
+    "joint_l": {
+      "real": 0.8245884452297516,
+      "imag": -0.28586450003260105
+    },
+    "small_lq": {
+      "real": [
+        0.826264169332306,
+        0.08251404329909372,
+        -0.006596453885720486
+      ],
+      "imag": [
+        -0.28852707952247447,
+        0.13493129372259016,
+        -0.011556403627769609
+      ]
+    },
+    "small_scales": [
+      0.009096911678391589,
+      0.00010047753108844993,
+      8.874454560554644e-05
+    ],
+    "small_scaled_moment": {
+      "real": [
+        [
+          0.9999999999999999,
+          -0.06136182288475065,
+          0.007745116357287696
+        ],
+        [
+          -0.06136182288475066,
+          1.0000000000000002,
+          -0.001209650710472176
+        ],
+        [
+          0.007745116357287696,
+          -0.001209650710472176,
+          1.0
+        ]
+      ],
+      "imag": [
+        [
+          -4.429221982022386e-19,
+          -0.029099772025186633,
+          0.024253441301075217
+        ],
+        [
+          0.029099772025186627,
+          -2.7463483757388597e-19,
+          -0.001901072886190634
+        ],
+        [
+          -0.02425344130107521,
+          0.001901072886190632,
+          5.999703780877565e-19
+        ]
+      ]
+    },
+    "small_scaled_rhs": {
+      "real": [
+        0.00751635829394586,
+        -0.00037655531347776457,
+        -6.063542900808216e-06
+      ],
+      "imag": [
+        -0.0026258006777290076,
+        0.00039334366673070617,
+        -0.00020365468621891294
+      ]
+    },
+    "pair_count": 81,
+    "ls_rank": 82,
+    "ls_condition": 6.322714606081944,
+    "kim_l": {
+      "real": 0.9949294068564376,
+      "imag": -0.34491751503927803
+    },
+    "kim_alpha": 2.3891266218772022e-05,
+    "kim_beta": 1.8580920211195412e-05,
+    "kim_eta": {
+      "real": 4.853736693176598e-05,
+      "imag": -1.6826709385895184e-05
+    },
+    "kim_pstar": 7.267600069066167e-05,
+    "kim_admissible": false,
+    "kim_rank": 81,
+    "kim_condition": 6.169190181634714,
+    "nmse": [
+      0.005737147234385365,
+      0.0054121348604941714,
+      0.036268341415347426
+    ]
+  },
+  "audit": {
+    "all_saved_training_moments_match": true,
+    "example_refits_match": true,
+    "kim_all_admissible": 35,
+    "kim_total": 368,
+    "kim_main_admissible": 8,
+    "ls_all_identified": true,
+    "ls_condition_range": [
+      4.887841582733489,
+      10.764519253346275
+    ],
+    "main_improvement_percent_range": [
+      -0.16984939913815555,
+      12.178339777525382
+    ],
+    "main_improvement_percent_median": 5.088006523239058,
+    "fold_median_improvement_percent": [
+      5.088006523239058,
+      4.902957948034609,
+      4.704790470372055,
+      4.7227088753340585
+    ]
+  },
+  "limitations": [
+    "A valid numerical solve is not a validation of stationary independent noise.",
+    "Kim failed-bound coefficients remain algebraic comparisons, not corrected physical coefficients.",
+    "Four folds share training captures; their spread is not a confidence interval.",
+    "Q magnitude is not an energy-transfer rate; no physical response or group velocity supplied."
+  ]
+}

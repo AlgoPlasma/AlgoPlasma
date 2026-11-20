@@ -1,0 +1,81 @@
+/* Classroom layout for the staged lessons. Keep the figure in place while
+   observations accumulate beside it. Long algebra gets the full reading width. */
+.staged-lesson { padding-inline: clamp(16px, 3.4vw, 72px); grid-template-rows: auto 1fr auto; }
+.staged-lesson .masthead { min-height: 64px; }
+.staged-lesson main { padding: 14px 0 28px; }
+.staged-lesson .slide-label { margin: 0 0 8px; color: var(--mint); font-size: clamp(20px, 1.5vw, 26px); }
+.staged-lesson h1 { font-size: clamp(37px, 3.65vw, 66px); line-height: 1.2; overflow-wrap: break-word; }
+.staged-lesson .reading-layout { display: grid; grid-template-columns: minmax(0, 1.23fr) minmax(0, 1fr); gap: clamp(24px, 3.4vw, 64px); align-items: start; margin-top: 20px; }
+.staged-lesson .reading-panel { min-width: 0; }
+.staged-lesson .narration { margin: 0; min-height: 0; line-height: 1.48; }
+.staged-lesson .narration p { margin: 0 0 .55em; }
+.staged-lesson .scene { margin: 0; min-width: 0; }
+.staged-lesson .scene canvas { cursor: default; }
+.staged-lesson:not(.complex-lesson):not(.dispersion-lesson) .scene canvas { height: clamp(310px, 42vh, 480px); flex: none; }
+.staged-lesson .takeaway { animation: lesson-appear .85s ease-out both; }
+.staged-lesson .equation, .staged-lesson .standing-math, .staged-lesson .derivation-math, .staged-lesson .model-equation { margin-block: .5em; line-height: 1.5; text-align: center; color: var(--mint); overflow-wrap: anywhere; }
+.staged-lesson .equation small { margin-top: .5em; }
+.staged-lesson .derivation-result { padding: 0; }
+.staged-lesson .scene figcaption { font-size: var(--annotation-size); }
+.staged-lesson .interaction { margin-top: 1em; }
+.dispersion-lesson.staged-lesson .scene .interaction { margin: 0 0 12px; }
+.staged-lesson .range-control, .staged-lesson .quiz-options { flex-wrap: wrap; }
+.staged-lesson .range-control input { max-width: 100%; }
+.staged-lesson .progress-group { flex-direction: column; align-items: flex-start; gap: 2px; font-size: clamp(18px, 1.4vw, 23px); font-weight: 650; white-space: nowrap; }
+.staged-lesson .controls { position: sticky; z-index: 4; bottom: 0; background: #10181c; border-top: 1px solid var(--line); padding: 10px 0; flex-wrap: wrap; }
+.staged-lesson .actions { gap: 10px; }
+.staged-lesson .restart, .staged-lesson .back { font-size: clamp(18px, 1.45vw, 24px); font-weight: 650; color: #e0ebe6; width: auto; height: auto; padding: 9px 12px; background: transparent; border: 1px solid #56736a; border-radius: 5px; }
+.staged-lesson .back { border-color: transparent; }
+.staged-lesson .advance { display: grid; justify-content: start; align-content: center; gap: 1px; min-width: 0; max-width: 38ch; padding: 8px 16px; text-align: start; line-height: 1.3; overflow-wrap: anywhere; }
+.staged-lesson #advance-kind { font-size: .85em; }
+.staged-lesson .page-navigation { display: flex; flex-wrap: wrap; width: auto; gap: 16px; }
+.staged-lesson .page-navigation [aria-disabled="true"] { display: none; }
+.complex-lesson.staged-lesson .reading-layout, .dispersion-lesson.staged-lesson .reading-layout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.complex-lesson.staged-lesson .reading-panel, .dispersion-lesson.staged-lesson .reading-panel { grid-row: 1; }
+.staged-lesson.is-deriving .reading-layout { display: block; max-width: 1440px; width: 100%; margin-inline: auto; }
+.staged-lesson .model-reading { font-size: var(--explanation-size); line-height: 1.55; }
+.staged-lesson .model-reading p { margin: .48em 0; }
+.staged-lesson .model-reading a { color: var(--mint); text-underline-offset: 4px; }
+.staged-lesson .model-equation { font-size: clamp(28px, 2.35vw, 40px); }
+.lesson-fade { animation: lesson-appear .85s ease-out both; }
+@keyframes lesson-appear { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (min-width: 1100px) {
+  :is(.complex-lesson, .dispersion-lesson).staged-lesson:not(.is-deriving) .reading-panel {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 2.5vw; align-items: center;
+  }
+  :is(.complex-lesson, .dispersion-lesson).staged-lesson:not(.is-deriving) .equation { margin: 0; }
+  :is(.complex-lesson, .dispersion-lesson).staged-lesson:not(.is-deriving) :is(.interaction, .takeaway) { grid-column: 1 / -1; margin-top: 8px; }
+}
+@media (min-width: 1200px) {
+  .dispersion-lesson.staged-lesson:not(.is-deriving) .reading-layout {
+    grid-template-columns: minmax(0, .85fr) minmax(0, 2fr); gap: 28px;
+  }
+  .dispersion-lesson.staged-lesson:not(.is-deriving) .reading-panel { display: block; grid-column: 1; }
+  .dispersion-lesson.staged-lesson:not(.is-deriving) .scene { grid-column: 2; grid-row: 1; }
+  .dispersion-lesson .dispersion-panels { gap: 20px; }
+}
+@media (max-width: 900px) {
+  .staged-lesson .reading-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .staged-lesson .reading-panel { grid-row: 1; }
+  .staged-lesson .page-navigation { flex-basis: 100%; justify-content: flex-start; gap: 0 12px; }
+  .staged-lesson:not(.complex-lesson):not(.dispersion-lesson) .scene canvas { height: 320px; }
+  .staged-lesson .masthead { padding: 8px 0; }
+}
+@media (max-width: 700px) {
+  .staged-lesson .controls { position: static; display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+  .staged-lesson .actions { grid-column: 1 / -1; margin: 0; display: grid; grid-template-columns: auto auto minmax(0, 1fr); }
+  .staged-lesson .actions .advance { grid-column: -2 / -1; max-width: none; }
+  .staged-lesson .actions:has(.back[hidden]) { grid-template-columns: auto minmax(0, 1fr); }
+  .staged-lesson .actions .restart, .staged-lesson .actions .back { padding: 8px 5px; }
+  .staged-lesson .language-switch { flex-shrink: 0; }
+  .staged-lesson .advance { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lesson .lesson-fade, .staged-lesson .takeaway { animation: none; }
+}
+@media print { .staged-lesson .controls { display: none; } }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
