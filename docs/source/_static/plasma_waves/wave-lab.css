@@ -1,0 +1,46 @@
+/* Shared additions for lessons 08–10. The masthead and footer use the lesson 07 shell. */
+html[lang="zh-CN"] .en, html[lang="en"] .zh { display:none; }
+.lab-lesson .slide-layout { grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); }
+.lab-lesson .slide-layout[data-visual="none"] { max-width:1240px; }
+.lab-lesson .lab-slide { min-width:0; }
+.lab-lesson .scene canvas { background:#141f25; }
+.lab-lesson .build-block { padding-left:0; }
+.lab-lesson .scene figcaption::before, .lab-lesson .scene figcaption::after { content:none; }
+.lab-lesson .scene figcaption, .lab-lesson .lab-control, .lab-lesson .legend, .lab-lesson .reading { font-size:var(--annotation-size); line-height:1.4; }
+.lab-lesson .lab-control { display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px; margin-top:12px; }
+.lab-lesson .lab-control output { color:var(--gold); margin-left:auto; }
+.lab-lesson .lab-control input[type=range] { width:100%; accent-color:var(--mint); cursor:pointer; }
+.lab-lesson input[type=checkbox] { width:24px; height:24px; accent-color:var(--mint); }
+.lab-lesson .reading { margin:12px 0 0; color:var(--mint); font-variant-numeric:tabular-nums; }
+.lab-lesson .legend { margin:8px 0 0; display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px; }
+.lab-lesson .colorbar { height:12px; width:100%; background:linear-gradient(90deg,#141f30,#314b80,#2a9199,#9ed28e,#ffe276); }
+.lab-lesson .fieldbar { background:linear-gradient(90deg,#6db2ff,#17232d,#f5bf6c); }
+.lab-lesson .scale { display:flex; justify-content:space-between; width:100%; }
+.lab-lesson .math { font-family:"Cambria Math","Segoe UI",sans-serif; }
+.lab-lesson .math sup, .lab-lesson .math sub { line-height:0; }
+.lab-lesson .progress-group { min-width:0; }
+.lab-lesson #advance-text:empty { display:none; }
+.lab-lesson #advance-kind { margin:0; }
+.lab-lesson .motion { margin-top:10px; }
+.lab-lesson .slide-label { margin-top:0; }
+.lab-lesson .controls { scroll-margin:0; }
+@media(max-width:1100px) { .lab-lesson .slide-layout { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:700px) {
+  .lab-lesson .controls { position:static; }
+  .lab-lesson .page-navigation { column-gap:5px; }
+  .lesson.lab-lesson .scene canvas { height:300px; min-height:300px; }
+  .lab-lesson .lab-control { font-size:22px; }
+}
+@media(prefers-reduced-motion:reduce) { .lab-lesson .content-enter { animation:none; } }
+
+.lab-lesson .lab-settings { margin:14px 0; }
+.lab-lesson .lab-settings:has(> .reading[hidden]:only-child) { display:none; }
+.lab-lesson figure[data-kind="field"] canvas { height:390px; min-height:390px; }
+.lab-lesson .lab-settings .motion { margin:0; }
+.lab-lesson .lab-settings .lab-control input[type=range] { margin:0; }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+ * 2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

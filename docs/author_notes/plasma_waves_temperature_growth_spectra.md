@@ -1,0 +1,15 @@
+# Lessons 08–10
+
+Readers enter from lesson 07 with the cold frequency, the pressure law written with u² and the plane-wave phase kx − ωt. Each lesson pairs a worked prediction with a change the reader can check independently.
+
+- **08.** Start with momentum transport and the pressure force on opposite sides of a compression. Linearize the longitudinal one-dimensional adiabatic pressure law and substitute into the lesson 07 dispersion relation. The fixed-density comparison reuses that lesson's SI constants and equilibrium. Vary k or electron thermal energy independently and predict the change in the squared-frequency excess. The maximum plotted k vTe/ωpe is about 0.20. The moving pressure profile illustrates the gradient over one phase cycle. [Thermal Langmuir waves, Caltech lecture notes](https://www.pmaweb.caltech.edu/Courses/ph136/yr2012/1221.2.K.pdf)
+- **09.** Start with a probe record. Expand i[kx − (ωr + iγ)t] before taking its real part. A fixed-position probe has A0 = 1 V/m. One experiment holds γ = 0 while varying ωr, the other holds ωr = 8 rad/s while varying γ. The curve is an analytic test signal and the rates are prescribed. Infer both rates in the closing example.
+- **10.** Compute an actual field record and separable radix-2 DFT, forward in space and positive-exponent in time. L = 2π m, T = 2π/(2.5e5 rad/s), Nx = 128, Nt = 4096. Samples exclude the repeated endpoint. Use a rectangular window. Display the positive-k, positive-ω detail with power |C|² normalized to the largest displayed cell, in dB, clipped at −40 dB. The two calibration modes occupy exact bins. The band uses twenty neighboring integer spatial bins and generally off-grid warm frequencies. The independently drawn curve is evaluated from the model at plot resolution. Switch the overlay on the same record, then interpret dark regions along the line.
+
+Run `node docs/tests/test_wave_spectrum.cjs` to verify bin signs, modal power and the band frequencies. The plots, sampled data and controls run locally without a CDN.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

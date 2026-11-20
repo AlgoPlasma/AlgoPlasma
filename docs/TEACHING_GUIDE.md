@@ -4,6 +4,7 @@ Adopted 2026-11-03. Use this guide when creating or substantially revising
 explanations, derivations, examples, figures, or interactive demonstrations.
 It complements [the documentation guide](DOCUMENTATION_GUIDE.md) and
 [the Codex development guide](CODEX_DEVELOPMENT_GUIDE.md).
+For plasma-wave lessons, also follow the [module authoring rules](source/learning/plasma_waves/AUTHORING_RULES.md).
 
 The purpose is to help a reader build, use, and check a scientific explanation.
 Readable pages and functioning controls are necessary, but do not demonstrate
@@ -258,3 +259,7 @@ evidence rather than treating this list as blanket support. Avoid unsupported
 retention percentages, fixed rules for the number of concepts per screen, or
 claims that a medium guarantees learning. Accessibility choices, disclosure
 policy and the proposed page sequence are explicit project design decisions.
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

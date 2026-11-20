@@ -78,7 +78,11 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-exclude_patterns = ["sphinx_rtd_theme"]
+exclude_patterns = [
+    "sphinx_rtd_theme",
+    # Authoring guidance lives beside the lessons but is not a student page.
+    "learning/plasma_waves/AUTHORING_RULES.md",
+]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -301,3 +305,7 @@ def setup(app):
     app.connect("html-page-context", keep_g03_navigation_shallow)
     app.connect("source-read", track_g03_test_plot_inputs)
     app.connect("build-finished", mark_reference_links_in_html)
+
+# Plasma-wave contribution history (Git author dates; edit time includes timezone).
+# 2026-11-19 14:21 +08:00 | Yinjian Zhao | git ee4adc3c832f
+# 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)

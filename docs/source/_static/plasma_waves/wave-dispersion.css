@@ -1,0 +1,57 @@
+/* One selectable branch beside its real-space density wave. */
+.dispersion-lesson .dispersion-panels { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 36px; }
+.dispersion-lesson[data-stage="0"] .dispersion-panels { grid-template-columns: minmax(0, 1fr); }
+.lesson.dispersion-lesson .scene { display: block; }
+.lesson.dispersion-lesson .scene canvas { height: 460px; min-height: 460px; }
+.dispersion-lesson #chart-pane { min-width: 0; }
+.dispersion-lesson #chart-heading { margin: 0 0 12px; font-size: 26px; font-weight: 650; color: var(--muted); }
+.dispersion-lesson svg { display: block; width: 100%; height: 416px; overflow: visible; }
+.dispersion-lesson svg text { fill: #e0ebe6; font: 600 26px "Segoe UI","Microsoft YaHei",sans-serif; }
+.chart-axis { stroke: #e0ebe6; stroke-width: 2; }
+.chart-grid { stroke: #526e62; stroke-dasharray: 4 6; }
+.dispersion-curve { fill: none; stroke: #b5efcf; stroke-width: 3; }
+.curve-sample { fill: #10181c; stroke: #b5efcf; stroke-width: 2; }
+.point-guide { stroke: #f4c583; stroke-width: 1.5; stroke-dasharray: 5 5; }
+.selected-mode { fill: #f4c583; stroke: #10181c; stroke-width: 2; }
+.phase-ray { stroke: #f4c583; stroke-width: 3; }
+.dispersion-lesson svg .point-name { fill: #f4c583; }
+.dispersion-lesson:not([data-stage="0"]):not([data-stage="1"]):not([data-stage="5"]) svg { cursor: crosshair; }
+.dispersion-lesson #comparison-note { margin: 8px 0 0; font-size: var(--annotation-size); color: var(--muted); }
+.dispersion-lesson details { margin-top: 20px; font-size: var(--annotation-size); line-height: 1.6; }
+.dispersion-lesson summary { cursor: pointer; color: var(--mint); }
+.dispersion-lesson summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 5px; }
+.dispersion-lesson details p { margin: 12px 0; }
+.dispersion-lesson details a { color: var(--mint); text-underline-offset: 4px; }
+.dispersion-lesson .model-equation { font-size: 32px; }
+@media (max-width: 900px) {
+  .dispersion-lesson .dispersion-panels { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .dispersion-lesson #chart-pane { border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+}
+@media (max-width: 700px) {
+  .dispersion-lesson svg { height: 360px; }
+  .dispersion-lesson svg text { font-size: 22px; }
+  .dispersion-lesson #chart-heading { font-size: 24px; }
+}
+
+.dispersion-lesson .reading-formula { display: inline-block; margin-right: 24px; }
+.dispersion-lesson .range-control input { width: min(260px, 30vw); }
+.dispersion-lesson .range-control output { font-size: var(--annotation-size); }
+@media (max-width: 700px) { .dispersion-lesson .range-control input { width: 100%; } }
+
+.lesson.dispersion-lesson[data-stage="5"] .scene canvas { height: 550px; min-height: 550px; }
+.dispersion-lesson[data-stage="5"] svg { height: 320px; }
+.dispersion-lesson #component-controls { margin: 12px 0 0; padding: 0; border: 0; min-width: 0; }
+.dispersion-lesson #component-controls legend { font-size: var(--annotation-size); margin-bottom: 8px; font-weight: 650; }
+.dispersion-lesson .component-option { display: flex; align-items: center; gap: 14px; padding: 9px 0; cursor: pointer; color: var(--mode-color); font-size: var(--annotation-size); font-weight: 600; line-height: 1.4; }
+.dispersion-lesson .component-option input { flex: 0 0 26px; width: 26px; height: 26px; margin: 0; accent-color: var(--mode-color); }
+.dispersion-lesson .component-option input:focus-visible { outline: 3px solid var(--mode-color); outline-offset: 4px; }
+.dispersion-lesson .component-option span span { display: block; }
+.dispersion-lesson #component-hint { margin: 12px 0 0; font-size: var(--annotation-size); line-height: 1.5; color: var(--muted); }
+
+.dispersion-lesson .component-swatch { display: inline-block; width: 34px; height: 3px; vertical-align: middle; margin-right: 8px; background: repeating-linear-gradient(to right, currentColor 0 var(--dash), transparent var(--dash) var(--period)); }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+ * 2026-11-18 16:04 +08:00 | Yinjian Zhao | git 92c692b04920
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
