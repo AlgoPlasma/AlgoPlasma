@@ -1,3 +1,6 @@
+.. Contribution history (edit times include timezone).
+   2026-11-24 19:06 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+
 Citation
 ========
 
@@ -34,25 +37,7 @@ Citation
         keywords = {AlgoPlasma, Plasma modeling, Numerical algorithms, Parallel computing}
       }
 
-   AlgoPlasma v1.0.1 已存档于 Zenodo，可按以下格式引用：
-
-   Zhao, Y. (2026). *AlgoPlasma: Open Algorithms for Plasma Modeling*
-   (Version 1.0.1). Zenodo.
-   https://doi.org/10.5281/zenodo.23227612
-
-   .. code-block:: bibtex
-
-      @software{zhao_2026_23227612,
-        author = {Zhao, Yinjian},
-        title = {AlgoPlasma: Open Algorithms for Plasma Modeling. v1.0.1},
-        month = oct,
-        year = {2026},
-        publisher = {Zenodo},
-        doi = {10.5281/zenodo.23227612},
-        url = {https://doi.org/10.5281/zenodo.23227612}
-      }
-
-   .. rubric:: 引用 AlgoPlasma 的论文
+   .. rubric:: 代表性论文
 
    - Zhongping Zhao, Kunpeng Zhong, Yinjian Zhao.
      *Test particle study of electron transport driven by ECDI induced waves in a Hall thruster.*
@@ -64,25 +49,10 @@ Citation
      **Physical Review E 114**, 035211 (2026).
      `DOI: 10.1103/p8v6-66mq <https://doi.org/10.1103/p8v6-66mq>`__
 
-   - Kunpeng Zhong, Demai Zeng, Yinjian Zhao, Daren Yu.
-     *Effects of RZ magnetic field components on electron drift instability in Hall thrusters via 3D PIC simulations.*
-     **Physics Letters A 590**, 131809 (2026).
-     `DOI: 10.1016/j.physleta.2026.131809 <https://doi.org/10.1016/j.physleta.2026.131809>`__
-
    - Yinjian Zhao, Kunpeng Zhong, Daren Yu.
      *Three-dimensional particle-in-cell simulations on Hall thruster electron drift instability: influence of magnetic field on electron transport.*
      **Journal of Plasma Physics 92**, E110 (2026).
      `DOI: 10.1017/S0022377826102189 <https://doi.org/10.1017/S0022377826102189>`__
-
-   - Xi Chen, Yinjian Zhao.
-     *Coupling MCC with fluid neutral solver for 3D PIC simulation of Hall thruster electron azimuthal drift instability.*
-     **IEPC-2025-169** (2025).
-     https://www.electricrocket.org/IEPC_2025/London/submission_169.pdf
-
-   - Yinjian Zhao, Kunpeng Zhong.
-     *Effect of magnetic field configuration on Hall thruster azimuthal instability in 3D PIC simulations.*
-     **IEPC-2025-063** (2025).
-     https://www.electricrocket.org/IEPC_2025/London/submission_63.pdf
 
    - Xi Chen, Lihuan Xie, Kunpeng Zhong, Xin Luo, Zhijun Zhou,
      Baisheng Wang, Zhe Liu, Yinjian Zhao.
@@ -116,25 +86,7 @@ Citation
         keywords = {AlgoPlasma, Plasma modeling, Numerical algorithms, Parallel computing}
       }
 
-   AlgoPlasma v1.0.1 is archived on Zenodo and may be cited as follows:
-
-   Zhao, Y. (2026). *AlgoPlasma: Open Algorithms for Plasma Modeling*
-   (Version 1.0.1). Zenodo.
-   https://doi.org/10.5281/zenodo.23227612
-
-   .. code-block:: bibtex
-
-      @software{zhao_2026_23227612,
-        author = {Zhao, Yinjian},
-        title = {AlgoPlasma: Open Algorithms for Plasma Modeling. v1.0.1},
-        month = oct,
-        year = {2026},
-        publisher = {Zenodo},
-        doi = {10.5281/zenodo.23227612},
-        url = {https://doi.org/10.5281/zenodo.23227612}
-      }
-
-   .. rubric:: Referenced By
+   .. rubric:: Selected Publications
 
    - Zhongping Zhao, Kunpeng Zhong, Yinjian Zhao.
      *Test particle study of electron transport driven by ECDI induced waves in a Hall thruster.*
@@ -146,25 +98,10 @@ Citation
      **Physical Review E 114**, 035211 (2026).
      `DOI: 10.1103/p8v6-66mq <https://doi.org/10.1103/p8v6-66mq>`__
 
-   - Kunpeng Zhong, Demai Zeng, Yinjian Zhao, Daren Yu.
-     *Effects of RZ magnetic field components on electron drift instability in Hall thrusters via 3D PIC simulations.*
-     **Physics Letters A 590**, 131809 (2026).
-     `DOI: 10.1016/j.physleta.2026.131809 <https://doi.org/10.1016/j.physleta.2026.131809>`__
-
    - Yinjian Zhao, Kunpeng Zhong, Daren Yu.
      *Three-dimensional particle-in-cell simulations on Hall thruster electron drift instability: influence of magnetic field on electron transport.*
      **Journal of Plasma Physics 92**, E110 (2026).
      `DOI: 10.1017/S0022377826102189 <https://doi.org/10.1017/S0022377826102189>`__
-
-   - Xi Chen, Yinjian Zhao.
-     *Coupling MCC with fluid neutral solver for 3D PIC simulation of Hall thruster electron azimuthal drift instability.*
-     **IEPC-2025-169** (2025).
-     https://www.electricrocket.org/IEPC_2025/London/submission_169.pdf
-
-   - Yinjian Zhao, Kunpeng Zhong.
-     *Effect of magnetic field configuration on Hall thruster azimuthal instability in 3D PIC simulations.*
-     **IEPC-2025-063** (2025).
-     https://www.electricrocket.org/IEPC_2025/London/submission_63.pdf
 
    - Xi Chen, Lihuan Xie, Kunpeng Zhong, Xin Luo, Zhijun Zhou,
      Baisheng Wang, Zhe Liu, Yinjian Zhao.
