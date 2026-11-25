@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 J01 Free Molecular
 ==========================================================================================
 
@@ -36,7 +42,7 @@ J01 Free Molecular
    下端也是开放面，已经进入通道的粒子可以从那里反向逃逸。
    本章先采用整个下端面均匀供气；入口半径只覆盖部分开放面时的含义在采样页说明。
 
-   .. figure:: /_static/J_Fluid/fm_history.svg
+   .. figure:: ../../images/J_Fluid/fm_history_en.svg
       :alt: 粒子从下端注入，沿网格内直线飞行，碰壁改变速度，最终从开放边界逃逸
       :width: 900px
 

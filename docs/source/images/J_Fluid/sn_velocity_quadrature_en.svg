@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520" role="img" aria-labelledby="title desc">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/sn_velocity_quadrature.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
   <title id="title">Product quadrature in the velocity plane</title>
   <desc id="desc">Eight angular intervals and three equal speed intervals divide the disk. Each annular sector contains one velocity node. Its weight equals the sector area in velocity space.</desc>
   <defs>

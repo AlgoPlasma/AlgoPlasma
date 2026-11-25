@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1120" height="660" viewBox="0 0 1120 660" role="img" aria-labelledby="title desc">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/sn_upwind_sweep.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
 <title id="title">Upwind sweeps for two velocity directions</title>
 <desc id="desc">For a velocity pointing upper right, start at the lower left; the center receives inflow from the left and below. Reverse the velocity and the center receives inflow from the right and above. Numbers 1–9 show the cell solve order.</desc>
 <defs><marker id="flow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#217b78"/></marker></defs>

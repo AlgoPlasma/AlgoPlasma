@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-label="J02 complete transport problem">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/sn_problem.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#267d8d" stroke-width="1.4"/></marker></defs>
 <rect width="900" height="470" rx="12" fill="#f7f9fc"/>
 <g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">

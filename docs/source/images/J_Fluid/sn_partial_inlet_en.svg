@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="480" viewBox="0 0 1000 480" role="img" aria-labelledby="title desc">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/sn_partial_inlet.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
   <title id="title">Inlet and wall regions on a lower axial face</title>
   <desc id="desc">The local radial coordinate runs from minus one to plus one. The inlet covers an interval with wall on either side. Integrate each part separately for inflow and use the full face for the outflow matrix. The inlet can also touch either end.</desc>
   <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#267d8d"/></marker></defs>

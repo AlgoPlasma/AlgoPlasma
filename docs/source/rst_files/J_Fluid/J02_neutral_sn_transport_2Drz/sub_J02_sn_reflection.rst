@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Reflection Iteration
 ==========================================================================================
 
@@ -91,7 +97,7 @@ Reflection Iteration
    若持续有入口供应，却没有开放出口、体损失或吸附等移除机制，就可能不存在有限稳态解。
    此时增加迭代上限不能解决物理收支问题。
 
-   .. figure:: /_static/J_Fluid/sn_parallel_iteration.svg
+   .. figure:: ../../../images/J_Fluid/sn_parallel_iteration_en.svg
       :alt: 上一轮分布确定壁面入流，各线程计算不同离散速度的空间分布，全部完成后检查收敛
       :width: 900px
 

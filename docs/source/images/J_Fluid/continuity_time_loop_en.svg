@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1050" height="620" viewBox="0 0 1050 620" role="img" aria-labelledby="title desc">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/continuity_time_loop.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
 <title id="title">Time stepping for the continuity equation</title><desc id="desc">Initialize the face coefficients once. At each step, supply sources, losses and inflows, select a time step, form the fluxes using the old density and update the density semi-implicitly. Check the discrete balance before advancing the clock.</desc>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
 <rect width="1050" height="620" rx="12" fill="#f7f9fc"/>

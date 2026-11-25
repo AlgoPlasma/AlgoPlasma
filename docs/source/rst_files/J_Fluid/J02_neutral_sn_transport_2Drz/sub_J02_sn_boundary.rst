@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-23 10:58 +08:00 | Yingjie Chen | git cd0d957281af
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Boundary Geometry
 ==========================================================================================
 
@@ -93,7 +99,7 @@ Boundary Geometry
    这三段区间共同组成一个完整单元面。分别积分可保留入口的实际位置；
    若只将整面入流乘以面积比例，会丢失这个位置信息。
 
-   .. figure:: /_static/J_Fluid/sn_partial_inlet.svg
+   .. figure:: ../../../images/J_Fluid/sn_partial_inlet_en.svg
       :alt: 单个下端面分成入口区间及两段反射壁面补集，入射分别积分
       :width: 900px
 

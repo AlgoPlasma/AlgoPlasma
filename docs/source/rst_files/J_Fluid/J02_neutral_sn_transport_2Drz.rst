@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 J02 Discrete Ordinates
 ==========================================================================================
 
@@ -59,7 +65,7 @@ J02 Discrete Ordinates
    其余下端和两个径向侧面是反射壁，上端是开放出口。
    域内存在给定损失频率，不含体产生项和粒子间散射。
 
-   .. figure:: /_static/J_Fluid/sn_problem.svg
+   .. figure:: ../../images/J_Fluid/sn_problem_en.svg
       :alt: 环形通道截面：下端部分入口，其余反射壁，上端出口，域内损失
       :width: 800px
 

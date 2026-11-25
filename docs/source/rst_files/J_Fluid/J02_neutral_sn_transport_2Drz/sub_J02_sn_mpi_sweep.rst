@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-07 00:49 +08:00 | Yingjie Chen | git 8f4066fd17ec
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Distributed Sweep and Flux
 ==========================================================================================
 
@@ -56,7 +62,7 @@ Distributed Sweep and Flux
    例如两者均为正时，每块依赖 r-low 和 z-low 邻居，
    完成后将结果送给 r-high 和 z-high 邻居。
 
-   .. figure:: /_static/J_Fluid/sn_spatial_mpi.svg
+   .. figure:: /_static/J_Fluid/sn_spatial_mpi_english.svg
       :alt: 四块空间网格从左下向右上进行迎风通信；每块内部线程处理不同离散速度
       :width: 900px
 

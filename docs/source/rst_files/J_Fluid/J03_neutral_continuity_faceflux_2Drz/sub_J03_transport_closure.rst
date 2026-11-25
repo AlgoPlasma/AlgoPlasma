@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Transport Closure
 ==========================================================================================
 
@@ -41,7 +47,7 @@ Transport Closure
    :math:`u_f` 的单位为 m/s，源码字段因而命名为 ``velocity_*_face``；
    但它不等于参考场的单元平均粒子速度。J03 初始化不接收单元平均速度数组。
 
-   .. figure:: /_static/J_Fluid/continuity_closure.svg
+   .. figure:: ../../../images/J_Fluid/continuity_closure_en.svg
       :alt: 正负参考通量分别选左侧或右侧密度，固定系数乘当前密度得到变化的面通量
       :width: 900px
 

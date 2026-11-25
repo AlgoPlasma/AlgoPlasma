@@ -1,3 +1,12 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-07-01 10:08 +08:00 | Yinjian Zhao | git c5308fa556c9
+   2026-07-01 11:33 +08:00 | Yinjian Zhao | git 5dcac4e969c0
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-23 10:58 +08:00 | Yingjie Chen | git cd0d957281af
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 J_Fluid
 ==========================================================================================
 
@@ -28,7 +37,7 @@ J_Fluid
    求参考场时，需要考虑粒子的速度分布；参考场建立后，可以用连续性方程继续更新密度。
    这两类计算由不同模块承担。
 
-   .. figure:: /_static/J_Fluid/model_pipeline.svg
+   .. figure:: ../images/J_Fluid/model_pipeline_en.svg
       :alt: 从几何和物理输入选择一种参考场算法，再建立面输运系数并推进当前密度
       :width: 900px
 

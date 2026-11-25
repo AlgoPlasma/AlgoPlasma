@@ -1,3 +1,10 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-23 10:58 +08:00 | Yingjie Chen | git cd0d957281af
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Velocity Quadrature
 ==========================================================================================
 
@@ -28,7 +35,7 @@ Velocity Quadrature
    角度选项 ``gauss-chebyshev`` 在当前代码中只是 ``midpoint`` 的别名：
    两者进入同一实现，生成完全相同的节点和权重，并非另一种求积方法。
 
-   .. figure:: /_static/J_Fluid/sn_velocity_quadrature.svg
+   .. figure:: ../../../images/J_Fluid/sn_velocity_quadrature_en.svg
       :alt: 速度圆盘按角区间和速率区间划分，每个扇环有一个中点节点
       :width: 900px
 

@@ -1,3 +1,10 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-07 00:49 +08:00 | Yingjie Chen | git 8f4066fd17ec
+   2026-10-23 10:58 +08:00 | Yingjie Chen | git cd0d957281af
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Complete Calculation
 ==========================================================================================
 
@@ -23,7 +30,8 @@ Complete Calculation
 
    .. raw:: html
 
-      <iframe id="sn-walkthrough" title="SN 迎风扫描、方程组装与反射迭代" style="width:100%;height:1400px;border:1px solid #d5dde3;" loading="lazy"></iframe>
+      <iframe id="sn-walkthrough" title="SN 迎风扫描、方程组装与反射迭代" style="width:100%;height:1400px;border:1px solid #d5dde3;" loading="lazy" hidden></iframe>
+      <noscript><p>启用 JavaScript 可播放动画。下文按相同顺序说明计算步骤。</p></noscript>
 
    静态阅读时，下面仍按输入准备、求解与重构的顺序给出完整调用过程。
    动画对应本页第 6 步的内部执行，不改变各功能页的公式和接口。
@@ -318,7 +326,8 @@ Complete Calculation
 
    .. raw:: html
 
-      <iframe id="sn-walkthrough-en" title="Discrete ordinates upwind sweeps, cell assembly, and reflection iteration" style="width:100%;height:1400px;border:1px solid #d5dde3;" loading="lazy"></iframe>
+      <iframe id="sn-walkthrough-en" title="Discrete ordinates upwind sweeps, cell assembly, and reflection iteration" style="width:100%;height:1400px;border:1px solid #d5dde3;" loading="lazy" hidden></iframe>
+      <noscript><p>Enable JavaScript to play the animation. The steps below describe the same calculation.</p></noscript>
 
    The following static description covers input preparation, the transport solve, and reconstruction.
    The animation shows the operations within the solve in Section 6, using the formulas and interfaces
@@ -747,6 +756,10 @@ Complete Calculation
    $("finish").onclick=()=>{stop();reconstructed=true;render()};
    document.querySelectorAll("[data-term]").forEach(b=>b.onclick=()=>{term=b.dataset.term;renderAssembly();sendSize()});
    document.addEventListener("visibilitychange",()=>{if(document.hidden)stop()});
+   const languagePanel = window.frameElement?.closest(".ap-lang");
+   if (languagePanel) new MutationObserver(() => {
+     if (languagePanel.hidden) stop();
+   }).observe(languagePanel, {attributes:true, attributeFilter:["hidden"]});
    window.addEventListener("pagehide",stop);
    const same=(a,b)=>a[0]===b[0]&&a[1]===b[1], inside=([i,k])=>i>=0&&i<NR&&k>=0&&k<NZ;
    const point=([i,k])=>[74+i*76+38,402-k*52-26];
@@ -755,7 +768,7 @@ Complete Calculation
     let out="";
     const line=(x1,y1,x2,y2,color="#155b8f",dash="",arrow=true)=>'<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+color+'" stroke-width="2" '+(dash?'stroke-dasharray="'+dash+'" ':'')+(arrow?'marker-end="url(#'+(color==="#8c3970"?"wallarrow":"arrow")+')"':'')+'/>';
     const text=(x,y,value,extra="")=>'<text x="'+x+'" y="'+y+'" '+extra+'>'+value+'</text>';
-    out+=text(84,20,label("上端开放：外部入射为零","Open outlet: zero external inflow"));
+    out+=text(84,20,"Open outlet: zero external inflow");
     for(let i=0;i<NR;i++)for(let k=0;k<NZ;k++){
      const cell=[i,k],isCurrent=current.some(c=>same(c,cell)),isDone=done.some(c=>same(c,cell));
      const [x,y]=point(cell);
@@ -766,8 +779,8 @@ Complete Calculation
     out+=line(71,402,71,90,"#8c3970","",false)+line(381,402,381,90,"#8c3970","",false);
     out+=line(74,405,150,405,"#8c3970","",false)+line(302,405,378,405,"#8c3970","",false);
     out+=line(151,406,301,406,"#155b8f","",false);
-    out+=text(166,431,label('给定入口 <tspan font-style="italic">h</tspan><tspan baseline-shift="sub" font-size="10">m</tspan>',"Prescribed inlet <tspan font-style=\"italic\">h</tspan><tspan baseline-shift=\"sub\" font-size=\"10\">m</tspan>"));
-    out+=text(11,260,label("反射壁","Reflecting wall"),'transform="rotate(-90 11 260)"')+text(450,200,label("反射壁","Reflecting wall"),'transform="rotate(90 450 200)"');
+    out+=text(166,431,'Prescribed inlet <tspan font-style="italic">h</tspan><tspan baseline-shift="sub" font-size="10">m</tspan>');
+    out+=text(11,260,"Reflecting wall",'transform="rotate(-90 11 260)"')+text(450,200,"Reflecting wall",'transform="rotate(90 450 200)"');
     out+=line(74,402,74,66,"#24313d","",false)+text(53,65,"z ↑")+text(376,452,"r →");
     if(mode==="hybrid"){
      out+=line(226,90,226,402,"#5e6870","6 4",false)+line(74,246,378,246,"#5e6870","6 4",false);
@@ -800,7 +813,7 @@ Complete Calculation
      }
     }
     if(f.phase==="boundary"){
-     out+=text(89,48,iteration===1?label("旧分布为零 → 第一轮反射入流为零","Zero initial field → zero reflected inflow"):label("读取上一轮壁面出射 → 固定本轮反射入流","Previous outflow → fixed reflected inflow"));
+     out+=text(89,48,iteration===1?"Zero initial field → zero reflected inflow":"Previous outflow → fixed reflected inflow");
     }
     $("drawing").innerHTML=out;
    }
@@ -929,6 +942,7 @@ Complete Calculation
        frames[index].srcdoc = '<!doctype html><html lang="' + language + '"><head>' +
          head.innerHTML + '<title>' + frames[index].title + '</title></head><body>' +
          view.innerHTML + script.innerHTML + '</body></html>';
+       frames[index].hidden = false;
      }
      window.addEventListener("message", event => {
        if (event.data?.type !== "sn-walkthrough-height") return;

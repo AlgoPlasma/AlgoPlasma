@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="570" viewBox="0 0 1080 570" role="img" aria-labelledby="title desc">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/fm_history.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
 <title id="title">A free-molecular history from injection to escape</title>
 <desc id="desc">The horizontal axis is radius and the vertical axis is axial position. A particle enters at the bottom, crosses internal faces in straight flight, reflects at the right wall and exits at the top. Each segment adds residence time and each face crossing adds a signed count.</desc>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
