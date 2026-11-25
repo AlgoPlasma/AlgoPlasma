@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md) | [Online documentation](https://algoplasma.readthedocs.io/en/latest/index.html)
+[简体中文](README.zh-CN.md) | [Online documentation](https://algoplasma.readthedocs.io/en/develop/)
 
 AlgoPlasma, formerly PMSL, turns scattered and repeatedly reimplemented core algorithms for plasma modeling into an open, reusable, tested, and explainable algorithm library. It supports reliable modeling and result verification in research, while also helping learners understand algorithmic principles and gain hands-on experience in education. By bringing the community's efforts together, AlgoPlasma aims to build a shared algorithmic foundation so that others can build upon it instead of starting from scratch.
 
@@ -18,7 +18,7 @@ AlgoPlasma
 ├── H_MPI_Exchange    # MPI data exchange
 ├── I_Initializer     # Initialization
 ├── J_Fluid           # Fluid algorithms
-├── K_Diagnostics     # Probe diagnostics and signal inversion
+├── K_Diagnostics     # Plasma diagnostics algorithms
 ├── docs              # Sphinx + Doxygen documentation
 └── tests             # Algorithm tests and validation cases
 ```
@@ -87,7 +87,7 @@ After changing an algorithm, start with the most local tests for that algorithm,
 
 ## Documentation
 
-Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/latest/index.html) online on Read the Docs.
+Read the [AlgoPlasma documentation](https://algoplasma.readthedocs.io/en/develop/) online on Read the Docs.
 
 The documentation is built with Sphinx, Doxygen, and Breathe:
 
@@ -105,6 +105,29 @@ make html
 ```
 
 Doxygen is also required on the system. The Read the Docs configuration is in `.readthedocs.yaml`. After a successful build, the HTML entry page is usually at `docs/build/html/index.html`; open that file in a browser to view the documentation.
+
+## Citation
+
+If you use AlgoPlasma in your research, please cite the library paper:
+
+Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for plasma modeling," *SoftwareX* 36 (2026), 103176. DOI: [10.1016/j.softx.2026.103176](https://doi.org/10.1016/j.softx.2026.103176).
+
+```bibtex
+@article{ZHAO2026103176,
+  title = {AlgoPlasma: Open algorithms for plasma modeling},
+  journal = {SoftwareX},
+  volume = {36},
+  pages = {103176},
+  year = {2026},
+  issn = {2352-7110},
+  doi = {https://doi.org/10.1016/j.softx.2026.103176},
+  url = {https://www.sciencedirect.com/science/article/pii/S2352711026006667},
+  author = {Yinjian Zhao and Zhongping Zhao and Zhe Liu and Baisheng Wang and Zilong Peng and Xin Luo and Lihuan Xie and Xi Chen and Zhijun Zhou and Kunpeng Zhong and Yingjie Chen and Changzheng Hu},
+  keywords = {AlgoPlasma, Plasma modeling, Numerical algorithms, Parallel computing}
+}
+```
+
+AlgoPlasma v1.0.1 is archived on Zenodo: [https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612). See the [Citation page](https://algoplasma.readthedocs.io/en/develop/community/citation.html) for details and related application papers.
 
 ## Contributing
 
@@ -134,3 +157,7 @@ Per-file license headers are not yet uniform across the source tree. Original pr
 - Yinjian Zhao / 赵隐剑
 - Email: contact@algoplasma.com
 - Homepage: <https://homepage.hit.edu.cn/zhaoyinjian>
+
+<!-- Contribution history (edit times include timezone).
+2026-11-20 10:25 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+-->

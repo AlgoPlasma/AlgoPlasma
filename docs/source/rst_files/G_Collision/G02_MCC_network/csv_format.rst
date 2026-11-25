@@ -138,10 +138,21 @@ CSV 数据格式与填写
 
    Success prints PASS and returns 0. Format/reference/model errors return 1; missing arguments return 2. This does not advance collisions or establish experimental validity. The values in the following example illustrate format only.
 
-.. rubric:: 5. 完整最小示例 / Complete minimal inline example
+.. container:: ap-lang ap-lang-zh
 
-下面十段内容各保存为标题指定的文件；最后一段放入 tables 子目录。A/B 是虚构粒子，X/Y 是元素记账标签，质量和截面都是说明格式的合成值。
-Save each block under its stated filename, with the last in the tables subdirectory. A/B, X/Y, masses and cross sections are synthetic format examples.
+   .. rubric:: 5. 完整最小示例
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: 5. Complete minimal inline example
+
+.. container:: ap-lang ap-lang-zh
+
+   下面十段内容各保存为标题指定的文件；最后一段放入 tables 子目录。A/B 是虚构粒子，X/Y 是元素记账标签，质量和截面都是说明格式的合成值。
+
+.. container:: ap-lang ap-lang-en
+
+   Save each block under its stated filename, with the last in the tables subdirectory. A/B, X/Y, masses and cross sections are synthetic format examples.
 
 .. rubric:: manifest.csv
 

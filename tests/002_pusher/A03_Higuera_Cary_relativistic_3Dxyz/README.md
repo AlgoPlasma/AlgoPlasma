@@ -1,6 +1,6 @@
 # A03_Higuera_Cary_relativistic_3Dxyz Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This directory provides an independent test for `A_Pusher/A03_Higuera_Cary_relativistic_3Dxyz`, the relativistic Higuera-Cary particle velocity pusher in 3D Cartesian coordinates. The test builds a small Fortran driver, runs relativistic gyro and high-Lorentz-factor `E x B` drift cases, and compares the numerical result against analytic references or a reference tolerance.
 
@@ -12,7 +12,7 @@ The entry point is `source_f90/main.f90`, which runs three cases:
 | --- | --- | --- |
 | `build/case01_gyro.dat` | Relativistic gyromotion in a magnetic field | Uses an initial speed of `0.9c` and compares trajectory and velocity against the analytic solution with the relativistically corrected gyrofrequency. |
 | `build/case02_exb_drift.dat` | Force-free `E x B` drift with `gamma = 20` | Sets `E = -v_y B_z` so the Lorentz force cancels, then checks that the particle keeps `x = 0` while drifting at constant velocity. |
-| `build/case03_warpx_exb_drift.dat` | WarpX reference `E x B` drift test | Uses the positron charge-to-mass ratio and WarpX-style reference setup, then checks the final `|x| < 0.001` tolerance. |
+| `build/case03_warpx_exb_drift.dat` | WarpX reference `E x B` drift test | Uses the positron charge-to-mass ratio and WarpX-style reference setup, then checks the final `abs(x) < 0.001` tolerance. |
 
 When the executable runs, each case prints the maximum velocity error and maximum position error. The third case also prints `PASS` or `FAIL` for the WarpX reference tolerance.
 

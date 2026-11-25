@@ -144,13 +144,22 @@ B03_scatter_3Dxyz_bspline Test
 
    .. rubric:: 参考图
 
-   .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_shape_curves.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``b03_bspline_scatter_shape_curves.png``：不同 ``order`` 的中心化
-      B-spline 形函数曲线。横轴为粒子到网格点的距离 :math:`r`，纵轴为权重
-      :math:`S_{order}(r)`。阶数越高，支撑范围越宽，曲线越平滑。
+      * - .. image:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_shape_curves.png
+             :width: 100%
+        - .. image:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_ref_vs_value.png
+             :width: 100%
+
+   ``b03_bspline_scatter_shape_curves.png``：不同 ``order`` 的中心化
+   B-spline 形函数曲线。横轴为粒子到网格点的距离 :math:`r`，纵轴为权重
+   :math:`S_{order}(r)`。阶数越高，支撑范围越宽，曲线越平滑。
+
+   ``b03_bspline_scatter_ref_vs_value.png``：横轴为理论参考不变量，纵轴为
+   从 ``den`` 计算得到的不变量。虚线为 ``value=reference``。总量守恒和一阶矩子测试
+   都落在对角线附近，说明沉积结果满足对应不变量。
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_single_particle_footprint.png
       :align: center
@@ -159,14 +168,6 @@ B03_scatter_3Dxyz_bspline Test
       ``b03_bspline_scatter_single_particle_footprint.png``：单个粒子的 xy
       沉积 footprint，图中已经对 z 方向权重求和。它展示了随着 ``order`` 增加，
       一个粒子的源项会分配到更多网格点上。
-
-   .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_ref_vs_value.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
-
-      ``b03_bspline_scatter_ref_vs_value.png``：横轴为理论参考不变量，纵轴为
-      从 ``den`` 计算得到的不变量。虚线为 ``value=reference``。总量守恒和一阶矩子测试
-      都落在对角线附近，说明沉积结果满足对应不变量。
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_errors.png
       :align: center
@@ -326,15 +327,26 @@ B03_scatter_3Dxyz_bspline Test
 
    .. rubric:: Reference Figures
 
-   .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_shape_curves.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``b03_bspline_scatter_shape_curves.png``: centered B-spline shape
-      functions for different ``order`` values. The x-axis is the
-      particle-grid distance :math:`r`; the y-axis is the weight
-      :math:`S_{order}(r)`. Higher order gives wider support and smoother
-      curves.
+      * - .. image:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_shape_curves.png
+             :width: 100%
+        - .. image:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_ref_vs_value.png
+             :width: 100%
+
+   ``b03_bspline_scatter_shape_curves.png``: centered B-spline shape
+   functions for different ``order`` values. The x-axis is the
+   particle-grid distance :math:`r`; the y-axis is the weight
+   :math:`S_{order}(r)`. Higher order gives wider support and smoother
+   curves.
+
+   ``b03_bspline_scatter_ref_vs_value.png``: theoretical invariant on the
+   x-axis and the invariant computed from ``den`` on the y-axis. The dashed
+   line is ``value=reference``. Conservation and first-moment subtests lie
+   close to the diagonal, showing that the deposited grid field satisfies
+   the corresponding invariants.
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_single_particle_footprint.png
       :align: center
@@ -343,16 +355,6 @@ B03_scatter_3Dxyz_bspline Test
       ``b03_bspline_scatter_single_particle_footprint.png``: xy deposition
       footprint of one particle after summing the z weights. It shows that a
       higher order distributes one particle source to more grid points.
-
-   .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_ref_vs_value.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-wide
-
-      ``b03_bspline_scatter_ref_vs_value.png``: theoretical invariant on the
-      x-axis and the invariant computed from ``den`` on the y-axis. The dashed
-      line is ``value=reference``. Conservation and first-moment subtests lie
-      close to the diagonal, showing that the deposited grid field satisfies
-      the corresponding invariants.
 
    .. figure:: ../../images/tests/004_scatter/B03_scatter_3Dxyz_bspline/b03_bspline_scatter_errors.png
       :align: center

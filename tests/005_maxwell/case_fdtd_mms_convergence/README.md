@@ -1,5 +1,7 @@
 # FDTD MMS Accuracy and Convergence Tests
 
+[简体中文](README.zh-CN.md)
+
 This directory validates the core Maxwell kernels with MMS convergence tests.
 It does not include CPML, particles, current sources, collisions, or filtering.
 

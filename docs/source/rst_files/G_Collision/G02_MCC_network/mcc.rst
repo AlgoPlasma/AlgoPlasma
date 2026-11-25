@@ -38,7 +38,13 @@ mcc.hpp：C++ 总入口头文件
 
    The names above are an interface index; consult the source declarations for exact parameters.
 
-.. rubric:: 源码 / Source
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 源码
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: Source
 
 :download:`mcc.hpp <../../../../../G_Collision/G02_MCC_network/mcc.hpp>`
 
@@ -47,7 +53,13 @@ mcc.hpp：C++ 总入口头文件
    :linenos:
 
 
-.. rubric:: 文件归属 / File location
+.. container:: ap-lang ap-lang-zh
+
+   .. rubric:: 文件归属
+
+.. container:: ap-lang ap-lang-en
+
+   .. rubric:: File location
 
 ``G_Collision/G02_MCC_network/mcc.hpp``
 

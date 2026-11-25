@@ -1,6 +1,6 @@
 # K02_beall
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `K02_beall` holds two things: the **closed-form algebra of aliasing** and the
 **Beall statistical dispersion spectrum `S(k, f)`** that makes it visible.

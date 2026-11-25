@@ -2,8 +2,6 @@
 
 .. snapshot-start
 
-运行时间：2026-10-05T12:01:05.121547+00:00
-
 K01: PASS / K02: PASS / K03: PASS
 
 .. list-table:: 同次运行的验收结果

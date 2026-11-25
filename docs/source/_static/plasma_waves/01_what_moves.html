@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>电子运动与等离子体振荡 | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css">
+  <script src="wave-navigation.js" defer></script><script src="wave-slides.js" defer></script><script src="wave-text.js" defer></script><script src="wave-course.js" defer></script><script src="wave-intro.js" defer></script><script src="wave-restoring.js" defer></script>
+  <link rel="stylesheet" href="wave-presentation.css">
+  <link rel="stylesheet" href="wave-slides.css">
+</head>
+<body>
+  <div class="lesson staged-lesson" id="lesson" data-page="1" data-stage="0">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link" aria-label="返回等离子体波课堂">Algo<span>Plasma</span></a>
+      <p class="chapter sr-only" id="chapter">01 / 电子运动与等离子体振荡</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" aria-disabled="true" tabindex="-1">上一课</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">课程目录</a>
+        <a id="next-lesson" rel="next" href="02_measuring_a_wave.html?lang=zh">下一课</a>
+      </nav>
+      <div class="header-actions">
+        <button class="motion" id="motion" hidden type="button" aria-pressed="false">暂停动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言">
+          <button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button>
+          <button type="button" data-language="en" lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <header class="heading"><p class="slide-label" id="slide-label"></p><h1 id="title">波来了，<span>电子去哪儿了？</span></h1></header>
+      <div class="reading-layout">
+        <figure class="scene" id="scene">
+        <canvas id="plasma" role="img" aria-label="均匀排列的绿色点代表电子，蓝色加号代表固定离子背景；点阵只用于示意集体运动。">绿色点代表电子。电子在平衡位置附近往复运动时，可以形成向右移动的疏密图样。</canvas>
+        <p id="canvas-fallback" hidden></p>
+        <div class="species" aria-hidden="true"><span><i class="electron-key"></i><span id="electron-name">电子</span></span><span class="ions"><b>+</b><span id="ion-name">离子背景</span></span></div>
+        <div class="scene-prompt" id="scene-prompt" aria-hidden="true">从这里，开始观察。</div>
+        <figcaption id="model-note">集体运动示意：离子固定，省略热运动；点阵不代表晶格，动画已减速。</figcaption>
+      </figure>
+        <div class="reading-panel">
+          <div class="narration" id="narration">先看一片均匀的等离子体。</div>
+
+          <p class="equation" id="equation" hidden></p>
+          <div class="takeaway" id="takeaway" hidden>
+        <p id="takeaway-text"><span class="gold">电子在局部往复，</span><br class="mobile-break"><span class="mint">疏密图样向前移动。</span></p>
+      </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="controls">
+      <div class="progress-group"><span id="stage-count"></span><span id="build-count"></span></div>
+      <button class="restart" id="restart-lesson" type="button">本课起始</button>
+      <p class="keyboard-note" id="keyboard-note">P 播放 · F 全屏</p>
+      <div class="actions">
+        <button class="back" id="back" type="button" hidden>上一步</button>
+        <button class="restart" id="restart-slide" type="button">本页起始</button>
+        <button class="advance" id="advance" type="button"><span id="advance-kind">下一步</span><span id="advance-text"></span></button>
+      </div>
+    </footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>这一页比较电子的局部往复运动和密度图样的传播。电子不需要随波峰穿过整片等离子体；不同位置电子的有序位移能组成移动的疏密图样。请启用 JavaScript 查看分步动画。</p><p>This page compares local electron oscillation with a moving density pattern. Individual electrons need not travel across the plasma with a crest. Enable JavaScript to view the step-through animation.</p><p>电子层向右偏移，左侧留下正电、右侧出现负电。电场向右，负电子受力向左。回到平衡位置时，电子仍有速度；越过原位后，电场和恢复力反向。这就是理想模型中的往复振荡。</p><p>Displacing the electron layer to the right exposes positive charge on the left and negative charge on the right. The field points right and the electron force points left. Electrons still have velocity at equilibrium; after crossing it, the restoring force reverses.</p></div></noscript>
+</body>
+</html>
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 19:33 +08:00 | Yinjian Zhao | git fb1cc989ad32
+2026-11-17 19:41 +08:00 | Yinjian Zhao | git 7667d669c7ec
+2026-11-17 19:50 +08:00 | Yinjian Zhao | git 3e022dd90c69
+2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+2026-11-18 16:36 +08:00 | Yinjian Zhao | git 4be5f6b5764f
+2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

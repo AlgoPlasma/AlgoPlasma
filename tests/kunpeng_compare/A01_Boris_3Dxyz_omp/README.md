@@ -1,5 +1,7 @@
 # A01_Boris_3Dxyz_omp
 
+[简体中文](README.zh-CN.md)
+
 This case compares the OpenMP performance of the `boris_xyz_SoA_omp` test on
 two platforms:
 

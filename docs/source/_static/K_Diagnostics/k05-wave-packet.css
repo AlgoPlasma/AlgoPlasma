@@ -1,0 +1,151 @@
+/* K05 contribution history (Git author dates; edit times include timezone).
+ * 2026-10-23 16:13 +08:00 | Yinjian Zhao | git 482110a190d6
+ * 2026-10-27 16:16 +08:00 | Yinjian Zhao | git 1782aebfbe9c
+ * 2026-11-03 09:08 +08:00 | Yinjian Zhao | git 52f1bfb880ab
+ * 2026-11-03 13:13 +08:00 | Yinjian Zhao | git c78fafbf8e0b
+ * 2026-11-03 13:48 +08:00 | Yinjian Zhao | git d720dd65bc61
+ * 2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */
+
+/* Shared layout for the K05 theory pages. */
+.k05-lesson .rubric { margin-top: 1.8rem; }
+/* Keep the number and its permalink in a fixed column, outside math scrolling. */
+.k05-lesson div.math {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: .6rem;
+  overflow: visible;
+  padding: .5rem 0;
+}
+.k05-lesson div.math > span:last-child { grid-column: 1; grid-row: 1; min-width: 0; }
+.k05-lesson div.math .eqno {
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
+  height: auto;
+  padding: 0;
+  white-space: nowrap;
+}
+.k05-lesson div.math .eqno::before { display: none; }
+.k05-lesson div.math .eqno .headerlink,
+.k05-lesson div.math .eqno:hover .headerlink {
+  display: inline-block;
+  visibility: visible;
+  width: 1.2em;
+  padding: 0;
+  margin: 0 0 0 .35em;
+}
+.k05-lesson div.math .eqno .headerlink { opacity: 0; }
+.k05-lesson div.math .eqno:hover .headerlink,
+.k05-lesson div.math .eqno .headerlink:focus { opacity: 1; }
+.k05-lesson .katex-display > .katex > .katex-html { box-sizing: border-box; }
+.k05-lesson .k05-note {
+  margin: 1.1rem 0 1.6rem;
+  padding: .8rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-left: 3px solid #28658b;
+  border-radius: .3rem;
+  background: #f8fafc;
+}
+.k05-note summary { cursor: pointer; font-weight: 600; color: #174a6a; }
+.k05-note[open] summary { margin-bottom: 1rem; }
+.k05-note > :last-child { margin-bottom: 0; }
+.k05-wave {
+  padding: 1rem;
+  margin: 1rem 0 .7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: .5rem;
+  background: #fff;
+  color: #243746;
+}
+.k05-wave svg, .k05-wave img { display: block; width: 100%; height: auto; }
+.k05-wave .k05-wave-title { margin: 0 0 .3rem; font-weight: 600; }
+.k05-wave .k05-wave-legend { font-size: .86rem; margin: .4rem 0 .8rem; }
+.k05-wave-legend span { display: inline-block; margin-right: 1rem; }
+.k05-wave-legend .k05-blue { color: #216b96; }
+.k05-wave-legend .k05-orange { color: #a34508; }
+.k05-wave-legend .k05-green { color: #237344; }
+.k05-envelope-labels text { paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+.k05-wave-controls { display: flex; gap: .8rem; align-items: end; flex-wrap: wrap; }
+.k05-wave-controls label { display: flex; flex-direction: column; gap: .35rem; font-size: .9rem; }
+.k05-wave-controls .k05-time-label { flex: 1 1 12rem; }
+.k05-wave-controls input[type="range"] { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-wave-controls select, .k05-wave-controls button {
+  min-height: 2.3rem; padding: .4rem .65rem;
+  border: 1px solid #889cae; border-radius: .25rem;
+  background: #fff; color: #243746; font: inherit;
+}
+.k05-wave-controls button { cursor: pointer; background: #edf4f8; }
+.k05-wave-controls button:hover { background: #dcebf4; }
+.k05-wave :focus-visible, .k05-note summary:focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-wave .k05-wave-readout { font-size: .85rem; margin: .7rem 0 0; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) {
+  .k05-wave { padding: .6rem; }
+  .k05-wave-controls .k05-time-label { flex-basis: 100%; }
+  .k05-lesson .k05-note { padding: .7rem; }
+}
+
+.k05-band {
+  color: #243746;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: .4rem;
+  padding: 1rem;
+  margin: 1.2rem 0;
+}
+.k05-band-title { font-weight: 600; margin-bottom: .8rem; }
+.k05-band svg, .k05-band img { display: block; width: 100%; height: auto; }
+.k05-band-controls { display: flex; align-items: end; flex-wrap: wrap; gap: 1rem; }
+.k05-band-controls label { display: flex; flex: 1 1 12rem; flex-direction: column; gap: .3rem; font-size: .9rem; }
+.k05-band-controls input { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-band-controls button { min-height: 2.3rem; background: #edf4f8; border: 1px solid #889cae; border-radius: .25rem; padding: .4rem .7rem; font: inherit; color: #243746; cursor: pointer; }
+.k05-band :focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-band-readout { font-size: .86rem; font-variant-numeric: tabular-nums; margin: .8rem 0 .2rem; }
+
+.k05-probes { color: #243746; background: #fff; border: 1px solid #cbd5e1; border-radius: .4rem; padding: 1rem; margin: 1.2rem 0; }
+.k05-probes svg, .k05-probes img { display: block; width: 100%; height: auto; }
+.k05-probes-title { font-weight: 600; margin-bottom: .8rem; }
+.k05-probes-controls { display: flex; gap: 1rem; flex-wrap: wrap; align-items: end; }
+.k05-probes-controls label { display: flex; flex: 1 1 12rem; flex-direction: column; gap: .3rem; font-size: .9rem; }
+.k05-probes-controls input { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-probes-controls button { min-height: 2.3rem; background: #edf4f8; border: 1px solid #889cae; border-radius: .25rem; padding: .4rem .7rem; font: inherit; color: #243746; cursor: pointer; }
+.k05-probes :focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-probes-readout { font-size: .86rem; font-variant-numeric: tabular-nums; margin: .8rem 0 .2rem; }
+
+.k05-statistics {
+  padding: 1rem; margin: 1rem 0 .7rem; border: 1px solid #cbd5e1;
+  border-radius: .5rem; background: #fff; color: #243746;
+}
+.k05-statistics svg, .k05-statistics img { display: block; width: 100%; height: auto; }
+.k05-statistics-title { margin: 0 0 .6rem; font-weight: 600; }
+.k05-statistics-controls { display: flex; flex-wrap: wrap; gap: .8rem; align-items: end; }
+.k05-statistics-controls label { display: flex; flex-direction: column; gap: .35rem; flex: 1 1 10rem; font-size: .9rem; }
+.k05-statistics-controls input { width: 100%; min-height: 2rem; cursor: pointer; }
+.k05-statistics-controls select, .k05-statistics-controls button {
+  min-height: 2.3rem; padding: .4rem .65rem; border: 1px solid #889cae;
+  border-radius: .25rem; background: #fff; color: #243746; font: inherit;
+}
+.k05-statistics-controls button { cursor: pointer; background: #edf4f8; }
+.k05-statistics :focus-visible { outline: 3px solid #1675a8; outline-offset: 3px; }
+.k05-statistics-readout { font-size: .85rem; margin: .7rem 0; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .k05-statistics { padding: .6rem; } }
+
+
+/* Permanent source-comparison panels, not revision colours. */
+.k05-lesson .k05-paper-match {
+  border: 1px solid #97a6b2; border-left: 4px solid #526575;
+  border-radius: .4rem; padding: 1rem 1.1rem; margin: 1.4rem 0;
+  background: var(--pst-color-surface, #f8fafc);
+}
+.k05-lesson .k05-paper-match > .rubric:first-child { margin-top: 0; }
+.k05-lesson .k05-paper-match > :last-child { margin-bottom: 0; }
+.k05-lesson .k05-paper-match div.math { margin: .6rem 0; }
+@media (max-width: 600px) {
+  .k05-lesson .k05-paper-match { padding: .7rem; }
+}
+
+/* Keep the concluding reading guide usable without horizontal page overflow. */
+.k05-lesson table.k05-reading-table { width: 100%; table-layout: fixed; }
+.k05-lesson table.k05-reading-table th,
+.k05-lesson table.k05-reading-table td { white-space: normal; overflow-wrap: anywhere; }

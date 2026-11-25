@@ -1,6 +1,6 @@
 # A02_Boris_3Drtz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `A02_Boris_3Drtz` provides a non-relativistic Boris pusher for a single particle in 3D cylindrical coordinates. It advances both position `x = (r, theta, z)` and velocity `v = (v_r, v_theta, v_z)`.
 

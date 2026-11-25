@@ -112,11 +112,19 @@ case_fdtd_3d_cylindrical_m0_wave
    外侧暗区和边界附近是否出现明显非物理反射。因为图中画的是幅值，正负相位已经被取绝对值隐藏；
    因此它适合做几何和传播形态检查，不是严格误差图，也不是解析模态验证图。
 
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_m0_wave_rz.png
-      :align: center
-      :width: 64%
+   .. list-table::
+      :class: ap-triptych ap-maxwell-field-pair
+      :widths: 50 50
 
-      3D cylindrical 的 ``r-z`` 截面传播快照。颜色表示幅值，主要用于检查轴线、波前和边界附近行为。
+      * - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_m0_wave_rz.png
+             :width: 100%
+        - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_waveguide_mode.png
+             :width: 100%
+
+   3D cylindrical 的 ``r-z`` 截面传播快照。颜色表示幅值，主要用于检查轴线、波前和边界附近行为。
+
+   固定 ``z`` 截面上的 ``|Ez|`` 模式形态示意图。该图含 ``cos(phi)`` 角向结构，不是严格
+   ``m=0`` 本征模参考解。
 
    .. rubric:: 如何看第二张横截面图
 
@@ -125,13 +133,6 @@ case_fdtd_3d_cylindrical_m0_wave
    来自源项里的 ``cos(phi)``：若画 signed ``Ez``，左右两瓣应带相反符号；现在画 ``|Ez|``，
    所以只显示幅值大小。这个图可以帮助读者理解角向网格和模式形态，但不能作为严格的 ``m=0``
    波导本征模参考图；真正的 ``m=0`` 横截面应不随 ``phi`` 变化，形态应近似轴对称。
-
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_waveguide_mode.png
-      :align: center
-      :width: 62%
-
-      固定 ``z`` 截面上的 ``|Ez|`` 模式形态示意图。该图含 ``cos(phi)`` 角向结构，不是严格
-      ``m=0`` 本征模参考解。
 
    .. rubric:: 常见误读
 
@@ -267,11 +268,20 @@ case_fdtd_3d_cylindrical_m0_wave
    qualitative geometry/propagation check, not an error map or analytic mode
    validation.
 
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_m0_wave_rz.png
-      :align: center
-      :width: 64%
+   .. list-table::
+      :class: ap-triptych ap-maxwell-field-pair
+      :widths: 50 50
 
-      ``r-z`` propagation snapshot for a 3D cylindrical visualization case.
+      * - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_m0_wave_rz.png
+             :width: 100%
+        - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_waveguide_mode.png
+             :width: 100%
+
+   ``r-z`` propagation snapshot for a 3D cylindrical visualization case.
+
+   ``|Ez|`` mode-shape visualization on a fixed ``z`` section. The angular
+   ``cos(phi)`` structure means this is not a strict ``m=0`` eigenmode
+   reference.
 
    .. rubric:: How to Read the Cross-Section Figure
 
@@ -284,14 +294,6 @@ case_fdtd_3d_cylindrical_m0_wave
    shape, but it should not be treated as a strict ``m=0`` waveguide eigenmode
    reference. A true ``m=0`` cross section would be independent of ``phi`` and
    approximately axisymmetric.
-
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cylindrical_m0_wave/fdtd_3d_cylindrical_waveguide_mode.png
-      :align: center
-      :width: 62%
-
-      ``|Ez|`` mode-shape visualization on a fixed ``z`` section. The angular
-      ``cos(phi)`` structure means this is not a strict ``m=0`` eigenmode
-      reference.
 
    .. rubric:: Common Pitfall
 

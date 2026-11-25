@@ -1,6 +1,6 @@
 # K03_mle_k2d
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 
@@ -51,7 +51,8 @@ likelihood and can be resolved by the other configurations.
 
 - **Geometry.** Each baseline constrains the wavevector projection along its direction through the measured phase difference. Summing the configurations' log likelihoods locates jointly supported wavevectors in the two-dimensional wavenumber plane. Baseline directions and lengths determine where the phase fringes intersect.
 - **Search range.**  The estimate is confined to the grid, so `k_range` must
-  contain the true wavevector; a boundary peak warrants a range check.  Grid discretisation puts a floor of a resolution-dependent limitation on accuracy.
+  contain the true wavevector. A boundary peak warrants a range check. Grid
+  resolution affects both the local peak position and the choice of alias branch.
 - The variance describes segment-phase scatter and scales the phase residual in the likelihood. Vary sample count and histogram binning to assess the stability of the mode estimate.
 - **Memory.**  The likelihood array holds `n_grid^2` float64 values: about
   1.3 MB at 401x401, accumulated configuration by configuration.

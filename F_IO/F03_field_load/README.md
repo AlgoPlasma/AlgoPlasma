@@ -1,6 +1,6 @@
 # F03_field_load
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Reads local field files written by F04 for 1D packed and 3D cell-centered layouts.
 

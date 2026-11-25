@@ -1,5 +1,7 @@
 # B03_scatter_3Dxyz_bspline test
 
+[简体中文](README.zh-CN.md)
+
 This test validates `B_Scatter/B03_scatter_3Dxyz_bspline`.
 
 It checks the following properties:

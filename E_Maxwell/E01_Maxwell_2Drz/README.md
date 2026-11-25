@@ -1,6 +1,6 @@
 # E01_Maxwell_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 2D axisymmetric cylindrical `(r,z)` Maxwell/FDTD kernels with two decoupled field-set updates plus 2D RZ CPML.
 

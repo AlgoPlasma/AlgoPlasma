@@ -113,8 +113,8 @@ G02_collision_box
 
       python3 tests/009_collision/G02_MCC_network/examples/collision_box/plot.py /tmp/box
 
-   把 ``/tmp/box`` 换成实际结果目录。详细参数说明在算例目录的
-   ``README.zh-CN.md`` （中文）和 ``README.en.md`` （英文）中。
+   把 ``/tmp/box`` 换成实际结果目录。详细参数见算例目录的中文版
+   ``README.zh-CN.md`` 或英文版 ``README.md``。
 
    .. rubric:: 4. 三张图怎样读？
 
@@ -239,9 +239,9 @@ G02_collision_box
    因此“已出现的候选被接受”的概率约 95.24%。
    前者针对一段时间，后者针对一个候选；碰撞次数图只统计真实事件。
 
-   更详细的操作和物理解释保留在算例目录的
-   :download:`中文教程 <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md>` 与
-   :download:`English tutorial <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.en.md>` 中。
+   有关操作步骤和物理解释的更多细节，请下载算例的
+   :download:`中文 README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md>` 或
+   :download:`英文 README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.md>`。
 
 .. container:: ap-lang ap-lang-en
 
@@ -348,7 +348,8 @@ G02_collision_box
       python3 tests/009_collision/G02_MCC_network/examples/collision_box/plot.py /tmp/box
 
    Replace ``/tmp/box`` with the actual output path.
-   Detailed parameter notes are in the example's ``README.en.md`` and ``README.zh-CN.md``.
+   For detailed parameter notes, see the English ``README.md`` or the Simplified
+   Chinese ``README.zh-CN.md`` in the example directory.
 
    .. rubric:: 4. Read the three plots
 
@@ -478,6 +479,6 @@ G02_collision_box
    One probability describes an interval; the other describes a candidate.
    The collision-count plot includes real events only.
 
-   The example directory retains the more detailed
-   :download:`English tutorial <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.en.md>` and
-   :download:`Chinese tutorial <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md>`.
+   For more detailed instructions and physical explanations, download the example's
+   :download:`English README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.md>` or
+   :download:`Simplified Chinese README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md>`.

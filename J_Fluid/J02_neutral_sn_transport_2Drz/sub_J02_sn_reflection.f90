@@ -8,7 +8,8 @@
         type(sn_mesh_2drz_type), intent(in) :: mesh
         type(sn_geometry_2drz_type), intent(in) :: geometry
         type(sn_quadrature_type), intent(in) :: quadrature
-        real, intent(in) :: sigma_t(:, :, :), wall_shape(:)
+        real, intent(in) :: sigma_t(:, :, :)
+        real, intent(in), optional :: wall_shape(:)
         real, intent(in), optional :: boundary_inflow(:, :, :, :), zlo_inflow(:)
         type(sn_boundary_2drz_type), intent(in) :: boundary
         real, intent(in) :: diffuse_fraction, tolerance
@@ -31,19 +32,16 @@
         if (present(failed_direction)) failed_direction=0
         if (present(failed_i)) failed_i=0
         if (present(failed_k)) failed_k=0
-#ifndef J02_USE_MPI
-        if (present(partition)) then
-            ierr=SN_ERR_MPI_DISABLED
-            converged=.false.
-            iterations=0
-            final_relative_change=huge(1.0)
-            return
-        end if
-#endif
         ierr = SN_SUCCESS
         converged = .false.
         iterations = 0
         final_relative_change = huge(1.0)
+#ifndef J02_USE_MPI
+        if (present(partition)) then
+            ierr=SN_ERR_MPI_DISABLED
+            return
+        end if
+#endif
         fd = 0
         fi = 0
         fk = 0
@@ -66,8 +64,8 @@
         config%tolerance=tolerance
         config%diffuse_fraction=diffuse_fraction
         call sub_J02_partition_iteration_options(partition,config,ierr)
-#endif
         if (ierr/=SN_SUCCESS) return
+#endif
         allocate(psi_old(3, mesh%nr, mesh%nz, quadrature%n_dir))
         ! This iteration resolves wall coupling, not physical time evolution.
         ! The zero field supplies the first reflected boundary estimate.

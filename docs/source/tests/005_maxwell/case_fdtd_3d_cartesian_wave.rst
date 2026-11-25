@@ -105,22 +105,23 @@ case_fdtd_3d_cartesian_wave
    判断 ``x=0``、``y=0``、``z=0`` 三个中心平面上的整体传播形态。两张图的色标和统计量不同：
    主图是最后 ``80`` 步的 ``Ez`` RMS，单平面图是保留的参考快照，因此只能比较形态，不能逐点比较数值。
 
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_ez_slices.png
-      :align: center
-      :width: 66%
+   .. list-table::
+      :class: ap-triptych ap-maxwell-field-pair
+      :widths: 50 50
 
-      ``fdtd_3d_cartesian_ez_slices.png``：当前脚本输出的主图。它把 ``x=0``、``y=0``、``z=0``
-      三个中心平面裁成一个开角 cutaway 视图：两个竖直中心面保留完整 ``z`` 范围，
-      水平 ``z=0`` 面只显示一个象限，避免完整平面互相遮挡。
-      颜色表示最后 ``80`` 步累积得到的 ``Ez`` RMS 幅值；这张图主要帮助观察中心源附近三维剖面的整体形态。
+      * - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_ez_slices.png
+             :width: 100%
+        - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_wave_slice.png
+             :width: 100%
 
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_wave_slice.png
-      :align: center
-      :width: 62%
+   ``fdtd_3d_cartesian_ez_slices.png``：当前脚本输出的主图。它把 ``x=0``、``y=0``、``z=0``
+   三个中心平面裁成一个开角 cutaway 视图：两个竖直中心面保留完整 ``z`` 范围，
+   水平 ``z=0`` 面只显示一个象限，避免完整平面互相遮挡。
+   颜色表示最后 ``80`` 步累积得到的 ``Ez`` RMS 幅值；这张图主要帮助观察中心源附近三维剖面的整体形态。
 
-      ``fdtd_3d_cartesian_wave_slice.png``：单平面参考图，显示 ``z=0`` 截面上的场幅值快照。
-      它更接近普通二维热图，适合先看中心源附近的环状波前、径向对称性和边界吸收后的剩余场分布。
-      注意这张图的色标和量纲来自该参考快照，不能直接与上方 RMS 三切片图逐数值比较。
+   ``fdtd_3d_cartesian_wave_slice.png``：单平面参考图，显示 ``z=0`` 截面上的场幅值快照。
+   它更接近普通二维热图，适合先看中心源附近的环状波前、径向对称性和边界吸收后的剩余场分布。
+   注意这张图的色标和量纲来自该参考快照，不能直接与上方 RMS 三切片图逐数值比较。
 
    .. rubric:: 常见误读
 
@@ -240,27 +241,28 @@ case_fdtd_3d_cartesian_wave
    quantities differ: the main figure is an ``Ez`` RMS over the final ``80``
    steps, while the single-plane image is a retained reference snapshot.
 
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_ez_slices.png
-      :align: center
-      :width: 66%
+   .. list-table::
+      :class: ap-triptych ap-maxwell-field-pair
+      :widths: 50 50
 
-      ``fdtd_3d_cartesian_ez_slices.png``: the main output of the current
-      script. It crops the ``x=0``, ``y=0``, and ``z=0`` center planes into an
-      open-corner cutaway view: the two vertical center planes keep the full
-      ``z`` range, while the horizontal ``z=0`` plane keeps one quadrant. This
-      keeps the slices readable without hiding one complete plane behind
-      another. Color denotes the ``Ez`` RMS amplitude accumulated over the final
-      ``80`` steps.
+      * - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_ez_slices.png
+             :width: 100%
+        - .. image:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_wave_slice.png
+             :width: 100%
 
-   .. figure:: ../../../../tests/005_maxwell/case_fdtd_3d_cartesian_wave/fdtd_3d_cartesian_wave_slice.png
-      :align: center
-      :width: 62%
+   ``fdtd_3d_cartesian_ez_slices.png``: the main output of the current
+   script. It crops the ``x=0``, ``y=0``, and ``z=0`` center planes into an
+   open-corner cutaway view: the two vertical center planes keep the full
+   ``z`` range, while the horizontal ``z=0`` plane keeps one quadrant. This
+   keeps the slices readable without hiding one complete plane behind
+   another. Color denotes the ``Ez`` RMS amplitude accumulated over the final
+   ``80`` steps.
 
-      ``fdtd_3d_cartesian_wave_slice.png``: a single-plane reference image on
-      the ``z=0`` section. It is easier to read as a 2D heat map and helps show
-      the ring-like wavefront near the centered source. Its color scale and
-      quantity come from that snapshot, so it should not be compared
-      point-by-point with the RMS triple-slice figure above.
+   ``fdtd_3d_cartesian_wave_slice.png``: a single-plane reference image on
+   the ``z=0`` section. It is easier to read as a 2D heat map and helps show
+   the ring-like wavefront near the centered source. Its color scale and
+   quantity come from that snapshot, so it should not be compared
+   point-by-point with the RMS triple-slice figure above.
 
    .. rubric:: Common Pitfall
 

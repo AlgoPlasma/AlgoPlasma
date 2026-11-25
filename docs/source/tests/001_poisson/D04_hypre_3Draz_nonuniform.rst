@@ -144,12 +144,6 @@ D04_hypre_3Draz_nonuniform Tests
 
    ``test07`` 的误差趋势见下方收敛图。当前制造解和网格设置下，均匀网格 D03 的误差整体低于非均匀网格 D04，但两者都随网格加密而下降。
 
-   .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/mms_error_convergence.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
-
-      ``test07`` 的 MMS 误差收敛图。横轴为 ``N``，纵轴为误差；D03 与 D04 的 ``L_inf`` 和 relative ``L2`` 一起显示，便于直接比较两种网格的误差水平和下降趋势。
-
    .. rubric:: 图片如何阅读
 
    ``test05`` 的 case 1 误差图对应线性解析解。图上如果只剩平滑的小量误差，说明非均匀
@@ -167,35 +161,45 @@ D04_hypre_3Draz_nonuniform Tests
 
    .. rubric:: 代表图
 
-   .. figure:: ../../images/tests/001_poisson/test05/fig_case1/grid_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+   .. list-table::
+      :class: ap-triptych
+      :widths: 34 33 33
 
-      ``test05`` case 1 的误差图。误差分布平滑，峰值约为 ``3.88e-7``，对应单 rank 非均匀边界条件回归。
+      * - .. figure:: ../../images/tests/001_poisson/test05/fig_case1/grid_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/rz_pcolormesh_abs_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             ``test05`` case 1 的误差图。误差分布平滑，峰值约为 ``3.88e-7``，对应单 rank 非均匀边界条件回归。
 
-      ``test06`` 的 ``r-z`` 物理坐标误差图，对应 8-rank 解析/MPI 回归汇总后的全局误差场。
+        - .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/rz_pcolormesh_abs_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/line_r_j1_k17.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             ``test06`` 的 ``r-z`` 物理坐标误差图，对应 8-rank 解析/MPI 回归汇总后的全局误差场。
 
-      ``test06`` 在固定 ``j=1``、``k=17`` 下的径向线剖面对比图，用于检查 MPI 汇总后的解析解与数值解一致性。
+        - .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/line_r_j1_k17.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/uniform_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             ``test06`` 在固定 ``j=1``、``k=17`` 下的径向线剖面对比图，用于检查 MPI 汇总后的解析解与数值解一致性。
 
-      ``test07`` 的均匀网格误差图，对应最细 ``48 x 48`` MMS 结果。
+      * - .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/mms_error_convergence.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/nonuniform_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             ``test07`` 的 MMS 误差收敛图。横轴为 ``N``，纵轴为误差；D03 与 D04 的 ``L_inf`` 和 relative ``L2`` 一起显示，便于直接比较两种网格的误差水平和下降趋势。
 
-      ``test07`` 的非均匀网格误差图。与均匀网格相比误差较大，但空间分布平滑并随加密下降。
+        - .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/uniform_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
+
+             ``test07`` 的均匀网格误差图，对应最细 ``48 x 48`` MMS 结果。
+
+        - .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/nonuniform_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
+
+             ``test07`` 的非均匀网格误差图。与均匀网格相比误差较大，但空间分布平滑并随加密下降。
 
 .. container:: ap-lang ap-lang-en
 
@@ -352,13 +356,6 @@ D04_hypre_3Draz_nonuniform Tests
    accurate than the nonuniform-grid D04 result, while both still improve with
    refinement.
 
-   .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/mms_error_convergence.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
-
-      MMS convergence plot for ``test07``. The horizontal axis is ``N`` and
-      the curves show both ``L_inf`` and relative ``L2`` for D03 and D04.
-
    .. rubric:: How To Read The Figures
 
    The ``test05`` case-1 error map corresponds to the linear exact solution.
@@ -382,34 +379,45 @@ D04_hypre_3Draz_nonuniform Tests
 
    .. rubric:: Representative Figures
 
-   .. figure:: ../../images/tests/001_poisson/test05/fig_case1/grid_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+   .. list-table::
+      :class: ap-triptych
+      :widths: 34 33 33
 
-      ``test05`` case-1 error map. The field is smooth and peaks near
-      ``3.88e-7``, which is the intended single-rank D04 regression signal.
+      * - .. figure:: ../../images/tests/001_poisson/test05/fig_case1/grid_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/rz_pcolormesh_abs_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             ``test05`` case-1 error map. The field is smooth and peaks near
+             ``3.88e-7``, which is the intended single-rank D04 regression signal.
 
-      ``test06`` physical ``r-z`` error map from the gathered 8-rank analytic
-      regression.
+        - .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/rz_pcolormesh_abs_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/line_r_j1_k17.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             ``test06`` physical ``r-z`` error map from the gathered 8-rank analytic
+             regression.
 
-      Radial line comparison at fixed ``j=1`` and ``k=17`` in ``test06``.
+        - .. figure:: ../../images/tests/001_poisson/test06/fig_phi_compare/line_r_j1_k17.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/uniform_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             Radial line comparison at fixed ``j=1`` and ``k=17`` in ``test06``.
 
-      Uniform-grid error field for the finest ``48 x 48`` MMS case.
+      * - .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/mms_error_convergence.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
 
-   .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/nonuniform_error_j1.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+             MMS convergence plot for ``test07``. The horizontal axis is ``N`` and
+             the curves show both ``L_inf`` and relative ``L2`` for D03 and D04.
 
-      Nonuniform-grid error field for the same finest-grid MMS case.
+        - .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/uniform_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
+
+             Uniform-grid error field for the finest ``48 x 48`` MMS case.
+
+        - .. figure:: ../../images/tests/001_poisson/test07/fig_compare_uniform_nonuniform_rz_mms/nonuniform_error_j1.png
+             :align: center
+             :figclass: ap-figure-equal-height ap-figure-medium
+
+             Nonuniform-grid error field for the same finest-grid MMS case.

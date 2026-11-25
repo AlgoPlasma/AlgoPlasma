@@ -1,6 +1,6 @@
 # A01_Boris_3Dxyz Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 This directory provides an independent test for `A_Pusher/A01_Boris_3Dxyz`, the Boris particle velocity pusher in 3D Cartesian coordinates. The test builds a small Fortran driver, runs several single-particle analytic cases, and compares the numerical trajectory and velocity against reference solutions.
 

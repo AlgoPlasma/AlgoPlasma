@@ -49,6 +49,7 @@
         - ``test05``、``test06``、``test07``
         - 非均匀柱坐标 D04 的单 rank 边界条件回归、8-rank 解析/MPI 回归，以及 D03-D04 MMS 对比。
 
+
    .. rubric:: 使用约定
 
    四个子页面统一采用同一结构：
@@ -63,7 +64,7 @@
    - `参考结果`：列出当前可对照的误差或输出范围。
    - `代表图`：保留一组风格一致的参考图，便于快速人工比对。
 
-   所有测试在编译前都应先检查脚本中的 ``HYPRE_INC`` 与 ``HYPRE_LIB``。如果本机 HYPRE 安装路径不同，必须先修改这些变量，再执行 ``make.sh``、``run.sh`` 或其他编译/运行脚本。
+   依赖 HYPRE 的测试在编译前应先检查脚本中的 ``HYPRE_INC`` 与 ``HYPRE_LIB``。如果本机 HYPRE 安装路径不同，必须先修改这些变量，再执行 ``make.sh``、``run.sh`` 或其他编译/运行脚本。
 
 
 .. container:: ap-lang ap-lang-en
@@ -101,9 +102,10 @@
         - ``test05``, ``test06``, and ``test07``
         - Single-rank BC regression, 8-rank analytic/MPI regression, and D03-D04 MMS comparison for nonuniform cylindrical D04.
 
+
    .. rubric:: Shared Structure
 
-   All four subpages now follow the same structure:
+   All four subpages follow the same structure:
 
    - `Test Role`: what this test is supposed to prove.
    - `What This Test Is Doing`: a reader-facing explanation of the problem being tested and the acceptance signal.
@@ -115,7 +117,7 @@
    - `Reference Result`: the current numeric baseline.
    - `Representative Figures`: a small, style-consistent figure set for manual comparison.
 
-   Before any build step, check ``HYPRE_INC`` and ``HYPRE_LIB`` in the test
+   For tests that require HYPRE, check ``HYPRE_INC`` and ``HYPRE_LIB`` in the test
    scripts. If the local HYPRE installation path differs, update those
    variables before running ``make.sh``, ``run.sh``, or other build/run
    scripts.

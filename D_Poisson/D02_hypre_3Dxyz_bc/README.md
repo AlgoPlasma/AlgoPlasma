@@ -1,6 +1,6 @@
 # D02_hypre_3Dxyz_bc
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Cartesian 3D Poisson solver with matrix/RHS assembly, boundary corrections, and HYPRE Struct solve interfaces.
 

@@ -56,26 +56,25 @@ A01_Boris_3Dxyz_omp Comparison
    建议先看计算时间图确认“绝对快慢”，再用吞吐率图核对同一结论，最后看加速比图
    判断“多加的线程值不值得”。点击任意图片可查看原始尺寸。
 
-   .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/wall_time_vs_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-readable
-      :target: ../../_images/wall_time_vs_threads.png
+   .. list-table::
+      :class: ap-triptych ap-kunpeng-chart-row
+      :widths: 1 1 1
 
-      计算时间对比。横轴为 OpenMP 线程数，纵轴为计算 wall time；曲线越低表示越快。
+      * - .. image:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/wall_time_vs_threads.png
+             :width: 100%
+             :target: ../../_images/wall_time_vs_threads.png
+        - .. image:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/throughput_vs_threads.png
+             :width: 100%
+             :target: ../../_images/throughput_vs_threads.png
+        - .. image:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/speedup_vs_threads.png
+             :width: 100%
+             :target: ../../_images/speedup_vs_threads.png
 
-   .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/throughput_vs_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-readable
-      :target: ../../_images/throughput_vs_threads.png
+   计算时间对比。横轴为 OpenMP 线程数，纵轴为计算 wall time；曲线越低表示越快。
 
-      吞吐率对比。横轴仍为线程数，纵轴为 G particle-pushes/s；曲线越高表示越快。
+   吞吐率对比。横轴仍为线程数，纵轴为 G particle-pushes/s；曲线越高表示越快。
 
-   .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/speedup_vs_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-readable
-      :target: ../../_images/speedup_vs_threads.png
-
-      并行扩展性对比。纵轴是各平台相对自身 8 线程的加速比，不是两台机器之间的速度比。
+   并行扩展性对比。纵轴是各平台相对自身 8 线程的加速比，不是两台机器之间的速度比。
 
    .. rubric:: 先看几个代表线程点
 
@@ -224,26 +223,25 @@ A01_Boris_3Dxyz_omp Comparison
    the same result, and then use speedup to judge whether additional threads are
    worthwhile. Click any figure to open it at its original size.
 
-   .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/wall_time_vs_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-readable
-      :target: ../../_images/wall_time_vs_threads.png
+   .. list-table::
+      :class: ap-triptych ap-kunpeng-chart-row
+      :widths: 1 1 1
 
-      Compute-time comparison. x-axis: OpenMP threads. y-axis: compute wall time; lower is faster.
+      * - .. image:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/wall_time_vs_threads.png
+             :width: 100%
+             :target: ../../_images/wall_time_vs_threads.png
+        - .. image:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/throughput_vs_threads.png
+             :width: 100%
+             :target: ../../_images/throughput_vs_threads.png
+        - .. image:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/speedup_vs_threads.png
+             :width: 100%
+             :target: ../../_images/speedup_vs_threads.png
 
-   .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/throughput_vs_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-readable
-      :target: ../../_images/throughput_vs_threads.png
+   Compute-time comparison. x-axis: OpenMP threads. y-axis: compute wall time; lower is faster.
 
-      Throughput comparison in G particle-pushes/s; higher is faster.
+   Throughput comparison in G particle-pushes/s; higher is faster.
 
-   .. figure:: ../../images/tests/kunpeng_compare/A01_Boris_3Dxyz_omp/speedup_vs_threads.png
-      :align: center
-      :figclass: ap-figure-equal-height ap-figure-readable
-      :target: ../../_images/speedup_vs_threads.png
-
-      Scaling relative to each platform's own 8-thread result; this is not a cross-platform speed ratio.
+   Scaling relative to each platform's own 8-thread result; this is not a cross-platform speed ratio.
 
    .. rubric:: Representative Thread Counts
 

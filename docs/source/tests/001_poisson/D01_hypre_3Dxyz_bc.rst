@@ -129,7 +129,8 @@ D01_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test00/phi_zx.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+      :width: 60%
+      :figclass: ap-figure-equal-height
 
       ``test00`` 的 ``x-z`` 截面势函数。场分布连续、无明显 rank 接缝，是 D01 旧接口仍可工作的直接证据。
 
@@ -267,7 +268,8 @@ D01_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test00/phi_zx.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+      :width: 60%
+      :figclass: ap-figure-equal-height
 
       ``test00`` ``x-z`` potential slice. The continuous field without visible
       rank seams is the intended regression signal for the legacy D01 path.

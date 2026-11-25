@@ -18,7 +18,7 @@ J01 Complete FM Solve
 
    .. rubric:: 1. 单单元镜面通道
 
-   测试为 ``test_J01_faceflux_2Drz_units.f90`` 中的
+   测试为 ``test_J01_fm_units.f90`` 中的
    ``test_free_molecular_single_cell``。
    计算区域 :math:`1\le r\le2,\ 0\le z\le1`，径向两面为镜面壁，轴向两端开放。
    入口位于轴向低端，固定种子 17，运行 200 条粒子历史。
@@ -113,23 +113,22 @@ J01 Complete FM Solve
 
    .. rubric:: 文件、执行与结果
 
-   上述两个测试文件均位于
-   ``tests/012_fluid/J01_free_molecular/source_f90``。
+   上述两个子测试均位于
+   ``tests/012_fluid/J01_free_molecular/source_f90/test_J01_fm_units.f90``。
    主入口实现为 ``J_Fluid/J01_free_molecular/sub_J01_free_molecular_mc_2Drz.f90``。
 
    .. code-block:: bash
 
       bash tests/012_fluid/J01_free_molecular/run.sh
 
-   在 ``build/test_J01_faceflux_2Drz_units.log`` 中检查完成数和粒子率断言；
-   在 ``build/test_J01_fm_units.log`` 中检查截断及错误拓扑断言。
+   在 ``build/test_J01_fm_units.log`` 中检查完成数、粒子率、截断及错误拓扑断言。
    两组在 2026-10-06 通过。J01 结果接入连续性方程的检查位于 J03 分组的串联测试。
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
    .. rubric:: Complete-driver test
 
-   ``test_free_molecular_single_cell`` in ``test_J01_faceflux_2Drz_units.f90``
+   ``test_free_molecular_single_cell`` in ``test_J01_fm_units.f90``
    calls ``sub_J01_free_molecular_mc_2Drz`` on r=[1,2], z=[0,1],
    with specular radial walls and open axial ends. It runs 200 histories with seed 17.
    The driver prepares the inlet, samples each particle, tracks flight and reflection,
@@ -202,5 +201,4 @@ J01 Complete FM Solve
 
       bash tests/012_fluid/J01_free_molecular/run.sh
 
-   Both checks passed on 2026-10-06. Logs are
-   ``build/test_J01_faceflux_2Drz_units.log`` and ``build/test_J01_fm_units.log``.
+   Both checks passed on 2026-10-06. Their current log is ``build/test_J01_fm_units.log``.

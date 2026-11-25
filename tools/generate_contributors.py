@@ -24,13 +24,16 @@ The output is deterministic: running the script twice
 produces no diff, and the order of ``contributors.yml`` is never changed.
 
 The script uses the standard library only.  A small built-in parser handles
-the subset of YAML used by ``contributors.yml``.
+the subset of YAML used by ``contributors.yml``. Lifetime activity is an offline
+snapshot in ``tools/contributor_activity.json``. Update its Git revision, date,
+line totals and Gitee PR numbers together, then rerun this generator.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import os
 import re
 import sys
@@ -39,6 +42,7 @@ from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "contributors.yml"
+ACTIVITY_FILE = Path(__file__).with_name("contributor_activity.json")
 
 START = "<!-- CONTRIBUTORS:START -->"
 END = "<!-- CONTRIBUTORS:END -->"
@@ -54,6 +58,10 @@ README_AVATAR_PX = 80
 RTD_AVATAR_PX = 96
 WORK_AVATAR_PX = 80
 MODULE_PAGE_RE = re.compile(r"^([A-K][0-9]{2})_.+\.rst$")
+ARCHIVE_PAGE_RE = re.compile(
+    r"https://gitee\.com/algoplasma/algoplasma/blob/[0-9a-f]{40}/"
+    r"docs/source/rst_files/[\w-]+/(?P<module>[A-K][0-9]{2}_[\w-]+)\.rst"
+)
 WORK_TABLE_CLASS = "ap-work-list"
 WORK_HEADERS = {
     "zh": ("成员", "参与过的具体工作"),
@@ -173,12 +181,12 @@ RTD_LEGEND_LABEL = {"zh": "贡献类型：", "en": "Contribution types: "}
 README_OUTRO = {
     "zh": (
         "项目负责人及现任维护者："
-        '<a href="https://algoplasma.readthedocs.io/en/latest/community/'
+        '<a href="https://algoplasma.readthedocs.io/en/develop/community/'
         'contributors.html">Read the Docs</a>'
     ),
     "en": (
         "Project lead and current maintainers: "
-        '<a href="https://algoplasma.readthedocs.io/en/latest/community/'
+        '<a href="https://algoplasma.readthedocs.io/en/develop/community/'
         'contributors.html">Read the Docs</a>'
     ),
 }
@@ -333,11 +341,11 @@ def load_contributors(path: Path = DATA_FILE):
 
 
 def _module_pages() -> dict:
-    """Index top-level module pages by their unique short ID."""
+    """Index module homepages that have a namesake directory in the source tree."""
     pages = {}
     for path in sorted((ROOT / "docs/source/rst_files").glob("*/*.rst")):
         match = MODULE_PAGE_RE.fullmatch(path.name)
-        if not match:
+        if not match or not (ROOT / path.parent.name / path.stem).is_dir():
             continue
         module_id = match.group(1)
         if module_id in pages:
@@ -352,14 +360,20 @@ def _normalise_work_catalog(raw) -> dict:
     pages = _module_pages()
     catalog = {}
     for module_id, labels in raw.items():
-        if not isinstance(module_id, str) or not re.fullmatch(
-            r"[A-K][0-9]{2}", module_id
-        ):
-            sys.exit(f"error: invalid work module ID {module_id!r}")
-        if module_id not in pages:
-            sys.exit(f"error: {module_id}: matching module document not found")
         if not isinstance(labels, dict):
             sys.exit(f"error: {module_id}: work description must be a mapping")
+        if "archive_url" in labels:
+            url = labels["archive_url"]
+            match = ARCHIVE_PAGE_RE.fullmatch(url) if isinstance(url, str) else None
+            if not match or match.group("module") != module_id:
+                sys.exit(f"error: {module_id}: archive_url must link to its commit-pinned module page")
+            target = {"archive_url": url}
+        else:
+            if not isinstance(module_id, str) or not re.fullmatch(r"[A-K][0-9]{2}", module_id):
+                sys.exit(f"error: invalid work module ID {module_id!r}")
+            if module_id not in pages:
+                sys.exit(f"error: {module_id}: matching module document not found")
+            target = {"path": pages[module_id]}
         descriptions = {}
         for lang in ("zh", "en"):
             value = labels.get(lang)
@@ -368,10 +382,7 @@ def _normalise_work_catalog(raw) -> dict:
             if re.search(r"\b[A-K][0-9]{2}\b", value):
                 sys.exit(f"error: {module_id}: {lang} description contains a module ID")
             descriptions[lang] = value.strip()
-        catalog[module_id] = {
-            **descriptions,
-            "path": pages[module_id],
-        }
+        catalog[module_id] = {"module_id": module_id, **descriptions, **target}
     return catalog
 
 
@@ -671,14 +682,106 @@ def _profile_links(entry: dict, separator: str = " | ") -> str:
 
 
 def _work_href(work: dict, target_dir: str) -> str:
-    """Link to the source RST from README, or built HTML from Read the Docs."""
+    """Link to the archived revision, or to the current source RST or built HTML."""
+    if "archive_url" in work:
+        return work["archive_url"]
     path = work["path"]
     if target_dir == RTD_TARGET_DIR:
         path = path.with_suffix(".html")
     return PurePosixPath(os.path.relpath(path, ROOT / target_dir)).as_posix()
 
 
-def _maintainer_table(entries, lang: str, target_dir: str) -> str:
+# Lifetime activity on the Read the Docs page --------------------------------
+ACTIVITY_LABELS = {
+    "zh": ("代码行数", "提交 PR", "审阅／合并 PR"),
+    "en": ("Code lines", "PRs opened", "PRs reviewed/merged"),
+}
+MEDALS = ("🥇", "🥈", "🥉")
+MEDAL_LABELS = {"zh": ("金牌", "银牌", "铜牌"), "en": ("Gold", "Silver", "Bronze")}
+
+
+def _activity_rows(contributors, members, lang):
+    """Rank the three metrics independently among the people shown on the page."""
+    scores = {}
+    for entry in contributors:
+        name = entry["name"]
+        if entry["role"] in HIDDEN_ROLES or name not in members:
+            continue
+        record = members[name]
+        scores[name] = (
+            record["source"] + record["docs"] + record["tests"],
+            len(set(record["opened_prs"])),
+            len(set(record["reviewed_or_merged_prs"]) - set(record["opened_prs"])),
+        )
+
+    ranks = []
+    for column in zip(*scores.values()):
+        leaders = sorted({value for value in column if value > 0}, reverse=True)[:3]
+        ranks.append({value: rank for rank, value in enumerate(leaders)})
+
+    rows = {}
+    for name, values in scores.items():
+        record = members[name]
+        breakdown = (
+            "算法源码 {source:,} 行 · 文档 {docs:,} 行 · 测试 {tests:,} 行"
+            if lang == "zh" else "Algorithm source: {source:,} · Docs: {docs:,} · Tests: {tests:,}"
+        ).format(**record)
+        metrics = []
+        for index, (label, value) in enumerate(zip(ACTIVITY_LABELS[lang], values)):
+            title = f' title="{breakdown}"' if index == 0 else ""
+            medal = ""
+            if value in ranks[index]:
+                rank = ranks[index][value]
+                award = f"{label} · {MEDAL_LABELS[lang][rank]}"
+                medal = (
+                    f'<i class="ap-medal" role="img" aria-label="{award}" '
+                    f'title="{award}">{MEDALS[rank]}</i>'
+                )
+            metrics.append(f'<span{title}>{label} <b>{value:,}</b>{medal}</span>')
+        rows[name] = '<div class="ap-cum">' + "".join(metrics) + "</div>"
+    return rows
+
+
+def _activity_note(snapshot, lang):
+    date = html_escape(snapshot["as_of"])
+    revision = html_escape(snapshot["revision"], quote=True)
+    baseline = html_escape(snapshot["import_revision"][:7])
+    if lang == "zh":
+        summary = f"历史累计 · 截至 {date} · 统计说明"
+        notes = (
+            ("代码行数", f"从首次整库导入（{baseline}）之后起算，按 develop 非合并提交的作者累计新增行。"
+             "计入算法源码、仓库内的 Markdown 和 reStructuredText 文档、docs/ 和 tests/ 下的文本文件，"
+             "以及模块内的测试代码。SVG、生成文件和文本测试数据也计入。删除不抵扣，纯重命名计零行。"),
+            ("提交 PR", "统计本人在 Gitee 发起、以 develop 为目标的全部 PR，含开放、关闭和已合并的 PR。"),
+            ("审阅／合并 PR", "统计本人正式审阅通过或合并他人 PR 的数量。同一人对同一 PR 只计一次。"
+             "自动合并按 Gitee 记录的操作者归属。"),
+            ("奖牌", "每项的前三档正数依次获金、银、铜牌。并列同牌，零值不授牌。"),
+        )
+        pr_label = "Gitee PR 记录"
+    else:
+        summary = f"Lifetime totals · through {date} · How we count"
+        notes = (
+            ("Code lines", f"Additions by author in non-merge commits on develop after the initial import ({baseline}). "
+             "Counts include algorithm source, Markdown and reStructuredText across the repository, text files in docs/ "
+             "and tests/, and tests within modules. SVGs, generated files and text test data count. "
+             "Deletions do not reduce the total and pure renames add no lines."),
+            ("PRs opened", "All Gitee PRs the contributor opened against develop, including open, closed and merged PRs."),
+            ("PRs reviewed/merged", "PRs by other authors that the contributor formally approved or merged. Each PR counts "
+             "once per person. Automatic merges are credited to the account recorded by Gitee."),
+            ("Medals", "Gold, silver and bronze mark the three highest distinct positive values in each metric. Ties share a medal."),
+        )
+        pr_label = "Gitee pull requests"
+    base = "https://gitee.com/algoplasma/algoplasma"
+    lines = [f'<details class="ap-stats-note"><summary>{summary}</summary>']
+    lines.extend(f"<p><strong>{label}</strong> {note}</p>" for label, note in notes)
+    lines.append(
+        f'<p><a href="{base}/commit/{revision}">develop · {revision[:7]}</a> · '
+        f'<a href="{base}/pulls">{pr_label}</a></p></details>'
+    )
+    return "\n".join(lines)
+
+
+def _maintainer_table(entries, lang: str, target_dir: str, activity=None) -> str:
     """Compact three-column profiles, read left to right in the supplied order."""
     cells = []
     for entry in entries:
@@ -714,12 +817,14 @@ def _maintainer_table(entries, lang: str, target_dir: str) -> str:
                 f'<br>{html_escape(research, quote=False)}</p>'
             )
             cell.append('  </div>')
+        if activity and entry["name"] in activity:
+            cell.append('  ' + activity[entry["name"]])
         cell.append('</td>')
         cells.append(cell)
     return _render_table(cells, 3, "ap-maintainers")
 
 
-def _work_table(entries, lang: str, target_dir: str) -> str:
+def _work_table(entries, lang: str, target_dir: str, activity=None) -> str:
     member_label, work_label = WORK_HEADERS[lang]
     if all(entry.get("biography") for entry in entries):
         work_label = BIOGRAPHY_LABELS[lang]
@@ -817,6 +922,8 @@ def _work_table(entries, lang: str, target_dir: str) -> str:
             lines.append(
                 f'        <span class="ap-work-pending">{WORK_PENDING[lang]}</span>'
             )
+        if activity and entry["name"] in activity:
+            lines.append("        " + activity[entry["name"]])
         lines.extend(["      </td>", "    </tr>"])
     lines.extend(["  </tbody>", "</table>"])
     return "\n".join(lines)
@@ -901,6 +1008,9 @@ def _rtd_block(contributors, lang: str, target_dir: str) -> str:
     whole block stays a single HTML block in Markdown.
     """
     parts = [f'<div class="ap-lang ap-lang-{lang} ap-contributor-page">']
+    snapshot = json.loads(ACTIVITY_FILE.read_text(encoding="utf-8"))
+    activity = _activity_rows(contributors, snapshot["members"], lang)
+    parts.append(_activity_note(snapshot, lang))
     assigned = set(HIDDEN_ROLES)
     role_titles = ROLE_LABELS if lang == "en" else ROLE_LABELS_ZH
     for title_en, title_zh, roles in RTD_SECTIONS:
@@ -910,9 +1020,9 @@ def _rtd_block(contributors, lang: str, target_dir: str) -> str:
             continue
         parts.append(f'<h2 class="ap-contributor-heading">{title_en if lang == "en" else title_zh}</h2>')
         if roles == ("maintainer",):
-            parts.append(_maintainer_table(group, lang, target_dir))
+            parts.append(_maintainer_table(group, lang, target_dir, activity))
         elif "lead" in roles:
-            parts.append(_work_table(group, lang, target_dir))
+            parts.append(_work_table(group, lang, target_dir, activity))
         else:
             legend = _legend_text(group, lang)
             if legend:
@@ -1022,3 +1132,8 @@ def main(argv=None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+# Contribution history (edit times include timezone).
+# 2026-11-20 10:25 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+# 2026-11-22 21:31 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+# 2026-11-25 10:07 +0800 | Yinjian Zhao (Codex-assisted)

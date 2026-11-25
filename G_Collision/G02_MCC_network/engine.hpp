@@ -237,13 +237,16 @@ private:
                                            bool record_events,
                                            const BackgroundIndex* background_index = nullptr,
                                            ChannelCacheLookup cache_lookup = nullptr,
-                                           void* cache_context = nullptr) const;
+                                           void* cache_context = nullptr,
+                                           bool validated_batch = false,
+                                           const Real* first_candidate_time = nullptr) const;
     [[nodiscard]] BackgroundIndex index_background(
         const std::vector<BackgroundComponent>& background) const;
     [[nodiscard]] StepOutcome collide_full_batch(
         const CollisionRequest& request, const BackgroundIndex& background_index,
         ChannelCacheLookup lookup, void* lookup_context,
-        std::uint32_t max_candidates, bool record_events) const;
+        std::uint32_t max_candidates, bool record_events,
+        const Real* first_candidate_time = nullptr) const;
     std::shared_ptr<const CompiledModel> model_;
     friend class MccStepper;
 };

@@ -151,12 +151,13 @@ def maybe_make_figures(exact: dict[str, object], conv: dict[str, object], push: 
     hi = max(refs + nums)
     pad = 0.03 * (hi - lo + 1.0e-30)
 
-    plt.figure(figsize=(6.6, 5.6))
+    plt.figure(figsize=(5.4, 4.5))
     plt.scatter(refs, nums, s=12, alpha=0.75)
     plt.plot([lo - pad, hi + pad], [lo - pad, hi + pad], "k--", linewidth=1)
-    plt.xlabel("Analytic Ex/Ey/Ez/Bx/By/Bz at particle")
-    plt.ylabel("C01 gathered Ex/Ey/Ez/Bx/By/Bz")
-    plt.title("C01: Analytic Field vs Gathered Field")
+    plt.xlabel("Analytic Ex/Ey/Ez/Bx/By/Bz at particle", fontsize=15)
+    plt.ylabel("C01 gathered Ex/Ey/Ez/Bx/By/Bz", fontsize=15)
+    plt.title("C01: Analytic Field vs Gathered Field", fontsize=17)
+    plt.tick_params(labelsize=15)
     plt.text(
         0.02,
         0.98,
@@ -164,7 +165,7 @@ def maybe_make_figures(exact: dict[str, object], conv: dict[str, object], push: 
         transform=plt.gca().transAxes,
         va="top",
         ha="left",
-        fontsize=9,
+        fontsize=13,
         bbox={"facecolor": "white", "alpha": 0.85, "edgecolor": "0.8"},
     )
     plt.tight_layout()
@@ -176,26 +177,28 @@ def maybe_make_figures(exact: dict[str, object], conv: dict[str, object], push: 
     l2 = [conv["l2"][n] for n in levels]
     linf = [conv["linf"][n] for n in levels]
 
-    plt.figure(figsize=(6.8, 4.9))
+    plt.figure(figsize=(5.4, 4.5))
     plt.loglog(hs, l2, "o-", label="L2: all particles/components")
     plt.loglog(hs, linf, "s-", label="Linf: max component error")
     plt.gca().invert_xaxis()
-    plt.xlabel("Grid spacing h = 1/N")
-    plt.ylabel("Error of gathered field components")
-    plt.title("C01: Gather Error vs Grid Spacing")
+    plt.xlabel("Grid spacing h = 1/N", fontsize=15)
+    plt.ylabel("Error of gathered field components", fontsize=15)
+    plt.title("C01: Gather Error vs Grid Spacing", fontsize=17)
+    plt.tick_params(labelsize=15)
     plt.grid(True, which="both", alpha=0.25)
-    plt.legend()
+    plt.legend(fontsize=13)
     plt.tight_layout()
     plt.savefig(FIG / "c01_convergence.png", dpi=180)
     plt.close()
 
     traj = push["traj"]
-    plt.figure(figsize=(6.2, 5.2))
+    plt.figure(figsize=(5.4, 4.5))
     for x0, y0, x1, y1 in traj:
         plt.plot([x0, x1], [y0, y1], "-o", markersize=3, linewidth=1)
-    plt.xlabel("Particle x position")
-    plt.ylabel("Particle y position")
-    plt.title("C01: Fused Gather-Push Displacement")
+    plt.xlabel("Particle x position", fontsize=15)
+    plt.ylabel("Particle y position", fontsize=15)
+    plt.title("C01: Fused Gather-Push Displacement", fontsize=17)
+    plt.tick_params(labelsize=15)
     plt.text(
         0.02,
         0.98,
@@ -203,7 +206,7 @@ def maybe_make_figures(exact: dict[str, object], conv: dict[str, object], push: 
         transform=plt.gca().transAxes,
         va="top",
         ha="left",
-        fontsize=9,
+        fontsize=13,
         bbox={"facecolor": "white", "alpha": 0.85, "edgecolor": "0.8"},
     )
     plt.tight_layout()

@@ -1,8 +1,8 @@
 # D03_hypre_3Draz_uniform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Uniform cylindrical `(r,alpha,z)` 3D Poisson solver. It uses HYPRE Struct/PFMG to solve the 7-neighbor system assembled by the D03 routines.
+Uniform cylindrical `(r,alpha,z)` 3D Poisson solver. It uses HYPRE Struct/PFMG to solve the 7-point stencil system assembled by the D03 routines.
 
 ## Files
 

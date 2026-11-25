@@ -1,6 +1,6 @@
 # J03_neutral_continuity_faceflux_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 J03 initializes fixed face transport coefficients from reference density and signed fluxes, evaluates current fluxes with upwind density, and advances transient cylindrical continuity. It does not track particles, solve velocity distributions or rerun preprocessing.
 

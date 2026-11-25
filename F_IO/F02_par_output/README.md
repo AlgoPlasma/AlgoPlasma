@@ -1,6 +1,6 @@
 # F02_par_output
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Writes each MPI rank's particle array `par(:,1:np)` to a separate file.
 

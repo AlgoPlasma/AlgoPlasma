@@ -201,7 +201,8 @@ D02_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test01/phi_zx.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+      :width: 60%
+      :figclass: ap-figure-equal-height
 
       ``test01`` 的中间 ``y`` 截面 ``log10(phi)``，用于确认多 rank smoke test 输出稳定。
 
@@ -427,7 +428,8 @@ D02_hypre_3Dxyz_bc Tests
 
    .. figure:: ../../images/tests/001_poisson/test01/phi_zx.png
       :align: center
-      :figclass: ap-figure-equal-height ap-figure-medium
+      :width: 60%
+      :figclass: ap-figure-equal-height
 
       ``test01`` middle-``y`` ``log10(phi)`` slice from the multi-rank smoke test.
 

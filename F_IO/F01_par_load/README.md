@@ -1,6 +1,6 @@
 # F01_par_load
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Loads each MPI rank's particle file into `par(:,1:np)`.
 

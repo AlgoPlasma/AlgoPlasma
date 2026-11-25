@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "records": [8, 9, 10, 11, 15, 16, 17, 18],
+  "example_record": 15,
+  "supply_channel": "CH3_2",
+  "shunt_channel": "CH4_2",
+  "resistance_ohm": 1000.0,
+  "bias_supply_v": 100.0,
+  "supply_limits_v": [5.0, 349.0],
+  "bin_width_v": 1.0,
+  "minimum_samples": 8,
+  "ion_window_v": [-80.0, -50.0],
+  "lower_margin_v": 2.0,
+  "upper_margin_v": 5.0,
+  "smoothing_spans_v": [5, 7, 9, 11, 15, 19, 23],
+  "ion_window_tests_v": [[-90, -60], [-80, -50], [-70, -40], [-90, -40]],
+  "lower_margin_tests_v": [0, 2, 5],
+  "upper_margin_tests_v": [3, 5, 8],
+  "cathode_scenarios_v": [-20, 0, 20],
+  "provenance": {
+    "source": "Supplied SingleProbe_AxialGroups_20261019 project, group3 record0015; core mean/binning/fit settings independently reproduced.",
+    "repeats": "Data owner confirms 015–018 are repeated measurements; quality concern about 008–011 remains unclassified.",
+    "circuit": "Slow bias is a 100 V DC power supply. Fast bias is a 40.5 V rechargeable battery. Stored shunt polarity is assumed tip minus clip.",
+    "scope": "Mean I–V slope estimates; smoothing peak is only a plasma-potential candidate. Cathode offsets are estimated scenarios, not measured bounds. No high-frequency inverse filtering."
+  }
+}

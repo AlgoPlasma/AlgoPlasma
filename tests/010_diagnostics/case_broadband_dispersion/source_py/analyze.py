@@ -170,7 +170,7 @@ def check_k01(entries: list[dict]) -> dict:
     outside = out_of_band & (frequencies > config.BAND_MAX_HZ)
 
     _plot_waveform(reference)
-    _plot_spectrum(frequencies, psd_1, psd_2, bins, floor, slope)
+    _plot_spectrum(frequencies, psd_1, psd_2, bins, floor)
 
     return {
         "reference_configuration": f"{reference['spacing_mm']:.1f} mm, {reference['angle_deg']} deg",
@@ -380,18 +380,14 @@ def _plot_waveform(entry: dict) -> None:
     figure, axes = plt.subplots(1, 2, figsize=(9.6, 3.3), sharey=True,
                                constrained_layout=True)
     axes[0].plot(time_us, entry["probe_1"][:span], lw=0.9, color="0.6",
-                 label=f"recorded (SNR = {config.SNR:g})")
+                 label="recorded")
     axes[0].plot(time_us, clean_1, lw=1.4, color="tab:blue", label="noiseless")
     axes[0].set_title("probe 1: signal and noise", fontsize=10)
     axes[0].legend(fontsize=8, loc="upper right")
 
     axes[1].plot(time_us, clean_1, lw=1.4, color="tab:blue", label="probe 1")
     axes[1].plot(time_us, clean_2, lw=1.4, color="tab:orange", label="probe 2")
-    axes[1].set_title(
-        f"noiseless pair, separation {entry['spacing_mm']:.1f} mm at "
-        f"{entry['angle_deg']}$^\\circ$",
-        fontsize=10,
-    )
+    axes[1].set_title("noiseless probe pair", fontsize=10)
     axes[1].legend(fontsize=8, loc="upper right")
     for axis in axes:
         axis.set_xlabel(r"time ($\mu$s)")
@@ -400,23 +396,23 @@ def _plot_waveform(entry: dict) -> None:
     plt.close(figure)
 
 
-def _plot_spectrum(frequencies, psd_1, psd_2, bins, floor, slope) -> None:
+def _plot_spectrum(frequencies, psd_1, psd_2, bins, floor) -> None:
     mode_frequencies = config.mode_frequencies()
     reference = psd_1[bins][0] * (mode_frequencies / mode_frequencies[0]) ** -2.0
 
-    figure, axis = plt.subplots(figsize=(6.2, 3.8), constrained_layout=True)
+    figure, axis = plt.subplots(figsize=(6.0, 4.5), constrained_layout=True)
     axis.loglog(frequencies[1:] * 1e-3, psd_1[1:], lw=0.8, label="probe 1")
     axis.loglog(frequencies[1:] * 1e-3, psd_2[1:], lw=0.8, alpha=0.7, label="probe 2")
     axis.loglog(mode_frequencies * 1e-3, reference, "k--", lw=1.2,
-                label=r"generator $\propto f^{-2}$")
-    axis.axhline(config.ACCEPTANCE["power_to_floor"]*floor, color="0.4", ls="--", lw=0.8, label="assessment threshold (10 x floor)")
+                label="generator reference")
+    axis.axhline(config.ACCEPTANCE["power_to_floor"]*floor, color="0.4", ls="--", lw=0.8, label="assessment threshold")
     axis.axhline(floor, color="tab:red", ls=":", lw=1.0, label="noise floor")
     axis.set_xlim(50.0, frequencies[-1] * 1e-3)
     axis.set_ylim(floor / 5.0, psd_1[bins].max() * 5.0)
-    axis.set_xlabel("frequency (kHz)")
-    axis.set_ylabel("PSD (arb. / Hz)")
-    axis.set_title(f"Power spectrum, fitted slope {slope:.2f}", fontsize=10)
-    axis.legend(fontsize=8)
+    axis.set_xlabel("frequency (kHz)", fontsize=15)
+    axis.set_ylabel("PSD (arb. / Hz)", fontsize=15)
+    axis.tick_params(labelsize=14)
+    axis.legend(fontsize=11)
     figure.savefig(config.FIGURE_DIR / "power_spectrum.png", dpi=150)
     plt.close(figure)
 
@@ -435,51 +431,40 @@ def _plot_beall(result, predicted, mode_frequencies, chi) -> None:
         np.concatenate([[False], np.abs(np.diff(folded)) > nyquist]), np.nan, folded
     )
 
-    occupied = np.unique(fun_K02_fold_order(
-        2*np.pi*mode_frequencies/config.SOUND_SPEED_M_S
-        * np.cos(np.deg2rad(config.PHI_DEG)-direction), chi)).size
-    figure, axis = plt.subplots(figsize=(6.0, 4.4), constrained_layout=True)
+    figure, axis = plt.subplots(figsize=(6.0, 4.5), constrained_layout=True)
     mesh = axis.pcolormesh(result["k_centers"], result["f_centers"] * 1e-3,
                            spectrum, shading="auto", cmap="magma",
                            vmin=top - 4.0, vmax=top)
     axis.plot(folded, dense_f * 1e-3, "-", color="tab:cyan", lw=0.9,
               label="aliased theory")
-    axis.plot(predicted, mode_frequencies * 1e-3, "o", mfc="none", mec="white",
-              ms=3, mew=0.7, label="K02 prediction")
+    axis.plot(predicted, mode_frequencies * 1e-3, "o", mfc="none", mec="tab:green",
+              ms=6, mew=1.3, label="K02 prediction")
     axis.set_xlim(-nyquist, nyquist)
     axis.set_ylim(0.0, mode_frequencies[-1] * 1.02e-3)
-    axis.set_xlabel(r"$k_\parallel$ (rad/m)")
-    axis.set_ylabel("frequency (kHz)")
-    axis.set_title(
-        f"Beall $S(k,f)$, coarse pair "
-        f"({config.BEALL_SPACING_MM:.0f} mm at {config.BEALL_ANGLE_DEG}$^\\circ$, "
-        f"{result['segments']} segments)\n"
-        rf"$k_{{\rm Nyq}}$ = {nyquist:.0f} rad/m, "
-        f"{occupied} occupied fold orders",
-        fontsize=9,
-    )
-    axis.legend(fontsize=8, loc="lower left", framealpha=0.75)
-    figure.colorbar(mesh, ax=axis, label=r"$\log_{10} S$", fraction=0.046)
+    axis.set_xlabel(r"$k_\parallel$ (rad/m)", fontsize=15)
+    axis.set_ylabel("frequency (kHz)", fontsize=15)
+    axis.tick_params(labelsize=14)
+    axis.legend(fontsize=11, loc="lower center", bbox_to_anchor=(0.5, 1.02),
+                ncol=2, markerscale=1.4, framealpha=0.9)
+    colorbar = figure.colorbar(mesh, ax=axis, fraction=0.046)
+    colorbar.set_label(r"$\log_{10} S$", fontsize=15)
+    colorbar.ax.tick_params(labelsize=14)
     figure.savefig(config.FIGURE_DIR / "beall_skf.png", dpi=150)
     plt.close(figure)
 
 
 def _plot_dispersion(frequencies, magnitude, truth) -> None:
-    figure, axis = plt.subplots(figsize=(5.6, 4.2), constrained_layout=True)
+    figure, axis = plt.subplots(figsize=(6.0, 4.5), constrained_layout=True)
     reference = np.linspace(0.0, truth.max() * 1.08, 200)
     axis.plot(reference, config.SOUND_SPEED_M_S * reference / (2.0 * np.pi) * 1e-3,
-              "-", lw=1.2, color="tab:blue", label=r"theory: $f = c_s|k|/2\pi$")
-    axis.plot(magnitude, frequencies * 1e-3, "o", ms=3.5, color="tab:orange",
+              "-", lw=1.2, color="tab:blue", label="theory")
+    axis.plot(magnitude, frequencies * 1e-3, "o", ms=5, color="tab:orange",
               label="K03 recovered")
-    axis.set_xlabel(r"$|k|$ (rad/m)")
-    axis.set_ylabel("$f$ (kHz)")
-    axis.set_title(
-        f"Joint MLE dispersion, {len(config.SPACINGS_MM) * len(config.ANGLES_DEG)} "
-        f"configurations\nthe branch K02 shows folded is recovered straight",
-        fontsize=9,
-    )
+    axis.set_xlabel(r"$|k|$ (rad/m)", fontsize=15)
+    axis.set_ylabel("$f$ (kHz)", fontsize=15)
+    axis.tick_params(labelsize=14)
     axis.grid(alpha=0.3)
-    axis.legend(fontsize=8)
+    axis.legend(fontsize=11)
     figure.savefig(config.FIGURE_DIR / "mle_dispersion.png", dpi=150)
     plt.close(figure)
 
@@ -504,8 +489,7 @@ def write_snapshot(summary, out):
     for lang in ["zh", "en"]:
         zh = lang == "zh"
         lines = [":orphan:", "", ".. snapshot-start", "",
-                 ("运行时间：" if zh else "Run time: ") + summary['provenance']['generated_at_utc'],
-                 "", " / ".join(f"{name.split('_')[0].upper()}: {'PASS' if result['passed'] else 'FAIL'}" for name, result in checks.items()), "",
+                 " / ".join(f"{name.split('_')[0].upper()}: {'PASS' if result['passed'] else 'FAIL'}" for name, result in checks.items()), "",
                  ".. list-table:: " + ("同次运行的验收结果" if zh else "Acceptance results from this run"),
                  "   :header-rows: 1", "", "   * - " + ("检查量" if zh else "Quantity"),
                  "     - " + ("要求" if zh else "Requirement"), "     - " + ("实测" if zh else "Measured")]

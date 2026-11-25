@@ -1,6 +1,6 @@
-=========================
-Diagnostics Learning Path
-=========================
+===============================
+Probe Diagnostics Learning Path
+===============================
 
 .. raw:: html
 
@@ -14,14 +14,14 @@ Diagnostics Learning Path
    .. note::
 
       如果还不熟悉波数、FFT、互相位或最大似然，请先读
-      :doc:`探针诊断基础 <diagnostics_foundations>`。它从同一个双探针例子逐步引入这些概念，
+      :doc:`Probe Diagnostics Foundations <diagnostics_foundations>`。它从同一个双探针例子逐步引入这些概念，
       并说明多构型反演的适用条件；读完后再用本页安排函数阅读顺序。
 
    .. rubric:: 这页解决什么问题
 
-   本页面向第一次接触 ``K_Diagnostics`` 的读者。它不是谱分析教材，而是帮你把"两根探针能测到什么、
-   测不到什么"这件事跟仓库里的 routine 对上号。读完后，应该知道该先看哪一页、混叠为什么是这个
-   模块存在的理由、以及测试为什么能说明实现是可信的。
+   本页属于 :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` 专题，面向第一次接触
+   K01–K03 探针波动分析链的读者。它帮你把"两根探针能测到什么、测不到什么"与具体 routine
+   对上号。读完后，应该知道该先看哪一页、混叠如何限制波矢估计，以及测试如何验证这条分析链的实现。
 
    .. rubric:: 推荐学习顺序
 
@@ -50,11 +50,11 @@ Diagnostics Learning Path
         - :doc:`K03_mle_k2d <K03_mle_k2d>` 的 ``fun_K03_joint_log_likelihood``
       * - 6
         - 怎么用、怎么接进自己的分析流程。
-        - :doc:`Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
+        - :doc:`Probe Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
       * - 7
         - 怎样验证实现可信。
         - :doc:`基础数值测试 </tests/010_diagnostics/case_basic_checks>`，再读
-          :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` 和
+          :doc:`Probe Diagnostics Testing Guide <diagnostics_testing_guide>` 和
           :doc:`010_diagnostics </tests/010_diagnostics/index>`
 
    .. rubric:: 核心图景
@@ -66,7 +66,7 @@ Diagnostics Learning Path
 
       \theta = \mathbf{K}\cdot\boldsymbol{\chi}.
 
-   这一个式子决定了整个模块的能力边界，有三层含义：
+   这个式子说明了由探针互相位估计波矢的几何边界，有三层含义：
 
    - **只能测投影**。:math:`\theta` 只依赖 :math:`\mathbf{K}` 沿 :math:`\boldsymbol{\chi}`
      的分量，垂直分量完全不进入测量。所以单对探针永远给不出二维波矢。
@@ -107,11 +107,11 @@ Diagnostics Learning Path
 
    .. rubric:: What This Page Is For
 
-   This page is for a reader meeting ``K_Diagnostics`` for the first time. It is not a course on
-   spectral analysis; it maps the question "what can two probes measure, and what can they not"
-   onto the routines in this repository. After reading it you should know which page to open
-   first, why aliasing is the reason this module exists, and why the tests are evidence that the
-   implementation is trustworthy.
+   This page belongs to :doc:`Probe Wave Diagnostics <probe_wave_diagnostics>` and introduces
+   the K01–K03 probe wave analysis chain. It maps the question "what can two probes measure,
+   and what can they not" onto specific routines. After reading it you should know which page
+   to open first, how aliasing limits wavevector estimation, and how the tests verify the
+   implementation of this chain.
 
    .. rubric:: Suggested Learning Order
 
@@ -142,11 +142,11 @@ Diagnostics Learning Path
         - ``fun_K03_joint_log_likelihood`` in :doc:`K03_mle_k2d <K03_mle_k2d>`
       * - 6
         - How to use it and wire it into your own analysis.
-        - :doc:`Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
+        - :doc:`Probe Diagnostics Usage Cookbook <diagnostics_usage_cookbook>`
       * - 7
         - How the implementation is shown to be trustworthy.
         - :doc:`basic_numerical tests </tests/010_diagnostics/case_basic_checks>`, then
-          :doc:`Diagnostics Testing Guide <diagnostics_testing_guide>` and
+          :doc:`Probe Diagnostics Testing Guide <diagnostics_testing_guide>` and
           :doc:`010_diagnostics </tests/010_diagnostics/index>`
 
    .. rubric:: Core Mental Model
@@ -159,7 +159,8 @@ Diagnostics Learning Path
 
       \theta = \mathbf{K}\cdot\boldsymbol{\chi}.
 
-   That single expression sets the limits of the whole module, in three ways:
+   This expression sets the geometric limits of estimating wavevectors from probe cross
+   phases, in three ways:
 
    - **Only a projection is measurable.** :math:`\theta` depends only on the component of
      :math:`\mathbf{K}` along :math:`\boldsymbol{\chi}`; the perpendicular component never

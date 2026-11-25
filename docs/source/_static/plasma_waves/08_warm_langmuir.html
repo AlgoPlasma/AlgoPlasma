@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>温度怎样改变波？ | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css">
+  <link rel="stylesheet" href="wave-course.css">
+  <link rel="stylesheet" href="wave-presentation.css">
+  <link rel="stylesheet" href="wave-packet.css">
+  <link rel="stylesheet" href="wave-derivation.css">
+  <link rel="stylesheet" href="wave-lab.css">
+  <script defer src="wave-navigation.js"></script>
+  <script defer src="wave-derivation-model.js"></script>
+  <script defer src="wave-spectrum-model.js"></script>
+  <script defer src="wave-lab-plots.js"></script>
+  <script defer src="wave-lab-deck.js"></script>
+  <noscript><style>.lesson .lab-slide[hidden], .lesson .build-block[hidden],html[lang] .en { display:block !important; } .lab-slide{margin-bottom:3em} .lesson .scene,.lesson .controls,.lesson .lab-settings,.language-switch {display:none!important} .lab-lesson .slide-layout{display:block}</style></noscript>
+</head>
+<body>
+  <div id="lesson" class="lesson course-lesson packet-lesson derivation-lesson lab-lesson" data-page="8">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程导航">
+        <a id="previous-lesson" rel="prev" href="07_deriving_dispersion.html?lang=zh"><span class="zh" lang="zh-CN">上一课</span><span class="en" lang="en">Previous lesson</span></a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">课程目录</a>
+        <a id="next-lesson" rel="next" href="09_complex_frequency.html?lang=zh"><span class="zh" lang="zh-CN">下一课</span><span class="en" lang="en">Next lesson</span></a>
+      </nav>
+      <div class="header-actions"><div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div></div>
+    </header>
+    <main>
+      <p class="slide-label" id="slide-label"><span class="zh" lang="zh-CN">08 · 温度怎样改变波？</span><span class="en" lang="en">08 · How does temperature change the wave?</span></p>
+      <section class="lab-slide">
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">把一小团电子压密</span><span class="en" lang="en">Compress a small cloud of electrons</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">第 07 课中，电子受电场拉回，在固定离子背景中沿波的方向振荡。这种静电波叫作 Langmuir 波。电子有热运动时，还有什么力？</span><span class="en" lang="en">In lesson 7 the electric field pulled electrons back along the wave against a fixed ion background. This electrostatic oscillation is a Langmuir wave. What force does thermal motion add?</span></p>
+        <div class="slide-layout" data-visual="pressure">
+          <figure class="scene" data-kind="pressure">
+            <canvas role="img"></canvas>
+            <p class="canvas-fallback" hidden><span class="zh" lang="zh-CN">图像不可用。可继续阅读本页的解释和数值。</span><span class="en" lang="en">The figure is unavailable. The explanation and values below describe the result.</span></p>
+
+            <figcaption><span class="zh" lang="zh-CN">绿色曲线是相对背景的压强变化 p₁，按峰值归一化。金箭头是压力方向。播放可跟随一个压缩区。</span><span class="en" lang="en">Green shows the pressure change p₁ relative to equilibrium, scaled to its peak. Gold arrows show the pressure force. Play to follow one compression.</span></figcaption>
+          </figure>
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">电子向各个方向运动，穿过一小块截面时会传递动量。单位面积上的这种动量通量形成电子压强 p，单位 Pa。</span><span class="en" lang="en">Electrons carry momentum across an imaginary surface as they move in random directions. This momentum flux gives the electron pressure p, measured in Pa.</span></p>
+            </div>
+            <div class="lab-settings"><button type="button" class="motion" aria-pressed="false"><span class="zh" lang="zh-CN">播放</span><span class="en" lang="en">Play</span></button><label class="lab-control"><span class="zh" lang="zh-CN">波的相位进度</span><span class="en" lang="en">Wave phase</span><output data-value="time"></output><input type="range" data-param="time" min="0" max="4" step="0.01" value="0"></label>
+            <p class="reading" hidden></p></div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">沿波的方向，密集区压强升高。左侧压强向右升高，压力把电子推向左；右侧压强向右降低，电子被推向右。压强梯度也有恢复密度均匀的作用。</span><span class="en" lang="en">Along the wave, pressure rises in a compressed region. On the left slope the pressure force points left, and on the right it points right. Both forces act to relieve the compression.</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">给冷模型加一项力</span><span class="en" lang="en">Add a force to the cold model</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">保留第 07 课的一维小扰动、均匀背景与静电场。连续性方程和泊松方程仍然适用。</span><span class="en" lang="en">Keep the one-dimensional small perturbation, uniform background and electrostatic field of lesson 7. Continuity and Poisson’s equation still apply.</span></p>
+        <div class="slide-layout" data-visual="none">
+
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">电子质量为 mₑ [kg]，电荷为 −e [C]。电场扰动 E₁ [V/m] 原先单独决定平均速度扰动 v₁ [m/s] 的变化。</span><span class="en" lang="en">An electron of mass mₑ [kg] and charge −e [C] feels the perturbed field E₁ [V/m]. In the cold model this force alone changes the mean velocity perturbation v₁ [m/s].</span></p>
+              <p class="math">mₑ ∂ₜv₁ = −eE₁</p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">每单位体积的压力是 −∂ₓp₁ [N/m³]。除以背景数密度 n₀ [m⁻³] 就得到每个电子分到的力。</span><span class="en" lang="en">The pressure force per volume is −∂ₓp₁ [N/m³]. Divide by the background number density n₀ [m⁻³] to get the force per electron.</span></p>
+              <p class="math">mₑ ∂ₜv₁ = −eE₁ − (1/n₀) ∂ₓp₁</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">同样的压缩会增加多少压强？</span><span class="en" lang="en">How much does compression raise pressure?</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">Tₑ 是平衡电子温度 [K]，k<sub>B</sub> 是玻尔兹曼常数 [J/K]。背景压强为 p₀ = n₀ k<sub>B</sub>Tₑ。</span><span class="en" lang="en">Tₑ is the equilibrium electron temperature [K] and k<sub>B</sub> is Boltzmann’s constant [J/K]. The equilibrium pressure is p₀ = n₀ k<sub>B</sub>Tₑ.</span></p>
+        <div class="slide-layout" data-visual="none">
+
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">压缩沿传播方向发生。若一个振荡周期内沿该方向的热量交换可以忽略，采用一维绝热关系，纵向压强随密度的三次方变化。</span><span class="en" lang="en">Compression acts along the wave. When heat exchange along that direction can be neglected during an oscillation, the one-dimensional adiabatic law gives the longitudinal pressure.</span></p>
+              <p class="math">p / p₀ = (n / n₀)³</p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">写 n = n₀ + n₁，只保留 n₁/n₀ 的一次项。令 p₁ = p − p₀，温度就进了动量方程。</span><span class="en" lang="en">Write n = n₀ + n₁ and keep only the term linear in n₁/n₀. Subtract p₀ to obtain the pressure perturbation that enters the momentum equation.</span></p>
+              <p class="math">p / p₀ ≈ 1 + 3n₁/n₀<br>p₁ = 3k<sub>B</sub>Tₑ n₁</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">把压强带回色散关系</span><span class="en" lang="en">Put pressure back into the dispersion relation</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">第 07 课把压强对密度的响应写作 p₁ = mₑu²n₁，其中 u 的单位是 m/s。现在可以确定 u 的大小。</span><span class="en" lang="en">Lesson 7 wrote the pressure response as p₁ = mₑu²n₁, where u is measured in m/s. The temperature now fixes its value.</span></p>
+        <div class="slide-layout" data-visual="none">
+
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">比较两个压强表达式。定义单方向电子热速 v<sub>Te</sub> [m/s]，即该方向随机速度的均方根。</span><span class="en" lang="en">Match the two pressure expressions. Define the one-direction thermal speed v<sub>Te</sub> [m/s] as the root-mean-square random velocity along the wave.</span></p>
+              <p class="math">v<sub>Te</sub>² = k<sub>B</sub>Tₑ / mₑ<br>u² = 3v<sub>Te</sub>²</p>
+            </div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">将 u² 代入上一课的结果。ω<sub>pe</sub> 是同一密度下的冷电子等离子体角频率 [rad/s]，k 是波数 [rad/m]。这一长波热修正称为 Bohm–Gross 关系。</span><span class="en" lang="en">Insert u² into the result of lesson 7. Here ω<sub>pe</sub> is the cold plasma angular frequency [rad/s] at the same density and k is the wavenumber [rad/m]. This long-wavelength thermal correction is the Bohm–Gross relation.</span></p>
+              <p class="math">ω² = ω<sub>pe</sub>² + u²k²<br>ω² ≈ ω<sub>pe</sub>² + 3k²v<sub>Te</sub>²</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">固定密度，对照两条曲线</span><span class="en" lang="en">Compare both curves at one density</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">先选定一个 k，再提高温度。预测两条曲线在哪一端最容易分开。</span><span class="en" lang="en">Pick a wavenumber, then raise the temperature. Predict which end of the curves will separate most.</span></p>
+        <div class="slide-layout" data-visual="dispersion">
+          <figure class="scene" data-kind="dispersion">
+            <canvas role="img"></canvas>
+            <p class="canvas-fallback" hidden><span class="zh" lang="zh-CN">图像不可用。可继续阅读本页的解释和数值。</span><span class="en" lang="en">The figure is unavailable. The explanation and values below describe the result.</span></p>
+
+            <figcaption><span class="zh" lang="zh-CN">固定背景密度，取 ω<sub>pe</sub> = 10⁸ rad/s。温度滑块以电子伏特表示热能 k<sub>B</sub>Tₑ（1 eV ≈ 1.60 × 10⁻¹⁹ J）。</span><span class="en" lang="en">The density is fixed so that ω<sub>pe</sub> = 10⁸ rad/s. The temperature slider gives the thermal energy k<sub>B</sub>Tₑ in electronvolts (1 eV ≈ 1.60 × 10⁻¹⁹ J).</span></figcaption>
+          </figure>
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">两点取同一波数。金色虚线是冷模型，绿色实线是温模型。横移读数点，可比较不同波长的热修正。</span><span class="en" lang="en">The two markers share a wavenumber. Gold dashes show the cold model and the solid green line shows the warm model. Move the markers to compare wavelengths.</span></p>
+            </div>
+            <div class="lab-settings"><label class="lab-control"><span class="zh" lang="zh-CN">电子热能 k<sub>B</sub>Tₑ</span><span class="en" lang="en">Electron thermal energy k<sub>B</sub>Tₑ</span><output data-value="energy"></output><input type="range" data-param="energy" min="0" max="4" step="0.25" value="2"></label><label class="lab-control"><span class="zh" lang="zh-CN">读数波数 k</span><span class="en" lang="en">Read at wavenumber k</span><output data-value="k"></output><input type="range" data-param="k" min="0" max="24" step="1" value="10"></label>
+            <p class="reading"></p></div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">当 k 趋近于零时，两条曲线都趋于 ω<sub>pe</sub>。波长越短，同一密度扰动产生的压强变化越集中，压强梯度越大。这里取正频率分支。</span><span class="en" lang="en">As k approaches zero, both curves approach ω<sub>pe</sub>. The same compression over a shorter wavelength produces a steeper pressure gradient. The graph shows the positive-frequency branch.</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="lab-slide" hidden>
+        <h1 tabindex="-1"><span class="zh" lang="zh-CN">波数加倍，哪个量变成四倍？</span><span class="en" lang="en">Double k. Which quantity quadruples?</span></h1>
+        <p class="narration"><span class="zh" lang="zh-CN">保持密度和温度不变，把 k 从 10 rad/m 调到 20 rad/m。先判断，再查看答案。</span><span class="en" lang="en">At fixed density and temperature, move k from 10 to 20 rad/m. Make a prediction before revealing the result.</span></p>
+        <div class="slide-layout" data-visual="dispersion">
+          <figure class="scene" data-kind="dispersion">
+            <canvas role="img"></canvas>
+            <p class="canvas-fallback" hidden><span class="zh" lang="zh-CN">图像不可用。可继续阅读本页的解释和数值。</span><span class="en" lang="en">The figure is unavailable. The explanation and values below describe the result.</span></p>
+
+            <figcaption><span class="zh" lang="zh-CN">固定背景密度，取 ω<sub>pe</sub> = 10⁸ rad/s。温度滑块以电子伏特表示热能 k<sub>B</sub>Tₑ（1 eV ≈ 1.60 × 10⁻¹⁹ J）。</span><span class="en" lang="en">The density is fixed so that ω<sub>pe</sub> = 10⁸ rad/s. The temperature slider gives the thermal energy k<sub>B</sub>Tₑ in electronvolts (1 eV ≈ 1.60 × 10⁻¹⁹ J).</span></figcaption>
+          </figure>
+          <div class="slide-content">
+            <div class="build-block">
+              <p><span class="zh" lang="zh-CN">可比较 ω 本身，也可以比较频率平方相对于冷模型的增量。</span><span class="en" lang="en">Compare the angular frequency itself with the excess of its square over the cold value.</span></p>
+              <p class="math">Δ = ω² − ω<sub>pe</sub>²</p>
+            </div>
+            <div class="lab-settings"><label class="lab-control"><span class="zh" lang="zh-CN">电子热能 k<sub>B</sub>Tₑ</span><span class="en" lang="en">Electron thermal energy k<sub>B</sub>Tₑ</span><output data-value="energy"></output><input type="range" data-param="energy" min="0" max="4" step="0.25" value="2"></label><label class="lab-control"><span class="zh" lang="zh-CN">读数波数 k</span><span class="en" lang="en">Read at wavenumber k</span><output data-value="k"></output><input type="range" data-param="k" min="0" max="24" step="1" value="10"></label>
+            <p class="reading"></p></div>
+            <div class="build-block" hidden>
+              <p><span class="zh" lang="zh-CN">四倍的是 Δ。ω 还包含冷模型的贡献，并且要开平方。使用长波近似时要求 kv<sub>Te</sub>/ω<sub>pe</sub> 远小于 1；图中这一比值最大约 0.20。</span><span class="en" lang="en">It is Δ that quadruples. To find ω one must add the cold contribution and take a square root. The long-wave approximation requires kv<sub>Te</sub>/ω<sub>pe</sub> well below one. This ratio reaches about 0.20 in the plot.</span></p>
+              <p class="math">Δ ≈ 3k²v<sub>Te</sub>²</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="controls">
+      <div class="progress-group"><span class="stage-count" id="stage-count"></span><div class="build-progress"><span id="build-count"></span><div class="progress" id="progress" aria-hidden="true"></div></div><button type="button" id="restart-lesson" class="restart-lesson"><span class="zh" lang="zh-CN">本课起始</span><span class="en" lang="en">Restart lesson</span></button></div>
+      <p class="keyboard-note" id="keyboard-note"><span class="zh" lang="zh-CN">F 全屏</span><span class="en" lang="en">F fullscreen</span></p>
+      <div class="actions"><button type="button" id="back" class="back"><span class="zh" lang="zh-CN">上一步</span><span class="en" lang="en">Back</span></button><button type="button" id="restart-slide" class="restart-slide"><span class="zh" lang="zh-CN">本页起始</span><span class="en" lang="en">Restart slide</span></button><button class="advance" id="advance" type="button"><span id="advance-kind"></span><span id="advance-text"></span></button></div>
+    </footer>
+  </div>
+  <p id="status" role="status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-19 15:26 +08:00 | Yinjian Zhao | git b9e33596c00f
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

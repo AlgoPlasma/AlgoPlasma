@@ -2,6 +2,21 @@
 // 阅读路线：存储适配器 → 时间步准备 → 分块碰撞 → 固定顺序汇总 → 提交。
 // prepare 只生成待写回结果，commit 才修改粒子，避免失败时只更新了一半。
 #include "batch.hpp"
+#ifndef G02_PARTICLE_READ_MODE
+#define G02_PARTICLE_READ_MODE 2
+#endif
+#ifndef G02_SNAPSHOT_LOOKUP_CACHE
+#define G02_SNAPSHOT_LOOKUP_CACHE 1
+#endif
+#ifndef G02_SNAPSHOT_DIRECT_COPY
+#define G02_SNAPSHOT_DIRECT_COPY 0
+#endif
+#include "rng.hpp"
+#include "waiting_clock.hpp"
+
+#ifndef G02_LAZY_BATCH_OUTCOME
+#define G02_LAZY_BATCH_OUTCOME 1
+#endif
 
 #include <algorithm>
 #include <chrono>
@@ -20,6 +35,9 @@ namespace algoplasma::mcc {
 namespace {
 
 using Clock = std::chrono::steady_clock;
+#ifndef G02_REUSE_ID_INDEX
+#define G02_REUSE_ID_INDEX 1
+#endif
 
 [[nodiscard]] Real seconds_since(const Clock::time_point start) {
     return std::chrono::duration<Real>(Clock::now() - start).count();
@@ -102,6 +120,12 @@ struct MccWorkspace::Impl {
     ChannelSampler sampler{ChannelSampler::Prefix};
     std::vector<ParticleState> snapshot;
     std::vector<std::size_t> active;
+    // Cache only an unordered host layout. Never rearrange host particles.
+    // Exact per-slot ID/alive comparisons invalidate on any topology change.
+    bool index_cache_valid{false};
+    std::vector<std::uint64_t> index_ids;
+    std::vector<unsigned char> index_alive;
+    std::vector<std::size_t> sorted_active;
     std::vector<std::size_t> eligible;
     std::vector<BlockResult> blocks;
     std::vector<ParticleChange> changes;
@@ -562,18 +586,46 @@ PreparedMccStep MccStepper::prepare_step(
         const std::size_t size = particles.size();
         auto& snapshot = state.snapshot;
         snapshot.resize(size);
+        bool reuse_index = G02_REUSE_ID_INDEX && state.index_cache_valid &&
+            state.index_ids.size() == size;
         auto& active = state.active;
         active.clear();
         active.reserve(size);
         std::uint64_t largest_id = 0;
         bool ordered_ids = true;
+        // Reuse only a successfully checked adjacent species/state pair within
+        // this snapshot pass. Dynamic particle fields are always checked.
+        bool metadata_valid = false;
+        SpeciesId checked_species = invalid_species;
+        StateId checked_state = invalid_state;
+        // Dispatch once per step. VectorParticleAdapter is final: every slot
+        // is alive and direct access has the same order as particle(index).
+        auto capture = [&]<bool vector_input, bool prefilled>(const auto& input) {
         for (std::size_t index = 0; index < size; ++index) {
-            if (!particles.alive(index)) continue;
-            const ParticleState particle = particles.particle(index);
-            const Species& species = model.species.at(particle.species);
-            if (species.representation != Representation::Kinetic ||
-                model.states.at(particle.state).species != particle.species) {
-                throw Error("batch particle has an invalid kinetic species or state");
+            const bool alive_now = [&] {
+                if constexpr (vector_input) return true;
+                else return particles.alive(index);
+            }();
+            if (reuse_index && static_cast<bool>(state.index_alive[index]) != alive_now)
+                reuse_index = false;
+            if (!alive_now) continue;
+            // Binding to const reference borrows a vector entry; for the generic
+            // adapter, it extends the lifetime of the original by-value result.
+            const auto& particle = [&]() -> decltype(auto) {
+                if constexpr (vector_input) return (input[index]);
+                else return particles.particle(index);
+            }();
+            if (reuse_index && state.index_ids[index] != particle.id) reuse_index = false;
+            if (!G02_SNAPSHOT_LOOKUP_CACHE || !metadata_valid ||
+                checked_species != particle.species || checked_state != particle.state) {
+                const Species& species = model.species.at(particle.species);
+                if (species.representation != Representation::Kinetic ||
+                    model.states.at(particle.state).species != particle.species) {
+                    throw Error("batch particle has an invalid kinetic species or state");
+                }
+                checked_species = particle.species;
+                checked_state = particle.state;
+                metadata_valid = true;
             }
             if (!std::isfinite(particle.weight) || particle.weight < 0.0 ||
                 !std::isfinite(particle.position.x) || !std::isfinite(particle.position.y) ||
@@ -583,14 +635,84 @@ PreparedMccStep MccStepper::prepare_step(
                 throw Error("batch particle has invalid position, weight or velocity");
             }
             largest_id = std::max(largest_id, particle.id);
-            snapshot[index] = particle;
+            if constexpr (!prefilled) snapshot[index] = particle;
             if (!active.empty() && snapshot[active.back()].id > particle.id) ordered_ids = false;
             active.push_back(index);
         }
+        };
+#if G02_PARTICLE_READ_MODE > 0
+        if (const auto* vector_adapter = dynamic_cast<const VectorParticleAdapter*>(&particles)) {
+            const auto& contiguous = vector_adapter->contiguous_particles();
+#if G02_PARTICLE_READ_MODE == 2
+            std::copy(contiguous.begin(), contiguous.end(), snapshot.begin());
+            capture.template operator()<true, true>(snapshot);
+#else
+            capture.template operator()<true, false>(contiguous);
+#endif
+        } else
+#endif
+        {
+        for (std::size_t index = 0; index < size; ++index) {
+            const bool alive_now = particles.alive(index);
+            if (reuse_index && static_cast<bool>(state.index_alive[index]) != alive_now)
+                reuse_index = false;
+            if (!alive_now) continue;
+#if G02_SNAPSHOT_DIRECT_COPY
+            // Candidate under evaluation: populate our private snapshot directly.
+            ParticleState& particle = snapshot[index];
+            particle = particles.particle(index);
+#else
+            const ParticleState particle = particles.particle(index);
+#endif
+            if (reuse_index && state.index_ids[index] != particle.id) reuse_index = false;
+            if (!G02_SNAPSHOT_LOOKUP_CACHE || !metadata_valid ||
+                checked_species != particle.species || checked_state != particle.state) {
+                const Species& species = model.species.at(particle.species);
+                if (species.representation != Representation::Kinetic ||
+                    model.states.at(particle.state).species != particle.species) {
+                    throw Error("batch particle has an invalid kinetic species or state");
+                }
+                checked_species = particle.species;
+                checked_state = particle.state;
+                metadata_valid = true;
+            }
+            if (!std::isfinite(particle.weight) || particle.weight < 0.0 ||
+                !std::isfinite(particle.position.x) || !std::isfinite(particle.position.y) ||
+                !std::isfinite(particle.position.z) ||
+                !std::isfinite(particle.velocity.x) || !std::isfinite(particle.velocity.y) ||
+                !std::isfinite(particle.velocity.z)) {
+                throw Error("batch particle has invalid position, weight or velocity");
+            }
+            largest_id = std::max(largest_id, particle.id);
+#if !G02_SNAPSHOT_DIRECT_COPY
+            snapshot[index] = particle;
+#endif
+            if (!active.empty() && snapshot[active.back()].id > particle.id) ordered_ids = false;
+            active.push_back(index);
+        }
+        }
         if (!ordered_ids) {
-            std::sort(active.begin(), active.end(), [&](const std::size_t a, const std::size_t b) {
-                return snapshot[a].id < snapshot[b].id;
-            });
+            if (reuse_index) {
+                active = state.sorted_active;
+            } else {
+                std::sort(active.begin(), active.end(), [&](const std::size_t a, const std::size_t b) {
+                    return snapshot[a].id < snapshot[b].id;
+                });
+                if constexpr (G02_REUSE_ID_INDEX) {
+                    // A failed allocation must not leave a partly rebuilt index reusable.
+                    state.index_cache_valid = false;
+                    state.sorted_active = active;
+                    state.index_ids.resize(size);
+                    state.index_alive.assign(size, 0);
+                    for (const std::size_t i : active) {
+                        state.index_ids[i] = snapshot[i].id;
+                        state.index_alive[i] = 1;
+                    }
+                    state.index_cache_valid = true;
+                }
+            }
+        } else {
+            state.index_cache_valid = false;
         }
         auto& eligible = state.eligible;
         eligible.clear();
@@ -719,6 +841,36 @@ PreparedMccStep MccStepper::prepare_step(
                     cached_state = projectile.state;
                     local_key_valid = true;
                 }
+                Real first_candidate_time = 0.0;
+                const Real* first_candidate_ptr = nullptr;
+                if constexpr (G02_LAZY_BATCH_OUTCOME) {
+                    // Same cache contract and first clock as collide_impl. No candidate
+                    // means no outcome, event record, or particle update is needed.
+                    // Input validation has already run on this immutable snapshot.
+                    if (channels_ptr->species != projectile.species ||
+                        channels_ptr->state != projectile.state) {
+                        throw Error("batch channel cache does not match projectile species/state");
+                    }
+                    const Real total_majorant = channels_ptr->total_majorant;
+                    if (!(total_majorant > 0.0) || !(dt_s > 0.0) ||
+                        channels_ptr->channels.empty()) {
+                        ++block.visited;
+                        continue;
+                    }
+                    CounterRng clock_rng(seed, global_step, projectile.id, 0U, slot_clock);
+                    const Real uniform = clock_rng.uniform_open();
+                    if (clock_definitely_outside(uniform, total_majorant, dt_s)) {
+                        ++block.visited;
+                        continue;
+                    }
+                    first_candidate_time = -std::log1p(-uniform) / total_majorant;
+                    if (!(first_candidate_time <= dt_s)) {
+                        ++block.visited;
+                        continue;
+                    }
+                    // Pass the sample on: never redraw or advance the event index.
+                    first_candidate_ptr = &first_candidate_time;
+                }
                 ChannelResolveContext context{&engine_, &block, &channel_cache, components_ptr,
                                               cached_cell, options_.exact_pruning, options_.sampler};
                 const auto lookup = +[](void* data, SpeciesId species, StateId state_id)
@@ -745,7 +897,8 @@ PreparedMccStep MccStepper::prepare_step(
                 request.exact_pruning = options_.exact_pruning;
                 StepOutcome outcome = engine_.collide_full_batch(
                     request, *background_index_ptr, lookup, &context,
-                    options_.max_candidates_per_particle, options_.record_events);
+                    options_.max_candidates_per_particle, options_.record_events,
+                    first_candidate_ptr);
                 ++block.visited;
                 block.candidates += outcome.candidates;
                 block.real_events += outcome.real_events;

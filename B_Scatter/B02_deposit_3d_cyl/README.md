@@ -1,6 +1,6 @@
 # B02_deposit_3d_cyl
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 3D cylindrical `(r, phi, z)` PIC charge-density and current-density deposition
 utilities. The implementation covers cylindrical node-volume normalization,

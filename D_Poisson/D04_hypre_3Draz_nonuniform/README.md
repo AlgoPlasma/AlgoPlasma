@@ -1,6 +1,6 @@
 # D04_hypre_3Draz_nonuniform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Nonuniform cylindrical `(r,alpha,z)` 3D Poisson solver. It uses the same HYPRE Struct/PFMG solve pattern as D03, but matrix coefficients come from local nonuniform mesh spacing.
 

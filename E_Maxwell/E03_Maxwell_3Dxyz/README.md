@@ -1,6 +1,6 @@
 # E03_Maxwell_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 3D Cartesian `(x,y,z)` Maxwell/FDTD kernels with standard Yee curl updates and a 3D CPML extension.
 

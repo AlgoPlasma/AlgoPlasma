@@ -1,6 +1,6 @@
 # D05_phi1d_to_phi3d
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Unpacks the 1D solution vector from the HYPRE Poisson solver into a 3D ghost-cell array, and performs MPI halo exchange for the phi field.
 

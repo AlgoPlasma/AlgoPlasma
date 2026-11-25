@@ -1,5 +1,7 @@
 # 007_gather
 
+[简体中文](README.zh-CN.md)
+
 Gather-related regression tests for `C_Gather`.
 
 The tests are split by module so each one can be built and run independently:

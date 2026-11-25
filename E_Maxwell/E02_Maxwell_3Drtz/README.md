@@ -1,6 +1,6 @@
 # E02_Maxwell_3Drtz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Full 3D cylindrical `(r,phi,z)` Maxwell/FDTD kernels retaining `phi` variation and updating all six field components.
 

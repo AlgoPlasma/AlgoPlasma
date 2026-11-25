@@ -1,0 +1,93 @@
+/* Shared last-loaded presentation typography: readable from a classroom seat. */
+.no-script, #toast.toast { font-size: 28px; font-weight: 600; }
+.lesson {
+  --muted: #e0ebe6;
+  --explanation-size: clamp(28px, 1.85vw, 34px);
+  --annotation-size: clamp(26px, 1.7vw, 32px);
+  height: auto;
+  min-height: 100svh;
+  grid-template-rows: minmax(88px, auto) minmax(min-content, 1fr) minmax(110px, auto);
+  font-weight: 600;
+}
+.lesson h1 { font-weight: 650; }
+.lesson .narration { font-size: clamp(28px, 2.15vw, 38px); color: #eef4f0; font-weight: 600; }
+.lesson .scene { min-height: 0; }
+.lesson .scene canvas { height: 0; min-height: 280px; flex: 1 0 280px; }
+.lesson figcaption { font-size: var(--explanation-size); font-weight: 600; line-height: 1.5; color: #e0ebe6; padding-top: 14px; }
+.lesson figcaption::before { content: "（"; }
+.lesson figcaption::after { content: "）"; }
+html[lang="en"] .lesson figcaption::before { content: "("; }
+html[lang="en"] .lesson figcaption::after { content: ")"; }
+.lesson .equation { font-size: clamp(30px, 2.5vw, 42px); font-weight: 600; }
+.lesson .equation small { display: block; margin: 6px 0 0; font-size: var(--annotation-size); font-weight: 600; line-height: 1.45; color: #e0ebe6; }
+.lesson .species, .lesson .species .ions, .lesson .scene-prompt { font-size: var(--annotation-size); color: #e0ebe6; font-weight: 600; }
+.lesson .species .ions { color: #bed5f0; }
+.lesson .species { flex-wrap: wrap; gap: 6px 24px; }
+.lesson .scene-prompt { top: 62px; bottom: auto; }
+.lesson[data-page="1"] .scene canvas { min-height: 320px; flex-basis: 320px; }
+.lesson .motion, .lesson .language-switch button, .lesson .page-navigation, .lesson .page-navigation #lesson-index { font-size: 22px; font-weight: 600; }
+.lesson .page-navigation { width: 400px; gap: 12px; }
+.lesson .page-navigation a[aria-disabled="true"] { opacity: .65; }
+.lesson .masthead { gap: 24px; }
+.lesson .header-actions { gap: 18px; }
+.lesson .stage-count, .lesson .keyboard-note { font-size: 22px; color: #e0ebe6; font-weight: 600; }
+.lesson .controls { padding: 18px 0; gap: 20px; }
+.lesson .advance { font-size: 25px; font-weight: 650; }
+.lesson .back { color: #e0ebe6; }
+.lesson .interaction, .lesson .range-control, .lesson .quiz-options button, .lesson .feedback { font-size: var(--annotation-size); font-weight: 600; }
+.lesson .takeaway > p:first-child { font-weight: 650; }
+.lesson .derivation-explanation, .lesson .derivation-unit, .lesson .derivation-limit,
+.lesson .standing-assumptions, .lesson .standing-units, .lesson .standing-explanation, .lesson .standing-nodes {
+  font-size: var(--annotation-size); font-weight: 600; color: #e0ebe6;
+}
+.lesson .derivation h2, .lesson .standing-component h2 { font-size: 28px; font-weight: 650; }
+.lesson .derivation-unit strong { font-weight: 650; }
+.lesson .derivation-math, .lesson .standing-math { font-size: clamp(28px, 2.25vw, 36px); font-weight: 600; }
+.lesson .derivation { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.lesson .math-group, .lesson .math-part { max-width: 100%; white-space: normal; }
+.complex-lesson .scene canvas { min-height: 360px; flex-basis: 360px; }
+@media (min-width: 1400px) and (min-height: 900px) {
+  .lesson { grid-template-rows: minmax(100px, auto) minmax(min-content, 1fr) minmax(120px, auto); }
+}
+@media (max-width: 1100px) {
+  .lesson .keyboard-note { display: none; }
+}
+@media (max-width: 900px) {
+  .lesson { grid-template-rows: minmax(140px, auto) minmax(min-content, 1fr) minmax(110px, auto); }
+  .lesson .masthead { gap: 4px 18px; }
+  .lesson .page-navigation { width: 100%; }
+  .lesson .scene { display: grid; grid-template-rows: 320px auto; flex: 0 0 auto; }
+  .lesson .scene canvas { height: 320px; min-height: 320px; }
+  .complex-lesson .scene { grid-template-rows: 720px auto; }
+  .complex-lesson .scene canvas { height: 720px; min-height: 720px; }
+  .complex-lesson[data-stage="0"] .scene { grid-template-rows: 320px auto; }
+  .complex-lesson[data-stage="0"] .scene canvas { height: 320px; min-height: 320px; }
+  .lesson .derivation { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
+  .no-script, #toast.toast { font-size: 24px; }
+  .lesson { --explanation-size: 24px; --annotation-size: 22px; }
+  .lesson .narration { font-size: 25px; }
+  .lesson .scene-prompt { top: 96px; }
+  .lesson .equation, .lesson .derivation-math, .lesson .standing-math { font-size: 27px; }
+  .lesson .motion, .lesson .language-switch button, .lesson .page-navigation, .lesson .page-navigation #lesson-index { font-size: 18px; }
+  .lesson .masthead { gap: 4px 8px; }
+  .lesson .header-actions { gap: 8px; }
+  .lesson .language-switch { gap: 6px; padding-left: 10px; }
+  .lesson .page-navigation { gap: 6px; }
+  .lesson .stage-count { font-size: 20px; }
+  .lesson .controls { gap: 12px; }
+  .lesson .progress { flex-wrap: wrap; max-width: 48px; row-gap: 5px; }
+  .lesson .progress-group { flex-shrink: 0; }
+  .lesson .actions { min-width: 0; }
+  .lesson .advance { font-size: 22px; padding: 12px 14px; gap: 10px; }
+  .lesson .back { flex-shrink: 0; }
+  .lesson .derivation h2, .lesson .standing-component h2 { font-size: 24px; }
+}
+@media print { .lesson { min-height: 0; } }
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ * 2026-11-20 21:40 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+ */

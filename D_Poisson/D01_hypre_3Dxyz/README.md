@@ -1,6 +1,6 @@
 # D01_hypre_3Dxyz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Earlier Cartesian 3D Poisson/HYPRE interface. The Fortran side calls a C-side HYPRE Struct solver through a bridge subroutine.
 

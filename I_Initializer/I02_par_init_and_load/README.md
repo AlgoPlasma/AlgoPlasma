@@ -1,6 +1,6 @@
 # I02_par_init_and_load
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `I02_par_init_and_load` provides an offline binary particle generator and an MPI
 loader workflow.

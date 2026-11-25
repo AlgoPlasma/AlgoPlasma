@@ -1,6 +1,6 @@
 # C_Gather
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 `C_Gather` contains grid-to-particle interpolation routines used in PIC-style
 particle loops. These routines evaluate grid-based field quantities or shape

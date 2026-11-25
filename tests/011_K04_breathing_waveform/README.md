@@ -1,8 +1,8 @@
 # 011_K04_breathing_waveform
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-Verify the [K04 numerical routines](../../K_Diagnostics/K04_breathing_waveform/README.en.md) with artificial data
+Verify the [K04 numerical routines](../../K_Diagnostics/K04_breathing_waveform/README.md) with artificial data
 and reproduce the 12 figures in the [learning page](../../docs/source/rst_files/K_Diagnostics/K04_breathing_waveform.rst)
 plus the 2 figures in the [compact-phase note](../../docs/source/knowledge/compact_phase.rst).
 This directory contains generators, example drivers, plotting scripts, 17 local tests and cleanup.

@@ -121,17 +121,18 @@ case_cpml_3d_cylindrical_wavepacket_ref
    CPML 的过程。图中的两条黑线标出 z 向 CPML 的内边界；波包穿过内边界后应快速衰减，且不应看到明显
    回传波前。动画适合做直观检查，定量反射水平仍以后面的 probe error 曲线为准。
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_plus.gif
-      :align: center
-      :width: 64%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``z_plus`` 方向的 ``sqrt(r) Ez`` 传播动画。
+      * - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_plus.gif
+             :width: 100%
+        - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_minus.gif
+             :width: 100%
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_minus.gif
-      :align: center
-      :width: 64%
+   ``z_plus`` 方向的 ``sqrt(r) Ez`` 传播动画。
 
-      ``z_minus`` 方向的 ``sqrt(r) Ez`` 传播动画。
+   ``z_minus`` 方向的 ``sqrt(r) Ez`` 传播动画。
 
    第二张图是 ``z_plus`` 和 ``z_minus`` 的 probe error 曲线。曲线比较 compact 域和 reference 域的
    probe 差异，dB 值越负说明 late reflection 越小。该图只评价 z 向两端 CPML 的反射水平。
@@ -275,17 +276,18 @@ case_cpml_3d_cylindrical_wavepacket_ref
    Use the animations as a visual sanity check; the probe-error curves below
    remain the quantitative reflection metric.
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_plus.gif
-      :align: center
-      :width: 64%
+   .. list-table::
+      :class: ap-triptych
+      :widths: 50 50
 
-      ``sqrt(r) Ez`` propagation animation for ``z_plus``.
+      * - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_plus.gif
+             :width: 100%
+        - .. image:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_minus.gif
+             :width: 100%
 
-   .. figure:: ../../images/tests/005_maxwell/cpml_wavepacket/3d_cylindrical_ez_animation_z_minus.gif
-      :align: center
-      :width: 64%
+   ``sqrt(r) Ez`` propagation animation for ``z_plus``.
 
-      ``sqrt(r) Ez`` propagation animation for ``z_minus``.
+   ``sqrt(r) Ez`` propagation animation for ``z_minus``.
 
    The second figure gives probe-error curves for ``z_plus`` and ``z_minus``.
    It compares compact and reference probe signals; more negative dB values mean

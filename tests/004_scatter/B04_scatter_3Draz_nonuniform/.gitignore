@@ -1,0 +1,4 @@
+/build/
+# Historical local result snapshots stay outside version control.
+/results/
+/*.log

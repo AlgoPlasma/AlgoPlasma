@@ -34,4 +34,10 @@ MPI
    mpi.hpp <mpi>
    fun_G02_mcc_mpi.cpp <fun_G02_mcc_mpi>
 
-:doc:`返回 G02 / Back to G02 <../G02_MCC_network>`
+.. container:: ap-lang ap-lang-zh
+
+   :doc:`返回 G02 <../G02_MCC_network>`
+
+.. container:: ap-lang ap-lang-en
+
+   :doc:`Back to G02 <../G02_MCC_network>`

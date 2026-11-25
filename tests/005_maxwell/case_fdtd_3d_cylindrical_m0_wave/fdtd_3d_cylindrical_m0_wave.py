@@ -122,7 +122,12 @@ def run_fdtd_3d_cylindrical_waveguide():
     plt.gca().set_aspect("equal", adjustable="box")
     plt.xlabel("x (m)")
     plt.ylabel("y (m)")
-    plt.title("3D Cylindrical FDTD Circular Waveguide Mode at 10 GHz (|Ez| slice)")
+    plt.title(
+        "3D Cylindrical FDTD Circular Waveguide Mode at 10 GHz (|Ez| slice)",
+        fontsize=20,
+        fontfamily="Liberation Sans Narrow",
+        x=0.45,
+    )
     cbar = plt.colorbar(im, pad=0.02)
     cbar.set_label("|Ez| (a.u.)")
     plt.tight_layout()

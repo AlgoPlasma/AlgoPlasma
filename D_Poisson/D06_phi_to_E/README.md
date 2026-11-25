@@ -1,6 +1,6 @@
 # D06_phi_to_E
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
 Computes the three electric field components from the electrostatic potential using second-order central differences (E = -∇φ, dx = dy = dz = 1).
 
