@@ -100,23 +100,80 @@ J01 Free Molecular
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   J01 estimates steady neutral fields from independent collisionless particle histories.
-   It uses Monte Carlo sampling for inlet positions, inlet velocities and diffuse wall reflection.
-   The outputs are cell density, residence-weighted mean velocities, internal face fluxes,
-   and outgoing physical-boundary fluxes.
+   J01 estimates steady neutral gas fields from independent particle histories. Free molecular (FM)
+   transport assumes particles fly without intermolecular collisions. Monte Carlo (MC) sampling determines
+   the inlet position and velocity and the outgoing velocity after diffuse reflection.
 
-   The running problem is an annular r-z channel with an open lower inlet, an open upper outlet
-   and reflecting radial walls. The lower inlet also allows reverse escape.
-   The current inlet is a truncated drifted normal distribution of incoming particles.
-   Walls mix specular and flux-weighted thermal reflection. There are no volume sources,
-   volume losses, adsorption, or intermolecular collisions.
+   For a continuous supply at a prescribed injection rate, how long do particles stay in each cell, what is
+   their mean velocity there, and how many cross each face? J01 returns cell densities, cell-averaged
+   velocities and face fluxes. Each history has its own clock.
 
-   A history carries a steady injection rate, not a PIC macro-particle population.
-   Its residence time times that rate contributes to the steady particle inventory.
-   Signed crossings provide face fluxes independently of cell velocity moments.
+   .. rubric:: The channel used throughout this chapter
 
-   Read Module and Data, Inlet Sampling, Wall Reflection, Particle Tracking, Field Estimators,
-   then Complete Calculation. The six pages map to the module and its five included files.
-   The current model uses straight r-z paths with two velocity components and cylindrical measures,
-   not full axisymmetric three-velocity dynamics. Histories are currently serial and share
-   the Fortran runtime random state.
+   Consider an annular channel with :math:`r_a<r<r_b`, :math:`0<z<L` and :math:`r_a>0`. Particles enter at
+   the lower axial end. Both axial ends are open, so particles can escape through either, and both radial
+   walls reflect. The example starts with uniform injection across the entire lower end. The sampling page
+   also treats inlets that cover part of an open face.
+
+   .. figure:: ../../images/J_Fluid/fm_history_en.svg
+      :alt: A particle enters at the lower end, flies through cells in straight segments, changes velocity at a wall and exits through an open boundary.
+      :width: 900px
+
+      One history includes all segments from injection to escape, including segments after a wall collision.
+
+   The inputs are inlet temperature :math:`T_{\mathrm{in}}`, axial drift :math:`U_z`, supply parameter
+   :math:`n_{\mathrm{in}}`, particle mass :math:`M`, wall temperature :math:`T_{\mathrm w}` and diffuse
+   fraction :math:`d`. The inlet samples a drifting normal velocity distribution truncated to
+   :math:`v_z>0`. A wall collision gives thermal diffuse reflection with probability :math:`d` and specular
+   reflection otherwise. The calculation omits volume sources and losses, adsorption and intermolecular
+   collisions. A finite steady state requires escape; a sealed channel with continuous injection has no
+   such steady state.
+
+   .. rubric:: From a single history to steady density
+
+   Each history represents a continuous injection rate :math:`\dot w`. If it spends :math:`\tau` seconds in
+   cell :math:`K`, it contributes :math:`\dot w\tau` particles to the steady population. Divide the sum
+   over histories by the cell volume to obtain density. Use signed face crossings for flux; the cell mean
+   velocity alone cannot recover it.
+
+   The driver finishes one history before sampling the next. Increasing the number of histories increases
+   the sample size without advancing a shared physical clock.
+
+   .. rubric:: Reading the implementation
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 24 38 38
+
+      * - Page
+        - Calculation
+        - Source file
+      * - 01 Module and Data
+        - Grid, face types, particle state, inlet data and tally arrays
+        - ``mod_J01_neutral_free_molecular_2Drz.f90``
+      * - 02 Inlet Sampling
+        - Injection area and rate, position distribution and velocity distribution
+        - ``sub_J01_fm_sampling.f90``
+      * - 03 Wall Reflection
+        - Sampling rules for specular and thermal diffuse reflection
+        - ``sub_J01_fm_reflection.f90``
+      * - 04 Particle Tracking
+        - Time to the next face, internal crossings, wall hits, escape and corners
+        - ``sub_J01_fm_trajectory.f90``
+      * - 05 Field Estimators
+        - Conversion of residence times and crossings into physical fields
+        - ``sub_J01_fm_statistics.f90``
+      * - 06 Complete Calculation
+        - Assemble the calculation, check the result and return reference fields
+        - ``sub_J01_free_molecular_mc_2Drz.f90``
+
+   .. rubric:: Limits of the motion model
+
+   The particle moves along a straight line within each cell, with :math:`\mathrm dr/\mathrm dt=v_r` and
+   :math:`\mathrm dz/\mathrm dt=v_z`. The two velocity components change only at walls. Inlet areas and
+   cell volumes use cylindrical geometry; the motion omits azimuthal velocity and its inertial effects.
+
+   The history loop is serial and uses the Fortran runtime's random state. The code provides neither
+   independent per-thread streams nor spatial partition communication. To change inlet sampling or wall
+   reflection, modify the corresponding implementation file and ensure the statistical weights match the
+   new model.

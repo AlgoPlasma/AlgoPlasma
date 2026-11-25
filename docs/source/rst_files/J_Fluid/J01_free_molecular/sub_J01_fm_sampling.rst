@@ -176,39 +176,171 @@ Inlet Sampling
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   This file prepares an area-weighted lower-boundary inlet and samples independent incoming histories.
-   For each active open z-low face, intersect its radial interval with the specified injection bounds:
+   ``sub_J01_fm_sampling.f90`` first determines the inlet area and total particle rate. For each history it
+   then draws an initial position and velocity. Inlet preparation runs once and sampling runs once per
+   history.
+
+   The inlet velocity distribution describes particles that have crossed the inlet. Each history draws its
+   initial velocity from that distribution.
+
+   .. rubric:: 1. Locating the injection area
+
+   Injection takes place at :math:`z=z_1`, the lower axial boundary of the first row of cells
+   (:math:`k=1`). For each active cell with an open lower face, intersect the face with the prescribed
+   radial range :math:`[r_{\mathrm{in,lo}},r_{\mathrm{in,hi}}]`:
 
    .. math::
 
-      A_i=\Theta(b_i^2-a_i^2)/2,\quad P(i)=A_i/A_{\mathrm{in}},\quad
-      r=\sqrt{a_i^2+\xi(b_i^2-a_i^2)}.
+      a_i=\max(r_i,r_{\mathrm{in,lo}}),\qquad
+      b_i=\min(r_{i+1},r_{\mathrm{in,hi}}).
 
-   Injection bounds do not change face topology: the remainder of an OPEN face is still open to escape.
-   Use aligned grid faces if the remainder must reflect.
-
-   Incoming velocities are independent radial normal and positive-truncated axial normal samples:
+   If :math:`b_i\le a_i` the segment contributes no inlet area. Otherwise,
 
    .. math::
 
-      v_r=\sigma Z_1,\quad v_z=U_z+\sigma Z_2>0,\quad
-      \sigma^2=k_{\mathrm B}T_{\mathrm{in}}/M.
+      A_i=\int_{a_i}^{b_i}\Theta r\,\mathrm dr
+          =\frac{\Theta}{2}(b_i^2-a_i^2),\qquad
+      A_{\mathrm{in}}=\sum_i A_i.
 
-   This is a distribution of particles crossing the inlet, not reservoir Maxwellian flux sampling.
-   The supply convention is
+   Inactive cells and closed faces have :math:`A_i=0`. An inlet can span multiple faces. The module stores
+   the intersections, so the inlet endpoints need not coincide with grid edges.
+
+   The interval restricts injection position only; it does not change ``face_type``. If only the middle of
+   an open face injects, a particle returning anywhere on that face still escapes. To model a central
+   opening flanked by reflecting walls, align grid edges with the opening and label faces individually, or
+   extend the tracker to resolve within-face boundaries.
+
+   .. rubric:: 2. Sampling uniform injection per unit area
+
+   Uniform supply gives equal incident rates per unit physical area. Select a segment with probability
+   :math:`P(i)=A_i/A_{\mathrm{in}}`. The code draws :math:`\xi_1\in[0,1)` and selects the first nonzero
+   segment whose cumulative area reaches :math:`\xi_1 A_{\mathrm{in}}`.
+
+   On the selected interval :math:`[a_i,b_i]` the radial density and cumulative probability are
 
    .. math::
 
-      \overline v_z^+=U_z+\sigma\frac{\varphi(U_z/\sigma)}{\Phi(U_z/\sigma)},\quad
-      J_{\mathrm{in}}=n_{\mathrm{in}}\overline v_z^+,\quad
-      \dot w=A_{\mathrm{in}}J_{\mathrm{in}}/N_{\mathrm{hist}}.
+      p_r(r\mid i)=\frac{2r}{b_i^2-a_i^2},\qquad
+      F_r(r\mid i)=\frac{r^2-a_i^2}{b_i^2-a_i^2}.
 
-   ``sub_J01_prepare_fm_inlet`` takes geometry, bounds, mass, temperature, drift,
-   supply density and history count; it outputs the inlet structure, history_rate and ierr.
-   ``sub_J01_sample_fm_inlet`` takes the prepared inlet, z_start and the same drift,
-   and outputs r,z,ur,uz without an error status.
+   Setting :math:`F_r=\xi_2` and inverting gives
 
-   ``fun_J01_standard_normal`` returns a Box–Muller sample.
-   ``sub_J01_set_random_seed`` changes the runtime random state.
-   Extreme negative drift makes rejection sampling inefficient and the conditional-mean formula ill-conditioned.
-   The sampling loop has no rejection limit. Low-level callers must supply valid finite inputs.
+   .. math::
+
+      r=\sqrt{a_i^2+\xi_2(b_i^2-a_i^2)}.
+
+   Thus :math:`r^2` is uniform, while :math:`r` has the density above. The caller supplies ``z_start``. The
+   driver uses :math:`z_1+\varepsilon_z`, just inside the domain.
+
+   .. rubric:: 3. Inlet velocity distribution
+
+   For particle mass :math:`M`, inlet temperature parameter :math:`T_{\mathrm{in}}` and axial drift
+   :math:`U_z`, the velocity standard deviation is
+
+   .. math::
+
+      \sigma_{\mathrm{in}}=\sqrt{\frac{k_{\mathrm B}T_{\mathrm{in}}}{M}},
+      \qquad k_{\mathrm B}=1.380649\times10^{-23}\,\mathrm{J\,K^{-1}}.
+
+   There is no radial drift. Draw independent standard normal variates :math:`Z_1,Z_2` and set
+
+   .. math::
+
+      v_r=\sigma_{\mathrm{in}}Z_1,\qquad
+      v_z=U_z+\sigma_{\mathrm{in}}Z_2,
+      \quad\text{accept only }v_z>0.
+
+   If the axial velocity is nonpositive, redraw only that component. This procedure samples the normalized
+   density on the incident half-plane,
+
+   .. math::
+
+      p_{\mathrm{in}}(v_r,v_z)=
+      \frac{\exp[-(v_r^2+(v_z-U_z)^2)/(2\sigma_{\mathrm{in}}^2)]}
+           {2\pi\sigma_{\mathrm{in}}^2\Phi(U_z/\sigma_{\mathrm{in}})}
+           \,\boldsymbol 1_{v_z>0},
+
+   .. math::
+
+      \varphi(x)=\frac{e^{-x^2/2}}{\sqrt{2\pi}},\qquad
+      \Phi(x)=\int_{-\infty}^{x}\varphi(y)\,\mathrm dy
+             =\frac{1+\operatorname{erf}(x/\sqrt2)}{2}.
+
+   The indicator :math:`\boldsymbol1_{v_z>0}` restricts the density to positive axial velocities. The
+   denominator :math:`\Phi` is the probability that the untruncated Gaussian falls in the incident
+   half-plane, so division by it normalizes the conditional distribution.
+
+   J01 samples the truncated normal distribution of incident particles directly, without an additional
+   :math:`v_z` weight. If the supplied distribution :math:`g` instead described the gas outside the inlet,
+   crossings would have relative probability :math:`v_zg`.
+
+   .. rubric:: 4. Particle rate represented by one history
+
+   The interface sets the supply strength through ``inlet_density``, denoted :math:`n_{\mathrm{in}}`. First
+   calculate the mean axial velocity of the incoming particles:
+
+   .. math::
+
+      \overline v_z^+
+        =\int_{v_z>0}v_zp_{\mathrm{in}}\,\mathrm dv_r\,\mathrm dv_z
+        =U_z+\sigma_{\mathrm{in}}
+          \frac{\varphi(U_z/\sigma_{\mathrm{in}})}
+               {\Phi(U_z/\sigma_{\mathrm{in}})}.
+
+   The interface then defines
+
+   .. math::
+
+      J_{\mathrm{in}}=n_{\mathrm{in}}\overline v_z^+,\qquad
+      Q_{\mathrm{in}}=A_{\mathrm{in}}J_{\mathrm{in}},\qquad
+      \dot w=\frac{Q_{\mathrm{in}}}{N_{\mathrm{hist}}}.
+
+   :math:`J_{\mathrm{in}}` is incident flux per unit area, :math:`Q_{\mathrm{in}}` is the total particle
+   rate and :math:`\dot w` is returned as ``history_rate`` in :math:`\mathrm{s^{-1}}`. The weight is a
+   rate. If the application specifies :math:`Q_{\mathrm{in}}` first, invert these relations to obtain the
+   input :math:`n_{\mathrm{in}}`.
+
+   The supply parameter differs from the gas density obtained by integrating a boundary distribution. The
+   gas-side distribution corresponding to these incoming-particle statistics is
+   :math:`f_{\mathrm{in}}=J_{\mathrm{in}}p_{\mathrm{in}}/v_z`. Near-grazing, slow particles can have long
+   residence times, so even if all histories escape the density estimate may need more samples.
+
+   .. rubric:: 5. Inputs and outputs of inlet preparation
+
+   ``sub_J01_prepare_fm_inlet``:
+
+   - Supply ``r_edge``, ``active``, ``face_type``, ``theta_span`` and the radius bounds
+     ``inlet_r_lo/inlet_r_hi`` in metres. See Module and Data for array shapes.
+   - Supply ``neutral_mass`` (kg), ``inlet_temperature`` (K), ``inlet_drift_z`` (m/s), ``inlet_density``
+     (m⁻³) and a positive integer ``n_histories``.
+   - The routine allocates the segment arrays in ``inlet`` and stores inlet areas, radial intervals and the
+     velocity standard deviation.
+   - It returns ``history_rate`` and ``ierr``. Zero available injection area is a configuration error. The
+     routine also checks positive mass, temperature and angular span, nonnegative supply strength and array
+     shapes.
+   - Direct callers must also provide increasing edges, finite inputs and valid face connectivity. The
+     routine does not repeat all driver checks.
+
+   .. rubric:: 6. Sampling and random-number routines
+
+   ``sub_J01_sample_fm_inlet``:
+
+   - Supply the prepared ``inlet``, ``z_start`` and the same ``inlet_drift_z`` used during preparation.
+   - The four scalar outputs are ``r,z,ur,uz``; the last two are the components :math:`v_r,v_z` used here.
+   - ``inlet`` is read-only. There is no ``ierr`` argument. Complete the preparation first and ensure the
+     initial position lies inside the domain.
+
+   ``fun_J01_standard_normal`` takes no explicit arguments and returns one standard normal variate using
+   the Box–Muller transform:
+
+   .. math::
+
+      Z=\sqrt{-2\ln\xi_1}\cos(2\pi\xi_2).
+
+   The logarithm argument is bounded below by ``tiny(1.0)`` to avoid :math:`\ln0`.
+   ``sub_J01_set_random_seed(seed_value)`` sets the runtime random state from an integer seed and has no
+   numerical output. Different compilers can produce different sequences.
+
+   For a large negative drift, :math:`\Phi(U_z/\sigma_{\mathrm{in}})` is small. Rejection sampling is then
+   slow and the mean velocity formula is susceptible to cancellation. The sampler has no retry limit and is
+   unsuitable for extreme negative drift.

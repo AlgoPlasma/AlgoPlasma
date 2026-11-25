@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="530" viewBox="0 0 1000 530" role="img" aria-labelledby="title desc">
+<title id="title">Neutral transport and density evolution</title>
+<desc id="desc">Geometry, inlet, walls, outlet and volume loss define the problem. Choose FM or SN to generate reference densities and face fluxes. J03 builds the closure and advances the current density.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#38677b"/></marker></defs>
+<rect width="1000" height="530" fill="#fff"/>
+<g font-family="Arial, sans-serif" text-anchor="middle" fill="#163749">
+<text x="500" y="30" font-size="23">Define the problem, then choose a reference-field solver</text>
+<g fill="#edf4f8" stroke="#849fb1" stroke-width="1.5">
+<rect x="25" y="52" width="210" height="85" rx="8"/><rect x="270" y="52" width="210" height="85" rx="8"/>
+<rect x="515" y="52" width="210" height="85" rx="8"/><rect x="760" y="52" width="215" height="85" rx="8"/>
+</g>
+<g font-size="21">
+<text x="130" y="86">Geometry and cells</text><text x="375" y="86">Inlet model</text>
+<text x="620" y="86">Walls and outlets</text><text x="867" y="86">Volume loss</text>
+</g>
+<g font-size="17">
+<text x="130" y="115">Cell volumes, face areas</text><text x="375" y="115">Distribution, location, rate</text>
+<text x="620" y="115">Reflection, external inflow</text><text x="867" y="115">Where supported</text>
+</g>
+<g fill="none" stroke="#38677b" stroke-width="2">
+<path d="M130 137V166H867V137M375 137V166M620 137V166M300 166V206" marker-end="url(#arrow)"/>
+<path d="M700 166V206" marker-end="url(#arrow)"/>
+</g>
+<rect x="100" y="210" width="390" height="94" rx="8" fill="#e7f5f1" stroke="#4c9380"/>
+<rect x="510" y="210" width="390" height="94" rx="8" fill="#e7f5f1" stroke="#4c9380"/>
+<text x="295" y="241" font-size="22">J01: particle histories</text><text x="705" y="241" font-size="22">J02: discrete ordinates</text>
+<text x="295" y="270" font-size="18">Sample → track → tally time and crossings</text>
+<text x="705" y="270" font-size="18">Discrete velocities → cell solves → moments</text>
+<text x="500" y="194" font-size="17">Choose the applicable transport model</text>
+<g fill="none" stroke="#38677b" stroke-width="2">
+<path d="M295 304V330H500V351" marker-end="url(#arrow)"/><path d="M705 304V330H500"/>
+</g>
+<rect x="180" y="355" width="640" height="58" rx="8" fill="#edf4f8" stroke="#849fb1"/>
+<text x="500" y="379" font-size="20">Reference density, internal fluxes, boundary inflow and outflow</text>
+<text x="500" y="401" font-size="16">Pass the inflow and outflow to J03 as separate arrays.</text>
+<path d="M500 414V443" fill="none" stroke="#38677b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="180" y="447" width="640" height="65" rx="8" fill="#fff4e7" stroke="#b99562"/>
+<text x="500" y="474" font-size="21">J03: build face coefficients → compute fluxes → advance density</text>
+<text x="500" y="500" font-size="17">The application supplies time, inlet data, volume sources and losses at each step.</text>
+</g></svg>

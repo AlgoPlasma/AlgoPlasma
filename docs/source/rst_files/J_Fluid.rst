@@ -77,21 +77,60 @@ J_Fluid
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   J_Fluid supplies neutral reference fields and density evolution for applications.
-   Charged-particle pushing, electromagnetic fields, and reaction-rate models remain outside this group.
+   J_Fluid computes reference fields and evolves the density of a neutral gas.
+   In a particle-in-cell (PIC) application, the collision module can use this neutral density.
+   Other modules advance charged particles, compute electromagnetic fields and supply reaction rates.
 
-   Read one complete reference-field route, including its local geometry, indexing and signs,
-   followed by J03 for transient density evolution. J01 and J02 are alternatives, not successive stages.
-   Existing reference arrays can be passed directly to J03.
+   .. rubric:: How the modules fit together
 
-   - J01: inlet sampling, wall reflection, particle histories, residence and crossing estimators.
-   - J02: velocity quadrature, boundary distributions, DG equations, sweeps, iteration and reconstruction.
-   - J03: reference-field closure, current fluxes, physical-time steps, balance diagnostics and an optional steady solver.
+   Neutrals enter through an inlet, travel through the domain, reflect at walls and leave through an outlet.
+   Computing a reference field requires the velocity distribution. Once a reference field is available,
+   the continuity equation can advance the density.
 
-   The current kinetic preprocessors retain only r,z and two velocity components.
-   Cylindrical measures do not provide full axisymmetric three-velocity dynamics.
-   J03 evolves scalar density and never reruns a preprocessor.
+   .. figure:: ../images/J_Fluid/model_pipeline_en.svg
+      :alt: Geometry and physical inputs feed either reference-field solver. J03 derives face transport coefficients and advances the current density.
+      :width: 900px
 
-   Compile module files with preprocessing, not their included implementation files.
-   Use one real precision consistently. Detailed tests and results belong to
-   :doc:`Tests / 012_fluid </tests/012_fluid/index>`, separate from the algorithm documentation.
+      Choose one of the two reference-field solvers. The continuity solver receives field arrays
+      and can use the output of either solver through the same interface.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 24 44 32
+
+      * - Chapter
+        - Topics
+        - What you can compute
+      * - J01 Free Molecular
+        - Inlet sampling, wall reflection, particle tracking, residence time and face crossings
+        - Reference density and flux from independent particle histories
+      * - J02 Discrete Ordinates
+        - Velocity quadrature, boundary distributions, cell equations, sweeps and reflection iteration
+        - Reference density and flux from the distribution at discrete velocities
+      * - J03 Continuity
+        - Reference-field closure, current fluxes, transient stepping, balance and the optional steady solver
+        - A density history from a prescribed initial state and a complete sequence of solver calls
+
+   On a first reading, follow one reference-field solver through to its outputs, then read J03.
+   Each chapter introduces the grid, array locations and flux conventions where it uses them.
+   If you already have reference density and flux arrays that satisfy the interface, start with J03.
+
+   .. rubric:: Model scope and source layout
+
+   Both reference-field solvers retain :math:`r,z` and :math:`v_r,v_z`.
+   They use cylindrical areas and volumes and omit azimuthal velocity dynamics.
+   Each chapter describes its own equations of motion, boundary models and assumptions.
+
+   J03 advances cell density. It uses the supplied reference field throughout the calculation.
+   If the inlet velocity distribution, wall temperature or transport conditions change appreciably,
+   the application must decide whether that field still applies.
+
+   The ``mod_*.f90`` files define types and constants and include the implementation files after
+   ``contains``. Compile each module once with its included ``sub_*.f90`` files and use the same real precision in every caller.
+   Each chapter explains the purpose and arguments of its procedures.
+
+   .. rubric:: Algorithm documentation and tests
+
+   This directory describes the models, equations, interfaces and assembly sequence.
+   :doc:`Tests / 012_fluid </tests/012_fluid/index>` gives the commands, assertions, errors and result
+   plots for the tests. The small examples in these chapters illustrate how the algorithms work.

@@ -284,55 +284,284 @@ Spatial MPI Partition
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   ``sub_J02_sn_partition.f90`` defines spatial ownership and collective validation.
-   MPI distributes rectangular r-z blocks; each rank retains all velocity nodes.
-   OpenMP threads work inside each rank. Open MPI is an MPI implementation, not OpenMP.
+   ``sub_J02_sn_partition.f90`` records each rank's spatial region, connects faces between ranks, and collectively checks inputs.
+   This page covers grid partitioning and local input preparation. The next explains communication and
+   solution. The physical model and DG cell equations are those on pages 01–12.
 
-   .. rubric:: Ownership and initialization
+   Processes own separate arrays and memory. A process obtains another process's data through MPI
+   messages. Threads within a process can share the mesh and boundary arrays. OpenMP distributes
+   different discrete velocities among those threads.
 
-   Call ``sub_J02_initialize_partition(communicator, global_shape, partition, ierr, first, count)``
-   collectively on an application-owned, nonperiodic 2D Cartesian communicator
-   created with the integer ``use mpi`` interface. Topology directions are r then z.
-   ``global_shape(2)`` is identical on every rank; optional ``first/count`` must be supplied together.
-   They specify one-based global cell starts and positive local cell counts.
-   Without them, each axis uses
+   For example, on a single domain four threads can share 192 velocities, but each velocity still
+   traverses the complete grid. MPI divides the grid into spatial regions. A rank solves only its local
+   cells and receives off-block upstream data from its neighbors. A hybrid run combines spatial and
+   velocity parallelism.
+
+   Open MPI is one implementation of the MPI communication standard. OpenMP provides the separate
+   thread-based parallelism within a process.
+
+   .. rubric:: 1. Spatial partitions and local arrays
+
+   Partition the global :math:`N_r\times N_z` mesh into :math:`P_r\times P_z` rectangular blocks. Each rank stores its local cells and
+   retains all :math:`N_{\mathrm{dir}}` velocities. Given a block starting at :math:`(I_0,K_0)` with cell counts :math:`(n_r,n_z)`, the indices satisfy
 
    .. math::
 
-      F_a=\left\lfloor N_aq_a/P_a\right\rfloor+1,\qquad
-      C_a=\left\lfloor N_a(q_a+1)/P_a\right\rfloor-F_a+1.
+      I=I_0+i-1,\qquad K=K_0+k-1,\qquad
+      1\leq i\leq n_r,\quad 1\leq k\leq n_z.
 
-   Custom blocks must tile the grid without overlap or gaps and have matching transverse extents.
-   Rank reordering is supported. J02 borrows the communicator and never initializes or finalizes MPI.
-   Read but do not modify the returned metadata: ``comm/rank/n_ranks``, ``dims/coords``,
-   ``global_shape/first/count``, ``neighbor(4)``, and ``real_type``.
+   :math:`(I,K)` are global cell indices and :math:`(i,k)` are local array indices passed to J02. Local edges still use their
+   physical coordinates: in particular, keep each block's true starting radius.
 
-   Local arrays contain owned cells only: ``psi(3,nr,nz,n_dir)``, ``sigma_t(nr,nz,n_dir)``
-   and cell fields ``(nr,nz)``. Coordinate arrays have ``nr+1`` or ``nz+1`` physical edge values;
-   no caller-provided ghosts or global field replication is required.
-   Global indices are local indices plus ``first-1``.
+   Consider a grid of :math:`8\times6` cells on :math:`2\times2` process blocks:
 
-   .. rubric:: Physical boundaries versus process interfaces
+   .. list-table::
+      :header-rows: 1
+      :widths: 18 24 28 30
 
-   Call ``sub_J02_initialize_boundary_types`` collectively with ``partition``.
-   Matching active neighbors become REMOTE, inactive neighbors form WALL, and physical exterior
-   faces default to OPEN. Local active neighbors remain INTERIOR.
-   Only overwrite actual physical boundary faces afterwards.
+      * - Block
+        - Partition coordinates
+        - Global cell range
+        - Local start and size
+      * - A (lower left)
+        - :math:`(0,0)`
+        - :math:`I=1\ldots4,\ K=1\ldots3`
+        - ``first=[1,1]``, ``count=[4,3]``
+      * - B (lower right)
+        - :math:`(1,0)`
+        - :math:`I=5\ldots8,\ K=1\ldots3`
+        - ``first=[5,1]``, ``count=[4,3]``
+      * - C (upper left)
+        - :math:`(0,1)`
+        - :math:`I=1\ldots4,\ K=4\ldots6`
+        - ``first=[1,4]``, ``count=[4,3]``
+      * - D (upper right)
+        - :math:`(1,1)`
+        - :math:`I=5\ldots8,\ K=4\ldots6`
+        - ``first=[5,4]``, ``count=[4,3]``
 
-   Partial z-low inlet intervals belong only to ranks with ``first(2)==1``.
-   Intersect the global inlet band with the local radial range before calling the local geometry helper;
-   use zero fractions/intervals for an empty intersection.
-   Normalize a specified global particle rate with the globally summed inlet area, not each block's area.
-   The compact ``zlo_inflow`` may be supplied everywhere: the solver suppresses it away from global z-low.
+   Each process uses local indices :math:`i=1\ldots4,\ k=1\ldots3`. For example, local cell :math:`(1,1)` of block D is global cell :math:`(5,4)`. With
+   192 velocities, the local distribution has shape ``psi(3,4,3,192)`` and contains all velocities for one quarter of
+   the spatial cells.
 
-   .. rubric:: Collective contract
+   .. list-table::
+      :header-rows: 1
+      :widths: 32 28 40
 
-   Every rank enters the same solve in the same order, including wholly inactive blocks.
-   Quadrature and stopping options must agree. Hybrid builds require MPI main-thread calls
-   and at least ``MPI_THREAD_FUNNELED``. Use a dedicated communicator and do not overlap solves
-   on it. MPI real types match the default real width; all linked sources must use consistent precision.
+      * - Input or output
+        - Local shape
+        - Data held on each rank
+      * - ``mesh%r_edge/z_edge``
+        - ``nr+1`` / ``nz+1``
+        - All edges of the local cells; coordinates on shared block boundaries must agree
+      * - ``mesh%active``, density, and velocity
+        - ``(nr,nz)``
+        - Local cells only; the caller need not add ghost cells for neighbor data
+      * - ``sigma_t``
+        - ``(nr,nz,n_dir)``
+        - Loss coefficients for every local cell and discrete velocity
+      * - ``psi``
+        - ``(3,nr,nz,n_dir)``
+        - Three spatial coefficients per local cell and velocity
+      * - ``boundary_inflow``
+        - ``(4,nr,nz,n_dir)``
+        - Prescribed inflow at physical inlets and open outlets. Partition-interface data are stored
+          separately.
+      * - ``partition_flux``
+        - ``(4,nr,nz)``
+        - Coordinate-directed flux on this block's REMOTE faces; zero elsewhere
 
-   Supported layouts are nonperiodic conforming rectangular blocks with positive cell counts and
-   arbitrary local active masks. Periodic cycles, nonconforming grids, adaptive repartitioning and
-   zero-cell ranks are unsupported. Numerical/input errors return collectively; genuine MPI
-   communication errors abort the communicator rather than providing process-failure recovery.
+   J02 allocates its communication buffers internally. Storage for the two iteration fields scales with
+   local cell count. The coefficient buffers scale with block perimeter times the number of velocities.
+   Supply each rank with its local arrays.
+
+   .. rubric:: 2. Partition initialization and arguments
+
+   A communicator identifies the processes participating in a solve. A two-dimensional Cartesian
+   communicator also assigns logical coordinates to each process so it can find its radial and axial
+   neighbors. The process topology leaves the cylindrical physical model intact.
+
+   The application initializes MPI and creates the nonperiodic communicator. All participating ranks
+   then call ``sub_J02_initialize_partition``. This collective call lets each rank supply local information and complete the checks
+   together.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 25 18 57
+
+      * - Argument
+        - Intent
+        - Description
+      * - ``communicator``
+        - Input
+        - Integer communicator from the ``use mpi`` interface. Its two topology dimensions are ordered r, z.
+      * - ``global_shape(2)``
+        - Input
+        - Global cell counts ``[N_r,N_z]``, equal across ranks. Each direction must allow at least one cell per
+          block.
+      * - ``first(2), count(2)``
+        - Optional inputs
+        - Provide both the global start and cell counts for this rank, or omit both for a balanced
+          partition.
+      * - ``partition``
+        - Output
+        - Communicator, neighbors, topology coordinates, local cell range, and MPI datatype matching
+          default ``real``
+      * - ``ierr``
+        - Output
+        - Zero for success. Use ``fun_J02_error_message`` for other codes.
+
+   The default partition distributes cells as evenly as possible along each coordinate. Let :math:`(q_r,q_z)` be the
+   rank's zero-based logical coordinates. The global starting indices and local counts are
+
+   .. math::
+
+      \begin{aligned}
+      I_0&=\left\lfloor\frac{N_rq_r}{P_r}\right\rfloor+1,&
+      n_r&=\left\lfloor\frac{N_r(q_r+1)}{P_r}\right\rfloor-I_0+1,\\
+      K_0&=\left\lfloor\frac{N_zq_z}{P_z}\right\rfloor+1,&
+      n_z&=\left\lfloor\frac{N_z(q_z+1)}{P_z}\right\rfloor-K_0+1.
+      \end{aligned}
+
+   Floor division assigns each cell exactly once. When the counts are not divisible, block sizes along
+   a direction differ by at most one. Topology coordinates are distinct from rank numbers. The code
+   queries the communicator for neighbors; rank numbering need not increase to the right or upward.
+   With explicit ``first/count``, blocks must cover the mesh without overlaps or gaps and neighbors must agree on
+   their tangential index ranges.
+
+   Fields of ``sn_partition_type``:
+
+   - ``comm, rank, n_ranks``: borrowed communicator, rank, and communicator size.
+   - ``dims(2), coords(2)``: process grid dimensions and zero-based topology coordinates.
+   - ``global_shape(2), first(2), count(2)``: global grid size and this block's start and counts.
+   - ``neighbor(4)``: neighbors ordered r-low, r-high, z-low, z-high. At physical outer boundaries the neighbor is
+     ``MPI_PROC_NULL``.
+   - ``real_type``: MPI datatype matching default real precision in this build.
+
+   The application treats the initialized partition fields as read-only. It owns the communicator and
+   handles ``MPI_Init``, ``MPI_Finalize``, and communicator cleanup. J02 initializes its partition
+   metadata without copying the global grid.
+
+   .. rubric:: 3. Partition interfaces and physical boundaries
+
+   After initializing local meshes, all ranks call ``sub_J02_initialize_boundary_types(..., partition=partition)``. It identifies local neighbors and exchanges
+   physical edge coordinates and active flags on neighboring blocks.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 25 35 40
+
+      * - Face type
+        - Meaning
+        - Incoming data
+      * - ``INTERIOR``
+        - Both active cells are on this block
+        - Upstream cell already solved in this sweep
+      * - ``REMOTE``
+        - Active neighbor belongs to another rank
+        - Upstream coefficients received in this sweep
+      * - ``WALL``
+        - Physical wall or edge of the active region
+        - Reflection of the preceding iteration's outgoing distribution
+      * - ``OPEN``
+        - Physical inlet or open outlet
+        - Prescribed distribution; zero for vacuum inflow
+
+   If the matching cell on the neighboring block is inactive, the active side becomes WALL. A block
+   must contain at least one grid cell but may have all ``active`` flags false. It still participates in
+   communication and collective calls.
+
+   After initialization, a rank assigns walls and inlets only on physical boundaries it owns. In the
+   example, only A and B satisfy ``first(2)==1`` and touch the domain's lower boundary. The first local row of C and
+   D is inside the domain and its lower face is a partition interface. A local ``k=1`` alone does not
+   identify a physical inlet. Retain REMOTE on process interfaces.
+
+   .. rubric:: 4. Partial-inlet location and flux normalization
+
+   Intersect the global inlet band :math:`[r_{\min},r_{\max}]` with the radial extent of each block on the physical lower
+   boundary. ``sub_J02_build_partial_zlo_inlet`` requires the interval to fit the mesh passed to it. Clip the interval to the block
+   before calling; for an empty intersection use zero area fractions and zero endpoints. Ranks away
+   from the physical lower boundary omit the partial-inlet interval arrays.
+
+   For a specified total inlet rate :math:`Q`, normalize using
+
+   .. math::
+
+      A_{\mathrm{in}}=\sum_p A_{\mathrm{in},p},\qquad A_{\mathrm{in},p} =\sum_{i\in\text{local physical lower boundary}}\chi_i A_{z-,i,1},\qquad J_{\mathrm{in}}=\frac{Q}{A_{\mathrm{in}}}.
+
+   Use a global sum to obtain :math:`A_{\mathrm{in}}`. All ranks then construct the inlet distribution with the same :math:`J_{\mathrm{in}}`. If
+   A and B each own half the inlet area, each injects :math:`Q/2` and both use the same flux per unit area :math:`Q/A_{\mathrm{in}}`.
+   If each instead uses :math:`Q/A_{\mathrm{in},p}`, each injects the full :math:`Q`, for an incorrect total of :math:`2Q`. Any rank may pass
+   ``zlo_inflow``; the solver ignores it on ranks away from the physical lower boundary.
+
+   .. rubric:: 5. Collective call requirements and supported partitions
+
+   All ranks enter the same public solver calls in the same order, including blocks without an inlet, a
+   wall, or active cells. Velocity nodes, weights, real precision, azimuthal span, and reflection
+   stopping conditions must agree across ranks. Physical fields, losses, and physical boundary
+   conditions may vary spatially.
+
+   For a hybrid build the application calls ``MPI_Init_thread`` and obtains at least ``MPI_THREAD_FUNNELED``. Under this level, multiple
+   threads can execute, but only the main thread that initialized MPI communicates. OpenMP workers
+   compute cell solutions and never directly send or receive. Start all J02 solves on the MPI main
+   thread. A dedicated J02 communicator is recommended; overlapping solves on a communicator are
+   unsupported because the internal message tags are fixed.
+
+   The implementation supports nonperiodic rectangular 2D partitions with matching neighbor faces and a
+   local active mask. It excludes periodic communication cycles, nonmatching grids, adaptive
+   partitions, and zero-cell blocks. Validation errors return synchronously before subsequent
+   communication. A failed MPI operation is reported and aborts the communicator's job; the solver
+   cannot recover a crashed process or broken connection.
+
+   .. rubric:: 6. From application inputs to a distributed solve
+
+   1. Initialize MPI and create a two-dimensional process communicator.
+   2. Call ``sub_J02_initialize_partition`` to obtain ``first/count`` and neighbor information.
+   3. Prepare local edge coordinates, active masks, and loss fields for those ranges; initialize local
+      mesh and geometry.
+   4. All ranks initialize face types with ``partition``, then assign inlets, outlets, and walls on physical
+      boundaries only.
+   5. Generate the same velocity quadrature on every rank. Compute total inlet area and use it to
+      normalize inflow.
+   6. All ranks call ``sub_J02_sweep`` or ``sub_J02_solve_transport`` with ``partition``.
+   7. Check the common return status, use local results, and reduce physical quantities as needed. The
+      application releases the communicator and finalizes MPI.
+
+   Partition initialization records local ranges and neighbors and verifies the blocks fit together.
+   The application uses those indices to prepare inputs. The next page expands the communication
+   sequence in step 6.
+
+   .. rubric:: 7. Internal routines
+
+   The following private routines supply checks and communication through partition initialization,
+   face-type initialization, and the public solver calls.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 60
+
+      * - Procedure
+        - Inputs, outputs, and purpose
+      * - ``sub_J02_partition_check``
+        - Takes local mesh and partition, checks local counts and array shapes, and returns a
+          collective status
+      * - ``sub_J02_connect_partition_faces``
+        - Takes adjacent edge coordinates and active flags. During initialization sets face types;
+          during a solve checks the user-supplied values without overwriting them.
+      * - ``sub_J02_partition_quadrature``
+        - Takes all ranks' quadratures, checks counts and velocity data through global operations, and
+          returns consistency status
+      * - ``sub_J02_partition_iteration_options``
+        - Checks iteration stopping criteria and reflection fraction across ranks to prevent
+          inconsistent termination
+      * - ``sub_J02_partition_any``
+        - Takes a local logical value and returns the global logical OR for selecting reflection
+          iteration
+      * - ``sub_J02_partition_real_reduce``
+        - Takes one local real scalar and returns a global maximum or sum for convergence
+      * - ``sub_J02_sync_status``
+        - Takes a local error and optional failed location and returns a common error and global
+          location
+      * - ``sub_J02_check_mpi``
+        - Takes an MPI status. On communication failure reports the MPI reason and aborts the
+          communicator's job.

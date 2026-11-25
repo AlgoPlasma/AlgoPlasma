@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="500" viewBox="0 0 1080 500" role="img" aria-labelledby="title desc">
+<title id="title">Face transport coefficients and current flux</title><desc id="desc">Positive flux uses the left density and negative flux the right density. The reference field sets the face coefficient. Flux then follows the current density.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
+<rect width="1080" height="500" rx="12" fill="#f7f9fc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+<text x="32" y="39" font-size="24" font-weight="bold">Set the coefficient from the reference field, then apply it to the current density</text>
+<g fill="white" stroke="#c1d0da"><rect x="28" y="65" width="502" height="342" rx="9"/><rect x="550" y="65" width="502" height="342" rx="9"/></g>
+<text x="52" y="103" font-size="21" font-weight="bold">Positive flux: L is upstream</text>
+<text x="576" y="103" font-size="21" font-weight="bold">Negative flux: R is upstream</text>
+<g stroke="#a8bbc8"><rect x="62" y="131" width="174" height="69" fill="#daeeea"/><rect x="326" y="131" width="174" height="69" fill="#edf2f7"/><rect x="582" y="131" width="174" height="69" fill="#edf2f7"/><rect x="846" y="131" width="174" height="69" fill="#daeeea"/></g>
+<g font-size="21" text-anchor="middle"><text x="149" y="173">L: ref. density 3</text><text x="413" y="173">R: ref. density 6</text><text x="669" y="173">L: ref. density 3</text><text x="933" y="173">R: ref. density 6</text></g>
+<g stroke="#267d8d" stroke-width="3" marker-end="url(#arrow)"><path d="M242 166H315"/><path d="M839 166H766"/></g>
+<g font-size="20"><text x="54" y="236">Reference flux +12 → coefficient 12 / 3 = +4</text><text x="576" y="236">Reference flux −12 → coefficient −12 / 6 = −2</text>
+<text x="54" y="284">Later, the left density falls to 1</text><text x="576" y="284">Later, the right density falls to 2</text>
+<text x="54" y="331" fill="#217b78">Current flux = 4 × 1 = +4</text><text x="576" y="331" fill="#217b78">Current flux = −2 × 2 = −4</text>
+<text x="54" y="377" font-size="18">Only the left density enters this face flux.</text><text x="576" y="377" font-size="18">Only the right density enters this face flux.</text></g>
+<text x="32" y="449" font-size="18">Units: density in m⁻³, flux in m⁻² s⁻¹, coefficient in m/s. The density floor is inactive.</text>
+<text x="32" y="477" font-size="18">Green marks the upstream cell. The coefficient is the reference flux divided by upstream density.</text>
+</g></svg>

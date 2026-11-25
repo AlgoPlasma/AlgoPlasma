@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="490" viewBox="0 0 900 490" role="img" aria-labelledby="title desc">
+<title id="title">Cell density and signed coordinate fluxes</title>
+<desc id="desc">The radial and axial coordinates are horizontal and vertical. Cell (i,k) holds density and volume. The four arrows mark the positive coordinate directions. Net outflow uses the high face minus the low face.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
+<rect width="900" height="490" rx="12" fill="#f7f9fc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+<text x="32" y="39" font-size="23" font-weight="bold">Density in the cell, fluxes on its four faces</text>
+<rect x="300" y="160" width="300" height="170" fill="#e9f3f4" stroke="#677f91" stroke-width="2"/>
+<g fill="none" stroke="#267d8d" stroke-width="2" marker-end="url(#arrow)">
+<path d="M125 399H764"/><path d="M125 399V89"/>
+<path d="M230 245H332" stroke-width="3"/><path d="M568 245H680" stroke-width="3"/>
+<path d="M450 382V305" stroke-width="3"/><path d="M450 186V108" stroke-width="3"/>
+</g>
+<g font-family="Cambria Math, Times New Roman, serif" font-size="28">
+<text x="775" y="408" font-style="italic">r</text><text x="114" y="77" font-style="italic">z</text>
+<text x="421" y="233">n<tspan baseline-shift="sub" font-size="18">i,k</tspan></text>
+<text x="421" y="275">V<tspan baseline-shift="sub" font-size="18">i,k</tspan></text>
+<text x="220" y="219">Γ<tspan baseline-shift="sub" font-size="18">r−</tspan></text>
+<text x="628" y="219">Γ<tspan baseline-shift="sub" font-size="18">r+</tspan></text>
+<text x="478" y="143">Γ<tspan baseline-shift="sub" font-size="18">z+</tspan></text>
+<text x="478" y="375">Γ<tspan baseline-shift="sub" font-size="18">z−</tspan></text>
+</g>
+<text x="167" y="277" font-size="16">Low-r face</text><text x="632" y="277" font-size="16">High-r face</text>
+<text x="340" y="135" font-size="16">High-z face</text><text x="340" y="377" font-size="16">Low-z face</text>
+<text x="80" y="455" font-size="18">Arrows mark positive flux. A negative flux carries particles in the opposite direction.</text>
+</g></svg>

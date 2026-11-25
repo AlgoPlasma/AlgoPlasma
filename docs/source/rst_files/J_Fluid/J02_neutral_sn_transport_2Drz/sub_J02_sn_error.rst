@@ -1,187 +1,387 @@
 Error Reference
 ==========================================================================================
 
-``sub_J02_sn_error.f90`` 将 J02 的整数状态码转换成可读原因。
-调用者在每个准备或求解步骤后检查 ``ierr``：成功时使用输出，
-失败时用 ``fun_J02_error_message`` 取得原因，再决定报告、修改输入或结束计算。
+.. raw:: html
 
-.. rubric:: 1. 消息函数的接口
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
+   </div>
 
-``fun_J02_error_message``：
+.. container:: ap-lang ap-lang-zh ap-fluid-doc
 
-- 输入 ``ierr``：整数状态码。
-- 返回 ``message``：长度为 160 的字符结果。输出到日志时可去掉尾部空格。
-- ``SN_SUCCESS=0`` 返回成功消息；
-  未识别的编号返回包含该整数的未知错误说明。
-- 消息为源码中固定的英文诊断，以下表格用中文说明相应检查对象。
-  错误码在 J02 内唯一，不应据此假定其他模块也使用相同编号体系。
+   ``sub_J02_sn_error.f90`` 将 J02 的整数状态码转换成可读原因。
+   调用者在每个准备或求解步骤后检查 ``ierr``：成功时使用输出，
+   失败时用 ``fun_J02_error_message`` 取得原因，再决定报告、修改输入或结束计算。
 
-.. rubric:: 2. 网格、几何与求积
+   .. rubric:: 1. 消息函数的接口
 
-.. list-table::
-   :header-rows: 1
-   :widths: 14 38 48
+   ``fun_J02_error_message``：
 
-   * - 编号
-     - 原因
-     - 首先检查
-   * - 101
-     - 边界坐标数量不足
-     - ``r_edge``、``z_edge`` 至少各含两个值
-   * - 102
-     - 有效标记尺寸不匹配
-     - ``active`` 应为两个边界数组长度各减一
-   * - 103
-     - 负半径
-     - 第一个径向边界
-   * - 104 / 105
-     - 径向 / 轴向边界不是严格递增
-     - 是否重复坐标或逆序排列
-   * - 201
-     - 网格对象未完整建立
-     - 对象初始化、数组分配与维数
-   * - 202
-     - 周向张角非正
-     - ``theta_span``
-   * - 301
-     - 角节点数不支持
-     - 至少八个，且可被四整除
-   * - 302
-     - 角度规则名称不支持
-     - 当前为 ``midpoint`` 或其别名 ``gauss-chebyshev``
-   * - 311 / 312
-     - 速率区间数 / 截断速率非正
-     - ``n_speeds``、``speed_max``
-   * - 321
-     - 扫描方向不是有限值
-     - ``mu`` 和 ``eta`` 是否包含 NaN 或无穷大
-   * - 322 / 323
-     - 损失频率数组为空 / 含负数
-     - ``frequency``；与实际网格的尺寸匹配由调用方保证
+   - 输入 ``ierr``：整数状态码。
+   - 返回 ``message``：长度为 160 的字符结果。输出到日志时可去掉尾部空格。
+   - ``SN_SUCCESS=0`` 返回成功消息；
+     未识别的编号返回包含该整数的未知错误说明。
+   - 消息为源码中固定的英文诊断，以下表格用中文说明相应检查对象。
+     错误码在 J02 内唯一，不应据此假定其他模块也使用相同编号体系。
 
-.. rubric:: 3. 入口分布与通量归一化
+   .. rubric:: 2. 网格、几何与求积
 
-.. list-table::
-   :header-rows: 1
-   :widths: 14 38 48
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
 
-   * - 编号
-     - 原因
-     - 首先检查
-   * - 401 / 402
-     - 温度 / 质量非正
-     - 输入值及其单位，分别为开尔文和千克
-   * - 403
-     - 入口数组长度错误
-     - 应等于 ``n_dir``，不是仅等于角节点数
-   * - 404
-     - 法向不是单位向量
-     - 使用面外法向，而不是带面积的法向量
-   * - 405
-     - 入口分布或入射概率数据含负数
-     - 原始分布与数据转换
-   * - 406
-     - 所有入射速度上的概率数据均为零
-     - 入射方向筛选、速度截断、浮点下溢
-   * - 407
-     - 目标入射通量为负
-     - 输入应为入射大小，不是坐标向带符号通量
-   * - 408
-     - 入射归一化因子为零
-     - 入射速度上的分布是否有正值，法向是否反向
-   * - 409
-     - 入射概率数据出现在出射或切向速度
-     - 入射粒子模型只允许入射半平面非零
+      * - 编号
+        - 原因
+        - 首先检查
+      * - 101
+        - 边界坐标数量不足
+        - ``r_edge``、``z_edge`` 至少各含两个值
+      * - 102
+        - 有效标记尺寸不匹配
+        - ``active`` 应为两个边界数组长度各减一
+      * - 103
+        - 负半径
+        - 第一个径向边界
+      * - 104 / 105
+        - 径向 / 轴向边界不是严格递增
+        - 是否重复坐标或逆序排列
+      * - 201
+        - 网格对象未完整建立
+        - 对象初始化、数组分配与维数
+      * - 202
+        - 周向张角非正
+        - ``theta_span``
+      * - 301
+        - 角节点数不支持
+        - 至少八个，且可被四整除
+      * - 302
+        - 角度规则名称不支持
+        - 当前为 ``midpoint`` 或其别名 ``gauss-chebyshev``
+      * - 311 / 312
+        - 速率区间数 / 截断速率非正
+        - ``n_speeds``、``speed_max``
+      * - 321
+        - 扫描方向不是有限值
+        - ``mu`` 和 ``eta`` 是否包含 NaN 或无穷大
+      * - 322 / 323
+        - 损失频率数组为空 / 含负数
+        - ``frequency``；与实际网格的尺寸匹配由调用方保证
 
-.. rubric:: 4. 局部求解、扫描与反射
+   .. rubric:: 3. 入口分布与通量归一化
 
-.. list-table::
-   :header-rows: 1
-   :widths: 14 38 48
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
 
-   * - 编号
-     - 原因
-     - 首先检查
-   * - 501
-     - 3×3 线性方程组的主元过小
-     - 局部矩阵、单元几何和方向；扫描可能将它包装为 609
-   * - 502
-     - 局部保正无法完成
-     - 是否非有限值、首对角非正或入射粒子率为负
-   * - 608
-     - 方向位于或过于接近坐标轴
-     - 两个方向余弦均须显著非零
-   * - 609
-     - 扫描中的局部求解失败
-     - 失败方向与单元索引，再检查该处矩阵
-   * - 610
-     - 路程损失系数为负
-     - ``sigma_t`` 的构造
-   * - 612
-     - 面类型或分区用法错误
-     - 类型值是否有效；使用 REMOTE 面时是否提供分区
-   * - 613
-     - 反射或入口组合不合法
-     - 入流二选一、上一轮分布和壁面速度分布、区间成对出现、混合比例与进度参数
-   * - 614
-     - 迭代选项不合法
-     - 最大轮数至少二，容差有限且为正，进度间隔非负
-   * - 615
-     - 用尽迭代次数仍未收敛
-     - 最后相对变化、逃逸与损失条件；不是数组尺寸错误
-   * - 616
-     - 部分入口几何不合法
-     - 物理范围、有效交集，以及 :math:`-1\leq\xi_L\leq\xi_H\leq1`
-   * - 617
-     - 壁面速度分布无法归一化
-     - 壁温、速度网格、分布值是否下溢和入射权重
+      * - 编号
+        - 原因
+        - 首先检查
+      * - 401 / 402
+        - 温度 / 质量非正
+        - 输入值及其单位，分别为开尔文和千克
+      * - 403
+        - 入口数组长度错误
+        - 应等于 ``n_dir``，不是仅等于角节点数
+      * - 404
+        - 法向不是单位向量
+        - 使用面外法向，而不是带面积的法向量
+      * - 405
+        - 入口分布或入射概率数据含负数
+        - 原始分布与数据转换
+      * - 406
+        - 所有入射速度上的概率数据均为零
+        - 入射方向筛选、速度截断、浮点下溢
+      * - 407
+        - 目标入射通量为负
+        - 输入应为入射大小，不是坐标向带符号通量
+      * - 408
+        - 入射归一化因子为零
+        - 入射速度上的分布是否有正值，法向是否反向
+      * - 409
+        - 入射概率数据出现在出射或切向速度
+        - 入射粒子模型只允许入射半平面非零
 
-.. rubric:: 5. 重构与诊断输出
+   .. rubric:: 4. 局部求解、扫描与反射
 
-重构直接沿用成功求解后的场、几何边界和入口区间，不再重复检查结构。
-原结构校验错误码 203、601--603、701--702 已移除；数组尺寸由调用方遵守接口约定。
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
 
-发生扫描错误时，记录 ``failed_direction``、``failed_i``、``failed_k``。
-其中方向索引指速率与角度的离散速度，不只是角度编号。
-根据求积布局可还原为
+      * - 编号
+        - 原因
+        - 首先检查
+      * - 501
+        - 3×3 线性方程组的主元过小
+        - 局部矩阵、单元几何和方向；扫描可能将它包装为 609
+      * - 502
+        - 局部保正无法完成
+        - 是否非有限值、首对角非正或入射粒子率为负
+      * - 608
+        - 方向位于或过于接近坐标轴
+        - 两个方向余弦均须显著非零
+      * - 609
+        - 扫描中的局部求解失败
+        - 失败方向与单元索引，再检查该处矩阵
+      * - 610
+        - 路程损失系数为负
+        - ``sigma_t`` 的构造
+      * - 612
+        - 面类型或分区用法错误
+        - 类型值是否有效；使用 REMOTE 面时是否提供分区
+      * - 613
+        - 反射或入口组合不合法
+        - 入流二选一、上一轮分布和壁面速度分布、区间成对出现、混合比例与进度参数
+      * - 614
+        - 迭代选项不合法
+        - 最大轮数至少二，容差有限且为正，进度间隔非负
+      * - 615
+        - 用尽迭代次数仍未收敛
+        - 最后相对变化、逃逸与损失条件；不是数组尺寸错误
+      * - 616
+        - 部分入口几何不合法
+        - 物理范围、有效交集，以及 :math:`-1\leq\xi_L\leq\xi_H\leq1`
+      * - 617
+        - 壁面速度分布无法归一化
+        - 壁温、速度网格、分布值是否下溢和入射权重
 
-.. math::
+   .. rubric:: 5. 重构与诊断输出
 
-   g=1+\left\lfloor\frac{m-1}{N_\theta}\right\rfloor,\qquad
-   a=1+\operatorname{mod}(m-1,N_\theta).
+   重构直接沿用成功求解后的场、几何边界和入口区间，不再重复检查结构。
+   原结构校验错误码 203、601--603、701--702 已移除；数组尺寸由调用方遵守接口约定。
 
-再检查对应的速率、方向和单元几何，就能定位触发问题的数据。
-输入检查可能发生在方向循环之前，因此零索引表示尚无对应位置，
-不能理解为第零个单元。
+   发生扫描错误时，记录 ``failed_direction``、``failed_i``、``failed_k``。
+   其中方向索引指速率与角度的离散速度，不只是角度编号。
+   根据求积布局可还原为
 
-错误输出应同时包含“当前计算阶段、状态码与消息、有效的失败位置”。
-某些过程失败时尚未分配输出，另一些过程可能留下部分场或上一轮完整场；
-存在数组不等于该次计算成功。完整输运求解接口只有在求解和全部重构均成功后，
-才将 ``result%converged`` 置真。
+   .. math::
 
-.. rubric:: 6. MPI 分区与集体调用
+      g=1+\left\lfloor\frac{m-1}{N_\theta}\right\rfloor,\qquad
+      a=1+\operatorname{mod}(m-1,N_\theta).
 
-.. list-table::
-   :header-rows: 1
-   :widths: 14 38 48
+   再检查对应的速率、方向和单元几何，就能定位触发问题的数据。
+   输入检查可能发生在方向循环之前，因此零索引表示尚无对应位置，
+   不能理解为第零个单元。
 
-   * - 编号
-     - 原因
-     - 首先检查
-   * - 801
-     - 非 MPI 构建却传入了分区对象
-     - 编译器与 ``-DJ02_USE_MPI``；串行调用应省略分区
-   * - 802
-     - 分区、邻接网格或交界面类型不一致
-     - 非周期二维 Cartesian 拓扑、起点与尺寸、共享边坐标、REMOTE 标记
-   * - 803
-     - 各进程求积或停止选项不一致，或部分入口设置在非物理下端
-     - 离散速度与权重、最大轮数和容差、漫反射比例、``first(2)``
-   * - 804
-     - MPI 线程约束不满足
-     - 主线程调用；混合构建初始化时至少请求并获得 FUNNELED
+   错误输出应同时包含“当前计算阶段、状态码与消息、有效的失败位置”。
+   某些过程失败时尚未分配输出，另一些过程可能留下部分场或上一轮完整场；
+   存在数组不等于该次计算成功。完整输运求解接口只有在求解和全部重构均成功后，
+   才将 ``result%converged`` 置真。
 
-传入分区时，失败位置使用全局单元索引；
-没有对应单元的检查错误仍返回零位置。
-正常输入/数值错误通过集体返回报告，不能仅让本地失败进程退出而让其他进程继续求解。
-实际 MPI 通信错误另打印 MPI 消息并终止通信器上的任务，此时无法继续当前求解。
+   .. rubric:: 6. MPI 分区与集体调用
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
+
+      * - 编号
+        - 原因
+        - 首先检查
+      * - 801
+        - 非 MPI 构建却传入了分区对象
+        - 编译器与 ``-DJ02_USE_MPI``；串行调用应省略分区
+      * - 802
+        - 分区、邻接网格或交界面类型不一致
+        - 非周期二维 Cartesian 拓扑、起点与尺寸、共享边坐标、REMOTE 标记
+      * - 803
+        - 各进程求积或停止选项不一致，或部分入口设置在非物理下端
+        - 离散速度与权重、最大轮数和容差、漫反射比例、``first(2)``
+      * - 804
+        - MPI 线程约束不满足
+        - 主线程调用；混合构建初始化时至少请求并获得 FUNNELED
+
+   传入分区时，失败位置使用全局单元索引；
+   没有对应单元的检查错误仍返回零位置。
+   正常输入/数值错误通过集体返回报告，不能仅让本地失败进程退出而让其他进程继续求解。
+   实际 MPI 通信错误另打印 MPI 消息并终止通信器上的任务，此时无法继续当前求解。
+
+.. container:: ap-lang ap-lang-en ap-fluid-doc
+
+   ``sub_J02_sn_error.f90`` maps J02 integer status codes to diagnostic messages. Check ``ierr`` after each preparation or solver
+   call. On success use its output; on failure obtain the reason from ``fun_J02_error_message`` before reporting the error,
+   correcting inputs, or ending the calculation.
+
+   .. rubric:: 1. Message function interface
+
+   ``fun_J02_error_message``:
+
+   - Input ``ierr`` is the integer status code.
+   - The returned ``message`` is a 160-character string. Trim trailing spaces for logging.
+   - ``SN_SUCCESS=0`` returns the success message. For an unrecognized code, the message includes the unknown
+     integer.
+   - The source provides fixed English diagnostics. The tables identify the inputs or conditions to
+     inspect. Codes are unique within J02; other modules may use different numbering.
+
+   .. rubric:: 2. Mesh, geometry, and quadrature
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
+
+      * - Code
+        - Reason
+        - Check first
+      * - 101
+        - Too few edge coordinates
+        - ``r_edge`` and ``z_edge`` must each have at least two elements
+      * - 102
+        - Active mask has the wrong shape
+        - Each dimension of ``active`` must be one less than the length of its corresponding edge array
+      * - 103
+        - Negative radius
+        - First radial edge
+      * - 104 / 105
+        - Radial / axial edges are not strictly increasing
+        - Duplicate or reversed coordinates
+      * - 201
+        - Incomplete mesh object
+        - Object initialization, allocation, and dimensions
+      * - 202
+        - Nonpositive azimuthal span
+        - ``theta_span``
+      * - 301
+        - Unsupported angular node count
+        - At least eight and divisible by four
+      * - 302
+        - Unsupported angular rule name
+        - Use ``midpoint`` or its alias ``gauss-chebyshev``
+      * - 311 / 312
+        - Nonpositive speed interval count / cutoff speed
+        - ``n_speeds``, ``speed_max``
+      * - 321
+        - Nonfinite sweep direction
+        - NaN or infinity in ``mu`` or ``eta``
+      * - 322 / 323
+        - Empty loss-frequency array / negative entry
+        - ``frequency``; matching its shape to the mesh is the caller's responsibility
+
+   .. rubric:: 3. Inlet distribution and flux normalization
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
+
+      * - Code
+        - Reason
+        - Check first
+      * - 401 / 402
+        - Nonpositive temperature / mass
+        - Input values and units, in kelvin and kilograms respectively
+      * - 403
+        - Incorrect inlet array length
+        - Must equal ``n_dir``, which includes both angles and speeds
+      * - 404
+        - Normal is not a unit vector
+        - Use the outward unit normal without an area factor
+      * - 405
+        - Negative inlet distribution or crossing probability
+        - Original distribution and data conversion
+      * - 406
+        - Probabilities vanish at every incoming velocity
+        - Selection of incoming directions, speed cutoff, and floating-point underflow
+      * - 407
+        - Negative target incoming flux
+        - Supply the nonnegative incoming magnitude rather than a signed coordinate component
+      * - 408
+        - Zero inflow normalization factor
+        - Positive support on incoming velocities and orientation of the normal
+      * - 409
+        - Probability assigned to outgoing or tangent velocities
+        - Crossing-particle probability may be nonzero only on the incoming half-plane
+
+   .. rubric:: 4. Local solve, sweep, and reflection
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
+
+      * - Code
+        - Reason
+        - Check first
+      * - 501
+        - Pivot in the 3 × 3 system is too small
+        - Inspect the local matrix, geometry, and direction. The sweep may report this as 609.
+      * - 502
+        - Local positivity treatment failed
+        - Nonfinite values, nonpositive first diagonal entry, or negative incoming particle rate
+      * - 608
+        - Direction on or too close to a coordinate axis
+        - Both direction cosines must be appreciably nonzero
+      * - 609
+        - Local solve failed during sweep
+        - Failed direction and cell indices, then the matrix at that location
+      * - 610
+        - Negative loss per unit path length
+        - Construction of ``sigma_t``
+      * - 612
+        - Invalid face type or partition use
+        - Valid type value and partition present for REMOTE faces
+      * - 613
+        - Invalid combination of reflection or inlet arguments
+        - Exactly one inflow specification, previous field and wall shape, paired endpoints, mixing
+          fraction, and progress interval
+      * - 614
+        - Invalid iteration options
+        - At least two iterations, finite positive tolerance, nonnegative progress interval
+      * - 615
+        - Iteration limit reached without convergence
+        - Last relative change and physical escape or loss mechanisms. This status concerns
+          convergence.
+      * - 616
+        - Invalid partial-inlet geometry
+        - Physical bounds, nonempty active intersection, and :math:`-1\leq\xi_L\leq\xi_H\leq1`
+      * - 617
+        - Wall velocity distribution cannot be normalized
+        - Wall temperature, velocity grid, underflow, and incoming weights
+
+   .. rubric:: 5. Reconstruction and diagnostic outputs
+
+   Reconstruction uses the field, geometry, boundaries, and inlet intervals from a successful solve.
+   Structural check codes 203, 601–603, and 701–702 have been removed. The caller must supply arrays
+   with the documented shapes.
+
+   For a sweep error record ``failed_direction``, ``failed_i``, and ``failed_k``. The direction index identifies a combined speed and angle;
+   recover its components from the quadrature layout:
+
+   .. math::
+
+      g=1+\left\lfloor\frac{m-1}{N_\theta}\right\rfloor,\qquad
+      a=1+\operatorname{mod}(m-1,N_\theta).
+
+   Inspect the corresponding speed, direction, and geometry to locate the bad data. Validation may fail
+   before the direction loop; a zero location means that no particular cell or direction has yet been
+   identified.
+
+   Report the computation stage, status code and message, and any valid failure coordinates. A failed
+   procedure may leave an unallocated result, a partially filled field, or the preceding complete
+   field. The full transport solver sets ``result%converged`` only after both solution and reconstruction succeed.
+
+   .. rubric:: 6. MPI partition and collective calls
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 14 38 48
+
+      * - Code
+        - Reason
+        - Check first
+      * - 801
+        - Partition passed to a build without MPI
+        - Compiler and ``-DJ02_USE_MPI``. Omit the partition for a serial call.
+      * - 802
+        - Inconsistent partition, neighbor mesh, or interface types
+        - Nonperiodic 2D Cartesian topology, starts and sizes, shared-edge coordinates, and REMOTE
+          markers
+      * - 803
+        - Different quadratures or stopping options across ranks, or partial inlet on a nonphysical
+          lower edge
+        - Discrete velocities and weights, iteration limit and tolerance, diffuse fraction, and ``first(2)``
+      * - 804
+        - MPI thread requirements unmet
+        - Call from the main thread. A hybrid build must request and receive at least FUNNELED during
+          initialization.
+
+   With a partition, failed cells are identified by global indices. Checks unrelated to a cell return
+   zero locations. Normal input and numerical errors are returned collectively so ranks do not diverge
+   into different solve paths. A communication error prints the MPI diagnostic and aborts the
+   communicator's job; the current solve cannot continue.

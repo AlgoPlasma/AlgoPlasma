@@ -309,57 +309,298 @@ Time Advance and Diagnostics
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   This file evaluates current face fluxes, advances physical time and computes diagnostics.
-   At an interior face oriented L→R, use u*nL for u≥0 and u*nR otherwise.
-   Open flux is prescribed inflow plus the outgoing coefficient times current cell density; walls are zero.
-   ``sub_J03_cell_fluxes`` returns four coordinate-oriented fluxes without areas or density updates.
+   ``sub_J03_continuity_solver.f90`` uses the ``closure`` built on the preceding page to evaluate current
+   fluxes, advance density by one time step and calculate balance, residuals and an optional steady
+   solution. The derivation proceeds from face fluxes and cell conservation through time discretization and
+   step selection to diagnostics.
 
-   The cell equation and semi-implicit step are
+   Write :math:`K=(i,k)` for a cell and :math:`q` for the time level, with :math:`n_K^q=n_K(t_q)` and
+   :math:`t_{q+1}=t_q+\Delta t`. The volume source and loss :math:`S_K^q,\nu_K^q` and the prescribed
+   boundary inflow are held fixed over one step.
+
+   .. rubric:: 1. Fluxes on the four faces at current density
+
+   An internal face points from the lower-index cell L to the higher-index cell R. With fixed face
+   coefficient :math:`u_f` from the closure, the current flux is
 
    .. math::
 
-      D_K(n)=\frac{\sum_f s_fA_f\Gamma_f(n)}{V_K},\quad
+      \Gamma_f^q=
+      \begin{cases}
+         u_f n_L^q,&u_f\ge0,\\
+         u_f n_R^q,&u_f<0.
+      \end{cases}
+
+   Both cells read the same coefficient and upwind density, so they agree on the signed
+   coordinate-direction flux. Open faces and walls use
+
+   .. math::
+
+      \Gamma_b^q=\Gamma_{b,\mathrm{in}}^q+u_{b,\mathrm{out}}n_K^q,
+      \qquad \Gamma_{\mathrm{wall}}^q=0.
+
+   ``sub_J03_cell_fluxes`` takes ``closure``, current ``density`` and valid indices ``i,k``. It returns
+   four real fluxes ``frlo,frhi,fzlo,fzhi`` in the order lower radial, upper radial, lower axial, upper
+   axial. It does not advance density, apply face area or return an error code. The caller must provide
+   valid shapes and neighbours.
+
+   .. rubric:: 2. The cell equation from particle conservation
+
+   Integrate the continuity equation over the fixed cell. Its particle number is :math:`V_Kn_K`. The caller
+   supplies the volume and areas. For a cylindrical cell with edges :math:`r_i,r_{i+1},z_k,z_{k+1}` and
+   angular span :math:`\Theta` they are
+
+   .. math::
+
+      V_K=\frac{\Theta}{2}(r_{i+1}^2-r_i^2)\Delta z_k,\quad
+      A_{r-}=\Theta r_i\Delta z_k,\quad A_{r+}=\Theta r_{i+1}\Delta z_k,\quad
+      A_{z\pm}=\frac{\Theta}{2}(r_{i+1}^2-r_i^2).
+
+   Here :math:`\Delta z_k=z_{k+1}-z_k`. These measures already include azimuthal integration. With
+   face-averaged flux and cell-averaged production and loss,
+
+   .. math::
+
+      V_K\frac{\mathrm dn_K}{\mathrm dt}
+         =-Q_K^{\mathrm{net}}+V_KS_K-V_K\nu_Kn_K,
+
+   .. math::
+
+      Q_K^{\mathrm{net}}
+         =A_{r+}\Gamma_{r+}-A_{r-}\Gamma_{r-}
+          +A_{z+}\Gamma_{z+}-A_{z-}\Gamma_{z-},\qquad
+      D_K(n)=\frac{Q_K^{\mathrm{net}}(n)}{V_K}.
+
+   :math:`Q_K^{\mathrm{net}}` is the particle rate in s⁻¹ stored in ``net``. :math:`D_K` is the density
+   change rate in m⁻³ s⁻¹. Volumes and face areas account for the radial geometry; apply no additional
+   factor of :math:`r` in the update.
+
+   .. rubric:: 3. Explicit transport and semi-implicit linear loss
+
+   Transport and production use known values from this step, while linear loss uses the new density:
+
+   .. math::
+
       \frac{n_K^{q+1}-n_K^q}{\Delta t}
-        =-D_K(n^q)+S_K^q-\nu_K^q n_K^{q+1},
+         =-D_K(n^q)+S_K^q-\nu_K^q n_K^{q+1}.
+
+   Move the unknown loss term to the left to obtain the implemented update:
 
    .. math::
 
-      n_K^{q+1}=\frac{n_K^q-\Delta tD_K(n^q)+\Delta t S_K^q}
-                       {1+\Delta t\nu_K^q}.
+      n_K^{q+1}
+         =\frac{n_K^q-\Delta t D_K(n^q)+\Delta t S_K^q}
+                {1+\Delta t\nu_K^q}.
 
-   ``sub_J03_compute_stable_timestep`` returns cfl/max(lambda), using all absolute interior-face
-   coefficients, outgoing open coefficients, and loss frequency in lambda.
-   This is conservative; fixed incoming flux does not remove current particles.
-   If all rates are negligible it returns 1 s, which is not a physical accuracy recommendation.
+   Time discretization gives the denominator. Each cell requires only a scalar division. With no transport
+   or production and constant loss, :math:`n^{q+1}=n^q/(1+\Delta t\nu)` approximates the continuous decay
+   :math:`n(t)=n(0)e^{-\nu t}`; finite steps do not integrate the exponential exactly.
 
-   ``sub_J03_continuity_step`` reads closure, density, source_rate, dt and clip_negative,
-   allocates density_new and returns ierr. It validates shapes, positive dt and nonnegative source.
-   Without clipping it rejects negative input density, but does not automatically reject excessive
-   dt or negative output. Clipping adds particles and is not a conservation or CFL repair.
+   .. rubric:: 4. Nonnegative density and the stable time step
 
-   For an unclipped step, the exact discrete total balance uses mixed time levels:
+   With nonnegative initial density and sources and correctly oriented boundary data, the explicit
+   transport part in one cell can be written as
+
+   .. math::
+
+      n_K^{q+1}
+       =\frac{(1-\Delta t\,a_K)n_K^q
+              +\Delta t\sum_{L\ \mathrm{upstream}}b_{KL}n_L^q
+              +\Delta t I_K^q+\Delta t S_K^q}
+             {1+\Delta t\nu_K^q}.
+
+   Here :math:`a_K\ge0` is the total outflow coefficient multiplying the cell density, :math:`b_{KL}\ge0`
+   the upstream inflow coefficients and :math:`I_K^q\ge0` the prescribed boundary contribution per unit
+   volume. All numerator contributions are nonnegative if :math:`\Delta t\,a_K\le1`.
+
+   For a conservative bound, ``sub_J03_compute_stable_timestep`` takes the Courant–Friedrichs–Lewy factor
+   :math:`c_{\mathrm{CFL}}\in(0,1]` and computes
+
+   .. math::
+
+      \lambda_K=\nu_K+
+          \frac{\displaystyle\sum_{f\in\mathrm{INTERIOR}}A_f|u_f|
+                +\displaystyle\sum_{f\in\mathrm{OPEN}}A_f|u_{b,\mathrm{out}}|}
+               {V_K},
+      \qquad
+      \Delta t_{\mathrm{stable}}
+         =\frac{c_{\mathrm{CFL}}}{\max_{K\ \mathrm{active}}\lambda_K}.
+
+   This bound counts absolute velocities at all internal faces, including inflow, so
+   :math:`\lambda_K\ge a_K`. The implementation also counts the linear loss frequency even though the time
+   integration treats loss semi-implicitly. This makes the time-step choice conservative.
+
+   Prescribed inflow is independent of the cell density and contributes no outflow coefficient. If the
+   maximum rate is at most ``tiny(1.0)`` the routine returns a default of 1 s. Physical time scales,
+   requested output times and model coupling may require a smaller step.
+
+   Supply initialized ``closure`` and ``cfl``. The routine returns ``dt`` in seconds and ``ierr``. It
+   validates the CFL range but assumes the underlying closure data are valid.
+
+   .. rubric:: 5. Single-step arguments and return behaviour
+
+   ``sub_J03_continuity_step``:
+
+   - Supply ``closure``, ``density(nr,nz)``, nonnegative ``source_rate(nr,nz)`` and positive ``dt``.
+   - The logical option ``clip_negative`` selects whether to clip negative updated values to zero.
+   - The output ``density_new(nr,nz)`` is allocated, with zero in inactive cells. The old density is left
+     available to the caller.
+   - The output ``ierr`` reports incompatible shapes, nonpositive time step and negative source. Negative
+     input density is also rejected when clipping is off.
+
+   The step routine does not calculate the stable time step or automatically report a negative output. With
+   clipping off, too large a step can therefore return successfully with negative densities. Select a
+   stable step first and check the output for nonnegativity and finiteness.
+
+   With clipping on, :math:`n_K^{q+1}=\max(n_K^*,0)` is applied after the update. The added particle number is
+
+   .. math::
+
+      \Delta N_{\mathrm{clip}}
+         =\sum_{K\ \mathrm{active}}V_K\max(-n_K^*,0).
+
+   Clipping changes the particle balance and cannot replace suitable time steps and valid input data. The
+   code does not return this correction separately. For conservation checks, normally disable clipping and
+   diagnose the cause of negative values.
+
+   .. rubric:: 6. Checking the transient particle balance
+
+   Let the total particle number be :math:`N^q=\sum_K V_Kn_K^q`. Multiply every cell update by its volume
+   and sum. Internal face contributions cancel, giving the following relation when negative densities have
+   not been clipped:
 
    .. math::
 
       \frac{N^{q+1}-N^q}{\Delta t}
-        =Q_{\mathrm{in}}^q+Q_{\mathrm{src}}^q
+         =Q_{\mathrm{in}}^q+Q_{\mathrm{src}}^q
           -Q_{\mathrm{out}}(n^q)-Q_{\mathrm{loss}}^q(n^{q+1}).
 
-   ``sub_J03_compute_balance`` returns incoming, outgoing, production and removal rates
-   for one supplied density, plus a relative steady imbalance and ierr.
-   To verify a transient step, use old-density outflow and new-density removal with unchanged step data.
+   Use the stated time levels: outflow uses old density and loss uses new density. Four rates computed at
+   just one time level cannot in general test this semi-implicit step. Inflow and outflow can differ during
+   a transient.
 
-   ``sub_J03_compute_residual`` returns R=D+nu*n-S, max|R| and sum(VR).
-   Small global imbalance can hide cancelling local residuals.
-   Neither R nor the steady imbalance must vanish during a genuine transient.
+   For one supplied density, ``sub_J03_compute_balance`` computes
 
-   ``sub_J03_solve_steady`` starts from reference density and uses one fixed step for fixed inputs.
-   It requires relative L1 iterate change and normalized maximum residual to pass simultaneously.
-   ``sub_J03_reference_residual_scale`` computes a fixed scale from closure-evaluated reference fluxes,
-   source and loss rates, independent of dt or current iterate.
+   .. math::
 
-   Steady inputs include closure, source, cfl, tolerance, max_iterations and clipping;
-   optional progress_interval controls logging, residual_tolerance defaults to max(tolerance,100*epsilon).
-   Outputs include density, convergence flag, iteration count, relative change, maximum residual,
-   global balance, optional scaled residual and ierr.
-   Reaching the limit preserves the last state but returns J03_ERR_NOT_CONVERGED.
+      \begin{aligned}
+      Q_{\mathrm{in}}&=-\sum_{\mathrm{OPEN}}s_f A_f\Gamma_{b,\mathrm{in}},\\
+      Q_{\mathrm{out}}(n)&=\sum_{\mathrm{OPEN}}s_f A_fu_{b,\mathrm{out}}n_K,\\
+      Q_{\mathrm{src}}&=\sum_KV_KS_K,\qquad
+      Q_{\mathrm{loss}}(n)=\sum_KV_K\nu_Kn_K,
+      \end{aligned}
+      \qquad s_f=(-1,+1,-1,+1).
+
+   With inputs ``closure,density,source_rate`` the routine returns ``inflow,outflow,production,removal`` in
+   s⁻¹, dimensionless ``relative_balance`` and status ``ierr``. It checks shapes and relies on the caller
+   for physical input validation.
+
+   To test a step, hold its source, loss and boundary inputs fixed. Obtain ``outflow`` from the old density
+   and ``removal`` from the new density, then compare the resulting balance with the measured change in
+   total particle number.
+
+   The routine also returns the relative imbalance
+
+   .. math::
+
+      E_B=\frac{|Q_{\mathrm{out}}+Q_{\mathrm{loss}}
+                       -Q_{\mathrm{in}}-Q_{\mathrm{src}}|}
+              {\max(|Q_{\mathrm{in}}|+|Q_{\mathrm{src}}|,
+                    |Q_{\mathrm{out}}|+|Q_{\mathrm{loss}}|,
+                    \operatorname{tiny}(1.0))}.
+
+   This measures steady particle balance at one density. During a transient a nonzero :math:`E_B` can
+   simply reflect a changing total particle number.
+
+   .. rubric:: 7. Local residuals and global imbalance
+
+   Write the left-hand side of the steady equation as
+
+   .. math::
+
+      R_K(n)=D_K(n)+\nu_K n_K-S_K.
+
+   ``sub_J03_compute_residual`` takes ``closure,density,source_rate``, allocates ``residual(nr,nz)`` and
+   also returns
+
+   .. math::
+
+      R_{\max}=\max_{K\ \mathrm{active}}|R_K|,
+      \qquad B=\sum_{K\ \mathrm{active}}V_KR_K.
+
+   ``max_abs_residual`` is in m⁻³ s⁻¹. ``global_balance`` gives :math:`B` in s⁻¹. Inactive cells have zero
+   residual. ``ierr`` reports the shape check.
+
+   With valid internal faces,
+   :math:`B=Q_{\mathrm{out}}+Q_{\mathrm{loss}}-Q_{\mathrm{in}}-Q_{\mathrm{src}}`. Local residuals of
+   opposite signs can cancel even when individual cells remain far from steady. A transient solution need
+   not have :math:`R_K=0`; in continuous time the residual is :math:`-\mathrm dn_K/\mathrm dt`.
+
+   .. rubric:: 8. Stopping conditions for the steady solver
+
+   ``sub_J03_solve_steady`` applies to fixed sources, losses and boundary conditions. It starts from
+   ``closure%density_ref``, computes a time step once and repeatedly calls the same step routine. At
+   iteration :math:`j` the relative change in density is
+
+   .. math::
+
+      E_n^{j+1}=
+        \frac{\sum_{K\ \mathrm{active}}|n_K^{j+1}-n_K^j|}
+             {\max(\sum_{K\ \mathrm{active}}|n_K^j|,
+                   \operatorname{tiny}(1.0))}.
+
+   A small time step can make this change small even when the equation remains unbalanced. Each iteration
+   therefore also computes the current residual and normalizes it against a fixed scale.
+
+   ``sub_J03_reference_residual_scale`` takes the closure and volume source. Before iteration, it evaluates
+   the face fluxes produced by applying the closure to the reference density and sets
+
+   .. math::
+
+      R_{\mathrm{scale}}=
+        \max\!\left[
+          \operatorname{tiny}(1.0),
+          \max_{K\ \mathrm{active}}\left\{
+             \frac{\sum_f A_f|\Gamma_f(n^{\mathrm{ref}})|}{V_K}
+             +|S_K|+\nu_K|n_K^{\mathrm{ref}}|
+          \right\}\right].
+
+   Use :math:`\Gamma_f(n^{\mathrm{ref}})` here. When the density floor is active, this value may differ
+   from the originally supplied flux. The scalar output ``scale`` is in m⁻³ s⁻¹. The routine assumes
+   validated inputs and returns no error code. The scale is independent of iterative density and step size,
+   so it does not shrink as the iterations settle.
+
+   The normalized residual is :math:`E_R=R_{\max}/R_{\mathrm{scale}}`. Convergence requires both conditions
+
+   .. math::
+
+      E_n\le\text{tolerance},\qquad
+      E_R\le\text{residual\_tolerance}
+
+   to hold. The global balance measure :math:`E_B` helps interpret the solution; the maximum local residual
+   remains part of the stopping test.
+
+   .. rubric:: 9. Inputs, outputs and failure of the steady solver
+
+   Inputs to ``sub_J03_solve_steady``:
+
+   - ``closure`` and fixed ``source_rate(nr,nz)``.
+   - ``cfl``, positive ``tolerance`` and positive integer ``max_iterations``.
+   - ``clip_negative``.
+   - Optional nonnegative ``progress_interval``. Omit it or set it to zero to suppress progress logs.
+     Positive values set the reporting interval.
+   - Optional positive ``residual_tolerance``, defaulting to
+     :math:`\max(\text{tolerance},100\,\operatorname{epsilon}(1.0))`.
+
+   Outputs:
+
+   - Allocated ``density`` containing the last complete iterate on convergence or reaching the iteration limit.
+   - ``converged``, ``iterations``, ``final_relative_change``.
+   - ``max_abs_residual``, ``global_balance``.
+   - Optional ``final_scaled_residual``.
+   - ``ierr``, set to ``J03_ERR_NOT_CONVERGED`` when the iteration limit is reached without convergence.
+
+   This interface does not accept an arbitrary initial field or return an end time. For a prescribed
+   transient initial state, run an outer physical-time loop using the step routine. The iteration count is
+   a solver diagnostic. Convergence establishes approximate satisfaction of this discrete closure equation;
+   the physical model and spatial and temporal resolution require separate assessment.

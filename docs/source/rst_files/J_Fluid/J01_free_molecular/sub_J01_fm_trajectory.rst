@@ -159,25 +159,154 @@ Particle Tracking
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   The tracker advances one sampled state to escape or truncation and adds raw tallies.
-   Cell location uses half-open intervals edge(j)≤x<edge(j+1); out-of-domain coordinates return -1.
+   ``sub_J01_fm_trajectory.f90`` tracks a sampled particle from injection to escape or truncation. Each
+   flight adds to raw tallies. Density is evaluated later, and the tracker requires no fixed global time
+   step.
 
-   For constant velocity in a cell, divide the distance to the next face in each moving direction
-   by its signed velocity and choose the smallest positive arrival time.
-   Zero velocities and nonpositive candidates are disabled using a large sentinel; positive short flights are retained.
+   .. rubric:: 1. Locating the current cell
 
-   Before handling the face, add residence τ and velocity-time moments vrτ,vzτ.
-   An interior crossing adds ±1 according to coordinate orientation; an open face adds a signed
-   escape count and ends the history. A wall changes velocity and retains the history.
-   Each hit coordinate is first snapped to its grid face; small post-event offsets add no residence time.
+   ``fun_J01_locate_cell(x,edge)`` uses binary search to find the cell satisfying
 
-   Only ties within 16*epsilon(1.0)*arrival_time are resolved radially first,
-   then axially in the resulting cell. Distinct nearby hits keep their arrival order and intervening residence.
-   A radial escape stops immediately; a diffuse radial reflection that reverses the axial sign
-   cancels the original axial crossing. Intermediate cells get zero extra residence.
+   .. math::
 
-   ``sub_J01_trace_fm_history`` reads validated grid/topology and wall parameters,
-   updates r,z,ur,uz and tally, and returns escaped/truncated.
-   max_events limits all event-loop iterations. Invalid locations, missing events and exhausted
-   limits are all truncations, without distinct detailed error codes.
-   ``fun_J01_locate_cell`` only locates an index; it assumes sorted edges.
+      \mathrm{edge}(j)\le x<\mathrm{edge}(j+1).
+
+   The function takes a coordinate and strictly increasing edge array, and returns a cell index or -1
+   outside. A shared edge belongs to the higher-index cell; the uppermost endpoint lies outside. Apply the
+   search independently in r and z to obtain :math:`K=(i,k)`. The function assumes monotonicity and
+   performs no interpolation. The tracker checks the cell's active status separately.
+
+   .. rubric:: 2. Finding the first face reached
+
+   Velocity is constant during flight inside a cell:
+
+   .. math::
+
+      r(t+\tau)=r(t)+v_r\tau,\qquad
+      z(t+\tau)=z(t)+v_z\tau.
+
+   The sign of radial velocity determines the time to the next radial face:
+
+   .. math::
+
+      \tau_r=
+      \begin{cases}
+        (r_{i+1}-r)/v_r,&v_r>0,\\
+        (r_i-r)/v_r,&v_r<0,\\
+        +\infty,&v_r=0.
+      \end{cases}
+
+   The axial time follows the same rule:
+
+   .. math::
+
+      \tau_z=
+      \begin{cases}
+        (z_{k+1}-z)/v_z,&v_z>0,\\
+        (z_k-z)/v_z,&v_z<0,\\
+        +\infty,&v_z=0,
+      \end{cases}
+      \qquad \tau=\min(\tau_r,\tau_z).
+
+   For a negative velocity, both distance and velocity are negative, giving a positive flight time.
+   ``huge(1.0)`` represents an excluded candidate. Only nonpositive times are discarded, so short positive
+   segments between successive hits still count. If neither direction gives a valid event, the history is
+   truncated.
+
+   .. rubric:: 3. Accumulating the flight before handling the face
+
+   Before leaving the current cell, accumulate
+
+   .. math::
+
+      T_K\leftarrow T_K+\tau,\qquad
+      M_{r,K}\leftarrow M_{r,K}+v_r\tau,\qquad
+      M_{z,K}\leftarrow M_{z,K}+v_z\tau.
+
+   :math:`T_K` is stored in ``tally%residence`` in seconds; :math:`M_{r,K},M_{z,K}` in
+   ``moment_r/moment_z`` in metres. The tracker then moves to the hit point and applies the rule for that
+   face.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 43 37
+
+      * - Face type
+        - Tally
+        - Next action
+      * - Internal
+        - Count +1 along the positive coordinate direction and −1 in reverse
+        - Enter the neighbouring cell with the same velocity
+      * - Open
+        - Record a signed escape in this cell's boundary array
+        - End the history normally
+      * - Wall
+        - Record no net crossing
+        - Reflect and resume on the gas side
+
+   For example, crossing the upper radial face of :math:`(i,k)` increments ``count_r(i,k)``; crossing the
+   lower radial face decrements ``count_r(i-1,k)``. Both indices identify the actual shared face. Each
+   crossing counts once.
+
+   Add or subtract one per crossing, independent of velocity. A fast particle's shorter visit enters the
+   residence time; the crossing itself enters the event count. The estimators use these tallies for
+   different physical quantities.
+
+   .. rubric:: 4. Position offsets after a face hit
+
+   For each confirmed hit, snap the appropriate coordinate to the exact face location. After an internal
+   crossing, offset by :math:`\varepsilon_r` or :math:`\varepsilon_z` along the crossing direction; after
+   reflection, shift along the normal toward the gas. These offsets resolve the next cell location and add
+   no flight or residence time.
+
+   The driver uses
+
+   .. math::
+
+      \varepsilon_r=\max(10^{-12},10^{-9}\min_i\Delta r_i)\ \mathrm m,
+      \qquad
+      \varepsilon_z=\max(10^{-12},10^{-9}\min_k\Delta z_k)\ \mathrm m.
+
+   These numerical lengths are in metres. At very fine resolution the minimum offset can become significant
+   relative to the cell width. Direct callers should check this ratio; the offset serves location
+   bookkeeping and has no physical mean-free-path interpretation.
+
+   .. rubric:: 5. A corner hit on two faces
+
+   Let :math:`\epsilon_{\mathrm{mach}}=\operatorname{epsilon}(1.0)` be the machine precision of the working
+   real type and define :math:`\tau_{\mathrm{tol}}=16\epsilon_{\mathrm{mach}}\tau`. A face is hit when
+   :math:`|\tau_r-\tau|\le\tau_{\mathrm{tol}}` or :math:`|\tau_z-\tau|\le\tau_{\mathrm{tol}}`. Hits
+   simultaneous within roundoff follow this radial-first order:
+
+   1. Apply the radial rule in the current cell: cross, escape or reflect.
+   2. After an internal radial crossing, update the radial index immediately and process the axial face of
+      the new cell.
+   3. If the particle escaped through the radial face, end the history without counting an axial escape.
+   4. If diffuse radial reflection reverses the axial velocity back into the cell, cancel the planned axial
+      crossing and offset inward in z.
+   5. Otherwise process the corresponding axial face.
+
+   Two internal crossings trace a connected path through the original cell, its radial neighbour and the
+   diagonal cell. The middle cell gains no extra residence. Two hits outside the roundoff tolerance are
+   processed in arrival order and the intervening flight earns residence time. Each signed crossing agrees
+   with the updated position, preventing a second count on the next iteration.
+
+   .. rubric:: 6. Inputs and outputs of the tracker
+
+   ``sub_J01_trace_fm_history``:
+
+   - Supply ``r_edge,z_edge,active,face_type`` and the prepared wall parameters
+     ``diffuse_fraction,sigma_wall``.
+   - Supply a positive ``max_events`` and position offsets ``eps_r,eps_z``. The limit counts the full event
+     loop, including internal crossings as well as wall hits.
+   - Supply ``r,z,ur,uz``, updated in place.
+   - Allocate and zero ``tally`` before the history loop. Tracking only accumulates; retain previous
+     histories when starting a new one.
+   - ``escaped`` is true only when the particle leaves through an open face.
+   - ``truncated`` marks termination without escape, including exhaustion of events, an invalid or outside
+     location or absence of a valid next event.
+
+   The routine returns no integer error code and does not distinguish truncation causes. The driver counts
+   truncations and returns a tracking error; direct callers must inspect both logical outputs. Adding
+   volume loss, random scattering or acceleration would require redefining the next event and tally
+   contributions along the trajectory.
