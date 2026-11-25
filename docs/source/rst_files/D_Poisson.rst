@@ -10,6 +10,7 @@ D_Poisson
     D_Poisson/D04_hypre_3Draz_nonuniform
     D_Poisson/D05_phi1d_to_phi3d
     D_Poisson/D06_phi_to_E
+    D_Poisson/D07_phi_to_E_nonuniform
 
 .. raw:: html
 

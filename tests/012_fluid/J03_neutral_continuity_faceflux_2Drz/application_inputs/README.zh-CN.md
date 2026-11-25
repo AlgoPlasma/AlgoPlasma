@@ -1,6 +1,6 @@
 # Application Inputs
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录提供 FM/SN → J03 应用共用的非均匀网格。B0 为无体损失算例，
 ION 使用给定的损失频率；FM 应用目前只实现 B0。

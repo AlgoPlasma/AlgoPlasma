@@ -1,10 +1,10 @@
 # K02_beall
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 `K02_beall` 包含两部分：**混叠折叠的闭式代数**，以及让混叠显形的 **Beall 统计色散谱 `S(k, f)`**。
 
-单对探针只能报出 `±π/|χ|` 以内的波数，超出该限的模态被折回，一条笔直的色散支在 `S(k, f)` 图上被打断成锯齿。`K03_mle_k2d` 用满足可辨识条件的多构型尝试解除歧义——两个单元是同一次测量的问题面和解决面。
+单对探针只能报出 `±π/|χ|` 以内的波数，超出该限的模态被折回，一条笔直的色散支在 `S(k, f)` 图上被打断成锯齿。`K03_mle_k2d` 在满足可辨识条件时使用互补的探针构型解除歧义。仅采用多种基线长度并不能保证可辨识性。
 
 ## 文件
 
@@ -93,8 +93,8 @@ peaks = fun_K02_peak_wavenumber(result["spectrum"], result["k_centers"])
 
 ## 测试
 
-- [基础数值测试](../../tests/010_diagnostics/case_basic_checks/)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
-- [宽带测试](../../tests/010_diagnostics/case_broadband_dispersion/)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
+- [基础数值测试](../../tests/010_diagnostics/case_basic_checks/README.zh-CN.md)：用解析参考检查功率归一化、相位统计、Beall 累积和方差加权反演等行为。
+- [宽带测试](../../tests/010_diagnostics/case_broadband_dispersion/README.zh-CN.md)：从合成波形驱动 K01–K03，同时验收整体色散关系和每个选定频点的波矢，并记录边界峰、并列峰。
 
 宽带页面的图、数值表、逐频点 CSV 和源码哈希来自同次运行。阈值是这个合成案例的工程验收要求，不代表普适精度保证。
 

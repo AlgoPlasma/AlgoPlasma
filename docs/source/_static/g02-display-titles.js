@@ -2,6 +2,10 @@
 (function () {
   "use strict";
   var titles = {
+  "swarm_performance": {
+    "zh": "G02 蒙特卡洛碰撞模块的性能优化与验证",
+    "en": "Performance optimization and verification of the G02 Monte Carlo collision module"
+  },
   "references": {
     "zh": "MCC 方法与验证文献",
     "en": "MCC methods and verification references"
@@ -104,6 +108,7 @@
   }
 };
   var sidebarNames = {
+    "swarm_performance": "Swarm benchmark",
     "references": "References",
     "group_foundation": "Basics",
     "mcc": "mcc.hpp",

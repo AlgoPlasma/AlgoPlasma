@@ -1,35 +1,37 @@
 # 2D RZ TEz CPML Wave-Packet Reference Test
 
-这个测试用来检查二维柱坐标 `r-z` 下 TEz 模式 CPML 对有限宽度电磁波包的吸收效果。
+[简体中文](README.zh-CN.md)
 
-FDTD 和 CPML 更新都调用项目里的 Fortran Maxwell 子程序：
+This test measures how well the TEz CPML absorbs a finite-width electromagnetic wave packet in 2D cylindrical `r-z` coordinates.
+
+Both the FDTD and CPML updates use the project's Fortran Maxwell routines.
 
 - `../../../E_Maxwell/E01_Maxwell_2Drz/mod_E01_fdtd_2d_rz_tez.f90`
 - `../../../E_Maxwell/E01_Maxwell_2Drz/mod_E01_cpml_2d_rz_tez.f90`
 
-Python 只负责画图和生成 GIF。
+Python handles plotting and GIF generation.
 
-## 当前 Setup
+## Current Setup
 
-- 坐标：2D cylindrical `r-z`
-- 模式：TE
-- 场量：`Ephi, Hr, Hz`
-- 中央有效区域：`136 x 136`
-- 小区域总网格：`160 x 160`
-- 大参考区域：`568 x 576`
+- Coordinates are 2D cylindrical `r-z`.
+- TE mode.
+- Field components are `Ephi, Hr, Hz`.
+- Central active region of `136 x 136` cells.
+- Total compact grid of `160 x 160` cells.
+- Large reference grid of `568 x 576` cells.
 - `dr = dz = 1 mm`
 - `dt = 2.335067793 ps`
-- 小区域 CPML：`npml = 12`
-- 参考区域 CPML：`npml_ref = 20`
-- 中心波长：`lambda0 = 12 mm`
-- 波包包络：`sigma_long = 18 mm, sigma_trans = 22 mm`
-- 初始场：高斯包络调制的有限宽度电磁波包，不使用持续源
-- 时间步：`450`
+- Compact-domain CPML uses `npml = 12`.
+- Reference-domain CPML uses `npml_ref = 20`.
+- Central wavelength `lambda0 = 12 mm`.
+- Packet envelope widths `sigma_long = 18 mm, sigma_trans = 22 mm`.
+- The initial field is a finite-width electromagnetic wave packet with a Gaussian envelope. There is no continuous source.
+- `450` time steps.
 - late gate：`260`
-- 静态 snapshot：`0, 150, 300, 450`
-- GIF：`Ephi` 完整动画，每 `10` 步一帧
+- Static snapshots at `0, 150, 300, 450`.
+- Full `Ephi` GIF animation with one frame every `10` steps.
 
-CPML 参数：
+CPML parameters
 
 ```text
 kappa_max = 3
@@ -38,14 +40,14 @@ m         = 3.5
 R0        = 0.012
 ```
 
-四个传播方向：
+Four propagation directions
 
-- `z_plus`：沿 `+z` 传播
-- `z_minus`：沿 `-z` 传播
-- `r_plus`：沿 `+r` 传播
-- `r_minus`：沿 `-r` 传播
+- `z_plus` propagates along `+z`.
+- `z_minus` propagates along `-z`.
+- `r_plus` propagates along `+r`.
+- `r_minus` propagates along `-r`.
 
-probe 记录量是 `Ephi`，位置在波包后方：
+The probe sits behind the packet and records `Ephi`.
 
 | case | probe index `(r,z)` |
 |---|---:|
@@ -54,25 +56,25 @@ probe 记录量是 `Ephi`，位置在波包后方：
 | `r_plus` | `(36, 80)` |
 | `r_minus` | `(124, 80)` |
 
-## 误差定义
+## Error Definition
 
-小区域结果记为 `Ecompact`，大参考区域结果记为 `Eref`。误差定义为：
+Let `Ecompact` be the compact-domain result and `Eref` the large reference-domain result. The error is defined as follows.
 
 ```text
 Error_dB(n) = 20 log10( abs(Ecompact(n) - Eref(n)) / max(abs(Eref)) )
 ```
 
-`late reflection error` 是从 `n = 260` 到 `n = 450` 之间的最大 `Error_dB`。这个时间段避开了 probe 处的主入射波，主要用来看 CPML 反射回来的残余波。
+The `late reflection error` is the maximum `Error_dB` from `n = 260` through `n = 450`. This interval excludes the main incident wave at the probe and captures the residual wave reflected by the CPML.
 
-## 当前结果
+## Current Results
 
-当前保留的结果目录：
+The current results are stored in this directory.
 
 ```text
 output_lambda12mm_npml12_weak_ephi_gif/
 ```
 
-结果：
+Results by direction
 
 | case | late reflection error | final interior energy |
 |---|---:|---:|
@@ -81,31 +83,31 @@ output_lambda12mm_npml12_weak_ephi_gif/
 | `r_plus` | -49.12683 dB | -24.09557 dB |
 | `r_minus` | -50.39389 dB | -24.09364 dB |
 
-最差 late reflection：
+Worst late reflection
 
 ```text
 worst late reflection = -49.12683 dB
 ```
 
-## 参考解检查
+## Reference Solution Check
 
-为了确认 `Eref` 不会影响结果，只改变大参考区域大小做过检查：
+To check whether `Eref` affects the results, the size of the large reference domain was varied while holding the other settings fixed.
 
 ```text
 ref_extra = 200, 350, 500
 ```
 
-三组得到的 `worst late reflection` 都是：
+All three runs gave the same `worst late reflection`.
 
 ```text
 -49.12683 dB
 ```
 
-不同参考域之间的 `Eref` 差异在 late gate 后约为 `-300 dB` 量级，所以当前 `ref_extra = 200` 的大参考区域已经足够。
+After the late gate, the difference in `Eref` between reference domains is around `-300 dB`. The current large reference domain with `ref_extra = 200` is therefore sufficient.
 
-## 输出文件
+## Output Files
 
-当前目录中保留：
+The current directory retains the following files.
 
 - `metrics.dat`
 - `case_info.dat`
@@ -120,27 +122,27 @@ ref_extra = 200, 350, 500
 - `ephi_final_*.dat`
 - `hz_final_*.dat`
 
-四个 `Ephi` GIF：
+The four `Ephi` GIFs
 
 - `ephi_animation_z_plus.gif`
 - `ephi_animation_z_minus.gif`
 - `ephi_animation_r_plus.gif`
 - `ephi_animation_r_minus.gif`
 
-## 运行命令
+## Run Commands
 
-生成当前保留结果：
+To generate the results currently retained, run the following command.
 
 ```bash
 ./run.sh 12 output_lambda12mm_npml12_weak_ephi_gif 12 3 0.02 3.5 0.012 all 136 36 450 260 200 0
 ```
 
-上面最后一个参数 `0` 表示静态 snapshot 只输出 `0,150,300,450`。
+The final argument `0` writes static snapshots only at `0,150,300,450`.
 
-如果要重新生成每 10 步一帧的完整 GIF，可以临时跑：
+To regenerate the full GIF with a frame every 10 steps, run the following command in a temporary output directory.
 
 ```bash
 ./run.sh 12 output_lambda12mm_npml12_weak_ephi_gif_fullframes 12 3 0.02 3.5 0.012 all 136 36 450 260 200 10
 ```
 
-然后只保留其中的 `ephi_animation_*.gif`。
+Retain only the `ephi_animation_*.gif` files from that run.

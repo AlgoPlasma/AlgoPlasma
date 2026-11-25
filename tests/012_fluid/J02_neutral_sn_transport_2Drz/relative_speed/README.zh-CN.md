@@ -1,6 +1,6 @@
 # J02 相对速率与坐标转换测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 验证 [J02](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.zh-CN.md) 的速度节点重构、相对速率及柱坐标速度转换，
 并比较 real4/real8 下的串行与 OpenMP 结果。检查针对代表速度节点上的运动学；

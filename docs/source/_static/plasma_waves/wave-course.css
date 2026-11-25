@@ -1,0 +1,47 @@
+/* The measurement, phase and superposition lessons share the opening's shell. */
+.course-lesson .scene { min-height: 285px; }
+.course-lesson h1 { font-size: clamp(40px, 4vw, 72px); }
+.equation { font-size: clamp(26px, 2.5vw, 40px); color: var(--mint); line-height: 1.45; margin: 10px 0 0; letter-spacing: .2px; }
+.equation small { font-size: .67em; color: var(--muted); margin-left: 22px; }
+.lesson-links { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.course-lesson .takeaway { padding-top: 12px; margin-top: 12px; }
+.course-lesson .takeaway > p:first-child { font-size: clamp(25px, 2.15vw, 35px); }
+.interaction { flex: 0 0 auto; margin-top: 12px; font-size: 21px; }
+.range-control { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 22px; }
+.range-control input { width: min(330px, 42vw); accent-color: var(--gold); cursor: pointer; height: 30px; }
+.range-control output { color: var(--gold); min-width: 8em; font-variant-numeric: tabular-nums; }
+.quiz-question { margin: 0 0 10px; font-size: 23px; }
+.quiz-options { display: flex; flex-wrap: wrap; gap: 12px; }
+.quiz-options button { padding: 9px 20px; background: transparent; border: 1px solid #526e62; border-radius: 5px; font-size: 20px; }
+.quiz-options button[aria-pressed="true"] { color: var(--mint); border-color: var(--mint); background: #21372d; }
+.feedback { color: var(--gold); font-size: 20px; margin: 9px 0 0; }
+.course-lesson[data-topic="superposition"][data-stage="5"] .scene { min-height: 190px; }
+@media (max-height: 780px) and (min-width: 701px) {
+  .course-lesson h1 { font-size: 44px; }
+  .course-lesson .narration { font-size: 24px; }
+  .course-lesson .scene { min-height: 260px; margin-top: 10px; }
+  .equation { margin-top: 5px; font-size: 30px; }
+  .course-lesson .takeaway > p:first-child { font-size: 26px; }
+  .interaction { margin-top: 6px; }
+}
+@media (max-width: 700px) {
+  .course-lesson h1 { font-size: clamp(33px, 7vw, 46px); }
+  .course-lesson .scene { min-height: 0; grid-template-rows: 300px auto; }
+  .course-lesson .scene canvas { height: 300px; min-height: 300px; }
+  .equation { font-size: 25px; overflow-wrap: anywhere; }
+  .equation small { display: block; margin: 3px 0 0; font-size: 18px; }
+  .range-control { gap: 7px 14px; font-size: 18px; }
+  .range-control input { width: 100%; order: 3; }
+  .range-control output { min-width: 0; }
+  .quiz-question { font-size: 21px; }
+  .quiz-options button, .feedback { font-size: 18px; }
+  .course-lesson .takeaway > p:first-child { font-size: 25px; }
+  .course-lesson .next-question { font-size: 17px; }
+}
+
+/* Plasma-wave contribution history (Git author dates; edit time includes timezone).
+ * 2026-11-17 20:09 +08:00 | Yinjian Zhao | git c97a40fba286
+ * 2026-11-17 20:26 +08:00 | Yinjian Zhao | git 80d9ffd0c710
+ * 2026-11-18 14:57 +08:00 | Yinjian Zhao | git bb02aa7e9638
+ * 2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+ */

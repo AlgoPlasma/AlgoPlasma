@@ -138,7 +138,8 @@
    - :download:`fun_K04_extract_waveform.py <../../../../K_Diagnostics/K04_breathing_waveform/fun_K04_extract_waveform.py>`：串起正文完整计算流程。
    - :download:`fun_K04_compact_phase.py <../../../../K_Diagnostics/K04_breathing_waveform/fun_K04_compact_phase.py>`：省点计算及其中间结果字典。
 
-   测试目录说明可下载 :download:`中文 README <../../../../tests/011_K04_breathing_waveform/README.zh-CN.md>`。基础函数可从 ``mod_K04_breathing_waveform`` 统一导入。
+   测试目录说明可下载 :download:`中文 README <../../../../tests/011_K04_breathing_waveform/README.zh-CN.md>`。
+   上面列出的函数都可以从 ``mod_K04_breathing_waveform`` 统一导入。
 
    .. rubric:: 6. 省点知识点与文档图片重画
 
@@ -316,7 +317,9 @@
    - :download:`fun_K04_extract_waveform.py <../../../../K_Diagnostics/K04_breathing_waveform/fun_K04_extract_waveform.py>`: Orchestrate the main extraction.
    - :download:`fun_K04_compact_phase.py <../../../../K_Diagnostics/K04_breathing_waveform/fun_K04_compact_phase.py>`: Compact phase and its intermediate-result dictionary.
 
-   Download the :download:`test-case README <../../../../tests/011_K04_breathing_waveform/README.en.md>`. Individual routines can all be imported from ``mod_K04_breathing_waveform``.
+   For the test directory instructions, download the
+   :download:`English README <../../../../tests/011_K04_breathing_waveform/README.md>`.
+   The routines listed above can all be imported from ``mod_K04_breathing_waveform``.
 
    .. rubric:: 6. Compact-phase example and documentation figures
 

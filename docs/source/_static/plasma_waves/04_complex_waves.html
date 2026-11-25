@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark">
+  <title>波为什么要用复数表示？ | AlgoPlasma</title>
+  <link rel="stylesheet" href="wave-intro.css"><link rel="stylesheet" href="wave-course.css"><link rel="stylesheet" href="wave-complex.css">
+  <script src="wave-navigation.js" defer></script><script src="wave-slides.js" defer></script><script src="wave-text.js" defer></script><script src="wave-course.js" defer></script><script src="wave-complex.js" defer></script>
+  <link rel="stylesheet" href="wave-presentation.css">
+  <link rel="stylesheet" href="wave-slides.css">
+</head>
+<body>
+  <div class="lesson staged-lesson course-lesson complex-lesson" id="lesson" data-page="4" data-stage="0">
+    <header class="masthead">
+      <a class="brand" href="../../learning/plasma_waves/index.html" id="return-link">Algo<span>Plasma</span></a>
+      <p class="chapter sr-only" id="chapter">04 / 波的复数表达</p>
+      <nav class="page-navigation" id="page-navigation" aria-label="课程页面导航">
+        <a id="previous-lesson" rel="prev" href="03_superposition.html?lang=zh">上一课</a>
+        <a id="lesson-index" href="../../learning/plasma_waves/index.html?lang=zh">课程目录</a>
+        <a id="next-lesson" rel="next" href="05_dispersion.html?lang=zh">下一课</a>
+      </nav>
+      <div class="header-actions"><button class="motion" id="motion" type="button" aria-pressed="false">暂停动画</button>
+        <div class="language-switch" id="language-switch" role="group" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">EN</button></div>
+      </div>
+    </header>
+    <main>
+      <header class="heading"><p class="slide-label" id="slide-label"></p><h1 id="title">波，为什么<span>用复数表示？</span></h1></header>
+      <div class="reading-layout">
+        <figure class="scene" id="scene">
+        <canvas id="plasma" role="img" aria-label="电子密度波和固定探针">复密度扰动的实部给出可测量的密度扰动；复平面的坐标轴不是空间坐标。</canvas>
+        <p id="canvas-fallback" hidden>δn = Re{n̂ exp[i(kx−ωt)]}，n̂ = A exp(iφ₀)。复振幅的单位为 m⁻³。 / Recover the real density perturbation as Re{n̂ exp[i(kx−ωt)]}, with n̂ = A exp(iφ₀) in m⁻³.</p>
+        <figcaption id="model-note"></figcaption>
+      </figure>
+        <div class="reading-panel">
+          <div class="narration" id="narration">探针测到实数的密度起伏。复数能帮我们做什么？</div>
+          <p class="equation" id="equation" hidden></p>
+          <div class="interaction range-control" id="interaction" hidden><label for="complex-phase" id="complex-phase-label">初相位 φ₀</label><input id="complex-phase" type="range" min="0" max="2" step="0.05" value="0"><output id="complex-phase-output" for="complex-phase"></output></div>
+      <section class="derivation" id="derivation" aria-labelledby="title" hidden></section>
+      <div class="takeaway" id="takeaway" hidden><p id="takeaway-text"></p></div>
+        </div>
+      </div>
+    </main>
+    <footer class="controls">
+      <div class="progress-group"><span id="stage-count"></span><span id="build-count"></span></div>
+      <button class="restart" id="restart-lesson" type="button">本课起始</button>
+      <p class="keyboard-note" id="keyboard-note">P 播放 · F 全屏</p>
+      <div class="actions">
+        <button class="back" id="back" type="button" hidden>上一步</button>
+        <button class="restart" id="restart-slide" type="button">本页起始</button>
+        <button class="advance" id="advance" type="button"><span id="advance-kind">下一步</span><span id="advance-text"></span></button>
+      </div>
+    </footer>
+  </div>
+  <p class="sr-only" id="status" role="status" aria-live="polite" aria-atomic="true"></p><p class="toast" id="toast" role="status" hidden></p>
+  <noscript><div class="no-script"><p>i²=−1；Ae^{iθ}=Acosθ+iAsinθ。密度扰动 δn=Re{ñ}，其中 ñ=n̂e^{i(kx−ωt)}，n̂=Ae^{iφ₀}。A、n̂、ñ 和 δn 均用 m⁻³；φ₀ 用 rad，k 用 rad/m，ω 用 rad/s。复平面两轴是密度扰动的实部和虚部，不是空间方向。同 k、同 ω 的波可直接叠加常复振幅。对这一平面波，∂ₜñ=−iωñ、∂ₓñ=ikñ，单位分别为 m⁻³/s 和 m⁻⁴。图中用导数除以 ω 或 k 后的量比较相位；实际总密度为 n₀+δn。</p><p>With i²=−1, Ae^{iθ}=Acosθ+iAsinθ. Recover density perturbation as δn=Re{ñ}, where ñ=n̂e^{i(kx−ωt)} and n̂=Ae^{iφ₀}. A, n̂, ñ and δn use m⁻³; φ₀ uses rad, k rad/m and ω rad/s. The complex axes describe real and imaginary density components, not spatial directions. Add constant complex amplitudes for waves with the same k and ω. For this plane wave, ∂ₜñ=−iωñ and ∂ₓñ=ikñ, in m⁻³/s and m⁻⁴. Plotted derivatives are divided by ω or k to compare phase. Total density is n₀+δn.</p><p>时间偏导：固定 x，∂ₜ[i(kx−ωt)]=−iω。由链式法则，∂ₜñ=n̂ e<sup>i(kx−ωt)</sup>(−iω)=−iωñ。空间偏导：固定 t，∂ₓ[i(kx−ωt)]=ik，因此 ∂ₓñ=n̂ e<sup>i(kx−ωt)</sup>(ik)=ikñ。令 θ=kx−ωt+φ₀，取实部得到 ∂ₜδn=Aω sinθ [m⁻³/s]、∂ₓδn=−Ak sinθ [m⁻⁴]。这里复振幅 n̂、k 和 ω 都是常量；若复振幅变化，需要加入乘积法则中的振幅导数项。</p><p>Time partial derivative: hold x fixed, so ∂ₜ[i(kx−ωt)]=−iω. By the chain rule, ∂ₜñ=n̂ e<sup>i(kx−ωt)</sup>(−iω)=−iωñ. Space partial derivative: hold t fixed, so ∂ₓ[i(kx−ωt)]=ik and ∂ₓñ=n̂ e<sup>i(kx−ωt)</sup>(ik)=ikñ. With θ=kx−ωt+φ₀, taking real parts gives ∂ₜδn=Aω sinθ [m⁻³/s] and ∂ₓδn=−Ak sinθ [m⁻⁴]. These results assume constant n̂, k and ω; a varying amplitude requires additional product-rule terms.</p></div></noscript>
+</body>
+</html>
+
+<!-- Plasma-wave contribution history (Git author dates; edit time includes timezone).
+2026-11-17 21:23 +08:00 | Yinjian Zhao | git 789e519340b7
+2026-11-18 08:16 +08:00 | Yinjian Zhao | git 45f247468130
+2026-11-18 09:53 +08:00 | Yinjian Zhao | git 23e47e779735
+2026-11-18 15:11 +08:00 | Yinjian Zhao | git 8e431a343dc7
+2026-11-18 15:43 +08:00 | Yinjian Zhao | git 1f9402dd7fdd
+2026-11-18 16:36 +08:00 | Yinjian Zhao | git 4be5f6b5764f
+2026-11-19 15:22 +08:00 | Yinjian Zhao | git b32e8af2bb2b
+2026-11-19 16:01 +08:00 | Yinjian Zhao | git 2113cbc05ed4
+2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+-->

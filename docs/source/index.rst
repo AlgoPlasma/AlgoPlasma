@@ -28,6 +28,13 @@ AlgoPlasma
     ./examples/index
 
 .. toctree::
+    :caption: Learning
+    :maxdepth: 1
+    :hidden:
+
+    ./learning/plasma_waves/index
+
+.. toctree::
     :caption: Reference
     :maxdepth: 1
     :hidden:
@@ -44,6 +51,7 @@ AlgoPlasma
     :hidden:
 
     ./community/contributors
+    Citation <./community/citation>
 
 .. image:: images/algoplasma-logo-transparent.png
    :class: ap-home-preload
@@ -69,6 +77,7 @@ AlgoPlasma
          </p>
          <div class="ap-home-actions">
            <a class="ap-home-action ap-home-action-primary" href="developer_onboarding.html">快速入门</a>
+           <a class="ap-home-action" href="learning/plasma_waves/index.html">等离子体波课堂</a>
            <a class="ap-home-action" href="examples/index.html">查看示例</a>
            <a class="ap-home-action" href="tests/index.html">查看测试</a>
            <a class="ap-home-action" href="glossary.html">术语表</a>
@@ -126,6 +135,11 @@ AlgoPlasma
 
      <section class="ap-home-footer-band">
       <p>欢迎贡献服务于等离子体科学的算法实现、案例测试、文档说明和结果验证。</p>
+      <p>如在研究中使用了 AlgoPlasma，可引用以下论文。<br>
+         Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al. <em>AlgoPlasma: Open algorithms for plasma modeling.</em>
+         <strong>SoftwareX 36</strong>, 103176 (2026).
+         <a href="https://doi.org/10.1016/j.softx.2026.103176">DOI: 10.1016/j.softx.2026.103176</a> ·
+         <a href="community/citation.html">引用格式与 BibTeX</a></p>
       <p class="ap-home-license">本项目采用 <a href="LICENSE">Apache License 2.0</a> 开源许可证；版权和归属信息见 <a href="NOTICE">NOTICE</a>。</p>
       <p class="ap-home-contact">发起人：赵隐剑 · contact@algoplasma.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
@@ -144,6 +158,7 @@ AlgoPlasma
          </p>
          <div class="ap-home-actions">
            <a class="ap-home-action ap-home-action-primary" href="developer_onboarding.html">Quick Start</a>
+           <a class="ap-home-action" href="learning/plasma_waves/index.html">Plasma Waves</a>
            <a class="ap-home-action" href="examples/index.html">View Examples</a>
            <a class="ap-home-action" href="tests/index.html">View Tests</a>
            <a class="ap-home-action" href="glossary.html">Glossary</a>
@@ -201,7 +216,20 @@ AlgoPlasma
 
      <section class="ap-home-footer-band">
       <p>Contributions are welcome for algorithm implementations, test cases, documentation, and result validation that serve plasma science.</p>
+      <p>If you use AlgoPlasma in your research, you can cite this paper.<br>
+         Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al. <em>AlgoPlasma: Open algorithms for plasma modeling.</em>
+         <strong>SoftwareX 36</strong>, 103176 (2026).
+         <a href="https://doi.org/10.1016/j.softx.2026.103176">DOI: 10.1016/j.softx.2026.103176</a> ·
+         <a href="community/citation.html">Citation and BibTeX</a></p>
       <p class="ap-home-license">AlgoPlasma is licensed under the <a href="LICENSE">Apache License 2.0</a>; copyright and attribution information is available in <a href="NOTICE">NOTICE</a>.</p>
       <p class="ap-home-contact">Initiator: Yinjian ZHAO · contact@algoplasma.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
    </div>
+
+.. Plasma-wave contribution history (Git author dates; edit time includes timezone).
+   2026-11-17 19:33 +08:00 | Yinjian Zhao | git fb1cc989ad32
+   2026-11-19 16:28 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+
+.. Contribution history (edit times include timezone).
+   2026-11-25 10:15 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+   2026-11-25 10:19 +08:00 | Yinjian Zhao | edit (Codex-assisted)

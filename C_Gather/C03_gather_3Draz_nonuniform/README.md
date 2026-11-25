@@ -1,24 +1,24 @@
-# C03：非均匀三维 RAZ 场 Gather
+# C03: Nonuniform 3D RAZ Field Gather
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-使用 D04 风格单元索引，在物理坐标 `(r [m],alpha [rad],z [m])` 处插值场，输出柱坐标 E/B 分量。
+Gather fields at physical coordinates `(r [m],alpha [rad],z [m])` using D04-style cell indexing; return cylindrical E/B components.
 
 - `Er/Ea/Ez`: `(face,center,center)` / `(center,face,center)` / `(center,center,face)`.
 - `Br/Ba/Bz`: `(face,face,face)`.
 
-该布局用于静电交错 E 和给定节点 B，不直接适配 E02 Yee 场。调用方负责粒子归属、ghost 场及物理边界。
+This layout supports staggered electrostatic E and prescribed nodal B, not E02 Yee fields. The caller prepares particle ownership, ghost fields, and physical boundaries.
 
-## 文件与接口
+## Files and Interfaces
 
-- `mod_C03_gather_3Draz_nonuniform.f90`: 模块入口.
-- `sub_C03_gather_3Draz_nonuniform.f90`: 粒子数组包装接口.
-- `sub_C03_gather_3Draz_nonuniform_point.f90`: 单点 gather.
-- `sub_C03_gather_helpers.f90`: 公开 sub_C03_check_grid 与私有辅助函数.
+- `mod_C03_gather_3Draz_nonuniform.f90`: Module entry.
+- `sub_C03_gather_3Draz_nonuniform.f90`: Particle-array wrapper.
+- `sub_C03_gather_3Draz_nonuniform_point.f90`: Single-point gather.
+- `sub_C03_gather_helpers.f90`: Public sub_C03_check_grid and private helpers.
 
-## 调用片段
+## Call Fragment
 
-以下假定几何及场数组已分配并填充。
+Assumes geometry and field arrays are already allocated and populated.
 
 ```fortran
 use mod_C03_gather_3Draz_nonuniform
@@ -30,8 +30,8 @@ call sub_C03_gather_3Draz_nonuniform_point( &
     x,il,iu,r_face,a_face,z_face,dr,da,dz,Er,Ea,Ez,Br,Ba,Bz,E,B)
 ```
 
-可选参数：`cell(3)` 为只读单元缓存；`a_period>0` 启用角向归约；`a_origin` 默认 0 且必须与周期同时使用。
+Optional arguments: `cell(3)` is a read-only cell cache; `a_period>0` enables angular wrapping; `a_origin` defaults to zero and requires the period.
 
-只编译 module 入口，使用 `gfortran -cpp`。默认 `real`；双精度可加 `-fdefault-real-8`，调用方须采用一致精度。
+Compile only the module entry with `gfortran -cpp`. Default `real` is used; for double precision, apply `-fdefault-real-8` consistently to the caller and module.
 
-[完整接口、公式与边界说明](../../docs/source/rst_files/C_Gather/C03_gather_3Draz_nonuniform.rst).
+[Full interface, formulas, and boundary contracts](../../docs/source/rst_files/C_Gather/C03_gather_3Draz_nonuniform.rst).

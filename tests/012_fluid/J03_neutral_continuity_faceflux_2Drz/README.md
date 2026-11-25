@@ -1,38 +1,39 @@
 # J03 continuity tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-对应实现见[模块说明](../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)。下列命令均从仓库根目录运行。
+Implementation: [module README](../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.md). Run the commands below from the repository root.
 
-需要 Bash 和 GNU Fortran（`gfortran`）；普通测试采用八字节实数并启用数组越界检查。
+Requires Bash and GNU Fortran (`gfortran`); the ordinary runner uses eight-byte real values and runtime bounds checks.
 
-本目录先运行局部和配置测试，再运行真实前处理接续 J03 的小规模测试：
+The runner executes local/setup checks before actual preprocessing-to-continuity integration:
 
-- `test_J03_continuity_units`：闭合系数、时间步、单步公式、残差及错误返回。
-- `test_J03_equilibrium`：人工通量下的边界平衡、源损平衡和总量守恒。
-- `test_J03_transient`：解析时间演化、时间步收敛、共享面、瞬态收支和稳态残差判据。
-- `test_application_case`：应用有效区域与 ION 损失窗口。
-- `test_J01_J03_channel`：真实 FM 轨迹与统计接入 J03；两单元解析时间演化；完整随机前处理的守恒。
-- `test_J02_J03_analytic`：SN 解析分布的空间加密；实际面通量接入 J03，从空场推进至参考场。
+- `test_J03_continuity_units`: closure, timestep, single-step formulas, residuals and errors.
+- `test_J03_equilibrium`: artificial-flux boundary equilibrium, source/loss equilibrium and conservation.
+- `test_J03_transient`: analytical time evolution, temporal convergence, shared faces, transient balance and steady criteria.
+- `test_application_case`: application mask and ION loss window.
+- `test_J01_J03_channel`: actual trajectories and tallies passed to J03, two-cell analytical evolution, and a complete sampled FM solve.
+- `test_J02_J03_analytic`: spatial refinement against an exact SN distribution, followed by filling from zero with actual reconstructed fluxes.
 
-J01 的独立粒子测试位于 `../J01_free_molecular`，J02 的局部和并行测试位于
-`../J02_neutral_sn_transport_2Drz`。串联测试不读取完整应用输出。
+Independent J01 particle tests live in `../J01_free_molecular`, and the J02
+local and parallel tests live in `../J02_neutral_sn_transport_2Drz`. These
+integration checks do not read application outputs.
 
-在仓库根目录运行：
+From the repository root:
 
 ```bash
 bash tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/run.sh
 ```
 
-每个程序须无失败断言并以零状态退出，日志写入 `build/*.log`。
-对应 HTML 在 Tests / 012_fluid 的 J03 module、J03 transient 和 Integration tests 页面，
-给出解析参考、误差定义和通过标准。
+All assertions and exit statuses must indicate success. Logs are written to `build/*.log`.
+In the Sphinx documentation, see Tests / 012_fluid / J03 module, J03 transient,
+and Integration tests for analytical references, error definitions and acceptance criteria.
 
-完整算例位于 `application_reference_J01`（FM→J03）和
-`application_reference`（SN→J03），它们与这些快速测试分开执行。
-`clean.sh` 同时清理本目录和完整应用的生成物；需要保留应用结果时不要运行它。
+Full applications remain separate in `application_reference_J01` (FM→J03) and
+`application_reference` (SN→J03). The clean script also removes application
+outputs; preserve any needed results first.
 
-应用输入与验收逻辑检查：
+Application input and acceptance checks:
 
 ```bash
 python3 tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/test_application_checks.py

@@ -1,6 +1,6 @@
 # G03_DSMC
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 C++20 串行、单组分中性单原子、等权重的 HS/VHS/VSS 弹性碰撞数值库。
 公开入口统一接收柱坐标粒子数组与非均匀三维 `r/theta/z` 网格。

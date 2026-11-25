@@ -1,17 +1,18 @@
 # SN → J03 Application Tests
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-本目录将 [J02 的 SN 参考场](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.zh-CN.md)
-接入 [J03 连续性求解](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.zh-CN.md)，
-验证无体损失 B0 与给定体损失 ION 两个完整应用。
-SN 保留 r-z 空间和两个速度分量，速度求积使用一个平面角度；J03 推进标量密度。
-这一约化模型的柱坐标体积与面积用于离散守恒。
+This directory passes [J02 SN reference fields](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.md)
+to the [J03 continuity solver](../../../../J_Fluid/J03_neutral_continuity_faceflux_2Drz/README.md).
+It checks complete applications for loss-free B0 and prescribed-volume-loss ION.
+SN retains r-z space and two velocity components, with one in-plane angle in its
+velocity quadrature. J03 advances scalar density. Cylindrical volumes and areas
+supply the discrete conservation measures for this reduced model.
 
-## 环境与运行
+## Requirements and execution
 
-需要 Bash、GNU Fortran、Python 3、NumPy 和 Matplotlib。绘图使用 `Agg` 后端。
-以下命令从仓库根目录运行：
+Bash, GNU Fortran, Python 3, NumPy and Matplotlib are required. Plotting uses the
+`Agg` backend. Run from the repository root:
 
 ```bash
 OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE \
@@ -19,44 +20,51 @@ APPLICATION_OUTPUT="$HOME/algoplasma-results/sn-openmp-B0" \
 bash tests/012_fluid/J03_neutral_continuity_faceflux_2Drz/application_reference/run_application_reference.sh B0
 ```
 
-运行 ION 时，将最后参数改为 `ION` 并选择另一输出目录。
-J02 默认启用 OpenMP，编译和链接均添加 `-fopenmp`；设置 `OPENMP=0` 可采用串行构建。
-线程并行用于 J02 的离散速度扫描，J03 时间推进保持串行。
+For ION, change the final argument to `ION` and select a different output directory.
+J02 enables OpenMP by default, adding `-fopenmp` during compilation and linking;
+set `OPENMP=0` for a serial build. Thread parallelism applies to J02 discrete-velocity
+sweeps; J03 time stepping remains serial.
 
-脚本第二个参数可指定网格目录；默认使用同级
-[application_inputs](../application_inputs/README.zh-CN.md)。
-输入须保持规定的 256×256 网格及有效区域索引。网格检查在编译前执行，
-有效区域与 ION 损失由 [application_case.f90](../application_case.f90) 生成。
+The second script argument can select another grid directory. The default is the
+sibling [application_inputs](../application_inputs/README.md) directory.
+Inputs must retain the prescribed 256×256 grid and active-region indices.
+Grid validation precedes compilation; [application_case.f90](../application_case.f90)
+generates the active region and ION loss.
 
-## 检查内容与通过条件
+## Checks and acceptance criteria
 
-脚本依次运行 J02 前处理、J03 连续性求解和公共验收绘图程序。
-通过时 `summary.txt` 包含 `RESULT: PASS`；检查失败时脚本返回非零状态。
+The runner executes J02 preprocessing, J03 continuity and the shared acceptance/plotting
+program in sequence. On success, `summary.txt` contains `RESULT: PASS`; a failed
+check returns a nonzero process status.
 
-| 检查 | 通过条件 |
+| Check | Acceptance criterion |
 | --- | --- |
-| SN 前处理 | 反射源迭代收敛 |
-| 前处理与 J03 密度 | 有效单元内有限且非负 |
-| J03 稳态 | 求解器报告收敛 |
-| 局部残差 | 归一化残差 ≤ `1e-8` |
-| 全局收支 | 相对粒子率失衡 ≤ `1e-6` |
+| SN preprocessing | Reflection source iteration converges |
+| Preprocessing and J03 densities | Finite and nonnegative in active cells |
+| J03 steady state | Solver reports convergence |
+| Local residual | Normalized residual ≤ `1e-8` |
+| Global balance | Relative particle-rate imbalance ≤ `1e-6` |
 
-密度场相对前处理的变化作为诊断输出；面通量闭合下的 J03 密度由其自身方程决定。
-公式和历史运行记录见[完整应用测试页](../../../../docs/source/tests/012_fluid/application_tests.rst)。
-该页 2026-10-06 的 SN B0/ION 记录采用 4 个 OpenMP 线程；空间 MPI 的验证范围见
-[J02 测试说明](../../J02_neutral_sn_transport_2Drz/README.zh-CN.md)。
+Density change relative to preprocessing is a diagnostic; the J03 equation and
+face-flux closure determine its steady density. Formulas and historical runs are
+documented on the [full-application test page](../../../../docs/source/tests/012_fluid/application_tests.rst).
+Its SN B0/ION records dated 2026-10-06 used four OpenMP workers. See the
+[J02 test guide](../../J02_neutral_sn_transport_2Drz/README.md) for the scope of spatial MPI verification.
 
-## 输出与清理
+## Outputs and cleanup
 
-默认输出目录为本目录的 `build/application_reference/output_B0` 或 `output_ION`。
-`APPLICATION_OUTPUT` 可覆盖这一位置；指定目录须为空，重复运行应选择新的目录。
+The default output directory is `build/application_reference/output_B0` or
+`output_ION` within this directory. `APPLICATION_OUTPUT` overrides that location.
+The destination must be empty; choose a new directory for each rerun.
 
-| 输出 | 内容 |
+| Output | Content |
 | --- | --- |
-| `j02/`、`j03/` | 各阶段的场数据、收支记录与 `run.log` |
-| `summary.txt` | 前处理状态、连续性收敛、残差、收支和密度变化 |
-| `j02_chain_density.png` | 同一色标下的两个面板：SN 参考密度与 J03 稳态密度 |
+| `j02/`, `j03/` | Stage-specific fields, balance records and `run.log` |
+| `summary.txt` | Preprocessing status, continuity convergence, residual, balance and density change |
+| `j02_chain_density.png` | Two panels on a common colour scale: SN reference density and J03 steady density |
 
-图中横轴为 z、纵轴为 r，颜色表示中性密度；结合 `summary.txt` 判断是否通过。
-J03 测试目录的 `clean.sh` 会删除本应用的整个 `build/`，包括默认结果。
-需要保留的输出应先另存；写到外部目录的结果由使用者管理。
+The horizontal axis is z, the vertical axis is r, and colour represents neutral
+density. Use `summary.txt` with the plot to assess acceptance. The J03 test
+directory's `clean.sh` removes this application's entire `build/`, including
+default results. Save needed output elsewhere first; results written to external
+directories remain under the user's control.

@@ -1,50 +1,50 @@
 # A_Pusher
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-`A_Pusher` 收集 AlgoPlasma 中的粒子推进算法，用于在给定电场、磁场、粒子电荷质量比和时间步长的条件下更新粒子速度或粒子相空间状态。当前目录包含三个粒子推进器，覆盖直角坐标、柱坐标和相对论速度推进场景。
+`A_Pusher` collects particle-pushing algorithms in AlgoPlasma. These routines update particle velocity or phase-space state under prescribed electric and magnetic fields, particle charge-to-mass ratio, and time step. The current directory contains three pushers for Cartesian coordinates, cylindrical coordinates, and relativistic velocity updates.
 
-## 当前算法
+## Current Algorithms
 
-| 编号 | 目录 | 算法 | 主要用途 |
+| ID | Directory | Algorithm | Main purpose |
 | --- | --- | --- | --- |
-| A01 | [`A01_Boris_3Dxyz`](A01_Boris_3Dxyz/) | 3D 直角坐标非相对论 Boris 推进 | 对单个粒子的速度 `v = (v_x, v_y, v_z)` 做一次完整 Boris 更新。 |
-| A02 | [`A02_Boris_3Drtz`](A02_Boris_3Drtz/) | 3D 柱坐标非相对论 Boris 推进 | 在柱坐标 `x = (r, theta, z)` 中同时更新单个粒子的位置和速度 `v = (v_r, v_theta, v_z)`。 |
-| A03 | [`A03_Higuera_Cary_relativistic_3Dxyz`](A03_Higuera_Cary_relativistic_3Dxyz/) | 3D 直角坐标相对论 Higuera-Cary 推进 | 用 Higuera-Cary 方法更新相对论粒子速度，适合高速粒子和强电磁场问题。 |
+| A01 | [`A01_Boris_3Dxyz`](A01_Boris_3Dxyz/) | Non-relativistic Boris pusher in 3D Cartesian coordinates | Advances the velocity `v = (v_x, v_y, v_z)` of a single particle by one full Boris step. |
+| A02 | [`A02_Boris_3Drtz`](A02_Boris_3Drtz/) | Non-relativistic Boris pusher in 3D cylindrical coordinates | Advances both position `x = (r, theta, z)` and velocity `v = (v_r, v_theta, v_z)` for a single particle. |
+| A03 | [`A03_Higuera_Cary_relativistic_3Dxyz`](A03_Higuera_Cary_relativistic_3Dxyz/) | Relativistic Higuera-Cary pusher in 3D Cartesian coordinates | Updates relativistic particle velocity for high-speed particles and strong electromagnetic fields. |
 
 ## A01_Boris_3Dxyz
 
-- 模块入口：`mod_A01_Boris_3Dxyz.f90`
-- 核心子程序：`sub_A01_Boris_3Dxyz(v, E, B, k)`
-- 坐标系：3D Cartesian / `xyz`
-- 更新量：速度 `v`
-- 适用范围：非相对论单粒子速度推进
+- Module entry: `mod_A01_Boris_3Dxyz.f90`
+- Core routine: `sub_A01_Boris_3Dxyz(v, E, B, k)`
+- Coordinate system: 3D Cartesian / `xyz`
+- Updated quantity: velocity `v`
+- Scope: non-relativistic single-particle velocity push
 
-该算法采用标准 Boris 结构，先进行电场半步加速，再进行磁场旋转，最后再进行电场半步加速。参数 `k` 表示 `q dt / 2m`。
+This implementation follows the standard Boris structure: electric-field half kick, magnetic-field rotation, and a second electric-field half kick. The parameter `k` denotes `q dt / 2m`.
 
 ## A02_Boris_3Drtz
 
-- 模块入口：`mod_A02_Boris_3Drtz.f90`
-- 核心子程序：`sub_A02_Boris_3Drtz_push_v_x(x, v, E, B, k, dt)`
-- 坐标系：3D cylindrical / `rtz`
-- 更新量：位置 `x` 和速度 `v`
-- 适用范围：非相对论柱坐标粒子推进
+- Module entry: `mod_A02_Boris_3Drtz.f90`
+- Core routine: `sub_A02_Boris_3Drtz_push_v_x(x, v, E, B, k, dt)`
+- Coordinate system: 3D cylindrical / `rtz`
+- Updated quantities: position `x` and velocity `v`
+- Scope: non-relativistic cylindrical-coordinate particle push
 
-该算法在柱坐标下执行 Boris 速度更新，并根据柱坐标几何关系推进粒子位置。输入的电场和磁场分量应与柱坐标分量一致。
+This implementation performs the Boris velocity update in cylindrical coordinates and advances the particle position with the corresponding cylindrical geometry. Electric and magnetic field components should be provided in cylindrical components.
 
 ## A03_Higuera_Cary_relativistic_3Dxyz
 
-- 模块入口：`mod_A03_Higuera_Cary_relativistic_3Dxyz_pusher.f90`
-- 核心子程序：`sub_A03_Higuera_Cary_relativistic_3Dxyz_push_v(v, E, B, k)`
-- 坐标系：3D Cartesian / `xyz`
-- 更新量：速度 `v`
-- 适用范围：相对论速度推进
+- Module entry: `mod_A03_Higuera_Cary_relativistic_3Dxyz_pusher.f90`
+- Core routine: `sub_A03_Higuera_Cary_relativistic_3Dxyz_push_v(v, E, B, k)`
+- Coordinate system: 3D Cartesian / `xyz`
+- Updated quantity: velocity `v`
+- Scope: relativistic velocity push
 
-该算法使用 Higuera-Cary 相对论推进格式。它先把速度转换为 proper velocity `u = gamma v`，经过电场半步推进和磁场旋转后，再转换回速度形式。
+This implementation uses the relativistic Higuera-Cary scheme. It converts velocity to proper velocity `u = gamma v`, applies the electric half kicks and magnetic rotation, and converts the result back to velocity.
 
-## 使用方式
+## Usage
 
-这些算法目前以 Fortran 源码级模块组织。通常在调用程序中通过 `mod_*.f90` 入口文件引入：
+The pushers are currently organized as source-level Fortran modules. A calling program usually includes the corresponding `mod_*.f90` entry file:
 
 ```fortran
 #include "A_Pusher/A01_Boris_3Dxyz/mod_A01_Boris_3Dxyz.f90"
@@ -64,7 +64,7 @@ program demo_a01
 end program demo_a01
 ```
 
-编译时通常需要开启 C 预处理：
+Compilation usually requires C preprocessing:
 
 ```bash
 gfortran -cpp -O2 -fdefault-real-8 demo_a01.f90

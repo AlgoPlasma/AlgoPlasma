@@ -1,30 +1,27 @@
 # J_Fluid
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-本目录提供中性参考场计算与密度演化方法。它可以为粒子网格法（Particle-in-Cell，PIC）应用提供中性密度；带电粒子推进、电磁场和反应率计算由其他模块负责。
+This group provides neutral reference fields and density evolution. It can supply neutral density to Particle-in-Cell (PIC) applications; charged-particle pushing, electromagnetic fields and reaction-rate calculations belong to other modules.
 
-## 目录分工
+## Directories
 
-| 目录 | 计算任务 | 主要输出 |
+| Directory | Calculation | Main outputs |
 | --- | --- | --- |
-| `J01_free_molecular` | 自由分子流（Free Molecular，FM）的入口采样、壁面反射与粒子历史统计 | 参考密度、平均速度、有符号面通量 |
-| `J02_neutral_sn_transport_2Drz` | 离散纵标法（Discrete Ordinates，SN）的速度求积、输运扫描与反射迭代 | 参考密度、平均速度、入射与出射通量 |
-| `J03_neutral_continuity_faceflux_2Drz` | 用参考场建立面输运系数，再推进瞬态连续性方程 | 当前密度、面通量与收支量 |
+| `J01_free_molecular` | Free Molecular (FM) inlet sampling, reflection and particle-history statistics | Reference density, mean velocity and signed face fluxes |
+| `J02_neutral_sn_transport_2Drz` | Discrete Ordinates (SN) quadrature, transport sweeps and reflection iteration | Reference density, mean velocity, incoming and outgoing fluxes |
+| `J03_neutral_continuity_faceflux_2Drz` | Reference-field face coefficients and transient continuity | Current density, fluxes and balance quantities |
 
-J01 与 J02 是可选的参考场计算方法，不需要依次执行。J03 只接收几何、参考密度和通量数组，不依赖前处理内部实现。
+J01 and J02 are alternative reference-field methods, not successive steps. J03 consumes geometry and field arrays without depending on preprocessor internals.
 
-## 模型范围
+## Scope and compilation
 
-当前中性前处理保留 r、z 坐标和两个速度分量，不含周向速度动力学。柱坐标体积和面积不意味着完整三速度轴对称模型；各方法的方程与近似分别见其文档。J03 只演化标量密度，不自动重算参考场。
+The neutral preprocessors retain r,z and two velocity components, without azimuthal velocity dynamics. Cylindrical measures do not imply full three-velocity axisymmetric kinetics; each method documents its own equations and approximations. J03 evolves scalar density and does not rerun reference-field calculations.
 
-编译所需的 `mod_*.f90` 并启用预处理，不单独编译被包含的 `sub_*.f90`。模块与调用程序须采用相同实数精度。
+Compile the required `mod_*.f90` with preprocessing enabled, not the included `sub_*.f90` files. Keep real precision consistent between modules and callers.
 
-## 阅读顺序
+## Reading order
 
-Sphinx 的 [J_Fluid](../docs/source/rst_files/J_Fluid.rst) 按以下顺序组织：
+The Sphinx [J_Fluid](../docs/source/rst_files/J_Fluid.rst) section contains independent J01 and J02 routes with their local data conventions, followed by J03 with its complete calling sequence.
 
-1. J01 或 J02：独立阅读所需方法的网格、模型、推导与接口。
-2. J03：参考场闭合、瞬态推进和完整调用流程。
-
-运行命令与断言集中在 [tests/012_fluid](../tests/012_fluid/README.zh-CN.md)，不与算法推导混排。
+Commands and assertions belong to [tests/012_fluid](../tests/012_fluid/README.md), separate from algorithm derivations.

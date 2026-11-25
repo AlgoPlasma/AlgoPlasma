@@ -1,32 +1,32 @@
-# A01_Boris_3Dxyz 测试
+# A01_Boris_3Dxyz Test
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-本目录提供 `A_Pusher/A01_Boris_3Dxyz` 的独立测试，用于验证三维直角坐标中的 Boris 粒子速度推进器。测试程序会编译一个小型 Fortran 驱动，运行多个单粒子解析算例，并把数值轨道、速度和解析解进行对比。
+This directory provides an independent test for `A_Pusher/A01_Boris_3Dxyz`, the Boris particle velocity pusher in 3D Cartesian coordinates. The test builds a small Fortran driver, runs several single-particle analytic cases, and compares the numerical trajectory and velocity against reference solutions.
 
-## 测试内容
+## Test Cases
 
-测试入口为 `source_f90/main.f90`，会依次运行 4 个算例：
+The entry point is `source_f90/main.f90`, which runs four cases:
 
-| 输出文件 | 算例 | 验证内容 |
+| Output file | Case | What it checks |
 | --- | --- | --- |
-| `build/case01_gyro.dat` | 纯磁场回旋运动 | 对比解析回旋轨道，并检查速度平方守恒。 |
-| `build/case02_Eonly.dat` | 纯电场加速 | 对比解析位置和速度。 |
-| `build/case03_ExB.dat` | 垂直电磁场 | 验证回旋运动叠加 `E x B` 漂移。 |
-| `build/case04_ExB_drift.dat` | 纯 `E x B` 漂移 | 验证无回旋情况下的漂移速度和轨道。 |
+| `build/case01_gyro.dat` | Gyromotion in a magnetic field | Compares against the analytic gyro orbit and checks conservation of velocity magnitude squared. |
+| `build/case02_Eonly.dat` | Acceleration in an electric field | Compares position and velocity against the analytic solution. |
+| `build/case03_ExB.dat` | Perpendicular electric and magnetic fields | Checks gyromotion combined with `E x B` drift. |
+| `build/case04_ExB_drift.dat` | Pure `E x B` drift | Checks drift velocity and trajectory without gyration. |
 
-运行程序时，每个算例会在终端输出最大速度误差和最大位置误差。绘图脚本会读取这些 `.dat` 文件，并生成诊断图。
+When the executable runs, each case prints the maximum velocity error and maximum position error. The plotting script reads the generated `.dat` files and writes diagnostic figures.
 
-## 环境要求
+## Requirements
 
-编译和运行需要：
+Build and run requirements:
 
-- POSIX shell 或 bash。
-- GNU Fortran 编译器 `gfortran`。
-- Python 3。
-- Python 包 `numpy` 和 `matplotlib`。
+- POSIX shell or bash.
+- GNU Fortran compiler `gfortran`.
+- Python 3.
+- Python packages `numpy` and `matplotlib`.
 
-在 Ubuntu/Debian 上可使用：
+On Ubuntu/Debian, install the required tools with:
 
 ```bash
 sudo apt update
@@ -34,7 +34,7 @@ sudo apt install -y gfortran python3 python3-pip
 python3 -m pip install --user numpy matplotlib
 ```
 
-如果希望使用虚拟环境：
+To use a virtual environment instead:
 
 ```bash
 python3 -m venv ~/.venv
@@ -42,9 +42,9 @@ source ~/.venv/bin/activate
 pip install numpy matplotlib
 ```
 
-## 编译与运行
+## Build and Run
 
-从本目录运行：
+Run from this directory:
 
 ```bash
 cd tests/002_pusher/A01_Boris_3Dxyz
@@ -53,24 +53,24 @@ bash make.sh
 bash run.sh
 ```
 
-`make.sh` 会创建 `build/` 并生成 `build/a.out`。`run.sh` 会进入 `build/` 运行该程序，并生成：
+`make.sh` creates `build/` and builds `build/a.out`. `run.sh` enters `build/`, runs the executable, and generates:
 
 - `build/case01_gyro.dat`
 - `build/case02_Eonly.dat`
 - `build/case03_ExB.dat`
 - `build/case04_ExB_drift.dat`
 
-如果 `make.sh` 提示 `build` 已存在，请先运行 `bash clean.sh`。
+If `make.sh` reports that `build` already exists, run `bash clean.sh` first.
 
-## 绘图
+## Plot
 
-运行：
+Run:
 
 ```bash
 bash plot.sh
 ```
 
-绘图脚本会读取 `build/` 中的数据文件，并将图片保存到 `figs_cases/`。当前会生成：
+The plotting script reads the data files under `build/` and saves figures to `figs_cases/`. It currently writes:
 
 - `figs_cases/case01_gyro_traj_xy.png`
 - `figs_cases/case01_gyro_v2_t.png`
@@ -78,15 +78,15 @@ bash plot.sh
 - `figs_cases/case03_ExB_traj_xy.png`
 - `figs_cases/case04_drift_traj_xy.png`
 
-## 清理
+## Clean
 
-运行：
+Run:
 
 ```bash
 bash clean.sh
 ```
 
-该命令会删除：
+This removes:
 
 - `build/`
 - `figs_cases/`

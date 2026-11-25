@@ -1,5 +1,7 @@
 # D01_hypre_3Dxyz OpenMP-thread comparison
 
+[简体中文](README.zh-CN.md)
+
 This case benchmarks the D01 Cartesian Poisson/HYPRE solver on a fixed
 `320 x 80 x 320` grid. The benchmark is intended for exactly 4 MPI ranks and
 scans OpenMP thread counts per rank. It compares Kunpeng GCC, Kunpeng BiSheng,

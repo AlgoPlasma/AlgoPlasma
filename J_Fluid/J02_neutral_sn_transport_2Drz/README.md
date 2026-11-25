@@ -1,235 +1,271 @@
 # J02_neutral_sn_transport_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-本模块用离散纵标法（Discrete Ordinates Method，SN）求解二维 r-z 网格上的稳态中性粒子输运。
-空间离散采用一阶不连续 Galerkin 方法（P1-DG），体积与面积按柱坐标几何计算。
+`J02_neutral_sn_transport_2Drz` provides reusable deterministic discrete-ordinates
+(SN) building blocks for steady neutral transport on an r-z mesh with cylindrical geometry.
 
-空间算子沿用约化模型的柱坐标守恒形式：
+The spatial operator follows the reduced conservative cylindrical
+form
 
 ```text
-(1/r) d(r mu psi)/dr + d(eta psi)/dz + sigma_t psi = 0。
+(1/r) d(r mu psi)/dr + d(eta psi)/dz + sigma_t psi = 0.
 ```
 
-因此当 `mu` 非零时，逐方向常数 `psi` 不是径向自由流不变量。
-测试应遵循这一约化方程，不能直接套用笛卡尔自由流不变性的假设。
+Consequently, a direction-wise constant `psi` is not a radial free-stream
+invariant when `mu` is nonzero. Tests must respect this reduced equation
+rather than assume a Cartesian free-stream invariant.
 
-当前阶段包括柱坐标几何、角度节点、等宽或显式非均匀速率区间、入口外侧气体模型与入射粒子模型、入口
-通量归一化、局部 P1-DG 算子、开放边界方向扫描、镜面/漫反射迭代、z-low
-部分面入口积分，以及单元矩和内部面通量重构。
-`gauss-chebyshev` 被明确保留为全圆 `midpoint` 节点集合及排列的别名，并不是另一套
-数值求积规则。
+The first implementation stage contains cylindrical geometry, midpoint
+full-circle angular nodes, uniform or explicitly supplied nonuniform speed groups, reservoir and MC-sampled
+inflow construction, flux normalization, a local P1-DG operator,
+open-boundary directional sweeps, specular/diffuse wall source iteration,
+partial z-low inlet integration, and cell-moment/internal-face-flux
+reconstruction. `gauss-chebyshev` is retained as an explicit alias for the
+same full-circle midpoint node set and ordering; it is not a second rule.
 
-相空间数组采用适合 Fortran 的 `psi(3,nr,nz,n_dir)` 布局，第一维对应局部基函数
-`(1, xi, zeta)` 的三个系数。速度权重已经包含二维极坐标面积元
-`v dv dtheta`。
+The phase-space state uses the Fortran-native layout
+`psi(3,nr,nz,n_dir)`. The first index stores coefficients of the scaled local
+basis `(1, xi, zeta)`. Velocity-space weights contain the two-dimensional polar
+measure `v dv dtheta`.
 
-核心算法不读取 PIC 网格或 NML 文件，也不负责写应用结果。局部 P1 多项式在角点
-出现负值时，扫描器退回满足常数检验函数收支方程的 P0 解；这不是直接截断负值，
-也不保证保留原 P1 解的单元平均值。
+This numerical kernel does not read PIC grids or namelists and does not write
+application output. If a local P1 polynomial becomes negative at a corner,
+the sweep uses a P0 fallback satisfying the constant-test balance equation;
+this is not clipping or preservation of the original P1 mean.
 
-## 模型范围与维度
+## Functional files
 
-本模块保留两个空间坐标（r、z）和两个速度分量（v_r、v_z）。
-速度用速率和一个平面角度离散，不包含周向速度及其动力学。
-柱坐标的体积、面积和 r 权重不意味着完整的轴对称 2D3V 模型。
+- `sub_J02_sn_inflow.f90`: reservoir shapes and crossing-event conversion.
+- `sub_J02_sn_source.f90`: prescribed inlet-flux normalization.
+- `sub_J02_sn_validation.f90`: shared inlet-distribution checks.
+- `sub_J02_sn_boundary.f90`: partial-inlet area fractions and local intervals.
+- `sub_J02_sn_wall.f90`: thermal shape, specular mapping and diffuse-flux normalization.
+- `sub_J02_sn_loss.f90`: removal frequency to sigma_t conversion.
+- `sub_J02_sn_sweep.f90`: one sweep, including boundary assembly and positivity recovery.
+- `sub_J02_sn_reflection.f90`: source iteration calling the same sweep.
 
-## 功能文件
+The same module includes all files. Redundant sweep entry points have been removed.
+For zero drift, call `sub_J02_build_drifted_maxwellian_inflow_shape` with both drift velocities zero.
 
-各文件分别负责入口分布、通量归一化、边界、壁面反射、体损失和输运求解：
+## Main interfaces
 
-- `sub_J02_sn_inflow.f90`：入口外侧气体的 Maxwell 速度分布与入射粒子的速度分布转换。
-- `sub_J02_sn_source.f90`：入口目标通量归一化。
-- `sub_J02_sn_validation.f90`：入口分布共用的输入检查。
-- `sub_J02_sn_boundary.f90`：部分入口的面积比例与局部区间。
-- `sub_J02_sn_wall.f90`：由壁温确定的速度分布、镜面方向映射与漫反射通量归一化。
-- `sub_J02_sn_loss.f90`：由损失频率计算单位路程损失系数。
-- `sub_J02_sn_sweep.f90`：单次迎风扫描、边界组装及保正。
-- `sub_J02_sn_reflection.f90`：反复调用同一扫描过程，控制反射迭代。
+- `sub_J02_solve_transport`: application entry that selects an open sweep or
+  reflecting source iteration and reconstructs cell fields, internal face fluxes
+  and boundary fluxes into
+  `sn_transport_result_type`. Supply exactly one of `boundary_inflow` and
+  `zlo_inflow`; partial-inlet interval bounds must be supplied together.
+  Check `ierr == SN_SUCCESS` before using any result. Sweep, source iteration and reconstruction can also be called separately.
 
-所有文件由同一个 mod 文件包含，串行与并行扫描共用单元求解过程。
-零漂移直接调用 `sub_J02_build_drifted_maxwellian_inflow_shape`，两个漂移速度均设为零。
+- `sub_J02_initialize_mesh`: validates `r_edge`, `z_edge`, and `active`, then
+  constructs the mesh object.
+- `sub_J02_build_geometry`: computes cylindrical volumes, face areas, and the
+  radial P1 mean correction for a supplied azimuthal span.
+- `sub_J02_build_phase_quadrature`: constructs flattened angle-speed nodes and
+  weights. `n_angles` must be at least 8 and divisible by 4 so no ordinate lies
+  on a coordinate axis.
+- `sub_J02_build_phase_quadrature_from_edges`: constructs the same speed-angle layout from
+  `speed_edge(:)` in m/s. Edges must be finite, start at zero and strictly increase.
+  Group count and cutoff follow from the array; nodes are arithmetic midpoints and
+  radial weights integrate `v dv` exactly. The original uniform constructor is unchanged.
+- `sub_J02_build_speed_groups_from_edges`: returns only speed nodes and radial weights.
+- `sub_J02_build_drifted_maxwellian_inflow_shape`: samples the same reservoir
+  definition with prescribed `(u_r,u_z)`. Temperature is in K, particle mass
+  in kg, and drift velocity in m/s.
+- `sub_J02_normalize_inflow_flux`: scales a nonnegative `inflow_shape` to a
+  requested number flux.
+- `sub_J02_sweep`: performs one P1-DG sweep with prescribed inlet and optional frozen wall data. Its
+  inputs `sigma_t(nr,nz,n_dir)` and
+  `boundary_inflow(4,nr,nz,n_dir)` are respectively the macroscopic removal
+  coefficient in `m^-1` and prescribed incoming phase-space density. Optional
+  outputs `failed_direction`, `failed_i`, and `failed_k` locate a failed local
+  solve without encoding indices into `ierr`.
+- `sub_J02_build_partial_zlo_inlet`: converts a physical radial inlet band to
+  cylindrical face fractions and local `xi` intervals.
+- `sub_J02_build_wall_maxwell_shape`: samples the wall Maxwell speed shape used
+  by flux-conserving diffuse reflection.
+- `sub_J02_solve_source_iteration`: iterates the reflecting boundary state to
+  the requested relative tolerance and reports convergence diagnostics.
+  Supply the wall velocity distribution `wall_shape` when diffuse reflection is enabled.
+- `sub_J02_reconstruct_cell_moments` and
+  `sub_J02_reconstruct_internal_face_fluxes`: integrate the angular field into
+  cell density/velocity and signed internal face number-flux density.
+- `sub_J02_reconstruct_open_boundary_fluxes`: separately integrates prescribed
+  inflow and interior-trace outflow for the frozen J03 boundary closure. The
+  optional z-low `xi` intervals restrict both fluxes to the open part of a
+  partially reflecting face.
+- `sub_J02_build_sigma_from_frequency`: converts `nu [s^-1]` to
+  `sigma_t=nu/speed [m^-1]` for every discrete direction.
+- `sub_J02_build_mc_crossing_pdf_inflow_shape` and
+  `sub_J02_build_mc_crossing_bins_inflow_shape`: convert a continuous crossing
+  velocity probability density or a discrete bin probability mass, respectively,
+  to an inflow shape.
 
-## 主要接口
+Boundary face index order is `r-lo`, `r-hi`, `z-lo`, `z-hi`. Values supplied
+for outgoing directions are ignored by the upwind sweep.
 
-- `sub_J02_solve_transport`：完整求解接口，选择一次扫描或反射迭代，并将单元场、
-  内部面通量和边界通量集中返回到 `sn_transport_result_type`。
-  四面入流数组 `boundary_inflow` 与下端入流数组 `zlo_inflow` 必须且只能提供一种；
-  部分入口的区间端点必须成对提供。使用结果前先检查 `ierr == SN_SUCCESS`。
-  扫描、反射迭代和重构仍可独立调用。
+## Inflow definitions
 
-- `sub_J02_initialize_mesh`：检查径向、轴向单元边界和 有效单元标记。
-- `sub_J02_build_geometry`：计算柱坐标体积、面面积和 P1 径向平均修正。
-- `sub_J02_build_phase_quadrature`：将角度与速率组合为一组离散速度，并计算对应权重；角度数至少为
-  8 且须被 4 整除，避免方向恰好落在坐标轴上。
-- `sub_J02_build_phase_quadrature_from_edges`：由 `speed_edge(:)` 构造非均匀速率求积。
-  边界单位为 m/s，须有限、从零开始且严格递增；组数和上限由数组确定。
-  节点仍为算术中点，径向权重对 `v dv` 精确积分，角度与组内排列不变。
-- `sub_J02_build_speed_groups_from_edges`：仅返回速率节点与径向积分权重。
-- `sub_J02_build_drifted_maxwellian_inflow_shape`：按输入的温度 `K`、粒子质量
-  `kg` 和漂移速度 `(u_r,u_z) [m/s]` 生成漂移 Maxwell 速度分布。
-- `sub_J02_normalize_inflow_flux`：把非负 `inflow_shape` 归一化到指定粒子数通量。
-- `sub_J02_sweep`：执行全方向 P1-DG 扫描；有反射时传入上一轮壁面场。可选输出
-  `failed_direction/failed_i/failed_k` 分别指出失败方向和单元坐标。
-- `sub_J02_build_partial_zlo_inlet`：把物理径向入口范围转换成各 z-low 面的柱坐标
-  面积占比和局部 `xi` 区间。
-- `sub_J02_build_wall_maxwell_shape`：构造保证漫反射离散通量归一化所需的壁温
-  Maxwell 速度分布。
-- `sub_J02_solve_source_iteration`：迭代反射边界直到达到给定相对误差，并返回迭代
-  次数、最终变化量和失败位置。
-  启用漫反射时须提供壁面速度分布 `wall_shape`。
-- `sub_J02_reconstruct_cell_moments`：重构密度和平均速度。
-- `sub_J02_reconstruct_internal_face_fluxes`：重构带符号的内部面粒子数通量密度。
-- `sub_J02_reconstruct_open_boundary_fluxes`：把给定入射分布函数与单元内分布在面上的值
-  分别积分成带符号的边界入流和出流，供 J03 构造冻结闭合；可选的 z-low `xi`
-  区间会把两种通量都限制在部分面的开放区域。
-- `sub_J02_build_sigma_from_frequency`：按 `sigma_t=nu/speed` 把电离频率转换为
-  每个离散速度的单位路程损失系数。
-- `sub_J02_build_mc_crossing_pdf_inflow_shape` 与
-  `sub_J02_build_mc_crossing_bins_inflow_shape`：分别处理入射粒子的连续速度概率密度和各
-  速度网格单元内的概率，避免混淆是否需要除以求积权重。
-
-`sigma_t(nr,nz,n_dir)` 是单位为 `m^-1` 的单位路程损失系数；
-`boundary_inflow(4,nr,nz,n_dir)` 是给定的入射速度分布函数。四个面的顺序是
-`r-lo、r-hi、z-lo、z-hi`，出射方向上提供的边界值不会被上风扫描使用。
-
-## 两种入口定义
-
-入口外侧气体模型首先生成二维速度概率密度：
+The reservoir builders return the sampled phase-space density
 
 ```text
 f(v_r,v_z) = alpha/pi * exp(-alpha*((v_r-u_r)^2+(v_z-u_z)^2)),
-alpha = particle_mass/(2*k_B*temperature)。
+alpha = particle_mass/(2*k_B*temperature).
 ```
 
-它在连续二维速度空间中的积分为 1；后续根据目标入口通量计算归一化系数，
-得到实际入射分布函数。
+It is a unit-density Maxwellian in two velocity dimensions. Its absolute
+normalization is subsequently replaced by `sub_J02_normalize_inflow_flux`.
 
-入射粒子模型可以使用 Monte Carlo（蒙特卡洛）采样得到的速度统计。
-`crossing_bin_probability(m)` 表示入射粒子的速度落在第 `m` 个速度网格单元内的概率。
-程序先除以速度面积权重，将单元内的概率转换为概率密度，再除以法向速率，
-即除以 `weight(m)*speed(m)*abs(Omega(m).normal)`，得到待归一化的边界分布。
-按目标通量归一化后，各速度网格单元对应的入射粒子比例保持不变。
-若输入已是速度概率密度，则使用 `crossing_pdf` 接口，只需除以法向速率。
-入口外侧气体模型无需上述转换，直接按入口通量归一化。
+The MC interface deliberately accepts a different object:
+`crossing_bin_probability(m)` is the probability mass of particles observed
+crossing the boundary in incoming bin `m`. The converter divides it by
+`weight(m)*speed(m)*abs(Omega(m).normal)` to recover a phase-density shape.
+After flux normalization, the relative discrete-bin crossing probabilities
+are exactly preserved. If the input is already a velocity probability density,
+use the `crossing_pdf` interface, which divides only by the normal speed.
+Normalize reservoir samples directly to the target flux without this conversion.
 
-所有可失败接口使用J02 内唯一的 `SN_ERR_*` 错误码。调用
-`fun_J02_error_message(ierr)` 可得到具体原因。错误通过返回值报告；
-只有显式给定正的 `progress_interval` 时才打印进度。
+Status-returning interfaces use globally unique `SN_ERR_*` codes. Use
+`fun_J02_error_message(ierr)` for a readable diagnostic. Error reporting uses
+return values; progress is printed only when a positive `progress_interval`
+is requested.
 
-## 并行与串行构建
+## Parallel and serial builds
 
-扫描支持 OpenMP（Open Multi-Processing）共享内存线程并行。
-GNU Fortran 编译 J02 模块和最终链接时都需加 `-fopenmp`；
-运行时可用 `OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE` 指定四个线程。
-不加编译选项时，同一份源码按串行执行，调用参数不变。
+The sweep supports OpenMP (Open Multi-Processing) shared-memory threads.
+Compile the J02 module **and link the executable** with `-fopenmp` in GNU Fortran.
+Set `OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE` to request four workers.
+Without `-fopenmp`, the same source runs serially; no interface changes are needed.
 
-并行计算按离散速度分配任务。每个任务只写自己的
-`psi(:,:,:,m)`，其内部仍按迎风顺序逐单元求解。
-入口、损失、上一轮分布和壁面归一化系数在扫描期间均只读。
-每个进程内部的壁面归一化与最终重构仍由调用线程执行。
-MPI 构建还会交换上游系数，并对收敛量作全局归约。
-多个离散速度的任务同时失败时，待所有任务结束后报告编号最小的失败任务；
-失败返回的场不能继续当作有效解使用。
+Only the combined angle-speed loop is parallel. Each task writes one
+`psi(:,:,:,m)` slice and traverses its cells in upwind order. Inlet data,
+losses, the old field and wall constants are read-only during the sweep.
+Within each rank, wall normalization and field reconstruction use the calling thread.
+MPI builds additionally exchange upstream data and globally reduce convergence norms.
+When several nodes fail, the lowest failing node index is reported after all
+tasks finish. A failed sweep must not be used as a valid field.
 
-SN 应用测试脚本默认启用 OpenMP，`OPENMP=0` 可关闭。
-普通模块测试默认串行，`OPENMP=1` 可启用；独立的
-`run_parallel.sh` 同时检查两种构建。
-线程数不等于加速比；小网格、内存带宽和串行步骤都可能限制实际性能。
+The SN application test build enables OpenMP by default;
+set `OPENMP=0` for a serial build. Ordinary module tests default to serial,
+with `OPENMP=1` available. The separate `run_parallel.sh` checks both builds.
+Thread count is not a speedup estimate: small grids, memory bandwidth and
+serial stages can limit performance.
 
-## 空间 MPI 与混合构建
+## Spatial MPI and hybrid builds
 
-MPI 把 r-z 网格分成相邻面匹配的矩形块，每个进程只存储本块单元，
-但保留全部离散速度。同一进程内的离散速度可进一步使用 OpenMP 并行计算。
+MPI partitions the r-z grid into conforming rectangular blocks; each rank owns
+local cells and all velocity nodes. It is not velocity-only MPI decomposition.
+Build with an MPI Fortran compiler and `-cpp -DJ02_USE_MPI`; add `-fopenmp`
+to compile and link for hybrid execution. Without the MPI macro, no MPI dependency
+is required.
 
-使用 MPI Fortran 编译器，增加 `-cpp -DJ02_USE_MPI`；
-混合构建还需在编译和链接时加 `-fopenmp`。
-不定义 MPI 宏的普通构建不依赖 MPI 库。
+- `sub_J02_sn_partition.f90`: public `sub_J02_initialize_partition` borrows an
+  application-owned, nonperiodic 2D Cartesian communicator; optional `first/count`
+  specify custom positive-sized blocks. J02 never initializes/finalizes MPI.
+- `sub_J02_initialize_boundary_types(..., partition=part)`: connects matching
+  active neighbors as `SN_FACE_REMOTE`, distinct from physical OPEN/WALL faces.
+- `sub_J02_sweep(..., partition=part)` and
+  `sub_J02_solve_transport(..., partition=part)`: local meshes and fields in,
+  local results out; collective calls on every rank, with global failure indices.
+- `sub_J02_sn_mpi_sweep.f90`: private upstream DG-plane communication and
+  interface-flux reconstruction, reusing the existing DG/sweep kernel.
+- `result%partition_flux(4,nr,nz)`: coordinate-signed number-flux density on
+  REMOTE faces only. Physical open flux arrays do not include these faces.
 
-- `sub_J02_sn_partition.f90`：`sub_J02_initialize_partition` 接收应用建立的
-  非周期二维 Cartesian 通信器；可选 `first/count` 指定自定义空间块。
-  J02 不负责 MPI 启停，不复制全局场。
-- `sub_J02_initialize_boundary_types(..., partition=part)`：连接进程交界面，
-  使用 `SN_FACE_REMOTE`，不把它当作物理 OPEN/WALL。
-- `sub_J02_sweep(..., partition=part)` 和
-  `sub_J02_solve_transport(..., partition=part)`：
-  每个进程传入本地网格与场，返回本地结果；所有进程集体调用，失败索引使用全局位置。
-- `sub_J02_sn_mpi_sweep.f90`：内部完成上游 DG 系数通信与交界面通量重构，
-  复用原有单元算子和扫描内核。
-- `result%partition_flux(4,nr,nz)`：仅 REMOTE 面非零，按坐标正向计正；
-  入口和开放出口的入射/出射数组不包含这些面。
+Hybrid builds require main-thread calls and at least `MPI_THREAD_FUNNELED`.
+Quadrature, precision and stopping options must agree on all ranks. Keep the
+borrowed communicator alive and avoid overlapping solves on it. No periodic,
+nonconforming or zero-cell partitions are supported; wholly inactive blocks
+with positive cell counts are supported.
 
-混合运行至少需要 `MPI_THREAD_FUNNELED`，求解由 MPI 主线程发起。
-各进程的求积、实数精度与停止条件必须一致。通信器由应用保持有效并最终释放，
-同一通信器上不能交叠启动多次求解。
-当前不支持周期分区、非匹配网格或零单元块；支持包含单元但全部标记为无效的分区。
+Applications create the Cartesian communicator and partition, normalize the
+inlet by its global area, then call the transport entry on every rank.
+With Open MPI, use `mpiexec -np N` to select the number of processes and
+`OMP_NUM_THREADS` to select the threads per process in a hybrid build.
+Omit `-fopenmp` during compilation and linking for pure MPI.
 
-应用先建立 Cartesian 通信器和空间分区，用全局入口面积归一化入流，
-再由各进程共同调用输运接口。使用 Open MPI 时，`mpiexec -np N`
-指定进程数，混合构建中的 `OMP_NUM_THREADS` 指定每个进程的线程数。
-纯 MPI 构建不添加 `-fopenmp` 编译和链接选项。
+The MPI consistency runner is `tests/012_fluid/J02_neutral_sn_transport_2Drz/run_mpi.sh`.
+B0/ION drivers and J03 remain single-domain. Using MPI output with the existing
+J03 requires application-side global field/face assembly; no distributed J03
+or automatic gather is claimed.
 
-一致性检查使用 `tests/012_fluid/J02_neutral_sn_transport_2Drz/run_mpi.sh`。
-B0/ION 应用程序与 J03 当前仍是单域接口；分区结果交给现有 J03 前，
-需要应用自行组装全局单元场与内部面，当前尚未实现分布式 J03 或自动汇集过程。
+## Source layout
 
-## 源码组织
+The code follows the AlgoPlasma wrapper convention. One public
+`mod_J02_neutral_sn_transport_2Drz.f90` module owns the shared types and uses
+preprocessor `include` directives to collect the independently readable
+`sub_J02_sn_*.f90` implementation files.
 
-源码遵循 AlgoPlasma 现有包装约定：唯一的
-`mod_J02_neutral_sn_transport_2Drz.f90` 模块保存共享类型，并通过预处理
-`include` 纳入按职责拆分、可独立阅读的 `sub_J02_sn_*.f90` 实现文件。
+Suggested reading order, omitting the `sub_J02_` prefix and `.f90` suffix:
 
-可按以下顺序阅读，名称均省略文件前缀 `sub_J02_` 和后缀 `.f90`：
+- Collision coefficients: `sn_quadrature` → `sn_relative_speed` → `sn_reaction_kernel` → `sn_cex`.
+- Spatial transport: `sn_transport` → `sn_reflection` → `sn_sweep` → `sn_reconstruction`.
 
-- 碰撞系数：`sn_quadrature` → `sn_relative_speed` → `sn_reaction_kernel` → `sn_cex`。
-- 空间输运：`sn_transport` → `sn_reflection` → `sn_sweep` → `sn_reconstruction`。
+Like the existing AlgoPlasma Fortran kernels, the source uses default `real`.
+The ordinary test build uses `-fdefault-real-8`. Parallel consistency tests
+also exercise the compiler's default real precision.
 
-与仓库现有 Fortran 算法保持一致，源码使用默认 `real`；配套测试通过
-`-fdefault-real-8` 按双精度进行数值验证；并行一致性测试还覆盖编译器默认实数精度。
+## Model scope
 
-## 非均匀速率分组对比
+The model retains two spatial coordinates (r,z) and two velocity components
+(v_r,v_z). It uses speed and one in-plane angle, without v_theta or the
+associated cylindrical velocity dynamics. Cylindrical cell volumes, face
+areas and r-weighted integration do not make it full axisymmetric 2D3V kinetics.
 
-原等宽接口继续可用；显式边界接口不预设自适应策略，也不引入 CEX。
-应用根据冷、快分布选择边界，并分别检查密度、通量和能量矩。
+## Nonuniform speed-grid comparison
+
+The new constructors preserve the angle rule, group ordering and 2D velocity measure.
+They do not add CEX or choose an adaptive grid. Callers choose edges according to the
+cold and fast populations, then check density, flux and energy moments separately.
 `tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/run_comparison.py`
-在相同上限和组数下比较等宽、二次幂边界和分段等宽三种方案，输出解析矩误差、
-固定空间/角度下的输运误差、角度/截断检查、CSV、图和报告。
-运行说明与限制见[对比测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.zh-CN.md)。
+compares uniform, quadratic-edge and piecewise grids at the same cutoff and group count.
+It writes raw moments against analytic 2D Maxwellian integrals, fixed-space/angle
+transport comparisons, angle/cutoff controls, CSV files, figures and a report.
+See the [comparison README](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/nonuniform_speed/README.md).
 
-## 输入约定
+## Input contracts
 
-网格、几何、速度求积、面类型和截面表必须先成功初始化，再传给后续过程。
-保持对象尺寸、节点顺序和内部邻接关系一致；改变网格后重新构建派生对象。
-场数组按接口规定的形状传入，重构使用完成扫描后的场或等价的自定义场。
-下游不再重复验证对象结构，也不逐次包装乘、除、求和；物理输入与中间结果须有限且可表示。
-归一化为零、截面能量越界、局部求解失败、不收敛和 MPI 一致性问题仍返回错误。
+Initialize mesh, geometry, quadrature, boundary types and reaction tables successfully before use.
+Keep dimensions, node ordering and interior topology consistent; rebuild derived objects after changing a grid.
+Field arrays must have the documented shapes. Reconstruction consumes a completed sweep or a compatible field.
+Downstream arithmetic does not repeat object-layout checks or guard every product, quotient and sum;
+physical inputs and intermediate results must be finite and representable.
+Runtime failures (normalization, tabulated energy range, local solves, convergence and MPI consistency) still return errors.
 
-## 碰撞组装前的速度运动学
+## Velocity kinematics before collision assembly
 
-`sub_J02_sn_relative_speed.f90` 提供三个小接口：
+`sub_J02_sn_relative_speed.f90` provides three small interfaces:
 
-- `sub_J02_build_velocity_vectors(quadrature, velocity, ierr)`：返回
-  `velocity(3,n_dir)`，按 `(v_r,v_phi,v_z)` 排列，单位 m/s。
-  当前 J02 使用 `(speed*mu,0,speed*eta)`，保持原节点编号。
-  输入求积对象须已成功初始化；保留 `ierr` 参数以兼容现有调用。
-- `fun_J02_velocity_cyl_to_cart(velocity_cyl, azimuth)`：将柱坐标物理速度分量
-  转为笛卡尔分量。`azimuth` 是空间位置方位角，单位弧度，与 SN 速度方向角不同；
-  `v_phi` 是周向线速度，不是角速度。
-- `fun_J02_relative_speed(velocity_a, velocity_b)`：求两个速度之差的模，
-  使用缩放避免直接平方引起的溢出或下溢。输入必须使用同一正交基底；
-  不同局部方位角下的分量应先转换到共同基底。
+- `sub_J02_build_velocity_vectors(quadrature, velocity, ierr)` returns
+  `velocity(3,n_dir)` in m/s, with components `(v_r,v_phi,v_z)` in one local
+  orthonormal basis. It uses `(speed*mu,0,speed*eta)`, retains node ordering,
+  and requires a successfully initialized quadrature; `ierr` is retained for call compatibility.
+- `fun_J02_velocity_cyl_to_cart(velocity_cyl, azimuth)` rotates the three physical
+  velocity components to Cartesian `(v_x,v_y,v_z)`. `azimuth` is the spatial
+  position angle in radians, independent of the SN velocity-direction angle;
+  `v_phi` denotes tangential speed, not angular velocity.
+- `fun_J02_relative_speed(velocity_a, velocity_b)` returns the Euclidean norm
+  of the difference, using scaling to avoid squaring overflow/underflow.
+  Both inputs must use the same orthonormal basis. Velocities at different
+  local azimuths must first be expressed in a common basis.
 
-两个纯函数要求输入有限、结果可表示，相对速率函数还要求分量差可表示；
-它们不返回错误码。同一局部基底内直接相减，与共同转为笛卡尔后相减，
-在浮点舍入误差内一致。三分量容器不代表 J02 增加了周向动力学。
+The two pure functions require finite inputs and representable results; the
+relative-speed function additionally requires representable component differences.
+They do not return status codes. For a common local basis, computing relative
+speed directly and after a common Cartesian rotation gives the same result up
+to roundoff. The three-slot container does not add azimuthal dynamics to J02.
 
-给定速度节点后，每个节点对的相对速率固定，与节点上的分布数值无关；
-只要节点及共同基底保持不变，就可以复用。截面求值和离子分布加权由下节的反应核与 CEX 系数过程完成。
-见[运动学测试说明](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.zh-CN.md)。
+For fixed node sets, each pair has a fixed relative speed, independent of the
+population values. The caller can reuse it while those nodes and their common
+basis remain fixed. Cross-section evaluation and ion-distribution weighting belong
+to the reaction-kernel and CEX coefficient routines below. See the
+[kinematics tests](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/relative_speed/README.md).
 
-## 固定离子背景的 CEX 系数
+## Prescribed-ion CEX coefficients
 
-`sub_J02_sn_relative_speed.f90` 保存纯函数 `fun_J02_relative_speed` 及其速度重构/坐标转换辅助过程。
-`sub_J02_sn_reaction_kernel.f90` 保存反应通用的截面表、能量换算和节点对碰撞核 `sigma*g`。
-`sub_J02_sn_cex.f90` 负责离子 Maxwell 背景和 CEX 频率求和，调用通用反应核。
-CEX 系数尚未接入碰撞增益项和空间输运迭代。见[调用与三项检查](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.zh-CN.md)。
+`sub_J02_sn_relative_speed.f90` owns the pure relative-speed function and its
+node/coordinate helpers. `sub_J02_sn_reaction_kernel.f90` owns the general
+binary-reaction table, energy conversion, and pair kernel `sigma*g`.
+`sub_J02_sn_cex.f90` constructs the prescribed-ion Maxwellian and integrates
+that common kernel into CEX frequency/sigma_t arrays. It does not add a CEX
+gain term or transport iteration. See [the concise usage and three checks](../../tests/012_fluid/J02_neutral_sn_transport_2Drz/cex_coefficients/README.md).

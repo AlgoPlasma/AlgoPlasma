@@ -4,6 +4,15 @@ This guide is for students and maintainers who use Codex while developing AlgoPl
 It complements `docs/DOCUMENTATION_GUIDE.md`, which defines the documentation
 style.
 
+## Before Writing Explanations
+
+Read [Teaching Design](TEACHING_GUIDE.md) alongside the documentation guide.
+For the requested page, establish the reader's prerequisites, intended capability
+and a small example/check before drafting. Keep the main argument understandable
+with optional panels closed. Choose diagrams and controls for the reasoning they
+enable; do not equate interaction with learning or add every feature everywhere.
+Review these points together with the technical checks below.
+
 ## Working Principles
 
 - Keep module work local. Improve the current module's algorithm explanation,
@@ -22,7 +31,8 @@ style.
 
 For a module or submodule update, aim to provide:
 
-- `README.zh-CN.md` and `README.en.md` for short repository browsing.
+- `README.md` (default English) and `README.zh-CN.md` (Simplified Chinese) for
+  short repository browsing, with matching technical content and links to each other.
 - A bilingual Sphinx group or submodule page with a language switch.
 - Routine/API pages with Chinese usage notes and generated Doxygen API in the
   English language block.

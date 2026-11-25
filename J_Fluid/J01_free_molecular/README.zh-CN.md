@@ -1,6 +1,6 @@
 # J01_free_molecular
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本目录通过 Fortran 模块 `mod_J01_neutral_free_molecular_2Drz` 提供自由分子粒子前处理。
 

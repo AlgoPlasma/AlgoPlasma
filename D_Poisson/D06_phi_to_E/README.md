@@ -1,30 +1,30 @@
 # D06_phi_to_E
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[简体中文](README.zh-CN.md)
 
-使用二阶中心差分格式由静电势计算三个电场分量（E = -∇φ，dx = dy = dz = 1）。
+Computes the three electric field components from the electrostatic potential using second-order central differences (E = -∇φ, dx = dy = dz = 1).
 
-## 文件
+## Files
 
-- `mod_D06_phi_to_E.f90`: 模块包装文件。
-- `sub_D06_phi_to_E.f90`: 主子程序。
+- `mod_D06_phi_to_E.f90`: Module wrapper.
+- `sub_D06_phi_to_E.f90`: Main subroutine.
 
-## 主接口
+## Main Interface
 
 ```fortran
 call sub_D06_phi_to_E(il, iu, phi, Ex, Ey, Ez)
 ```
 
-- `phi(il(1)-1:iu(1)+1, ...)`：含单层幽灵格点的三维势场数组，调用前幽灵格点须已填充（如由 D05 完成）。
-- `Ex/Ey/Ez(il(1)-1:iu(1)+1, ...)`：输出电场数组，物理域 `il:iu` 内的值在调用后被赋值。
+- `phi(il(1)-1:iu(1)+1, ...)`: 3D potential array with one ghost layer per side; ghost cells must already be filled (e.g. by D05) before calling.
+- `Ex/Ey/Ez(il(1)-1:iu(1)+1, ...)`: Output electric field arrays; values are set on the physical domain `il:iu`.
 
-差分格式：
+The stencil is:
 ```
 Ex(i,j,k) = (phi(i-1,j,k) - phi(i+1,j,k)) * 0.5
 Ey(i,j,k) = (phi(i,j-1,k) - phi(i,j+1,k)) * 0.5
 Ez(i,j,k) = (phi(i,j,k-1) - phi(i,j,k+1)) * 0.5
 ```
 
-## 依赖
+## Dependencies
 
-无（不需要 MPI 或外部库）。
+None (no MPI or external libraries required).

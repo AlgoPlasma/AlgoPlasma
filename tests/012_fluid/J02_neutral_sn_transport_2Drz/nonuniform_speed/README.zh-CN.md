@@ -1,6 +1,6 @@
 # J02 非均匀速率分组测试
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 比较 [J02](../../../../J_Fluid/J02_neutral_sn_transport_2Drz/README.zh-CN.md) 的等宽、二次幂边界与分段等宽速率求积，
 检验分布矩和固定空间网格上的输运误差。速度积分采用约化二维测度 `v dv dtheta`；

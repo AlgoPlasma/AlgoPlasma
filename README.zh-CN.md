@@ -1,6 +1,6 @@
 # AlgoPlasma: Open Algorithms for Plasma Modeling
 
-[中文](README.zh-CN.md) | [English](README.en.md) | [在线文档](https://algoplasma.readthedocs.io/en/latest/index.html)
+[English](README.md) | [在线文档](https://algoplasma.readthedocs.io/en/develop/)
 
 AlgoPlasma 曾用名为 PMSL，致力于把等离子体建模中分散、重复实现的核心算法，沉淀为开放、可复用、可测试、可解释的算法库；它既服务于科研中的可靠建模与结果验证，也服务于教学中的算法理解与实践训练。AlgoPlasma 希望汇众人之力构筑共同的算法基座，让后来者站在其上继续创新，而不是各自从零开始搭建。
 
@@ -87,7 +87,7 @@ bash run.sh
 
 ## 文档
 
-在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/latest/index.html)。
+在线文档托管于 Read the Docs：[阅读 AlgoPlasma 文档](https://algoplasma.readthedocs.io/en/develop/)。
 
 项目文档基于 Sphinx、Doxygen 和 Breathe 构建：
 
@@ -105,6 +105,29 @@ make html
 ```
 
 系统中还需要安装 Doxygen。Read the Docs 配置见 `.readthedocs.yaml`。构建完成后，HTML 首页通常位于 `docs/build/html/index.html`，可以用浏览器打开该文件查看文档。
+
+## 引用
+
+如果您在研究中使用 AlgoPlasma，欢迎引用以下介绍本库的论文：
+
+Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al., "AlgoPlasma: Open algorithms for plasma modeling," *SoftwareX* 36 (2026), 103176. DOI: [10.1016/j.softx.2026.103176](https://doi.org/10.1016/j.softx.2026.103176).
+
+```bibtex
+@article{ZHAO2026103176,
+  title = {AlgoPlasma: Open algorithms for plasma modeling},
+  journal = {SoftwareX},
+  volume = {36},
+  pages = {103176},
+  year = {2026},
+  issn = {2352-7110},
+  doi = {https://doi.org/10.1016/j.softx.2026.103176},
+  url = {https://www.sciencedirect.com/science/article/pii/S2352711026006667},
+  author = {Yinjian Zhao and Zhongping Zhao and Zhe Liu and Baisheng Wang and Zilong Peng and Xin Luo and Lihuan Xie and Xi Chen and Zhijun Zhou and Kunpeng Zhong and Yingjie Chen and Changzheng Hu},
+  keywords = {AlgoPlasma, Plasma modeling, Numerical algorithms, Parallel computing}
+}
+```
+
+AlgoPlasma v1.0.1 已存档于 Zenodo：[https://doi.org/10.5281/zenodo.23227612](https://doi.org/10.5281/zenodo.23227612)。完整引用说明与相关应用论文见[引用页面](https://algoplasma.readthedocs.io/en/develop/community/citation.html)。
 
 ## 贡献建议
 
@@ -134,3 +157,7 @@ AlgoPlasma 的原创内容采用 [Apache License 2.0](LICENSE) 开源许可证�
 - 赵隐剑 / Yinjian Zhao
 - Email: contact@algoplasma.com
 - Homepage: <https://homepage.hit.edu.cn/zhaoyinjian>
+
+<!-- Contribution history (edit times include timezone).
+2026-11-20 10:25 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+-->

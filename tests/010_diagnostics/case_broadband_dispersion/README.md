@@ -1,5 +1,7 @@
 # broadband_dispersion test
 
+[简体中文](README.zh-CN.md)
+
 This case drives all three `K_Diagnostics` units from one synthetic dataset and
 checks each of them against the generator that produced it.  The `K_Diagnostics`
 units are subroutines only; this is where the computation happens.

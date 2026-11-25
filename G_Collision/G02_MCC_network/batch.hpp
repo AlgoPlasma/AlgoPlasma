@@ -77,6 +77,12 @@ public:
         next_id_ = staged_next_id_;
     }
     [[nodiscard]] std::uint64_t next_id() const noexcept { return next_id_; }
+    // Read-only contiguous storage; valid until the host changes the vector.
+    // Used only during prepare, before any adapter commit or host mutation.
+    [[nodiscard]] const std::vector<ParticleState>& contiguous_particles() const noexcept {
+        return particles_;
+    }
+
 
 private:
     std::vector<ParticleState>& particles_;

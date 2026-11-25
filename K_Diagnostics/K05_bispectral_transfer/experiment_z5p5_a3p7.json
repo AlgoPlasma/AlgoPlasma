@@ -1,0 +1,59 @@
+{
+  "data_id": "z5p5_a3p7",
+  "instrument": "SIGLENT SDS814X HD",
+  "channels": [
+    1,
+    3
+  ],
+  "capture_ids": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "synchronized_pairs": true,
+  "same_operating_condition": true,
+  "diagnostic": "ion saturation current",
+  "axial_distance_mm": 5.5,
+  "azimuthal_separation_mm": 3.7,
+  "c1_to_c3_physical_direction": "Left fixed probe C1 to right probe C3 in the supplied front-view diagram; not an inferred wave-propagation direction.",
+  "voltage_to_current_a_per_v": 0.001,
+  "relative_channel_gain_calibration": null,
+  "relative_channel_delay_s": null,
+  "discharge_parameters": {
+    "log_time": "19:12",
+    "voltage_v": 200,
+    "recorded_current_a": 2.814,
+    "source": "20261014_zzp.xlsx, sheet 1014, row 9 (E9/F9); data-owner mapping on 2026-10-28",
+    "usage": "Experiment context only; not used to set FFT axes or infer local plasma parameters"
+  },
+  "group_velocity_m_per_s": null,
+  "dc_offset_sign_verified": null,
+  "voltage_display_reference": "Each record mean is removed; no DC-offset sign is assumed",
+  "supplementary_evidence": {
+    "lab_reader": "tool02_readbin.py subtracts header vertical offset and cites a DC calibration not included in this dataset",
+    "scope_photo": "Post-experiment photo: 100 MSa/s, 10 Mpts, 10 ms/div, C1/C3 2 V/div, 1X, DC1M, FULL; not a screenshot of these stored waveforms",
+    "operating_log": "20261014_zzp.xlsx, sheet 1014, row 9 at 19:12, selected by data owner; row note says first acquisition had two groups, while supplied data have four numbered captures"
+  },
+  "provenance": {
+    "geometry": "Data-owner note supplied with captures",
+    "synchronization_condition_diagnostic": "Data-owner confirmation, 2026-10-28",
+    "sampling_voltage_scales": "Read separately from each binary header",
+    "c1_c3_mapping": "Data-owner confirmation, 2026-10-29: C1 is left fixed probe.",
+    "circuit_geometry_field": "Supplementary circuit and field diagram supplied 2026-10-29; nominal resistor conversion, no dynamic calibration."
+  },
+  "voltage_to_current_status": "Nominal 1 kohm resistor conversion for current toward the resistor return; not a calibrated MHz transimpedance.",
+  "probe_response_assumptions_config": "probe_response_config.json",
+  "probe_geometry": {
+    "c1": "left fixed probe",
+    "c3": "right probe",
+    "exposed_diameter_mm": 0.5,
+    "exposed_length_mm": 2.5
+  },
+  "reported_magnetic_field_at_c1": {
+    "br_magnitude_gauss": 39.48,
+    "bz_magnitude_gauss": 80.34,
+    "radial_direction": "inner to outer radius",
+    "exb_direction": "counterclockwise in supplied front view"
+  }
+}

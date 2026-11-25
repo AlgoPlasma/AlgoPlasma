@@ -1,6 +1,6 @@
 # J02_neutral_sn_transport_2Drz
 
-[中文](README.zh-CN.md) | [English](README.en.md)
+[English](README.md)
 
 本模块用离散纵标法（Discrete Ordinates Method，SN）求解二维 r-z 网格上的稳态中性粒子输运。
 空间离散采用一阶不连续 Galerkin 方法（P1-DG），体积与面积按柱坐标几何计算。
@@ -58,9 +58,9 @@
   部分入口的区间端点必须成对提供。使用结果前先检查 `ierr == SN_SUCCESS`。
   扫描、反射迭代和重构仍可独立调用。
 
-- `sub_J02_initialize_mesh`：检查径向、轴向单元边界和 有效单元标记。
-- `sub_J02_build_geometry`：计算柱坐标体积、面面积和 P1 径向平均修正。
-- `sub_J02_build_phase_quadrature`：将角度与速率组合为一组离散速度，并计算对应权重；角度数至少为
+- `sub_J02_initialize_mesh`：检查径向边界 `r_edge`、轴向边界 `z_edge` 和有效单元标记 `active`，然后构造网格对象。
+- `sub_J02_build_geometry`：根据给定的周向跨度计算柱坐标体积、面面积和 P1 径向平均修正。
+- `sub_J02_build_phase_quadrature`：将角度与速率组合为一组离散速度，并计算对应权重。角度数 `n_angles` 至少为
   8 且须被 4 整除，避免方向恰好落在坐标轴上。
 - `sub_J02_build_phase_quadrature_from_edges`：由 `speed_edge(:)` 构造非均匀速率求积。
   边界单位为 m/s，须有限、从零开始且严格递增；组数和上限由数组确定。
@@ -83,7 +83,7 @@
 - `sub_J02_reconstruct_open_boundary_fluxes`：把给定入射分布函数与单元内分布在面上的值
   分别积分成带符号的边界入流和出流，供 J03 构造冻结闭合；可选的 z-low `xi`
   区间会把两种通量都限制在部分面的开放区域。
-- `sub_J02_build_sigma_from_frequency`：按 `sigma_t=nu/speed` 把电离频率转换为
+- `sub_J02_build_sigma_from_frequency`：按 `sigma_t=nu/speed` 把给定的损失频率 `nu [s^-1]` 转换为
   每个离散速度的单位路程损失系数。
 - `sub_J02_build_mc_crossing_pdf_inflow_shape` 与
   `sub_J02_build_mc_crossing_bins_inflow_shape`：分别处理入射粒子的连续速度概率密度和各
