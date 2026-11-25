@@ -13,6 +13,7 @@
    2026-11-17 11:41 +08:00 | Yinjian Zhao | git f851bf1cd4a0
    2026-11-17 13:54 +08:00 | Yinjian Zhao | git 9085032adbf6
    2026-11-18 16:11 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+   2026-11-24 13:41 +08:00 | Zhongping Zhao | edit (Codex-assisted)
 
 K05 · Bispectral transfer
 =========================
@@ -44,6 +45,9 @@ K05 · Bispectral transfer
       Jorns |ref-en| from the wave equation to probe signals and their analysis.
       The aim is to connect the theory to calculations of growth and transfer
       from measured records.
+
+      The sections below can be read alongside
+      `Yinjian Zhao’s K05 video series on Bilibili <https://space.bilibili.com/454214189/lists/9642080>`__.
 
    .. container:: k05-text
 
@@ -115,6 +119,8 @@ K05 · Bispectral transfer
       哪些波正在增长？波与波之间怎样交换能量？K05 以 Brown 与 Jorns 的研究 |ref-zh|
       为线索，从波动方程走到探针信号及其分析，把理论与测量记录中的增长率（growth rate）
       和波间转移（wave-to-wave transfer）计算连接起来。
+
+      阅读下方各节时，可参看\ `赵隐剑录制的 K05 视频讲解（B 站） <https://space.bilibili.com/454214189/lists/9642080>`__\ 。
 
    .. container:: k05-text
 
