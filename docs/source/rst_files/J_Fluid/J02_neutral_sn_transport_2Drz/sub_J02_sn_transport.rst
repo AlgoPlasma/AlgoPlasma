@@ -4,6 +4,7 @@
    2026-10-23 10:58 +08:00 | Yingjie Chen | git cd0d957281af
    2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
    2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+   2026-11-25 16:14 +08:00 | Yingjie Chen | edit (Codex-assisted)
 
 Complete Calculation
 ==========================================================================================
@@ -741,29 +742,68 @@ Complete Calculation
      el.dataset.rendered=key;
     }
    }
-   let mode="hybrid",frames=schedule(mode),index=0,iteration=1,timer=null,term="incoming",reconstructed=false;
+   // The two translated frames render one timeline. Only the visible frame runs a timer.
+   const ownerDocument = window.frameElement?.ownerDocument || document;
+   const state = ownerDocument.j02WalkthroughState ??= {
+     mode: "hybrid", frames: schedule("hybrid"), index: 0, iteration: 1,
+     term: "incoming", reconstructed: false, pace: "350", reflectionOpen: false
+   };
+   let timer = null;
+   const reflectionDetails = document.querySelector("#equations details");
    quadrants.forEach((q,i)=>{const o=document.createElement("option");o.value=i;o.textContent=q.label.replace("，",label("，",", "));$("quadrant").append(o)});
    function stop(){clearTimeout(timer);timer=null;$("play").textContent=label("播放","Play")}
-   function play(){if(index===frames.length-1){stop();return}index++;render();timer=setTimeout(play,Number($("pace").value))}
-   function setIndex(i){stop();reconstructed=false;index=Math.max(0,Math.min(frames.length-1,i));render()}
-   $("play").onclick=()=>{if(timer){stop()}else{$("play").textContent=label("暂停","Pause");timer=setTimeout(play,Number($("pace").value))}};
-   $("prev").onclick=()=>setIndex(index-1);$("next").onclick=()=>setIndex(index+1);
-   $("timeline").oninput=()=>setIndex(Number($("timeline").value));
-   $("reset").onclick=()=>{iteration=1;setIndex(0)};
-   $("mode").onchange=()=>{mode=$("mode").value;frames=schedule(mode);setIndex(0)};
-   $("quadrant").onchange=()=>setIndex(frames.findIndex(f=>f.q===Number($("quadrant").value)&&f.phase!=="boundary"));
-   $("repeat").onclick=()=>{iteration++;setIndex(0)};
-   $("finish").onclick=()=>{stop();reconstructed=true;render()};
-   document.querySelectorAll("[data-term]").forEach(b=>b.onclick=()=>{term=b.dataset.term;renderAssembly();sendSize()});
+   function play(){
+     if (state.index === state.frames.length - 1) {
+       stop();
+       return;
+     }
+     state.index++;
+     render();
+     timer = setTimeout(play, Number(state.pace));
+   }
+   function setIndex(i){
+     stop();
+     state.reconstructed = false;
+     state.index = Math.max(0, Math.min(state.frames.length - 1, i));
+     render();
+   }
+   $("play").onclick = () => {
+     if (timer) {
+       stop();
+     } else {
+       $("play").textContent = label("暂停","Pause");
+       timer = setTimeout(play, Number(state.pace));
+     }
+   };
+   $("prev").onclick = () => setIndex(state.index - 1);
+   $("next").onclick = () => setIndex(state.index + 1);
+   $("timeline").oninput = () => setIndex(Number($("timeline").value));
+   $("pace").onchange = () => { state.pace = $("pace").value; };
+   $("reset").onclick = () => { state.iteration = 1; setIndex(0); };
+   $("mode").onchange = () => {
+     state.mode = $("mode").value;
+     state.frames = schedule(state.mode);
+     setIndex(0);
+   };
+   $("quadrant").onchange = () => setIndex(state.frames.findIndex(
+     f => f.q === Number($("quadrant").value) && f.phase !== "boundary"
+   ));
+   $("repeat").onclick = () => { state.iteration++; setIndex(0); };
+   $("finish").onclick = () => { stop(); state.reconstructed = true; render(); };
+   document.querySelectorAll("[data-term]").forEach(button => {
+     button.onclick = () => { state.term = button.dataset.term; renderAssembly(); sendSize(); };
+   });
    document.addEventListener("visibilitychange",()=>{if(document.hidden)stop()});
    const languagePanel = window.frameElement?.closest(".ap-lang");
    if (languagePanel) new MutationObserver(() => {
      if (languagePanel.hidden) stop();
+     else showState();
    }).observe(languagePanel, {attributes:true, attributeFilter:["hidden"]});
    window.addEventListener("pagehide",stop);
    const same=(a,b)=>a[0]===b[0]&&a[1]===b[1], inside=([i,k])=>i>=0&&i<NR&&k>=0&&k<NZ;
    const point=([i,k])=>[74+i*76+38,402-k*52-26];
    function draw(){
+    const {frames, index, mode, iteration} = state;
     const f=frames[index],q=quadrants[f.q],done=f.done,current=f.cells;
     let out="";
     const line=(x1,y1,x2,y2,color="#155b8f",dash="",arrow=true)=>'<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+color+'" stroke-width="2" '+(dash?'stroke-dasharray="'+dash+'" ':'')+(arrow?'marker-end="url(#'+(color==="#8c3970"?"wallarrow":"arrow")+')"':'')+'/>';
@@ -818,6 +858,7 @@ Complete Calculation
     $("drawing").innerHTML=out;
    }
    function renderAssembly(){
+    const {frames, index, term} = state;
     document.querySelectorAll("[data-term]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.term===term)));
     const cell=frames[index].cells[0];
     const content=$("assembly-"+term).content.cloneNode(true);
@@ -828,7 +869,14 @@ Complete Calculation
     $("assembly").replaceChildren(content);
     typeset($("assembly"));
    }
+   function showState(){
+     $("mode").value = state.mode;
+     $("pace").value = state.pace;
+     if (reflectionDetails.open !== state.reflectionOpen) reflectionDetails.open = state.reflectionOpen;
+     render();
+   }
    function render(){
+    const {frames, index, iteration, reconstructed} = state;
     const f=frames[index],q=quadrants[f.q];
     $("timeline").max=frames.length-1;$("timeline").value=index;$("progress").value=(index+1)+"/"+frames.length;
     $("iteration").textContent=label("当前第 ","Iteration ")+iteration+label(" 轮（ℓ = "," (ℓ = ")+(iteration-1)+label("）",")");$("quadrant").value=f.q;
@@ -922,9 +970,13 @@ Complete Calculation
     const targetOrigin = parentURL.protocol === "file:" ? "*" : parentURL.origin;
     requestAnimationFrame(()=>parent.postMessage({type:"sn-walkthrough-height",height:Math.ceil(document.body.getBoundingClientRect().height)},targetOrigin));
    }
-   new ResizeObserver(sendSize).observe(document.body);document.querySelectorAll("details").forEach(d=>d.addEventListener("toggle",sendSize));
+   new ResizeObserver(sendSize).observe(document.body);
+   new MutationObserver(() => {
+     state.reflectionOpen = reflectionDetails.open;
+     sendSize();
+   }).observe(reflectionDetails, {attributes:true, attributeFilter:["open"]});
    typeset(document);
-   render();
+   showState();
    </script>
    </template>
 
