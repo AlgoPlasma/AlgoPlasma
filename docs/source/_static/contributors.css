@@ -442,3 +442,50 @@ table.ap-contributors small {
     color: #425466;
     font-size: 0.82rem;
 }
+
+.ap-contributor-page .ap-cum {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.8rem;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e7edf2;
+    color: #5a6a75;
+    font-size: 0.75rem;
+    line-height: 1.65;
+    font-variant-numeric: tabular-nums;
+}
+
+.ap-cum > span {
+    white-space: nowrap;
+}
+
+.ap-cum b {
+    color: #324d60;
+    font-weight: 600;
+}
+
+.ap-cum .ap-medal {
+    margin-inline-start: 0.2em;
+    font: normal 1em/1 "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.ap-stats-note {
+    margin-top: 0.6rem;
+    color: #566c7e;
+    font-size: 0.8rem;
+}
+
+.ap-stats-note summary {
+    cursor: pointer;
+    width: fit-content;
+}
+
+.rst-content .ap-stats-note p {
+    margin: 0.4rem 0;
+    font-size: inherit;
+    line-height: 1.65;
+}
+
+/* 2026-11-25 10:07 +0800 | Yinjian Zhao (Codex-assisted) */
