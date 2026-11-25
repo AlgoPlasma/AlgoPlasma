@@ -14,6 +14,13 @@ from xml.etree import ElementTree
 from tools import generate_contributors as contributors
 
 
+ARCHIVED_J01_URL = (
+    "https://gitee.com/algoplasma/algoplasma/blob/"
+    "2baedd3807a73e7fdf38a98e41a64aa8ae438a71/docs/source/rst_files/"
+    "J_Fluid/J01_continuity_freeflow.rst"
+)
+
+
 class _VisibleText(HTMLParser):
     def __init__(self):
         super().__init__()
@@ -36,7 +43,10 @@ class ContributorWorkListTests(unittest.TestCase):
         }
         self.assertEqual(len(detailed), 13)
         expected = {
-            "赵隐剑": "A01 C01 D01 D02 D04 E01 E02 E03 F01 F02 F03 F04 H01 H02 I01 J01 K04",
+            "赵隐剑": (
+                "A01 C01 D01 D02 D04 E01 E02 E03 F01 F02 F03 F04 H01 H02 I01 "
+                "J01_continuity_freeflow K04"
+            ),
             "赵中平": "A01 A02 B03 C01 C02 I02",
             "刘哲": "E01 E02 E03 F01 F02 F03 F04 G02",
             "王佰胜": "C03 D01 D02 D03 D04",
@@ -46,9 +56,13 @@ class ContributorWorkListTests(unittest.TestCase):
             "周志君": "B02",
         }
         for name, module_ids in expected.items():
-            actual = [work["path"].name[:3] for work in detailed[name]["work"]]
+            actual = [work["module_id"] for work in detailed[name]["work"]]
             self.assertEqual(actual, module_ids.split(), name)
             for work in detailed[name]["work"]:
+                if work["module_id"] == "J01_continuity_freeflow":
+                    self.assertEqual((name, work["archive_url"]), ("赵隐剑", ARCHIVED_J01_URL))
+                    continue
+                self.assertEqual(work["path"].name[:3], work["module_id"])
                 attribution = work["path"].read_text(encoding="utf-8")
                 self.assertTrue(
                     any(
@@ -125,6 +139,43 @@ class ContributorWorkListTests(unittest.TestCase):
                         target_dir = "." if rendered == page else contributors.RTD_TARGET_DIR
                         self.assertNotIn(contributors._work_href(work, target_dir), rendered)
 
+    def test_module_page_discovery_distinguishes_tutorials_from_modules(self):
+        with TemporaryDirectory() as directory, patch.object(contributors, "ROOT", Path(directory)):
+            source = Path(directory) / "K_Diagnostics"
+            docs = Path(directory) / "docs/source/rst_files/K_Diagnostics"
+            docs.mkdir(parents=True)
+            (docs / "K05_coefficient_inference.rst").touch()
+            with self.assertRaisesRegex(SystemExit, "K05: matching module document not found"):
+                contributors._normalise_work_catalog({"K05": {"zh": "双谱", "en": "Bispectrum"}})
+
+            homepage = docs / "K05_bispectral_transfer.rst"
+            homepage.touch()
+            (source / homepage.stem).mkdir(parents=True)
+            self.assertEqual(contributors._module_pages(), {"K05": homepage})
+
+            (docs / "K05_another_module.rst").touch()
+            (source / "K05_another_module").mkdir()
+            with self.assertRaisesRegex(SystemExit, "duplicate module ID K05"):
+                contributors._module_pages()
+
+    def test_archived_work_links_and_current_module_can_share_a_short_id(self):
+        lead = next(entry for entry in self.entries if entry["name_zh"] == "赵隐剑")
+        old_id = "J01_continuity_freeflow"
+        archived = next(work for work in lead["work"] if work["module_id"] == old_id)
+        catalog = contributors._normalise_work_catalog({
+            old_id: {field: archived[field] for field in ("archive_url", "zh", "en")},
+            "J01": {"zh": "自由分子输运", "en": "Free molecular transport"},
+        })
+        self.assertEqual(catalog["J01"]["path"].stem, "J01_free_molecular")
+        # A lead with a biography normally displays that instead of a work list.
+        profile = {**lead, "biography": {}, "work": [archived]}
+        for target_dir in (".", contributors.RTD_TARGET_DIR):
+            self.assertEqual(contributors._work_href(archived, target_dir), ARCHIVED_J01_URL)
+            for lang in ("zh", "en"):
+                rendered = contributors._work_table([profile], lang, target_dir)
+                anchor = f'<a href="{ARCHIVED_J01_URL}">{html_escape(archived[lang])}</a>'
+                self.assertIn(anchor, rendered)
+
     def test_catalog_rejects_invalid_entries(self):
         with self.assertRaises(SystemExit):
             contributors._normalise_work_catalog({"A01": {"zh": "粒子推进"}})
@@ -138,10 +189,19 @@ class ContributorWorkListTests(unittest.TestCase):
             contributors._normalise_work_catalog(
                 {"A01": {"zh": "A01 粒子推进", "en": "Particle pushing"}}
             )
+        for url in (
+            re.sub(r"/blob/[0-9a-f]{40}/", "/blob/develop/", ARCHIVED_J01_URL),
+            ARCHIVED_J01_URL.replace("J01_continuity_freeflow.rst", "J01_free_molecular.rst"),
+        ):
+            with self.subTest(archive_url=url), self.assertRaisesRegex(SystemExit, "archive_url"):
+                contributors._normalise_work_catalog({
+                    "J01_continuity_freeflow": {"archive_url": url, "zh": "自由流", "en": "Free flow"}
+                })
 
     def test_personal_avatars_and_relative_paths(self):
         expected = {
             "赵隐剑": "docs/source/_static/contributors/zhaoyinjian.png",
+            "赵中平": "docs/source/_static/contributors/zhongping-zhao.jpg",
             "王佰胜": "docs/source/_static/contributors/wangbaisheng.jpg",
             "彭子龙": "docs/source/_static/contributors/pengzilong.jpg",
             "胡长征": "docs/source/_static/contributors/huchangzheng.jpg",
@@ -167,7 +227,7 @@ class ContributorWorkListTests(unittest.TestCase):
     def test_surname_first_initial_avatars(self):
         expected = {
             "陈曦": "CX", "陈英杰": "CY", "罗鑫": "LX", "谢礼桓": "XL",
-            "张武顺": "ZW", "赵中平": "ZZ", "钟昆硼": "ZK", "周志君": "ZZ",
+            "张武顺": "ZW", "钟昆硼": "ZK", "周志君": "ZZ",
         }
         generated = [entry for entry in self.entries if entry["generated_avatar"]]
         self.assertEqual({entry["name_zh"] for entry in generated}, set(expected))
@@ -366,3 +426,6 @@ class ContributorWorkListTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+# Contribution history (edit times include timezone).
+# 2026-11-22 21:37 +08:00 | Zhongping Zhao | edit (Codex-assisted)

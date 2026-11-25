@@ -49,6 +49,8 @@
 #
 # `work_catalog` supplies the public descriptions for `work_modules`.  Module
 # IDs are internal references: generated pages show the descriptions, not IDs.
+# For a retired module, use its full directory name as the key and set
+# `archive_url` to its RST homepage at a specific commit in the Gitee repository.
 # Maintainers follow their order in this file in both Chinese and English;
 # the project lead always comes first.
 #
@@ -151,7 +153,8 @@ work_catalog:
   I02:
     zh: 离线生成并行加载初始粒子
     en: Offline particle initialization and parallel loading
-  J01:
+  J01_continuity_freeflow:
+    archive_url: https://gitee.com/algoplasma/algoplasma/blob/2baedd3807a73e7fdf38a98e41a64aa8ae438a71/docs/source/rst_files/J_Fluid/J01_continuity_freeflow.rst
     zh: 三维自由流连续性方程的有限体积更新
     en: Finite-volume updates for the 3D free-flow continuity equation
   K01:
@@ -188,7 +191,7 @@ contributors:
         - 照亮己路，亦可温暖旁人。
       en:
         - Try to become not a man of success, but try rather to become a man of value. — Albert Einstein
-    work_modules: [A01, C01, D01, D02, D04, E01, E02, E03, F01, F02, F03, F04, H01, H02, I01, J01, K04]
+    work_modules: [A01, C01, D01, D02, D04, E01, E02, E03, F01, F02, F03, F04, H01, H02, I01, J01_continuity_freeflow, K04]
 
   # --- maintainers ----------------------------------------------------------
   - name: Baisheng Wang
@@ -341,3 +344,6 @@ contributors:
     role: contributor
     contributions:
       - code
+
+# Contribution history (edit times include timezone).
+# 2026-11-22 21:31 +08:00 | Zhongping Zhao | edit (Codex-assisted)

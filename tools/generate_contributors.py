@@ -54,6 +54,10 @@ README_AVATAR_PX = 80
 RTD_AVATAR_PX = 96
 WORK_AVATAR_PX = 80
 MODULE_PAGE_RE = re.compile(r"^([A-K][0-9]{2})_.+\.rst$")
+ARCHIVE_PAGE_RE = re.compile(
+    r"https://gitee\.com/algoplasma/algoplasma/blob/[0-9a-f]{40}/"
+    r"docs/source/rst_files/[\w-]+/(?P<module>[A-K][0-9]{2}_[\w-]+)\.rst"
+)
 WORK_TABLE_CLASS = "ap-work-list"
 WORK_HEADERS = {
     "zh": ("成员", "参与过的具体工作"),
@@ -333,11 +337,11 @@ def load_contributors(path: Path = DATA_FILE):
 
 
 def _module_pages() -> dict:
-    """Index top-level module pages by their unique short ID."""
+    """Index module homepages that have a namesake directory in the source tree."""
     pages = {}
     for path in sorted((ROOT / "docs/source/rst_files").glob("*/*.rst")):
         match = MODULE_PAGE_RE.fullmatch(path.name)
-        if not match:
+        if not match or not (ROOT / path.parent.name / path.stem).is_dir():
             continue
         module_id = match.group(1)
         if module_id in pages:
@@ -352,14 +356,20 @@ def _normalise_work_catalog(raw) -> dict:
     pages = _module_pages()
     catalog = {}
     for module_id, labels in raw.items():
-        if not isinstance(module_id, str) or not re.fullmatch(
-            r"[A-K][0-9]{2}", module_id
-        ):
-            sys.exit(f"error: invalid work module ID {module_id!r}")
-        if module_id not in pages:
-            sys.exit(f"error: {module_id}: matching module document not found")
         if not isinstance(labels, dict):
             sys.exit(f"error: {module_id}: work description must be a mapping")
+        if "archive_url" in labels:
+            url = labels["archive_url"]
+            match = ARCHIVE_PAGE_RE.fullmatch(url) if isinstance(url, str) else None
+            if not match or match.group("module") != module_id:
+                sys.exit(f"error: {module_id}: archive_url must link to its commit-pinned module page")
+            target = {"archive_url": url}
+        else:
+            if not isinstance(module_id, str) or not re.fullmatch(r"[A-K][0-9]{2}", module_id):
+                sys.exit(f"error: invalid work module ID {module_id!r}")
+            if module_id not in pages:
+                sys.exit(f"error: {module_id}: matching module document not found")
+            target = {"path": pages[module_id]}
         descriptions = {}
         for lang in ("zh", "en"):
             value = labels.get(lang)
@@ -368,10 +378,7 @@ def _normalise_work_catalog(raw) -> dict:
             if re.search(r"\b[A-K][0-9]{2}\b", value):
                 sys.exit(f"error: {module_id}: {lang} description contains a module ID")
             descriptions[lang] = value.strip()
-        catalog[module_id] = {
-            **descriptions,
-            "path": pages[module_id],
-        }
+        catalog[module_id] = {"module_id": module_id, **descriptions, **target}
     return catalog
 
 
@@ -671,7 +678,9 @@ def _profile_links(entry: dict, separator: str = " | ") -> str:
 
 
 def _work_href(work: dict, target_dir: str) -> str:
-    """Link to the source RST from README, or built HTML from Read the Docs."""
+    """Link to the archived revision, or to the current source RST or built HTML."""
+    if "archive_url" in work:
+        return work["archive_url"]
     path = work["path"]
     if target_dir == RTD_TARGET_DIR:
         path = path.with_suffix(".html")
@@ -1025,3 +1034,4 @@ if __name__ == "__main__":
 
 # Contribution history (edit times include timezone).
 # 2026-11-20 10:25 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+# 2026-11-22 21:31 +08:00 | Zhongping Zhao | edit (Codex-assisted)
