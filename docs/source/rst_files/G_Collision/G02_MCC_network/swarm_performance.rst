@@ -180,6 +180,8 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
         - 4 ranks × 4 threads
         - 0.029
 
+   运行命令后，100 通道基准读 ``median_step_s`` 列，MPI 碰撞盒读 ``distributed_step_s`` 列，单位均为秒。实际用时随机器和并行配置而变化。
+
    .. include:: /_includes/g02_parallel_reproduce.inc
 
    .. _reproduce-tables-zh:
@@ -376,6 +378,8 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
         - 4 ranks × 4 threads
         - 0.029
 
+   Read ``median_step_s`` for the 100-channel benchmark and ``distributed_step_s`` for the MPI collision box. Both columns report seconds. Measured times depend on the machine and parallel configuration.
+
    .. include:: /_includes/g02_parallel_reproduce.inc
 
    .. _reproduce-tables-en:
@@ -404,3 +408,4 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
    2026-11-09 15:37 +08:00 | Wushunzzz | git d37657fd65ef
    2026-11-25 11:54 +08:00 | Wushunzzz | git 65cc283b8592
    2026-11-25 15:54 +08:00 | Wushunzzz | edit (Codex-assisted)
+   2026-11-25 16:28 +08:00 | Wushunzzz | edit (Codex-assisted)
