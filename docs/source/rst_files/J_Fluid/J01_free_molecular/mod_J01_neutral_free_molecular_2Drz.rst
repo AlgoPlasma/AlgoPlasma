@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Module and Data
 ==========================================================================================
 
@@ -63,7 +69,7 @@ Module and Data
    体积单位为 m³，面积为 m²。密度放在单元中；通量放在面上，
    按正 r 或正 z 方向取正。因而低端面流入为正、流出为负，高端面相反。
 
-   .. figure:: /_static/J_Fluid/cell_flux.svg
+   .. figure:: ../../../images/J_Fluid/cell_flux_en.svg
       :alt: 单元密度和四个坐标方向面通量
       :width: 780px
 
@@ -149,28 +155,140 @@ Module and Data
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   ``mod_J01_neutral_free_molecular_2Drz.f90`` contains five implementation files.
-   Compile this module with preprocessing and the include path; keep real precision consistent.
+   ``mod_J01_neutral_free_molecular_2Drz.f90`` defines the types and constants used in this chapter and
+   includes the five implementation files. The complete calculation starts at
+   ``sub_J01_free_molecular_mc_2Drz``.
 
-   The input grid uses edge arrays (nr+1,nz+1), an active mask (nr,nz), and face types (4,nr,nz).
-   Face order is radial low/high, axial low/high. INTERIOR=0 crosses to a valid reciprocal neighbour,
-   OPEN=1 terminates a history with an escape tally, WALL=2 reflects and continues it.
-   No ghost layers or MPI partition faces are accepted by this interface.
-   With sector angle :math:`\Theta` and cell length :math:`\Delta z_k`,
+   .. rubric:: 1. Grid and boundary inputs
+
+   ``r_edge(nr+1)`` and ``z_edge(nz+1)`` are grid edge coordinates in metres. ``theta_span`` is the
+   physical azimuthal span. ``active(nr,nz)`` identifies active cells. Each entry of ``face_type(4,nr,nz)``
+   tells the tracker what to do when a particle reaches that cell face.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 34 12 54
+
+      * - Constant
+        - Value
+        - Tracker action
+      * - ``J01_FACE_INTERIOR``
+        - 0
+        - Enter the adjacent active cell with unchanged velocity
+      * - ``J01_FACE_OPEN``
+        - 1
+        - Record the escape and end the history
+      * - ``J01_FACE_WALL``
+        - 2
+        - Update velocity, stay on the gas side and continue the same history
+
+   The first index identifies the face using ``J01_R_LO=1``, ``J01_R_HI=2``, ``J01_Z_LO=3`` and
+   ``J01_Z_HI=4``. Both sides of an internal face must be marked internal and both cells must be active.
+   The grid has no ghost layer or MPI partition interfaces.
+
+   In the channel example both axial ends are open, the two radial boundaries are walls and neighbouring
+   cells share internal faces. Inlet preparation looks for injection sites only at the lower axial faces of
+   the first row. To model an internal obstruction, set the active-cell mask and wall flags; setting
+   density to zero inside it does not define a wall.
+
+   For cell :math:`(i,k)`, define :math:`\Delta z_k=z_{k+1}-z_k`. Let :math:`\Theta` be the azimuthal span,
+   equal to :math:`2\pi` for a full revolution. The inlet area and tally normalization use the same
+   geometry:
 
    .. math::
 
-      V_{i,k}=\tfrac{\Theta}{2}(r_{i+1}^2-r_i^2)\Delta z_k,\quad
-      A_{r-}=\Theta r_i\Delta z_k,\quad A_{r+}=\Theta r_{i+1}\Delta z_k,\quad
-      A_{z\pm}=\tfrac{\Theta}{2}(r_{i+1}^2-r_i^2).
+      V_{i,k}=\int_{z_k}^{z_{k+1}}\int_{r_i}^{r_{i+1}}
+                   \Theta r\,\mathrm dr\,\mathrm dz
+              =\frac{\Theta}{2}(r_{i+1}^2-r_i^2)\Delta z_k,
 
-   Face fluxes use positive coordinate directions. Multiplication by full-face area gives particle rates.
+   .. math::
 
-   A particle state is (r,z,ur,uz), where ur/uz are particle velocities.
-   The inlet structure stores per-segment bounds and areas, total inlet area, and thermal speed.
-   The separate history_rate output supplies normalization.
+      A_{r-}=\Theta r_i\Delta z_k,\quad
+      A_{r+}=\Theta r_{i+1}\Delta z_k,\quad
+      A_{z-}=A_{z+}=\frac{\Theta}{2}(r_{i+1}^2-r_i^2).
 
-   The tally structure stores cell residence (s), velocity-time moments (m),
-   signed internal crossing counts, and signed boundary escape counts.
-   Prepare the inlet once, initialize tallies once, accumulate all histories, then normalize.
-   Lower-level calls require valid prepared data; they do not all repeat driver validation.
+   Volumes are in m³ and areas in m². Density is cell-centred. Face flux is positive along increasing r or
+   z. Inflow is therefore positive and outflow negative at a lower face, with the signs reversed at an
+   upper face.
+
+   .. figure:: ../../../images/J_Fluid/cell_flux_en.svg
+      :alt: Cell-centred density and fluxes on the four coordinate faces
+      :width: 780px
+
+      Multiplying flux by the full face area gives the particle rate. The arrows mark the positive coordinate directions; actual flow can have either sign.
+
+   .. rubric:: 2. State of one particle history
+
+   The state contains four real numbers :math:`(r,z,v_r,v_z)`. The program variables ``ur,uz`` hold the
+   current particle velocity. Position is in :math:`\mathrm m` and velocity in :math:`\mathrm{m\,s^{-1}}`.
+
+   The tracker finds cell indices :math:`i,k` from the position and updates the state in place until escape
+   or the event limit. The caller does not need to retain cell indices. There is no permanent array of all
+   particle positions; only the accumulated tallies survive a completed history.
+
+   .. rubric:: 3. Inlet data prepared once and sampled repeatedly
+
+   ``fm_inlet_2drz_type`` is produced by ``sub_J01_prepare_fm_inlet`` and read by ``sub_J01_sample_fm_inlet``.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 32 20 48
+
+      * - Field
+        - Units and shape
+        - Meaning
+      * - ``segment_lo/segment_hi``
+        - m, ``(nr)``
+        - Actual injection interval in radius on each lower face
+      * - ``segment_area``
+        - m², ``(nr)``
+        - Annular area of the interval; zero where injection is unavailable
+      * - ``inlet_area``
+        - m², scalar
+        - Total area of all injection segments
+      * - ``sigma_inlet``
+        - m/s, scalar
+        - Standard deviation of the inlet normal velocity distribution
+
+   The per-history particle rate ``history_rate`` is returned separately. Final normalization uses this
+   value; inlet velocity sampling does not.
+
+   .. rubric:: 4. Tallies shared across all histories
+
+   ``sub_J01_initialize_fm_tally`` allocates and zeroes ``fm_tally_2drz_type``. Each tracked history adds
+   to the same arrays, which ``sub_J01_finalize_fm_tally`` reads at the end.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 30 25 45
+
+      * - Field
+        - Shape
+        - Raw tally
+      * - ``residence``
+        - ``(nr,nz)``
+        - Accumulated residence time, s
+      * - ``moment_r/moment_z``
+        - ``(nr,nz)``
+        - Accumulated velocity times residence time, m
+      * - ``count_r/count_z``
+        - ``(nr-1,nz)``, ``(nr,nz-1)``
+        - Internal crossings signed in the coordinate direction
+      * - ``boundary_count``
+        - ``(4,nr,nz)``
+        - Escapes through open boundaries signed in the coordinate direction
+
+   These raw tallies have no rate, volume or area normalization yet. A return visit to a cell adds another
+   segment; crossing an internal face does not reset the arrays. Inactive cells remain zero. A one-cell
+   grid direction can have a zero-length internal-face array.
+
+   .. rubric:: 5. Building and calling the module
+
+   Compile the module file with preprocessing and add its directory to the include path. Each ``sub`` file
+   supplies procedures within that module. The build options select the precision of default ``real``;
+   compile the module and its callers consistently.
+
+   The top-level routine validates shapes, basic parameters and internal-face connectivity. Direct callers
+   of lower-level routines must satisfy those preconditions themselves: some checks are performed only at
+   the top level, and some routines do not return an error code. Seeding changes the Fortran runtime's
+   random state; reproducibility with a fixed seed depends on the compiler and runtime.

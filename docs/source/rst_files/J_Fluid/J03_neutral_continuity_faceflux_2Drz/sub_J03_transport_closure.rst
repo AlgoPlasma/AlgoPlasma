@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Transport Closure
 ==========================================================================================
 
@@ -41,7 +47,7 @@ Transport Closure
    :math:`u_f` 的单位为 m/s，源码字段因而命名为 ``velocity_*_face``；
    但它不等于参考场的单元平均粒子速度。J03 初始化不接收单元平均速度数组。
 
-   .. figure:: /_static/J_Fluid/continuity_closure.svg
+   .. figure:: ../../../images/J_Fluid/continuity_closure_en.svg
       :alt: 正负参考通量分别选左侧或右侧密度，固定系数乘当前密度得到变化的面通量
       :width: 900px
 
@@ -222,45 +228,212 @@ Transport Closure
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   This file initializes a frozen face closure; it does not advance time.
-   The module defines neutral_transport_closure_2drz_type.
+   ``sub_J03_transport_closure.f90`` initializes face transport coefficients from reference density and
+   flux. No time step is taken here. The module defines ``neutral_transport_closure_2drz_type``; a
+   ``closure`` object holds the geometry, reference fields, coefficients, prescribed inflow and loss
+   frequency.
 
-   For a face oriented from L to R, choose upstream reference density by the sign of reference flux:
+   .. rubric:: 1. Deriving a current-flux relation from reference flux
+
+   Consider an internal face between cells L and R, oriented from L to R. The sign of reference flux
+   :math:`\Gamma_f^{\mathrm{ref}}` determines the upwind reference cell:
 
    .. math::
 
       n_{\mathrm{up}}^{\mathrm{ref}}=
-      \begin{cases}n_L^{\mathrm{ref}},&\Gamma_f^{\mathrm{ref}}\ge0,\\
-      n_R^{\mathrm{ref}},&\Gamma_f^{\mathrm{ref}}<0,\end{cases}
-      \quad
-      u_f=\frac{\Gamma_f^{\mathrm{ref}}}
-      {\max(n_{\mathrm{up}}^{\mathrm{ref}},n_{\mathrm{floor}})},
-      \quad\Gamma_f(n)=u_fn_{\mathrm{up}}.
+      \begin{cases}
+         n_L^{\mathrm{ref}},&\Gamma_f^{\mathrm{ref}}\ge0,\\
+         n_R^{\mathrm{ref}},&\Gamma_f^{\mathrm{ref}}<0.
+      \end{cases}
 
-   The coefficient has velocity units but is not a cell mean velocity.
-   The floor is max(density_floor_fraction times the largest active reference-density magnitude, tiny).
-   When it is active, evaluating the closure at the reference density need not reproduce the original flux.
-
-   Open boundaries store incoming and reference outgoing flux separately:
+   Assume the direction of transport and flux per unit upwind density remain fixed. Define :math:`u_f` and use
 
    .. math::
 
-      u_{b,\mathrm{out}}=\frac{\Gamma_{b,\mathrm{out}}^{\mathrm{ref}}}
-          {\max(n_K^{\mathrm{ref}},n_{\mathrm{floor}})},\quad
-      \Gamma_b=\Gamma_{b,\mathrm{in}}+u_{b,\mathrm{out}}n_K.
+      u_f=\frac{\Gamma_f^{\mathrm{ref}}}{n_{\mathrm{up}}^{\mathrm{ref}}},
+      \qquad \Gamma_f(n)=u_f n_{\mathrm{up}}.
 
-   All fluxes use coordinate signs; outward signs are (-1,+1,-1,+1).
-   Walls have zero net flux. Inputs use full-face averages.
+   The second relation is the closure assumed by this module. The continuity equation does not determine a
+   unique flux-density relation. :math:`u_f` has units of m/s, hence the name ``velocity_*_face``. It
+   differs from the cell-averaged particle velocity; initialization takes no array of mean velocities.
 
-   ``sub_J03_initialize_transport_closure`` takes active/face data, volumes/areas,
-   reference cell density, two internal flux arrays, incoming and reference outgoing boundary arrays,
-   linear loss frequency, and floor fraction. It outputs a copied closure and ierr.
-   Cell shapes are (nr,nz), internal faces (nr-1,nz)/(nr,nz-1), and face arrays (4,nr,nz).
+   .. figure:: ../../../images/J_Fluid/continuity_closure_en.svg
+      :alt: The sign of reference flux selects the left or right density. The fixed coefficient multiplies the current upwind density to give the evolving face flux.
+      :width: 900px
 
-   Initialization checks shapes, nonnegative loss, valid geometry and reciprocal internal neighbours.
-   Shared areas must agree within 100*epsilon times the larger area.
-   Callers must separately check finite/nonnegative reference density and physical boundary-flux signs.
+      A fixed coefficient still allows the flux to change as upstream density evolves.
 
-   Geometry and face coefficients stay fixed. Inflow and loss can be changed between steps.
-   Updating stored reference arrays alone does not recompute coefficients.
-   All reference fields use the same generic initializer; there are no source-specific import wrappers.
+   For a radial face, L and R are :math:`(i,k)` and :math:`(i+1,k)`; for an axial face, they are
+   :math:`(i,k)` and :math:`(i,k+1)`. The coefficient has the sign of the reference flux, so :math:`u_f`
+   also selects the current upwind density.
+
+   .. rubric:: 2. A floor for small reference densities
+
+   The code guards division by a small or zero reference density. Write the positive parameter
+   ``density_floor_fraction`` as :math:`\varepsilon_{\mathrm f}` and set
+
+   .. math::
+
+      n_{\max}^{\mathrm{ref}}
+         =\max_{K\ \mathrm{active}}|n_K^{\mathrm{ref}}|,\qquad
+      n_{\mathrm{floor}}
+         =\max(\varepsilon_{\mathrm f}n_{\max}^{\mathrm{ref}},
+               \operatorname{tiny}(1.0)),
+
+   .. math::
+
+      u_f=\frac{\Gamma_f^{\mathrm{ref}}}
+                {\max(n_{\mathrm{up}}^{\mathrm{ref}},n_{\mathrm{floor}})}.
+
+   :math:`\operatorname{tiny}(1.0)` is the smallest positive normal number of the working real type. Here
+   it only protects the division. The code checks :math:`\varepsilon_{\mathrm f}>0`; the caller must judge
+   whether the chosen fraction is too large.
+
+   When the floor is inactive, inserting reference density reproduces the reference flux. When the floor is
+   active,
+
+   .. math::
+
+      \Gamma_f(n^{\mathrm{ref}})
+         =\Gamma_f^{\mathrm{ref}}
+           \frac{n_{\mathrm{up}}^{\mathrm{ref}}}
+                {\max(n_{\mathrm{up}}^{\mathrm{ref}},n_{\mathrm{floor}})}.
+
+   The floor reduces the magnitude of the reconstructed flux and can change the discrete balance of the
+   reference field. It cannot repair negative or nonfinite reference densities, which the caller should
+   detect.
+
+   .. rubric:: 3. Keeping incoming and outgoing flux separate at open boundaries
+
+   For a boundary face of cell K let :math:`\Gamma_{b,\mathrm{in}}` denote prescribed incoming flux and
+   :math:`\Gamma_{b,\mathrm{out}}^{\mathrm{ref}}` reference outgoing flux. The outgoing coefficient and
+   current net flux are
+
+   .. math::
+
+      u_{b,\mathrm{out}}
+         =\frac{\Gamma_{b,\mathrm{out}}^{\mathrm{ref}}}
+                {\max(n_K^{\mathrm{ref}},n_{\mathrm{floor}})},\qquad
+      \Gamma_b(n)=\Gamma_{b,\mathrm{in}}+u_{b,\mathrm{out}}n_K.
+
+   Prescribed inflow is independent of the current density, while outflow varies with the boundary cell
+   density. Both use coordinate-direction signs. With outward-normal signs :math:`s_f=(-1,+1,-1,+1)`,
+   physically consistent data satisfy
+
+   .. math::
+
+      s_f\Gamma_{b,\mathrm{in}}\le0,\qquad
+      s_f\Gamma_{b,\mathrm{out}}^{\mathrm{ref}}\ge0.
+
+   At a lower inlet the incoming flux is positive and backflow escaping the domain is negative. A single
+   net flux cannot distinguish the externally supplied component from the density-dependent outgoing
+   component, so it cannot determine this boundary relation.
+
+   Walls have zero net flux during time integration and use no outgoing coefficient. Even an open face with
+   injection over only part of its area requires input averaged over the whole face. J03 does not apply
+   another aperture fraction.
+
+   .. rubric:: 4. Inputs to the initializer
+
+   ``sub_J03_initialize_transport_closure`` takes all inputs listed below.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 33 25 42
+
+      * - Argument
+        - Shape and units
+        - Use
+      * - ``active``
+        - ``(nr,nz)``, logical
+        - Marks participating cells; at least one must be active
+      * - ``face_type``
+        - ``(4,nr,nz)``, integer
+        - Internal 0, open 1, wall 2
+      * - ``volume``
+        - ``(nr,nz)``, m³
+        - Active-cell volumes must be positive
+      * - ``face_area``
+        - ``(4,nr,nz)``, m²
+        - Nonnegative areas; both sides of an internal face require the same positive area
+      * - ``density_ref``
+        - ``(nr,nz)``, m⁻³
+        - Select upwind reference density and determine the floor
+      * - ``flux_r_ref``
+        - ``(nr-1,nz)``, m⁻²s⁻¹
+        - Build radial internal-face coefficients
+      * - ``flux_z_ref``
+        - ``(nr,nz-1)``, m⁻²s⁻¹
+        - Build axial internal-face coefficients
+      * - ``boundary_inflow_flux``
+        - ``(4,nr,nz)``, m⁻²s⁻¹
+        - Store the prescribed inflow directly
+      * - ``boundary_outflow_flux_ref``
+        - ``(4,nr,nz)``, m⁻²s⁻¹
+        - Build outgoing coefficients on open faces
+      * - ``loss_frequency``
+        - ``(nr,nz)``, s⁻¹
+        - Store the nonnegative loss frequency per unit time, rather than loss per unit length
+      * - ``density_floor_fraction``
+        - Positive dimensionless scalar
+        - Floor as a fraction of maximum reference density over active cells
+
+   The outputs are ``closure`` and ``ierr``. The object stores copies of input arrays, so later edits to
+   the caller's arrays do not update the closure. The object does not store ``source_rate``; the caller
+   supplies volume production at each step.
+
+   .. rubric:: 5. Fixed and evolving fields in the closure
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 32 37 31
+
+      * - Field
+        - Meaning
+        - Subsequent use
+      * - ``nr,nz,active,face_type,volume,face_area``
+        - Geometry and topology
+        - Read by each divergence and time-step calculation
+      * - ``density_ref,flux_r_ref,flux_z_ref,boundary_outflow_flux_ref``
+        - Copy of initial reference fields
+        - Reference data, initial guess and scale for the steady solver
+      * - ``velocity_r_face,velocity_z_face,boundary_outflow_velocity``
+        - Fixed face coefficients derived above
+        - Multiply the current density to obtain current flux
+      * - ``boundary_inflow_flux``
+        - Prescribed incoming flux
+        - May be updated before each time step
+      * - ``loss_frequency``
+        - Current linear loss frequency
+        - May be updated; recompute the time-step bound afterward
+
+   Changing ``density_ref`` or ``flux_*_ref`` alone does not recalculate the face coefficients.
+   Reinitialize the object when changing reference fields so coefficients and reference data remain
+   consistent.
+
+   .. rubric:: 6. Checks performed during initialization
+
+   The routine validates shapes, nonnegative losses, a nonempty active region, volumes and areas, and valid
+   face types. Each internal face needs an existing active neighbour whose opposite face is also internal.
+   The two areas of a common face must satisfy
+
+   .. math::
+
+      |A_L-A_R|
+        \le100\,\operatorname{epsilon}(1.0)\max(A_L,A_R).
+
+   An external boundary on the axis may have zero area. Internal faces require positive area. These
+   conditions permit internal particle rates to cancel in the discrete balance.
+
+   Initialization does not fully check finiteness of the reference field, nonnegative reference density or
+   signs of incoming and outgoing boundary flux. The caller must verify these. Fill unused and noninternal
+   locations with zero to avoid accidental use during diagnostics or field conversion.
+
+   .. rubric:: 7. One initializer for every reference-field source
+
+   All sources use ``sub_J03_initialize_transport_closure``. It takes only geometry, density and flux
+   arrays. It does not read files, run the preprocessors or depend on linking a preprocessor module. A new
+   method can supply any reference fields that satisfy the same input conventions.
+
+   The module includes its implementation files after ``contains``. Compile only
+   ``mod_J03_neutral_continuity_faceflux_2Drz.f90`` with preprocessing enabled.

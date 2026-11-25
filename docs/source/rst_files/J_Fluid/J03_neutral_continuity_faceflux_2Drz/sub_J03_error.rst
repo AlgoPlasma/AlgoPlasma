@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Error Reference
 ==========================================================================================
 
@@ -78,15 +84,72 @@ Error Reference
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   ``fun_J03_error_message(ierr)`` returns a 160-character message without printing,
-   terminating or changing the field. Codes are:
-   0 success, 101 shape, 102 geometry, 103 negative input, 104 face type/topology,
-   105 options, and 106 steady iteration limit. Unknown codes include the integer value.
+   ``sub_J03_error.f90`` provides ``fun_J03_error_message(ierr)``, which maps an integer status code to a
+   string of length 160. The caller chooses how to report or handle the failure. Always check status before
+   deciding which outputs can be read.
 
-   Geometry checks allow zero-area physical axis faces but require positive matching internal areas.
-   A steady iteration-limit result retains the last complete state and diagnostics, not a converged solution.
-   Early failures may leave outputs unallocated. J03 does not return failed-cell or velocity indices.
+   .. rubric:: 1. Return codes and where to look
 
-   Success does not guarantee finite/nonnegative reference fields or correct incoming/outgoing signs.
-   The step does not enforce its stable-time bound or report all negative outputs automatically.
-   Callers must validate inputs and check finite values, minimum density and discrete balance.
+   .. list-table::
+      :header-rows: 1
+      :widths: 10 32 58
+
+      * - Value
+        - Constant
+        - Meaning and diagnostic action
+      * - 0
+        - ``J03_SUCCESS``
+        - The interface checks performed by this routine passed. Physical input validation remains the
+          caller's responsibility.
+      * - 101
+        - ``J03_ERR_SHAPE``
+        - Incompatible shapes among cell arrays, internal-face arrays or four-face arrays.
+      * - 102
+        - ``J03_ERR_GEOMETRY``
+        - No active cells, nonpositive active volume, negative area or an internal face with nonpositive or
+          mismatched area.
+      * - 103
+        - ``J03_ERR_NEGATIVE_INPUT``
+        - The routine detected a negative loss or source, or negative input density with clipping disabled.
+      * - 104
+        - ``J03_ERR_FACE_TYPE``
+        - Invalid face type, or an internal face lacks an active neighbour with a matching internal face.
+      * - 105
+        - ``J03_ERR_OPTIONS``
+        - A time step, CFL factor, density-floor fraction, tolerance, iteration limit or progress interval
+          violates a routine precondition.
+      * - 106
+        - ``J03_ERR_NOT_CONVERGED``
+        - The steady solve reached its iteration limit before both change and residual met their criteria.
+
+   The English status strings are brief; this table describes the checks in more detail. For example, the
+   geometry message calls for positive area, but a physical boundary on the axis may have zero area. Only a
+   shared internal face must have strictly positive area. Refer to the relevant procedure page for the
+   exact conditions.
+
+   An unrecognized integer returns an “unknown J03 error code” message containing the value. The codes are
+   local to J03. Log the module, procedure and physical time or iteration number alongside the code.
+
+   .. rubric:: 2. Which outputs remain usable after a failure?
+
+   Early failures in initialization or stepping can occur before output objects or allocatable arrays have
+   been created. Check before passing them to the next routine.
+
+   On reaching the steady iteration limit, the solver returns the last complete density, the completed
+   iteration count and associated diagnostics. They are available for troubleshooting an unconverged
+   solution. After other failures, output validity depends on the stage reached.
+
+   J03 does not return a failed cell index or velocity direction and does not automatically identify a
+   face. For geometry or negative-input failures, inspect the original arrays. Particle-tracking and
+   sweep-direction diagnostics belong to the kinetic preprocessors.
+
+   .. rubric:: 3. Checks beyond a successful status
+
+   - Initialization does not exhaustively validate finite reference values, nonnegative reference density
+     or boundary flux signs.
+   - The step routine does not check the supplied time step against the stability bound.
+   - With clipping disabled, a negative output does not itself produce a step error.
+   - Balance and residual routines mainly check shapes. They do not validate physical inputs.
+
+   Applications should therefore check finiteness, minimum density and discrete particle balance in
+   addition to the return code.

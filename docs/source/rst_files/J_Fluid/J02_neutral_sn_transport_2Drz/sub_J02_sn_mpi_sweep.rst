@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-07 00:49 +08:00 | Yingjie Chen | git 8f4066fd17ec
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Distributed Sweep and Flux
 ==========================================================================================
 
@@ -56,7 +62,7 @@ Distributed Sweep and Flux
    例如两者均为正时，每块依赖 r-low 和 z-low 邻居，
    完成后将结果送给 r-high 和 z-high 邻居。
 
-   .. figure:: /_static/J_Fluid/sn_spatial_mpi.svg
+   .. figure:: /_static/J_Fluid/sn_spatial_mpi_english.svg
       :alt: 四块空间网格从左下向右上进行迎风通信；每块内部线程处理不同离散速度
       :width: 900px
 
@@ -245,94 +251,217 @@ Distributed Sweep and Flux
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   The private routines in ``sub_J02_sn_mpi_sweep.f90`` implement spatial communication and
-   interface-flux reconstruction. Applications keep calling ``sub_J02_sweep`` or
-   ``sub_J02_solve_transport`` with an optional ``partition`` argument.
+   ``sub_J02_sn_mpi_sweep.f90`` implements partitioned upwind communication and interface-flux reconstruction. Both routines are
+   private to the module. Applications call ``sub_J02_sweep`` or ``sub_J02_solve_transport`` with optional ``partition``. Omitting the partition selects
+   the single-domain path.
 
-   .. rubric:: Upwind communication
+   Continue with blocks A, B, C, and D from the previous page. The cell equation within each block is
+   unchanged, but upstream coefficients residing on another rank must be received. The following
+   sections cover the data needed, message order, reflection convergence, and final flux.
 
-   The local DG equation is unchanged. Its incoming face term is
+   .. rubric:: 1. Upstream data exchanged between ranks
+
+   The DG cell equation is :math:`\mathsf A_{K,m}\boldsymbol c_{K,m}=\boldsymbol b_{K,m}`. Each incoming face contributes
 
    .. math::
 
-      b_{f,a}=s_{f,m}\int_f\phi_{a,K}\psi_m^{\mathrm{up}}r\,\mathrm d\ell.
+      b_{f,a}=s_{f,m}\int_f
+          \phi_{a,K}\,\psi^{\mathrm{up}}_m\,r\,\mathrm d\ell,\qquad a=1,2,3.
 
-   All three upstream coefficients are communicated, retaining the tangential P1 variation.
-   The existing neighbor-RHS, local solve and positivity routines are reused.
+   Here :math:`s_{f,m}=|\boldsymbol\Omega_m\cdot\boldsymbol n_f|` and :math:`\phi_1=1,\phi_2=\xi,\phi_3=\zeta`. The common azimuthal factor cancels as in the local DG equation. Once the three
+   upstream polynomial coefficients are known, the integral is independent of which rank owns the
+   upstream cell.
+
+   For example, B receives inflow from A on its left. For :math:`\mu_m>0` the distribution on the shared face from
+   A's rightmost cell is
+
+   .. math::
+
+      \psi_m^{\mathrm{up}}(\zeta)=c_{0,L,m}
+                               +c_{1,L,m}
+                               +c_{2,L,m}\zeta.
+
+   Subscript L denotes A's cell on the left side of the interface. Rank B integrates this face function
+   against its test functions to form its right-hand side. Therefore transmit :math:`(c_0,c_1,c_2)`. Transmitting only
+   density or :math:`c_0` would lose the linear variation along the face and change the P1 discretization. The
+   receiver uses ``sub_J02_add_neighbor_rhs`` to assemble the incoming term, then performs the same 3 × 3 solve and positivity
+   treatment as in a single domain.
+
+   .. rubric:: 2. Communication and sweeps by direction quadrant
+
+   For fixed velocity :math:`m`, the signs of :math:`\mu_m` and :math:`\eta_m` select upstream neighbors. When both are positive,
+   each block depends on its r-low and z-low neighbors, then sends results to r-high and z-high.
 
    .. figure:: /_static/J_Fluid/sn_spatial_mpi_english.svg
-      :alt: Positive-r positive-z spatial pipeline with velocity-node threads inside each block
+      :alt: Upwind communication from lower left to upper right across four blocks, with threads handling velocities within each block
       :width: 900px
 
-      A is ready first, then B and C, then D. Block labels are not fixed MPI ranks.
+      Only the group with positive radial and axial components is shown. A has no upstream rank and
+      starts first. B and C can proceed simultaneously once they receive A's data; D waits for both.
+      Letters denote spatial blocks, independent of MPI rank numbers.
 
-   Velocity nodes are grouped into four sign quadrants. In each quadrant, the main thread
-   receives the two upstream coefficient planes, runs the shared OpenMP batch on the local block,
-   sends downstream planes, and completes sends before reusing buffers.
-   Buffers scale as three coefficients times the local edge length times quadrant node count.
-   No global distribution is gathered. Pure MPI runs the same local batch without OpenMP.
+   Particle motion sets the dependency order. A uses its physical inlet or prepared wall inflow, solves
+   locally, then sends its right edge to B and upper edge to C. B and C solve and send the upstream
+   coefficients needed by D. D then has data on both incoming interfaces.
 
-   .. rubric:: Global reflection convergence
+   There are four sign combinations for the radial and axial cosines. The current code processes :math:`(+,+),(-,+),(+,-),(-,-)` in
+   order. All speeds in a group share one process dependency pattern. For group :math:`(-,-)` the wave starts at
+   D, proceeds through B and C, and ends at A. Each rank executes these steps for a quadrant:
 
-   A global logical OR selects reflection iteration on every rank. Wall normalization remains
-   local because all velocities of each owned wall are local.
-   For the local coefficient arrays, the global criterion is
+   1. The main thread receives three spatial coefficients on each upstream edge. No receive is required
+      on a physical outer boundary.
+   2. Start the shared ``sub_J02_sweep_batch``. OpenMP threads take velocity tasks. Each velocity traverses local cells in
+      upwind order.
+   3. Wait for all local tasks in the quadrant and pack the two downstream edges on the main thread.
+   4. Send coefficients downstream and confirm completion before reusing buffers for the next quadrant.
+
+   For :math:`N_q` velocities in a quadrant:
+
+   - A radial interface has :math:`n_z` cells along z and sends three coefficients per cell and velocity. The
+     receive buffer has shape :math:`(3,n_z,N_q)`.
+   - An axial interface has :math:`n_r` cells along r and receive shape :math:`(3,n_r,N_q)`.
+
+   In the preceding example with :math:`n_r=4,n_z=3` and 192 velocities, each quadrant contains 48 velocities. The
+   radial receive holds 432 reals and the axial receive 576. Buffers contain only neighbor edge
+   coefficients, with matching send buffers. Ranks exchange edge data without gathering the full field.
+   The nonperiodic rectangular partition gives an acyclic dependency graph. The present implementation
+   does not overlap quadrants asynchronously or tile their communication.
+
+   ``sub_J02_mpi_sweep`` takes local mesh, geometry, quadrature, loss, physical boundaries, and the previous distribution
+   for reflection. It produces new local coefficients and one error record per velocity. ``MPI_Recv`` receives
+   upstream data, ``sub_J02_sweep_batch`` assigns local tasks, ``MPI_Isend`` sends downstream data, and ``MPI_Waitall`` confirms completion before
+   buffer reuse. MPI calls occur outside OpenMP worker regions, so ``MPI_THREAD_MULTIPLE`` is unnecessary. With OpenMP
+   disabled, the same local task loop executes serially on each MPI rank.
+
+   .. rubric:: 3. Collective convergence of reflection iteration
+
+   If any rank owns a wall or partial inlet, every rank enters the reflection iteration. A global
+   logical OR selects this branch so wall-free blocks cannot finish a single sweep and exit early.
+
+   Each rank computes reflection on the wall faces it owns. Because it retains all velocities, specular
+   mapping and diffuse normalization are local; one physical face's velocity integral needs no
+   cross-rank sum. A REMOTE face uses the upstream coefficients received in the current sweep.
+
+   Global convergence depends on all blocks. Let :math:`\boldsymbol c_p` be rank p's local coefficients. First compute the
+   global scale
 
    .. math::
 
-      S=\max_p\max(|\boldsymbol c_p^{(\ell)}|,|\boldsymbol c_p^{(\ell+1)}|),\qquad
-      E=\frac{\sum_p\sum|\boldsymbol c_p^{(\ell+1)}/S-\boldsymbol c_p^{(\ell)}/S|}
-      {\max(\sum_p\sum|\boldsymbol c_p^{(\ell+1)}/S|,\sum_p\sum|\boldsymbol c_p^{(\ell)}/S|)}.
+      S=\max_p\max\!\left(
+          |\boldsymbol c_p^{(\ell)}|,\,
+          |\boldsymbol c_p^{(\ell+1)}|\right).
 
-   For zero S, E is zero. Old and new norms are globally summed separately before taking their
-   maximum. All ranks stop together. MPI reductions may change roundoff, so different layouts
-   are compared with precision-dependent tolerances, not bitwise equality.
-
-   .. rubric:: Interface fluxes and diagnostics
-
-   After convergence, exchange final edge coefficients and select the upwind trace for each node:
+   When :math:`S>0` each block computes local sums of absolute values, and then these are summed globally:
 
    .. math::
 
-      \Gamma_r=\sum_m w_mv_m\mu_m
-      \begin{cases}c_{0,L,m}+c_{1,L,m},&\mu_m>0,\\c_{0,R,m}-c_{1,R,m},&\mu_m<0,\end{cases}
+      \begin{aligned}
+      D&=\sum_p\sum
+          \left|\boldsymbol c_p^{(\ell+1)}/S-\boldsymbol c_p^{(\ell)}/S\right|,\\
+      B_{\mathrm{old}}&=\sum_p\sum|\boldsymbol c_p^{(\ell)}/S|,\\
+      B_{\mathrm{new}}&=\sum_p\sum|\boldsymbol c_p^{(\ell+1)}/S|.
+      \end{aligned}
 
    .. math::
 
-      \Gamma_z=\sum_m w_mv_m\eta_m
+      E_{\ell+1}=\frac{D}{\max(B_{\mathrm{old}},B_{\mathrm{new}})}.
+
+   The inner sums cover local cells, velocities, and all three coefficients. Compute the global old and
+   new norms separately, then take the larger; a sum of blockwise maxima would use a different
+   denominator. For :math:`S=0` define the change as zero. The code uses ``MPI_Allreduce``: each rank contributes a local value
+   and receives the same global result. Reduce one global maximum :math:`S` and three global sums :math:`D,B_{\mathrm{old}},B_{\mathrm{new}}`. All
+   ranks calculate the same :math:`E_{\ell+1}` and stop or continue together. Even an unchanged block participates
+   because later inflow may arrive from another region.
+
+   Partitioning may change the order of floating-point sums. Compare runs at a tolerance appropriate to
+   the real precision; a different partition can change the last rounded digits.
+
+   .. rubric:: 4. Reconstructing flux on partition interfaces
+
+   Upstream communication during the sweep lets downstream cells solve their equations. After
+   convergence, a separate operation reconstructs interface flux. ``sub_J02_reconstruct_partition_fluxes`` exchanges final edge coefficients
+   so each neighbor holds the cells on both sides of a shared face. For each velocity choose the
+   upstream cell by its direction sign and compute the face-averaged distribution :math:`\overline\psi^{\mathrm{up}}` as on the Field
+   Reconstruction page. For a radial interface,
+
+   .. math::
+
+      \overline\psi^{\mathrm{up}}_{r,m}=
       \begin{cases}
-      c_{0,B,m}+\bar\xi_i c_{1,B,m}+c_{2,B,m},&\eta_m>0,\\
-      c_{0,T,m}+\bar\xi_i c_{1,T,m}-c_{2,T,m},&\eta_m<0,
+         c_{0,L,m}+c_{1,L,m},&\mu_m>0,\\
+         c_{0,R,m}-c_{1,R,m},&\mu_m<0,
       \end{cases}
-      \qquad\bar\xi_i=h_{r,i}/(3r_{c,i}).
+      \qquad
+      \Gamma_r=\sum_m w_m v_m\mu_m\overline\psi^{\mathrm{up}}_{r,m}.
 
-   The transport result separates local internal ``flux_r/flux_z``, REMOTE-only
-   ``partition_flux(4,nr,nz)``, and physical open ``inflow_flux/outflow_flux``.
-   The shared face has identical coordinate-oriented signs on both owners; do not count it
-   twice as an external flux. The sweep-only entry does not reconstruct fluxes.
+   L and R denote spatially left and right cells regardless of rank order. On an axial face the average
+   retains the radial weighting correction:
 
-   Preflight errors are synchronized before point-to-point communication. Local numerical failures
-   complete the communication graph before collective return. Diagnostics use global cell indices
-   and the same direction/signed-cell ordering as the unsplit sweep. Partial fields are invalid.
-   This is numerical error handling, not process-failure recovery.
+   .. math::
 
-   .. rubric:: Build and application scope
+      \overline\psi^{\mathrm{up}}_{z,m}=
+      \begin{cases}
+         c_{0,B,m}+\bar\xi_i c_{1,B,m}+c_{2,B,m},&\eta_m>0,\\
+         c_{0,T,m}+\bar\xi_i c_{1,T,m}-c_{2,T,m},&\eta_m<0,
+      \end{cases}
+      \qquad
+      \Gamma_z=\sum_m w_m v_m\eta_m\overline\psi^{\mathrm{up}}_{z,m},
+      \qquad
+      \bar\xi_i=\frac{h_{r,i}}{3r_{c,i}}.
 
-   Use an MPI Fortran compiler with ``-cpp -DJ02_USE_MPI``; add ``-fopenmp`` to compile and link
-   for hybrid execution. All sources must share the same default-real width.
-   The application initializes MPI and a nonperiodic 2D Cartesian communicator,
-   initializes the partition, and prepares local meshes and physical boundaries.
-   Reduce inlet area globally before normalizing the prescribed particle rate,
-   then call ``sub_J02_solve_transport(..., partition=part)`` on every rank.
-   Check errors before reading local results or reducing physical particle rates.
-   The application owns communicator cleanup and MPI finalization.
+   B and T denote the bottom and top cells. The same reconstruction applies on local interior faces.
+   Both ranks see the same coefficients and sum velocities in the same order, producing the same
+   coordinate-directed flux. For instance :math:`\Gamma_r>0` on a radial interface indicates flow from left to right.
+   The left block counts outflow :math:`+A_f\Gamma_r` while the right block's outward contribution is :math:`-A_f\Gamma_r`. These cancel in
+   the global balance. The stored flux has one coordinate sign; each block applies its own outward sign
+   and area.
 
-   With Open MPI, ``mpiexec -np N`` selects the process count;
-   ``OMP_NUM_THREADS`` sets the requested threads per rank in a hybrid build.
-   Omitting ``-fopenmp`` gives pure MPI. Launching multiple single-domain programs
-   without a partition repeats the whole calculation rather than distributing it.
+   Outputs have three distinct storage locations:
 
-   J03 is not MPI-distributed. To use the current J03 entry, the application must assemble global
-   cell fields and internal faces using ``first/count``, taking one copy of each REMOTE flux.
-   Do not reinterpret process interfaces as physical open boundaries.
-   No automatic gather adapter or distributed J03 solver is supplied by this change.
+   - ``flux_r/flux_z`` holds interior faces with both cells on this block.
+   - ``partition_flux(4,nr,nz)`` holds REMOTE flux in :math:`\mathrm{m^{-2}s^{-1}}`. Both sides store a copy; this internal exchange is counted once when
+     assembling faces and excluded from external escape.
+   - ``inflow_flux/outflow_flux`` holds physical OPEN faces. Both arrays contain zero at REMOTE faces.
+
+   ``sub_J02_sweep`` alone returns the local distribution without reconstructing flux. ``sub_J02_solve_transport`` returns all local fields and
+   interface fluxes.
+
+   .. rubric:: 5. Synchronizing and locating errors
+
+   Before upwind communication, synchronize local input checks, compare quadratures and iteration
+   options, and check interface coordinates and face types. If a rank fails validation, all ranks
+   return together.
+
+   If a cell calculation fails, complete the current communication sequence before collectively
+   selecting the failure. Prefer the lowest failed velocity index, then the earliest cell in the
+   unpartitioned upwind order for that direction. Returned ``failed_i/failed_k`` are global indices. Errors unrelated to a
+   cell retain zero indices. A failed field is unsuitable as a solution.
+
+   This prevents detected numerical errors from leaving ranks waiting for upstream data. It does not
+   handle process crashes, network failures, or incorrect use of the communicator by the application.
+
+   .. rubric:: 6. Build, call order, and subsequent continuity solve
+
+   For MPI builds, use an MPI Fortran compiler and define ``-DJ02_USE_MPI``. Hybrid builds also require ``-fopenmp`` at compile
+   and link time. Serial builds need only ``-cpp`` and do not link MPI. All callers must match the module's
+   real precision.
+
+   Prepare and execute a distributed calculation in this order:
+
+   1. Initialize MPI and create a nonperiodic two-dimensional Cartesian communicator.
+   2. Call ``sub_J02_initialize_partition`` and use ``first/count`` to prepare the local mesh and fields.
+   3. Initialize partition-aware face types and set only physical boundaries owned by the local rank.
+   4. Sum the inlet area globally and normalize the inflow to the total inlet particle rate.
+   5. Call ``sub_J02_solve_transport(..., partition=part)`` collectively on all ranks.
+   6. Check the return code, read local fields, and globally sum inlet, escape, and volume-loss rates.
+   7. Release the communicator and finalize MPI in the application.
+
+   With Open MPI, ``mpiexec -np N`` selects the number of spatial ranks; ``OMP_NUM_THREADS`` selects threads per rank in a hybrid
+   build. Without ``-fopenmp``, each rank sweeps serially. Launching multiple processes without passing ``partition``
+   duplicates the single-domain calculation.
+
+   J03 currently operates on one domain and has no MPI communication. To pass distributed J02 output to
+   J03, use ``first/count`` to assemble global cell fields and interior faces first. For each REMOTE face, take one
+   copy and place it in the corresponding global interior-face slot. The J03 physical open-boundary
+   arrays exclude these internal faces. The interface provides the indices and fluxes for assembly; it
+   does not yet gather the data automatically or implement distributed J03.

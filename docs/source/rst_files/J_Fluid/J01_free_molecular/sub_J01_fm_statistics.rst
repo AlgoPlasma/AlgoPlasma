@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Field Estimators
 ==========================================================================================
 
@@ -141,40 +147,128 @@ Field Estimators
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   The tally stores sums over every trajectory segment inside a cell:
+   ``sub_J01_fm_statistics.f90`` converts raw trajectory tallies into physical fields. The inlet supplies a
+   particle rate :math:`\dot w` per history. The estimators combine it with residence times or crossing
+   counts, then normalize by cell volume or face area.
+
+   .. rubric:: 1. Histories, flight segments and cells
+
+   Index histories by :math:`h`. Each encounter with a face ends a flight segment, so one history contains
+   many segments. Let :math:`\mathcal S_K` contain all segments in cell :math:`K` from every history.
+   Segment :math:`s` lasts :math:`\tau_s` and has velocity :math:`(v_{r,s},v_{z,s})`. The arrays store
 
    .. math::
 
-      T_K=\sum_s\tau_s,\quad M_{r,K}=\sum_s v_{r,s}\tau_s,\quad
-      M_{z,K}=\sum_s v_{z,s}\tau_s.
+      T_K=\sum_{s\in\mathcal S_K}\tau_s,\qquad
+      M_{r,K}=\sum_{s\in\mathcal S_K}v_{r,s}\tau_s,\qquad
+      M_{z,K}=\sum_{s\in\mathcal S_K}v_{z,s}\tau_s.
 
-   A history represents an injection rate dot w. Integrating the particle age over time spent in K
-   gives inventory dot w times residence, hence
+   Each return visit by the same history contributes another segment. Residence time weights each segment's
+   velocity.
 
-   .. math::
+   .. rubric:: 2. From residence time to steady particle number
 
-      n_K=\dot w T_K/V_K,\qquad
-      \overline v_{r,K}=M_{r,K}/T_K,\qquad
-      \overline v_{z,K}=M_{z,K}/T_K.
-
-   No global simulation-time denominator is needed.
-   An unvisited cell returns zero density and velocity, which means no samples, not proven zero physical density.
-
-   Signed crossings yield independent face estimators:
+   Suppose trajectories of one type are continuously injected at rate :math:`\dot w`. At steady state,
+   :math:`\dot w\,\mathrm da` particles of this type have ages in :math:`[a,a+\mathrm da]`. Accumulate only
+   the age intervals spent in cell :math:`K`:
 
    .. math::
 
-      \Gamma_f=\dot w(N_f^+-N_f^-)/A_f.
+      N_K^{(h)}
+         =\dot w\int_0^{t_{\mathrm{escape},h}}
+               \boldsymbol1_K(\boldsymbol x_h(a))\,\mathrm da
+         =\dot w\,T_K^{(h)}.
 
-   Internal and outgoing-boundary fluxes use full physical face areas and coordinate signs.
-   They must not be replaced with cell density times mean velocity.
+   :math:`a` is the particle's age since injection. The indicator :math:`\boldsymbol1_K` is one inside this
+   cell and zero elsewhere. Summing over histories gives the cell-averaged density
 
-   ``sub_J01_initialize_fm_tally`` allocates and zeros the arrays once.
-   ``sub_J01_finalize_fm_tally`` reads geometry, active mask, history_rate and tallies;
-   it allocates density/velocities (nr,nz), internal fluxes (nr-1,nz)/(nr,nz-1),
-   and outgoing boundary fluxes (4,nr,nz), without an ierr or completeness check.
-   It does not generate prescribed inflow.
+   .. math::
 
-   Complete histories imply total escape rate equals total injection rate.
-   Local fields still have statistical error, and analytic per-face prescribed inflow can differ
-   from a finite sample's per-face injection counts.
+      n_K=\frac{N_K}{V_K}=\frac{\dot w T_K}{V_K}.
+
+   The units are :math:`\mathrm{s^{-1}}\times\mathrm s/\mathrm{m^3}=\mathrm{m^{-3}}`. The injection rate is
+   already in :math:`\dot w`, so there is no total simulation time in the denominator. As the sample count
+   grows, :math:`\dot w=Q_{\mathrm{in}}/N_{\mathrm{hist}}` decreases accordingly; the expected density
+   remains fixed.
+
+   .. rubric:: 3. Residence-weighted cell mean velocity
+
+   Use the same residence weights for velocity moments in the cell:
+
+   .. math::
+
+      n_K\overline v_{r,K}=\frac{\dot w M_{r,K}}{V_K},\qquad
+      n_K\overline v_{z,K}=\frac{\dot w M_{z,K}}{V_K}.
+
+   Division by density cancels the particle rate and volume:
+
+   .. math::
+
+      \overline v_{r,K}=\frac{M_{r,K}}{T_K},\qquad
+      \overline v_{z,K}=\frac{M_{z,K}}{T_K}.
+
+   The outputs ``velocity_r/velocity_z`` hold these two cell averages; ``ur/uz`` is the velocity of an
+   individual trajectory. An unvisited cell has :math:`T_K=0`, so density and both velocity outputs are set
+   to zero to avoid division by zero. Such a cell has no samples from which to infer the continuum value.
+
+   .. rubric:: 4. Face flux from crossing counts
+
+   Let :math:`N_f^+,N_f^-` be the numbers of forward and reverse crossings of face :math:`f` over all
+   histories. A single history may cross repeatedly. The signed count :math:`C_f=N_f^+-N_f^-` gives
+
+   .. math::
+
+      Q_f=\dot w C_f,\qquad \Gamma_f=\frac{\dot w C_f}{A_f}.
+
+   :math:`Q_f` is the signed particle rate along the positive coordinate direction and :math:`\Gamma_f` the
+   flux averaged over the full grid face. Internal fluxes go into ``flux_r`` and ``flux_z``. Only escaping
+   events are tallied in ``boundary_outflow_flux``: outflow is negative at a lower face and positive at an
+   upper face.
+
+   A wall reflection has zero net crossings and generates no wall outflow. If the lower radial face on the
+   axis has zero area, its flux stays zero to avoid division by zero. The application must still decide
+   whether the axis motion model suits the problem.
+
+   The cell velocity moment :math:`n_K\overline v_K` is a volume average; :math:`\Gamma_f` samples
+   crossings at a face. Retain the crossing counts to obtain the original face flux. Interpolating cell
+   density and mean velocity samples a different quantity.
+
+   .. rubric:: 5. Inputs and outputs of the tally routines
+
+   ``sub_J01_initialize_fm_tally(nr,nz,tally)``:
+
+   - Supply positive cell counts in both spatial directions.
+   - The output ``tally`` is allocated and zeroed. Module and Data lists its fields and shapes.
+   - Call once before the entire history loop. The routine has no status return.
+
+   ``sub_J01_finalize_fm_tally``:
+
+   - Supply ``r_edge,z_edge,theta_span,active``, ``history_rate`` and the ``tally`` accumulated across all
+     histories.
+   - Allocate and return ``density,velocity_r,velocity_z``, each with shape ``(nr,nz)``.
+   - Allocate and return ``flux_r(nr-1,nz)``, ``flux_z(nr,nz-1)`` and ``boundary_outflow_flux(4,nr,nz)``.
+   - Density is in m⁻³, velocities in m/s and fluxes in m⁻² s⁻¹. Inactive-cell fields stay zero.
+   - ``tally`` is read-only, and there is no ``ierr`` argument. The caller must supply compatible shapes
+     and valid active volumes and face areas. The inlet parameters supply prescribed inflow separately.
+
+   Finalization does not check history completion. The driver returns partial fields for diagnosis even
+   after a truncation, so check the status before using allocated outputs.
+
+   .. rubric:: 6. History count and statistical error
+
+   When all histories escape normally, the total escape count equals the number of histories, and the
+   global outgoing particle rate satisfies
+
+   .. math::
+
+      Q_{\mathrm{out}}=\dot w N_{\mathrm{hist}}=Q_{\mathrm{in}}
+      \quad\text{(up to roundoff)}.
+
+   Local density and face-flux estimates still fluctuate. Inlet-segment counts, long residence times of
+   slow particles and random wall velocities all contribute. Assess sample adequacy by varying the history
+   count and random seed, alongside checking global rate balance.
+
+   With analytically prescribed inflow, the expected rate on each face can differ from its finite-sample
+   injection count. The reference field may therefore adjust locally in a subsequent continuity solve.
+   Check sampling differences separately from truncated histories, sign errors or applying a face area
+   twice.

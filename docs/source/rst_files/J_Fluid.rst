@@ -1,3 +1,12 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-07-01 10:08 +08:00 | Yinjian Zhao | git c5308fa556c9
+   2026-07-01 11:33 +08:00 | Yinjian Zhao | git 5dcac4e969c0
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-23 10:58 +08:00 | Yingjie Chen | git cd0d957281af
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 J_Fluid
 ==========================================================================================
 
@@ -28,7 +37,7 @@ J_Fluid
    求参考场时，需要考虑粒子的速度分布；参考场建立后，可以用连续性方程继续更新密度。
    这两类计算由不同模块承担。
 
-   .. figure:: /_static/J_Fluid/model_pipeline.svg
+   .. figure:: ../images/J_Fluid/model_pipeline_en.svg
       :alt: 从几何和物理输入选择一种参考场算法，再建立面输运系数并推进当前密度
       :width: 900px
 
@@ -77,21 +86,60 @@ J_Fluid
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   J_Fluid supplies neutral reference fields and density evolution for applications.
-   Charged-particle pushing, electromagnetic fields, and reaction-rate models remain outside this group.
+   J_Fluid computes reference fields and evolves the density of a neutral gas.
+   In a particle-in-cell (PIC) application, the collision module can use this neutral density.
+   Other modules advance charged particles, compute electromagnetic fields and supply reaction rates.
 
-   Read one complete reference-field route, including its local geometry, indexing and signs,
-   followed by J03 for transient density evolution. J01 and J02 are alternatives, not successive stages.
-   Existing reference arrays can be passed directly to J03.
+   .. rubric:: How the modules fit together
 
-   - J01: inlet sampling, wall reflection, particle histories, residence and crossing estimators.
-   - J02: velocity quadrature, boundary distributions, DG equations, sweeps, iteration and reconstruction.
-   - J03: reference-field closure, current fluxes, physical-time steps, balance diagnostics and an optional steady solver.
+   Neutrals enter through an inlet, travel through the domain, reflect at walls and leave through an outlet.
+   Computing a reference field requires the velocity distribution. Once a reference field is available,
+   the continuity equation can advance the density.
 
-   The current kinetic preprocessors retain only r,z and two velocity components.
-   Cylindrical measures do not provide full axisymmetric three-velocity dynamics.
-   J03 evolves scalar density and never reruns a preprocessor.
+   .. figure:: ../images/J_Fluid/model_pipeline_en.svg
+      :alt: Geometry and physical inputs feed either reference-field solver. J03 derives face transport coefficients and advances the current density.
+      :width: 900px
 
-   Compile module files with preprocessing, not their included implementation files.
-   Use one real precision consistently. Detailed tests and results belong to
-   :doc:`Tests / 012_fluid </tests/012_fluid/index>`, separate from the algorithm documentation.
+      Choose one of the two reference-field solvers. The continuity solver receives field arrays
+      and can use the output of either solver through the same interface.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 24 44 32
+
+      * - Chapter
+        - Topics
+        - What you can compute
+      * - J01 Free Molecular
+        - Inlet sampling, wall reflection, particle tracking, residence time and face crossings
+        - Reference density and flux from independent particle histories
+      * - J02 Discrete Ordinates
+        - Velocity quadrature, boundary distributions, cell equations, sweeps and reflection iteration
+        - Reference density and flux from the distribution at discrete velocities
+      * - J03 Continuity
+        - Reference-field closure, current fluxes, transient stepping, balance and the optional steady solver
+        - A density history from a prescribed initial state and a complete sequence of solver calls
+
+   On a first reading, follow one reference-field solver through to its outputs, then read J03.
+   Each chapter introduces the grid, array locations and flux conventions where it uses them.
+   If you already have reference density and flux arrays that satisfy the interface, start with J03.
+
+   .. rubric:: Model scope and source layout
+
+   Both reference-field solvers retain :math:`r,z` and :math:`v_r,v_z`.
+   They use cylindrical areas and volumes and omit azimuthal velocity dynamics.
+   Each chapter describes its own equations of motion, boundary models and assumptions.
+
+   J03 advances cell density. It uses the supplied reference field throughout the calculation.
+   If the inlet velocity distribution, wall temperature or transport conditions change appreciably,
+   the application must decide whether that field still applies.
+
+   The ``mod_*.f90`` files define types and constants and include the implementation files after
+   ``contains``. Compile each module once with its included ``sub_*.f90`` files and use the same real precision in every caller.
+   Each chapter explains the purpose and arguments of its procedures.
+
+   .. rubric:: Algorithm documentation and tests
+
+   This directory describes the models, equations, interfaces and assembly sequence.
+   :doc:`Tests / 012_fluid </tests/012_fluid/index>` gives the commands, assertions, errors and result
+   plots for the tests. The small examples in these chapters illustrate how the algorithms work.

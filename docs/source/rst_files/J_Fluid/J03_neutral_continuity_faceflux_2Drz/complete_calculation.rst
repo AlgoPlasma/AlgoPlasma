@@ -1,3 +1,8 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Complete Calculation
 ==========================================================================================
 
@@ -93,7 +98,7 @@ Complete Calculation
 
    .. rubric:: 4. 一个物理时间步的完整顺序
 
-   .. figure:: /_static/J_Fluid/continuity_time_loop.svg
+   .. figure:: ../../../images/J_Fluid/continuity_time_loop_en.svg
       :alt: 本步物理输入、稳定时间步、旧密度通量、半隐式更新、收支检查与物理时钟推进
       :width: 900px
 
@@ -174,24 +179,164 @@ Complete Calculation
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   A complete J03 application first validates reference arrays, initializes closure once,
-   chooses an independent physical initial condition, then owns the time loop.
+   This page connects the preceding interfaces into a complete calculation. J03 receives field arrays on
+   its grid; particle histories, discrete velocities and internal preprocessing structures stay with the
+   caller. Initialize once, then choose the transient loop or the optional steady solve.
 
-   J01 provides cell density, internal fluxes and outgoing boundary fluxes; the application supplies
-   incoming flux from the same inlet model. J02 provides these plus result%inflow_flux.
-   Pack geometry and face types into the common four-face order.
-   Distributed reference results must be assembled globally first; remote interfaces become internal faces
-   and are counted once. There is no automatic gather adapter or distributed J03 solver.
+   .. rubric:: 1. Checking the reference field before calling J03
 
-   A physical step updates source, loss and incoming flux, computes a stable bound, selects a smaller
-   step as needed for accuracy/end/output times, calls continuity_step, verifies the new state and
-   mixed-time-level balance, then advances the application clock.
-   Record physical time, total inventory, density extrema and production/removal/boundary rates.
+   Provide active-cell flags, face types, cell volumes, all four face areas, reference density, internal
+   face fluxes, and separate boundary inflow and outflow on the same grid. Use the shapes and units in the
+   Transport Closure input table.
 
-   The initial density need not equal reference density.
-   Updating stored reference arrays alone does not recompute face coefficients.
-   For fixed inputs and only a final equilibrium, solve_steady is an alternative to the external
-   physical-time loop, not an operation to insert inside every outer physical step.
+   Before initialization check the following:
 
-   New reference-field methods can use the generic initializer unchanged.
-   A new closure, absorbing wall or nonlinear reaction requires its own physical and stability definition.
+   - All reference densities and used fluxes are finite, density is nonnegative and the source calculation
+     completed successfully.
+   - Internal fluxes follow positive r or z, with matching face types and areas on both sides.
+   - Boundary inflow and outflow are available separately. Do not use one net flux for both.
+   - Fluxes are averages over full grid faces. They have not yet been multiplied by face area.
+   - The wall model satisfies J03's zero-net-flux condition.
+   - Loss frequency is in s⁻¹. Convert any loss per unit path length before use.
+
+   Adapt fields from their source once here, outside the continuity time loop.
+
+   .. rubric:: 2. Connecting the available reference-field interfaces
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 25 36 39
+
+      * - J03 input
+        - J01 driver output
+        - J02 complete-solution result
+      * - ``density_ref``
+        - ``density``
+        - ``result%density``
+      * - ``flux_r_ref,flux_z_ref``
+        - ``flux_r,flux_z``
+        - ``result%flux_r,result%flux_z``
+      * - ``boundary_outflow_flux_ref``
+        - ``boundary_outflow_flux``
+        - ``result%outflow_flux``
+      * - ``boundary_inflow_flux``
+        - Application supplies this from the same inlet area and particle rate
+        - ``result%inflow_flux``
+      * - ``active,volume,face_area,face_type``
+        - Application retains the same grid and physical face flags
+        - Pack mesh, geometry and boundary flags in the fixed four-face order
+
+   Check ``ierr=J01_SUCCESS`` and verify that all J01 histories completed. The J01 Complete Calculation
+   page gives the prescribed-inflow formula. Adapting the fields requires no further particle sampling.
+
+   For a single J02 domain, use ``mesh%active`` for the active mask and ``geometry%volume`` for volume.
+   Pack ``area_r_lo/area_r_hi/area_z_lo/area_z_hi`` into ``face_area(1:4,:,:)`` in that order and pack the
+   four boundary-type fields into ``face_type`` in the same order. Check ``ierr=SN_SUCCESS`` and
+   ``result%converged`` before consuming the result. The reconstructed inlet flux already includes the
+   inlet area fraction.
+
+   For spatially partitioned data, first assemble global arrays in the application. A partition interface
+   is internal in the global grid. Take one copy of its ``partition_flux`` and assign it to the
+   corresponding internal face. Passing a partition's REMOTE flag directly to J03 fails; there is no
+   automatic gathering adapter.
+
+   On import, check the geometry, units and signs against the table and use the physical parameters from
+   the corresponding preprocessing case.
+
+   .. rubric:: 3. Initializing the closure and choosing an initial density
+
+   Call ``sub_J03_initialize_transport_closure`` to construct ``closure`` and check the status before
+   stepping. This is the common entry point for all preprocessing methods.
+
+   Also choose:
+
+   - Initial physical time :math:`t_0` and initial density :math:`n^0`.
+   - End time :math:`t_{\mathrm{end}}` and output times.
+   - How to obtain :math:`S^q,\nu^q` and prescribed inflow from the external physical model at each step.
+   - A stability factor and a time-step cap that resolves the physical response.
+
+   For filling an initially evacuated channel, choose :math:`n^0=0`. For the response of an existing
+   neutral population to changes in sources or losses, initialize with that density. The transient problem
+   determines the initial condition.
+
+   .. rubric:: 4. Sequence for one physical time step
+
+   .. figure:: ../../../images/J_Fluid/continuity_time_loop_en.svg
+      :alt: Update physical inputs, choose a stable step, evaluate old-density fluxes, apply the semi-implicit update, check balance and advance the clock.
+      :width: 900px
+
+      Initialization builds the face coefficients once. The loop updates density, sources, losses and inflow.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 10 43 47
+
+      * - Step
+        - Call or operation
+        - Data available at this point
+      * - 1
+        - Update physical inputs from the external model
+        - ``source_rate``, ``closure%loss_frequency``, ``closure%boundary_inflow_flux``
+      * - 2
+        - ``sub_J03_compute_stable_timestep``
+        - Stability bound for this step; check ``ierr``
+      * - 3
+        - Choose the actual :math:`\Delta t`
+        - Respect the stability bound, physical resolution limit and remaining time
+      * - 4
+        - ``sub_J03_continuity_step``
+        - Pass old density and obtain new density and status
+      * - 5
+        - Check new density and discrete particle balance
+        - Keep old and new density until this step has been checked
+      * - 6
+        - Replace old density with new density and advance the clock
+        - :math:`t\leftarrow t+\Delta t`; save results at the output times
+
+   The actual time step can be written as
+
+   .. math::
+
+      \Delta t=\min(\Delta t_{\mathrm{stable}},\Delta t_{\mathrm{physics}},
+                   t_{\mathrm{end}}-t,\Delta t_{\mathrm{output}}),
+
+   Use :math:`\Delta t_{\mathrm{output}}` only when an output time must be hit exactly. The application
+   advances the main clock; the single-step routine leaves :math:`t` to the caller.
+
+   When charged-particle and neutral time scales differ, the application can subcycle the neutral update
+   inside one outer step. How to obtain or interpolate sources and losses belongs to the coupling model;
+   J03 does not calculate reaction rates. Recompute the stability bound after changing loss frequency and
+   retain nonnegativity and the flux sign convention when updating other inputs.
+
+   .. rubric:: 5. Recording transient outputs
+
+   Record physical time, density field, total particle number, minimum density, boundary inflow and outflow
+   rates, volume production and loss, and the balance error for this step. Use the time levels derived on
+   the preceding page: outflow from old density and loss from new density.
+
+   ``sub_J03_compute_balance`` returns the individual particle rates. ``sub_J03_compute_residual`` locates
+   cells that continue to change; its steady residual can be nonzero during a transient. A nearly unchanged
+   density plot or small change in global particle number does not establish cellwise steady state.
+
+   Reinitialize the closure after changing reference density, reference flux or geometry. Editing a stored
+   reference array alone leaves the face coefficients unchanged.
+
+   .. rubric:: 6. Finding a final steady state under fixed conditions
+
+   For fixed sources, losses and boundaries, call ``sub_J03_solve_steady`` after initialization. It starts
+   from reference density and uses the same single-step update to approach the steady state of the present
+   closure. Inspect ``ierr``, ``converged``, relative change and normalized residual together.
+
+   This entry point does not return the response at a chosen physical time. Calling it to convergence at
+   every outer step would discard the transient response. With continuous production and neither outflow
+   nor loss, a finite steady state may not exist; increasing the iteration limit does not supply the
+   missing sink.
+
+   .. rubric:: 7. Extending the calculation
+
+   A new reference-field method can use the common initializer if it provides the same geometry, reference
+   density and face fluxes. No source-specific branch is needed in ``sub_J03_continuity_step``.
+
+   Changing the closure requires a new flux relation and corresponding stable time-step condition.
+   Adsorbing walls or nonlinear reactions need an appropriate boundary or source interface in addition to
+   changes in the physical model.

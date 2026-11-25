@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Complete Calculation
 ==========================================================================================
 
@@ -179,26 +185,174 @@ Complete Calculation
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   The public driver validates inputs, prepares the inlet and tallies, sets the wall thermal speed,
-   offsets and random seed, then repeats sampling and tracking before final normalization.
+   ``sub_J01_free_molecular_mc_2Drz.f90`` prepares the inlet, samples and tracks particles, then normalizes
+   the tallies. The caller supplies the grid, boundaries and physical parameters; a single call returns the
+   reference density, cell mean velocity and face fluxes.
 
-   Inputs are edge geometry, active/face arrays, injection bounds, mass, inlet/wall temperatures,
-   axial drift, supply density, diffuse probability, history/event counts and random seed.
-   Positive progress_interval reports processed histories; it does not guarantee successful escape.
-   The driver validates shapes, monotonic geometry, basic parameters and reciprocal internal topology,
-   but callers must still reject nonfinite external inputs.
+   .. rubric:: 1. Preparing inputs for the physical problem
 
-   Outputs are allocated cell density and mean velocities, signed internal face fluxes,
-   outgoing boundary fluxes, history_rate, completion counts and ierr.
-   Statuses are 0 success, 101 shape, 105 configuration/topology, and 106 incomplete tracking.
-   Partial fields may be allocated on a tracking error; they are not completed reference solutions.
+   Build the example annular grid with both axial ends open, both radial walls reflecting and internal
+   faces between active neighbours. The application supplies the inlet, mass and wall parameters. Mark face
+   types as well as the inlet radii: the face flags determine reflection and escape through either open
+   end.
 
-   To deliver prescribed lower-boundary inflow, the application uses the same inlet model:
+   .. list-table::
+      :header-rows: 1
+      :widths: 31 25 44
+
+      * - Input
+        - Shape and units
+        - Purpose
+      * - ``r_edge,z_edge,theta_span``
+        - Edge arrays, m; scalar, rad
+        - Locate particles and calculate inlet area and tally geometry
+      * - ``active,face_type``
+        - ``(nr,nz)``, ``(4,nr,nz)``
+        - Active domain and face types
+      * - ``inlet_r_lo,inlet_r_hi``
+        - m
+        - Injection radii on the open lower faces
+      * - ``neutral_mass``
+        - Positive, kg
+        - Inlet and wall thermal velocity scales
+      * - ``inlet_temperature,wall_temperature``
+        - Positive, K
+        - Width of the inlet normal distribution and wall temperature for diffuse reflection
+      * - ``inlet_drift_z``
+        - m/s
+        - Axial injection drift; radial drift is zero
+      * - ``inlet_density``
+        - Nonnegative, m⁻³
+        - Set the total particle rate using the Inlet Sampling convention
+      * - ``diffuse_fraction``
+        - Dimensionless, 0 to 1
+        - Probability of diffuse reflection at each wall collision
+      * - ``n_histories,max_events``
+        - Positive integers
+        - Number of samples and maximum event count per history
+      * - ``random_seed_value``
+        - Integer
+        - Initialize the runtime random state
+      * - ``progress_interval``
+        - Optional integer
+        - Positive values report progress in processed histories; omit or use a nonpositive value to
+          disable reporting
+
+   All physical inputs should be finite. The driver validates shapes, increasing coordinates, positive
+   parameters and reciprocal internal faces. Applications remain responsible for screening external inputs,
+   including NaNs, infinities and extreme parameter values.
+
+   .. rubric:: 2. Order of operations in a call
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 9 46 45
+
+      * - Step
+        - Procedure or operation
+        - Result
+      * - 1
+        - Validate configuration and internal-face adjacency
+        - Ensure an internal crossing stays within valid array bounds
+      * - 2
+        - ``sub_J01_prepare_fm_inlet``
+        - Obtain the inlet structure and :math:`\dot w`
+      * - 3
+        - ``sub_J01_initialize_fm_tally``
+        - Allocate and zero all tally arrays
+      * - 4
+        - Compute :math:`\sigma_{\mathrm w}` from wall temperature and set offsets and the random seed
+        - Prepare fixed inputs for reflection and tracking
+      * - 5
+        - Repeat ``sub_J01_sample_fm_inlet`` and ``sub_J01_trace_fm_history``
+        - Sample one new history at a time and accumulate in the same tally arrays
+      * - 6
+        - ``sub_J01_finalize_fm_tally``
+        - Convert accumulated residence times and counts to fields
+      * - 7
+        - Check the number of truncated histories
+        - Return success or an incomplete-tracking error
+
+   In step 5 the tracker calls the reflection routine to change velocity at a wall. Histories are
+   independent; the outer loop does not advance particles together on a global physical clock. Progress
+   reports count all processed histories, including truncations.
+
+   .. rubric:: 3. Returned fields and status
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 32 27 41
+
+      * - Output
+        - Shape and units
+        - Meaning
+      * - ``density``
+        - ``(nr,nz)``, m⁻³
+        - Cell density from residence tallies
+      * - ``velocity_r,velocity_z``
+        - ``(nr,nz)``, m/s
+        - Residence-weighted cell mean velocity
+      * - ``flux_r,flux_z``
+        - ``(nr-1,nz)``, ``(nr,nz-1)``, m⁻²s⁻¹
+        - Coordinate-oriented fluxes on internal faces
+      * - ``boundary_outflow_flux``
+        - ``(4,nr,nz)``, m⁻²s⁻¹
+        - Escape flux through open boundaries; prescribed inflow is supplied separately
+      * - ``history_rate``
+        - s⁻¹
+        - Particle rate represented by one history
+      * - ``n_completed,n_truncated``
+        - Integers
+        - Numbers of normal escapes and incomplete histories
+      * - ``ierr``
+        - Integer
+        - Completion status as listed below
+
+   The driver allocates the field arrays. They may be unallocated after an early input error. The relation
+   :math:`N_{\mathrm{completed}}+N_{\mathrm{truncated}}=N_{\mathrm{hist}}` applies once the full history
+   loop has run.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 13 38 49
+
+      * - Status code
+        - Constant
+        - Caller action
+      * - 0
+        - ``J01_SUCCESS``
+        - All histories completed. Check statistical precision before using the fields.
+      * - 101
+        - ``J01_ERR_SHAPE``
+        - Check dimensions of grid, masks and boundary arrays.
+      * - 105
+        - ``J01_ERR_CONFIGURATION``
+        - Check physical parameters, increasing edges, inlet availability and reciprocal internal faces.
+      * - 106
+        - ``J01_ERR_PARTICLE_TRACKING``
+        - At least one history was truncated. Treat the returned fields as partial diagnostic tallies.
+
+   Increasing ``max_events`` helps only when valid long trajectories reach the cap. Check for trapped
+   particles in closed regions, invalid positions and unsuitable position offsets when diagnosing other
+   causes.
+
+   .. rubric:: 4. Passing the complete reference field to the next stage
+
+   The returns already supply density, internal fluxes and outgoing boundary flux. The caller's inlet model
+   supplies incoming flux separately. The prescribed particle rate of segment :math:`i` is
+   :math:`J_{\mathrm{in}}A_i`. If the consumer uses the full face area :math:`A_{z-,i}`, its lower-face
+   inflow array must contain
 
    .. math::
 
-      \Gamma_{\mathrm{in},3,i,1}=J_{\mathrm{in}}A_i/A_{z-,i}.
+      \Gamma_{\mathrm{in},3,i,1}
+         =\frac{J_{\mathrm{in}}A_i}{A_{z-,i}}
+         =\chi_iJ_{\mathrm{in}},
+      \qquad \chi_i=\frac{A_i}{A_{z-,i}}.
 
-   This is positive in the axial coordinate convention and averaged over the complete face.
-   No second opening-area factor may be applied. The driver does not provide this incoming array
-   and does not run a continuity time loop.
+   The value is positive because lower-face inflow points along positive z. It is zero outside the inlet.
+   Use the segment areas and particle rate from the same inlet definition. Multiplying by the full face
+   area recovers the particle rate; the fraction :math:`\chi_i` has already been applied.
+
+   This handoff leaves the particle results unchanged. The J03 Complete Calculation page continues with the
+   reference-field closure and physical-time continuity loop.

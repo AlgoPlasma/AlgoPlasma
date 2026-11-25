@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="620" viewBox="0 0 1050 620" role="img" aria-labelledby="title desc">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/continuity_time_loop.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
+<title id="title">Time stepping for the continuity equation</title><desc id="desc">Initialize the face coefficients once. At each step, supply sources, losses and inflows, select a time step, form the fluxes using the old density and update the density semi-implicitly. Check the discrete balance before advancing the clock.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#267d8d"/></marker></defs>
+<rect width="1050" height="620" rx="12" fill="#f7f9fc"/>
+<g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+<text x="32" y="40" font-size="24" font-weight="bold">Initialize the closure once, then advance the density</text>
+<rect x="238" y="68" width="660" height="65" rx="8" fill="#e9f3f4" stroke="#afc9c7"/>
+<text x="568" y="96" text-anchor="middle" font-size="20">Reference fields → face coefficients</text><text x="568" y="120" text-anchor="middle" font-size="16">Set the initial density and physical start time separately</text>
+<g fill="white" stroke="#b7c9d6"><rect x="238" y="160" width="660" height="64" rx="8"/><rect x="238" y="252" width="660" height="64" rx="8"/><rect x="238" y="344" width="660" height="64" rx="8"/><rect x="238" y="436" width="660" height="76" rx="8"/></g>
+<g font-size="20" text-anchor="middle">
+<text x="568" y="188">① Supply volume sources, loss frequency and inflow</text>
+<text x="568" y="213" font-size="16">Choose the time step for both stability and physical accuracy</text>
+<text x="568" y="280">② Compute face fluxes from the old density</text>
+<text x="568" y="305" font-size="16">Interior faces use the upstream value. Open faces combine inflow and outflow.</text>
+<text x="568" y="372">③ Sum the face contributions and update the density</text>
+<text x="568" y="397" font-size="16">Explicit transport and production, implicit linear loss</text>
+<text x="568" y="464">④ Check the new density and the change in total particles</text>
+<text x="568" y="492" font-size="16">Use old-density outflow and new-density loss. Advance the clock after checking.</text>
+</g>
+<g stroke="#267d8d" stroke-width="2" fill="none" marker-end="url(#arrow)">
+<path d="M568 133V155"/><path d="M568 224V247"/><path d="M568 316V339"/><path d="M568 408V431"/>
+<path d="M238 476H208V191H232"/><path d="M568 512V550"/>
+</g>
+<text x="27" y="291" font-size="18">More time steps</text><text x="27" y="324" font-size="18">Use the new density</text><text x="27" y="351" font-size="18">in the next step</text>
+<rect x="375" y="554" width="390" height="44" rx="8" fill="#fff1dc" stroke="#d7b989"/><text x="570" y="583" text-anchor="middle" font-size="19">Stop at the requested final time</text>
+</g></svg>

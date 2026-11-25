@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="480" viewBox="0 0 1000 480" role="img" aria-labelledby="title desc">
+<!-- J_Fluid contribution history (Git author dates; edit times include timezone).
+     Source: docs/source/_static/J_Fluid/sn_partial_inlet.svg (Apache-2.0).
+     2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+     2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+     2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+-->
+  <title id="title">Inlet and wall regions on a lower axial face</title>
+  <desc id="desc">The local radial coordinate runs from minus one to plus one. The inlet covers an interval with wall on either side. Integrate each part separately for inflow and use the full face for the outflow matrix. The inlet can also touch either end.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#267d8d"/></marker></defs>
+  <rect width="1000" height="480" rx="12" fill="#f7f9fc"/>
+  <g font-family="Arial, Microsoft YaHei, sans-serif" fill="#233446">
+    <text x="30" y="38" font-size="23" font-weight="bold">An inlet and a reflecting wall can share one face</text>
+    <text x="30" y="69" font-size="17" fill="#516578">The inlet interval may lie inside the lower face, touch either end, or cover the whole face.</text>
+    <rect x="90" y="100" width="820" height="108" fill="#eaf2f5"/>
+    <text x="420" y="138" font-size="20">Active cell</text>
+    <text x="420" y="168" font-size="18">Positive axial direction</text>
+    <path d="M90 210H320M680 210H910" stroke="#647583" stroke-width="9"/>
+    <path d="M320 210H680" stroke="#cf852e" stroke-width="9"/>
+    <g fill="none" stroke="#267d8d" stroke-width="2.2" marker-end="url(#arrow)">
+      <path d="M390 255V180"/><path d="M500 255V180"/><path d="M610 255V180"/>
+      <path d="M180 155L200 204L220 157"/><path d="M780 155L800 204L820 157"/>
+    </g>
+    <g stroke="#8b9caa" stroke-dasharray="4 4">
+      <path d="M90 218V280"/><path d="M320 218V280"/><path d="M680 218V280"/><path d="M910 218V280"/>
+    </g>
+    <g font-family="Georgia, serif" font-size="23" text-anchor="middle">
+      <text x="90" y="307">−1</text>
+      <text x="320" y="307" font-style="italic">ξ<tspan baseline-shift="sub" font-size="15">L</tspan></text>
+      <text x="680" y="307" font-style="italic">ξ<tspan baseline-shift="sub" font-size="15">H</tspan></text>
+      <text x="910" y="307">+1</text>
+    </g>
+    <g text-anchor="middle" font-size="18">
+      <text x="200" y="252">Wall</text><text x="500" y="277" fill="#a96017">Prescribed inflow</text><text x="800" y="252">Wall</text>
+    </g>
+    <path d="M90 322V337H910V322" fill="none" stroke="#516578" stroke-width="1.5"/>
+    <text x="500" y="364" text-anchor="middle" font-size="18">Outflow term: integrate over the whole face</text>
+    <rect x="38" y="389" width="924" height="65" rx="8" fill="#eaf0f7"/>
+    <text x="60" y="416" font-size="18">Inflow RHS = inlet integral + left wall integral + right wall integral</text>
+    <text x="60" y="441" font-size="17" fill="#516578">The fraction gives the open area. The integrals of the test functions also depend on the interval endpoints.</text>
+  </g>
+</svg>
