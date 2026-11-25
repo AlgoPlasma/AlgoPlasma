@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Single-thread G02 electron-swarm benchmark; see PERFORMANCE.md for the run protocol.
+// Single-thread G02 electron-swarm benchmark; see the G02 electron swarm benchmark in Read the Docs.
 #include "mcc.hpp"
 
 #include <algorithm>

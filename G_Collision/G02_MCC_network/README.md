@@ -88,7 +88,7 @@ External CMake callers use `find_package(G02_MCC_network CONFIG REQUIRED)` and l
 
 For OpenMP, build with `-DG02_MCC_ENABLE_OPENMP=ON` and select `StepOptions.backend=CpuBackend::OpenMp`. For MPI, enable `-DG02_MCC_ENABLE_MPI=ON`, include `mpi.hpp`, link `AlgoPlasma::G02_MCC_MPI` and call `DistributedMccStepper::step()` on every participating rank. The host initializes MPI with at least `MPI_THREAD_FUNNELED` and destroys the stepper before `MPI_Finalize()`.
 
-Prefix channel sampling is the default; alias sampling is available for many-channel workloads. Compare complete MCC-step timings for the same model and workload while checking statistics and conservation. See [performance notes](../../tests/009_collision/G02_MCC_network/PERFORMANCE.md).
+Prefix channel sampling is the default; alias sampling is available for many-channel workloads. Compare complete MCC-step timings for the same model and workload while checking statistics and conservation. See [performance and reproduction guide](https://algoplasma.readthedocs.io/en/develop/rst_files/G_Collision/G02_MCC_network/swarm_performance.html).
 
 ## Supported models
 

@@ -22,6 +22,18 @@ G02_collision_box
    本页介绍 G02 的零维碰撞盒验证：先理解物理模型，再运行程序，最后读图并判断测试是否通过。
    MCC 的基本原理与程序接口见 :doc:`G02_MCC_network </rst_files/G_Collision/G02_MCC_network>`。
 
+   .. rubric:: 批量碰撞优化与验证
+
+   批量碰撞通过复用粒子访问顺序和随机数计算的中间值，
+   并跳过本步用不到的碰撞准备来减少耗时。原版和优化版在三个电子群工况下
+   共比较了 18 对运行。每对的过程诊断、最终粒子状态和碰撞计数均一致。
+   在相同的单线程条件下，三个工况的加速比分别为
+   3.50 倍（关闭电离的 He，50 Td）、3.61 倍（开启电离的 He，200 Td）
+   和 3.31 倍（Reid 模型气体，12 Td）。Td 是电场强度与背景气体数密度之比的单位。
+
+   本页下文的弹性碰撞盒用于检查漂移、温度和守恒。测试用的模型、计时方法、
+   峰值内存和复现命令见 :doc:`G02 电子群基准 </rst_files/G_Collision/G02_MCC_network/swarm_performance>`。
+
    .. rubric:: 1. 物理模型：热粒子与冷背景
       :class: g02-chapter
 
@@ -256,6 +268,21 @@ G02_collision_box
    This page explains the G02 zero-dimensional collision-box validation: understand the model, run the program,
    then read the plots and check the result. See :doc:`G02_MCC_network </rst_files/G_Collision/G02_MCC_network>`
    for MCC basics and program interfaces.
+
+   .. rubric:: Batch collision optimization and verification
+
+   The optimized batch step reuses the particle visit order and intermediate
+   random-number calculations. It skips collision preparation when the first
+   candidate falls beyond the current step. Across 18 paired runs in three
+   electron swarm cases, diagnostics, final particle states and collision
+   counts matched within each pair. On one CPU thread, the measured speedups
+   were **3.50×** (He with ionization disabled, 50 Td), **3.61×** (He with
+   ionization enabled, 200 Td) and **3.31×** (Reid model gas, 12 Td).
+   Td is the unit of electric field divided by background gas number density.
+
+   The elastic collision box below checks drift, temperature and conservation.
+   See the :doc:`G02 electron swarm benchmark </rst_files/G_Collision/G02_MCC_network/swarm_performance>`
+   for the benchmark models, timings, peak memory and reproduction commands.
 
    .. rubric:: 1. Physical model: hot particles in a cold background
       :class: g02-chapter

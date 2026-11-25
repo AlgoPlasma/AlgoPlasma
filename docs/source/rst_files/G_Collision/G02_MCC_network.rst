@@ -159,7 +159,7 @@ G02_MCC_network
 
    OpenMP 需要构建时开启 ``G02_MCC_ENABLE_OPENMP``，并选择 ``CpuBackend::OpenMp``。MPI 需要 ``G02_MCC_ENABLE_MPI``、``mpi.hpp`` 和 ``AlgoPlasma::G02_MCC_MPI``；所有相关进程共同调用分布式步进器。MPI 线程支持至少为 MPI_THREAD_FUNNELED，在 MPI_Finalize 前销毁步进器。
 
-   默认前缀通道抽样，多通道可以选择别名采样。用固定模型、粒子数和步数比较 Release 整步耗时，同时核对统计、守恒和串行/并行一致性。详见 :doc:`MPI 接口 <G02_MCC_network/group_mpi_interface>` 和测试目录 ``PERFORMANCE.md``。
+   默认前缀通道抽样，多通道可以选择别名采样。用固定模型、粒子数和步数比较 Release 整步耗时，同时核对统计、守恒和串行/并行一致性。详见 :doc:`MPI 接口 <G02_MCC_network/group_mpi_interface>` 和 :doc:`性能与复现 <G02_MCC_network/swarm_performance>`。
 
    .. _g02-generality-zh:
 
@@ -317,7 +317,7 @@ G02_MCC_network
 
    OpenMP requires G02_MCC_ENABLE_OPENMP and CpuBackend::OpenMp. MPI requires G02_MCC_ENABLE_MPI, mpi.hpp and AlgoPlasma::G02_MCC_MPI. Every participating rank calls the distributed stepper. Require MPI_THREAD_FUNNELED and destroy the stepper before MPI_Finalize.
 
-   Prefix channel sampling is the default; alias sampling is available for many channels. Compare Release complete-step timings for fixed models/workloads while checking statistics, conservation and serial/parallel agreement. See :doc:`MPI API <G02_MCC_network/group_mpi_interface>` and PERFORMANCE.md in the tests directory.
+   Prefix channel sampling is the default; alias sampling is available for many channels. Compare Release complete-step timings for fixed models/workloads while checking statistics, conservation and serial/parallel agreement. See :doc:`MPI API <G02_MCC_network/group_mpi_interface>` and :doc:`the performance and reproduction guide <G02_MCC_network/swarm_performance>`.
 
    .. _g02-generality-en:
 

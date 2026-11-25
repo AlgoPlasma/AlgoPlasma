@@ -68,7 +68,7 @@ Without `--model`, the executable generates a process-private temporary syntheti
 /tmp/g02_mcc_tests/bench_batch 1000000 100 7 8 prefix
 ```
 
-Benchmarks measure elapsed time; tests check statistics and physical constraints. See [PERFORMANCE.md](PERFORMANCE.md) for parallel integration.
+Benchmarks measure elapsed time; tests check statistics and physical constraints. See [performance and reproduction guide](https://algoplasma.readthedocs.io/en/develop/rst_files/G_Collision/G02_MCC_network/swarm_performance.html) for parallel integration.
 
 ## Verification references
 

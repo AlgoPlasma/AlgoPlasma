@@ -5,6 +5,7 @@
    :maxdepth: 1
 
    G02_collision_box
+   G02 MCC verification and performance </rst_files/G_Collision/G02_MCC_network/swarm_performance>
    G03_DSMC Validation <G03_DSMC>
 
 .. raw:: html

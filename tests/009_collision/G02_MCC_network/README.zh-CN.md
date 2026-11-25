@@ -68,7 +68,7 @@ bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
 /tmp/g02_mcc_tests/bench_batch 1000000 100 7 8 prefix
 ```
 
-基准测计算耗时，统计和物理约束由测试验证；并行说明见 [PERFORMANCE.md](PERFORMANCE.md)。
+基准测计算耗时，统计和物理约束由测试验证；并行说明见 [Read the Docs 性能与复现指南](https://algoplasma.readthedocs.io/en/develop/rst_files/G_Collision/G02_MCC_network/swarm_performance.html)。
 
 ## 测试依据与文献
 

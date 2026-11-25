@@ -88,7 +88,7 @@ cmake --install /tmp/g02_build --prefix /tmp/g02_install
 
 OpenMP：构建时加 `-DG02_MCC_ENABLE_OPENMP=ON`，通过 `StepOptions.backend=CpuBackend::OpenMp` 选择线程后端。MPI：加 `-DG02_MCC_ENABLE_MPI=ON`，包含 `mpi.hpp`，链接 `AlgoPlasma::G02_MCC_MPI`，所有相关进程共同调用 `DistributedMccStepper::step()`。主程序先初始化 MPI，提供至少 `MPI_THREAD_FUNNELED` 的支持，并在 `MPI_Finalize()` 前销毁步进器。
 
-默认使用前缀通道抽样；多通道可选择别名采样。用同一模型和粒子负载测量完整 MCC 步耗时，同时检查统计和守恒，详见[性能说明](../../tests/009_collision/G02_MCC_network/PERFORMANCE.md)。
+默认使用前缀通道抽样；多通道可选择别名采样。用同一模型和粒子负载测量完整 MCC 步耗时，同时检查统计和守恒，详见[Read the Docs 性能与复现指南](https://algoplasma.readthedocs.io/en/develop/rst_files/G_Collision/G02_MCC_network/swarm_performance.html)。
 
 ## 支持范围
 
