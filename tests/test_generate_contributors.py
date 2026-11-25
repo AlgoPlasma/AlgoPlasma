@@ -35,6 +35,27 @@ class ContributorWorkListTests(unittest.TestCase):
     def setUpClass(cls):
         cls.entries = contributors.load_contributors()
 
+    def test_activity_medals_and_unique_pr_credit(self):
+        def record(docs=0, opened=(), reviewed=()):
+            return {"source": 0, "docs": docs, "tests": 0,
+                    "opened_prs": opened, "reviewed_or_merged_prs": reviewed}
+
+        records = {
+            "Lead": record(16, [1], [1, 2, 2]),
+            "Alpha": record(8, [2, 3]),
+            "Beta": record(8, [4]),
+            "Gamma": record(2),
+            "Zero": record(),
+        }
+        entries = [{"name": name, "role": "maintainer"} for name in records]
+        for lang in ("zh", "en"):
+            rows = contributors._activity_rows(entries, records, lang)
+            for name, medal in (("Lead", "🥇"), ("Alpha", "🥈"), ("Beta", "🥈"), ("Gamma", "🥉")):
+                self.assertIn(medal, rows[name].split("</span>", 1)[0])
+            self.assertNotIn("ap-medal", rows["Zero"])
+            self.assertEqual(re.findall(r"<b>(\d+)</b>", rows["Lead"]), ["16", "1", "1"])
+            self.assertIn("🥇", rows["Alpha"].split("</span>")[1])
+
     def test_documented_work_and_pending_members(self):
         detailed = {
             entry["name_zh"]: entry
@@ -429,3 +450,4 @@ if __name__ == "__main__":
 
 # Contribution history (edit times include timezone).
 # 2026-11-22 21:37 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+# 2026-11-25 10:08 +0800 | Yinjian Zhao (Codex-assisted)

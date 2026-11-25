@@ -1,0 +1,106 @@
+{
+  "recorded_by": "2026-11-25 10:07 +0800 | Yinjian Zhao (Codex-assisted)",
+  "as_of": "2026-11-25",
+  "revision": "09ad2b674365b5841025d57290199cccde6936d5",
+  "import_revision": "c5308fa556c930c2f4fa4ac0e4e60cced39e23f8",
+  "members": {
+    "Yinjian Zhao": {
+      "source": 4932,
+      "docs": 480230,
+      "tests": 3100,
+      "opened_prs": [18, 19, 24, 36, 41],
+      "reviewed_or_merged_prs": [14, 15, 16]
+    },
+    "Baisheng Wang": {
+      "source": 388,
+      "docs": 2486,
+      "tests": 1680,
+      "opened_prs": [1, 14, 34],
+      "reviewed_or_merged_prs": []
+    },
+    "Zhe Liu": {
+      "source": 8387,
+      "docs": 68254,
+      "tests": 8248,
+      "opened_prs": [15],
+      "reviewed_or_merged_prs": [38, 40]
+    },
+    "Zhongping Zhao": {
+      "source": 16,
+      "docs": 3719,
+      "tests": 5201,
+      "opened_prs": [2, 3, 4, 8, 16, 20, 23, 25, 30, 31, 38, 39, 40, 42, 43, 44, 45, 46],
+      "reviewed_or_merged_prs": [22, 29, 32, 33, 34, 35, 36, 37, 41]
+    },
+    "Zilong Peng": {
+      "source": 1098,
+      "docs": 12800,
+      "tests": 2537,
+      "opened_prs": [9, 32],
+      "reviewed_or_merged_prs": []
+    },
+    "Xin Luo": {
+      "source": 759,
+      "docs": 6757,
+      "tests": 1535,
+      "opened_prs": [35],
+      "reviewed_or_merged_prs": []
+    },
+    "Lihuan Xie": {
+      "source": 0,
+      "docs": 0,
+      "tests": 0,
+      "opened_prs": [],
+      "reviewed_or_merged_prs": []
+    },
+    "Xi Chen": {
+      "source": 0,
+      "docs": 0,
+      "tests": 0,
+      "opened_prs": [],
+      "reviewed_or_merged_prs": []
+    },
+    "Yingjie Chen": {
+      "source": 6805,
+      "docs": 36695,
+      "tests": 12218,
+      "opened_prs": [11, 12, 21, 22, 33],
+      "reviewed_or_merged_prs": []
+    },
+    "Kunpeng Zhong": {
+      "source": 0,
+      "docs": 0,
+      "tests": 0,
+      "opened_prs": [],
+      "reviewed_or_merged_prs": []
+    },
+    "Zhijun Zhou": {
+      "source": 0,
+      "docs": 0,
+      "tests": 0,
+      "opened_prs": [],
+      "reviewed_or_merged_prs": []
+    },
+    "Wushun Zhang": {
+      "source": 272,
+      "docs": 357,
+      "tests": 1572,
+      "opened_prs": [37],
+      "reviewed_or_merged_prs": []
+    },
+    "Changzheng Hu": {
+      "source": 0,
+      "docs": 6,
+      "tests": 0,
+      "opened_prs": [29],
+      "reviewed_or_merged_prs": []
+    },
+    "Bocong Zheng": {
+      "source": 0,
+      "docs": 0,
+      "tests": 0,
+      "opened_prs": [],
+      "reviewed_or_merged_prs": []
+    }
+  }
+}
