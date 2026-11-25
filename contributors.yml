@@ -187,8 +187,8 @@ contributors:
       en: Throughout my career in research and teaching, I hope to make AlgoPlasma a lifelong endeavor, serving the plasma community across research, education, and industry, and contributing in my own small way to the field's progress.
     quotation:
       zh:
-        - 自持微光，不与群星争辉。
-        - 照亮己路，亦可温暖旁人。
+        - “与其追求成功，不如努力成为一个有价值的人。”
+        - ——阿尔伯特·爱因斯坦
       en:
         - Try to become not a man of success, but try rather to become a man of value. — Albert Einstein
     work_modules: [A01, C01, D01, D02, D04, E01, E02, E03, F01, F02, F03, F04, H01, H02, I01, J01_continuity_freeflow, K04]
@@ -347,3 +347,5 @@ contributors:
 
 # Contribution history (edit times include timezone).
 # 2026-11-22 21:31 +08:00 | Zhongping Zhao | edit (Codex-assisted)
+
+# 2026-11-25 10:07 +0800 | Yinjian Zhao (Codex-assisted)
