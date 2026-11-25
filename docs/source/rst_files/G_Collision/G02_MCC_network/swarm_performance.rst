@@ -38,6 +38,10 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    另外，连续存放的粒子可以整批复制到工作区，随后仍逐个检查；相邻粒子具有相同物种和内部状态时，可以沿用刚查到的定义。想对照代码，可看 :doc:`批量步进 <fun_G02_mcc_batch>` 和 :doc:`随机抽样 <rng>`。
 
+   七轮试验保留了六轮改动。第三轮预计算事件号为零的部分运算，因提速不稳定而未采用。
+   复核另外修正了两处边界问题。排序缓存重建前先标为无效，避免内存分配中途失败后重试越界。
+   等待时间快速判断会先检查乘法范围，极端输入下退回原公式，避免新增浮点溢出。
+
    .. rubric:: 怎样知道结果没变？
 
    给原版和优化版同一份初始电子文件和同一个种子，各跑一次，称为“一对”。先比较随时间记录的全部数据，再比较最后每个粒子的位置、速度、编号等状态。18 对运行的过程记录（每次 800 个时刻）和最终粒子状态逐对、逐字节相同。候选碰撞数、真实碰撞数、计时段及全程的电离新生电子数也逐对相等。
@@ -119,16 +123,83 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    速度表由 6ccb13e 中的脚本复现，内存表使用 c20880e 中的脚本。两次比较的 G02 代码都是 develop 的 7db6abe 和修复版 8c9e151。 :download:`逐对内存读数（CSV） <../../../../../tests/009_collision/G02_MCC_network/vmhwm_pairs.csv>`。
 
+   .. rubric:: 自动测试和碰撞盒核对
+
+   修复后通过 21 项 CTest。测试覆盖固定输入下的随机数核对、串行与 OpenMP 结果对照，
+   以及 1、2、4 个 MPI 进程的测试。弹性碰撞盒还对比了优化前后的过程记录、分布和碰撞计数，
+   三类输出逐字节一致。碰撞盒的物理量与通过标准见 :doc:`弹性碰撞盒 </tests/009_collision/G02_collision_box>`。
+   多线程与 MPI 的配置和验证方法见 :doc:`MPI 接口 <group_mpi_interface>`。
+
+   :download:`历史试验输出和核对脚本 <../../../../../tests/009_collision/G02_MCC_network/benchmark_evidence.tar.xz>`，
+   :download:`历史曲线数据 <../../../../../tests/009_collision/G02_MCC_network/he200_replay.csv>`。
+
+   .. rubric:: 算例输入和早期记录
+
+   最初的对照选了三组工况。氦气关闭电离和开启电离时各测 20、50、200 Td。
+   氦气弹性、激发和电离截面来自 WarpX 收录的 Biagi 数据（MAGBOLTZ 7.1），
+   能量轴已换算为 G02 使用的相对能量。Reid 模型使用解析截面，场强 1、12、24 Td
+   取自 `Dias 等（2023）表 1 <https://doi.org/10.1016/j.cpc.2022.108554>`_。
+   最初与 WarpX 的对照在 2.5–5 ns 计时，电子群最终版对照在 2–4 ns 计时。
+
+   :download:`电子群固定输入（初始电子、模型和截面来源） <../../../../../tests/009_collision/G02_MCC_network/examples/swarm_benchmark/swarm_inputs.zip>`。
+   早期数据包括 :download:`修复前的两批用时 <../../../../../tests/009_collision/G02_MCC_network/timings.csv>`、
+   :download:`边界修复前后的用时 <../../../../../tests/009_collision/G02_MCC_network/safeguard_timings.csv>`
+   和 :download:`修复后的三对结果核对 <../../../../../tests/009_collision/G02_MCC_network/review_replay.csv>`。
+
+   .. rubric:: 并行测试与历史参考
+
+   上游还曾用 32 个物理核、Release 构建和 OpenMPI 4.1.6 做过两组并行基准。
+   预热 2 至 3 次后取 5 次中位数。计时范围是完整 MCC 步，未计入粒子推进和场求解。
+   两组使用不同碰撞模型，各组的时间用于比较组内的并行配置。
+
+   .. list-table::
+      :header-rows: 1
+
+      * - 负载
+        - 配置
+        - 整步时间（秒）
+      * - 100 万粒子、100 通道
+        - 1 线程，前缀
+        - 1.003
+      * - 100 万粒子、100 通道
+        - 32 线程，前缀
+        - 0.110
+      * - 100 万粒子、100 通道
+        - 32 线程，别名
+        - 0.105
+      * - 100 万粒子、单通道碰撞盒
+        - 1 rank × 1 thread
+        - 0.288
+      * - 100 万粒子、单通道碰撞盒
+        - 2 ranks × 1 thread
+        - 0.130
+      * - 100 万粒子、单通道碰撞盒
+        - 4 ranks × 1 thread
+        - 0.068
+      * - 100 万粒子、单通道碰撞盒
+        - 4 ranks × 4 threads
+        - 0.029
+
+   运行命令后，100 通道基准读 ``median_step_s`` 列，MPI 碰撞盒读 ``distributed_step_s`` 列，单位均为秒。实际用时随机器和并行配置而变化。
+
+   .. include:: /_includes/g02_parallel_reproduce.inc
+
    .. _reproduce-tables-zh:
 
    .. rubric:: 复现这两张表
 
    在 Linux 或 WSL 的完整 Git 仓库中运行下面的命令。仓库需要包含 !37 的提交，环境需要 Python 3、Git、CMake、支持 C++20 和 OpenMP 的 G++、MPI 开发库及 taskset。两个输出目录均须使用新路径。若本机不能使用逻辑 CPU 2，请在两条命令中指定同一个可用的逻辑 CPU。每批运行会在各自输出目录的 pairs.csv 中写入逐对结果。
 
-   .. literalinclude:: ../../../../../tests/009_collision/G02_MCC_network/PERFORMANCE.md
-      :start-after: ```sh
-      :end-before: ```
-      :language: bash
+   如果只想检查环境和输入文件，可先从仓库根目录运行三个工况的短算例。
+   短跑用于验证安装和流程。
+
+   .. code-block:: bash
+
+      python3 tests/009_collision/G02_MCC_network/examples/swarm_benchmark/run.py --smoke --out ../g02-swarm-smoke
+
+   按原设置复现上面的用时和内存表时，使用以下固定版本。
+
+   .. include:: /_includes/g02_swarm_reproduce.inc
 
 .. container:: ap-lang ap-lang-en
 
@@ -238,13 +309,104 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
 
    Use the runner from 6ccb13e for the speed table and c20880e for memory. Both compare G02 at 7db6abe and 8c9e151. :download:`Paired VmHWM readings (CSV) <../../../../../tests/009_collision/G02_MCC_network/vmhwm_pairs.csv>`.
 
+   .. rubric:: Automated tests and the collision box check
+
+   The fixed code passed all 21 CTest tests. The suite covers random draws with fixed
+   inputs, serial and OpenMP agreement, and runs with 1, 2 and 4 MPI processes.
+   The pre- and post-optimization elastic collision box histories, distributions and
+   collision counts also matched byte for byte. See the
+   :doc:`elastic collision box </tests/009_collision/G02_collision_box>`
+   for the physical checks and :doc:`MPI integration <group_mpi_interface>`
+   for parallel configuration and verification.
+
+   Six of the seven trial rounds were adopted. The third precalculated part of the
+   draw for event zero and gave inconsistent timing gains. The review also corrected
+   two edge cases. Cache rebuilds invalidate the previous order before allocating
+   memory, so an allocation failure cannot leave a partial cache marked valid.
+   The early waiting-time check falls back to the original expression when its
+   multiplication could overflow.
+
+   :download:`Historical outputs and verification scripts <../../../../../tests/009_collision/G02_MCC_network/benchmark_evidence.tar.xz>`
+   and :download:`historical plot data <../../../../../tests/009_collision/G02_MCC_network/he200_replay.csv>`.
+
+   .. rubric:: Benchmark inputs and earlier records
+
+   The original comparison used helium with and without ionization at 20, 50
+   and 200 Td. Its electron collision tables come from the Biagi data bundled
+   by WarpX (MAGBOLTZ 7.1), with energies converted to the relative energy
+   used by G02. The Reid model uses analytical cross sections at 1, 12 and
+   24 Td from `Table 1 of Dias et al. (2023) <https://doi.org/10.1016/j.cpc.2022.108554>`_.
+   The initial WarpX runs timed 2.5–5 ns. The final G02 comparison timed 2–4 ns.
+
+   :download:`Fixed inputs and cross-section attribution <../../../../../tests/009_collision/G02_MCC_network/examples/swarm_benchmark/swarm_inputs.zip>`.
+   Earlier records include :download:`two pre-fix timing batches <../../../../../tests/009_collision/G02_MCC_network/timings.csv>`,
+   :download:`timings before and after the two fixes <../../../../../tests/009_collision/G02_MCC_network/safeguard_timings.csv>`,
+   and :download:`three post-fix replay checks <../../../../../tests/009_collision/G02_MCC_network/review_replay.csv>`.
+
+   .. rubric:: Parallel tests and historical reference timings
+
+   Earlier upstream benchmarks ran on 32 physical cores with a Release build and
+   OpenMPI 4.1.6. The table reports the median of five measurements after two or
+   three warmup runs. It covers the complete MCC step, excluding particle
+   advancement and the field solve. Compare configurations within each workload.
+
+   .. list-table::
+      :header-rows: 1
+
+      * - Workload
+        - Configuration
+        - Time per step (s)
+      * - 1 million particles, 100 channels
+        - 1 thread, prefix
+        - 1.003
+      * - 1 million particles, 100 channels
+        - 32 threads, prefix
+        - 0.110
+      * - 1 million particles, 100 channels
+        - 32 threads, alias
+        - 0.105
+      * - 1 million particles, 1-channel box
+        - 1 rank × 1 thread
+        - 0.288
+      * - 1 million particles, 1-channel box
+        - 2 ranks × 1 thread
+        - 0.130
+      * - 1 million particles, 1-channel box
+        - 4 ranks × 1 thread
+        - 0.068
+      * - 1 million particles, 1-channel box
+        - 4 ranks × 4 threads
+        - 0.029
+
+   Read ``median_step_s`` for the 100-channel benchmark and ``distributed_step_s`` for the MPI collision box. Both columns report seconds. Measured times depend on the machine and parallel configuration.
+
+   .. include:: /_includes/g02_parallel_reproduce.inc
+
    .. _reproduce-tables-en:
 
    .. rubric:: Reproduce both tables
 
    Run these commands in a full Linux or WSL Git checkout containing the !37 commits. Install Python 3, Git, CMake, G++ with C++20 and OpenMP support, MPI development libraries and taskset. Use fresh output directories. If logical CPU 2 is unavailable, use the same available CPU in both commands. Each output directory contains a pairs.csv file with the individual measurements.
 
-   .. literalinclude:: ../../../../../tests/009_collision/G02_MCC_network/PERFORMANCE.md
-      :start-after: ```sh
-      :end-before: ```
-      :language: bash
+   To check the build environment and input files, first run the short
+   three-case benchmark from the repository root.
+
+   .. code-block:: bash
+
+      python3 tests/009_collision/G02_MCC_network/examples/swarm_benchmark/run.py --smoke --out ../g02-swarm-smoke
+
+   To repeat the measurements for the two tables, use the pinned versions below.
+
+   .. include:: /_includes/g02_swarm_reproduce.inc
+
+.. G02 contribution history (Git author dates; edit times include timezone).
+   2026-11-09 09:53 +08:00 | Wushun Zhang | git 1c20092c7f45
+   2026-11-09 10:07 +08:00 | Wushun Zhang | git 91c37adedc11
+   2026-11-09 13:15 +08:00 | Wushun Zhang | git dcd3c48f6a11
+   2026-11-09 13:51 +08:00 | Wushun Zhang | git 6ccb13e796b1
+   2026-11-09 14:45 +08:00 | Wushun Zhang | git c5cf932645d9
+   2026-11-09 15:37 +08:00 | Wushun Zhang | git d37657fd65ef
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 16:28 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)

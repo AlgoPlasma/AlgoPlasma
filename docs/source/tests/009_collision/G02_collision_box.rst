@@ -22,6 +22,18 @@ G02_collision_box
    本页介绍 G02 的零维碰撞盒验证：先理解物理模型，再运行程序，最后读图并判断测试是否通过。
    MCC 的基本原理与程序接口见 :doc:`G02_MCC_network </rst_files/G_Collision/G02_MCC_network>`。
 
+   .. rubric:: 批量碰撞优化与验证
+
+   批量碰撞通过复用粒子访问顺序和随机数计算的中间值，
+   并跳过本步用不到的碰撞准备来减少耗时。原版和优化版在三个电子群工况下
+   共比较了 18 对运行。每对的过程诊断、最终粒子状态和碰撞计数均一致。
+   在相同的单线程条件下，三个工况的加速比分别为
+   3.50 倍（关闭电离的 He，50 Td）、3.61 倍（开启电离的 He，200 Td）
+   和 3.31 倍（Reid 模型气体，12 Td）。Td 是电场强度与背景气体数密度之比的单位。
+
+   本页下文的弹性碰撞盒用于检查漂移、温度和守恒。测试用的模型、计时方法、
+   峰值内存和复现命令见 :doc:`G02 电子群基准 </rst_files/G_Collision/G02_MCC_network/swarm_performance>`。
+
    .. rubric:: 1. 物理模型：热粒子与冷背景
       :class: g02-chapter
 
@@ -257,6 +269,21 @@ G02_collision_box
    then read the plots and check the result. See :doc:`G02_MCC_network </rst_files/G_Collision/G02_MCC_network>`
    for MCC basics and program interfaces.
 
+   .. rubric:: Batch collision optimization and verification
+
+   The optimized batch step reuses the particle visit order and intermediate
+   random-number calculations. It skips collision preparation when the first
+   candidate falls beyond the current step. Across 18 paired runs in three
+   electron swarm cases, diagnostics, final particle states and collision
+   counts matched within each pair. On one CPU thread, the measured speedups
+   were **3.50×** (He with ionization disabled, 50 Td), **3.61×** (He with
+   ionization enabled, 200 Td) and **3.31×** (Reid model gas, 12 Td).
+   Td is the unit of electric field divided by background gas number density.
+
+   The elastic collision box below checks drift, temperature and conservation.
+   See the :doc:`G02 electron swarm benchmark </rst_files/G_Collision/G02_MCC_network/swarm_performance>`
+   for the benchmark models, timings, peak memory and reproduction commands.
+
    .. rubric:: 1. Physical model: hot particles in a cold background
       :class: g02-chapter
 
@@ -482,3 +509,13 @@ G02_collision_box
    For more detailed instructions and physical explanations, download the example's
    :download:`English README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.md>` or
    :download:`Simplified Chinese README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md>`.
+
+.. G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | Zhe Liu | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | Zhe Liu | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yinjian Zhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | Zhongping Zhao | git 7db6abe64093
+   2026-11-09 14:54 +08:00 | Zhongping Zhao | git aabeed7fd31e
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)
