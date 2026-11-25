@@ -138,7 +138,8 @@ AlgoPlasma
       <p>如在研究中使用了 AlgoPlasma，可引用以下论文。<br>
          Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al. <em>AlgoPlasma: Open algorithms for plasma modeling.</em>
          <strong>SoftwareX 36</strong>, 103176 (2026).
-         <a href="https://doi.org/10.1016/j.softx.2026.103176">DOI: 10.1016/j.softx.2026.103176</a></p>
+         <a href="https://doi.org/10.1016/j.softx.2026.103176">DOI: 10.1016/j.softx.2026.103176</a> ·
+         <a href="community/citation.html">引用格式与 BibTeX</a></p>
       <p class="ap-home-license">本项目采用 <a href="LICENSE">Apache License 2.0</a> 开源许可证；版权和归属信息见 <a href="NOTICE">NOTICE</a>。</p>
       <p class="ap-home-contact">发起人：赵隐剑 · contact@algoplasma.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
@@ -218,7 +219,8 @@ AlgoPlasma
       <p>If you use AlgoPlasma in your research, you can cite this paper.<br>
          Yinjian Zhao, Zhongping Zhao, Zhe Liu, et al. <em>AlgoPlasma: Open algorithms for plasma modeling.</em>
          <strong>SoftwareX 36</strong>, 103176 (2026).
-         <a href="https://doi.org/10.1016/j.softx.2026.103176">DOI: 10.1016/j.softx.2026.103176</a></p>
+         <a href="https://doi.org/10.1016/j.softx.2026.103176">DOI: 10.1016/j.softx.2026.103176</a> ·
+         <a href="community/citation.html">Citation and BibTeX</a></p>
       <p class="ap-home-license">AlgoPlasma is licensed under the <a href="LICENSE">Apache License 2.0</a>; copyright and attribution information is available in <a href="NOTICE">NOTICE</a>.</p>
       <p class="ap-home-contact">Initiator: Yinjian ZHAO · contact@algoplasma.com · <a href="https://homepage.hit.edu.cn/zhaoyinjian" target="_blank" rel="noopener noreferrer">Homepage</a></p>
      </section>
@@ -230,3 +232,4 @@ AlgoPlasma
 
 .. Contribution history (edit times include timezone).
    2026-11-25 10:15 +08:00 | Yinjian Zhao | edit (Codex-assisted)
+   2026-11-25 10:19 +08:00 | Yinjian Zhao | edit (Codex-assisted)
