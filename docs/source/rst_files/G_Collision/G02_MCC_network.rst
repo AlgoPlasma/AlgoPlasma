@@ -159,7 +159,7 @@ G02_MCC_network
 
    OpenMP 需要构建时开启 ``G02_MCC_ENABLE_OPENMP``，并选择 ``CpuBackend::OpenMp``。MPI 需要 ``G02_MCC_ENABLE_MPI``、``mpi.hpp`` 和 ``AlgoPlasma::G02_MCC_MPI``；所有相关进程共同调用分布式步进器。MPI 线程支持至少为 MPI_THREAD_FUNNELED，在 MPI_Finalize 前销毁步进器。
 
-   默认前缀通道抽样，多通道可以选择别名采样。用固定模型、粒子数和步数比较 Release 整步耗时，同时核对统计、守恒和串行/并行一致性。详见 :doc:`MPI 接口 <G02_MCC_network/group_mpi_interface>` 和测试目录 ``PERFORMANCE.md``。
+   默认前缀通道抽样，多通道可以选择别名采样。用固定模型、粒子数和步数比较 Release 整步耗时，同时核对统计、守恒和串行/并行一致性。详见 :doc:`MPI 接口 <G02_MCC_network/group_mpi_interface>` 和 :doc:`性能与复现 <G02_MCC_network/swarm_performance>`。
 
    .. _g02-generality-zh:
 
@@ -317,7 +317,7 @@ G02_MCC_network
 
    OpenMP requires G02_MCC_ENABLE_OPENMP and CpuBackend::OpenMp. MPI requires G02_MCC_ENABLE_MPI, mpi.hpp and AlgoPlasma::G02_MCC_MPI. Every participating rank calls the distributed stepper. Require MPI_THREAD_FUNNELED and destroy the stepper before MPI_Finalize.
 
-   Prefix channel sampling is the default; alias sampling is available for many channels. Compare Release complete-step timings for fixed models/workloads while checking statistics, conservation and serial/parallel agreement. See :doc:`MPI API <G02_MCC_network/group_mpi_interface>` and PERFORMANCE.md in the tests directory.
+   Prefix channel sampling is the default; alias sampling is available for many channels. Compare Release complete-step timings for fixed models/workloads while checking statistics, conservation and serial/parallel agreement. See :doc:`MPI API <G02_MCC_network/group_mpi_interface>` and :doc:`the performance and reproduction guide <G02_MCC_network/swarm_performance>`.
 
    .. _g02-generality-en:
 
@@ -336,3 +336,15 @@ G02_MCC_network
         <p><strong>Contributors</strong></p>
         <p class="ap-home-contact">Zhe LIU, Lihuan XIE</p>
       </div>
+
+.. G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | Zhe Liu | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | Zhe Liu | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yinjian Zhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | Zhongping Zhao | git 7db6abe64093
+   2026-11-09 09:53 +08:00 | Wushun Zhang | git 1c20092c7f45
+   2026-11-09 10:07 +08:00 | Wushun Zhang | git 91c37adedc11
+   2026-11-09 13:15 +08:00 | Wushun Zhang | git dcd3c48f6a11
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)

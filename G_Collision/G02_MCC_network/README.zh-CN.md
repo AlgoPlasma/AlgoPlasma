@@ -88,7 +88,7 @@ cmake --install /tmp/g02_build --prefix /tmp/g02_install
 
 OpenMP：构建时加 `-DG02_MCC_ENABLE_OPENMP=ON`，通过 `StepOptions.backend=CpuBackend::OpenMp` 选择线程后端。MPI：加 `-DG02_MCC_ENABLE_MPI=ON`，包含 `mpi.hpp`，链接 `AlgoPlasma::G02_MCC_MPI`，所有相关进程共同调用 `DistributedMccStepper::step()`。主程序先初始化 MPI，提供至少 `MPI_THREAD_FUNNELED` 的支持，并在 `MPI_Finalize()` 前销毁步进器。
 
-默认使用前缀通道抽样；多通道可选择别名采样。用同一模型和粒子负载测量完整 MCC 步耗时，同时检查统计和守恒，详见[性能说明](../../tests/009_collision/G02_MCC_network/PERFORMANCE.md)。
+默认使用前缀通道抽样；多通道可选择别名采样。用同一模型和粒子负载测量完整 MCC 步耗时，同时检查统计和守恒，详见[Read the Docs 性能与复现指南](https://algoplasma.readthedocs.io/en/develop/rst_files/G_Collision/G02_MCC_network/swarm_performance.html)。
 
 ## 支持范围
 
@@ -101,3 +101,15 @@ G02 不推进位置、不求场、不处理壁面，也不划分 MPI 网格或�
 ## 方法依据与文献
 
 空碰撞方法参见 [Skullerud (1968)](https://doi.org/10.1088/0022-3727/1/11/423)，PIC-MCC 背景参见 [Vahedi–Surendra (1995)](https://doi.org/10.1016/0010-4655(94)00171-W)。指数时钟、热背景速度和两体末态的出处及实现对应见[方法与验证文献](../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst)。其中也列出本库流程的适用条件及碰撞盒理论曲线的推导。
+
+<!-- G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | Zhe Liu | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | Zhe Liu | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yinjian Zhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | Zhongping Zhao | git 7db6abe64093
+   2026-11-09 14:54 +08:00 | Zhongping Zhao | git aabeed7fd31e
+   2026-11-10 14:59 +08:00 | Wushun Zhang | git c31b4d18a0b4
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)
+-->

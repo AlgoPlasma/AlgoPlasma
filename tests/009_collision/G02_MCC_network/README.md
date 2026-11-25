@@ -68,8 +68,19 @@ Without `--model`, the executable generates a process-private temporary syntheti
 /tmp/g02_mcc_tests/bench_batch 1000000 100 7 8 prefix
 ```
 
-Benchmarks measure elapsed time; tests check statistics and physical constraints. See [PERFORMANCE.md](PERFORMANCE.md) for parallel integration.
+Benchmarks measure elapsed time; tests check statistics and physical constraints. See [performance and reproduction guide](https://algoplasma.readthedocs.io/en/develop/rst_files/G_Collision/G02_MCC_network/swarm_performance.html) for parallel integration.
 
 ## Verification references
 
 [Probability checks, binary kinematics and the box derivation](../../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst) are mapped to individual tests. C01 checks the exponential clock and Poisson thinning; the box uses analytic moments of its specified equal-mass, constant-rate model, not fits to paper data. [Parodi–Petronio (2025)](https://doi.org/10.1063/5.0241527) is a reference for separate-module verification against analytical results; this suite does not reproduce its seven cases. Synthetic inputs and tolerances are defined by these tests.
+
+<!-- G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | Zhe Liu | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | Zhe Liu | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yinjian Zhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | Zhongping Zhao | git 7db6abe64093
+   2026-11-09 14:54 +08:00 | Zhongping Zhao | git aabeed7fd31e
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)
+-->

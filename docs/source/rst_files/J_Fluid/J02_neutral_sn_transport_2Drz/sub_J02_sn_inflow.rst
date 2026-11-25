@@ -1,170 +1,346 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-10-23 10:58 +08:00 | Yingjie Chen | git cd0d957281af
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Inlet Distribution
 ==========================================================================================
 
-``sub_J02_sn_inflow.f90`` 根据入口模型计算各离散速度上的非负分布值
-:math:`g_m`。本文件先确定粒子速度的分布，再由入口归一化过程根据给定通量计算
-实际入射分布函数 :math:`h_m`。这里的 :math:`g_m` 是中间结果，尚未包含入口的总粒子率。
+.. raw:: html
 
-.. rubric:: 1. 两类入口模型的物理含义
+   <div class="ap-language-switch" role="group" aria-label="Language switch">
+     <button type="button" class="ap-lang-button" data-ap-set-lang="zh">中文</button>
+     <button type="button" class="ap-lang-button" data-ap-set-lang="en">English</button>
+   </div>
 
-入口外侧气体模型描述气体中粒子的速度分布。入射粒子模型则描述穿过入口的粒子中，
-各个速度所占的比例。速度法向分量越大的粒子，在相同时间内越容易穿过同一个面，
-所以两种分布相差一个法向速率因子。
+.. container:: ap-lang ap-lang-zh ap-fluid-doc
 
-设入口外法向为 :math:`\boldsymbol n_f`，
-入射半平面为 :math:`\beta_{f,m}<0`。
-分布函数在面上给定后，速度微元贡献的入射通量为
+   ``sub_J02_sn_inflow.f90`` 根据入口模型计算各离散速度上的非负分布值
+   :math:`g_m`。本文件先确定粒子速度的分布，再由入口归一化过程根据给定通量计算
+   实际入射分布函数 :math:`h_m`。这里的 :math:`g_m` 是中间结果，尚未包含入口的总粒子率。
 
-.. math::
+   .. rubric:: 1. 两类入口模型的物理含义
 
-   \mathrm dJ_{\mathrm{in}}
-       =|\boldsymbol v\cdot\boldsymbol n_f|\,
-          \psi_{\mathrm{in}}(\boldsymbol v)\,\mathrm d^2v.
+   入口外侧气体模型描述气体中粒子的速度分布。入射粒子模型则描述穿过入口的粒子中，
+   各个速度所占的比例。速度法向分量越大的粒子，在相同时间内越容易穿过同一个面，
+   所以两种分布相差一个法向速率因子。
 
-下面两种输入都从这个通量关系转换为边界上的分布函数。即使两种输入都采用高斯函数，
-得到的入射分布函数也不同：入射粒子的速度统计已经包含法向速度的影响，转换时需要将其除去。
+   设入口外法向为 :math:`\boldsymbol n_f`，
+   入射半平面为 :math:`\beta_{f,m}<0`。
+   分布函数在面上给定后，速度微元贡献的入射通量为
 
-.. rubric:: 2. 入口外侧气体模型：二维漂移 Maxwell 分布
+   .. math::
 
-当前入口外侧气体模型采用温度 :math:`T>0`、质量 :math:`M>0`、
-漂移速度 :math:`\boldsymbol U=(U_r,U_z)` 的二维 Maxwell 分布：
+      \mathrm dJ_{\mathrm{in}}
+          =|\boldsymbol v\cdot\boldsymbol n_f|\,
+             \psi_{\mathrm{in}}(\boldsymbol v)\,\mathrm d^2v.
 
-.. math::
+   下面两种输入都从这个通量关系转换为边界上的分布函数。即使两种输入都采用高斯函数，
+   得到的入射分布函数也不同：入射粒子的速度统计已经包含法向速度的影响，转换时需要将其除去。
 
-   g(\boldsymbol v)=\frac{M}{2\pi k_{\mathrm B}T}
-       \exp\!\left[-\frac{M}{2k_{\mathrm B}T}
-         \big((v_r-U_r)^2+(v_z-U_z)^2\big)\right],
-   \qquad \int_{\mathbb R^2}g\,\mathrm d^2v=1.
+   .. rubric:: 2. 入口外侧气体模型：二维漂移 Maxwell 分布
 
-其中 :math:`k_{\mathrm B}=1.380649\times10^{-23}\,\mathrm{J\,K^{-1}}`。
-在每个离散速度上取值即可：
+   当前入口外侧气体模型采用温度 :math:`T>0`、质量 :math:`M>0`、
+   漂移速度 :math:`\boldsymbol U=(U_r,U_z)` 的二维 Maxwell 分布：
 
-.. math::
+   .. math::
 
-   g_m=g(v_m\mu_m,v_m\eta_m).
+      g(\boldsymbol v)=\frac{M}{2\pi k_{\mathrm B}T}
+          \exp\!\left[-\frac{M}{2k_{\mathrm B}T}
+            \big((v_r-U_r)^2+(v_z-U_z)^2\big)\right],
+      \qquad \int_{\mathbb R^2}g\,\mathrm d^2v=1.
 
-这里的 :math:`g` 是入口外侧气体的速度概率密度，积分为一；乘以气体数密度才得到
-具有实际粒子数量的分布函数。它没有包含穿过入口时的法向速度因子，因此无需除以法向速度。
-本过程在全部离散速度上求值，入口归一化过程再选取入射半平面。
-速度积分只保留有限范围，并用有限个离散速度求和，因此离散积分不严格等于一，
-最终入口通量以实际离散求和归一化。
+   其中 :math:`k_{\mathrm B}=1.380649\times10^{-23}\,\mathrm{J\,K^{-1}}`。
+   在每个离散速度上取值即可：
 
-``sub_J02_build_drifted_maxwellian_inflow_shape`` 的输入与输出：
+   .. math::
 
-- 输入 ``quadrature``；``temperature``，单位 :math:`\mathrm K`；
-  ``particle_mass``，单位 :math:`\mathrm{kg}`；
-  ``drift_velocity_r``、``drift_velocity_z``，单位 :math:`\mathrm{m\,s^{-1}}`。
-- 输出并分配 ``inflow_shape(n_dir)``，即 :math:`g_m`，
-  单位 :math:`\mathrm{s^2\,m^{-2}}`。它表示速度概率密度，而非气体数密度。
-- 零漂移也使用本过程，只需令两个漂移分量为零。
-- 输出 ``ierr``；非正温度或质量返回错误。求积对象须已成功初始化。
+      g_m=g(v_m\mu_m,v_m\eta_m).
 
-.. rubric:: 3. 入射粒子模型：连续概率密度
+   这里的 :math:`g` 是入口外侧气体的速度概率密度，积分为一；乘以气体数密度才得到
+   具有实际粒子数量的分布函数。它没有包含穿过入口时的法向速度因子，因此无需除以法向速度。
+   本过程在全部离散速度上求值，入口归一化过程再选取入射半平面。
+   速度积分只保留有限范围，并用有限个离散速度求和，因此离散积分不严格等于一，
+   最终入口通量以实际离散求和归一化。
 
-设 :math:`p(\boldsymbol v)` 是已穿过入口的粒子在入射半平面上的概率密度，
-按 :math:`\mathrm d^2v` 积分。若给定的入口粒子通量为 :math:`J_{\mathrm{in}}`，
+   ``sub_J02_build_drifted_maxwellian_inflow_shape`` 的输入与输出：
 
-.. math::
+   - 输入 ``quadrature``；``temperature``，单位 :math:`\mathrm K`；
+     ``particle_mass``，单位 :math:`\mathrm{kg}`；
+     ``drift_velocity_r``、``drift_velocity_z``，单位 :math:`\mathrm{m\,s^{-1}}`。
+   - 输出并分配 ``inflow_shape(n_dir)``，即 :math:`g_m`，
+     单位 :math:`\mathrm{s^2\,m^{-2}}`。它表示速度概率密度，而非气体数密度。
+   - 零漂移也使用本过程，只需令两个漂移分量为零。
+   - 输出 ``ierr``；非正温度或质量返回错误。求积对象须已成功初始化。
 
-   \mathrm dJ_{\mathrm{in}}
-       =J_{\mathrm{in}}p(\boldsymbol v)\,\mathrm d^2v
-       =|\boldsymbol v\cdot\boldsymbol n_f|\,
-          \psi_{\mathrm{in}}(\boldsymbol v)\,\mathrm d^2v.
+   .. rubric:: 3. 入射粒子模型：连续概率密度
 
-因此，先除以法向速率，得到待归一化的分布
+   设 :math:`p(\boldsymbol v)` 是已穿过入口的粒子在入射半平面上的概率密度，
+   按 :math:`\mathrm d^2v` 积分。若给定的入口粒子通量为 :math:`J_{\mathrm{in}}`，
 
-.. math::
+   .. math::
 
-   g_m=\frac{p_m}{v_m|\beta_{f,m}|}\quad(\beta_{f,m}<0),
-   \qquad g_m=0\quad(\beta_{f,m}\geq0).
+      \mathrm dJ_{\mathrm{in}}
+          =J_{\mathrm{in}}p(\boldsymbol v)\,\mathrm d^2v
+          =|\boldsymbol v\cdot\boldsymbol n_f|\,
+             \psi_{\mathrm{in}}(\boldsymbol v)\,\mathrm d^2v.
 
-.. rubric:: 本章通道示例采用的入口分布
+   因此，先除以法向速率，得到待归一化的分布
 
-示例位于下端 :math:`z=z_{\min}`，外法向是 :math:`(0,-1)`，
-所以进入计算域要求 :math:`v_z>0`。本例直接规定入射粒子的速度统计：
-径向速度集中在 :math:`U_r=0` 附近，轴向速度集中在
-:math:`U_z=200\,\mathrm{m\,s^{-1}}` 附近，仅保留 :math:`v_z>0` 的部分。
-温度参数 :math:`T_{\mathrm{in}}=300\,\mathrm K` 和粒子质量
-:math:`M=6.6335\times10^{-26}\,\mathrm{kg}` 确定速度分布的宽度
+   .. math::
 
-.. math::
+      g_m=\frac{p_m}{v_m|\beta_{f,m}|}\quad(\beta_{f,m}<0),
+      \qquad g_m=0\quad(\beta_{f,m}\geq0).
 
-   a_T^2=\frac{k_{\mathrm B}T_{\mathrm{in}}}{M}.
+   .. rubric:: 本章通道示例采用的入口分布
 
-具体采用的高斯函数及其概率密度为
+   示例位于下端 :math:`z=z_{\min}`，外法向是 :math:`(0,-1)`，
+   所以进入计算域要求 :math:`v_z>0`。本例直接规定入射粒子的速度统计：
+   径向速度集中在 :math:`U_r=0` 附近，轴向速度集中在
+   :math:`U_z=200\,\mathrm{m\,s^{-1}}` 附近，仅保留 :math:`v_z>0` 的部分。
+   温度参数 :math:`T_{\mathrm{in}}=300\,\mathrm K` 和粒子质量
+   :math:`M=6.6335\times10^{-26}\,\mathrm{kg}` 确定速度分布的宽度
 
-.. math::
+   .. math::
 
-   \widetilde p(v_r,v_z)=
-   \begin{cases}
-     \exp\!\left[-\dfrac{(v_r-U_r)^2+(v_z-U_z)^2}{2a_T^2}\right],&v_z>0,\\
-     0,&v_z\leq0,
-   \end{cases}
+      a_T^2=\frac{k_{\mathrm B}T_{\mathrm{in}}}{M}.
 
-.. math::
+   具体采用的高斯函数及其概率密度为
 
-   Z_p=\int_{v_z>0}\widetilde p\,\mathrm dv_r\,\mathrm dv_z,\qquad
-   p=\frac{\widetilde p}{Z_p},\qquad
-   p_m=p(v_{r,m},v_{z,m}).
+   .. math::
 
-:math:`p_m` 是速度概率密度在第 :math:`m` 个离散速度上的取值，
-不是该速度对应的概率；乘速度面积权重后，:math:`w_mp_m` 才近似表示相应速度网格单元内的概率。
-本例的温度和漂移参数描述的是入射粒子的速度统计，并不意味着入口外侧气体一定处于
-同温度的 Maxwell 平衡态。
+      \widetilde p(v_r,v_z)=
+      \begin{cases}
+        \exp\!\left[-\dfrac{(v_r-U_r)^2+(v_z-U_z)^2}{2a_T^2}\right],&v_z>0,\\
+        0,&v_z\leq0,
+      \end{cases}
 
-示例源码用 ``event_pdf(m)`` 保存 :math:`\widetilde p_m`，没有预先除以 :math:`Z_p`。
-这样做是允许的：本过程先得到 :math:`g_m=\widetilde p_m/v_{z,m}`，
-下一页再按目标通量归一化，共同系数 :math:`Z_p` 会在分子与分母中消去。
-这里的高斯函数、除以法向速率以及通量归一化，是三个不同步骤。
+   .. math::
 
-当 :math:`v_{z,m}` 接近零时，上述除法可能产生很大的 :math:`g_m`。
-因此应检查角度分辨率和接近切向的入射速度对结果的影响；
-避开严格切向的求积点并不能消除这种模型敏感性。
+      Z_p=\int_{v_z>0}\widetilde p\,\mathrm dv_r\,\mathrm dv_z,\qquad
+      p=\frac{\widetilde p}{Z_p},\qquad
+      p_m=p(v_{r,m},v_{z,m}).
 
-``sub_J02_build_mc_crossing_pdf_inflow_shape`` 的输入与输出：
+   :math:`p_m` 是速度概率密度在第 :math:`m` 个离散速度上的取值，
+   不是该速度对应的概率；乘速度面积权重后，:math:`w_mp_m` 才近似表示相应速度网格单元内的概率。
+   本例的温度和漂移参数描述的是入射粒子的速度统计，并不意味着入口外侧气体一定处于
+   同温度的 Maxwell 平衡态。
 
-- 输入 ``quadrature``、单位外法向 ``normal_r/normal_z``，
-  以及 ``crossing_pdf(n_dir)``：按二维速度面积定义的入射粒子的速度概率密度。
-  对归一化概率密度，其单位为 :math:`\mathrm{s^2\,m^{-2}}`。
-- 输入必须非负，只能在入射速度非零，且至少有一个正入射值。
-  不要求输入已经归一化；公共比例会在后续通量归一化中消去。
-- 输出 ``inflow_shape(n_dir)``：按上式除以法向速率后的分布值；
-  对上述概率密度单位，它的单位为 :math:`\mathrm{s^3\,m^{-3}}`。
-  它仍是中间结果，后续按通量归一化才得到实际的 :math:`\psi_{\mathrm{in}}`。
-- 输出 ``ierr``。尺寸、法向、负值、出射速度上的非零输入或全零入射均有对应错误。
+   示例源码用 ``event_pdf(m)`` 保存 :math:`\widetilde p_m`，没有预先除以 :math:`Z_p`。
+   这样做是允许的：本过程先得到 :math:`g_m=\widetilde p_m/v_{z,m}`，
+   下一页再按目标通量归一化，共同系数 :math:`Z_p` 会在分子与分母中消去。
+   这里的高斯函数、除以法向速率以及通量归一化，是三个不同步骤。
 
-.. rubric:: 4. 入射粒子模型：各速度网格单元内的入射概率
+   当 :math:`v_{z,m}` 接近零时，上述除法可能产生很大的 :math:`g_m`。
+   因此应检查角度分辨率和接近切向的入射速度对结果的影响；
+   避开严格切向的求积点并不能消除这种模型敏感性。
 
-另一类输入是每个速度网格单元的概率 :math:`P_m`。
-它表示粒子速度落在这个网格单元内的概率，已经对单元的速度面积作过积分，与离散速度上的概率密度取值不同。
-由 :math:`P_m\approx w_mp_m` 可得
+   ``sub_J02_build_mc_crossing_pdf_inflow_shape`` 的输入与输出：
 
-.. math::
+   - 输入 ``quadrature``、单位外法向 ``normal_r/normal_z``，
+     以及 ``crossing_pdf(n_dir)``：按二维速度面积定义的入射粒子的速度概率密度。
+     对归一化概率密度，其单位为 :math:`\mathrm{s^2\,m^{-2}}`。
+   - 输入必须非负，只能在入射速度非零，且至少有一个正入射值。
+     不要求输入已经归一化；公共比例会在后续通量归一化中消去。
+   - 输出 ``inflow_shape(n_dir)``：按上式除以法向速率后的分布值；
+     对上述概率密度单位，它的单位为 :math:`\mathrm{s^3\,m^{-3}}`。
+     它仍是中间结果，后续按通量归一化才得到实际的 :math:`\psi_{\mathrm{in}}`。
+   - 输出 ``ierr``。尺寸、法向、负值、出射速度上的非零输入或全零入射均有对应错误。
 
-   g_m=\frac{P_m}{w_mv_m|\beta_{f,m}|}\quad(\beta_{f,m}<0).
+   .. rubric:: 4. 入射粒子模型：各速度网格单元内的入射概率
 
-与连续概率密度的转换相比，这里先用 :math:`P_m/w_m` 近似还原该离散速度上的概率密度，
-再除以法向速率。因此分母中同时有速度面积权重和法向速率。
+   另一类输入是每个速度网格单元的概率 :math:`P_m`。
+   它表示粒子速度落在这个网格单元内的概率，已经对单元的速度面积作过积分，与离散速度上的概率密度取值不同。
+   由 :math:`P_m\approx w_mp_m` 可得
 
-``sub_J02_build_mc_crossing_bins_inflow_shape`` 的输入与输出：
+   .. math::
 
-- 输入 ``quadrature``、单位外法向，以及
-  ``crossing_bin_probability(n_dir)``：无量纲的各速度网格单元内的概率。
-  这些数据可来自 Monte Carlo 采样，也可由已知概率密度积分得到。
-- 输入必须非负、出射速度为零、入射总量为正。
-  不强制总和等于一，后续会按目标通量归一化。
-- 输出 ``inflow_shape(n_dir)``，按上式生成；
-  若输入为无量纲概率，则输出单位仍为 :math:`\mathrm{s^3\,m^{-3}}`。
-- 输出 ``ierr``，验证条件与连续概率密度接口类似。
+      g_m=\frac{P_m}{w_mv_m|\beta_{f,m}|}\quad(\beta_{f,m}<0).
 
-.. rubric:: 5. 选择接口与传递结果
+   与连续概率密度的转换相比，这里先用 :math:`P_m/w_m` 近似还原该离散速度上的概率密度，
+   再除以法向速率。因此分母中同时有速度面积权重和法向速率。
 
-若物理输入是入口外侧气体的温度、粒子质量和漂移速度，使用漂移 Maxwell 分布生成过程。
-若输入描述已穿过入口的粒子的速度统计，先判断数据是概率密度还是各速度网格单元内的概率，
-再选择对应的概率转换接口。不要对入口外侧气体的速度分布除法向速度，也不要把概率密度误当成网格单元内的概率。
+   ``sub_J02_build_mc_crossing_bins_inflow_shape`` 的输入与输出：
 
-三个接口都输出待归一化的 :math:`g_m`。
-入口归一化过程用 :math:`g_m` 计算离散通量，再将其调整到给定值。三个接口的中间结果
-可以具有不同单位，归一化后的 :math:`h_m` 则具有相同的物理含义和单位。
-增加入口模型时，应先明确输入是速度概率密度、单元内概率还是气体的分布函数，再转换为
-:math:`g_m`。后续归一化和 DG 面积分仍可沿用。
+   - 输入 ``quadrature``、单位外法向，以及
+     ``crossing_bin_probability(n_dir)``：无量纲的各速度网格单元内的概率。
+     这些数据可来自 Monte Carlo 采样，也可由已知概率密度积分得到。
+   - 输入必须非负、出射速度为零、入射总量为正。
+     不强制总和等于一，后续会按目标通量归一化。
+   - 输出 ``inflow_shape(n_dir)``，按上式生成；
+     若输入为无量纲概率，则输出单位仍为 :math:`\mathrm{s^3\,m^{-3}}`。
+   - 输出 ``ierr``，验证条件与连续概率密度接口类似。
+
+   .. rubric:: 5. 选择接口与传递结果
+
+   若物理输入是入口外侧气体的温度、粒子质量和漂移速度，使用漂移 Maxwell 分布生成过程。
+   若输入描述已穿过入口的粒子的速度统计，先判断数据是概率密度还是各速度网格单元内的概率，
+   再选择对应的概率转换接口。不要对入口外侧气体的速度分布除法向速度，也不要把概率密度误当成网格单元内的概率。
+
+   三个接口都输出待归一化的 :math:`g_m`。
+   入口归一化过程用 :math:`g_m` 计算离散通量，再将其调整到给定值。三个接口的中间结果
+   可以具有不同单位，归一化后的 :math:`h_m` 则具有相同的物理含义和单位。
+   增加入口模型时，应先明确输入是速度概率密度、单元内概率还是气体的分布函数，再转换为
+   :math:`g_m`。后续归一化和 DG 面积分仍可沿用。
+
+.. container:: ap-lang ap-lang-en ap-fluid-doc
+
+   ``sub_J02_sn_inflow.f90`` evaluates a nonnegative inlet shape :math:`g_m` at the discrete velocities. After this routine has specified
+   the velocity dependence, inlet normalization uses the prescribed flux to compute the physical incoming
+   distribution :math:`h_m`. The intermediate shape :math:`g_m` does not yet include the total inlet particle rate.
+
+   .. rubric:: 1. Two physical interpretations of inlet data
+
+   An exterior gas model describes the velocity distribution in the gas. A crossing-particle model describes
+   the velocity fractions among particles that have crossed the inlet. Faster normal motion increases the
+   chance of crossing the face in a given time, introducing a normal-speed factor between the distributions.
+
+   Let :math:`\boldsymbol n_f` be the outward inlet normal, with the incoming half-plane given by :math:`\beta_{f,m}<0`. A velocity element of the
+   prescribed face distribution contributes the following incoming flux.
+
+   .. math::
+
+      \mathrm dJ_{\mathrm{in}}
+          =|\boldsymbol v\cdot\boldsymbol n_f|\,
+             \psi_{\mathrm{in}}(\boldsymbol v)\,\mathrm d^2v.
+
+   Both input models use this flux relation to obtain the boundary distribution. Even when both inputs are
+   Gaussian, they give different incoming distribution functions. Statistics collected at crossings already
+   weight particles by normal speed, and the conversion removes that factor.
+
+   .. rubric:: 2. Exterior gas model: two-dimensional drifting Maxwellian
+
+   The exterior gas model uses a two-dimensional Maxwellian with temperature :math:`T>0`, particle mass :math:`M>0` and drift
+   velocity :math:`\boldsymbol U=(U_r,U_z)`.
+
+   .. math::
+
+      g(\boldsymbol v)=\frac{M}{2\pi k_{\mathrm B}T}
+          \exp\!\left[-\frac{M}{2k_{\mathrm B}T}
+            \big((v_r-U_r)^2+(v_z-U_z)^2\big)\right],
+      \qquad \int_{\mathbb R^2}g\,\mathrm d^2v=1.
+
+   Here :math:`k_{\mathrm B}=1.380649\times10^{-23}\,\mathrm{J\,K^{-1}}`. Evaluate the function at each discrete velocity.
+
+   .. math::
+
+      g_m=g(v_m\mu_m,v_m\eta_m).
+
+   :math:`g` is a unit-integral velocity probability density of the exterior gas. Multiplying it by the gas number
+   density gives the physical distribution function. It contains no crossing-speed factor and can be
+   evaluated directly. This routine evaluates all discrete velocities, and inlet normalization selects the
+   incoming half-plane. The finite cutoff and quadrature mean that the discrete integral need not equal one
+   exactly. The final inlet flux is normalized using the actual discrete sum.
+
+   Inputs and outputs of ``sub_J02_build_drifted_maxwellian_inflow_shape``
+
+   - Inputs are ``quadrature``, ``temperature`` in :math:`\mathrm K`, ``particle_mass`` in :math:`\mathrm{kg}`, and ``drift_velocity_r`` and ``drift_velocity_z`` in :math:`\mathrm{m\,s^{-1}}`.
+   - The routine allocates output ``inflow_shape(n_dir)``, containing :math:`g_m` in :math:`\mathrm{s^2\,m^{-2}}`. This is a velocity probability density.
+   - For zero drift, use the same routine with both drift components set to zero.
+   - Output ``ierr`` reports a nonpositive temperature or mass. Initialize the quadrature successfully before
+     calling.
+
+   .. rubric:: 3. Crossing-particle model: continuous probability density
+
+   Let :math:`p(\boldsymbol v)` be the probability density for the velocities of particles that have crossed the inlet, integrated
+   over :math:`\mathrm d^2v` in the incoming half-plane. With prescribed particle flux :math:`J_{\mathrm{in}}`, the relation is
+
+   .. math::
+
+      \mathrm dJ_{\mathrm{in}}
+          =J_{\mathrm{in}}p(\boldsymbol v)\,\mathrm d^2v
+          =|\boldsymbol v\cdot\boldsymbol n_f|\,
+             \psi_{\mathrm{in}}(\boldsymbol v)\,\mathrm d^2v.
+
+   Dividing by the normal speed gives the shape before normalization.
+
+   .. math::
+
+      g_m=\frac{p_m}{v_m|\beta_{f,m}|}\quad(\beta_{f,m}<0),
+      \qquad g_m=0\quad(\beta_{f,m}\geq0).
+
+   .. rubric:: Inlet distribution in the channel example
+
+   The inlet lies on the lower boundary :math:`z=z_{\min}` with outward normal :math:`(0,-1)`. Entering particles therefore satisfy :math:`v_z>0`.
+   The example prescribes their velocities directly. The radial component is concentrated near :math:`U_r=0` and the
+   axial component near :math:`U_z=200\,\mathrm{m\,s^{-1}}`, keeping only :math:`v_z>0`. The temperature parameter :math:`T_{\mathrm{in}}=300\,\mathrm K` and particle mass :math:`M=6.6335\times10^{-26}\,\mathrm{kg}` set the width
+   of the velocity distribution.
+
+   .. math::
+
+      a_T^2=\frac{k_{\mathrm B}T_{\mathrm{in}}}{M}.
+
+   The Gaussian and its probability density are
+
+   .. math::
+
+      \widetilde p(v_r,v_z)=
+      \begin{cases}
+        \exp\!\left[-\dfrac{(v_r-U_r)^2+(v_z-U_z)^2}{2a_T^2}\right],&v_z>0,\\
+        0,&v_z\leq0,
+      \end{cases}
+
+   .. math::
+
+      Z_p=\int_{v_z>0}\widetilde p\,\mathrm dv_r\,\mathrm dv_z,\qquad
+      p=\frac{\widetilde p}{Z_p},\qquad
+      p_m=p(v_{r,m},v_{z,m}).
+
+   :math:`p_m` is the value of the probability density at discrete velocity :math:`m`. Multiplying by the velocity-area
+   weight gives :math:`w_mp_m`, an approximation to the probability in the corresponding velocity bin. Here temperature
+   and drift describe particles crossing the inlet. Those data alone do not establish Maxwellian equilibrium
+   in the exterior gas.
+
+   The example stores :math:`\widetilde p_m` in ``event_pdf(m)`` without first dividing by :math:`Z_p`. The conversion gives :math:`g_m=\widetilde p_m/v_{z,m}`, and normalizing to the
+   target flux on the next page cancels the common factor :math:`Z_p` between numerator and denominator. Evaluating
+   the Gaussian, dividing by normal speed and normalizing the flux are three separate operations.
+
+   When :math:`v_{z,m}` approaches zero the division may produce large :math:`g_m`. Check the effect of angular resolution and
+   nearly tangential incidence. Excluding exactly tangential nodes still leaves sensitivity to the
+   near-tangential part of the input.
+
+   Inputs and outputs of ``sub_J02_build_mc_crossing_pdf_inflow_shape``
+
+   - Inputs are ``quadrature``, unit outward normal ``normal_r/normal_z`` and ``crossing_pdf(n_dir)``, the crossing velocity probability density per unit area
+     in two-dimensional velocity space. A normalized density has units of :math:`\mathrm{s^2\,m^{-2}}`.
+   - Values must be nonnegative, must vanish for velocities outside the incoming half-plane, and must be
+     positive at least at one incoming node. A common input scale cancels when the flux is normalized.
+   - Output ``inflow_shape(n_dir)`` contains the distribution shape after division by normal speed. For the probability-density
+     units above its units are :math:`\mathrm{s^3\,m^{-3}}`. Subsequent flux normalization gives the physical :math:`\psi_{\mathrm{in}}`.
+   - Output ``ierr`` distinguishes invalid dimensions, an invalid normal, negative values, nonzero values at
+     outgoing velocities and all-zero incoming data.
+
+   .. rubric:: 4. Crossing-particle model: probability in each velocity bin
+
+   The other input is the probability :math:`P_m` in each velocity bin. This quantity already integrates over the
+   velocity-space area of the bin. Using :math:`P_m\approx w_mp_m` gives
+
+   .. math::
+
+      g_m=\frac{P_m}{w_mv_m|\beta_{f,m}|}\quad(\beta_{f,m}<0).
+
+   First recover an approximation to the pointwise probability density using :math:`P_m/w_m`, then divide by normal
+   speed. Both the velocity-area weight and the normal speed appear in the denominator.
+
+   Inputs and outputs of ``sub_J02_build_mc_crossing_bins_inflow_shape``
+
+   - Inputs are ``quadrature``, a unit outward normal and ``crossing_bin_probability(n_dir)``, the dimensionless probability in each velocity bin. These
+     probabilities may come from Monte Carlo samples or integration of a known probability density.
+   - Inputs must be nonnegative, with zero probability at outgoing velocities and positive total incoming
+     probability. The sum need not equal one because the subsequent step normalizes to the target flux.
+   - Output ``inflow_shape(n_dir)`` is constructed by the expression above. For dimensionless probabilities its units are :math:`\mathrm{s^3\,m^{-3}}`.
+   - Output ``ierr`` reports validation errors analogous to those for the continuous probability density.
+
+   .. rubric:: 5. Choosing an interface and passing on the result
+
+   For exterior gas temperature, mass and drift velocity, use the drifting Maxwellian routine directly. For
+   measured or modelled inlet crossings, first identify whether the data give a pointwise probability
+   density or a probability integrated over each bin, then select the corresponding conversion. Apply
+   division by normal speed only to the crossing data.
+
+   All three interfaces return an unnormalized shape :math:`g_m`. The inlet normalization routine computes the
+   discrete flux of :math:`g_m` and rescales it to the prescribed value. The intermediate shapes may have different
+   units, but the normalized :math:`h_m` has the same physical meaning and units for all three. When adding an inlet
+   model, identify whether it specifies a velocity probability density, bin probabilities or an exterior gas
+   distribution, and convert it to :math:`g_m`. The existing normalization and DG face integrals can then be reused.

@@ -88,7 +88,7 @@ External CMake callers use `find_package(G02_MCC_network CONFIG REQUIRED)` and l
 
 For OpenMP, build with `-DG02_MCC_ENABLE_OPENMP=ON` and select `StepOptions.backend=CpuBackend::OpenMp`. For MPI, enable `-DG02_MCC_ENABLE_MPI=ON`, include `mpi.hpp`, link `AlgoPlasma::G02_MCC_MPI` and call `DistributedMccStepper::step()` on every participating rank. The host initializes MPI with at least `MPI_THREAD_FUNNELED` and destroys the stepper before `MPI_Finalize()`.
 
-Prefix channel sampling is the default; alias sampling is available for many-channel workloads. Compare complete MCC-step timings for the same model and workload while checking statistics and conservation. See [performance notes](../../tests/009_collision/G02_MCC_network/PERFORMANCE.md).
+Prefix channel sampling is the default; alias sampling is available for many-channel workloads. Compare complete MCC-step timings for the same model and workload while checking statistics and conservation. See [performance and reproduction guide](https://algoplasma.readthedocs.io/en/develop/rst_files/G_Collision/G02_MCC_network/swarm_performance.html).
 
 ## Supported models
 
@@ -101,3 +101,16 @@ G02 does not advance positions, solve fields, handle walls, partition MPI domain
 ## Method references
 
 See [Skullerud (1968)](https://doi.org/10.1088/0022-3727/1/11/423) for null collisions and [Vahedi–Surendra (1995)](https://doi.org/10.1016/0010-4655(94)00171-W) for PIC-MCC context. [Methods and verification references](../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst) map the clock, thermal partners and binary outcomes to sources, state the implementation's assumptions, and derive the collision-box reference curves.
+
+<!-- G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | Zhe Liu | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | Zhe Liu | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yinjian Zhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | Zhongping Zhao | git 7db6abe64093
+   2026-11-09 14:54 +08:00 | Zhongping Zhao | git aabeed7fd31e
+   2026-11-10 14:59 +08:00 | Wushun Zhang | git c31b4d18a0b4
+   2026-11-10 15:11 +08:00 | Wushun Zhang | git dc9dd6c4147b
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)
+-->

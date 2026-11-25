@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 Wall Reflection
 ==========================================================================================
 
@@ -124,32 +130,115 @@ Wall Reflection
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   ``sub_J01_reflect_velocity`` modifies ur and uz after the tracker identifies a wall face.
-   It neither moves the particle nor changes history weight.
+   ``sub_J01_fm_reflection.f90`` provides a single routine, ``sub_J01_reflect_velocity``. After the tracker
+   identifies the wall face, this routine changes the velocity and returns control to the same history.
 
-   With outward normal n, an incident velocity has v·n>0 and the reflected velocity must have v′·n<0.
-   A Bernoulli choice selects diffuse reflection with probability d and specular reflection otherwise.
+   .. rubric:: 1. Incident and reflected velocities
+
+   Let :math:`\boldsymbol n_f` be the unit normal pointing out of the gas. An incident particle satisfies
+   :math:`\boldsymbol v\cdot\boldsymbol n_f>0`; the reflected particle must satisfy
+   :math:`\boldsymbol v'\cdot\boldsymbol n_f<0`. The wall does not adsorb particles, so the same history
+   continues with unchanged weight. A reflection changes the direction and, for thermal diffuse reflection,
+   can change the energy.
+
+   The input :math:`d\in[0,1]` corresponds to ``diffuse_fraction``. At each wall hit the routine draws an
+   independent uniform variate. A value below :math:`d` selects diffuse reflection; all other values select
+   specular reflection. Each hit selects one of the two events.
+
+   .. rubric:: 2. Specular reflection preserves tangential velocity
+
+   Resolve the velocity into components normal and tangential to the wall. Specular reflection gives
 
    .. math::
 
-      \boldsymbol v'=\boldsymbol v-2(\boldsymbol v\cdot\boldsymbol n)\boldsymbol n
-      \quad\text{(specular)}.
+      \boldsymbol v'=\boldsymbol v
+          -2(\boldsymbol v\cdot\boldsymbol n_f)\boldsymbol n_f.
 
-   For diffuse reflection, the inward normal speed is flux weighted and the tangential velocity is normal:
+   A radial wall reverses only :math:`v_r`; an axial wall reverses only :math:`v_z`. Speed and tangential
+   velocity are preserved, and the particle continues on the gas side.
+
+   .. rubric:: 3. Normal velocity in thermal diffuse reflection
+
+   For a wall at :math:`T_{\mathrm w}` define
+   :math:`\sigma_{\mathrm w}=\sqrt{k_{\mathrm B}T_{\mathrm w}/M}`, where :math:`M` is the particle mass and
+   :math:`k_{\mathrm B}` the Boltzmann constant. Let :math:`c>0` be the normal speed back into the gas and
+   :math:`v_t` the tangential velocity. The wall Maxwellian is Gaussian in velocity. Sampling particles
+   leaving the surface weights it by the crossing speed :math:`c`, giving the normalized joint density
 
    .. math::
 
-      p(c,v_t)=\frac{c}{\sigma_{\mathrm w}^2}e^{-c^2/(2\sigma_{\mathrm w}^2)}
-          \frac{e^{-v_t^2/(2\sigma_{\mathrm w}^2)}}{\sqrt{2\pi}\sigma_{\mathrm w}},
-      \quad
-      c=\sigma_{\mathrm w}\sqrt{-2\ln\xi},\quad v_t=\sigma_{\mathrm w}Z.
+      p(c,v_t)=
+         \frac{c}{\sigma_{\mathrm w}^2}
+             e^{-c^2/(2\sigma_{\mathrm w}^2)}
+         \frac{1}{\sqrt{2\pi}\sigma_{\mathrm w}}
+             e^{-v_t^2/(2\sigma_{\mathrm w}^2)},\qquad c>0.
 
-   The two random variables are independent: :math:`\xi\sim U(0,1)` and
-   :math:`Z\sim N(0,1)`.
-   :math:`\sigma_{\mathrm w}=\sqrt{k_{\mathrm B}T_{\mathrm w}/M}`
-   uses particle mass M and the Boltzmann constant kB.
+   The components are independent. The tangential component is normal with zero mean. The cumulative
+   distribution of the normal speed is
 
-   The four faces map (c,vt) to (+c,vt), (-c,vt), (vt,+c), (vt,-c).
-   Inputs are face, diffuse_fraction and sigma_wall in m/s; ur/uz are inout velocities.
-   The routine has no ierr and requires valid inputs. Position offsets and corner sequencing belong
-   to the tracker. Absorption would additionally require history-termination and loss accounting.
+   .. math::
+
+      F_c(c)=\int_0^c\frac{s}{\sigma_{\mathrm w}^2}
+                      e^{-s^2/(2\sigma_{\mathrm w}^2)}\,\mathrm ds
+             =1-e^{-c^2/(2\sigma_{\mathrm w}^2)}.
+
+   Draw independent :math:`\xi\sim U(0,1)` and :math:`Z\sim N(0,1)` for the normal and tangential
+   velocities, respectively. Here :math:`\xi` is uniform and :math:`Z` is standard normal. Inverting the
+   cumulative distribution gives :math:`c=\sigma_{\mathrm w}\sqrt{-2\ln(1-\xi)}`. Since :math:`1-\xi` is
+   also uniform, the code equivalently uses
+
+   .. math::
+
+      c=\sigma_{\mathrm w}\sqrt{-2\ln\xi},\qquad
+      v_t=\sigma_{\mathrm w}Z.
+
+   The normal speed is Rayleigh distributed and the tangential component is Gaussian. Taking the absolute
+   value of a Gaussian for the normal speed would omit the crossing-speed weight and describe a different
+   wall model.
+
+   .. rubric:: 4. Transforming normal and tangential velocities to grid coordinates
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 28 24 24 24
+
+      * - Face hit
+        - Outward normal
+        - Reflected :math:`v_r'`
+        - Reflected :math:`v_z'`
+      * - Lower radial
+        - :math:`(-1,0)`
+        - :math:`c`
+        - :math:`v_t`
+      * - Upper radial
+        - :math:`(1,0)`
+        - :math:`-c`
+        - :math:`v_t`
+      * - Lower axial
+        - :math:`(0,-1)`
+        - :math:`v_t`
+        - :math:`c`
+      * - Upper axial
+        - :math:`(0,1)`
+        - :math:`v_t`
+        - :math:`-c`
+
+   In every row the normal component points back into the gas. The tangential Gaussian has either sign, so
+   a diffuse reflection can reverse motion along the other coordinate too.
+
+   .. rubric:: 5. Procedure inputs and outputs
+
+   ``sub_J01_reflect_velocity``:
+
+   - ``ur,uz`` (m/s) is updated in place to the reflected particle velocity.
+   - ``face`` must be one of the four valid face constants.
+   - ``diffuse_fraction`` must lie in :math:`[0,1]`.
+   - ``sigma_wall`` is a positive velocity standard deviation in m/s. The driver computes it from particle
+     mass and wall temperature in kelvin.
+   - The routine leaves position and history weight unchanged, records no crossing, and has no ``ierr``
+     result. Direct callers must supply a valid face, incident direction and reflection parameters.
+
+   The tracker places the particle slightly inside the wall after reflection, then finds the next flight
+   segment. At a corner the new tangential velocity affects how the other face is handled; the next page
+   describes the ordering. An adsorption extension must specify how the history ends and how particle
+   losses are tallied. Setting velocity to zero alone does not model adsorption.

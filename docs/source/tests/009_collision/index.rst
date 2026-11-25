@@ -5,6 +5,7 @@
    :maxdepth: 1
 
    G02_collision_box
+   G02 MCC verification and performance </rst_files/G_Collision/G02_MCC_network/swarm_performance>
    G03_DSMC Validation <G03_DSMC>
 
 .. raw:: html
@@ -178,3 +179,13 @@
    .. code-block:: bash
 
       bash tests/009_collision/G03_DSMC/run.sh
+
+.. G02 contribution history (Git author dates; edit times include timezone).
+   2026-08-16 19:36 +08:00 | Yinjian Zhao | git f5945e401ab8
+   2026-09-30 10:10 +08:00 | Zhe Liu | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | Zhe Liu | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yinjian Zhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | Zhongping Zhao | git 7db6abe64093
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)

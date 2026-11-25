@@ -1,3 +1,9 @@
+.. J_Fluid contribution history (Git author dates; edit times include timezone).
+   2026-09-18 12:00 +08:00 | Yingjie Chen | git 69bdc8603906
+   2026-10-06 23:50 +08:00 | Yingjie Chen | git fa8cb9f5be05
+   2026-11-25 15:14 +08:00 | Yingjie Chen | git 8652258184b5
+   2026-11-25 15:59 +08:00 | Yingjie Chen | edit (Codex-assisted)
+
 J03 Continuity
 ==========================================================================================
 
@@ -103,21 +109,86 @@ J03 Continuity
 
 .. container:: ap-lang ap-lang-en ap-fluid-doc
 
-   J03 advances the transient r-z continuity equation using a reference-derived face closure:
+   J03 advances neutral density in physical time on a two-dimensional cylindrical grid. It derives face
+   transport coefficients from reference density and face flux, then uses the current density to calculate
+   flux at each step. The application supplies volume sources and loss frequencies.
+
+   .. rubric:: The physical problem
+
+   Given a grid, active region, physical boundaries, initial density :math:`n(r,z,0)`, volume production
+   rate :math:`S(r,z,t)` and linear loss frequency :math:`\nu(r,z,t)`, find the density as a function of
+   time:
 
    .. math::
 
-      \partial_t n+\frac1r\partial_r(r\Gamma_r)+\partial_z\Gamma_z=S-\nu n.
+      \frac{\partial n}{\partial t}
+        +\frac1r\frac{\partial(r\Gamma_r)}{\partial r}
+        +\frac{\partial\Gamma_z}{\partial z}=S-\nu n.
 
-   Reference fields define transport coefficients; the initial field defines the transient problem;
-   the current field determines the actual flux at each step. These are distinct roles.
-   Prescribed incoming flux, production and linear loss may change between steps.
+   :math:`S` has units of :math:`\mathrm{m^{-3}\,s^{-1}}`, :math:`\nu` has units of :math:`\mathrm{s^{-1}}`
+   and face flux has units of :math:`\mathrm{m^{-2}\,s^{-1}}`. Advancing density requires a relation
+   between flux and density, called a transport closure.
 
-   Read Transport Closure, Time Advance and Diagnostics, then Complete Calculation.
-   The first page covers module data and initialization; the second covers every solver routine;
-   the third assembles their application workflow. Error Reference documents return status.
+   The reference field determines fixed face transport coefficients. Internal flux changes with the current
+   upwind density. Open boundaries combine prescribed inflow with density-dependent outflow; walls maintain
+   zero net particle flux. The continuity solver uses the same algorithm for any reference data that
+   satisfy the array conventions.
 
-   Physical-time stepping does not require steady convergence.
-   An optional steady driver starts from reference density and requires both iterate change and residual convergence.
-   The implementation is single-domain, with no distributed J03 solver or automatic MPI gather.
-   It evolves neither momentum nor energy and does not supply reaction-rate physics.
+   .. rubric:: Reference, initial and current fields
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 23 41 36
+
+      * - Data
+        - Purpose
+        - When supplied or updated
+      * - Reference density and flux
+        - Determine face transport coefficients
+        - Supplied when initializing the closure
+      * - Initial density
+        - Initial condition for the transient problem
+        - Chosen by the caller; it may differ from the reference density
+      * - Current density
+        - Determine fluxes for this step and advance the density
+        - Updated at each physical time step
+      * - Volume source, loss and prescribed inflow
+        - Specify current external conditions
+        - May be updated between calls to the single-step routine
+
+   With fixed coefficients the density can still change over many steps. For a transient, start from the
+   chosen initial condition and advance to the desired physical time. For a time-independent final balance,
+   the optional steady solver starts from the reference density and iterates until both the change and
+   equation residual are sufficiently small.
+
+   .. rubric:: Guide to the pages and source files
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 24 39 37
+
+      * - Page
+        - Question answered
+        - Source
+      * - 01 Transport Closure
+        - How do reference fluxes become face coefficients, and how are boundary data stored?
+        - ``mod_J03_neutral_continuity_faceflux_2Drz.f90`` and ``sub_J03_transport_closure.f90``
+      * - 02 Time Advance and Diagnostics
+        - How are current flux, time step, update, residual and global particle balance calculated?
+        - All routines in ``sub_J03_continuity_solver.f90``
+      * - 03 Complete Calculation
+        - How does an application prepare reference data, organize a transient loop and interpret diagnostics?
+        - Calling sequence for the public routines above
+      * - Error Reference
+        - What do the return codes mean and which outputs remain usable?
+        - ``sub_J03_error.f90``
+
+   .. rubric:: Scope
+
+   J03 uses a single-domain structured two-dimensional grid. Applications assemble any spatially
+   partitioned data before calling it; there is no MPI communication or automatic gather. Grid geometry,
+   face types and coefficients usually remain fixed, while sources, losses and prescribed inflow can
+   change. Reassess the reference field after changing inlet velocity distribution, wall temperature,
+   geometry or reactions that substantially alter particle velocities. Evolving density alone cannot
+   capture all kinetic changes. This module has no energy or momentum equation, wall adsorption or
+   nonlinear reaction solver.
