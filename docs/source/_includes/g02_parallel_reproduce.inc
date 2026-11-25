@@ -9,3 +9,7 @@
    /tmp/g02_mcc_hybrid/g02_generate_test_data /tmp/g02_mcc_hybrid/generated_models
    mpirun -n 4 /tmp/g02_mcc_hybrid/mpi_collision_box \
      /tmp/g02_mcc_hybrid/generated_models/collision_box_elastic 1000000 5 4
+
+.. G02 contribution history (Git author dates; edit times include timezone).
+   2026-11-25 11:54 +08:00 | Wushunzzz | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushunzzz | edit (Codex-assisted)

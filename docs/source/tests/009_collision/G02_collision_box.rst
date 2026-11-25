@@ -509,3 +509,12 @@ G02_collision_box
    For more detailed instructions and physical explanations, download the example's
    :download:`English README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.md>` or
    :download:`Simplified Chinese README <../../../../tests/009_collision/G02_MCC_network/examples/collision_box/README.zh-CN.md>`.
+
+.. G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | ZheLIU | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | ZheLIU | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yin-YinjianZhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | GooseGH | git 7db6abe64093
+   2026-11-09 14:54 +08:00 | GooseGH | git aabeed7fd31e
+   2026-11-25 11:54 +08:00 | Wushunzzz | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushunzzz | edit (Codex-assisted)

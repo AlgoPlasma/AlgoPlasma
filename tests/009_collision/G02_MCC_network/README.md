@@ -73,3 +73,13 @@ Benchmarks measure elapsed time; tests check statistics and physical constraints
 ## Verification references
 
 [Probability checks, binary kinematics and the box derivation](../../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst) are mapped to individual tests. C01 checks the exponential clock and Poisson thinning; the box uses analytic moments of its specified equal-mass, constant-rate model, not fits to paper data. [Parodi–Petronio (2025)](https://doi.org/10.1063/5.0241527) is a reference for separate-module verification against analytical results; this suite does not reproduce its seven cases. Synthetic inputs and tolerances are defined by these tests.
+
+<!-- G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | ZheLIU | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | ZheLIU | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yin-YinjianZhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | GooseGH | git 7db6abe64093
+   2026-11-09 14:54 +08:00 | GooseGH | git aabeed7fd31e
+   2026-11-25 11:54 +08:00 | Wushunzzz | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushunzzz | edit (Codex-assisted)
+-->

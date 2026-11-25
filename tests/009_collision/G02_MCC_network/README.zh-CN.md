@@ -73,3 +73,13 @@ bash tests/009_collision/G02_MCC_network/examples/collision_box/run.sh
 ## 测试依据与文献
 
 [C01 的概率依据、两体运动学及碰撞盒推导](../../../docs/source/rst_files/G_Collision/G02_MCC_network/references.rst)给出逐项对应。C01 核对指数时钟和 Poisson 筛选；碰撞盒用当前等质量、恒频率模型的解析矩，不是论文数据拟合。分模块与解析结果对照的方法可参见 [Parodi–Petronio (2025)](https://doi.org/10.1063/5.0241527)，本库未复现该文七个算例。合成数据和通过阈值由本测试定义。
+
+<!-- G02 contribution history (Git author dates; edit times include timezone).
+   2026-09-30 10:10 +08:00 | ZheLIU | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | ZheLIU | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yin-YinjianZhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | GooseGH | git 7db6abe64093
+   2026-11-09 14:54 +08:00 | GooseGH | git aabeed7fd31e
+   2026-11-25 11:54 +08:00 | Wushunzzz | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushunzzz | edit (Codex-assisted)
+-->
