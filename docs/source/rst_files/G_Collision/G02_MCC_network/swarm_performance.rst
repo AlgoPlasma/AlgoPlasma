@@ -400,12 +400,13 @@ Performance optimization and verification of the G02 Monte Carlo collision modul
    .. include:: /_includes/g02_swarm_reproduce.inc
 
 .. G02 contribution history (Git author dates; edit times include timezone).
-   2026-11-09 09:53 +08:00 | Wushunzzz | git 1c20092c7f45
-   2026-11-09 10:07 +08:00 | Wushunzzz | git 91c37adedc11
-   2026-11-09 13:15 +08:00 | Wushunzzz | git dcd3c48f6a11
-   2026-11-09 13:51 +08:00 | Wushunzzz | git 6ccb13e796b1
-   2026-11-09 14:45 +08:00 | Wushunzzz | git c5cf932645d9
-   2026-11-09 15:37 +08:00 | Wushunzzz | git d37657fd65ef
-   2026-11-25 11:54 +08:00 | Wushunzzz | git 65cc283b8592
-   2026-11-25 15:54 +08:00 | Wushunzzz | edit (Codex-assisted)
-   2026-11-25 16:28 +08:00 | Wushunzzz | edit (Codex-assisted)
+   2026-11-09 09:53 +08:00 | Wushun Zhang | git 1c20092c7f45
+   2026-11-09 10:07 +08:00 | Wushun Zhang | git 91c37adedc11
+   2026-11-09 13:15 +08:00 | Wushun Zhang | git dcd3c48f6a11
+   2026-11-09 13:51 +08:00 | Wushun Zhang | git 6ccb13e796b1
+   2026-11-09 14:45 +08:00 | Wushun Zhang | git c5cf932645d9
+   2026-11-09 15:37 +08:00 | Wushun Zhang | git d37657fd65ef
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 16:28 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)

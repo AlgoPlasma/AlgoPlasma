@@ -338,12 +338,13 @@ G02_MCC_network
       </div>
 
 .. G02 contribution history (Git author dates; edit times include timezone).
-   2026-09-30 10:10 +08:00 | ZheLIU | git 37d5c58960b2
-   2026-10-04 15:26 +08:00 | ZheLIU | git 1fe22b59e443
-   2026-10-06 14:45 +08:00 | Yin-YinjianZhao | git 99fec723da7a
-   2026-11-01 14:31 +08:00 | GooseGH | git 7db6abe64093
-   2026-11-09 09:53 +08:00 | Wushunzzz | git 1c20092c7f45
-   2026-11-09 10:07 +08:00 | Wushunzzz | git 91c37adedc11
-   2026-11-09 13:15 +08:00 | Wushunzzz | git dcd3c48f6a11
-   2026-11-25 11:54 +08:00 | Wushunzzz | git 65cc283b8592
-   2026-11-25 15:54 +08:00 | Wushunzzz | edit (Codex-assisted)
+   2026-09-30 10:10 +08:00 | Zhe Liu | git 37d5c58960b2
+   2026-10-04 15:26 +08:00 | Zhe Liu | git 1fe22b59e443
+   2026-10-06 14:45 +08:00 | Yinjian Zhao | git 99fec723da7a
+   2026-11-01 14:31 +08:00 | Zhongping Zhao | git 7db6abe64093
+   2026-11-09 09:53 +08:00 | Wushun Zhang | git 1c20092c7f45
+   2026-11-09 10:07 +08:00 | Wushun Zhang | git 91c37adedc11
+   2026-11-09 13:15 +08:00 | Wushun Zhang | git dcd3c48f6a11
+   2026-11-25 11:54 +08:00 | Wushun Zhang | git 65cc283b8592
+   2026-11-25 15:54 +08:00 | Wushun Zhang | edit (Codex-assisted)
+   2026-11-25 20:26 +08:00 | Wushun Zhang | edit (Codex-assisted)
